@@ -27,6 +27,9 @@
     <ClInclude Include="Source\RenderProgram.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
@@ -44,6 +47,9 @@
     <Filter Include="Resource Files\Scripts">
       <UniqueIdentifier>{6ff2505d-65ae-4229-bcfd-eb260ae57cf0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\images">
+      <UniqueIdentifier>{da4aac92-3488-41bf-8c91-c9a9d09d8ab8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Dependancies\Shaders\frag.glsl">
@@ -55,5 +61,15 @@
     <None Include="..\Dependancies\Scripts\Main.as">
       <Filter>Resource Files\Scripts</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Dependancies\logo\logo.ico">
+      <Filter>Resource Files\images</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="WillowEngine.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

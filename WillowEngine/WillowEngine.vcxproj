@@ -184,6 +184,7 @@ copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\bin\Release\$(Platform)\gle
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Source\headers.h" />
     <ClInclude Include="Source\Renderer.h" />
     <ClInclude Include="Source\RenderProgram.h" />
@@ -199,6 +200,12 @@ copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\bin\Release\$(Platform)\gle
     <None Include="..\Dependancies\Scripts\Main.as" />
     <None Include="..\Dependancies\Shaders\frag.glsl" />
     <None Include="..\Dependancies\Shaders\vert.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="WillowEngine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Dependancies\logo\logo.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
