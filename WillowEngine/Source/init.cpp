@@ -8,8 +8,9 @@
 #include <SDL.h>
 
 //Include custom files
-#include "Renderer.h"
+//#include "Renderer.h"
 #include <ScriptingModule.h>
+#include <RenderModule.h>
 
 //Define context parameters
 unsigned int window_width = 800;
@@ -44,7 +45,10 @@ int main( int argc, char* argv[] )
 	InitScriptingModule();
 
 	//Initialize the renderer
-	rend.Init();
+	//rend.Init();
+	Renderer::init();
+	
+	Mesh plane (Mesh::square);
 
 	std::cout << "Compiling shaders... " << std::endl;
 	//Create the vertex shaders
@@ -52,12 +56,12 @@ int main( int argc, char* argv[] )
 	Shader fragmentShader ( "frag.glsl", GL_FRAGMENT_SHADER );
 
 	//Input the shaders
-	rend.program.addShader( vertexShader );
-	rend.program.addShader( fragmentShader );
+	//rend.program.addShader( vertexShader );
+	//rend.program.addShader( fragmentShader );
 
 	std::cout << "Linking the renderer... " << std::endl;
 	//Link the renderer
-	rend.compile();
+	//rend.compile();
 
 	//Check for OpenGL errors
 	GLenum error = glGetError();
@@ -85,7 +89,7 @@ SDL_Window* InitSDL( Uint32 flags )
                           SDL_WINDOWPOS_CENTERED,
                           SDL_WINDOWPOS_CENTERED,
                           window_width, window_height,
-                          SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL );
+						  SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL );
 }
 
 bool InitGlew()
@@ -119,13 +123,13 @@ void eventLoop( SDL_Window* window )
 		}
 
 		//render the frame
-		int err = rend.render( window );
-		if ( err != 0 )
-		{
-			printf( "Fatal error!" );
+		//int err = rend.render( window );
+		//if ( err != 0 )
+		//{
+			//printf( "Fatal error!" );
 
-			break;
-		}
+			//break;
+		//}
 	}
 
 	std::cout << "Leaving event loop... " << std::endl;
