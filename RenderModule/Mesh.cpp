@@ -5,16 +5,18 @@
 #include "Renderer.h"
 
 // Constructor
-Mesh::Mesh( const GLvoid *_vertices, Material *_mat )
+Mesh::Mesh( float _vertices[], int size )
 {
 	vertices = _vertices;
-	mat = _mat;
 	
 	//Generate buffers and upload data
+	glGenVertexArrays( 1, &vao );
+	glBindVertexArray( vao );
+
 	glGenBuffers( 1, &vbo );
 	glBindBuffer( GL_ARRAY_BUFFER, vbo );
 
-	glBufferData( GL_ARRAY_BUFFER, sizeof( vertices ), vertices, GL_DYNAMIC_DRAW );
+	glBufferData( GL_ARRAY_BUFFER, size, _vertices, GL_STATIC_DRAW );
 
 	// TODO: move this to scene class
 	Renderer::rqueue.push( this );
@@ -25,7 +27,7 @@ Mesh::~Mesh()
 	glDeleteBuffers( 1, &vbo );
 }
 
-float square_vertices[] = {
+float Mesh::square_data[] = {
 	-0.5f,  0.5f, 1.0f, 0.0f, 0.0f, // Top-left
      0.5f,  0.5f, 0.0f, 1.0f, 0.0f, // Top-right
      0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // Bottom-right
@@ -35,4 +37,4 @@ float square_vertices[] = {
     -0.5f,  0.5f, 1.0f, 0.0f, 0.0f  // Top-left
 };
 
-Mesh Mesh::square ( square_vertices, &Material::basic );
+//Mesh Mesh::square ( Mesh::square_data );

@@ -8,7 +8,6 @@
 #include <SDL.h>
 
 //Include custom files
-//#include "Renderer.h"
 #include <ScriptingModule.h>
 #include <RenderModule.h>
 
@@ -16,9 +15,6 @@
 unsigned int window_width = 800;
 unsigned int window_height = 600;
 const char* title = "Willow Engine";
-
-//Create the renderer
-Renderer rend;
 
 //Function Prototypes
 SDL_Window* InitSDL( Uint32 flags );
@@ -45,30 +41,35 @@ int main( int argc, char* argv[] )
 	InitScriptingModule();
 
 	//Initialize the renderer
-	//rend.Init();
 	Renderer::init();
+
+	//instantiate objects
+
+		float square_data[] = {
+		-0.5f,  0.5f, 1.0f, 0.0f, 0.0f, // Top-left
+		 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, // Top-right
+		 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // Bottom-right
+
+		 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // Bottom-right
+		-0.5f, -0.5f, 1.0f, 1.0f, 1.0f, // Bottom-left
+		-0.5f,  0.5f, 1.0f, 0.0f, 0.0f  // Top-left
+		};
+
+		float tri_data[] = {
+		 0.8f,  -0.7f, 1.0f, 0.0f, 0.0f, // Top
+		 1.0f,  -1.0f, 0.0f, 1.0f, 0.0f, // Bottom-right
+		 0.6f,  -1.0f, 0.0f, 0.0f, 1.0f, // Bottom-left
+		};
 	
-	Mesh plane (Mesh::square);
+		//Create a simple mesh to render
+		Mesh simple ( square_data, sizeof( square_data ) );
 
-	std::cout << "Compiling shaders... " << std::endl;
-	//Create the vertex shaders
-	Shader vertexShader ( "vert.glsl", GL_VERTEX_SHADER );
-	Shader fragmentShader ( "frag.glsl", GL_FRAGMENT_SHADER );
+		Shader simple_vert ( Shader::basic_vert_source, GL_VERTEX_SHADER );
+		Shader simple_frag ( Shader::basic_frag_source, GL_FRAGMENT_SHADER );
 
-	//Input the shaders
-	//rend.program.addShader( vertexShader );
-	//rend.program.addShader( fragmentShader );
+		Material simple_mat ( &simple_vert, &simple_frag );
 
-	std::cout << "Linking the renderer... " << std::endl;
-	//Link the renderer
-	//rend.compile();
-
-	//Check for OpenGL errors
-	GLenum error = glGetError();
-	if( error != 0 )
-	{
-		std::cout << "OpenGl AFTER error: " << error << std:: endl;
-	}
+		simple.mat = &simple_mat;
 
 	//Execute the main event loops
 	eventLoop( window );
@@ -104,14 +105,10 @@ void eventLoop( SDL_Window* window )
 	//Define the windowEvent
 	SDL_Event windowEvent;
 
-	//Set the openGL clear color, and clear the screen
-	glClearColor( 0, 0, 0, 1 );
-	glClear( GL_COLOR_BUFFER_BIT );
-
 	std::cout << "Entering event loop... " << std:: endl;
 
 	//Execute the main function
-	std::cout << "Executing scripts..." << std::endl;
+	std::cout << "	Executing scripts..." << std::endl;
 	ExecuteMain();
 
 	//Begine the event loop
@@ -121,25 +118,15 @@ void eventLoop( SDL_Window* window )
 		{
 			if ( windowEvent.type == SDL_QUIT ) break; 
 		}
-
 		//render the frame
-		//int err = rend.render( window );
-		//if ( err != 0 )
-		//{
-			//printf( "Fatal error!" );
-
-			//break;
-		//}
+		Renderer::render( window );
 	}
-
 	std::cout << "Leaving event loop... " << std::endl;
 }
 
 void cleanUp( SDL_GLContext context )
 {
 	std::cout << "Shutting down..." << std::endl;
-	//Delete the renderer
-	rend.~Renderer();
 	
 	//Delete the openGL rendering context
 	SDL_GL_DeleteContext( context ); 

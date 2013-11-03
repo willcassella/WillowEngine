@@ -9,7 +9,7 @@
 //Global print function
 void print(std::string &str)
 {
-	std::cout << str << std::endl;
+	std::cout << "	" << str << std::endl;
 }
 
 //Compiler callback function

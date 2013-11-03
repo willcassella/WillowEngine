@@ -14,8 +14,11 @@ public:
 	
 	GLuint id;
 
-	static Shader basic_vert;
-	static Shader basic_frag;
+	static std::string basic_vert_source;
+	static std::string basic_frag_source;
+
+	//static Shader basic_vert;
+	//static Shader basic_frag;
 };
 
 #endif

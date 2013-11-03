@@ -15,7 +15,7 @@ public:
 
 	GLuint id;
 
-	static Material basic;
+	//static Material basic;
 };
 
 #endif

@@ -7,17 +7,24 @@
 class Mesh
 {
 public:
-	Mesh( const GLvoid *_vertices, Material *_mat );
+	
+	Mesh( float _vertices[], int size );
 	~Mesh();
 
+	GLuint vao;
 	GLuint vbo;
-	const GLvoid *vertices;
+	void *vertices;
 
 	//TODO: allow multiple materials
 	Material *mat;
 
 	//Static meshes
-	static Mesh square;
+	//static Mesh square;
+
+	static float square_data[];
+
+private:
+	void static initMesh( Mesh *mesh );
 };
 
 #endif

@@ -7,7 +7,7 @@ RenderQueue Renderer::rqueue;
 
 int Renderer::init()
 {
-	// set the opengl clear color to black and clear the screen
+	// Set the opengl clear color to black and clear the screen
 	glClearColor( 0, 0, 0, 1 );
 	glClear( GL_COLOR_BUFFER_BIT );
 
@@ -21,8 +21,12 @@ int Renderer::render( SDL_Window* window )
 	// Render the only mesh in the queue
 	Mesh *current_mesh = rqueue.front();
 
-	// Bind the meshe's material
+	// Bind the mesh's material
 	glUseProgram( current_mesh->mat->id );
+
+	glDrawArrays( GL_TRIANGLES, 0, 6 );
 	
 	SDL_GL_SwapWindow( window );
+
+	return 0;
 }

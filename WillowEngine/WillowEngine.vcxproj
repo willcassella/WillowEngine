@@ -192,8 +192,6 @@ copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\gle
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Dependancies\Scripts\Main.as" />
-    <None Include="..\Dependancies\Shaders\frag.glsl" />
-    <None Include="..\Dependancies\Shaders\vert.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WillowEngine.rc" />

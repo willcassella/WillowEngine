@@ -23,9 +23,6 @@
     <Filter Include="Resource Files">
       <UniqueIdentifier>{54aef3ad-4ef4-4dbb-af39-6d9fb9fba686}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\Shaders">
-      <UniqueIdentifier>{a646e0a2-cf64-4f17-9345-d6b9885dbb42}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource Files\Scripts">
       <UniqueIdentifier>{6ff2505d-65ae-4229-bcfd-eb260ae57cf0}</UniqueIdentifier>
     </Filter>
@@ -34,12 +31,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Dependancies\Shaders\frag.glsl">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="..\Dependancies\Shaders\vert.glsl">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
     <None Include="..\Dependancies\Scripts\Main.as">
       <Filter>Resource Files\Scripts</Filter>
     </None>
