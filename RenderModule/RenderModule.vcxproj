@@ -20,16 +20,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\RenderModule.h" />
-    <ClInclude Include="Material.h" />
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="Renderer.h" />
-    <ClInclude Include="Shader.h" />
+    <ClInclude Include="source\Material.h" />
+    <ClInclude Include="source\Mesh.h" />
+    <ClInclude Include="source\Renderer.h" />
+    <ClInclude Include="source\Shader.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Material.cpp" />
-    <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="source\Material.cpp" />
+    <ClCompile Include="source\Mesh.cpp" />
+    <ClCompile Include="source\Renderer.cpp" />
+    <ClCompile Include="source\Shader.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D3DE9FCC-C429-4E36-A88E-DAC1004F1944}</ProjectGuid>

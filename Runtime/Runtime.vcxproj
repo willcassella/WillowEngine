@@ -102,8 +102,7 @@
       <IgnoreSpecificDefaultLibraries>msvcrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(SolutionDir)\Dependancies\Shaders\* $(OutDir)
-copy $(SolutionDir)\Dependancies\Scripts\* $(OutDir)
+      <Command>copy $(SolutionDir)\Dependancies\Scripts\* $(OutDir)
 copy $(SolutionDir)\Dependancies\Windows\SDL2-2.0.0\lib\$(Platform)\SDL2.dll $(OutDir)
 copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\glew32.dll $(OutDir)</Command>
       <Message>Copy dependancies into output</Message>
@@ -122,8 +121,7 @@ copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\gle
       <IgnoreSpecificDefaultLibraries>msvcrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(SolutionDir)\Dependancies\Shaders\* $(OutDir)
-copy $(SolutionDir)\Dependancies\Scripts\* $(OutDir)
+      <Command>copy $(SolutionDir)\Dependancies\Scripts\* $(OutDir)
 copy $(SolutionDir)\Dependancies\Windows\SDL2-2.0.0\lib\$(Platform)\SDL2.dll $(OutDir)
 copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\glew32.dll $(OutDir)</Command>
     </PostBuildEvent>
@@ -147,8 +145,7 @@ copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\gle
       <SubSystem>Windows</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(SolutionDir)\Dependancies\Shaders\* $(OutDir)
-copy $(SolutionDir)\Dependancies\Scripts\* $(OutDir)
+      <Command>copy $(SolutionDir)\Dependancies\Scripts\* $(OutDir)
 copy $(SolutionDir)\Dependancies\Windows\SDL2-2.0.0\lib\$(Platform)\SDL2.dll $(OutDir)
 copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\glew32.dll $(OutDir)</Command>
     </PostBuildEvent>
@@ -174,8 +171,7 @@ copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\gle
       </IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(SolutionDir)\Dependancies\Shaders\* $(OutDir)
-copy $(SolutionDir)\Dependancies\Scripts\* $(OutDir)
+      <Command>copy $(SolutionDir)\Dependancies\Scripts\* $(OutDir)
 copy $(SolutionDir)\Dependancies\Windows\SDL2-2.0.0\lib\$(Platform)\SDL2.dll $(OutDir)
 copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\glew32.dll $(OutDir)</Command>
     </PostBuildEvent>
@@ -194,7 +190,7 @@ copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\gle
     <None Include="..\Dependancies\Scripts\Main.as" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="WillowEngine.rc" />
+    <ResourceCompile Include="Runtime.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\Dependancies\logo\logo.ico" />

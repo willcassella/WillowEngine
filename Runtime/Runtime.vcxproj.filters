@@ -41,7 +41,7 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="WillowEngine.rc">
+    <ResourceCompile Include="Runtime.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>

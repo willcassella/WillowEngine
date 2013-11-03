@@ -1,9 +1,9 @@
 #ifndef RENDERMODULE_H_
 #define RENDERMODULE_H_
 
-#include "..\Renderer.h"
-#include "..\Mesh.h"
-#include "..\Material.h"
-#include "..\Shader.h"
+#include "..\source\Renderer.h"
+#include "..\source\Mesh.h"
+#include "..\source\Material.h"
+#include "..\source\Shader.h"
 
 #endif
