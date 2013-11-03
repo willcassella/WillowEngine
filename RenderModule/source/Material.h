@@ -13,6 +13,7 @@ public:
 	Shader *vertex;
 	Shader *fragment;
 
+	GLuint vao;
 	GLuint id;
 
 	//static Material basic;

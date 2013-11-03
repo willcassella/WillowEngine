@@ -5,21 +5,23 @@
 #include "Renderer.h"
 
 // Constructor
-Mesh::Mesh( float _vertices[], int size )
+Mesh::Mesh( float _vertices[], int vertsize, int _elements[], int elemsize )
 {
 	vertices = _vertices;
+	elements = _elements;
 	
 	//Generate buffers and upload data
-	glGenVertexArrays( 1, &vao );
-	glBindVertexArray( vao );
-
 	glGenBuffers( 1, &vbo );
 	glBindBuffer( GL_ARRAY_BUFFER, vbo );
 
-	glBufferData( GL_ARRAY_BUFFER, size, _vertices, GL_STATIC_DRAW );
+	glGenBuffers( 1, &ebo );
+	glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, ebo );
+
+	glBufferData( GL_ARRAY_BUFFER, vertsize, _vertices, GL_STATIC_DRAW );
+	glBufferData( GL_ELEMENT_ARRAY_BUFFER, elemsize, _elements, GL_STATIC_DRAW );
 
 	// TODO: move this to scene class
-	Renderer::rqueue.push( this );
+	Renderer::rqueue.push_front( this );
 }
 
 Mesh::~Mesh()

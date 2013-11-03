@@ -45,24 +45,20 @@ int main( int argc, char* argv[] )
 
 	//instantiate objects
 
-		float square_data[] = {
-		-0.5f,  0.5f, 1.0f, 0.0f, 0.0f, // Top-left
-		 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, // Top-right
-		 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // Bottom-right
-
-		 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // Bottom-right
-		-0.5f, -0.5f, 1.0f, 1.0f, 1.0f, // Bottom-left
-		-0.5f,  0.5f, 1.0f, 0.0f, 0.0f  // Top-left
+		float square_vertices[] = {
+			-0.5f,  0.5f, 1.0f, 0.0f, 0.0f, // Top-left
+			 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, // Top-right
+			 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // Bottom-right
+			-0.5f, -0.5f, 1.0f, 1.0f, 1.0f  // Bottom-left
 		};
 
-		float tri_data[] = {
-		 0.8f,  -0.7f, 1.0f, 0.0f, 0.0f, // Top
-		 1.0f,  -1.0f, 0.0f, 1.0f, 0.0f, // Bottom-right
-		 0.6f,  -1.0f, 0.0f, 0.0f, 1.0f, // Bottom-left
+		int square_elements[] = {
+			0, 1, 2,
+			2, 3, 0
 		};
-	
+
 		//Create a simple mesh to render
-		Mesh simple ( square_data, sizeof( square_data ) );
+		Mesh simple ( square_vertices, sizeof( square_vertices ), square_elements, sizeof( square_elements ) );
 
 		Shader simple_vert ( Shader::basic_vert_source, GL_VERTEX_SHADER );
 		Shader simple_frag ( Shader::basic_frag_source, GL_FRAGMENT_SHADER );

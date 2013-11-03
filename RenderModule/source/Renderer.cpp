@@ -18,14 +18,14 @@ int Renderer::render( SDL_Window* window )
 {
 	glClear( GL_COLOR_BUFFER_BIT );
 
-	// Render the only mesh in the queue
+	//select the front mesh
 	Mesh *current_mesh = rqueue.front();
 
-	// Bind the mesh's material
-	glUseProgram( current_mesh->mat->id );
-
+	//draw the mesh
+	//glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0 );
 	glDrawArrays( GL_TRIANGLES, 0, 6 );
 	
+	//update the screen
 	SDL_GL_SwapWindow( window );
 
 	return 0;

@@ -3,10 +3,11 @@
 
 #include <GL\glew.h>
 #include <SDL.h>
-#include <queue>
+#include <forward_list>
 
 #include "Mesh.h"
-typedef std::queue<Mesh*> RenderQueue;
+//TODO: change this to a queue
+typedef std::forward_list<Mesh*> RenderQueue;
 
 class Renderer
 {

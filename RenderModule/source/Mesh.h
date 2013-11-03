@@ -8,12 +8,13 @@ class Mesh
 {
 public:
 	
-	Mesh( float _vertices[], int size );
+	Mesh( float _vertices[], int vertsize, int _elements[], int elemsize );
 	~Mesh();
 
-	GLuint vao;
 	GLuint vbo;
+	GLuint ebo;
 	void *vertices;
+	void *elements;
 
 	//TODO: allow multiple materials
 	Material *mat;

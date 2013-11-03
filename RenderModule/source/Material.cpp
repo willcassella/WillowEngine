@@ -13,6 +13,9 @@ Material::Material( Shader *_vertex, Shader *_fragment )
 	glBindFragDataLocation( id, 0, "outColor" );
 	glLinkProgram( id );
 
+	glGenVertexArrays( 1, &vao );
+	glBindVertexArray( vao );
+
 	//TODO: find a better place for this
 	GLint posAttrib = glGetAttribLocation( id, "position" );
     glEnableVertexAttribArray( posAttrib );
