@@ -8,7 +8,7 @@ class Mesh
 {
 public:
 	
-	Mesh( float _vertices[], int vertsize, int _elements[], int elemsize );
+	Mesh( float _vertices[], int vertsize, GLuint _elements[], int elemsize );
 	~Mesh();
 
 	GLuint vbo;

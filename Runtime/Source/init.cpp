@@ -1,13 +1,12 @@
 //Willow Engine Init code!
 //By Will Cassella
-#define _HEADERS_INCLUDED_
-#include <stdio.h>
+
 #include <iostream>
 #include <string>
 #include <GL/glew.h>
 #include <SDL.h>
 
-//Include custom files
+//Include modules files
 #include <ScriptingModule.h>
 #include <RenderModule.h>
 
@@ -52,11 +51,10 @@ int main( int argc, char* argv[] )
 			-0.5f, -0.5f, 1.0f, 1.0f, 1.0f  // Bottom-left
 		};
 
-		int square_elements[] = {
+		GLuint square_elements[] = {
 			0, 1, 2,
 			2, 3, 0
 		};
-
 		//Create a simple mesh to render
 		Mesh simple ( square_vertices, sizeof( square_vertices ), square_elements, sizeof( square_elements ) );
 
@@ -64,7 +62,7 @@ int main( int argc, char* argv[] )
 		Shader simple_frag ( Shader::basic_frag_source, GL_FRAGMENT_SHADER );
 
 		Material simple_mat ( &simple_vert, &simple_frag );
-
+		
 		simple.mat = &simple_mat;
 
 	//Execute the main event loops
