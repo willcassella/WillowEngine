@@ -2,7 +2,7 @@
 #define RENDERER_H_
 
 #include <GL\glew.h>
-#include <SDL.h>
+#include <GLFW\glfw3.h>
 #include <forward_list>
 
 #include "Mesh.h"
@@ -16,7 +16,7 @@ public:
 
 	static int init();
 
-	static int render( SDL_Window* window );
+	static int render( GLFWwindow* window );
 };
 
 #endif

@@ -1,7 +1,7 @@
 // Renderer.cpp
 
 #include "Renderer.h"
-#include <SDL.h>
+#include <GLFW\glfw3.h>
 
 RenderQueue Renderer::rqueue;
 
@@ -14,7 +14,7 @@ int Renderer::init()
 	return 0;
 }
 
-int Renderer::render( SDL_Window* window )
+int Renderer::render( GLFWwindow* window )
 {
 	glClear( GL_COLOR_BUFFER_BIT );
 
@@ -26,7 +26,7 @@ int Renderer::render( SDL_Window* window )
 	glDrawArrays( GL_TRIANGLES, 0, 6 );
 	
 	//update the screen
-	SDL_GL_SwapWindow( window );
+	glfwSwapBuffers( window );
 
 	return 0;
 }

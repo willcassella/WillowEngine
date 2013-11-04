@@ -66,26 +66,26 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\Dependancies\Windows\SDL2-2.0.0\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\ScriptingModule\include;$(SolutionDir)\RenderModule\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\Dependancies\Windows\SDL2-2.0.0\lib\$(Platform);$(SolutionDir)\Dependancies\Windows\glew-1.10.0\lib\Release\$(Platform);$(SolutionDir)\ScriptingModule\bin;$(SolutionDir)\RenderModule\bin;C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\ScriptingModule\include;$(SolutionDir)\RenderModule\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\lib-msvc110;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\lib\Release\$(Platform);$(SolutionDir)\ScriptingModule\bin;$(SolutionDir)\RenderModule\bin;C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)\Dependancies\Windows\SDL2-2.0.0\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\ScriptingModule\include;$(SolutionDir)\RenderModule\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\Dependancies\Windows\SDL2-2.0.0\lib\$(Platform);$(SolutionDir)\Dependancies\Windows\glew-1.10.0\lib\Release\$(Platform);$(SolutionDir)\ScriptingModule\bin;$(SolutionDir)\RenderModule\bin;C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\ScriptingModule\include;$(SolutionDir)\RenderModule\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\lib-msvc110;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\lib\Release\$(Platform);$(SolutionDir)\ScriptingModule\bin;$(SolutionDir)\RenderModule\bin;C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)\Dependancies\Windows\SDL2-2.0.0\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\ScriptingModule\include;$(SolutionDir)\RenderModule\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\Dependancies\Windows\SDL2-2.0.0\lib\$(Platform);$(SolutionDir)\Dependancies\Windows\glew-1.10.0\lib\Release\$(Platform);$(SolutionDir)\ScriptingModule\bin;$(SolutionDir)\RenderModule\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\ScriptingModule\include;$(SolutionDir)\RenderModule\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\lib-msvc110;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\lib\Release\$(Platform);$(SolutionDir)\ScriptingModule\bin;$(SolutionDir)\RenderModule\bin;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)\Dependancies\Windows\SDL2-2.0.0\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\ScriptingModule\include;$(SolutionDir)\RenderModule\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\Dependancies\Windows\SDL2-2.0.0\lib\$(Platform);$(SolutionDir)\Dependancies\Windows\glew-1.10.0\lib\Release\$(Platform);$(SolutionDir)\ScriptingModule\bin;$(SolutionDir)\RenderModule\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\ScriptingModule\include;$(SolutionDir)\RenderModule\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\lib-msvc110;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\lib\Release\$(Platform);$(SolutionDir)\ScriptingModule\bin;$(SolutionDir)\RenderModule\bin;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -94,16 +94,17 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>GLFW_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OpenGL32.lib;SDL2.lib;SDL2main.lib;glew32.lib;ScriptingModule_d.lib;RenderModule_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenGL32.lib;glfw3dll.lib;glew32.lib;ScriptingModule_d.lib;RenderModule_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>copy $(SolutionDir)\Dependancies\Scripts\* $(OutDir)
-copy $(SolutionDir)\Dependancies\Windows\SDL2-2.0.0\lib\$(Platform)\SDL2.dll $(OutDir)
+copy $(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\lib-msvc110\glfw3.dll $(OutDir)
 copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\glew32.dll $(OutDir)</Command>
       <Message>Copy dependancies into output</Message>
     </PostBuildEvent>
@@ -113,16 +114,17 @@ copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\gle
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>GLFW_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;SDL2.lib;SDL2main.lib;glew32.lib;ScriptingModule64_d.lib;RenderModule64_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3dll.lib;glew32.lib;ScriptingModule64_d.lib;RenderModule64_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>copy $(SolutionDir)\Dependancies\Scripts\* $(OutDir)
-copy $(SolutionDir)\Dependancies\Windows\SDL2-2.0.0\lib\$(Platform)\SDL2.dll $(OutDir)
+copy $(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\lib-msvc110\glfw3.dll $(OutDir)
 copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\glew32.dll $(OutDir)</Command>
     </PostBuildEvent>
     <PostBuildEvent>
@@ -136,17 +138,18 @@ copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\gle
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>GLFW_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>OpenGL32.lib;SDL2.lib;SDL2main.lib;glew32.lib;ScriptingModule.lib;RenderModule.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>OpenGL32.lib;glfw3dll.lib;glew32.lib;ScriptingModule.lib;RenderModule.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
       <Command>copy $(SolutionDir)\Dependancies\Scripts\* $(OutDir)
-copy $(SolutionDir)\Dependancies\Windows\SDL2-2.0.0\lib\$(Platform)\SDL2.dll $(OutDir)
+copy $(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\lib-msvc110\glfw3.dll $(OutDir)
 copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\glew32.dll $(OutDir)</Command>
     </PostBuildEvent>
     <PostBuildEvent>
@@ -160,19 +163,20 @@ copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\gle
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>GLFW_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;SDL2.lib;SDL2main.lib;glew32.lib;ScriptingModule64.lib;RenderModule64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>opengl32.lib;glfw3dll.lib;glew32.lib;ScriptingModule64.lib;RenderModule64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>copy $(SolutionDir)\Dependancies\Scripts\* $(OutDir)
-copy $(SolutionDir)\Dependancies\Windows\SDL2-2.0.0\lib\$(Platform)\SDL2.dll $(OutDir)
+copy $(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\lib-msvc110\glfw3.dll $(OutDir)
 copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\glew32.dll $(OutDir)</Command>
     </PostBuildEvent>
     <PostBuildEvent>
@@ -181,7 +185,6 @@ copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\gle
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Source\headers.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\init.cpp" />

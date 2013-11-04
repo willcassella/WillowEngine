@@ -4,31 +4,31 @@
 #include <iostream>
 #include <string>
 #include <GL/glew.h>
-#include <SDL.h>
+#include <GLFW/glfw3.h>
 
 //Include modules files
 #include <ScriptingModule.h>
 #include <RenderModule.h>
 
 //Define context parameters
-unsigned int window_width = 800;
-unsigned int window_height = 600;
+int window_width = 800;
+int window_height = 600;
 const char* title = "Willow Engine";
 
 //Function Prototypes
-SDL_Window* InitSDL( Uint32 flags );
+GLFWwindow* InitGLFW();
 bool InitGlew();
-void eventLoop( SDL_Window* window );
-void cleanUp( SDL_GLContext context );
+void eventLoop( GLFWwindow* window );
+void cleanUp( GLFWwindow* window );
 
 int main( int argc, char* argv[] )
 {	
 	std::cout << "Initializing subsystems... " << std::endl;
-	//Initialize SDL and get the window
-	SDL_Window* window = InitSDL( SDL_INIT_VIDEO );
+	//Initialize GLFW and get a window
+	GLFWwindow* window = InitGLFW();
   
-	// Create an OpenGL context associated with the window.
-	SDL_GLContext glcontext = SDL_GL_CreateContext( window );
+	// Make an openGL context in window
+	glfwMakeContextCurrent(window);
 
 	//Initialize GLEW and check for errors
 	if ( !InitGlew() )
@@ -69,22 +69,32 @@ int main( int argc, char* argv[] )
 	eventLoop( window );
 	
 	//Cleanup the engine
-	cleanUp( glcontext );
+	cleanUp( window );
 
 	return 0;
 }
 
-SDL_Window* InitSDL( Uint32 flags )
+GLFWwindow* InitGLFW()
 {
-	//Initailize SDL
-	SDL_Init( flags );
+	//Initailize GLFW
+	if (!glfwInit())
+		exit(EXIT_FAILURE);
 
-	//Create the SDL window
-	return SDL_CreateWindow( title,
-                          SDL_WINDOWPOS_CENTERED,
-                          SDL_WINDOWPOS_CENTERED,
-                          window_width, window_height,
-						  SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL );
+	GLFWwindow* window = glfwCreateWindow(window_width, window_height, 
+		title, NULL, NULL);
+
+	//make sure the window was initialized properly
+	if (!window)
+	{
+		glfwTerminate();
+		exit(EXIT_FAILURE);
+	}
+
+	// Create the frambuffer and viewport
+	glfwGetFramebufferSize(window, &window_width, &window_width);
+	glViewport(0, 0, window_width, window_width);
+
+	return window;
 }
 
 bool InitGlew()
@@ -94,11 +104,8 @@ bool InitGlew()
 	return glewInit() == GLEW_OK;
 }
 
-void eventLoop( SDL_Window* window )
+void eventLoop( GLFWwindow* window )
 {
-	//Define the windowEvent
-	SDL_Event windowEvent;
-
 	std::cout << "Entering event loop... " << std:: endl;
 
 	//Execute the main function
@@ -106,25 +113,23 @@ void eventLoop( SDL_Window* window )
 	ExecuteMain();
 
 	//Begine the event loop
-	while ( true )
+	while ( !glfwWindowShouldClose(window) )
 	{
-		if ( SDL_PollEvent( &windowEvent ) )
-		{
-			if ( windowEvent.type == SDL_QUIT ) break; 
-		}
 		//render the frame
 		Renderer::render( window );
+
+		glfwPollEvents();
 	}
 	std::cout << "Leaving event loop... " << std::endl;
 }
 
-void cleanUp( SDL_GLContext context )
+void cleanUp( GLFWwindow* window )
 {
 	std::cout << "Shutting down..." << std::endl;
 	
-	//Delete the openGL rendering context
-	SDL_GL_DeleteContext( context ); 
+	//Delete the window (along with the context)
+	glfwDestroyWindow( window );
 	
-	//Quit SDl
-	SDL_Quit();
+	//Quit GLFW
+	glfwTerminate();
 }
