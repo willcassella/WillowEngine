@@ -1,6 +1,11 @@
 //Willow Engine Init code!
 //By Will Cassella
 
+// Show console in debug mode
+#ifdef DEBUG
+#define WinMain main
+#endif
+
 #include <iostream>
 #include <string>
 #include <GL/glew.h>
@@ -21,7 +26,8 @@ bool InitGlew();
 void eventLoop( GLFWwindow* window );
 void cleanUp( GLFWwindow* window );
 
-int main( int argc, char* argv[] )
+
+int WinMain( int argc, char* argv[] )
 {	
 	std::cout << "Initializing subsystems... " << std::endl;
 	//Initialize GLFW and get a window
@@ -79,6 +85,9 @@ GLFWwindow* InitGLFW()
 	//Initailize GLFW
 	if (!glfwInit())
 		exit(EXIT_FAILURE);
+	
+	// Make the window invisible
+	glfwWindowHint( GLFW_VISIBLE, GL_FALSE );
 
 	GLFWwindow* window = glfwCreateWindow(window_width, window_height, 
 		title, NULL, NULL);
@@ -89,6 +98,12 @@ GLFWwindow* InitGLFW()
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
+
+	//move the window to the center of the screen
+	glfwSetWindowPos( window, 550, 250 );
+
+	//Make the window visible
+	glfwShowWindow( window );
 
 	// Create the frambuffer and viewport
 	glfwGetFramebufferSize(window, &window_width, &window_width);
