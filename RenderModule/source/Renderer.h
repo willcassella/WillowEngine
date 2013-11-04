@@ -12,6 +12,7 @@ typedef std::forward_list<Mesh*> RenderQueue;
 class Renderer
 {
 public:
+
 	static RenderQueue rqueue;
 
 	static int init();

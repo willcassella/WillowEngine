@@ -1,6 +1,8 @@
 // Renderer.cpp
 
 #include "Renderer.h"
+#include "Mesh.h"
+#include <forward_list>
 #include <GLFW\glfw3.h>
 
 RenderQueue Renderer::rqueue;
@@ -18,13 +20,21 @@ int Renderer::render( GLFWwindow* window )
 {
 	glClear( GL_COLOR_BUFFER_BIT );
 
-	//select the front mesh
-	Mesh *current_mesh = rqueue.front();
+	// Create an iterator
+	std::forward_list<Mesh*>::iterator iter;
 
-	//draw the mesh
-	//glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0 );
-	glDrawArrays( GL_TRIANGLES, 0, 6 );
+	//Iterate throught the render queue
+    for (iter = rqueue.begin() ; iter != rqueue.end(); iter++){
+
+		// Bind the mesh
+		glBindVertexArray( (*iter)->vao );
+
+		//Draw the mesh
+		glDrawElements( GL_TRIANGLES, (*iter)->elements/4, GL_UNSIGNED_INT, 0 );
+	};
 	
+	glBindVertexArray( 0 );
+
 	//update the screen
 	glfwSwapBuffers( window );
 

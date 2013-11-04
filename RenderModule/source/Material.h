@@ -3,20 +3,29 @@
 
 #include "Shader.h"
 
-//TODO: make this not a render program
+//TODO: make this more than just a shader program
 class Material
 {
 public:
+
+	Material();
 	Material( Shader *_vertex, Shader *_fragment ); //TODO: add texture support
 	~Material();
 
-	Shader *vertex;
-	Shader *fragment;
+	// Load and unload material information to GPU
+	void Load( Shader *_vertex, Shader *_fragment );
+	void Unload();
 
-	GLuint vao;
 	GLuint id;
 
-	//static Material basic;
+private:
+
+	// Holds whether material has been loaded to GPU
+	bool loaded;
+
+	// Material information
+	Shader *vertex;
+	Shader *fragment;
 };
 
 #endif

@@ -1,34 +1,65 @@
 #include "Material.h"
 #include "Shader.h"
 
+Material::Material()
+{
+	loaded = false;
+}
+
 Material::Material( Shader *_vertex, Shader *_fragment )
 {
 	vertex = _vertex;
 	fragment = _fragment;
 	
 	id = glCreateProgram();
+
 	glAttachShader( id, vertex->id );
 	glAttachShader( id, fragment->id );
 
 	glBindFragDataLocation( id, 0, "outColor" );
 	glLinkProgram( id );
 
-	glGenVertexArrays( 1, &vao );
-	glBindVertexArray( vao );
-
 	//TODO: find a better place for this
-	GLint posAttrib = glGetAttribLocation( id, "position" );
-    glEnableVertexAttribArray( posAttrib );
-    glVertexAttribPointer( posAttrib, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), 0 );
+	glUseProgram( id );
 
-    GLint colAttrib = glGetAttribLocation( id, "color" );
-    glEnableVertexAttribArray( colAttrib );
-    glVertexAttribPointer( colAttrib, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat)) );
+	loaded = true;
 }
 
 Material::~Material()
 {
-	glDeleteProgram( id );
+	Unload();
 }
 
-//Material Material::basic ( &Shader::basic_vert, &Shader::basic_frag );
+void Material::Load( Shader *_vertex, Shader *_fragment )
+{
+	vertex = _vertex;
+	fragment = _fragment;
+	
+	if( !loaded )
+		id = glCreateProgram();
+
+	if( loaded )
+	{
+		glDetachShader( id, vertex->id );
+		glDetachShader( id, fragment->id );
+	}
+
+	glAttachShader( id, vertex->id );
+	glAttachShader( id, fragment->id );
+
+	glBindFragDataLocation( id, 0, "outColor" );
+	glLinkProgram( id );
+
+	//TODO: find a better place for this
+	glUseProgram( id );
+
+	loaded = true;
+}
+
+void Material::Unload()
+{
+	if( loaded )
+		glDeleteProgram( id );
+
+	loaded = false;
+}

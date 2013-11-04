@@ -26,6 +26,14 @@ bool InitGlew();
 void eventLoop( GLFWwindow* window );
 void cleanUp( GLFWwindow* window );
 
+void windowPosCallback( GLFWwindow* window, int x, int y )
+{
+	std::cout << "Position: " << x << ", " << y <<std::endl;
+}
+void windowSizeCallback( GLFWwindow* window, int x, int y )
+{
+	std::cout << "Size: " << x << ", " << y << std::endl;
+}
 
 int WinMain( int argc, char* argv[] )
 {	
@@ -50,27 +58,39 @@ int WinMain( int argc, char* argv[] )
 
 	//instantiate objects
 
-		float square_vertices[] = {
-			-0.5f,  0.5f, 1.0f, 0.0f, 0.0f, // Top-left
-			 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, // Top-right
-			 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // Bottom-right
-			-0.5f, -0.5f, 1.0f, 1.0f, 1.0f  // Bottom-left
-		};
+	float square_vertices[] = {
+		-0.5f,  0.5f, 1.0f, 0.0f, 0.0f, // Top-left
+		 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, // Top-right
+		 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // Bottom-right
+		-0.5f, -0.5f, 1.0f, 1.0f, 1.0f  // Bottom-left
+	};
 
-		GLuint square_elements[] = {
-			0, 1, 2,
-			2, 3, 0
-		};
-		//Create a simple mesh to render
-		Mesh simple ( square_vertices, sizeof( square_vertices ), square_elements, sizeof( square_elements ) );
+	float tri_vertices[] = {
+		 0.8f, -0.7f, 1.0f, 0.0f, 1.0f, // Top
+		 1.0f, -1.0f, 0.0f, 1.0f, 1.0f, // Bottom-right
+		 0.6f, -1.0f, 1.0f, 1.0f, 0.0f  // Bottomr-left
+	};
 
-		Shader simple_vert ( Shader::basic_vert_source, GL_VERTEX_SHADER );
-		Shader simple_frag ( Shader::basic_frag_source, GL_FRAGMENT_SHADER );
+	GLuint square_elements[] = {
+		0, 1, 2,
+		2, 3, 0
+	};
 
-		Material simple_mat ( &simple_vert, &simple_frag );
-		
-		simple.mat = &simple_mat;
+	GLuint tri_elements[] = {
+		0, 1, 2
+	};
 
+	//Create a simple mesh to render
+	Mesh simple;
+	simple.Load( square_vertices, sizeof( square_vertices ), square_elements, sizeof( square_elements ) );
+	
+	Shader frag ( Shader::basic_frag_source, GL_FRAGMENT_SHADER );
+	Shader vert ( Shader::basic_vert_source, GL_VERTEX_SHADER );
+
+	Material mat ( &vert, &frag );
+
+	simple.AssignMat( &mat );
+	
 	//Execute the main event loops
 	eventLoop( window );
 	
@@ -104,6 +124,10 @@ GLFWwindow* InitGLFW()
 
 	//Make the window visible
 	glfwShowWindow( window );
+
+	//Set the window callbacks
+	glfwSetWindowPosCallback( window, windowPosCallback );
+	glfwSetWindowSizeCallback( window, windowSizeCallback );
 
 	// Create the frambuffer and viewport
 	glfwGetFramebufferSize(window, &window_width, &window_width);
