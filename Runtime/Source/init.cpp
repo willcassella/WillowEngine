@@ -84,10 +84,14 @@ int WinMain( int argc, char* argv[] )
 	Mesh simple;
 	simple.Load( square_vertices, sizeof( square_vertices ), square_elements, sizeof( square_elements ) );
 	
-	Shader frag ( Shader::basic_frag_source, GL_FRAGMENT_SHADER );
-	Shader vert ( Shader::basic_vert_source, GL_VERTEX_SHADER );
+	Shader frag;
+	Shader vert;
 
-	Material mat ( &vert, &frag );
+	frag.Load( Shader::basic_frag_source, GL_FRAGMENT_SHADER );
+	vert.Load( Shader::basic_vert_source, GL_VERTEX_SHADER );
+
+	Material mat;
+	mat.Load( &vert, &frag );
 
 	simple.AssignMat( &mat );
 	

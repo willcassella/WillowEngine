@@ -1,18 +1,46 @@
 #include "Shader.h"
 #include <string>
 
+Shader::Shader()
+{
+	loaded = false;
+}
+
 Shader::Shader( std::string _source, GLenum type )
 {
 	source = _source;
 	const char* temp_source = source.c_str();
+
 	id = glCreateShader( type );
 	glShaderSource( id, 1, &temp_source, NULL );
 	glCompileShader( id );
+
+	loaded = true;
 }
 
 Shader::~Shader()
 {
-	glDeleteShader( id );
+	Unload();
+}
+
+void Shader::Load( std::string _source, GLenum type )
+{
+	source = _source;
+	const char* temp_source = source.c_str();
+
+	if( !loaded )
+		id = glCreateShader( type );
+	glShaderSource( id, 1, &temp_source, NULL );
+	glCompileShader( id );
+
+	loaded = true;
+}
+
+void Shader::Unload()
+{
+	if( loaded )
+		glDeleteShader( id );
+	loaded = false;
 }
 
 std::string Shader::basic_vert_source =
@@ -32,7 +60,3 @@ std::string Shader::basic_frag_source =
     "void main() {"
     "   outColor = vec4(Color, 1.0);"
     "}";
-
-
-//Shader Shader::basic_vert ( Shader::basic_vert_source, GL_VERTEX_SHADER );
-//Shader Shader::basic_frag ( Shader::basic_frag_source, GL_FRAGMENT_SHADER );

@@ -7,18 +7,28 @@
 class Shader
 {
 public:
+
+	Shader();
 	Shader( std::string _source, GLenum type );
 	~Shader();
 
-	std::string source;
-	
+
+	//Load and unload shader to GPU
+	void Load( std::string _source, GLenum type );
+	void Unload();
+
+	// Shader information
 	GLuint id;
 
 	static std::string basic_vert_source;
 	static std::string basic_frag_source;
 
-	//static Shader basic_vert;
-	//static Shader basic_frag;
+private:
+
+	std::string source;
+
+	//Holds whether shader has been loaded to GPU
+	bool loaded;
 };
 
 #endif
