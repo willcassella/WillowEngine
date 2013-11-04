@@ -1,0 +1,2 @@
+Setting up sdl under linux:
+http://nothingtocode.blogspot.com/2013/07/setting-up-sdl2-in-ubuntu-or-linux-mint.html
