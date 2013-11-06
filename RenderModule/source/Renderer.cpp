@@ -30,7 +30,7 @@ int Renderer::render( GLFWwindow* window )
 		glBindVertexArray( (*iter)->vao );
 
 		//Draw the mesh
-		glDrawElements( GL_TRIANGLES, (*iter)->elements/4, GL_UNSIGNED_INT, 0 );
+		glDrawElements( GL_TRIANGLES, (*iter)->elements.size(), GL_UNSIGNED_INT, 0 );
 	};
 	
 	glBindVertexArray( 0 );

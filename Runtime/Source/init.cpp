@@ -32,7 +32,8 @@ void windowPosCallback( GLFWwindow* window, int x, int y )
 }
 void windowSizeCallback( GLFWwindow* window, int x, int y )
 {
-	std::cout << "Size: " << x << ", " << y << std::endl;
+	//Resize the viewport
+	glViewport(0, 0, x, y);
 }
 
 int WinMain( int argc, char* argv[] )
@@ -56,33 +57,11 @@ int WinMain( int argc, char* argv[] )
 	//Initialize the renderer
 	Renderer::init();
 
-	//instantiate objects
 
-	float square_vertices[] = {
-		-0.5f,  0.5f, 1.0f, 0.0f, 0.0f, // Top-left
-		 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, // Top-right
-		 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // Bottom-right
-		-0.5f, -0.5f, 1.0f, 1.0f, 1.0f  // Bottom-left
-	};
-
-	float tri_vertices[] = {
-		 0.8f, -0.7f, 1.0f, 0.0f, 1.0f, // Top
-		 1.0f, -1.0f, 0.0f, 1.0f, 1.0f, // Bottom-right
-		 0.6f, -1.0f, 1.0f, 1.0f, 0.0f  // Bottomr-left
-	};
-
-	GLuint square_elements[] = {
-		0, 1, 2,
-		2, 3, 0
-	};
-
-	GLuint tri_elements[] = {
-		0, 1, 2
-	};
 
 	//Create a simple mesh to render
 	Mesh simple;
-	simple.Load( square_vertices, sizeof( square_vertices ), square_elements, sizeof( square_elements ) );
+	simple.Load( "monkey.obj" );
 	
 	Shader frag;
 	Shader vert;
@@ -94,6 +73,10 @@ int WinMain( int argc, char* argv[] )
 	mat.Load( &vert, &frag );
 
 	simple.AssignMat( &mat );
+
+
+
+
 	
 	//Execute the main event loops
 	eventLoop( window );

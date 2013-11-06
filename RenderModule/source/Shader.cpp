@@ -50,7 +50,7 @@ std::string Shader::basic_vert_source =
     "out vec3 Color;"
     "void main() {"
     "   Color = color;"
-    "   gl_Position = vec4(position, 0.0, 1.0);"
+    "   gl_Position = vec4(position.x, position.y, 0.0, 1.0);"
     "}";
 
 std::string Shader::basic_frag_source =
@@ -58,5 +58,5 @@ std::string Shader::basic_frag_source =
     "in vec3 Color;"
     "out vec4 outColor;"
     "void main() {"
-    "   outColor = vec4(Color, 1.0);"
+    "   outColor = vec4( 1.0, 1.0, 1.0, 1.0);"
     "}";

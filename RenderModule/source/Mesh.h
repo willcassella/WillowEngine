@@ -2,19 +2,24 @@
 #define MESH_H_
 
 #include <string>
+#include <vector>
+#include <glm\gtc\matrix_transform.hpp>
 #include <GL/glew.h>
 #include "Material.h"
+
+typedef std::vector<glm::vec3>	VertexArray;
+typedef std::vector<GLuint>		ElementArray;
 
 class Mesh
 {
 public:
 	
 	Mesh();
-	Mesh( float _vertices[], int vertsize, GLuint _elements[], int elemsize );
+	Mesh( const char * path );
 	~Mesh();
 
 	// Load buffers to video card
-	void Load( float _vertices[], int vertsize, GLuint _elements[], int elemsize );
+	void Load( const char * path );
 
 	// Assign a material
 	void AssignMat( Material *_mat );
@@ -26,7 +31,11 @@ public:
 	GLuint vao;
 	GLuint vbo;
 	GLuint ebo;
-	GLuint elements;
+	
+	VertexArray vertices;
+	ElementArray elements;
+	std::vector < glm::vec2 > uv;
+    std::vector < glm::vec3 > normal;
 
 private:
 

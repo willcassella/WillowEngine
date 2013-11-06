@@ -3,6 +3,7 @@
 #include <GL\glew.h>
 #include "Mesh.h"
 #include "Renderer.h"
+#include "Utils.h"
 
 // Constructors
 Mesh::Mesh()
@@ -10,9 +11,9 @@ Mesh::Mesh()
 	loaded = false;
 }
 
-Mesh::Mesh( float _vertices[], int vertsize, GLuint _elements[], int elemsize )
+Mesh::Mesh( const char * path )
 {
-	elements = elemsize;
+	loadOBJ( path, vertices, elements, uv, normal );
 
 	glGenVertexArrays( 1, &vao );
 	glBindVertexArray( vao );
@@ -20,11 +21,11 @@ Mesh::Mesh( float _vertices[], int vertsize, GLuint _elements[], int elemsize )
 	//Generate buffers and upload data
 	glGenBuffers( 1, &vbo );
 	glBindBuffer( GL_ARRAY_BUFFER, vbo );
-	glBufferData( GL_ARRAY_BUFFER, vertsize, _vertices, GL_STATIC_DRAW );
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof( glm::vec3 ), &vertices[0], GL_STATIC_DRAW);
 
 	glGenBuffers( 1, &ebo );
 	glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, ebo );
-	glBufferData( GL_ELEMENT_ARRAY_BUFFER, elemsize, _elements, GL_STATIC_DRAW );
+	glBufferData( GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof( GLuint ), &elements[0] , GL_STATIC_DRAW );
 
 	glBindVertexArray( 0 );
 
@@ -39,9 +40,9 @@ Mesh::~Mesh()
 	Unload();
 }
 
-void Mesh::Load( float _vertices[], int vertsize, GLuint _elements[], int elemsize )
+void Mesh::Load( const char * path )
 {
-	elements = elemsize;
+	loadOBJ( path, vertices, elements, uv, normal );
 
 	if( !loaded )
 		glGenVertexArrays( 1, &vao );
@@ -51,12 +52,12 @@ void Mesh::Load( float _vertices[], int vertsize, GLuint _elements[], int elemsi
 	if( !loaded )
 		glGenBuffers( 1, &vbo );
 	glBindBuffer( GL_ARRAY_BUFFER, vbo );
-	glBufferData( GL_ARRAY_BUFFER, vertsize, _vertices, GL_STATIC_DRAW );
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof( glm::vec3 ), &vertices[0], GL_STATIC_DRAW);
 
 	if( !loaded )
 		glGenBuffers( 1, &ebo );
 	glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, ebo );
-	glBufferData( GL_ELEMENT_ARRAY_BUFFER, elemsize, _elements, GL_STATIC_DRAW );
+	glBufferData( GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof( GLuint ), &elements[0] , GL_STATIC_DRAW );
 
 	// TODO: move this to scene class
 	Renderer::rqueue.push_front( this );
@@ -86,11 +87,11 @@ void Mesh::AssignMat( Material *_mat )
 
 	posAttrib = glGetAttribLocation( mat->id, "position" );
     glEnableVertexAttribArray( posAttrib );
-    glVertexAttribPointer( posAttrib, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), 0 );
+    glVertexAttribPointer( posAttrib, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0 );
 
     colAttrib = glGetAttribLocation( mat->id, "color" );
     glEnableVertexAttribArray( colAttrib );
-    glVertexAttribPointer( colAttrib, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat)) );
+    glVertexAttribPointer( colAttrib, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat)) );
 
 	glBindVertexArray( 0 );
 }
