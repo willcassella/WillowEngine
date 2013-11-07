@@ -3,17 +3,21 @@
 
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
-#include <forward_list>
+#include <queue>
+#include "GameObject.h"
+#include "Camera.h"
 
 #include "Mesh.h"
 //TODO: change this to a queue
-typedef std::forward_list<Mesh*> RenderQueue;
+typedef std::queue<GameObject*>	RenderQueue;
+typedef std::queue<Camera*>		CameraQueue;
 
 class Renderer
 {
 public:
 
 	static RenderQueue rqueue;
+	static CameraQueue cqueue;
 
 	static int init();
 

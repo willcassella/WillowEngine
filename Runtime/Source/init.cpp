@@ -36,7 +36,7 @@ void windowSizeCallback( GLFWwindow* window, int x, int y )
 	glViewport(0, 0, x, y);
 }
 
-int WinMain( int argc, char* argv[] )
+int main( int argc, char* argv[] )
 {	
 	std::cout << "Initializing subsystems... " << std::endl;
 	//Initialize GLFW and get a window
@@ -57,7 +57,7 @@ int WinMain( int argc, char* argv[] )
 	//Initialize the renderer
 	Renderer::init();
 
-
+	GameObject monkey;
 
 	//Create a simple mesh to render
 	Mesh simple;
@@ -74,9 +74,13 @@ int WinMain( int argc, char* argv[] )
 
 	simple.AssignMat( &mat );
 
+	monkey.mesh = &simple;
 
+	Camera cam;
 
-
+	cam.transform.global.x = 3;
+	cam.transform.global.y = 1;
+	cam.transform.global.z = 2;
 	
 	//Execute the main event loops
 	eventLoop( window );
@@ -138,9 +142,28 @@ void eventLoop( GLFWwindow* window )
 	std::cout << "	Executing scripts..." << std::endl;
 	ExecuteMain();
 
+	double lastTime = glfwGetTime();
+	int nbFrames = 0;
+
+     // Measure speed
+     double currentTime = glfwGetTime();
+     nbFrames++;
+
 	//Begine the event loop
 	while ( !glfwWindowShouldClose(window) )
 	{
+		 
+		// Measure speed
+		double currentTime = glfwGetTime();
+		nbFrames++;
+		if ( currentTime - lastTime >= 1.0 ){ // If last prinf() was more than 1 sec ago
+         // printf and reset timer
+         printf("%f ms/frame\n", 1000.0/double(nbFrames));
+         nbFrames = 0;
+         lastTime += 1.0;
+		};
+		
+		
 		//render the frame
 		Renderer::render( window );
 

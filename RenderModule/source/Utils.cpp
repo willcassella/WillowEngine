@@ -1,16 +1,19 @@
 #include "Utils.h"
+#include "Vertex.h"
 #include <GL\glew.h>
 #include <vector>
 #include <glm\gtc\matrix_transform.hpp>
 
 bool loadOBJ(
     const char * path,
-    std::vector < glm::vec3 > & out_vertices,
-	std::vector < GLuint    > & out_elements,
-    std::vector < glm::vec2 > & out_uvs,
-    std::vector < glm::vec3 > & out_normals
+    std::vector < Vertex > & out_vertices,
+	std::vector < GLuint > & out_elements
 )
 {
+	std::vector < glm::vec3 > temp_positions;
+	std::vector < glm::vec2 > temp_coordinates;
+	std::vector < glm::vec3 > temp_normals;
+	
 	FILE * file = fopen(path, "r");
 	if( file == NULL )
 	{
@@ -31,7 +34,7 @@ bool loadOBJ(
 		{
 			glm::vec3 vertex;
 			fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z );
-			out_vertices.push_back(vertex);
+			temp_positions.push_back(vertex);
 		}
 
 		// Parse texture coordinates
@@ -39,7 +42,7 @@ bool loadOBJ(
 		{
 			glm::vec2 uv;
 			fscanf(file, "%f %f\n", &uv.x, &uv.y );
-			out_uvs.push_back(uv);
+			temp_coordinates.push_back(uv);
 		}
 		
 		// Parse vertex normals
@@ -47,7 +50,7 @@ bool loadOBJ(
 		{
 			glm::vec3 normal;
 			fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z );
-			out_normals.push_back(normal);
+			temp_normals.push_back(normal);
 		}
 		
 		// Parse faces
@@ -55,7 +58,8 @@ bool loadOBJ(
 		{
 			std::string vertex1, vertex2, vertex3;
 			GLuint vertexIndex[3], uvIndex[3], normalIndex[3];
-			int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
+			int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], 
+				&normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
 			if (matches != 9)
 			{
 				printf("File can't be read by our simple parser : ( Try exporting with other options\n");
@@ -69,4 +73,24 @@ bool loadOBJ(
 	}
 
 
+	// Construct vertices
+	std::vector<glm::vec3>::iterator pos;
+	std::vector<glm::vec2>::iterator uv = temp_coordinates.begin();
+	std::vector<glm::vec3>::iterator norm = temp_normals.begin();
+
+	for( pos = temp_positions.begin(); pos != temp_positions.end(); ++pos )
+	{
+		Vertex vert;
+		vert.position = *pos;
+		vert.coordinates = *uv;
+		vert.normal = *norm;
+
+		out_vertices.push_back( vert );
+
+		++uv;
+		++norm;
+	}
+
+	// Loading was succesfull
+	return true;
 }

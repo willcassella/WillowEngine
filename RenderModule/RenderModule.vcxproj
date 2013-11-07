@@ -20,13 +20,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\RenderModule.h" />
+    <ClInclude Include="source\Camera.h" />
+    <ClInclude Include="source\GameObject.h" />
     <ClInclude Include="source\Material.h" />
     <ClInclude Include="source\Mesh.h" />
     <ClInclude Include="source\Renderer.h" />
     <ClInclude Include="source\Shader.h" />
+    <ClInclude Include="source\Transform.h" />
     <ClInclude Include="source\Utils.h" />
+    <ClInclude Include="source\Vertex.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\Camera.cpp" />
+    <ClCompile Include="source\GameObject.cpp" />
     <ClCompile Include="source\Material.cpp" />
     <ClCompile Include="source\Mesh.cpp" />
     <ClCompile Include="source\Renderer.cpp" />

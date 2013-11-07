@@ -33,13 +33,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\Dependancies\logo\logo.ico">
-      <Filter>Resource Files\images</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="Runtime.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Dependancies\logo\logo.ico">
+      <Filter>Resource Files\images</Filter>
+    </Image>
   </ItemGroup>
 </Project>

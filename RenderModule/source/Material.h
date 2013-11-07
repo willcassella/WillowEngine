@@ -18,6 +18,10 @@ public:
 
 	GLuint id;
 
+	GLuint model;
+	GLuint view;
+	GLuint proj;
+
 private:
 
 	// Holds whether material has been loaded to GPU

@@ -6,9 +6,10 @@
 #include <glm\gtc\matrix_transform.hpp>
 #include <GL/glew.h>
 #include "Material.h"
+#include "Vertex.h"
 
-typedef std::vector<glm::vec3>	VertexArray;
-typedef std::vector<GLuint>		ElementArray;
+typedef std::vector< Vertex> VertexArray;
+typedef std::vector< GLuint> ElementArray;
 
 class Mesh
 {
@@ -34,20 +35,14 @@ public:
 	
 	VertexArray vertices;
 	ElementArray elements;
-	std::vector < glm::vec2 > uv;
-    std::vector < glm::vec3 > normal;
+
+	//TODO: allow multiple materials
+	Material *mat;
 
 private:
 
 	// Holds whether the mesh has been loaded to the video card
 	bool loaded;
-
-	//TODO: allow multiple materials
-	Material *mat;
-
-	//Material information
-	GLuint posAttrib;
-	GLuint colAttrib;
 };
 
 #endif
