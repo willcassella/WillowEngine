@@ -26,6 +26,7 @@
     <ClInclude Include="source\Mesh.h" />
     <ClInclude Include="source\Renderer.h" />
     <ClInclude Include="source\Shader.h" />
+    <ClInclude Include="source\Texture.h" />
     <ClInclude Include="source\Transform.h" />
     <ClInclude Include="source\Utils.h" />
     <ClInclude Include="source\Vertex.h" />
@@ -37,6 +38,7 @@
     <ClCompile Include="source\Mesh.cpp" />
     <ClCompile Include="source\Renderer.cpp" />
     <ClCompile Include="source\Shader.cpp" />
+    <ClCompile Include="source\Texture.cpp" />
     <ClCompile Include="source\Utils.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -87,24 +89,24 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\Dependancies\libraries\glm;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\Dependancies\libraries\glm;$(SolutionDir)\Dependancies\Windows\SOIL\src;$(IncludePath)</IncludePath>
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetName>$(ProjectName)_d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\Dependancies\libraries\glm;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\Dependancies\libraries\glm;$(SolutionDir)\Dependancies\Windows\SOIL\src;$(IncludePath)</IncludePath>
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\Dependancies\libraries\glm;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\Dependancies\libraries\glm;$(SolutionDir)\Dependancies\Windows\SOIL\src;$(IncludePath)</IncludePath>
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetName>$(ProjectName)64_d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\Dependancies\libraries\glm;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\Dependancies\libraries\glm;$(SolutionDir)\Dependancies\Windows\SOIL\src;$(IncludePath)</IncludePath>
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetName>$(ProjectName)64</TargetName>

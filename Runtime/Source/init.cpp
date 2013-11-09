@@ -61,7 +61,7 @@ int main( int argc, char* argv[] )
 
 	//Create a simple mesh to render
 	Mesh simple;
-	simple.Load( "monkey.obj" );
+	simple.Load( "M4A1.obj" );
 	
 	Shader frag;
 	Shader vert;
@@ -71,6 +71,9 @@ int main( int argc, char* argv[] )
 
 	Material mat;
 	mat.Load( &vert, &frag );
+
+	Texture tex ("sample.png");
+	mat.texture = &tex;
 
 	simple.AssignMat( &mat );
 

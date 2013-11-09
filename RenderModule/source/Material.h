@@ -2,6 +2,7 @@
 #define MATERIAL_H_
 
 #include "Shader.h"
+#include "Texture.h"
 
 //TODO: make this more than just a shader program
 class Material
@@ -17,6 +18,7 @@ public:
 	void Unload();
 
 	GLuint id;
+	Texture *texture;
 
 	GLuint model;
 	GLuint view;

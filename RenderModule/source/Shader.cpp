@@ -45,21 +45,26 @@ void Shader::Unload()
 
 std::string Shader::basic_vert_source =
     "#version 150 core\n"
+	"in vec3 color;"
     "in vec3 position;"
-    "in vec3 color;"
+    "in vec2 texcoord;"
     "out vec3 Color;"
+	"out vec2 Texcoord;"
 	"uniform mat4 model;"
 	"uniform mat4 view;"
 	"uniform mat4 proj;"
     "void main() {"
     "   Color = color;"
     "   gl_Position = proj * view * model * vec4(position, 1.0);"
+	"	Texcoord = texcoord;"
     "}";
 
 std::string Shader::basic_frag_source =
     "#version 150 core\n"
     "in vec3 Color;"
+    "in vec2 Texcoord;"
     "out vec4 outColor;"
+    "uniform sampler2D tex;"
     "void main() {"
-    "   outColor = vec4( Color, 1.0);"
+    "   outColor = texture(tex, Texcoord);"
     "}";

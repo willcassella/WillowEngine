@@ -85,10 +85,14 @@ void Mesh::AssignMat( Material *_mat )
     glEnableVertexAttribArray( posAttrib );
     glVertexAttribPointer( posAttrib, 3, GL_FLOAT, GL_FALSE, sizeof( Vertex ), 0 );
 
+	GLint texAttrib = glGetAttribLocation( mat->id, "texcoord" );
+	glEnableVertexAttribArray( texAttrib );
+	glVertexAttribPointer( texAttrib, 2, GL_FLOAT, GL_FALSE, sizeof( Vertex ), (void*)sizeof( glm::vec3 ) );
+
 	GLuint colAttrib;
     colAttrib = glGetAttribLocation( mat->id, "color" );
     glEnableVertexAttribArray( colAttrib );
-    glVertexAttribPointer( colAttrib, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)) );
+    glVertexAttribPointer( colAttrib, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)) );
 
 	glBindVertexArray( 0 );
 }
