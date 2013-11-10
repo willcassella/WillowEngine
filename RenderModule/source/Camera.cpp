@@ -5,9 +5,9 @@ Camera::Camera()
 {
 	//Assign defaults
 	fov = 45.0f;
-	ratio = 800.0f/600.0f;
+	ratio = 1920.0f/1080.0f;
 	near = 1.0f;
-	far = 10.0f;
+	far = 40.0f;
 
 	//Generate the projection matrix
 	perspective = glm::perspective( fov, ratio, near, far );

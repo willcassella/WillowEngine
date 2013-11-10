@@ -16,8 +16,8 @@
 #include <RenderModule.h>
 
 //Define context parameters
-int window_width = 800;
-int window_height = 600;
+int window_width = 1920;
+int window_height = 1080;
 const char* title = "Willow Engine";
 
 //Function Prototypes
@@ -72,7 +72,7 @@ int main( int argc, char* argv[] )
 	Material mat;
 	mat.Load( &vert, &frag );
 
-	Texture tex ("sample.png");
+	Texture tex ("gun.png");
 	mat.texture = &tex;
 
 	simple.AssignMat( &mat );
@@ -82,7 +82,7 @@ int main( int argc, char* argv[] )
 	Camera cam;
 
 	cam.transform.global.x = 3;
-	cam.transform.global.y = 1;
+	cam.transform.global.y = 0;
 	cam.transform.global.z = 2;
 	
 	//Execute the main event loops

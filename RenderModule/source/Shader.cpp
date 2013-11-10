@@ -56,7 +56,7 @@ std::string Shader::basic_vert_source =
     "void main() {"
     "   Color = color;"
     "   gl_Position = proj * view * model * vec4(position, 1.0);"
-	"	Texcoord = texcoord;"
+	"	Texcoord = vec2(texcoord.x, 1.0 - texcoord.y);"
     "}";
 
 std::string Shader::basic_frag_source =

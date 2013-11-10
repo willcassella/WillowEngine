@@ -13,11 +13,14 @@ bool loadOBJ(
 	std::vector < glm::vec3 > temp_positions;
 	std::vector < glm::vec2 > temp_coordinates;
 	std::vector < glm::vec3 > temp_normals;
+
+	std::vector < Vertex	> temp_vertices;
 	
 	FILE * file = fopen(path, "r");
 	if( file == NULL )
 	{
 		printf("Impossible to open the file !\n");
+		fclose( file );
 		return false;
 	}
 
@@ -56,41 +59,52 @@ bool loadOBJ(
 		// Parse faces
 		else if ( strcmp( lineHeader, "f" ) == 0 )
 		{
-			std::string vertex1, vertex2, vertex3;
 			GLuint vertexIndex[3], uvIndex[3], normalIndex[3];
 			int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], 
 				&normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
 			if (matches != 9)
 			{
-				printf("File can't be read by our simple parser : ( Try exporting with other options\n");
+				printf("File can't be read by OBJ parser : ( Try exporting with other options\n");
+				fclose( file );
 				return false;
 			}
 
-			out_elements.push_back( vertexIndex[0]-1 );
-			out_elements.push_back( vertexIndex[1]-1 );
-			out_elements.push_back( vertexIndex[2]-1 );
+			// For each vertex in the face (3)
+			for( int i = 0; i < 3; i++ )
+			{
+				// Construct a vertex
+				Vertex vert;
+				vert.position = temp_positions.at( vertexIndex[i] - 1 );
+				vert.coordinates = temp_coordinates.at( uvIndex[i] - 1 );
+				vert.normal = temp_normals.at( normalIndex[i] - 1 );
+
+				// Search for the vertex
+				bool search_failed = true;
+				int index;
+				for( index = 0; index < out_vertices.size(); index++ )
+				{
+					// if it already exists
+					if( out_vertices[ index ] == vert )
+					{
+						// Add it to elements
+						out_elements.push_back( index );
+						search_failed = false;
+						break;
+					}
+				}
+
+				// If the vertex wash not found
+				if( search_failed )
+				{
+					// Add the vertex to output
+					out_vertices.push_back( vert );
+					// Add it to elements
+					out_elements.push_back( index );
+				}
+			}
 		}
 	}
 
-
-	// Construct vertices
-	std::vector<glm::vec3>::iterator pos;
-	std::vector<glm::vec2>::iterator uv = temp_coordinates.begin();
-	std::vector<glm::vec3>::iterator norm = temp_normals.begin();
-
-	for( pos = temp_positions.begin(); pos != temp_positions.end(); ++pos )
-	{
-		Vertex vert;
-		vert.position = *pos;
-		vert.coordinates = *uv;
-		vert.normal = *norm;
-
-		out_vertices.push_back( vert );
-
-		++uv;
-		++norm;
-	}
-
-	// Loading was succesfull
+	fclose( file );
 	return true;
 }

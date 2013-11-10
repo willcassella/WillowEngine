@@ -37,19 +37,19 @@ int Renderer::render( GLFWwindow* window )
 	Camera* cam = cqueue.front();
 
 	//change the camera's position
-	cam->transform.global.x = 3*sin( glfwGetTime() );
-	cam->transform.global.y = 3*cos( glfwGetTime() );
+	cam->transform.global.x = 3*sin( (float)glfwGetTime() );
+	cam->transform.global.y = 3*cos( (float)glfwGetTime() );
 
 	//Iterate throught the render queue
     //for (object = rqueue.begin() ; object != rqueue.end(); object++){
 
 		// Bind the mesh
-		glBindVertexArray( (*object).mesh->vao );
+		glBindVertexArray( object->mesh->vao );
 
 
 		// Create the model matrix
 		glm::mat4 model;
-		glUniformMatrix4fv( (*object).mesh->mat->model, 1, GL_FALSE, glm::value_ptr( model ) );
+		glUniformMatrix4fv( object->mesh->mat->model, 1, GL_FALSE, glm::value_ptr( model ) );
 
 
 		//Generate the view matrix
@@ -58,12 +58,12 @@ int Renderer::render( GLFWwindow* window )
 			glm::vec3(0.0f, 0.0f, 0.0f),
 			glm::vec3(0.0f, 0.0f, 1.0f)
 		);
-		glUniformMatrix4fv( (*object).mesh->mat->view, 1, GL_FALSE, glm::value_ptr( view ) );
+		glUniformMatrix4fv( object->mesh->mat->view, 1, GL_FALSE, glm::value_ptr( view ) );
 
-		glUniformMatrix4fv( (*object).mesh->mat->proj, 1, GL_FALSE, glm::value_ptr( cam->perspective ) );
+		glUniformMatrix4fv( object->mesh->mat->proj, 1, GL_FALSE, glm::value_ptr( cam->perspective ) );
 		
 		//Draw the mesh
-		glDrawElements( GL_TRIANGLES, (GLsizei)(*object).mesh->elements.size(), GL_UNSIGNED_INT, 0 );
+		glDrawElements( GL_TRIANGLES, (GLsizei)object->mesh->elements.size(), GL_UNSIGNED_INT, 0 );
 	//};
 	
 	glBindVertexArray( 0 );
