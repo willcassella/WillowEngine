@@ -1,6 +1,10 @@
 #include "Camera.h"
 #include "Renderer.h"
 
+#include <glm\glm.hpp>
+//experimental
+#include <math.h>
+
 Camera::Camera()
 {
 	//Assign defaults
@@ -21,7 +25,13 @@ Camera::~Camera()
 	//Do nothing
 }
 
-void Camera::Update()
+void Camera::Update( GLFWwindow* window )
 {
-	//do nothing;
+	//double x, y;
+	//glfwGetCursorPos( window, &x, &y );
+
+	//transform.euler.x = (GLfloat)x/700;
+	//transform.euler.y = (GLfloat)y/400;
+	transform.local.x = 3*sin( glfwGetTime()/2 );
+	transform.local.y = 3*cos( glfwGetTime()/2 );
 }

@@ -8,9 +8,6 @@
 
 #include <glm\gtc\type_ptr.hpp>
 
-//experimental
-#include <math.h>
-
 RenderQueue Renderer::rqueue;
 CameraQueue Renderer::cqueue;
 
@@ -36,9 +33,8 @@ int Renderer::render( GLFWwindow* window )
 	//Get the current camera
 	Camera* cam = cqueue.front();
 
-	//change the camera's position
-	cam->transform.global.x = 3*sin( (float)glfwGetTime() );
-	cam->transform.global.y = 3*cos( (float)glfwGetTime() );
+	// Call the camera's update function
+	cam->Update( window );
 
 	//Iterate throught the render queue
     //for (object = rqueue.begin() ; object != rqueue.end(); object++){
@@ -47,20 +43,16 @@ int Renderer::render( GLFWwindow* window )
 		glBindVertexArray( object->mesh->vao );
 
 
-		// Create the model matrix
+		// Create the clipspace matrix
 		glm::mat4 model;
-		glUniformMatrix4fv( object->mesh->mat->model, 1, GL_FALSE, glm::value_ptr( model ) );
+		glm::mat4 view = glm::lookAt( 
+			cam->transform.local, 
+			glm::vec3( 0, 0, 0 ), 
+			glm::vec3(0.0f, 0.0f, 1.0f) );
+		glm::mat4 clipspace = cam->perspective * view * model;
 
-
-		//Generate the view matrix
-		glm::mat4 view = glm::lookAt(
-			cam->transform.global,
-			glm::vec3(0.0f, 0.0f, 0.0f),
-			glm::vec3(0.0f, 0.0f, 1.0f)
-		);
-		glUniformMatrix4fv( object->mesh->mat->view, 1, GL_FALSE, glm::value_ptr( view ) );
-
-		glUniformMatrix4fv( object->mesh->mat->proj, 1, GL_FALSE, glm::value_ptr( cam->perspective ) );
+		// Upload the matrix to the GPU
+		glUniformMatrix4fv( object->mesh->mat->clipspace, 1, GL_FALSE, glm::value_ptr( clipspace ) );
 		
 		//Draw the mesh
 		glDrawElements( GL_TRIANGLES, (GLsizei)object->mesh->elements.size(), GL_UNSIGNED_INT, 0 );

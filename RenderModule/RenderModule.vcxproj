@@ -24,6 +24,7 @@
     <ClInclude Include="source\GameObject.h" />
     <ClInclude Include="source\Material.h" />
     <ClInclude Include="source\Mesh.h" />
+    <ClInclude Include="source\Quaternion.h" />
     <ClInclude Include="source\Renderer.h" />
     <ClInclude Include="source\Shader.h" />
     <ClInclude Include="source\Texture.h" />

@@ -20,9 +20,7 @@ public:
 	GLuint id;
 	Texture *texture;
 
-	GLuint model;
-	GLuint view;
-	GLuint proj;
+	GLuint clipspace;
 
 private:
 

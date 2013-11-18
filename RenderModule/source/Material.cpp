@@ -20,9 +20,7 @@ Material::Material( Shader *_vertex, Shader *_fragment )
 	glLinkProgram( id );
 
 	// get matrix locations
-	model = glGetUniformLocation( id, "model" );
-	view = glGetUniformLocation( id, "view" );
-	proj = glGetUniformLocation( id, "proj" );
+	clipspace = glGetUniformLocation( id, "clipspace" );
 
 
 	//TODO: find a better place for this
@@ -56,9 +54,8 @@ void Material::Load( Shader *_vertex, Shader *_fragment )
 	glBindFragDataLocation( id, 0, "outColor" );
 	glLinkProgram( id );
 
-	model = glGetUniformLocation( id, "model" );
-	view = glGetUniformLocation( id, "view" );
-	proj = glGetUniformLocation( id, "proj" );
+	clipspace = glGetUniformLocation( id, "clipspace" );
+
 
 	//TODO: find a better place for this
 	glUseProgram( id );

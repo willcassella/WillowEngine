@@ -10,6 +10,7 @@
 #include <string>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <cstring>
 
 //Include modules files
 #include <ScriptingModule.h>
@@ -19,6 +20,7 @@
 int window_width = 1920;
 int window_height = 1080;
 const char* title = "Willow Engine";
+bool fullscreen = false;
 
 //Function Prototypes
 GLFWwindow* InitGLFW();
@@ -30,6 +32,7 @@ void windowPosCallback( GLFWwindow* window, int x, int y )
 {
 	std::cout << "Position: " << x << ", " << y <<std::endl;
 }
+
 void windowSizeCallback( GLFWwindow* window, int x, int y )
 {
 	//Resize the viewport
@@ -81,9 +84,13 @@ int main( int argc, char* argv[] )
 
 	Camera cam;
 
-	cam.transform.global.x = 3;
-	cam.transform.global.y = 0;
-	cam.transform.global.z = 2;
+	cam.transform.local.x = 2;
+	cam.transform.local.y = 2;
+	cam.transform.local.z = 2;
+
+	cam.transform.orientation.x = 0;
+	cam.transform.orientation.y = 0;
+	cam.transform.orientation.z = 0;
 	
 	//Execute the main event loops
 	eventLoop( window );
@@ -114,7 +121,7 @@ GLFWwindow* InitGLFW()
 	}
 
 	//move the window to the center of the screen
-	glfwSetWindowPos( window, 550, 250 );
+	glfwSetWindowPos( window, 0, 0 );
 
 	//Make the window visible
 	glfwShowWindow( window );

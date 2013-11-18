@@ -73,7 +73,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\Dependancies\Windows\SOIL\src;$(SolutionDir)\Dependancies\libraries\glm;$(SolutionDir)\ScriptingModule\include;$(SolutionDir)\RenderModule\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\lib-msvc110;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\lib\Release\$(Platform);$(SolutionDir)\Dependancies\Windows\SOIL\lib;$(SolutionDir)\ScriptingModule\bin;$(SolutionDir)\RenderModule\bin;C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Users\Will\Documents\BitBucket\willow-engine\Dependancies\libraries\glfw-3.0.3\project\src\Release;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\lib\Release\$(Platform);$(SolutionDir)\Dependancies\Windows\SOIL\lib;$(SolutionDir)\ScriptingModule\bin;$(SolutionDir)\RenderModule\bin;C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -85,7 +85,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\Dependancies\Windows\SOIL\src;$(SolutionDir)\Dependancies\libraries\glm;$(SolutionDir)\ScriptingModule\include;$(SolutionDir)\RenderModule\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\lib-msvc110;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\lib\Release\$(Platform);$(SolutionDir)\Dependancies\Windows\SOIL\lib;$(SolutionDir)\ScriptingModule\bin;$(SolutionDir)\RenderModule\bin;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Users\Will\Documents\BitBucket\willow-engine\Dependancies\Windows\glfw3\x64\lib-msvc110;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\lib\Release\$(Platform);$(SolutionDir)\Dependancies\Windows\SOIL\lib;$(SolutionDir)\ScriptingModule\bin;$(SolutionDir)\RenderModule\bin;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>

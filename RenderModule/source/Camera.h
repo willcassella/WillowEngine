@@ -1,6 +1,9 @@
 #ifndef CAMERA_H_
 #define CAMERA_H_
 
+#include <GL\glew.h>
+#include <GLFW\glfw3.h>
+
 #include "Transform.h"
 #include <glm\gtc\matrix_transform.hpp>
 
@@ -12,7 +15,7 @@ public:
 	~Camera();
 	
 	Transform transform;
-	void Update();
+	void Update( GLFWwindow* window );
 
 	float fov;
 	float ratio;
