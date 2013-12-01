@@ -42,11 +42,10 @@ int Renderer::render( GLFWwindow* window )
 		// Bind the mesh
 		glBindVertexArray( object->mesh->vao );
 
-
 		// Create the clipspace matrix
 		glm::mat4 model;
 		glm::mat4 view = glm::lookAt( 
-			cam->transform.local, 
+			cam->transform.local,
 			glm::vec3( 0, 0, 0 ), 
 			glm::vec3(0.0f, 0.0f, 1.0f) );
 		glm::mat4 clipspace = cam->perspective * view * model;

@@ -17,8 +17,8 @@
 #include <RenderModule.h>
 
 //Define context parameters
-int window_width = 1920;
-int window_height = 1080;
+int window_width = 1024;
+int window_height = 768;
 const char* title = "Willow Engine";
 bool fullscreen = false;
 
@@ -27,11 +27,6 @@ GLFWwindow* InitGLFW();
 bool InitGlew();
 void eventLoop( GLFWwindow* window );
 void cleanUp( GLFWwindow* window );
-
-void windowPosCallback( GLFWwindow* window, int x, int y )
-{
-	std::cout << "Position: " << x << ", " << y <<std::endl;
-}
 
 void windowSizeCallback( GLFWwindow* window, int x, int y )
 {
@@ -75,7 +70,7 @@ int main( int argc, char* argv[] )
 	Material mat;
 	mat.Load( &vert, &frag );
 
-	Texture tex ("gun.png");
+	Texture tex ("M4A1 tex.png");
 	mat.texture = &tex;
 
 	simple.AssignMat( &mat );
@@ -120,14 +115,20 @@ GLFWwindow* InitGLFW()
 		exit(EXIT_FAILURE);
 	}
 
+	// figure out the center of the screen
+	int screen_height = 1080;
+	int screen_width = 1920;
+
+	int posx = (screen_width - window_width)/2;
+	int posy = (screen_height - window_height)/2;
+
 	//move the window to the center of the screen
-	glfwSetWindowPos( window, 0, 0 );
+	glfwSetWindowPos( window, posx, posy );
 
 	//Make the window visible
 	glfwShowWindow( window );
 
 	//Set the window callbacks
-	glfwSetWindowPosCallback( window, windowPosCallback );
 	glfwSetWindowSizeCallback( window, windowSizeCallback );
 
 	// Create the frambuffer and viewport

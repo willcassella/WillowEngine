@@ -9,7 +9,7 @@ Camera::Camera()
 {
 	//Assign defaults
 	fov = 45.0f;
-	ratio = 1920.0f/1080.0f;
+	ratio = 1024.0f/768.0f;
 	near = 1.0f;
 	far = 40.0f;
 
@@ -27,11 +27,6 @@ Camera::~Camera()
 
 void Camera::Update( GLFWwindow* window )
 {
-	//double x, y;
-	//glfwGetCursorPos( window, &x, &y );
-
-	//transform.euler.x = (GLfloat)x/700;
-	//transform.euler.y = (GLfloat)y/400;
 	transform.local.x = 3*sin( glfwGetTime()/2 );
 	transform.local.y = 3*cos( glfwGetTime()/2 );
 }
