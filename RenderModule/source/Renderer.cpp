@@ -16,6 +16,7 @@ int Renderer::init()
 	// Set the opengl clear color to black and clear the screen
 	glClearColor( 0, 0, 0, 1 );
 	glEnable( GL_DEPTH_TEST );
+	glEnable( GL_CULL_FACE );
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 	return 0;
