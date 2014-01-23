@@ -25,5 +25,8 @@ Camera::~Camera()
 
 void Camera::Update( GLFWwindow* window )
 {
-	transform.local.x = 1*sin( glfwGetTime()/2 );
+	transform.myLocal.x = 1*sin( glfwGetTime()/2 );
+	transform.myLocal.y = 1*cos( glfwGetTime()/2 );
+
+	transform.myLocal.z = 4;
 }

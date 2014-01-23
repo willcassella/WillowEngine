@@ -59,7 +59,7 @@ int main( int argc, char* argv[] )
 
 	//Create a simple mesh to render
 	Mesh simple;
-	simple.Load( "M4A1.obj" );
+	simple.Load( "teapot.obj" );
 	
 	Shader frag;
 	Shader vert;
@@ -70,7 +70,7 @@ int main( int argc, char* argv[] )
 	Material mat;
 	mat.Load( &vert, &frag );
 
-	Texture tex ("M4A1 tex.png");
+	Texture tex ("teapot_tex.png");
 	mat.texture = &tex;
 
 	simple.AssignMat( &mat );
@@ -81,7 +81,7 @@ int main( int argc, char* argv[] )
 
 	cam.transform.local.x = 0;
 	cam.transform.local.y = 0;
-	cam.transform.local.z = 2;
+	cam.transform.local.z = 3;
 
 	cam.transform.orientation.x = 0;
 	cam.transform.orientation.y = 0;

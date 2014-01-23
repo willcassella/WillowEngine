@@ -104,7 +104,6 @@
     </Link>
     <PostBuildEvent>
       <Command>copy $(SolutionDir)\Dependancies\Scripts\* $(OutDir)
-copy $(SolutionDir)\Dependancies\Models\* $(OutDir)
 copy $(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\lib-msvc110\glfw3.dll $(OutDir)
 copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\glew32.dll $(OutDir)</Command>
       <Message>Copy dependancies into output</Message>
@@ -125,7 +124,6 @@ copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\gle
     </Link>
     <PostBuildEvent>
       <Command>copy $(SolutionDir)\Dependancies\Scripts\* $(OutDir)
-copy $(SolutionDir)\Dependancies\Models\* $(OutDir)
 copy $(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\lib-msvc110\glfw3.dll $(OutDir)
 copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\glew32.dll $(OutDir)</Command>
     </PostBuildEvent>
@@ -153,7 +151,6 @@ copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\gle
     </Link>
     <PostBuildEvent>
       <Command>copy $(SolutionDir)\Dependancies\Scripts\* $(OutDir)
-copy $(SolutionDir)\Dependancies\Models\* $(OutDir)
 copy $(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\lib-msvc110\glfw3.dll $(OutDir)
 copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\glew32.dll $(OutDir)</Command>
     </PostBuildEvent>
@@ -181,7 +178,6 @@ copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\gle
     </Link>
     <PostBuildEvent>
       <Command>copy $(SolutionDir)\Dependancies\Scripts\* $(OutDir)
-copy $(SolutionDir)\Dependancies\Models\* $(OutDir)
 copy $(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\lib-msvc110\glfw3.dll $(OutDir)
 copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\glew32.dll $(OutDir)</Command>
     </PostBuildEvent>

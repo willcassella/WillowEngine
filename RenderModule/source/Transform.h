@@ -5,7 +5,9 @@
 #include <glm\gtc\quaternion.hpp>
 #include <glm\gtx\quaternion.hpp>
 
-//#include "Quaternion.h"
+#include "Vec3.h"
+#include "Quat.h"
+#include "Mat4.h"
 
 struct Transform
 {
@@ -13,6 +15,9 @@ struct Transform
 	glm::vec3 local;
 	glm::quat orientation;
 	glm::vec3 scale;
+
+	Vec3 myLocal;
+	Quat myOrientation;
 	
 	// Returns the global position
 	glm::vec3 getGlobal()
@@ -25,6 +30,12 @@ struct Transform
 	glm::mat4 getModel()
 	{
 		return glm::translate( glm::mat4(), local ) * glm::mat4_cast( orientation );
+	}
+
+	// Using my math
+	Mat4 myGetModel()
+	{
+		return myLocal.translate() * myOrientation.to_matrix();
 	}
 };
 
