@@ -2,8 +2,6 @@
 #include "Renderer.h"
 
 #include <glm\glm.hpp>
-//experimental
-#include <math.h>
 
 Camera::Camera()
 {
@@ -27,6 +25,5 @@ Camera::~Camera()
 
 void Camera::Update( GLFWwindow* window )
 {
-	transform.local.x = 3*sin( glfwGetTime()/2 );
-	transform.local.y = 3*cos( glfwGetTime()/2 );
+	transform.local.x = 1*sin( glfwGetTime()/2 );
 }

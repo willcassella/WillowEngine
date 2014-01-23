@@ -22,14 +22,16 @@
     <ClInclude Include="include\RenderModule.h" />
     <ClInclude Include="source\Camera.h" />
     <ClInclude Include="source\GameObject.h" />
+    <ClInclude Include="source\Mat4.h" />
     <ClInclude Include="source\Material.h" />
     <ClInclude Include="source\Mesh.h" />
-    <ClInclude Include="source\Quaternion.h" />
+    <ClInclude Include="source\Quat.h" />
     <ClInclude Include="source\Renderer.h" />
     <ClInclude Include="source\Shader.h" />
     <ClInclude Include="source\Texture.h" />
     <ClInclude Include="source\Transform.h" />
     <ClInclude Include="source\Utils.h" />
+    <ClInclude Include="source\Vec3.h" />
     <ClInclude Include="source\Vertex.h" />
   </ItemGroup>
   <ItemGroup>

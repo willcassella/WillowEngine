@@ -21,8 +21,8 @@
     <Filter Include="Source Files\Engine">
       <UniqueIdentifier>{90f9aa5b-2446-4bb6-ae64-d8867d34b3b9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Math">
-      <UniqueIdentifier>{2d386157-4f30-4e9b-bece-c88a61309baf}</UniqueIdentifier>
+    <Filter Include="Math">
+      <UniqueIdentifier>{650a7b13-aa3f-4e0d-b9db-ef2391d6092c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -59,8 +59,14 @@
     <ClInclude Include="source\Texture.h">
       <Filter>Header Files\Render</Filter>
     </ClInclude>
-    <ClInclude Include="source\Quaternion.h">
-      <Filter>Header Files\Math</Filter>
+    <ClInclude Include="source\Quat.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Mat4.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Vec3.h">
+      <Filter>Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

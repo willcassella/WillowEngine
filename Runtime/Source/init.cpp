@@ -79,8 +79,8 @@ int main( int argc, char* argv[] )
 
 	Camera cam;
 
-	cam.transform.local.x = 2;
-	cam.transform.local.y = 2;
+	cam.transform.local.x = 0;
+	cam.transform.local.y = 0;
 	cam.transform.local.z = 2;
 
 	cam.transform.orientation.x = 0;

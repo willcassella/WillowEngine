@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// OpenGL Mathematics Copyright (c) 2005 - 2013 G-Truc Creation (www.g-truc.net)
+// OpenGL Mathematics Copyright (c) 2005 - 2014 G-Truc Creation (www.g-truc.net)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Created : 2011-05-25
 // Updated : 2011-05-31
@@ -7,6 +7,7 @@
 // File    : test/gtx/quaternion.cpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+#define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 #include <glm/gtc/epsilon.hpp>
 #include <glm/gtx/quaternion.hpp>
@@ -16,9 +17,9 @@ int test_quat_fastMix()
 	int Error = 0;
 
 	glm::quat A = glm::angleAxis(0.0f, glm::vec3(0, 0, 1));
-	glm::quat B = glm::angleAxis(90.0f, glm::vec3(0, 0, 1));
+	glm::quat B = glm::angleAxis(glm::pi<float>() * 0.5f, glm::vec3(0, 0, 1));
 	glm::quat C = glm::fastMix(A, B, 0.5f);
-	glm::quat D = glm::angleAxis(45.0f, glm::vec3(0, 0, 1));
+	glm::quat D = glm::angleAxis(glm::pi<float>() * 0.25f, glm::vec3(0, 0, 1));
 
 	Error += glm::epsilonEqual(C.x, D.x, 0.01f) ? 0 : 1;
 	Error += glm::epsilonEqual(C.y, D.y, 0.01f) ? 0 : 1;
@@ -33,9 +34,9 @@ int test_quat_shortMix()
 	int Error(0);
 
 	glm::quat A = glm::angleAxis(0.0f, glm::vec3(0, 0, 1));
-	glm::quat B = glm::angleAxis(90.0f, glm::vec3(0, 0, 1));
+	glm::quat B = glm::angleAxis(glm::pi<float>() * 0.5f, glm::vec3(0, 0, 1));
 	glm::quat C = glm::shortMix(A, B, 0.5f);
-	glm::quat D = glm::angleAxis(45.0f, glm::vec3(0, 0, 1));
+	glm::quat D = glm::angleAxis(glm::pi<float>() * 0.25f, glm::vec3(0, 0, 1));
 
 	Error += glm::epsilonEqual(C.x, D.x, 0.01f) ? 0 : 1;
 	Error += glm::epsilonEqual(C.y, D.y, 0.01f) ? 0 : 1;
@@ -67,10 +68,27 @@ int test_orientation()
 	return Error;
 }
 
+int test_rotation()
+{
+	int Error(0);
+
+	glm::vec3 v(1, 0, 0);
+	glm::vec3 u(0, 1, 0);
+
+	glm::quat Rotation = glm::rotation(v, u);
+
+	float Angle = glm::angle(Rotation);
+
+	Error += glm::abs(Angle - glm::pi<float>() * 0.5f) < glm::epsilon<float>() ? 0 : 1;
+
+	return Error;
+}
+
 int main()
 {
-	int Error = 0;
+	int Error(0);
 
+	Error += test_rotation();
 	Error += test_quat_fastMix();
 	Error += test_quat_shortMix();
 
