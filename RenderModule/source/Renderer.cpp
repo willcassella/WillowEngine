@@ -1,13 +1,12 @@
 // Renderer.cpp
 
 #include "Renderer.h"
-#include "Mesh.h"
-#include <forward_list>
+
 #include <GLFW\glfw3.h>
+#include <forward_list>
+
+#include "Mesh.h"
 #include "GameObject.h"
-
-#include <glm\gtc\type_ptr.hpp>
-
 #include "Mat4.h"
 
 RenderQueue Renderer::rqueue;
@@ -45,25 +44,17 @@ int Renderer::render( GLFWwindow* window )
 		// Bind the mesh
 		glBindVertexArray( object->mesh->vao );
 
-		// Create the clipspace matrix using MY math
-
-		// Use GLM's inverse algorithm
-		Mat4 view = cam->transform.myGetModel();
-		// Assign pre_view to cam_model
-		glm::mat4 pre_view = view.to_glm();
-		// Invert it
-		pre_view = glm::inverse( pre_view );
-		// Assign pre_view to cam_model
-		view.set_from_glm( pre_view );
-
 		// Get the perspective matrix
 		Mat4 perspective;
-		glm::mat4 pre_perspective = cam->perspective;
-		// Assign pre_perspective to perspective
-		perspective.set_from_glm( pre_perspective );
+		perspective.set_from_glm( cam->perspective );
 
-		Mat4 model;
-		//// Create the clipspace matrix
+		// Get the view matrix
+		Mat4 view = cam->transform.getModel().inverse();
+
+		// Get the model matrix
+		Mat4  model = object->transform.getModel();
+
+		// Create the clipspace matrix
 		Mat4 clipspace = perspective * view * model;
 
 		// Upload the matrix to the GPU

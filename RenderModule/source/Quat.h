@@ -11,7 +11,17 @@ struct Quat
 	// Default constructor
 	Quat()
 	{
-		x = 0; y = 0; z = 0; w = 0;
+		x = 1; y = 0; z = 0; w = 0;
+	}
+
+	// Turn this quaternion into a rotation matrix
+	Mat4 to_matrix()
+	{
+		return Mat4(
+			1 - 2*y*y - 2*z*z,	2*x*y + 2*z*w,		2*x*z - 2*y*w,		0,
+			2*x*y - 2*z*w,		1 - 2*x*x - 2*z*z,	2*y*z + 2*x*w,		0,
+			2*x*z + 2*y*w,		2*y*z - 2*x*w,		1 - 2*x*x - 2*y*y,	0,
+			0,					0,					0,					1 );
 	}
 
 	// Returns the quaternion result of one quaternion multiplied by another (rotation)
@@ -25,16 +35,6 @@ struct Quat
 		total.z = w*quat.z + x*quat.y - y*quat.x + z*quat.w;
 
 		return total;
-	}
-
-	// Turn this quaternion into a rotation matrix
-	Mat4 to_matrix()
-	{
-		return Mat4(
-			1 - 2*y*y - 2*z*z,	2*x*y + 2*z*w,		2*x*z - 2*y*w,		0,
-			2*x*y - 2*z*w,		1 - 2*x*x - 2*z*z,	2*y*z + 2*x*w,		0,
-			2*x*z + 2*y*w,		2*y*z - 2*x*w,		1 - 2*x*x - 2*y*y,	0,
-			0,					0,					0,					1 );
 	}
 };
 

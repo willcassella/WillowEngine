@@ -1,14 +1,15 @@
 #ifndef VERTEX_H_
 #define VERTEX_H_
 
-#include <glm\gtc\matrix_transform.hpp>
+#include "Vec3.h"
+#include "Vec2.h"
 
 struct Vertex
 {
 	// Vertex attributes
-	glm::vec3 position;
-	glm::vec2 coordinates;
-	glm::vec3 normal;
+	Vec3 position;
+	Vec2 coordinates;
+	Vec3 normal;
 
 	// == operator
 	bool operator==( Vertex comp )

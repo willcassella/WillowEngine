@@ -2,7 +2,8 @@
 #include "Vertex.h"
 #include <GL\glew.h>
 #include <vector>
-#include <glm\gtc\matrix_transform.hpp>
+#include "Vec2.h"
+#include "Vec3.h"
 
 bool loadOBJ(
     const char * path,
@@ -10,9 +11,9 @@ bool loadOBJ(
 	std::vector < GLuint > & out_elements
 )
 {
-	std::vector < glm::vec3 > temp_positions;
-	std::vector < glm::vec2 > temp_coordinates;
-	std::vector < glm::vec3 > temp_normals;
+	std::vector < Vec3 > temp_positions;
+	std::vector < Vec2 > temp_coordinates;
+	std::vector < Vec3 > temp_normals;
 
 	std::vector < Vertex	> temp_vertices;
 	
@@ -35,7 +36,7 @@ bool loadOBJ(
 		// Parse vertices
 		if ( strcmp( lineHeader, "v" ) == 0 )
 		{
-			glm::vec3 vertex;
+			Vec3 vertex;
 			fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z );
 			temp_positions.push_back(vertex);
 		}
@@ -43,7 +44,7 @@ bool loadOBJ(
 		// Parse texture coordinates
 		else if ( strcmp( lineHeader, "vt" ) == 0 )
 		{
-			glm::vec2 uv;
+			Vec2 uv;
 			fscanf(file, "%f %f\n", &uv.x, &uv.y );
 			temp_coordinates.push_back(uv);
 		}
@@ -51,7 +52,7 @@ bool loadOBJ(
 		// Parse vertex normals
 		else if ( strcmp( lineHeader, "vn" ) == 0 )
 		{
-			glm::vec3 normal;
+			Vec3 normal;
 			fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z );
 			temp_normals.push_back(normal);
 		}

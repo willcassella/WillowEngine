@@ -68,6 +68,9 @@
     <ClInclude Include="source\Vec3.h">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="source\Vec2.h">
+      <Filter>Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Utils.cpp">

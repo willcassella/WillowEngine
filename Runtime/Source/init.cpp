@@ -55,11 +55,11 @@ int main( int argc, char* argv[] )
 	//Initialize the renderer
 	Renderer::init();
 
-	GameObject monkey;
+	GameObject teapot;
 
 	//Create a simple mesh to render
-	Mesh simple;
-	simple.Load( "teapot.obj" );
+	Mesh teapot_mesh;
+	teapot_mesh.Load( "teapot.obj" );
 	
 	Shader frag;
 	Shader vert;
@@ -73,19 +73,15 @@ int main( int argc, char* argv[] )
 	Texture tex ("teapot_tex.png");
 	mat.texture = &tex;
 
-	simple.AssignMat( &mat );
+	teapot_mesh.AssignMat( &mat );
 
-	monkey.mesh = &simple;
+	teapot.mesh = &teapot_mesh;
 
 	Camera cam;
 
 	cam.transform.local.x = 0;
 	cam.transform.local.y = 0;
-	cam.transform.local.z = 3;
-
-	cam.transform.orientation.x = 0;
-	cam.transform.orientation.y = 0;
-	cam.transform.orientation.z = 0;
+	cam.transform.local.z = -5;
 	
 	//Execute the main event loops
 	eventLoop( window );
