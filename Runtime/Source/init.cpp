@@ -12,7 +12,7 @@
 #include <GLFW/glfw3.h>
 #include <cstring>
 
-//Include modules files
+//Include module files
 #include <ScriptingModule.h>
 #include <RenderModule.h>
 
@@ -55,6 +55,14 @@ int main( int argc, char* argv[] )
 	//Initialize the renderer
 	Renderer::init();
 
+	
+	
+	///////////////////////////////
+	///   Setting up a simple   ///
+	///          scene          ///
+	///////////////////////////////
+
+
 	GameObject teapot;
 
 	//Create a simple mesh to render
@@ -79,9 +87,11 @@ int main( int argc, char* argv[] )
 
 	Camera cam;
 
-	cam.transform.local.x = 0;
-	cam.transform.local.y = 0;
 	cam.transform.local.z = -5;
+
+
+
+
 	
 	//Execute the main event loops
 	eventLoop( window );
