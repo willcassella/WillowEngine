@@ -1,8 +1,6 @@
 #ifndef VEC3_H_
 #define VEC3_H_
 
-#include "Mat4.h"
-
 struct Vec3
 {
 	// Data
@@ -20,7 +18,53 @@ struct Vec3
 		x = _X; y = _Y; z = _Z;
 	}
 
-	// TODO: operator overloads
+	// Assignment operator
+	void operator=( Vec3 rhs )
+	{
+		x = rhs.x; y = rhs.y; z = rhs.z;
+	}
+
+	// Addition operator
+	Vec3 operator+( Vec3 rhs )
+	{
+		return Vec3( x + rhs.x, y + rhs.y, z + rhs.z );
+	}
+
+	// Addition-assignment operator
+	void operator+=( Vec3 rhs )
+	{
+		x += rhs.x; y += rhs.y; z+= rhs.z;
+	}
+
+	// Subtraction operator
+	Vec3 operator-( Vec3 rhs )
+	{
+		return Vec3( x - rhs.x, y - rhs.y, z - rhs.z );
+	}
+
+	// Subtraction-assignment operator
+	void operator-=( Vec3 rhs )
+	{
+		x -= rhs.x; y -= rhs.y; z-= rhs.z;
+	}
+
+	// Equality operator
+	bool operator==( Vec3 rhs )
+	{
+		if( x == rhs.x && y == rhs.y && z == rhs.z )
+			return true;
+		else
+			return false;
+	}
+
+	// Inequality operator
+	bool operator!=( Vec3 rhs )
+	{
+		if( x != rhs.x || y != rhs.y || z != rhs.z )
+			return true;
+		else
+			return false;
+	}
 };
 
 #endif

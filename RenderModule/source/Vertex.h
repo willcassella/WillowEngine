@@ -15,13 +15,13 @@ struct Vertex
 	bool operator==( Vertex comp )
 	{
 		// Check position
-		if( position.x != comp.position.x || position.y != comp.position.y || position.z != comp.position.z )
+		if( position != comp.position )
 			return false;
 		// Check coordinates
-		if( coordinates.x != comp.coordinates.x || coordinates.y != comp.coordinates.y )
+		if( coordinates != comp.coordinates  )
 			return false;
 		// Check normal
-		if( normal.x != comp.normal.x || normal.y != comp.normal.y || normal.z != comp.normal.z )
+		if( normal != comp.normal )
 			return false;
 
 		// They all must have checked out
@@ -31,13 +31,13 @@ struct Vertex
 	bool operator!=( Vertex comp )
 	{
 		// Check position
-		if( position.x != comp.position.x || position.y != comp.position.y || position.z != comp.position.z )
+		if( position != comp.position )
 			return true;
 		// Check coordinates
-		if( coordinates.x != comp.coordinates.x || coordinates.y != comp.coordinates.y )
+		if( coordinates != comp.coordinates )
 			return true;
 		// Check normal
-		if( normal.x != comp.normal.x || normal.y != comp.normal.y || normal.z != comp.normal.z )
+		if( normal != comp.normal )
 			return true;
 
 		// They must have all been equal

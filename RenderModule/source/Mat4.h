@@ -54,7 +54,7 @@ struct Mat4
 	{
 		Mat4 result;
 
-		// Seriously, fuck this shit
+		// Seriously, fuck this shit, I had to type all this by hand
 		// based off http://www.cg.info.hiroshima-cu.ac.jp/~miyazaki/knowledge/teche23.html
 		// by some miracle, this all worked perfectly on the first try!
 
@@ -251,7 +251,6 @@ struct Mat4
 				}
 
 				// Assign it to the new matrix
-				// Row and column must be reversed because of how the data is stored, i might change this
 				total.set( col, row, value );
 			}
 		}
@@ -284,9 +283,11 @@ struct Mat4
 			// For each column
 			for( int col = 0; col < 4; col++ )
 			{
+				// Print the value in that place
 				printf( "%f  ", values[col][row] );
 			}
 
+			// Start a new line
 			printf( "\n" );
 		}
 
