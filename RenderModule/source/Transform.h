@@ -33,10 +33,10 @@ struct Transform
 		// Generate the translation matrix from the local position vector
 		Mat4 translate (
 			1, 0, 0, local.x,
-			0, 1, 0, local.y,
-			0, 0, 1, local.z,
+			0, 1, 0, -local.y,
+			0, 0, 1, -local.z,
 			0, 0, 0, 1 );
-
+			
 		// Generate the scale matrix from the local scale vector
 		Mat4 scale (
 			scale.x, 0, 0, 0,

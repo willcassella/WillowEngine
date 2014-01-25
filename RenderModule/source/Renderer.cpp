@@ -38,21 +38,24 @@ int Renderer::render( GLFWwindow* window )
 	// Call the camera's update function
 	cam->Update( window );
 
+	// Call the object's update function
+	object->Update();
+
 	//Iterate throught the render queue
     //for (object = rqueue.begin() ; object != rqueue.end(); object++){
 
 		// Bind the mesh
 		glBindVertexArray( object->mesh->vao );
+		
+		// Get the model matrix
+		Mat4  model = object->transform.getModel();
+		
+		// Get the view matrix
+		Mat4 view = cam->transform.getModel().inverse();
 
 		// Get the perspective matrix
 		Mat4 perspective;
 		perspective.set_from_glm( cam->perspective );
-
-		// Get the view matrix
-		Mat4 view = cam->transform.getModel().inverse();
-
-		// Get the model matrix
-		Mat4  model = object->transform.getModel();
 
 		// Create the clipspace matrix
 		Mat4 clipspace = perspective * view * model;

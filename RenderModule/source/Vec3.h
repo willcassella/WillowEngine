@@ -1,6 +1,8 @@
 #ifndef VEC3_H_
 #define VEC3_H_
 
+#include <math.h>
+
 struct Vec3
 {
 	// Data
@@ -16,6 +18,19 @@ struct Vec3
 	Vec3( float _X, float _Y, float _Z )
 	{
 		x = _X; y = _Y; z = _Z;
+	}
+
+	// Returns the length of the vector
+	float length()
+	{
+		return sqrtf( x*x + y*y + z*z );
+	}
+
+	// Returns the normal of the vector
+	Vec3 normal()
+	{
+		float length = this->length();
+		return Vec3( x/length, y/length, z/length );
 	}
 
 	// Assignment operator

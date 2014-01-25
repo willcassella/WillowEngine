@@ -62,7 +62,6 @@ int main( int argc, char* argv[] )
 	///          scene          ///
 	///////////////////////////////
 
-
 	GameObject teapot;
 
 	//Create a simple mesh to render
@@ -87,12 +86,13 @@ int main( int argc, char* argv[] )
 
 	Camera cam;
 
-	cam.transform.local.z = -5;
+	cam.transform.local.z = 4;
+	cam.transform.local.y = 3;
+	cam.transform.orientation.rotateByAxisAngle( Vec3( 1, 0, 0 ), 0.3f );
+
+	teapot.transform.local. y = 1;
 
 
-
-
-	
 	//Execute the main event loops
 	eventLoop( window );
 	
