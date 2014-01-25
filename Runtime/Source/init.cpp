@@ -88,7 +88,6 @@ int main( int argc, char* argv[] )
 
 	cam.transform.local.z = 4;
 	cam.transform.local.y = 3;
-	cam.transform.orientation.rotateByAxisAngle( Vec3( 1, 0, 0 ), 0.3f );
 
 	teapot.transform.local. y = 1;
 
@@ -133,6 +132,11 @@ GLFWwindow* InitGLFW()
 
 	//Make the window visible
 	glfwShowWindow( window );
+
+	// Make the cursor invisible
+	glfwSetInputMode( window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	// Move the cursor to the center of the screen
+	glfwSetCursorPos( window, window_width/2, window_height/2 );
 
 	//Set the window callbacks
 	glfwSetWindowSizeCallback( window, windowSizeCallback );
@@ -180,11 +184,10 @@ void eventLoop( GLFWwindow* window )
          lastTime += 1.0;
 		};
 		
-		
+		glfwPollEvents();
+
 		//render the frame
 		Renderer::render( window );
-
-		glfwPollEvents();
 	}
 	std::cout << "Leaving event loop... " << std::endl;
 }

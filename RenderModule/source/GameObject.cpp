@@ -16,5 +16,5 @@ GameObject::~GameObject()
 
 void GameObject::Update()
 {
-	transform.orientation.rotateByAxisAngle( Vec3( 0, 1, 0 ), 0.0005f );
+	//transform.orientation.rotateByAxisAngle( Vec3( 0, 1, 0 ), 0.0005f );
 }

@@ -28,11 +28,14 @@ struct Quat
 	}
 
 	// Rotate this quaternion by and axis and angle
-	void rotateByAxisAngle( Vec3 axis, float angle )
+	void rotateByAxisAngle( Vec3 axis, float angle, bool local )
 	{
 		Quat rotation( axis, angle );
 
-		*this *= rotation;
+		if( local )
+			*this = rotation * *this;
+		else
+			*this  = *this * rotation;
 	}
 
 	// Turn this quaternion into a rotation matrix
@@ -62,12 +65,6 @@ struct Quat
 		total.z = w*quat.z + x*quat.y - y*quat.x + z*quat.w;
 
 		return total;
-	}
-
-	// Multiplication-assignment operator
-	void operator*=( Quat rhs )
-	{
-		*this = *this * rhs;
 	}
 };
 
