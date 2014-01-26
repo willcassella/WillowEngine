@@ -30,18 +30,22 @@ void Camera::Update( GLFWwindow* window )
 
 	transform.orientation.rotateByAxisAngle( Vec3( 0, 1, 0 ), -(xpos-512)/1000, false );
 	transform.orientation.rotateByAxisAngle( Vec3( 1, 0, 0 ), (ypos-384)/1000, true );
+
+	float speed = 0.02f;
+	if( glfwGetKey( window, 340 ) )
+		speed = 0.05f;
 	
 	glfwSetCursorPos( window, 512, 384 );
 
 	if( glfwGetKey( window, 87 ) )
-		transform.local.z -= 0.001f;
+		transform.translateLocal( Vec3( 0, 0, speed ) );
 
 	if( glfwGetKey( window, 83 ) )
-		transform.local.z += 0.001f;
+		transform.translateLocal( Vec3( 0, 0, -speed ) );
 
 	if( glfwGetKey( window, 65 ) )
-		transform.local.x -= 0.001f;
+		transform.translateLocal( Vec3( speed, 0, 0 ) );
 
 	if( glfwGetKey( window, 68 ) )
-		transform.local.x += 0.001f;
+		transform.translateLocal( Vec3( -speed, 0, 0 ) );
 }

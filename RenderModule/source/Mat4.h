@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <glm\gtc\matrix_transform.hpp>
 
+#include "Vec3.h"
+
 struct Mat4
 {
 	// Data
@@ -257,6 +259,17 @@ struct Mat4
 
 		// Return the product of the two matrices
 		return total;
+	}
+
+	// Multiply by a 3-length vector
+	Vec3 operator* ( Vec3 rhs )
+	{
+		Vec3 result;
+		result.x = values[0][0]*rhs.x + values[1][0]*rhs.y + values[2][0]*rhs.z + values[3][0];
+		result.y = values[0][1]*rhs.x + values[1][1]*rhs.y + values[2][1]*rhs.z + values[3][1];
+		result.z = values[0][2]*rhs.x + values[1][2]*rhs.y + values[2][2]*rhs.z + values[3][2];
+
+		return result;
 	}
 
 	// Assign to values from another matrix

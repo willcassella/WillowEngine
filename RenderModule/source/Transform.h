@@ -27,12 +27,19 @@ struct Transform
 		return local;
 	}
 
+	// Translates the object in local space
+	void translateLocal( Vec3 localMovement )
+	{
+		localMovement = orientation.to_matrix() * localMovement;
+		local += localMovement;
+	}
+
 	// Constructs the model matrix for this transform
 	Mat4 getModel()
 	{
 		// Generate the translation matrix from the local position vector
 		Mat4 translate (
-			1, 0, 0, local.x,
+			1, 0, 0, -local.x,
 			0, 1, 0, -local.y,
 			0, 0, 1, -local.z,
 			0, 0, 0, 1 );
