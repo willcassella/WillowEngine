@@ -1,10 +1,21 @@
 #ifndef VEC2_H_
 #define VEC2_H_
 
+#include <math.h>
+
+// TODO: dot product and other stuff
+
 struct Vec2
 {
-	// Data
+	////////////////
+	///   Data   ///
+	////////////////
+
 	float x, y;
+
+	////////////////////////
+	///   Constructors   ///
+	////////////////////////
 
 	// Default constructor
 	Vec2()
@@ -18,37 +29,58 @@ struct Vec2
 		x = _X; y = _Y;
 	}
 
-	// Assignment operator
+	///////////////////
+	///   Methods   ///
+	///////////////////
+
+	// Returns the length of this vector
+	float length()
+	{
+		return sqrtf( x*x + y*y );
+	}
+
+	// Returns the normal of this vector
+	Vec2 normal()
+	{
+		float length = this->length();
+		return Vec2( x/length, y/length );
+	}
+
+	/////////////////////
+	///   Overloads   ///
+	/////////////////////
+
+	// Copy another vector to this vector
 	void operator=( Vec2 rhs )
 	{
 		x = rhs.x; y = rhs.y;
 	}
 
-	// Addition operator
+	// Add another vector to this vector
 	Vec2 operator+( Vec2 rhs )
 	{
 		return Vec2( x + rhs.x, y + rhs.y );
 	}
 
-	// Addition-assignment operator
+	// Add this vector to another vector and copy the result
 	void operator+=( Vec2 rhs )
 	{
 		x += rhs.x; y += rhs.y ;
 	}
 
-	// Subtraction operator
+	// Subtract another vector from this vector
 	Vec2 operator-( Vec2 rhs )
 	{
 		return Vec2( x - rhs.x, y - rhs.y );
 	}
 
-	// Subtraction-assignment operator
+	// Subtract another vector from this vector and copy the result
 	Vec2 operator-=( Vec2 rhs )
 	{
 		x -= rhs.x; y -= rhs.y;
 	}
 
-	// Equality operator
+	// Returns TRUE if this vector is equivilent to another vector
 	bool operator==( Vec2 rhs )
 	{
 		if( x == rhs.x && y == rhs.y )
@@ -57,7 +89,7 @@ struct Vec2
 			return false;
 	}
 
-	// Inequality operator
+	// Returns TRUE of this vector is NOT equivilent to another vector
 	bool operator!=( Vec2 rhs )
 	{
 		if( x != rhs.x || y != rhs.y )

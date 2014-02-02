@@ -5,7 +5,7 @@
 #include <GLFW\glfw3.h>
 
 #include "Transform.h"
-#include <glm\gtc\matrix_transform.hpp>
+#include "Mat4.h"
 
 class Camera
 {
@@ -17,12 +17,12 @@ public:
 	Transform transform;
 	void Update( GLFWwindow* window );
 
-	float fov;
+	float hFOV;
 	float ratio;
 	float near;
 	float far;
 
-	glm::mat4 perspective;
+	Mat4 perspective;
 };
 
 #endif

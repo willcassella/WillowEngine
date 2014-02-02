@@ -2,14 +2,27 @@
 #define MAT4_H_
 
 #include <stdio.h>
+#include <math.h>
 #include <glm\gtc\matrix_transform.hpp>
-
 #include "Vec3.h"
+#include "Quat.h"
 
 struct Mat4
 {
-	// Data
+	////////////////
+	///   Data   ///
+	////////////////
+
+private:
+
+	// Matrix data members should never be accessed directly from outside
 	float values[4][4];
+
+	////////////////////////
+	///   Constructors   ///
+	////////////////////////
+
+public:
 
 	// Default constructor, sets to identity matrix
 	Mat4()
@@ -39,17 +52,9 @@ struct Mat4
 		values[0][3] = ad; values[1][3] = bd; values[2][3] = cd; values[3][3] = dd;
 	}
 
-	// Get contents by row and column
-	float get( int column, int row )
-	{
-		return values[column][row];
-	}
-
-	// Set contents by row and column
-	void set( int column, int row, float value )
-	{
-		values[column][row] = value;
-	}
+	///////////////////
+	///   Methods   ///
+	///////////////////
 
 	// Returns the inverse of this matrix
 	Mat4 inverse()
@@ -58,7 +63,6 @@ struct Mat4
 
 		// Seriously, fuck this shit, I had to type all this by hand
 		// based off http://www.cg.info.hiroshima-cu.ac.jp/~miyazaki/knowledge/teche23.html
-		// by some miracle, this all worked perfectly on the first try!
 
 		///////////////////
 		///  COLUMN 1   ///
@@ -223,10 +227,152 @@ struct Mat4
 		return result;
 	}
 
-	// Get contents as an array
-	float* operator[]( int index )
+	// Print the matrix to the console
+	void display()
 	{
-		return values[index];
+		// For each row
+		for( int row = 0; row < 4; row++ )
+		{
+			printf("| ");
+			
+			// For each column
+			for( int col = 0; col < 4; col++ )
+			{
+				// Print the value in that place
+				printf( "%f  ", values[col][row] );
+			}
+
+			// Start a new line
+			printf( " |\n" );
+		}
+
+		printf("\n\n\n");
+	}
+
+	/////////////////////
+	///   Rendering   ///
+	/////////////////////
+	
+	// Generates a perspective projection matrix
+	static Mat4 perspective( float hFOV, float vFOV, float near, float far )
+	{
+		// Convert vertical and horizontal FOV to radians
+		hFOV *= 0.0174532925f;
+		vFOV *= 0.0174532925f;
+
+		const float xMax = tanf( hFOV/2 ) * near;
+		const float xMin = -xMax;
+
+		const float yMax = tanf( vFOV/2 ) * near;
+		const float yMin = -yMax;
+
+		const float width = xMax - xMin;
+		const float height = yMax - yMin;
+		const float depth = far - near;
+		
+		return Mat4(
+			2*near/width,	0,					(xMax+xMin)/width,		0,
+			0,				2*near/height,		(yMax+yMin)/height,		0,
+			0,				0,					-(far+near)/depth,		-2*far*near/depth,
+			0,				0,					-1,						0 );
+	}
+
+	// Generates a persepctive projection matrix based off desird xFOV and screen ratio
+	static Mat4 perspectiveFOV( float hFOV, float ratio, float near, float far )
+	{
+		// Convert xFOV to radians
+		hFOV *= 0.0174532925f;
+
+		float vFOV = 2*atan( tan( hFOV/2 ) * 1/ratio );
+
+		// Convert xFOV and yFOV back to degrees
+		hFOV *= 57.2957795f;
+		vFOV *= 57.2957795f;
+
+		return perspective( hFOV, vFOV, near, far );
+	}
+
+	// Generates an orthographic projection matrix
+	static Mat4 orthographic( float xMin, float xMax, float yMin, float yMax, float near, float far )
+	{
+		const float width = xMax - xMin;
+		const float height = yMax - yMin;
+		const float depth = far - near;
+
+		return Mat4( 
+			2/width,	0,			0,			-(xMax+xMin)/width,
+			0,			2/height,	0,			-(yMax+yMin)/height,
+			0,			0,			-2/depth,	-(far+near)/depth,
+			0,			0,			0,			1 );
+	}
+
+	// Returns a translation matrix from a 3-length vector
+	static Mat4 translate( Vec3 vec )
+	{
+		return Mat4(
+			1,	0,	0,	-vec.x,
+			0,	1,	0,	-vec.y,
+			0,	0,	1,	-vec.z,
+			0,	0,	0,	1	);
+	}
+
+	// Returns a scale matrix from a 3-length vector
+	static Mat4 scale( Vec3 vec )
+	{
+		return Mat4(
+			vec.x,	0,	0,	0,
+			0,	vec.y,	0,	0,
+			0,	0,	vec.z,	0,
+			0,	0,	0,	1	);
+	}
+
+	// Returns a rotation matrix from a quaternion
+	static Mat4 rotate( Quat rot )
+	{
+		// Retreive the data members of rot
+		float x, y, z, w;
+		rot.retrieve( &x, &y, &z, &w );
+		
+		return Mat4(
+			1 - 2*y*y - 2*z*z,	2*x*y + 2*z*w,		2*x*z - 2*y*w,		0,
+			2*x*y - 2*z*w,		1 - 2*x*x - 2*z*z,	2*y*z + 2*x*w,		0,
+			2*x*z + 2*y*w,		2*y*z - 2*x*w,		1 - 2*x*x - 2*y*y,	0,
+			0,					0,					0,					1 );
+	}
+
+	///////////////////////////////
+	///   Getters and Setters   ///
+	///////////////////////////////
+
+	// Get contents by row and column
+	float get( int column, int row )
+	{
+		return values[column][row];
+	}
+
+	// Set contents by row and column
+	void set( int column, int row, float value )
+	{
+		values[column][row] = value;
+	}
+
+	/////////////////////
+	///   Overloads   ///
+	/////////////////////
+
+	// Copy another matrix to this matrix
+	void operator= (Mat4 rhs )
+	{
+		// For each column
+		for( int col = 0; col < 4; col++ )
+		{
+			// For each row
+			for( int row = 0; row < 4; row++ )
+			{
+				// Assign the corresponding value from the other matrix
+				values[col][row] = rhs[col][row];
+			}
+		}
 	}
 
 	// Multiply by another matrix
@@ -272,44 +418,15 @@ struct Mat4
 		return result;
 	}
 
-	// Assign to values from another matrix
-	Mat4 operator= (Mat4 rhs )
+	// Get contents as an array
+	float* operator[]( int index )
 	{
-		// For each column
-		for( int col = 0; col < 4; col++ )
-		{
-			// For each row
-			for( int row = 0; row < 4; row++ )
-			{
-				// Assign the corresponding value from the other matrix
-				values[col][row] = rhs[col][row];
-			}
-		}
+		return values[index];
 	}
 
-	// Print the matrix to the console (for debugging, to be removed)
-	void display()
-	{
-		// For each row
-		for( int row = 0; row < 4; row++ )
-		{
-			// For each column
-			for( int col = 0; col < 4; col++ )
-			{
-				// Print the value in that place
-				printf( "%f  ", values[col][row] );
-			}
-
-			// Start a new line
-			printf( "\n" );
-		}
-
-		printf("\n\n\n");
-	}
-
-	///////////////////////
-	//// FOR DEBUGGING ////
-	///////////////////////
+	/////////////////////////
+	///   FOR DEBUGGING   ///
+	/////////////////////////
 
 	glm::mat4 to_glm()
 	{

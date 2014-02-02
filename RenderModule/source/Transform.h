@@ -7,52 +7,75 @@
 
 struct Transform
 {
-	// Data
-	Vec3 local;
-	Quat orientation;
+	////////////////
+	///   Data   ///
+	////////////////
+
+	Vec3 position;
 	Vec3 scale;
+	Quat orientation;
+	
+	////////////////////////
+	///   Constructors   ///
+	////////////////////////
 
 	// Default constructor
 	Transform()
 	{
-		local.x = 0; local.y = 0; local.z = 0;
-		scale.x = 1; scale.y = 1; scale.z = 1;
-		orientation.x = 1; orientation.y = 0; orientation.z = 0; orientation.w = 0;
-	}
-	
-	// Returns the global position
-	Vec3 getGlobal()
-	{
-		//TODO: add parenting support
-		return local;
+		// Set scale to 1 (default for vec3 is 0)
+		scale = Vec3( 1, 1, 1 );
 	}
 
-	// Translates the object in local space
-	void translateLocal( Vec3 localMovement )
+	// Custom constructor
+	Transform( Vec3 _POSITION, Vec3 _SCALE, Quat _ORIENTATION )
 	{
-		localMovement = orientation.to_matrix() * localMovement;
-		local += localMovement;
+		position = _POSITION;
+		scale = _SCALE;
+		orientation = _ORIENTATION;
+	}
+
+	///////////////////
+	///   Methods   ///
+	///////////////////
+
+	// Returns the global position
+	Vec3 getGlobalPosition()
+	{
+		//TODO: add parenting support
+		return position;
+	}
+
+	// Translate this object in local or global space
+	void translate( Vec3 vec, bool isLocal )
+	{
+		if( isLocal )
+		{
+			vec = Mat4::rotate( orientation ) * vec;
+		}
+
+		position += vec;
+	}
+
+	// Scale the object in local or global space
+	void changeScale( Vec3 vec, bool isLocal )
+	{
+		if( isLocal )
+			vec = Mat4::rotate( orientation ) * vec;
+
+		scale += vec;
+	}
+
+	// Rotate the object by axis+angle in local or global space
+	void rotate( Vec3 axis, float angle, bool isLocal )
+	{
+		orientation.rotateByAxisAngle( axis, angle, isLocal );
 	}
 
 	// Constructs the model matrix for this transform
 	Mat4 getModel()
 	{
-		// Generate the translation matrix from the local position vector
-		Mat4 translate (
-			1, 0, 0, -local.x,
-			0, 1, 0, -local.y,
-			0, 0, 1, -local.z,
-			0, 0, 0, 1 );
-			
-		// Generate the scale matrix from the local scale vector
-		Mat4 scale (
-			scale.x, 0, 0, 0,
-			0, scale.y, 0, 0,
-			0, 0, scale.z, 0,
-			0, 0, 0, 1 );
-
-		// Multiply them together
-		return translate * orientation.to_matrix() * scale;
+		// Generate the transformation matrices and multiply them together
+		return Mat4::translate( position ) * Mat4::rotate( orientation ) * Mat4::scale( scale );
 	}
 };
 

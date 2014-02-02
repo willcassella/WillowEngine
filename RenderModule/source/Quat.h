@@ -2,14 +2,26 @@
 #define QUAT_H_
 
 #include <math.h>
-
-#include "Mat4.h"
 #include "Vec3.h"
+
+// TODO: conversion to euler angles, conversion to axis+angle, and rotation by euler angles
 
 struct Quat
 {
-	// Data
+	////////////////
+	///   Data   ///
+	////////////////
+	
+private:
+
+	// Quaternion data members should never be acessed directly from outside
 	float x, y, z, w;
+
+	////////////////////////
+	///   Constructors   ///
+	////////////////////////
+	
+public:
 
 	// Default constructor
 	Quat()
@@ -21,34 +33,43 @@ struct Quat
 	Quat( Vec3 axis, float angle )
 	{
 		// Based off http://www.cprogramming.com/tutorial/3d/quaternions.html
-		w = std::cosf( angle/2 );
-		x = axis.x * std::sinf( angle/2 );
-		y = axis.y * std::sinf( angle/2 );
-		z = axis.z * std::sinf( angle/2 );
+		// Make sure the axis vector is normalized
+		const Vec3 normAxis = axis.normal();
+		w = cosf( angle/2 );
+		x = normAxis.x * sinf( angle/2 );
+		y = normAxis.y * sinf( angle/2 );
+		z = normAxis.z * sinf( angle/2 );
 	}
+
+	///////////////////
+	///   Methods   ///
+	///////////////////
 
 	// Rotate this quaternion by and axis and angle
 	void rotateByAxisAngle( Vec3 axis, float angle, bool local )
 	{
+		// Construct a quaternion from the axis and angle
 		Quat rotation( axis, angle );
 
 		if( local )
+			// Perform a local rotation
 			*this = rotation * *this;
 		else
+			// Perform a global rotation
 			*this  = *this * rotation;
 	}
 
-	// Turn this quaternion into a rotation matrix
-	Mat4 to_matrix()
+	// Returns the data members of this quaternion to external variables
+	void retrieve( float* X, float* Y, float* Z, float* W )
 	{
-		return Mat4(
-			1 - 2*y*y - 2*z*z,	2*x*y + 2*z*w,		2*x*z - 2*y*w,		0,
-			2*x*y - 2*z*w,		1 - 2*x*x - 2*z*z,	2*y*z + 2*x*w,		0,
-			2*x*z + 2*y*w,		2*y*z - 2*x*w,		1 - 2*x*x - 2*y*y,	0,
-			0,					0,					0,					1 );
+		*X = x; *Y = y; *Z = z; *W = w;
 	}
 
-	// Assignment operator
+	/////////////////////
+	///   Overloads   ///
+	/////////////////////
+
+	// Copies another quaternion into this quaternion
 	void operator=( Quat rhs )
 	{
 		x = rhs.x; y = rhs.y; z = rhs.z; w = rhs.w;
@@ -65,6 +86,18 @@ struct Quat
 		total.z = w*quat.z + x*quat.y - y*quat.x + z*quat.w;
 
 		return total;
+	}
+
+	// Returns TRUE if this quaternion is euqivilent to another quaternion
+	bool operator==( Quat rhs )
+	{
+		return x == rhs.x && y == rhs.y && z == rhs.z && w == rhs.w;
+	}
+
+	// Returns TRUE if this quaternion is NOT equivilent to another quaternions
+	bool operator!=( Quat rhs )
+	{
+		return x != rhs.x || y != rhs.y || z != rhs.z || w != rhs.w;
 	}
 };
 

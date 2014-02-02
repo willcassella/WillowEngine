@@ -53,12 +53,8 @@ int Renderer::render( GLFWwindow* window )
 		// Get the view matrix
 		Mat4 view = cam->transform.getModel().inverse();
 
-		// Get the perspective matrix
-		Mat4 perspective;
-		perspective.set_from_glm( cam->perspective );
-
 		// Create the clipspace matrix
-		Mat4 clipspace = perspective * view * model;
+		Mat4 clipspace = cam->perspective * view * model;
 
 		// Upload the matrix to the GPU
 		glUniformMatrix4fv( object->mesh->mat->clipspace, 1, GL_FALSE,  clipspace[0] );

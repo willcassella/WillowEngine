@@ -17,7 +17,7 @@
 #include <RenderModule.h>
 
 //Define context parameters
-int window_width = 1024;
+int window_width = 1280;
 int window_height = 768;
 const char* title = "Willow Engine";
 bool fullscreen = false;
@@ -34,7 +34,7 @@ void windowSizeCallback( GLFWwindow* window, int x, int y )
 	glViewport(0, 0, x, y);
 }
 
-int main( int argc, char* argv[] )
+int WinMain( int argc, char* argv[] )
 {	
 	std::cout << "Initializing subsystems... " << std::endl;
 	//Initialize GLFW and get a window
@@ -86,10 +86,10 @@ int main( int argc, char* argv[] )
 
 	Camera cam;
 
-	cam.transform.local.z = 4;
-	cam.transform.local.y = 3;
+	cam.transform.position.z = 4;
+	cam.transform.position.y = 3;
 
-	teapot.transform.local. y = 1;
+	teapot.transform.position. y = 1;
 
 
 	//Execute the main event loops
