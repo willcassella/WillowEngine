@@ -3,7 +3,6 @@
 
 #include <string>
 #include <vector>
-#include <glm\gtc\matrix_transform.hpp>
 #include <GL/glew.h>
 #include "Material.h"
 #include "Vertex.h"

@@ -34,7 +34,7 @@ void windowSizeCallback( GLFWwindow* window, int x, int y )
 	glViewport(0, 0, x, y);
 }
 
-int WinMain( int argc, char* argv[] )
+int main( int argc, char* argv[] )
 {	
 	std::cout << "Initializing subsystems... " << std::endl;
 	//Initialize GLFW and get a window
@@ -55,7 +55,7 @@ int WinMain( int argc, char* argv[] )
 	//Initialize the renderer
 	Renderer::init();
 
-	
+
 	
 	///////////////////////////////
 	///   Setting up a simple   ///
@@ -84,7 +84,7 @@ int WinMain( int argc, char* argv[] )
 
 	teapot.mesh = &teapot_mesh;
 
-	Camera cam;
+	Camera cam( 60.0f, float(window_width)/window_height, 0.2f, 60.0f );
 
 	cam.transform.position.z = 4;
 	cam.transform.position.y = 3;
@@ -142,8 +142,8 @@ GLFWwindow* InitGLFW()
 	glfwSetWindowSizeCallback( window, windowSizeCallback );
 
 	// Create the frambuffer and viewport
-	glfwGetFramebufferSize(window, &window_width, &window_width);
-	glViewport(0, 0, window_width, window_width);
+	glfwGetFramebufferSize(window, &window_width, &window_height);
+	glViewport(0, 0, window_width, window_height);
 
 	return window;
 }

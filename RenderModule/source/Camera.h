@@ -12,6 +12,7 @@ class Camera
 public:
 	
 	Camera();
+	Camera( float hFOV, float ratio, float zMin, float zMax );
 	~Camera();
 	
 	Transform transform;
@@ -19,8 +20,8 @@ public:
 
 	float hFOV;
 	float ratio;
-	float near;
-	float far;
+	float zMin;
+	float zMax;
 
 	Mat4 perspective;
 };

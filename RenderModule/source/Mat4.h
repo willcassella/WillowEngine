@@ -1,6 +1,9 @@
 #ifndef MAT4_H_
 #define MAT4_H_
 
+#define DEG2RAD 0.0174532925f
+#define RAD2DEG 57.2957795f
+
 #include <stdio.h>
 #include <math.h>
 #include <glm\gtc\matrix_transform.hpp>
@@ -254,55 +257,55 @@ public:
 	/////////////////////
 	
 	// Generates a perspective projection matrix
-	static Mat4 perspective( float hFOV, float vFOV, float near, float far )
+	static Mat4 perspective( float hFOV, float vFOV, float zMin, float zMax )
 	{
 		// Convert vertical and horizontal FOV to radians
-		hFOV *= 0.0174532925f;
-		vFOV *= 0.0174532925f;
+		hFOV *= DEG2RAD;
+		vFOV *= DEG2RAD;
 
-		const float xMax = tanf( hFOV/2 ) * near;
+		const float xMax = tanf( hFOV/2 ) * zMin;
 		const float xMin = -xMax;
 
-		const float yMax = tanf( vFOV/2 ) * near;
+		const float yMax = tanf( vFOV/2 ) * zMin;
 		const float yMin = -yMax;
 
 		const float width = xMax - xMin;
 		const float height = yMax - yMin;
-		const float depth = far - near;
+		const float depth = zMax - zMin;
 		
 		return Mat4(
-			2*near/width,	0,					(xMax+xMin)/width,		0,
-			0,				2*near/height,		(yMax+yMin)/height,		0,
-			0,				0,					-(far+near)/depth,		-2*far*near/depth,
+			2*zMin/width,	0,					(xMax+xMin)/width,		0,
+			0,				2*zMin/height,		(yMax+yMin)/height,		0,
+			0,				0,					-(zMax+zMin)/depth,		-2*zMax*zMin/depth,
 			0,				0,					-1,						0 );
 	}
 
-	// Generates a persepctive projection matrix based off desird xFOV and screen ratio
-	static Mat4 perspectiveFOV( float hFOV, float ratio, float near, float far )
+	// Generates a persepctive projection matrix based off desird hFOV and screen ratio
+	static Mat4 perspectiveFOV( float hFOV, float ratio, float zMin, float zMax )
 	{
-		// Convert xFOV to radians
-		hFOV *= 0.0174532925f;
+		// Convert hFOV to radians
+		hFOV *= DEG2RAD;
 
 		float vFOV = 2*atan( tan( hFOV/2 ) * 1/ratio );
 
 		// Convert xFOV and yFOV back to degrees
-		hFOV *= 57.2957795f;
-		vFOV *= 57.2957795f;
+		hFOV *= RAD2DEG;
+		vFOV *= RAD2DEG;
 
-		return perspective( hFOV, vFOV, near, far );
+		return perspective( hFOV, vFOV, zMin, zMax );
 	}
 
 	// Generates an orthographic projection matrix
-	static Mat4 orthographic( float xMin, float xMax, float yMin, float yMax, float near, float far )
+	static Mat4 orthographic( float xMin, float xMax, float yMin, float yMax, float zMin, float zMax )
 	{
 		const float width = xMax - xMin;
 		const float height = yMax - yMin;
-		const float depth = far - near;
+		const float depth = zMax - zMin;
 
 		return Mat4( 
 			2/width,	0,			0,			-(xMax+xMin)/width,
 			0,			2/height,	0,			-(yMax+yMin)/height,
-			0,			0,			-2/depth,	-(far+near)/depth,
+			0,			0,			-2/depth,	-(zMax+zMin)/depth,
 			0,			0,			0,			1 );
 	}
 

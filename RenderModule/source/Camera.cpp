@@ -8,13 +8,25 @@ Camera::Camera()
 	//Assign defaults
 	hFOV = 60;
 	ratio = 1280.0f/768.0f;
-	near = 0.2f;
-	far = 40.0f;
+	zMin = 0.2f;
+	zMax = 40.0f;
 
 	//Generate the projection matrix
-	perspective = Mat4::perspectiveFOV( hFOV, ratio, near, far );
+	perspective = Mat4::perspectiveFOV( hFOV, ratio, zMin, zMax );
 	
 	//Add the camera to the camera queue
+	Renderer::cqueue.push( this );
+}
+
+Camera::Camera( float _HFOV, float _RATIO, float _ZMIN, float _ZMAX )
+{
+	hFOV = _HFOV;
+	ratio = _RATIO;
+	zMin = _ZMIN;
+	zMax = _ZMAX;
+
+	perspective = Mat4::perspectiveFOV( hFOV, ratio, zMin, zMax );
+
 	Renderer::cqueue.push( this );
 }
 
@@ -28,10 +40,10 @@ void Camera::Update( GLFWwindow* window )
 	double xpos, ypos;
 	glfwGetCursorPos( window, &xpos, &ypos );
 
-	transform.rotate( Vec3( 0, 1, 0 ), -(xpos-512)/500, false );
-	transform.rotate( Vec3( 1, 0, 0 ), (ypos-384)/500, true );
+	transform.rotate( Vec3( 0, 1, 0 ), -((float)xpos-512)/500, false );
+	transform.rotate( Vec3( 1, 0, 0 ), ((float)ypos-384)/500, true );
 
-	float speed = 0.002f;
+	float speed = 0.02f;
 	if( glfwGetKey( window, 340 ) )
 		speed = 0.005f;
 	

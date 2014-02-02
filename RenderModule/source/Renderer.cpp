@@ -5,6 +5,8 @@
 #include <GLFW\glfw3.h>
 #include <forward_list>
 
+#include <glm\glm.hpp>
+
 #include "Mesh.h"
 #include "GameObject.h"
 #include "Mat4.h"
@@ -14,7 +16,7 @@ CameraQueue Renderer::cqueue;
 
 int Renderer::init()
 {
-	// Set the opengl clear color to black and clear the screen
+	// Set the opengl clear color to black and clear the screen and the depth buffer
 	glClearColor( 0, 0, 0, 1 );
 	glEnable( GL_DEPTH_TEST );
 	glEnable( GL_CULL_FACE );
