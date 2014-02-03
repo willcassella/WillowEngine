@@ -9,6 +9,8 @@
 #include "Vec3.h"
 #include "Quat.h"
 
+// TODO: Add a lookat() function, figure out how I'm dealing with FOV once and for all
+
 struct Mat4
 {
 	////////////////

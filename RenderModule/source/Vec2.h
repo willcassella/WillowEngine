@@ -3,8 +3,6 @@
 
 #include <math.h>
 
-// TODO: dot product and other stuff
-
 struct Vec2
 {
 	////////////////
@@ -44,6 +42,21 @@ struct Vec2
 	{
 		float length = this->length();
 		return Vec2( x/length, y/length );
+	}
+
+	// Calculates the dot product of this and another vector
+	static float dot( Vec2 a, Vec2 b )
+	{
+		return a.x*b.x + a.y*b.y;
+	}
+
+	// Calculates the angle between two vectors
+	static float angle( Vec2 a, Vec2 b )
+	{
+		Vec2 a_normalized = a.normal();
+		Vec2 b_normalized = b.normal();
+
+		return acos( Vec2::dot( a_normalized, b_normalized ) );
 	}
 
 	/////////////////////

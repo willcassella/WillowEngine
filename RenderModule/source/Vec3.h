@@ -3,8 +3,6 @@
 
 #include <math.h>
 
-// TODO: dot product and other stuff
-
 struct Vec3
 {
 	////////////////
@@ -44,6 +42,31 @@ struct Vec3
 	{
 		float length = this->length();
 		return Vec3( x/length, y/length, z/length );
+	}
+
+	// Returns the cross product of vector a and vector b
+	static Vec3 cross( Vec3 a, Vec3 b )
+	{
+		Vec3 result;
+		result.x = a.y * b.z - a.z * b.y;
+		result.y = a.z * b.x - a.x * b.z;
+		result.z = a.x * b.y - a.y * b.x;
+		return result;
+	}
+
+	// Returns the dot product of vector a and vector b
+	static float dot( Vec3 a, Vec3 b )
+	{
+		return a.x*b.x + a.y*b.y + a.z*b.z;
+	}
+
+	// Calculates the angle between two vectors
+	static float angle( Vec3 a, Vec3 b )
+	{
+		Vec3 a_normalized = a.normal();
+		Vec3 b_normalized = b.normal();
+
+		return acos( Vec3::dot( a_normalized, b_normalized ) );
 	}
 
 	/////////////////////
