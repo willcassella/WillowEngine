@@ -280,15 +280,30 @@ public:
 			0,				0,					-1,						0 );
 	}
 
-	// Generates a persepctive projection matrix based off desird hFOV and screen ratio
-	static Mat4 perspectiveFOV( float hFOV, float ratio, float zMin, float zMax )
+	// Generates a persepctive projection matrix based off desired horizontal FOV and screen ratio
+	static Mat4 perspectiveHFOV( float hFOV, float ratio, float zMin, float zMax )
 	{
 		// Convert hFOV to radians
 		hFOV *= DEG2RAD;
 
 		float vFOV = 2*atan( tan( hFOV/2 ) * 1/ratio );
 
-		// Convert xFOV and yFOV back to degrees
+		// Convert hFOV and vFOV back to degrees
+		hFOV *= RAD2DEG;
+		vFOV *= RAD2DEG;
+
+		return perspective( hFOV, vFOV, zMin, zMax );
+	}
+
+	// Generates a perspective projection matrix based off the desired vertical FOV and screen ratio
+	static Mat4 perspectiveVFOV( float vFOV, float ratio, float zMin, float zMax )
+	{
+		// Convert the vFOV to radians
+		vFOV *= DEG2RAD;
+
+		float hFOV = 2*atan( tan( vFOV/2 ) * ratio );
+
+		// Convert hFOV and vFOV back to degrees
 		hFOV *= RAD2DEG;
 		vFOV *= RAD2DEG;
 

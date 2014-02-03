@@ -6,13 +6,13 @@
 Camera::Camera()
 {
 	//Assign defaults
-	hFOV = 60;
+	vFOV = 59;
 	ratio = 1280.0f/768.0f;
 	zMin = 0.2f;
 	zMax = 40.0f;
 
 	//Generate the projection matrix
-	perspective = Mat4::perspectiveFOV( hFOV, ratio, zMin, zMax );
+	perspective = Mat4::perspectiveVFOV( vFOV, ratio, zMin, zMax );
 	
 	//Add the camera to the camera queue
 	Renderer::cqueue.push( this );
@@ -20,12 +20,12 @@ Camera::Camera()
 
 Camera::Camera( float _HFOV, float _RATIO, float _ZMIN, float _ZMAX )
 {
-	hFOV = _HFOV;
+	vFOV = _HFOV;
 	ratio = _RATIO;
 	zMin = _ZMIN;
 	zMax = _ZMAX;
 
-	perspective = Mat4::perspectiveFOV( hFOV, ratio, zMin, zMax );
+	perspective = Mat4::perspectiveVFOV( vFOV, ratio, zMin, zMax );
 
 	Renderer::cqueue.push( this );
 }

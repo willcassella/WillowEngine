@@ -17,8 +17,8 @@
 #include <RenderModule.h>
 
 //Define context parameters
-int window_width = 1280;
-int window_height = 768;
+int window_width = 1920;
+int window_height = 1080;
 const char* title = "Willow Engine";
 bool fullscreen = false;
 
@@ -84,7 +84,7 @@ int main( int argc, char* argv[] )
 
 	teapot.mesh = &teapot_mesh;
 
-	Camera cam( 60.0f, float(window_width)/window_height, 0.2f, 60.0f );
+	Camera cam( 59.0f, float(window_width)/window_height, 0.2f, 60.0f );
 
 	cam.transform.position.z = 4;
 	cam.transform.position.y = 3;

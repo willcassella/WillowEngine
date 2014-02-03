@@ -18,7 +18,7 @@ public:
 	Transform transform;
 	void Update( GLFWwindow* window );
 
-	float hFOV;
+	float vFOV;
 	float ratio;
 	float zMin;
 	float zMax;
