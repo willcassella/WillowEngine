@@ -26,7 +26,7 @@ public:
 	// Default constructor
 	Quat()
 	{
-		x = 1; y = 0; z = 0; w = 0;
+		x = 0; y = 0; z = 0; w = 1;
 	}
 
 	// Custom constructor

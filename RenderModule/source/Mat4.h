@@ -9,7 +9,7 @@
 #include "Vec3.h"
 #include "Quat.h"
 
-// TODO: Add a lookat() function, figure out how I'm dealing with FOV once and for all
+// TODO: Add a lookat() function
 
 struct Mat4
 {
@@ -329,9 +329,9 @@ public:
 	static Mat4 translate( Vec3 vec )
 	{
 		return Mat4(
-			1,	0,	0,	-vec.x,
-			0,	1,	0,	-vec.y,
-			0,	0,	1,	-vec.z,
+			1,	0,	0,	vec.x,
+			0,	1,	0,	vec.y,
+			0,	0,	1,	vec.z,
 			0,	0,	0,	1	);
 	}
 

@@ -6,10 +6,10 @@
 Camera::Camera()
 {
 	//Assign defaults
-	vFOV = 59;
+	vFOV = 43;
 	ratio = 1280.0f/768.0f;
 	zMin = 0.2f;
-	zMax = 40.0f;
+	zMax = 60.0f;
 
 	//Generate the projection matrix
 	perspective = Mat4::perspectiveVFOV( vFOV, ratio, zMin, zMax );
@@ -40,24 +40,37 @@ void Camera::Update( GLFWwindow* window )
 	double xpos, ypos;
 	glfwGetCursorPos( window, &xpos, &ypos );
 
-	transform.rotate( Vec3( 0, 1, 0 ), -((float)xpos-512)/500, false );
+
+	transform.rotate( Vec3( 0, 1, 0 ), ((float)xpos-512)/500, false );
 	transform.rotate( Vec3( 1, 0, 0 ), ((float)ypos-384)/500, true );
 
-	float speed = 0.02f;
+	float speed = 0.002f;
 	if( glfwGetKey( window, 340 ) )
 		speed = 0.005f;
 	
 	glfwSetCursorPos( window, 512, 384 );
 
+	// Move forward
 	if( glfwGetKey( window, 87 ) )
-		transform.translate( Vec3( 0, 0, speed ), true );
-
-	if( glfwGetKey( window, 83 ) )
 		transform.translate( Vec3( 0, 0, -speed ), true );
 
+	// Move backward
+	if( glfwGetKey( window, 83 ) )
+		transform.translate( Vec3( 0, 0, speed ), true );
+
+	// Move left
 	if( glfwGetKey( window, 65 ) )
+		transform.translate( Vec3( -speed, 0, 0 ), true );
+
+	// Move right
+	if( glfwGetKey( window, 68 ) )
 		transform.translate( Vec3( speed, 0, 0 ), true );
 
-	if( glfwGetKey( window, 68 ) )
-		transform.translate( Vec3( -speed, 0, 0 ), true );
+	// Move up
+	if( glfwGetKey( window, 81 ) )
+		transform.translate( Vec3( 0, speed, 0 ), false );
+
+	// Move down
+	if( glfwGetKey( window, 69 ) )
+		transform.translate( Vec3( 0, -speed, 0 ), false );
 }
