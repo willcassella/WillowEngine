@@ -6,7 +6,6 @@
 
 #include <stdio.h>
 #include <math.h>
-#include <glm\gtc\matrix_transform.hpp>
 #include "Vec3.h"
 #include "Quat.h"
 
@@ -440,33 +439,6 @@ public:
 	float* operator[]( int index )
 	{
 		return values[index];
-	}
-
-	/////////////////////////
-	///   FOR DEBUGGING   ///
-	/////////////////////////
-
-	glm::mat4 to_glm()
-	{
-		return glm::mat4(
-			values[0][0], values[0][1], values[0][2], values[0][3],
-			values[1][0], values[1][1], values[1][2], values[1][3],
-			values[2][0], values[2][1], values[2][2], values[2][3],
-			values[3][0], values[3][1], values[3][2], values[3][3] );
-	}
-
-	void set_from_glm( glm::mat4 mat )
-	{
-		// For each column
-		for( int col = 0; col < 4; col++ )
-		{
-			// For each row
-			for( int row = 0; row < 4; row++ )
-			{
-				// Assign from the corresponding value in the GLM matrix
-				values[col][row] = mat[col][row];
-			}
-		}
 	}
 };
 

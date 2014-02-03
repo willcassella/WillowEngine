@@ -3,7 +3,6 @@
 
 #include <vector>
 #include "Vertex.h"
-#include <glm\gtc\matrix_transform.hpp>
 #include <GL\glew.h>
 
 bool loadOBJ(

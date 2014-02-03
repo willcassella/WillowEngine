@@ -17,8 +17,8 @@
 #include <RenderModule.h>
 
 //Define context parameters
-int window_width = 1920;
-int window_height = 1080;
+int window_width = 1280;
+int window_height = 768;
 const char* title = "Willow Engine";
 bool fullscreen = false;
 

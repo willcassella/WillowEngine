@@ -5,8 +5,6 @@
 #include <GLFW\glfw3.h>
 #include <forward_list>
 
-#include <glm\glm.hpp>
-
 #include "Mesh.h"
 #include "GameObject.h"
 #include "Mat4.h"

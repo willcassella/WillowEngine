@@ -5,6 +5,7 @@
 #include "Renderer.h"
 #include "Utils.h"
 #include "Vertex.h"
+#include "Vec3.h"
 
 // Constructors
 Mesh::Mesh()
@@ -87,7 +88,7 @@ void Mesh::AssignMat( Material *_mat )
 
 	GLint texAttrib = glGetAttribLocation( mat->id, "texcoord" );
 	glEnableVertexAttribArray( texAttrib );
-	glVertexAttribPointer( texAttrib, 2, GL_FLOAT, GL_FALSE, sizeof( Vertex ), (void*)sizeof( glm::vec3 ) );
+	glVertexAttribPointer( texAttrib, 2, GL_FLOAT, GL_FALSE, sizeof( Vertex ), (void*)sizeof( Vec3 ) );
 
 	GLuint colAttrib;
     colAttrib = glGetAttribLocation( mat->id, "color" );
