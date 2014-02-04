@@ -1,7 +1,7 @@
 #ifndef VEC3_H_
 #define VEC3_H_
 
-#include <math.h>
+#include <cmath>
 
 struct Vec3
 {
@@ -32,20 +32,20 @@ struct Vec3
 	///////////////////
 
 	// Returns the length of this vector
-	float length()
+	float length() const
 	{
 		return sqrtf( x*x + y*y + z*z );
 	}
 
 	// Returns the normal of this vector
-	Vec3 normal()
+	Vec3 normalize() const
 	{
 		float length = this->length();
 		return Vec3( x/length, y/length, z/length );
 	}
 
 	// Returns the cross product of vector a and vector b
-	static Vec3 cross( Vec3 a, Vec3 b )
+	static Vec3 cross( const Vec3& a, const Vec3& b )
 	{
 		Vec3 result;
 		result.x = a.y * b.z - a.z * b.y;
@@ -55,16 +55,16 @@ struct Vec3
 	}
 
 	// Returns the dot product of vector a and vector b
-	static float dot( Vec3 a, Vec3 b )
+	static float dot( const Vec3& a, const Vec3& b )
 	{
 		return a.x*b.x + a.y*b.y + a.z*b.z;
 	}
 
 	// Calculates the angle between two vectors
-	static float angle( Vec3 a, Vec3 b )
+	static float angle( const Vec3& a, const Vec3& b )
 	{
-		Vec3 a_normalized = a.normal();
-		Vec3 b_normalized = b.normal();
+		Vec3 a_normalized = a.normalize();
+		Vec3 b_normalized = b.normalize();
 
 		return acos( Vec3::dot( a_normalized, b_normalized ) );
 	}
@@ -73,44 +73,38 @@ struct Vec3
 	///   Overloads   ///
 	/////////////////////
 
-	// Copy another vector to this vector
-	void operator=( Vec3 rhs )
-	{
-		x = rhs.x; y = rhs.y; z = rhs.z;
-	}
-
 	// Adds this vector to another vector
-	Vec3 operator+( Vec3 rhs )
+	Vec3 operator+( const Vec3& rhs ) const
 	{
 		return Vec3( x + rhs.x, y + rhs.y, z + rhs.z );
 	}
 
 	// Adds this vector to another vector and copies the data
-	void operator+=( Vec3 rhs )
+	void operator+=( const Vec3& rhs )
 	{
 		x += rhs.x; y += rhs.y; z+= rhs.z;
 	}
 
 	// Subtracts another vector from this vector
-	Vec3 operator-( Vec3 rhs )
+	Vec3 operator-( const Vec3& rhs ) const
 	{
 		return Vec3( x - rhs.x, y - rhs.y, z - rhs.z );
 	}
 
 	// Subtracts another vector from this vector and copies the result
-	void operator-=( Vec3 rhs )
+	void operator-=( const Vec3& rhs )
 	{
 		x -= rhs.x; y -= rhs.y; z-= rhs.z;
 	}
 
 	// Returns TRUE if this vector is equvilent to another vector
-	inline bool operator==( Vec3 rhs )
+	inline bool operator==( const Vec3& rhs ) const
 	{
 		return x == rhs.x && y == rhs.y && z == rhs.z;
 	}
 
 	// Returns TRUE if this vector is NOT equivilent to another vector
-	inline bool operator!=( Vec3 rhs )
+	inline bool operator!=( const Vec3& rhs ) const
 	{
 		return x != rhs.x || y != rhs.y || z != rhs.z;
 	}

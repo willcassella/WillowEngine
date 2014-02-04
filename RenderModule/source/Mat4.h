@@ -4,8 +4,8 @@
 #define DEG2RAD 0.0174532925f
 #define RAD2DEG 57.2957795f
 
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
+#include <cmath>
 #include "Vec3.h"
 #include "Quat.h"
 
@@ -61,7 +61,7 @@ public:
 	///////////////////
 
 	// Returns the inverse of this matrix
-	Mat4 inverse()
+	Mat4 inverse() const
 	{
 		Mat4 result;
 
@@ -74,12 +74,12 @@ public:
 
 		/// ROW 1
 		result.set( 0, 0,
-		values[1][1]*values[2][2]*values[3][3] +
-		values[2][1]*values[3][2]*values[1][3] +
-		values[3][1]*values[1][2]*values[2][3] -
-		values[1][1]*values[3][2]*values[2][3] -
-		values[2][1]*values[1][2]*values[3][3] -
-		values[3][1]*values[2][2]*values[1][3] );
+			values[1][1]*values[2][2]*values[3][3] +
+			values[2][1]*values[3][2]*values[1][3] +
+			values[3][1]*values[1][2]*values[2][3] -
+			values[1][1]*values[3][2]*values[2][3] -
+			values[2][1]*values[1][2]*values[3][3] -
+			values[3][1]*values[2][2]*values[1][3] );
 
 		/// ROW 2
 		result.set( 0, 1,
@@ -232,7 +232,7 @@ public:
 	}
 
 	// Print the matrix to the console
-	void display()
+	void display() const
 	{
 		// For each row
 		for( int row = 0; row < 4; row++ )
@@ -264,10 +264,10 @@ public:
 		hFOV *= DEG2RAD;
 		vFOV *= DEG2RAD;
 
-		const float xMax = tanf( hFOV/2 ) * zMin;
+		const float xMax = tanf( hFOV * 0.5f ) * zMin;
 		const float xMin = -xMax;
 
-		const float yMax = tanf( vFOV/2 ) * zMin;
+		const float yMax = tanf( vFOV * 0.5f ) * zMin;
 		const float yMin = -yMax;
 
 		const float width = xMax - xMin;
@@ -287,7 +287,7 @@ public:
 		// Convert hFOV to radians
 		hFOV *= DEG2RAD;
 
-		float vFOV = 2*atan( tan( hFOV/2 ) * 1/ratio );
+		float vFOV = 2*atan( tan( hFOV * 0.5f ) * 1/ratio );
 
 		// Convert hFOV and vFOV back to degrees
 		hFOV *= RAD2DEG;
@@ -302,7 +302,7 @@ public:
 		// Convert the vFOV to radians
 		vFOV *= DEG2RAD;
 
-		float hFOV = 2*atan( tan( vFOV/2 ) * ratio );
+		float hFOV = 2*atan( tan( vFOV * 0.5f ) * ratio );
 
 		// Convert hFOV and vFOV back to degrees
 		hFOV *= RAD2DEG;
@@ -326,7 +326,7 @@ public:
 	}
 
 	// Returns a translation matrix from a 3-length vector
-	static Mat4 translate( Vec3 vec )
+	static Mat4 translate( const Vec3& vec )
 	{
 		return Mat4(
 			1,	0,	0,	vec.x,
@@ -336,7 +336,7 @@ public:
 	}
 
 	// Returns a scale matrix from a 3-length vector
-	static Mat4 scale( Vec3 vec )
+	static Mat4 scale( const Vec3& vec )
 	{
 		return Mat4(
 			vec.x,	0,	0,	0,
@@ -346,11 +346,11 @@ public:
 	}
 
 	// Returns a rotation matrix from a quaternion
-	static Mat4 rotate( Quat rot )
+	static Mat4 rotate( const Quat& rot )
 	{
 		// Retreive the data members of rot
 		float x, y, z, w;
-		rot.retrieve( &x, &y, &z, &w );
+		rot.retrieve( x, y, z, w );
 		
 		return Mat4(
 			1 - 2*y*y - 2*z*z,	2*x*y + 2*z*w,		2*x*z - 2*y*w,		0,
@@ -364,13 +364,13 @@ public:
 	///////////////////////////////
 
 	// Get contents by row and column
-	float get( int column, int row )
+	inline float get( int column, int row ) const
 	{
 		return values[column][row];
 	}
 
 	// Set contents by row and column
-	void set( int column, int row, float value )
+	inline void set( int column, int row, float value )
 	{
 		values[column][row] = value;
 	}
@@ -379,23 +379,8 @@ public:
 	///   Overloads   ///
 	/////////////////////
 
-	// Copy another matrix to this matrix
-	void operator= (Mat4 rhs )
-	{
-		// For each column
-		for( int col = 0; col < 4; col++ )
-		{
-			// For each row
-			for( int row = 0; row < 4; row++ )
-			{
-				// Assign the corresponding value from the other matrix
-				values[col][row] = rhs[col][row];
-			}
-		}
-	}
-
 	// Multiply by another matrix
-	Mat4 operator* ( Mat4 rhs )
+	Mat4 operator* (const Mat4& rhs )
 	{
 		Mat4 total;
 
@@ -414,7 +399,7 @@ public:
 				for( int i = 0; i < 4; i++ )
 				{
 					// add them up
-					value += values[i][row] * rhs[col][i];
+					value += values[i][row] * rhs.get( col, i );
 				}
 
 				// Assign it to the new matrix
@@ -427,7 +412,7 @@ public:
 	}
 
 	// Multiply by a 3-length vector
-	Vec3 operator* ( Vec3 rhs )
+	Vec3 operator* ( const Vec3& rhs )
 	{
 		Vec3 result;
 		result.x = values[0][0]*rhs.x + values[1][0]*rhs.y + values[2][0]*rhs.z + values[3][0];
