@@ -34,7 +34,7 @@ struct Vec2
 	// Returns the length of this vector
 	float length() const
 	{
-		return sqrtf( x*x + y*y );
+		return std::sqrtf( x*x + y*y );
 	}
 
 	// Returns the normal of this vector
@@ -56,7 +56,7 @@ struct Vec2
 		Vec2 a_normalized = a.normalize();
 		Vec2 b_normalized = b.normalize();
 
-		return acos( Vec2::dot( a_normalized, b_normalized ) );
+		return std::acos( Vec2::dot( a_normalized, b_normalized ) );
 	}
 
 	/////////////////////

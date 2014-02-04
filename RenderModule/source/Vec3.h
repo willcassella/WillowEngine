@@ -34,7 +34,7 @@ struct Vec3
 	// Returns the length of this vector
 	float length() const
 	{
-		return sqrtf( x*x + y*y + z*z );
+		return std::sqrtf( x*x + y*y + z*z );
 	}
 
 	// Returns the normal of this vector
@@ -66,7 +66,7 @@ struct Vec3
 		Vec3 a_normalized = a.normalize();
 		Vec3 b_normalized = b.normalize();
 
-		return acos( Vec3::dot( a_normalized, b_normalized ) );
+		return std::acos( Vec3::dot( a_normalized, b_normalized ) );
 	}
 
 	/////////////////////

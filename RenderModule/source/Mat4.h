@@ -264,10 +264,10 @@ public:
 		hFOV *= DEG2RAD;
 		vFOV *= DEG2RAD;
 
-		const float xMax = tanf( hFOV * 0.5f ) * zMin;
+		const float xMax = std::tanf( hFOV * 0.5f ) * zMin;
 		const float xMin = -xMax;
 
-		const float yMax = tanf( vFOV * 0.5f ) * zMin;
+		const float yMax = std::tanf( vFOV * 0.5f ) * zMin;
 		const float yMin = -yMax;
 
 		const float width = xMax - xMin;

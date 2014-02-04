@@ -34,11 +34,13 @@ public:
 	{
 		// Based off http://www.cprogramming.com/tutorial/3d/quaternions.html
 		// Make sure the axis vector is normalized
-		const Vec3 normAxis = axis.normalize();
-		w = cosf( angle/2 );
-		x = normAxis.x * sinf( angle/2 );
-		y = normAxis.y * sinf( angle/2 );
-		z = normAxis.z * sinf( angle/2 );
+		const Vec3 kNormAxis = axis.normalize();
+		const float kSinHalfAngle = std::sinf( angle * 0.5f );
+
+		w = std::cosf( angle/2 );
+		x = kNormAxis.x * kSinHalfAngle;
+		y = kNormAxis.y * kSinHalfAngle;
+		z = kNormAxis.z * kSinHalfAngle;
 	}
 
 	///////////////////
