@@ -44,9 +44,9 @@ void Camera::Update( GLFWwindow* window )
 	transform.rotate( Vec3( 0, 1, 0 ), ((float)xpos-512)/500, false );
 	transform.rotate( Vec3( 1, 0, 0 ), ((float)ypos-384)/500, true );
 
-	float speed = 0.002f;
+	float speed = 0.04f;
 	if( glfwGetKey( window, 340 ) )
-		speed = 0.005f;
+		speed = 0.09f;
 	
 	glfwSetCursorPos( window, 512, 384 );
 

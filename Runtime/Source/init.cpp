@@ -66,7 +66,7 @@ int main( int argc, char* argv[] )
 
 	//Create a simple mesh to render
 	Mesh teapot_mesh;
-	teapot_mesh.Load( "teapot.obj" );
+	teapot_mesh.Load( "sponza.obj" );
 	
 	Shader frag;
 	Shader vert;
@@ -77,7 +77,7 @@ int main( int argc, char* argv[] )
 	Material mat;
 	mat.Load( &vert, &frag );
 
-	Texture tex ("teapot_tex.png");
+	Texture tex ("sponza_tex.png");
 	mat.texture = &tex;
 
 	teapot_mesh.AssignMat( &mat );
