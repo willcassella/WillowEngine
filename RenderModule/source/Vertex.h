@@ -12,7 +12,7 @@ struct Vertex
 	Vec3 normal;
 
 	// == operator
-	bool operator==( Vertex comp )
+	bool operator==( const Vertex& comp )
 	{
 		// Check position
 		if( position != comp.position )
@@ -28,7 +28,7 @@ struct Vertex
 		return true;
 	}
 
-	bool operator!=( Vertex comp )
+	bool operator!=( const Vertex& comp )
 	{
 		// Check position
 		if( position != comp.position )

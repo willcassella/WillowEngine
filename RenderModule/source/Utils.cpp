@@ -1,111 +1,54 @@
+// Util.cpp
+
 #include "Utils.h"
-#include "Vertex.h"
+
 #include <GL\glew.h>
 #include <vector>
+#include <fstream>
+#include <cstdio>
+#include "Vertex.h"
 #include "Vec2.h"
 #include "Vec3.h"
 
-bool loadOBJ(
-    const char * path,
+bool loadBinaryModel( const char * path,
     std::vector < Vertex > & out_vertices,
-	std::vector < GLuint > & out_elements
-)
+	std::vector < GLuint > & out_elements )
 {
-	std::vector < Vec3 > temp_positions;
-	std::vector < Vec2 > temp_coordinates;
-	std::vector < Vec3 > temp_normals;
+	// Attempt to open the file
+	std::ifstream input;
+	input.open( path, std::ios::binary | std::ios::in );
 
-	std::vector < Vertex	> temp_vertices;
-	
-	FILE * file = fopen(path, "r");
-	if( file == NULL )
-	{
-		printf("Impossible to open the file !\n");
-		fclose( file );
+	// Make sure the file opened sucessfully
+	if( !input.is_open() ) {
+		std::printf( path );
+		std::printf( " could not be opened!\n" );
 		return false;
 	}
 
-	while( 1 )
-	{
-		char lineHeader[128];
-		// read the first word of the line
-		int res = fscanf(file, "%s", lineHeader);
-		if (res == EOF)
-			break; // EOF = End Of File. Quit the loop.
- 
-		// Parse vertices
-		if ( strcmp( lineHeader, "v" ) == 0 )
-		{
-			Vec3 vertex;
-			fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z );
-			temp_positions.push_back(vertex);
-		}
-
-		// Parse texture coordinates
-		else if ( strcmp( lineHeader, "vt" ) == 0 )
-		{
-			Vec2 uv;
-			fscanf(file, "%f %f\n", &uv.x, &uv.y );
-			temp_coordinates.push_back(uv);
-		}
-		
-		// Parse vertex normals
-		else if ( strcmp( lineHeader, "vn" ) == 0 )
-		{
-			Vec3 normal;
-			fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z );
-			temp_normals.push_back(normal);
-		}
-		
-		// Parse faces
-		else if ( strcmp( lineHeader, "f" ) == 0 )
-		{
-			GLuint vertexIndex[3], uvIndex[3], normalIndex[3];
-			int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], 
-				&normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
-			if (matches != 9)
-			{
-				printf("File can't be read by OBJ parser : ( Try exporting with other options\n");
-				fclose( file );
-				return false;
-			}
-
-			// For each vertex in the face (3)
-			for( int i = 0; i < 3; i++ )
-			{
-				// Construct a vertex
-				Vertex vert;
-				vert.position = temp_positions.at( vertexIndex[i] - 1 );
-				vert.coordinates = temp_coordinates.at( uvIndex[i] - 1 );
-				vert.normal = temp_normals.at( normalIndex[i] - 1 );
-
-				// Search for the vertex
-				bool search_failed = true;
-				int index;
-				for( index = 0; index < out_vertices.size(); index++ )
-				{
-					// if it already exists
-					if( out_vertices[ index ] == vert )
-					{
-						// Add it to elements
-						out_elements.push_back( index );
-						search_failed = false;
-						break;
-					}
-				}
-
-				// If the vertex wash not found
-				if( search_failed )
-				{
-					// Add the vertex to output
-					out_vertices.push_back( vert );
-					// Add it to elements
-					out_elements.push_back( index );
-				}
-			}
-		}
+	// Get the number of vertices
+	int num_verts;
+	input.read( (char*)&num_verts, sizeof( int ) );
+	
+	// Add all the vertices
+	for( int i = 0; i < num_verts; i++ ) {
+		Vertex newVert;
+		input.read( (char*)&newVert, sizeof( Vertex ) );
+		out_vertices.push_back( newVert );
 	}
 
-	fclose( file );
+	// Get the number of elements
+	int num_elems;
+	input.read( (char*)&num_elems, sizeof( int ) );
+
+	// Add all the elements
+	for( int i = 0; i < num_elems; i++ ) {
+		GLuint newElem;
+		input.read( (char*)&newElem, sizeof( unsigned int ) );
+		out_elements.push_back( newElem );
+	}
+
+	// Close the file
+	input.close();
+
 	return true;
 }

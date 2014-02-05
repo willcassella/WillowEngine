@@ -15,7 +15,7 @@ Mesh::Mesh()
 
 Mesh::Mesh( const char * path )
 {
-	loadOBJ( path, vertices, elements );
+	loadBinaryModel( path, vertices, elements );
 
 	glGenVertexArrays( 1, &vao );
 	glBindVertexArray( vao );
@@ -41,7 +41,7 @@ Mesh::~Mesh()
 
 void Mesh::Load( const char * path )
 {
-	loadOBJ( path, vertices, elements );
+	loadBinaryModel( path, vertices, elements );
 
 	if( !loaded )
 		glGenVertexArrays( 1, &vao );

@@ -15,14 +15,14 @@ class Mesh
 public:
 	
 	Mesh();
-	Mesh( const char * path );
+	Mesh( const char* path );
 	~Mesh();
 
 	// Load buffers to video card
-	void Load( const char * path );
+	void Load( const char* path );
 
 	// Assign a material
-	void AssignMat( Material *_mat );
+	void AssignMat( Material* _mat );
 
 	// Delete buffers from video card
 	void Unload();
