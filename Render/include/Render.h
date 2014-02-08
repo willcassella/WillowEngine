@@ -1,5 +1,5 @@
-#ifndef RENDERMODULE_H_
-#define RENDERMODULE_H_
+#ifndef RENDER_H_
+#define RENDER_H_
 
 #include "..\source\Renderer.h"
 #include "..\source\Mesh.h"

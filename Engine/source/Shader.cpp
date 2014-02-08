@@ -56,7 +56,7 @@ std::string Shader::basic_vert_source =
 	"uniform mat4 clipspace;"
     "void main() {"
     "   Color = color;"
-    "   gl_Position = clipspace * vec4(position, 1.0);"
+	"   gl_Position = clipspace * vec4( position, 1.0 );"
 	"	Texcoord = vec2(texcoord.x, 1.0 - texcoord.y);"
     "}";
 

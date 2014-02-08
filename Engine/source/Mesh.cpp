@@ -1,8 +1,8 @@
 // Mesh.cpp
 
 #include <GL\glew.h>
+
 #include "Mesh.h"
-#include "Renderer.h"
 #include "Utils.h"
 #include "Vertex.h"
 #include "Vec3.h"

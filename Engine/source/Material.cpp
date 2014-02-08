@@ -22,10 +22,6 @@ Material::Material( Shader *_vertex, Shader *_fragment )
 	// get matrix locations
 	clipspace = glGetUniformLocation( id, "clipspace" );
 
-
-	//TODO: find a better place for this
-	glUseProgram( id );
-
 	loaded = true;
 }
 

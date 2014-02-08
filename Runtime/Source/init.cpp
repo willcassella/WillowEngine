@@ -12,9 +12,10 @@
 #include <GLFW/glfw3.h>
 #include <cstring>
 
-//Include module files
-#include <ScriptingModule.h>
-#include <RenderModule.h>
+//Include subsytem files
+#include <Engine.h>
+#include <Render.h>
+#include <Scripting.h>
 
 //Define context parameters
 int window_width = 1280;
@@ -25,7 +26,7 @@ bool fullscreen = false;
 //Function Prototypes
 GLFWwindow* InitGLFW();
 bool InitGlew();
-void eventLoop( GLFWwindow* window );
+void eventLoop( GLFWwindow* window, Scene scene );
 void cleanUp( GLFWwindow* window );
 
 void windowSizeCallback( GLFWwindow* window, int x, int y )
@@ -62,11 +63,17 @@ int main( int argc, char* argv[] )
 	///          scene          ///
 	///////////////////////////////
 
+	Scene testScene;
+
+	GameObject sponza;
 	GameObject teapot;
 
 	//Create a simple mesh to render
+	Mesh sponza_mesh;
+	sponza_mesh.Load( "sponza.dat" );
+
 	Mesh teapot_mesh;
-	teapot_mesh.Load( "sponza.dat" );
+	teapot_mesh.Load( "teapot.dat" );
 	
 	Shader frag;
 	Shader vert;
@@ -74,25 +81,36 @@ int main( int argc, char* argv[] )
 	frag.Load( Shader::basic_frag_source, GL_FRAGMENT_SHADER );
 	vert.Load( Shader::basic_vert_source, GL_VERTEX_SHADER );
 
-	Material mat;
-	mat.Load( &vert, &frag );
+	Material sponza_mat;
+	sponza_mat.Load( &vert, &frag );
 
-	Texture tex ("sponza_tex.png");
-	mat.texture = &tex;
+	Material teapot_mat;
+	teapot_mat.Load( &vert, &frag );
 
-	teapot_mesh.AssignMat( &mat );
+	Texture sponza_tex ("sponza_tex.png");
+	sponza_mat.texture = &sponza_tex;
 
+	Texture teapot_tex ("teapot_tex.png");
+	sponza_mat.texture = &teapot_tex;
+
+	sponza_mesh.AssignMat( &sponza_mat );
+	teapot_mesh.AssignMat( &teapot_mat );
+
+	sponza.mesh = &sponza_mesh;
 	teapot.mesh = &teapot_mesh;
 
-	Camera cam( 43, float(window_width)/window_height, 0.2f, 60.0f );
+	Camera cam( 43, float(window_width)/window_height, 0.2f, 90.0f );
 
 	cam.transform.position.z = 4;
 	cam.transform.position.y = 1;
 
+	testScene.objects.push_back( sponza );
+	testScene.objects.push_back( teapot );
+	testScene.cameras.push_back( cam );
 
 
 	//Execute the main event loops
-	eventLoop( window );
+	eventLoop( window, testScene );
 	
 	//Cleanup the engine
 	cleanUp( window );
@@ -154,7 +172,7 @@ bool InitGlew()
 	return glewInit() == GLEW_OK;
 }
 
-void eventLoop( GLFWwindow* window )
+void eventLoop( GLFWwindow* window, Scene scene )
 {
 	std::cout << "Entering event loop... " << std:: endl;
 
@@ -185,8 +203,20 @@ void eventLoop( GLFWwindow* window )
 		
 		glfwPollEvents();
 
+		// Update all game objects
+		for( int i = 0; i < scene.objects.size(); i++ ) {
+			scene.objects[i].Update();
+		}
+
+		// Update all cameras
+		for( int i = 0; i < scene.cameras.size(); i++ ) {
+			scene.cameras[i].Update( window );
+		}
+
 		//render the frame
-		Renderer::render( window );
+		Renderer::render( scene );
+
+		glfwSwapBuffers( window );
 	}
 	std::cout << "Leaving event loop... " << std::endl;
 }

@@ -1,12 +1,10 @@
 #include "GameObject.h"
-#include "Renderer.h"
 
 #include "Vec3.h"
 
 GameObject::GameObject()
 {
-	// TODO: move this to scene class
-	Renderer::rqueue.push( this );
+	// Do nothing
 }
 
 GameObject::~GameObject()

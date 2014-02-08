@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\ScriptingModule.h" />
+    <ClInclude Include="include\Scripting.h" />
     <ClInclude Include="source\angelscript.h" />
     <ClInclude Include="source\AngelScript\as_array.h" />
     <ClInclude Include="source\AngelScript\as_atomic.h" />
@@ -100,7 +100,7 @@
     <ClCompile Include="source\AngelScript\as_typeinfo.cpp" />
     <ClCompile Include="source\AngelScript\as_variablescope.cpp" />
     <ClCompile Include="source\GlobalFunctions.cpp" />
-    <ClCompile Include="source\ScriptingModule.cpp" />
+    <ClCompile Include="source\Scripting.cpp" />
     <ClCompile Include="source\scriptstdstring.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -122,6 +122,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{39E6AF97-6BA3-4A72-8C61-BCEBF214EBFD}</ProjectGuid>
     <RootNamespace>angelscript</RootNamespace>
+    <ProjectName>Scripting</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">

@@ -1,11 +1,12 @@
 // Util.cpp
 
-#include "Utils.h"
-
-#include <GL\glew.h>
 #include <vector>
 #include <fstream>
 #include <cstdio>
+
+#include <GL\glew.h>
+
+#include "Utils.h"
 #include "Vertex.h"
 #include "Vec2.h"
 #include "Vec3.h"

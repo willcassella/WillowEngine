@@ -1,5 +1,5 @@
 #include "Camera.h"
-#include "Renderer.h"
+#include "Scene.h"
 
 #include "Mat4.h"
 
@@ -13,9 +13,6 @@ Camera::Camera()
 
 	//Generate the projection matrix
 	perspective = Mat4::perspectiveVFOV( vFOV, ratio, zMin, zMax );
-	
-	//Add the camera to the camera queue
-	Renderer::cqueue.push( this );
 }
 
 Camera::Camera( float _HFOV, float _RATIO, float _ZMIN, float _ZMAX )
@@ -26,8 +23,6 @@ Camera::Camera( float _HFOV, float _RATIO, float _ZMIN, float _ZMAX )
 	zMax = _ZMAX;
 
 	perspective = Mat4::perspectiveVFOV( vFOV, ratio, zMin, zMax );
-
-	Renderer::cqueue.push( this );
 }
 
 Camera::~Camera()
@@ -40,37 +35,44 @@ void Camera::Update( GLFWwindow* window )
 	double xpos, ypos;
 	glfwGetCursorPos( window, &xpos, &ypos );
 
-
 	transform.rotate( Vec3( 0, 1, 0 ), ((float)xpos-512)/500, false );
 	transform.rotate( Vec3( 1, 0, 0 ), ((float)ypos-384)/500, true );
 
 	float speed = 0.04f;
-	if( glfwGetKey( window, 340 ) )
+	if( glfwGetKey( window, GLFW_KEY_LEFT_SHIFT ) )
 		speed = 0.09f;
 	
 	glfwSetCursorPos( window, 512, 384 );
 
 	// Move forward
-	if( glfwGetKey( window, 87 ) )
+	if( glfwGetKey( window, GLFW_KEY_W ) )
 		transform.translate( Vec3( 0, 0, -speed ), true );
 
 	// Move backward
-	if( glfwGetKey( window, 83 ) )
+	if( glfwGetKey( window, GLFW_KEY_S ) )
 		transform.translate( Vec3( 0, 0, speed ), true );
 
 	// Move left
-	if( glfwGetKey( window, 65 ) )
+	if( glfwGetKey( window, GLFW_KEY_A ) )
 		transform.translate( Vec3( -speed, 0, 0 ), true );
 
 	// Move right
-	if( glfwGetKey( window, 68 ) )
+	if( glfwGetKey( window, GLFW_KEY_D ) )
 		transform.translate( Vec3( speed, 0, 0 ), true );
 
 	// Move up
-	if( glfwGetKey( window, 81 ) )
+	if( glfwGetKey( window, GLFW_KEY_Q ) )
 		transform.translate( Vec3( 0, speed, 0 ), false );
 
 	// Move down
-	if( glfwGetKey( window, 69 ) )
+	if( glfwGetKey( window, GLFW_KEY_E ) )
 		transform.translate( Vec3( 0, -speed, 0 ), false );
+
+	// Tilt left
+	if( glfwGetKey( window, GLFW_KEY_Z ) )
+		transform.rotate( Vec3( 0, 0, 1 ), -0.008f , true );
+
+	// Tilt right
+	if( glfwGetKey( window, GLFW_KEY_X ) )
+		transform.rotate( Vec3( 0, 0, 1 ), 0.008f , true );
 }

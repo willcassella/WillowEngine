@@ -1,6 +1,6 @@
 //Scripting.cpp
 
-#include "..\include\ScriptingModule.h"
+#include "..\include\Scripting.h"
 #include "GlobalFunctions.h"
 
 #include <iostream>
