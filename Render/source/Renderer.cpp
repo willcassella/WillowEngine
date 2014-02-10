@@ -1,14 +1,17 @@
 // Renderer.cpp
 
 #include <GL\glew.h>
-#include <GLFW\glfw3.h>
 
 #include <Engine.h>
 
 #include "Renderer.h"
 
-int Renderer::init()
+//RENDER_API API = RENDER_NULL;
+
+int Renderer::init( const RENDER_API& _API )
 {
+	//API = _API;
+
 	// Set the opengl clear color to black and clear the screen and the depth buffer
 	glClearColor( 0, 0, 0, 1 );
 	glEnable( GL_DEPTH_TEST );
@@ -37,9 +40,6 @@ int Renderer::render( const Scene& scene )
 
 			// Bind the shader program
 			glUseProgram( object.mesh->mat->id );
-
-			// Bind the texture
-			//glBindTexture( GL_TEXTURE_2D, object.mesh->mat->texture->id );
 		
 			// Get the model matrix
 			Mat4  model = object.transform.getModel();

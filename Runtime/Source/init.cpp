@@ -54,7 +54,7 @@ int main( int argc, char* argv[] )
 	InitScriptingModule();
 
 	//Initialize the renderer
-	Renderer::init();
+	Renderer::init( RENDER_OPENGL );
 
 
 	

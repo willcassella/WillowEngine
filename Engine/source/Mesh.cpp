@@ -13,7 +13,7 @@ Mesh::Mesh()
 	loaded = false;
 }
 
-Mesh::Mesh( const char * path )
+Mesh::Mesh( const char* path )
 {
 	loadBinaryModel( path, vertices, elements );
 
@@ -23,7 +23,7 @@ Mesh::Mesh( const char * path )
 	//Generate buffers and upload data
 	glGenBuffers( 1, &vbo );
 	glBindBuffer( GL_ARRAY_BUFFER, vbo );
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof( Vertex ), &vertices[0], GL_STATIC_DRAW);
+	glBufferData( GL_ARRAY_BUFFER, vertices.size() * sizeof( Vertex ), &vertices[0], GL_STATIC_DRAW );
 
 	glGenBuffers( 1, &ebo );
 	glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, ebo );
@@ -51,7 +51,7 @@ void Mesh::Load( const char * path )
 	if( !loaded )
 		glGenBuffers( 1, &vbo );
 	glBindBuffer( GL_ARRAY_BUFFER, vbo );
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof( Vertex ), &vertices[0], GL_STATIC_DRAW);
+	glBufferData( GL_ARRAY_BUFFER, vertices.size() * sizeof( Vertex ), &vertices[0], GL_STATIC_DRAW );
 
 	if( !loaded )
 		glGenBuffers( 1, &ebo );

@@ -74,24 +74,24 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\Engine\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\Engine\include;C:\Users\Will\Documents\BitBucket\willow-engine\Dependancies\libraries\glfw-3.0.3\include;$(IncludePath)</IncludePath>
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetName>$(ProjectName)_d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\Engine\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\Engine\include;C:\Users\Will\Documents\BitBucket\willow-engine\Dependancies\libraries\glfw-3.0.3\include;$(IncludePath)</IncludePath>
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\Engine\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\Engine\include;C:\Users\Will\Documents\BitBucket\willow-engine\Dependancies\libraries\glfw-3.0.3\include;$(IncludePath)</IncludePath>
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetName>$(ProjectName)64_d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\Engine\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\Engine\include;C:\Users\Will\Documents\BitBucket\willow-engine\Dependancies\libraries\glfw-3.0.3\include;$(IncludePath)</IncludePath>
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetName>$(ProjectName)64</TargetName>
