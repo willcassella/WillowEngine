@@ -1,9 +1,8 @@
 // Renderer.cpp
 
+#include <iostream>
 #include <GL\glew.h>
-
 #include <Engine.h>
-
 #include "Renderer.h"
 
 //RENDER_API API = RENDER_NULL;
@@ -36,13 +35,16 @@ int Renderer::render( const Scene& scene )
 			GameObject object = scene.objects[objID];
 
 			// Bind the mesh
-			glBindVertexArray( object.mesh->vao );
+			glBindVertexArray( object.mesh->getVAO() );
 
-			// Bind the shader program
-			glUseProgram( object.mesh->mat->id );
+			// Bind the material
+			glUseProgram( object.mesh->getMaterial().getID() );
+
+			// Bind the texture
+			glBindTexture( GL_TEXTURE_2D, object.mesh->getMaterial().getTexture().getID() );
 		
 			// Get the model matrix
-			Mat4  model = object.transform.getModel();
+			Mat4 model = object.transform.getModel();
 		
 			// Get the view matrix
 			Mat4 view = cam.transform.getModel().inverse();
@@ -51,13 +53,13 @@ int Renderer::render( const Scene& scene )
 			Mat4 clipspace = cam.perspective * view * model;
 
 			// Upload the matrix to the GPU
-			glUniformMatrix4fv( object.mesh->mat->clipspace, 1, GL_FALSE,  clipspace[0] );
+			glUniformMatrix4fv( object.mesh->getMaterial().getClipSpaceID(), 1, GL_FALSE,  clipspace[0] );
 		
 			//Draw the mesh
-			glDrawElements( GL_TRIANGLES, (GLsizei)object.mesh->elements.size(), GL_UNSIGNED_INT, 0 );
+			glDrawElements( GL_TRIANGLES, (GLsizei)object.mesh->getNumElements(), GL_UNSIGNED_INT, 0 );
 		}
 	}
-	
+
 	glBindVertexArray( 0 );
 
 	return 0;

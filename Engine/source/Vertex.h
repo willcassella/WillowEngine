@@ -6,38 +6,47 @@
 
 struct Vertex
 {
-	// Vertex attributes
+	////////////////
+	///   Data   ///
+	////////////////
+public:
+
 	Vec3 position;
 	Vec2 coordinates;
 	Vec3 normal;
 
-	// == operator
-	bool operator==( const Vertex& comp )
+	//////////////////////////////
+	///   Operator Overloads   ///
+	//////////////////////////////
+
+	// Returns TRUE if this vertex is equivilent to another vertex
+	bool operator==( const Vertex& rhs )
 	{
 		// Check position
-		if( position != comp.position )
+		if( position != rhs.position )
 			return false;
 		// Check coordinates
-		if( coordinates != comp.coordinates  )
+		if( coordinates != rhs.coordinates  )
 			return false;
 		// Check normal
-		if( normal != comp.normal )
+		if( normal != rhs.normal )
 			return false;
 
 		// They all must have checked out
 		return true;
 	}
 
-	bool operator!=( const Vertex& comp )
+	// Returns TRUE if this vertex is NOT equivilent to another vertex
+	bool operator!=( const Vertex& rhs )
 	{
 		// Check position
-		if( position != comp.position )
+		if( position != rhs.position )
 			return true;
 		// Check coordinates
-		if( coordinates != comp.coordinates )
+		if( coordinates != rhs.coordinates )
 			return true;
 		// Check normal
-		if( normal != comp.normal )
+		if( normal != rhs.normal )
 			return true;
 
 		// They must have all been equal

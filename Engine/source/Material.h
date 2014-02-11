@@ -4,32 +4,37 @@
 #include "Shader.h"
 #include "Texture.h"
 
-//TODO: make this more than just a shader program
 class Material
 {
-public:
-
-	Material();
-	Material( Shader *_vertex, Shader *_fragment ); //TODO: add texture support
-	~Material();
-
-	// Load and unload material information to GPU
-	void Load( Shader *_vertex, Shader *_fragment );
-	void Unload();
-
-	GLuint id;
-	Texture *texture;
-
-	GLuint clipspace;
-
+	////////////////
+	///   Data   ///
+	////////////////
 private:
 
-	// Holds whether material has been loaded to GPU
-	bool loaded;
+	GLuint id;
+	GLuint clipspace;
 
-	// Material information
-	Shader *vertex;
-	Shader *fragment;
+	Texture* texture;
+	Shader* vertex;
+	Shader* fragment;
+
+	////////////////////////
+	///   Constructors   ///
+	////////////////////////
+public:
+
+	Material( const Shader& _vertex, const Shader& _fragment );
+	~Material();
+
+	///////////////////////////////
+	///   Getters and Setters   ///
+	///////////////////////////////
+public:
+
+	GLuint getID() const;
+	Texture& getTexture() const;
+	void setTexture( const Texture& _TEX );
+	GLuint getClipSpaceID() const;
 };
 
 #endif

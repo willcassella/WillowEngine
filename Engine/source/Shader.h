@@ -6,29 +6,36 @@
 
 class Shader
 {
+	////////////////
+	///   Data   ///
+	////////////////
+private:
+
+	GLuint id;
+	std::string source;
+
+	////////////////////////
+	///   Constructors   ///
+	////////////////////////
 public:
 
-	Shader();
 	Shader( std::string _source, GLenum type );
 	~Shader();
 
+	///////////////////////////////
+	///   Getters and Setters   ///
+	///////////////////////////////
+public:
 
-	//Load and unload shader to GPU
-	void Load( std::string _source, GLenum type );
-	void Unload();
+	GLuint getID() const;
 
-	// Shader information
-	GLuint id;
+	//////////////////////////
+	///   Static Members   ///
+	//////////////////////////
+public:
 
 	static std::string basic_vert_source;
 	static std::string basic_frag_source;
-
-private:
-
-	std::string source;
-
-	//Holds whether shader has been loaded to GPU
-	bool loaded;
 };
 
 #endif

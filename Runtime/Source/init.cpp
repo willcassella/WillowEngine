@@ -10,7 +10,6 @@
 #include <string>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <cstring>
 
 //Include subsytem files
 #include <Engine.h>
@@ -69,32 +68,23 @@ int main( int argc, char* argv[] )
 	GameObject teapot;
 
 	//Create a simple mesh to render
-	Mesh sponza_mesh;
-	sponza_mesh.Load( "sponza.dat" );
+	StaticMesh sponza_mesh( "sponza.dat" );
+	StaticMesh teapot_mesh( "teapot.dat" );
 
-	Mesh teapot_mesh;
-	teapot_mesh.Load( "teapot.dat" );
-	
-	Shader frag;
-	Shader vert;
+	Shader frag( Shader::basic_frag_source, GL_FRAGMENT_SHADER );
+	Shader vert( Shader::basic_vert_source, GL_VERTEX_SHADER );
 
-	frag.Load( Shader::basic_frag_source, GL_FRAGMENT_SHADER );
-	vert.Load( Shader::basic_vert_source, GL_VERTEX_SHADER );
-
-	Material sponza_mat;
-	sponza_mat.Load( &vert, &frag );
-
-	Material teapot_mat;
-	teapot_mat.Load( &vert, &frag );
+	Material sponza_mat( vert, frag );
+	Material teapot_mat( vert, frag );
 
 	Texture sponza_tex ("sponza_tex.png");
-	sponza_mat.texture = &sponza_tex;
+	sponza_mat.setTexture( sponza_tex );
 
-	Texture teapot_tex ("teapot_tex.png");
-	sponza_mat.texture = &teapot_tex;
+	Texture teapot_tex ( "teapot_tex.png" );
+	teapot_mat.setTexture( teapot_tex );
 
-	sponza_mesh.AssignMat( &sponza_mat );
-	teapot_mesh.AssignMat( &teapot_mat );
+	sponza_mesh.setMaterial( sponza_mat );
+	teapot_mesh.setMaterial( teapot_mat );
 
 	sponza.mesh = &sponza_mesh;
 	teapot.mesh = &teapot_mesh;

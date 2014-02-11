@@ -1,22 +1,32 @@
 #ifndef TEXTURE_H_
 #define TEXTURE_H_
 
+#include <string>
 #include <GL\glew.h>
 
 class Texture
 {
-public:
-	Texture();
-	Texture( const char* path );
-	~Texture();
-
-	void Load( const char* path );
+	////////////////
+	///   Data   ///
+	////////////////
+private:
 
 	GLuint id;
 
-private:
+	////////////////////////
+	///   Constructors   ///
+	////////////////////////
+public:
 
-	bool loaded;
+	Texture( const std::string& path );
+	~Texture();
+
+	///////////////////////////////
+	///   Getters and Setters   ///
+	///////////////////////////////
+public:
+
+	GLuint getID() const;
 };
 
 #endif

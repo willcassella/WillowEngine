@@ -46,13 +46,13 @@
     <ClCompile Include="source\Material.cpp">
       <Filter>Source Files\Render\Source</Filter>
     </ClCompile>
-    <ClCompile Include="source\Mesh.cpp">
-      <Filter>Source Files\Render\Source</Filter>
-    </ClCompile>
     <ClCompile Include="source\Shader.cpp">
       <Filter>Source Files\Render\Source</Filter>
     </ClCompile>
     <ClCompile Include="source\Texture.cpp">
+      <Filter>Source Files\Render\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\StaticMesh.cpp">
       <Filter>Source Files\Render\Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -87,9 +87,6 @@
     <ClInclude Include="source\Material.h">
       <Filter>Source Files\Render\Header</Filter>
     </ClInclude>
-    <ClInclude Include="source\Mesh.h">
-      <Filter>Source Files\Render\Header</Filter>
-    </ClInclude>
     <ClInclude Include="source\Shader.h">
       <Filter>Source Files\Render\Header</Filter>
     </ClInclude>
@@ -104,6 +101,9 @@
     </ClInclude>
     <ClInclude Include="source\Game.h">
       <Filter>Source Files\Engine\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="source\StaticMesh.h">
+      <Filter>Source Files\Render\Header</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

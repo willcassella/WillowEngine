@@ -2,7 +2,7 @@
 #define GAMEOBJECT_H_
 
 #include "Transform.h"
-#include "Mesh.h"
+#include "StaticMesh.h"
 
 class GameObject
 {
@@ -12,7 +12,7 @@ public:
 	~GameObject();
 	
 	Transform transform;
-	Mesh *mesh;
+	StaticMesh *mesh;
 	void Update();
 };
 

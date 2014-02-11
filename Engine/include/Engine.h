@@ -8,7 +8,7 @@
 #include "..\source\Transform.h"
 
 // Rendering types
-#include "..\source\Mesh.h"
+#include "..\source\StaticMesh.h"
 #include "..\source\Material.h"
 #include "..\source\Vertex.h"
 #include "..\source\Texture.h"

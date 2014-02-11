@@ -1,8 +1,9 @@
 // Util.cpp
 
+#include <string>
 #include <vector>
 #include <fstream>
-#include <cstdio>
+#include <iostream>
 
 #include <GL\glew.h>
 
@@ -11,9 +12,10 @@
 #include "Vec2.h"
 #include "Vec3.h"
 
-bool loadBinaryModel( const char * path,
-    std::vector < Vertex > & out_vertices,
-	std::vector < GLuint > & out_elements )
+bool loadBinaryModel(
+	const std::string& path,
+    std::vector < Vertex >* out_vertices,
+	std::vector < GLuint >* out_elements )
 {
 	// Attempt to open the file
 	std::ifstream input;
@@ -21,8 +23,8 @@ bool loadBinaryModel( const char * path,
 
 	// Make sure the file opened sucessfully
 	if( !input.is_open() ) {
-		std::printf( path );
-		std::printf( " could not be opened!\n" );
+		std::cout << path;
+		std::cout << " could not be opened!\n";
 		return false;
 	}
 
@@ -34,7 +36,7 @@ bool loadBinaryModel( const char * path,
 	for( int i = 0; i < num_verts; i++ ) {
 		Vertex newVert;
 		input.read( (char*)&newVert, sizeof( Vertex ) );
-		out_vertices.push_back( newVert );
+		out_vertices->push_back( newVert );
 	}
 
 	// Get the number of elements
@@ -45,7 +47,7 @@ bool loadBinaryModel( const char * path,
 	for( int i = 0; i < num_elems; i++ ) {
 		GLuint newElem;
 		input.read( (char*)&newElem, sizeof( unsigned int ) );
-		out_elements.push_back( newElem );
+		out_elements->push_back( newElem );
 	}
 
 	// Close the file
