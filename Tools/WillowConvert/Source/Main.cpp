@@ -16,24 +16,35 @@ This program converts text files to .DAT for faster loading by the engine
 using namespace std;
 
 // Enum of supported file types
-enum FileType {
+enum inputType {
 	NONE, OBJ
 };
 
-FileType parseFileName( 
+// Enum of output types
+enum OutputType {
+	MESH
+};
+
+inputType parseFileName( 
 	const string& fileName, 
 	string& name, 
 	string& extension );
 
 bool parseOBJ(
-    const char* path,
-    vector< Vertex >& out_vertices,
-	vector< unsigned int >& out_elements );
+    const string& path,
+    vector< Vertex >* out_vertices,
+	vector< unsigned int >* out_elements );
+
+bool writeMesh(
+	const string& path,
+	const string& name,
+	const vector< Vertex >& vertices,
+	const vector< unsigned int >& elements );
 
 int main()
 {
 	// Prompt the user for a file to convert
-	cout << "\n---WillowConvert version 0.6---\n\n";
+	cout << "\n---WillowConvert version 1.0---\n\n";
 	cout << "Enter the path to a file to convert:\n\n";
 	cout << "  > ";
 
@@ -45,7 +56,7 @@ int main()
 
 	// Parse it
 	string name, extension;
-	FileType type = parseFileName( fileName, name, extension );
+	inputType type = parseFileName( fileName, name, extension );
 
 	// Check the returned type was valid
 	if( type == NONE ) {
@@ -54,28 +65,16 @@ int main()
 		return 0;
 	}
 
-	// Attempt to open it
 	vector< Vertex > vertices;
 	vector< unsigned int > elements;
-	if( !parseOBJ( fileName.c_str(), vertices, elements ) ) {
-		// Opening failed
-		cout << "Opening file failed!";
+	if( !parseOBJ( fileName, &vertices, &elements ) ) {
+		// Must have failed
+		cin.get();
 		return 0;
 	}
-	// Find the number of vertices
-	int num_verts = (int)vertices.size();
-	int num_elems = (int)elements.size();
 
-	// Write it to a file
-	ofstream output;
-	output.open( (name + ".dat").c_str(), ios::binary | ios::out );
-
-	output.write( (char*)&num_verts,	sizeof( int ) );
-	output.write( (char*)&vertices[0],	sizeof( Vertex ) * num_verts );
-	output.write( (char*)&num_elems,	sizeof( int ) );
-	output.write( (char*)&elements[0],	sizeof( unsigned int ) * num_elems );
-
-	output.close();
+	// Write the mesh
+	writeMesh( fileName, name, vertices, elements );
 	
 	cout << "All done!";
 	cin.get();
@@ -83,7 +82,7 @@ int main()
 	return 0;
 }
 
-FileType parseFileName( const string& fileName, string& name, string& extension )
+inputType parseFileName( const string& fileName, string& name, string& extension )
 {
 	// Determine file name and extension
 	for( int i = (int)fileName.length() - 1; i > 0; i-- ) {
@@ -126,25 +125,23 @@ FileType parseFileName( const string& fileName, string& name, string& extension 
 }
 
 bool parseOBJ(
-    const char* path,
-    std::vector < Vertex > & out_vertices,
-	std::vector < unsigned int > & out_elements
+    const string& path,
+    vector < Vertex >* out_vertices,
+	vector < unsigned int >* out_elements
 )
 {
 	std::vector < Vec3 > temp_positions;
 	std::vector < Vec2 > temp_coordinates;
 	std::vector < Vec3 > temp_normals;
-	std::vector < Vertex > temp_vertices;
 	
-	FILE * file = fopen(path, "r");
+	FILE * file = fopen( path.c_str(), "r" );
 	if( file == NULL )
 	{
-		printf("Impossible to open the file !\n");
-		fclose( file );
+		cout << "File does not exist!\n";
 		return false;
 	}
 
-	while( 1 )
+	while( true )
 	{
 		char lineHeader[128];
 		// read the first word of the line
@@ -201,13 +198,13 @@ bool parseOBJ(
 				// Search for the vertex
 				bool search_failed = true;
 				int index;
-				for( index = 0; index < out_vertices.size(); index++ )
+				for( index = 0; index < out_vertices->size(); index++ )
 				{
 					// if it already exists
-					if( out_vertices[ index ] == vert )
+					if( (*out_vertices)[ index ] == vert )
 					{
 						// Add it to elements
-						out_elements.push_back( index );
+						out_elements->push_back( index );
 						search_failed = false;
 						break;
 					}
@@ -217,14 +214,38 @@ bool parseOBJ(
 				if( search_failed )
 				{
 					// Add the vertex to output
-					out_vertices.push_back( vert );
+					out_vertices->push_back( vert );
 					// Add it to elements
-					out_elements.push_back( index );
+					out_elements->push_back( index );
 				}
 			}
 		}
 	}
 
 	fclose( file );
+	return true;
+}
+
+bool writeMesh(
+	const string& path,
+	const string& name,
+	const vector < Vertex >& vertices,
+	const vector < unsigned int >& elements )
+{
+	// Find the number of vertices
+	int num_verts = (int)vertices.size();
+	int num_elems = (int)elements.size();
+
+	// Write it to a file
+	ofstream output;
+	output.open( (name + ".dat").c_str(), ios::binary | ios::out );
+
+	output.write( (char*)&num_verts,	sizeof( int ) );
+	output.write( (char*)&vertices[0],	sizeof( Vertex ) * num_verts );
+	output.write( (char*)&num_elems,	sizeof( int ) );
+	output.write( (char*)&elements[0],	sizeof( unsigned int ) * num_elems );
+
+	output.close();
+
 	return true;
 }

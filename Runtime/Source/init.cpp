@@ -10,11 +10,11 @@
 #include <string>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <cstring>
 
-//Include module files
-#include <ScriptingModule.h>
-#include <RenderModule.h>
+//Include subsytem files
+#include <Engine.h>
+#include <Render.h>
+#include <Scripting.h>
 
 //Define context parameters
 int window_width = 1280;
@@ -25,7 +25,7 @@ bool fullscreen = false;
 //Function Prototypes
 GLFWwindow* InitGLFW();
 bool InitGlew();
-void eventLoop( GLFWwindow* window );
+void eventLoop( GLFWwindow* window, Scene scene );
 void cleanUp( GLFWwindow* window );
 
 void windowSizeCallback( GLFWwindow* window, int x, int y )
@@ -53,7 +53,7 @@ int main( int argc, char* argv[] )
 	InitScriptingModule();
 
 	//Initialize the renderer
-	Renderer::init();
+	Renderer::init( RENDER_OPENGL );
 
 
 	
@@ -62,37 +62,52 @@ int main( int argc, char* argv[] )
 	///          scene          ///
 	///////////////////////////////
 
-	GameObject teapot;
+	Scene testScene;
+
+	GameObject sponza;
+	GameObject gun;
 
 	//Create a simple mesh to render
-	Mesh teapot_mesh;
-	teapot_mesh.Load( "sponza.dat" );
-	
-	Shader frag;
-	Shader vert;
+	StaticMesh sponza_mesh( "sponza.dat" );
+	StaticMesh gun_mesh( "M4A1.dat" );
 
-	frag.Load( Shader::basic_frag_source, GL_FRAGMENT_SHADER );
-	vert.Load( Shader::basic_vert_source, GL_VERTEX_SHADER );
+	Shader frag( Shader::basic_frag_source, GL_FRAGMENT_SHADER );
+	Shader vert( Shader::basic_vert_source, GL_VERTEX_SHADER );
 
-	Material mat;
-	mat.Load( &vert, &frag );
+	Material sponza_mat( vert, frag );
+	Material gun_mat( vert, frag );
 
-	Texture tex ("sponza_tex.png");
-	mat.texture = &tex;
+	Texture sponza_tex ("sponza_tex.png");
+	sponza_mat.setTexture( sponza_tex );
 
-	teapot_mesh.AssignMat( &mat );
+	Texture gun_tex( "M4A1_tex.png" );
+	gun_mat.setTexture( gun_tex );
 
-	teapot.mesh = &teapot_mesh;
+	sponza_mesh.setMaterial( sponza_mat );
+	gun_mesh.setMaterial( gun_mat );
 
-	Camera cam( 43, float(window_width)/window_height, 0.2f, 60.0f );
+	sponza.mesh = &sponza_mesh;
+	gun.mesh = &gun_mesh;
+
+	Camera cam( 43, float(window_width)/window_height, 0.1f, 90.0f );
 
 	cam.transform.position.z = 4;
 	cam.transform.position.y = 1;
 
+	gun.transform.scale = Vec3( 0.2f, 0.2f, 0.2f );
+	gun.transform.position.x = 0.15f;
+	gun.transform.position.z = -0.5f;
+	gun.transform.position.y = -0.1f;
+	gun.transform.rotate( Vec3( 0, 1, 0 ), -3.14159f/2, false );
+	gun.transform.parent = &cam.transform;
+
+	testScene.objects.push_back( &sponza );
+	testScene.objects.push_back( &gun );
+	testScene.cameras.push_back( &cam );
 
 
 	//Execute the main event loops
-	eventLoop( window );
+	eventLoop( window, testScene );
 	
 	//Cleanup the engine
 	cleanUp( window );
@@ -154,7 +169,7 @@ bool InitGlew()
 	return glewInit() == GLEW_OK;
 }
 
-void eventLoop( GLFWwindow* window )
+void eventLoop( GLFWwindow* window, Scene scene )
 {
 	std::cout << "Entering event loop... " << std:: endl;
 
@@ -185,8 +200,20 @@ void eventLoop( GLFWwindow* window )
 		
 		glfwPollEvents();
 
+		// Update all game objects
+		for( int i = 0; i < scene.objects.size(); i++ ) {
+			scene.objects[i]->Update();
+		}
+
+		// Update all cameras
+		for( int i = 0; i < scene.cameras.size(); i++ ) {
+			scene.cameras[i]->Update( window );
+		}
+
 		//render the frame
-		Renderer::render( window );
+		Renderer::render( scene );
+
+		glfwSwapBuffers( window );
 	}
 	std::cout << "Leaving event loop... " << std::endl;
 }

@@ -66,26 +66,26 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\Dependancies\Windows\SOIL\src;$(SolutionDir)\ScriptingModule\include;$(SolutionDir)\RenderModule\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\lib-msvc110;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\lib\Release\$(Platform);$(SolutionDir)\Dependancies\Windows\SOIL\lib;$(SolutionDir)\ScriptingModule\bin;$(SolutionDir)\RenderModule\bin;C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\Dependancies\Windows\SOIL\src;$(SolutionDir)\Engine\include;$(SolutionDir)\Scripting\include;$(SolutionDir)\Render\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\lib-msvc110;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\lib\Release\$(Platform);$(SolutionDir)\Dependancies\Windows\SOIL\lib;$(SolutionDir)\Engine\bin;$(SolutionDir)\Scripting\bin;$(SolutionDir)\Render\bin;C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\Dependancies\Windows\SOIL\src;$(SolutionDir)\ScriptingModule\include;$(SolutionDir)\RenderModule\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Will\Documents\BitBucket\willow-engine\Dependancies\libraries\glfw-3.0.3\project\src\Release;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\lib\Release\$(Platform);$(SolutionDir)\Dependancies\Windows\SOIL\lib;$(SolutionDir)\ScriptingModule\bin;$(SolutionDir)\RenderModule\bin;C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\Dependancies\Windows\SOIL\src;$(SolutionDir)\Engine\include;$(SolutionDir)\Scripting\include;$(SolutionDir)\Render\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Will\Documents\BitBucket\willow-engine\Dependancies\libraries\glfw-3.0.3\project\src\Release;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\lib\Release\$(Platform);$(SolutionDir)\Dependancies\Windows\SOIL\lib;$(SolutionDir)\Engine\bin;$(SolutionDir)\Scripting\bin;$(SolutionDir)\Render\bin;C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\Dependancies\Windows\SOIL\src;$(SolutionDir)\ScriptingModule\include;$(SolutionDir)\RenderModule\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\lib-msvc110;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\lib\Release\$(Platform);$(SolutionDir)\Dependancies\Windows\SOIL\lib;$(SolutionDir)\ScriptingModule\bin;$(SolutionDir)\RenderModule\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\Dependancies\Windows\SOIL\src;$(SolutionDir)\Engine\include;$(SolutionDir)\Scripting\include;$(SolutionDir)\Render\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\lib-msvc110;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\lib\Release\$(Platform);$(SolutionDir)\Dependancies\Windows\SOIL\lib;$(SolutionDir)\Engine\bin;$(SolutionDir)\Scripting\bin;$(SolutionDir)\Render\bin;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\Dependancies\Windows\SOIL\src;$(SolutionDir)\ScriptingModule\include;$(SolutionDir)\RenderModule\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Will\Documents\BitBucket\willow-engine\Dependancies\Windows\glfw3\x64\lib-msvc110;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\lib\Release\$(Platform);$(SolutionDir)\Dependancies\Windows\SOIL\lib;$(SolutionDir)\ScriptingModule\bin;$(SolutionDir)\RenderModule\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\Dependancies\Windows\glfw3\$(Platform)\include;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\include;$(SolutionDir)\Dependancies\Windows\SOIL\src;$(SolutionDir)\Engine\include;$(SolutionDir)\Scripting\include;$(SolutionDir)\Render\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Will\Documents\BitBucket\willow-engine\Dependancies\Windows\glfw3\x64\lib-msvc110;$(SolutionDir)\Dependancies\Windows\glew-1.10.0\lib\Release\$(Platform);$(SolutionDir)\Dependancies\Windows\SOIL\lib;$(SolutionDir)\Scripting\bin;$(SolutionDir)\Render\bin;$(SolutionDir)\Engine\bin;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -98,7 +98,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OpenGL32.lib;glfw3dll.lib;glew32.lib;SOIL.lib;ScriptingModule_d.lib;RenderModule_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenGL32.lib;glfw3dll.lib;glew32.lib;SOIL.lib;Engine_d.lib;Scripting_d.lib;Render_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
@@ -118,7 +118,7 @@ copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\gle
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glfw3dll.lib;glew32.lib;SOIL64.lib;ScriptingModule64_d.lib;RenderModule64_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3dll.lib;glew32.lib;SOIL64.lib;Engine64_d.lib;Scripting64_d.lib;Render64_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
@@ -144,7 +144,7 @@ copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\gle
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>OpenGL32.lib;glfw3dll.lib;glew32.lib;SOIL.lib;ScriptingModule.lib;RenderModule.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenGL32.lib;glfw3dll.lib;glew32.lib;SOIL.lib;Engine.lib;Scripting.lib;Render.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <EntryPointSymbol>
       </EntryPointSymbol>
@@ -171,7 +171,7 @@ copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\gle
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;glfw3dll.lib;glew32.lib;SOIL64.lib;ScriptingModule64.lib;RenderModule64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3dll.lib;glew32.lib;SOIL64.lib;Engine64.lib;Scripting64.lib;Render64.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
