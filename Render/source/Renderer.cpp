@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <GL\glew.h>
+#include <GLFW\glfw3.h>
 #include <Engine.h>
 #include "Renderer.h"
 
@@ -22,17 +23,19 @@ int Renderer::init( const RENDER_API& _API )
 
 int Renderer::render( const Scene& scene )
 {
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT );
 
 	// For every camera
 	for( int camID = 0; camID < scene.cameras.size(); camID++ ) {
 
-		Camera cam = scene.cameras[camID];
+		Camera cam = *scene.cameras[camID];
 
 		// For every object
 		for( int objID = 0; objID < scene.objects.size(); objID++ ) {
 
-			GameObject object = scene.objects[objID];
+			//glClear( GL_DEPTH_BUFFER_BIT );
+
+			GameObject object = *scene.objects[objID];
 
 			// Bind the mesh
 			glBindVertexArray( object.mesh->getVAO() );
@@ -49,11 +52,11 @@ int Renderer::render( const Scene& scene )
 			// Get the view matrix
 			Mat4 view = cam.transform.getModel().inverse();
 
-			// Create the clipspace matrix
-			Mat4 clipspace = cam.perspective * view * model;
-
 			// Upload the matrix to the GPU
-			glUniformMatrix4fv( object.mesh->getMaterial().getClipSpaceID(), 1, GL_FALSE,  clipspace[0] );
+			glUniformMatrix4fv( object.mesh->getMaterial().getModelID(), 1, GL_FALSE, model[0] );
+			glUniformMatrix4fv( object.mesh->getMaterial().getViewID(), 1, GL_FALSE,  view[0] );
+			glUniformMatrix4fv( object.mesh->getMaterial().getProjectionID(), 1, GL_FALSE, cam.perspective[0] );
+			glUniform1f( object.mesh->getMaterial().getTimeID(), (float)glfwGetTime() );
 		
 			//Draw the mesh
 			glDrawElements( GL_TRIANGLES, (GLsizei)object.mesh->getNumElements(), GL_UNSIGNED_INT, 0 );

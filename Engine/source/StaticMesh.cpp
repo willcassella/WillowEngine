@@ -68,14 +68,18 @@ void StaticMesh::setMaterial( Material& _mat )
 	glBindBuffer( GL_ARRAY_BUFFER, this->vbo );
 
 	// Set stuff
-	GLuint posAttrib;
-	posAttrib = glGetAttribLocation( mat->getID(), "position" );
-    glEnableVertexAttribArray( posAttrib );
-    glVertexAttribPointer( posAttrib, 3, GL_FLOAT, GL_FALSE, sizeof( Vertex ), 0 );
+	GLuint vPosition;
+	vPosition = glGetAttribLocation( mat->getID(), "vPosition" );
+    glEnableVertexAttribArray( vPosition );
+    glVertexAttribPointer( vPosition, 3, GL_FLOAT, GL_FALSE, sizeof( Vertex ), 0 );
 
-	GLint texAttrib = glGetAttribLocation( mat->getID(), "texcoord" );
-	glEnableVertexAttribArray( texAttrib );
-	glVertexAttribPointer( texAttrib, 2, GL_FLOAT, GL_FALSE, sizeof( Vertex ), (void*)sizeof( Vec3 ) );
+	GLuint vTexcoord = glGetAttribLocation( mat->getID(), "vTexcoord" );
+	glEnableVertexAttribArray( vTexcoord );
+	glVertexAttribPointer( vTexcoord, 2, GL_FLOAT, GL_FALSE, sizeof( Vertex ), (void*)sizeof( Vec3 ) );
+
+	GLuint vNormal = glGetAttribLocation( mat->getID(), "vNormal" );
+	glEnableVertexAttribArray( vNormal );
+	glVertexAttribPointer( vNormal, 3, GL_FLOAT, GL_TRUE, sizeof( Vertex ), (void*)(sizeof( Vec3) + sizeof( Vec2 ) ));
 
 	glBindVertexArray( 0 );
 }

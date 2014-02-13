@@ -65,38 +65,45 @@ int main( int argc, char* argv[] )
 	Scene testScene;
 
 	GameObject sponza;
-	GameObject teapot;
+	GameObject gun;
 
 	//Create a simple mesh to render
 	StaticMesh sponza_mesh( "sponza.dat" );
-	StaticMesh teapot_mesh( "teapot.dat" );
+	StaticMesh gun_mesh( "M4A1.dat" );
 
 	Shader frag( Shader::basic_frag_source, GL_FRAGMENT_SHADER );
 	Shader vert( Shader::basic_vert_source, GL_VERTEX_SHADER );
 
 	Material sponza_mat( vert, frag );
-	Material teapot_mat( vert, frag );
+	Material gun_mat( vert, frag );
 
 	Texture sponza_tex ("sponza_tex.png");
 	sponza_mat.setTexture( sponza_tex );
 
-	Texture teapot_tex ( "teapot_tex.png" );
-	teapot_mat.setTexture( teapot_tex );
+	Texture gun_tex( "M4A1_tex.png" );
+	gun_mat.setTexture( gun_tex );
 
 	sponza_mesh.setMaterial( sponza_mat );
-	teapot_mesh.setMaterial( teapot_mat );
+	gun_mesh.setMaterial( gun_mat );
 
 	sponza.mesh = &sponza_mesh;
-	teapot.mesh = &teapot_mesh;
+	gun.mesh = &gun_mesh;
 
-	Camera cam( 43, float(window_width)/window_height, 0.2f, 90.0f );
+	Camera cam( 43, float(window_width)/window_height, 0.1f, 90.0f );
 
 	cam.transform.position.z = 4;
 	cam.transform.position.y = 1;
 
-	testScene.objects.push_back( sponza );
-	testScene.objects.push_back( teapot );
-	testScene.cameras.push_back( cam );
+	gun.transform.scale = Vec3( 0.2f, 0.2f, 0.2f );
+	gun.transform.position.x = 0.15f;
+	gun.transform.position.z = -0.5f;
+	gun.transform.position.y = -0.1f;
+	gun.transform.rotate( Vec3( 0, 1, 0 ), -3.14159f/2, false );
+	gun.transform.parent = &cam.transform;
+
+	testScene.objects.push_back( &sponza );
+	testScene.objects.push_back( &gun );
+	testScene.cameras.push_back( &cam );
 
 
 	//Execute the main event loops
@@ -195,12 +202,12 @@ void eventLoop( GLFWwindow* window, Scene scene )
 
 		// Update all game objects
 		for( int i = 0; i < scene.objects.size(); i++ ) {
-			scene.objects[i].Update();
+			scene.objects[i]->Update();
 		}
 
 		// Update all cameras
 		for( int i = 0; i < scene.cameras.size(); i++ ) {
-			scene.cameras[i].Update( window );
+			scene.cameras[i]->Update( window );
 		}
 
 		//render the frame

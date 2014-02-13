@@ -12,7 +12,10 @@ class Material
 private:
 
 	GLuint id;
-	GLuint clipspace;
+	GLuint vModel;
+	GLuint vView;
+	GLuint vProjection;
+	GLuint Time;
 
 	Texture* texture;
 	Shader* vertex;
@@ -34,7 +37,10 @@ public:
 	GLuint getID() const;
 	Texture& getTexture() const;
 	void setTexture( const Texture& _TEX );
-	GLuint getClipSpaceID() const;
+	GLuint getModelID() const;
+	GLuint getViewID() const;
+	GLuint getProjectionID() const;
+	GLuint getTimeID() const;
 };
 
 #endif

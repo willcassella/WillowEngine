@@ -10,20 +10,24 @@ struct Transform
 	////////////////
 	///   Data   ///
 	////////////////
+public:
 
 	Vec3 position;
 	Vec3 scale;
 	Quat orientation;
+	Transform* parent;
 	
 	////////////////////////
 	///   Constructors   ///
 	////////////////////////
+public:
 
 	// Default constructor
 	Transform()
 	{
 		// Set scale to 1 (default for vec3 is 0)
 		scale = Vec3( 1, 1, 1 );
+		parent = nullptr;
 	}
 
 	// Custom constructor
@@ -32,18 +36,13 @@ struct Transform
 		position = _POSITION;
 		scale = _SCALE;
 		orientation = _ORIENTATION;
+		parent = nullptr;
 	}
 
 	///////////////////
 	///   Methods   ///
 	///////////////////
-
-	// Returns the global position
-	Vec3 getGlobalPosition()
-	{
-		//TODO: add parenting support
-		return position;
-	}
+public:
 
 	// Translate this object in local or global space
 	void translate( Vec3 vec, bool isLocal )
@@ -75,7 +74,11 @@ struct Transform
 	Mat4 getModel()
 	{
 		// Generate the transformation matrices and multiply them together
-		return Mat4::translate( position ) * Mat4::rotate( orientation ) * Mat4::scale( scale );
+		if( parent != nullptr ) {
+			return parent->getModel() * (Mat4::translate( this->position ) * Mat4::rotate( this->orientation ) * Mat4::scale( this->scale ));
+		} else {
+		return Mat4::translate( this->position ) * Mat4::rotate( this->orientation ) * Mat4::scale( this->scale );
+		}
 	}
 };
 

@@ -2,6 +2,7 @@
 #define SCENE_H_
 
 #include <vector>
+#include <memory>
 
 #include "GameObject.h"
 #include "Camera.h"
@@ -16,8 +17,8 @@ class Scene
 
 public:
 
-	std::vector< GameObject >	objects;
-	std::vector< Camera >		cameras;
+	std::vector< GameObject* >	objects;
+	std::vector< Camera* >		cameras;
 };
 
 #endif

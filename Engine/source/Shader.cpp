@@ -35,20 +35,31 @@ GLuint Shader::getID() const
 
 std::string Shader::basic_vert_source =
     "#version 150 core\n"
-    "in vec3 position;"
-    "in vec2 texcoord;"
+    "in vec3 vPosition;"
+	"in vec3 vNormal;"
+    "in vec2 vTexcoord;"
+	"out vec3 Position;"
+	"out vec3 Normal;"
 	"out vec2 Texcoord;"
-	"uniform mat4 clipspace;"
+	"uniform mat4 vModel;"
+	"uniform mat4 vView;"
+	"uniform mat4 vProjection;"
+	"uniform float Time;"
     "void main() {"
-	"   gl_Position = clipspace * vec4( position, 1.0 );"
-	"	Texcoord = vec2(texcoord.x, 1.0 - texcoord.y);"
+	"   gl_Position = vProjection * vView * vModel * vec4( vPosition, 1.0 );"
+	"	Texcoord = vec2( vTexcoord.x, 1.0 - vTexcoord.y );"
+	"	Position = vPosition;"
+	"	Normal = vNormal;"
     "}";
 
 std::string Shader::basic_frag_source =
     "#version 150 core\n"
+	"in vec3 Position;"
+	"in vec3 Normal;"
     "in vec2 Texcoord;"
     "out vec4 outColor;"
     "uniform sampler2D tex;"
+	"float depth = gl_FragDepth;"
     "void main() {"
-    "   outColor = texture( tex, Texcoord );"
+	"   outColor = texture( tex, Texcoord );"
     "}";

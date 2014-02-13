@@ -21,7 +21,10 @@ Material::Material( const Shader& _vertex, const Shader& _fragment )
 	glLinkProgram( this->id );
 
 	// get matrix location
-	this->clipspace = glGetUniformLocation( this->id, "clipspace" );
+	this->vModel = glGetUniformLocation( this->id, "vModel" );
+	this->vView = glGetUniformLocation( this->id, "vView" );
+	this->vProjection = glGetUniformLocation( this->id, "vProjection" );
+	this->Time = glGetUniformLocation( this->id, "Time" );
 }
 
 Material::~Material()
@@ -48,7 +51,22 @@ void Material::setTexture( const Texture& _TEX )
 	this->texture = const_cast< Texture* >(&_TEX);
 }
 
-GLuint Material::getClipSpaceID() const
+GLuint Material::getModelID() const
 {
-	return clipspace;
+	return this->vModel;
+}
+
+GLuint Material::getViewID() const
+{
+	return this->vView;
+}
+
+GLuint Material::getProjectionID() const
+{
+	return this->vProjection;
+}
+
+GLuint Material::getTimeID() const
+{
+	return this->Time;
 }
