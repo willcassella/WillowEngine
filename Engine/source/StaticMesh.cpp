@@ -48,7 +48,7 @@ GLuint StaticMesh::getVAO() const
 	return this->vao;
 }
 
-const unsigned int StaticMesh::getNumElements() const
+std::size_t StaticMesh::getNumElements() const
 {
 	return this->elements.size();
 }

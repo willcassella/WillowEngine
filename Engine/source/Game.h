@@ -7,7 +7,8 @@ static class Game
 {
 	////////////////
 	///   Data   ///
-	///////////////
+	////////////////
+public:
 
 	Scene currentScene;
 };

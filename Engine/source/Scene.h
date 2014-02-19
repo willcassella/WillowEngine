@@ -2,8 +2,6 @@
 #define SCENE_H_
 
 #include <vector>
-#include <memory>
-
 #include "GameObject.h"
 #include "Camera.h"
 

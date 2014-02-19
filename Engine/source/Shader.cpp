@@ -34,7 +34,7 @@ GLuint Shader::getID() const
 //////////////////////////
 
 std::string Shader::basic_vert_source =
-    "#version 150 core\n"
+    "#version 330 core\n"
     "in vec3 vPosition;"
 	"in vec3 vNormal;"
     "in vec2 vTexcoord;"
@@ -53,7 +53,7 @@ std::string Shader::basic_vert_source =
     "}";
 
 std::string Shader::basic_frag_source =
-    "#version 150 core\n"
+    "#version 330 core\n"
 	"in vec3 Position;"
 	"in vec3 Normal;"
     "in vec2 Texcoord;"

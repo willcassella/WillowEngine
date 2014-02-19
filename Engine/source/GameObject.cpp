@@ -1,10 +1,15 @@
+#include <string>
 #include "GameObject.h"
-
 #include "Vec3.h"
 
-GameObject::GameObject()
+GameObject::GameObject( const std::string& _NAME )
 {
-	// Do nothing
+	name = _NAME;
+}
+
+GameObject::GameObject( const std::string& _NAME, const StaticMesh& _MESH )
+{
+	
 }
 
 GameObject::~GameObject()

@@ -101,6 +101,7 @@
       <AdditionalDependencies>OpenGL32.lib;glfw3dll.lib;glew32.lib;SOIL.lib;Engine_d.lib;Scripting_d.lib;Render_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <Profile>true</Profile>
     </Link>
     <PostBuildEvent>
       <Command>copy $(SolutionDir)\Dependancies\Scripts\* $(OutDir)
@@ -121,6 +122,7 @@ copy $(SolutionDir)\Dependancies\Windows\glew-1.10.0\Bin\Release\$(Platform)\gle
       <AdditionalDependencies>opengl32.lib;glfw3dll.lib;glew32.lib;SOIL64.lib;Engine64_d.lib;Scripting64_d.lib;Render64_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <Profile>true</Profile>
     </Link>
     <PostBuildEvent>
       <Command>copy $(SolutionDir)\Dependancies\Scripts\* $(OutDir)

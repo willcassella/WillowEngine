@@ -8,84 +8,66 @@ struct Vec2
 	////////////////
 	///   Data   ///
 	////////////////
+public:
 
 	float x, y;
 
 	////////////////////////
 	///   Constructors   ///
 	////////////////////////
+public:
 
-	// Default constructor
-	Vec2()
-	{
-		x = 0; y = 0;
-	}
-
-	// Custom constructor
-	Vec2( float _X, float _Y )
-	{
-		x = _X; y = _Y;
-	}
+	// Constructor, default set to 0
+	Vec2( const float _X = 0, const float _Y = 0 );
 
 	///////////////////
 	///   Methods   ///
 	///////////////////
+public:
 
 	// Returns the length of this vector
-	float length() const
-	{
-		return std::sqrtf( x*x + y*y );
-	}
+	float length() const;
 
 	// Returns the normal of this vector
-	Vec2 normalize() const
-	{
-		float length = this->length();
-		return Vec2( x/length, y/length );
-	}
+	Vec2 normalize() const;
 
 	// Calculates the dot product of this and another vector
-	static float dot( const Vec2& a, const Vec2& b )
-	{
-		return a.x*b.x + a.y*b.y;
-	}
+	static float dot( const Vec2& a, const Vec2& b );
 
 	// Calculates the angle between two vectors
-	static float angle( const Vec2& a, const Vec2& b )
-	{
-		Vec2 a_normalized = a.normalize();
-		Vec2 b_normalized = b.normalize();
+	static float angle( const Vec2& a, const Vec2& b );
 
-		return std::acos( Vec2::dot( a_normalized, b_normalized ) );
-	}
+	////////////////////////////
+	///   Static Instances   ///
+	////////////////////////////
+public:
+
+	static const Vec2 ZERO;
+	static const Vec2 UP;
+	static const Vec2 RIGHT;
 
 	/////////////////////
 	///   Overloads   ///
 	/////////////////////
+public:
 
 	// Add another vector to this vector
-	Vec2 operator+( const Vec2& rhs ) const
-	{
-		return Vec2( x + rhs.x, y + rhs.y );
-	}
+	Vec2 operator+( const Vec2& rhs ) const;
 
 	// Add this vector to another vector and copy the result
-	void operator+=( const Vec2& rhs )
-	{
-		x += rhs.x; y += rhs.y ;
-	}
+	void operator+=( const Vec2& rhs );
 
 	// Subtract another vector from this vector
-	Vec2 operator-( const Vec2& rhs ) const
-	{
-		return Vec2( x - rhs.x, y - rhs.y );
-	}
+	Vec2 operator-( const Vec2& rhs ) const;
 
 	// Subtract another vector from this vector and copy the result
-	Vec2 operator-=( const Vec2& rhs )
-	{
-		x -= rhs.x; y -= rhs.y;
-	}
+	Vec2 operator-=( const Vec2& rhs );
+
+	// Multiply this vector by a float
+	Vec2 operator*( const float rhs ) const;
+
+	// Multiply this vector by an int
+	Vec2 operator*( const int rhs ) const;
 
 	// Returns TRUE if this vector is equivilent to another vector
 	inline bool operator==( const Vec2& rhs ) const

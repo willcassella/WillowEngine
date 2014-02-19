@@ -8,24 +8,18 @@
     <Filter Include="Include">
       <UniqueIdentifier>{d9bf559f-eca9-4e1a-acb5-d9c9ca624dab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Header">
-      <UniqueIdentifier>{3a45ca97-a47e-4a0e-8e36-3ca7fae97afe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Source">
-      <UniqueIdentifier>{a5fa9c11-b1a4-4719-901f-2b0c0b005ac9}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Render.h">
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="source\Renderer.h">
-      <Filter>Source Files\Header</Filter>
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Renderer.cpp">
-      <Filter>Source Files\Source</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

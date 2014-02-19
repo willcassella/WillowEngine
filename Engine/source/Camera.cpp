@@ -3,26 +3,18 @@
 
 #include "Mat4.h"
 
-Camera::Camera()
+////////////////////////
+///   Constructors   ///
+////////////////////////
+
+Camera::Camera( const float _VFOV, const float _RATIO, const float _ZMIN, const float _ZMAX )
 {
-	//Assign defaults
-	vFOV = 43;
-	ratio = 1280.0f/768.0f;
-	zMin = 0.2f;
-	zMax = 60.0f;
+	this->vFOV = _VFOV;
+	this->ratio = _RATIO;
+	this->zMin = _ZMIN;
+	this->zMax = _ZMAX;
 
-	//Generate the projection matrix
-	perspective = Mat4::perspectiveVFOV( vFOV, ratio, zMin, zMax );
-}
-
-Camera::Camera( float _HFOV, float _RATIO, float _ZMIN, float _ZMAX )
-{
-	vFOV = _HFOV;
-	ratio = _RATIO;
-	zMin = _ZMIN;
-	zMax = _ZMAX;
-
-	perspective = Mat4::perspectiveVFOV( vFOV, ratio, zMin, zMax );
+	this->perspective = Mat4::perspectiveVFOV( this->vFOV, this->ratio, this->zMin, this->zMax );
 }
 
 Camera::~Camera()
@@ -30,7 +22,20 @@ Camera::~Camera()
 	//Do nothing
 }
 
-void Camera::Update( GLFWwindow* window )
+///////////////////////////////
+///   Getters and Setters   ///
+///////////////////////////////
+
+Mat4 Camera::getPerspective()
+{
+	return this->perspective;
+}
+
+///////////////////
+///   Methods   ///
+///////////////////
+
+void Camera::Update( GLFWwindow* const window )
 {
 	double xpos, ypos;
 	glfwGetCursorPos( window, &xpos, &ypos );
@@ -43,22 +48,26 @@ void Camera::Update( GLFWwindow* window )
 		speed = 0.09f;
 	
 	glfwSetCursorPos( window, 512, 384 );
+	Vec3 movement = Vec3::ZERO;
 
 	// Move forward
 	if( glfwGetKey( window, GLFW_KEY_W ) )
-		transform.translate( Vec3( 0, 0, -speed ), true );
+		movement += Vec3::FORWARD;
 
 	// Move backward
 	if( glfwGetKey( window, GLFW_KEY_S ) )
-		transform.translate( Vec3( 0, 0, speed ), true );
+		movement += Vec3::FORWARD * -1;
 
 	// Move left
 	if( glfwGetKey( window, GLFW_KEY_A ) )
-		transform.translate( Vec3( -speed, 0, 0 ), true );
+		movement += Vec3::RIGHT * -1;
 
 	// Move right
 	if( glfwGetKey( window, GLFW_KEY_D ) )
-		transform.translate( Vec3( speed, 0, 0 ), true );
+		movement += Vec3::RIGHT;
+
+	if( movement != Vec3::ZERO )
+		transform.translate( movement.normalize()*speed, true );
 
 	// Move up
 	if( glfwGetKey( window, GLFW_KEY_Q ) )

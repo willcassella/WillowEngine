@@ -64,8 +64,8 @@ int main( int argc, char* argv[] )
 
 	Scene testScene;
 
-	GameObject sponza;
-	GameObject gun;
+	GameObject sponza( "sponza" );
+	GameObject gun( "gun" );
 
 	//Create a simple mesh to render
 	StaticMesh sponza_mesh( "sponza.dat" );
@@ -73,6 +73,30 @@ int main( int argc, char* argv[] )
 
 	Shader frag( Shader::basic_frag_source, GL_FRAGMENT_SHADER );
 	Shader vert( Shader::basic_vert_source, GL_VERTEX_SHADER );
+
+	std::string acid_shader =
+	"#version 330 core\n"
+    "in vec3 vPosition;"
+	"in vec3 vNormal;"
+    "in vec2 vTexcoord;"
+	"out vec3 Position;"
+	"out vec3 Normal;"
+	"out vec2 Texcoord;"
+	"uniform mat4 vModel;"
+	"uniform mat4 vView;"
+	"uniform mat4 vProjection;"
+	"uniform float Time;"
+    "void main() {"
+	"	float offset = sin(Time+vPosition.y)/(5/vPosition.y);"
+	"	vec4 acid_pos = vec4(vPosition.x, vPosition.y, vPosition.z+offset, 1);"
+	"   gl_Position = vProjection * vView * vModel * acid_pos;"
+	"	Texcoord = vec2( vTexcoord.x, 1.0 - vTexcoord.y );"
+	"	Position = vPosition;"
+	"	Normal = vNormal;"
+    "}";
+
+	Shader acid( acid_shader, GL_VERTEX_SHADER );
+
 
 	Material sponza_mat( vert, frag );
 	Material gun_mat( vert, frag );
@@ -123,6 +147,9 @@ GLFWwindow* InitGLFW()
 	
 	// Make the window invisible
 	glfwWindowHint( GLFW_VISIBLE, GL_FALSE );
+
+	glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
+	glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 3 );
 
 	GLFWwindow* window = glfwCreateWindow(window_width, window_height, 
 		title, NULL, NULL);

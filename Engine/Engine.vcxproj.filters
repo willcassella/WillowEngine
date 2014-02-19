@@ -17,18 +17,6 @@
     <Filter Include="Source Files\Utility">
       <UniqueIdentifier>{d0338c78-3a71-4260-b00b-f70e7d6f29ef}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Render\Header">
-      <UniqueIdentifier>{041897c3-bdef-4b76-ba63-6d8d6158645d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\Header">
-      <UniqueIdentifier>{0f08a7aa-0ad7-45f5-8d77-1bcb8ba6d79a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\Source">
-      <UniqueIdentifier>{92b7a588-6f74-47bd-8bfb-e20f9d1fdbd2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Render\Source">
-      <UniqueIdentifier>{b509a77e-6596-48c6-ba9a-fdc623a5b140}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Include">
       <UniqueIdentifier>{70a96a91-66f9-40e8-81e6-67edcbd4cbfe}</UniqueIdentifier>
     </Filter>
@@ -37,23 +25,35 @@
     <ClCompile Include="source\Utils.cpp">
       <Filter>Source Files\Utility</Filter>
     </ClCompile>
+    <ClCompile Include="source\Vec3.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
     <ClCompile Include="source\Camera.cpp">
-      <Filter>Source Files\Engine\Source</Filter>
+      <Filter>Source Files\Engine</Filter>
     </ClCompile>
     <ClCompile Include="source\GameObject.cpp">
-      <Filter>Source Files\Engine\Source</Filter>
+      <Filter>Source Files\Engine</Filter>
     </ClCompile>
     <ClCompile Include="source\Material.cpp">
-      <Filter>Source Files\Render\Source</Filter>
+      <Filter>Source Files\Render</Filter>
     </ClCompile>
     <ClCompile Include="source\Shader.cpp">
-      <Filter>Source Files\Render\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Texture.cpp">
-      <Filter>Source Files\Render\Source</Filter>
+      <Filter>Source Files\Render</Filter>
     </ClCompile>
     <ClCompile Include="source\StaticMesh.cpp">
-      <Filter>Source Files\Render\Source</Filter>
+      <Filter>Source Files\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Texture.cpp">
+      <Filter>Source Files\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Vec2.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Quat.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Mat4.cpp">
+      <Filter>Source Files\Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -69,41 +69,41 @@
     <ClInclude Include="source\Vec3.h">
       <Filter>Source Files\Math</Filter>
     </ClInclude>
-    <ClInclude Include="source\Camera.h">
-      <Filter>Source Files\Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Scene.h">
-      <Filter>Source Files\Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="source\GameObject.h">
-      <Filter>Source Files\Engine\Header</Filter>
-    </ClInclude>
     <ClInclude Include="source\Utils.h">
       <Filter>Source Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Transform.h">
-      <Filter>Source Files\Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Material.h">
-      <Filter>Source Files\Render\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Shader.h">
-      <Filter>Source Files\Render\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Texture.h">
-      <Filter>Source Files\Render\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Vertex.h">
-      <Filter>Source Files\Render\Header</Filter>
     </ClInclude>
     <ClInclude Include="include\Engine.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="source\Camera.h">
+      <Filter>Source Files\Engine</Filter>
+    </ClInclude>
     <ClInclude Include="source\Game.h">
-      <Filter>Source Files\Engine\Header</Filter>
+      <Filter>Source Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="source\GameObject.h">
+      <Filter>Source Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Scene.h">
+      <Filter>Source Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Transform.h">
+      <Filter>Source Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Material.h">
+      <Filter>Source Files\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Shader.h">
+      <Filter>Source Files\Render</Filter>
     </ClInclude>
     <ClInclude Include="source\StaticMesh.h">
-      <Filter>Source Files\Render\Header</Filter>
+      <Filter>Source Files\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Texture.h">
+      <Filter>Source Files\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Vertex.h">
+      <Filter>Source Files\Render</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

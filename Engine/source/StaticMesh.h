@@ -39,7 +39,7 @@ public:
 public:
 
 	GLuint getVAO() const;
-	const unsigned int getNumElements() const;
+	std::size_t getNumElements() const;
 	
 	Material& getMaterial() const;
 	void setMaterial( Material& _mat );

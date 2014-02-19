@@ -45,27 +45,27 @@ public:
 public:
 
 	// Translate this object in local or global space
-	void translate( Vec3 vec, bool isLocal )
+	void translate( const Vec3& vec, const bool isLocal )
 	{
-		if( isLocal )
-		{
-			vec = Mat4::rotate( orientation ) * vec;
+		Vec3 translateVec = vec;
+		if( isLocal ) {
+			translateVec = Mat4::rotate( this->orientation ) * translateVec;
 		}
-
-		position += vec;
+		position += translateVec;
 	}
 
 	// Scale the object in local or global space
-	void changeScale( Vec3 vec, bool isLocal )
+	void changeScale( const Vec3& vec, const bool isLocal )
 	{
-		if( isLocal )
-			vec = Mat4::rotate( orientation ) * vec;
-
-		scale += vec;
+		Vec3 scaleVec = vec;
+		if( isLocal ) {
+			scaleVec = Mat4::rotate( this->orientation ) * scaleVec;
+		}
+		scale += scaleVec;
 	}
 
 	// Rotate the object by axis+angle in local or global space
-	void rotate( Vec3 axis, float angle, bool isLocal )
+	void rotate( const Vec3& axis, const float angle, const bool isLocal )
 	{
 		orientation.rotateByAxisAngle( axis, angle, isLocal );
 	}
@@ -75,9 +75,9 @@ public:
 	{
 		// Generate the transformation matrices and multiply them together
 		if( parent != nullptr ) {
-			return parent->getModel() * (Mat4::translate( this->position ) * Mat4::rotate( this->orientation ) * Mat4::scale( this->scale ));
+			return this->parent->getModel() * (Mat4::translate( this->position) * Mat4::rotate( this->orientation ) * Mat4::scale( this->scale ));
 		} else {
-		return Mat4::translate( this->position ) * Mat4::rotate( this->orientation ) * Mat4::scale( this->scale );
+			return Mat4::translate( this->position ) * Mat4::rotate( this->orientation ) * Mat4::scale( this->scale );
 		}
 	}
 };
