@@ -20,12 +20,12 @@
 int window_width = 1280;
 int window_height = 720;
 const char* title = "Willow Engine";
-bool fullscreen = false;
+bool fullscreen = true;
 
 //Function Prototypes
 GLFWwindow* InitGLFW();
 bool InitGlew();
-void eventLoop( GLFWwindow* window, Scene scene );
+void eventLoop( GLFWwindow* window, const Scene& scene );
 void cleanUp( GLFWwindow* window );
 
 void windowSizeCallback( GLFWwindow* window, int x, int y )
@@ -69,7 +69,7 @@ int main( int argc, char* argv[] )
 
 	//Create a simple mesh to render
 	StaticMesh sponza_mesh( "sponza.dat" );
-	StaticMesh gun_mesh( "M4A1.dat" );
+	StaticMesh gun_mesh( "battle_rifle.dat" );
 
 	Shader frag( Shader::basic_frag_source, GL_FRAGMENT_SHADER );
 	Shader vert( Shader::basic_vert_source, GL_VERTEX_SHADER );
@@ -104,7 +104,7 @@ int main( int argc, char* argv[] )
 	Texture sponza_tex ("sponza_tex.png");
 	sponza_mat.setTexture( sponza_tex );
 
-	Texture gun_tex( "M4A1_tex.png" );
+	Texture gun_tex( "battle_rifle_tex.png" );
 	gun_mat.setTexture( gun_tex );
 
 	sponza_mesh.setMaterial( sponza_mat );
@@ -113,16 +113,17 @@ int main( int argc, char* argv[] )
 	sponza.mesh = &sponza_mesh;
 	gun.mesh = &gun_mesh;
 
-	Camera cam( 43, float(window_width)/window_height, 0.1f, 90.0f );
+	Camera cam( 43, float(window_width)/window_height, 0.01f, 90.0f );
 
 	cam.transform.position.z = 4;
 	cam.transform.position.y = 1;
 
 	gun.transform.scale = Vec3( 0.2f, 0.2f, 0.2f );
-	gun.transform.position.x = 0.15f;
-	gun.transform.position.z = -0.5f;
-	gun.transform.position.y = -0.1f;
-	gun.transform.rotate( Vec3( 0, 1, 0 ), -3.14159f/2, false );
+	gun.transform.position.x = 0.08f;
+	gun.transform.position.z = -0.17f;
+	gun.transform.position.y = -0.14f;
+	gun.transform.rotate( Vec3::UP, -3.14159f/2, false );
+	gun.transform.rotate( Vec3::RIGHT, 3.14159f/25, false );
 	gun.transform.parent = &cam.transform;
 
 	testScene.objects.push_back( &sponza );
@@ -196,7 +197,7 @@ bool InitGlew()
 	return glewInit() == GLEW_OK;
 }
 
-void eventLoop( GLFWwindow* window, Scene scene )
+void eventLoop( GLFWwindow* window, const Scene& scene )
 {
 	std::cout << "Entering event loop... " << std:: endl;
 

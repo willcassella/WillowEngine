@@ -72,22 +72,22 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IntDir>$(SolutionDir)\build\</IntDir>
     <OutDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>C:\Users\Will\Documents\BitBucket\willow-engine\RenderModule\source;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Will\Documents\BitBucket\willow-engine\Engine\source;C:\Users\Will\Documents\BitBucket\willow-engine\Render\source;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IntDir>$(SolutionDir)\build\</IntDir>
     <OutDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>C:\Users\Will\Documents\BitBucket\willow-engine\RenderModule\source;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Will\Documents\BitBucket\willow-engine\Engine\source;C:\Users\Will\Documents\BitBucket\willow-engine\Render\source;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IntDir>$(SolutionDir)\build\</IntDir>
     <OutDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>C:\Users\Will\Documents\BitBucket\willow-engine\RenderModule\source;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Will\Documents\BitBucket\willow-engine\Engine\source;C:\Users\Will\Documents\BitBucket\willow-engine\Render\source;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IntDir>$(SolutionDir)\build\</IntDir>
     <OutDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>C:\Users\Will\Documents\BitBucket\willow-engine\RenderModule\source;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Will\Documents\BitBucket\willow-engine\Engine\source;C:\Users\Will\Documents\BitBucket\willow-engine\Render\source;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
