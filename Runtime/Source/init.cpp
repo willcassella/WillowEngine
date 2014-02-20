@@ -1,5 +1,5 @@
-//Willow Engine Init code!
-//By Will Cassella
+// Willow Engine Init code!
+// By Will Cassella
 
 // Show console in debug mode
 #ifdef DEBUG
@@ -66,10 +66,12 @@ int main( int argc, char* argv[] )
 
 	GameObject sponza( "sponza" );
 	GameObject gun( "gun" );
+	GameObject crosshairs( "crosshairs" );
 
 	//Create a simple mesh to render
 	StaticMesh sponza_mesh( "sponza.dat" );
 	StaticMesh gun_mesh( "battle_rifle.dat" );
+	StaticMesh crosshairs_mesh( "battle_rifle_crosshairs.dat" );
 
 	Shader frag( Shader::basic_frag_source, GL_FRAGMENT_SHADER );
 	Shader vert( Shader::basic_vert_source, GL_VERTEX_SHADER );
@@ -100,6 +102,7 @@ int main( int argc, char* argv[] )
 
 	Material sponza_mat( vert, frag );
 	Material gun_mat( vert, frag );
+	Material crosshairs_mat( vert, frag );
 
 	Texture sponza_tex ("sponza_tex.png");
 	sponza_mat.setTexture( sponza_tex );
@@ -107,11 +110,16 @@ int main( int argc, char* argv[] )
 	Texture gun_tex( "battle_rifle_tex.png" );
 	gun_mat.setTexture( gun_tex );
 
+	Texture crosshairs_tex( "battle_rifle_crosshair_tex.png" );
+	crosshairs_mat.setTexture( crosshairs_tex );
+
 	sponza_mesh.setMaterial( sponza_mat );
 	gun_mesh.setMaterial( gun_mat );
+	crosshairs_mesh.setMaterial( crosshairs_mat );
 
 	sponza.mesh = &sponza_mesh;
 	gun.mesh = &gun_mesh;
+	crosshairs.mesh = &crosshairs_mesh;
 
 	Camera cam( 43, float(window_width)/window_height, 0.01f, 90.0f );
 
@@ -126,8 +134,15 @@ int main( int argc, char* argv[] )
 	gun.transform.rotate( Vec3::RIGHT, 3.14159f/25, false );
 	gun.transform.parent = &cam.transform;
 
+	crosshairs.transform.scale = Vec3( 0.13f, 0.13f, 0.13f );
+	crosshairs.transform.position.z = -1;
+	crosshairs.transform.position.y = -0.02f;
+	crosshairs.transform.rotate( Vec3::RIGHT, -3.14159f/2, false );
+	crosshairs.transform.parent = &cam.transform;
+
 	testScene.objects.push_back( &sponza );
 	testScene.objects.push_back( &gun );
+	testScene.objects.push_back( &crosshairs );
 	testScene.cameras.push_back( &cam );
 
 
