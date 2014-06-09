@@ -4,26 +4,26 @@
 #include <string>
 #include <GL\glew.h>
 
-class Texture
+#include "object.h"
+
+class Texture : public object
 {
+	REGISTER(Texture);
+
+	////////////////////////
+	///   Constructors   ///
+
+	Texture(const std::string& path);
+	~Texture();
+
 	////////////////
 	///   Data   ///
-	////////////////
 private:
 
 	GLuint id;
 
-	////////////////////////
-	///   Constructors   ///
-	////////////////////////
-public:
-
-	Texture( const std::string& path );
-	~Texture();
-
 	///////////////////////////////
 	///   Getters and Setters   ///
-	///////////////////////////////
 public:
 
 	GLuint getID() const;

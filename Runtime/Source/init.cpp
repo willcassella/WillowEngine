@@ -245,7 +245,7 @@ void eventLoop( GLFWwindow* window, const Scene& scene )
 
 		// Update all game objects
 		for( int i = 0; i < scene.objects.size(); i++ ) {
-			scene.objects[i]->Update();
+			scene.objects[i]->tick(currentTime - lastTime);
 		}
 
 		// Update all cameras

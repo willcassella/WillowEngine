@@ -1,48 +1,45 @@
 #ifndef TRANSFORM_H_
 #define TRANSFORM_H_
 
+#include "object.h"
 #include "Vec3.h"
 #include "Quat.h"
 #include "Mat4.h"
 
-struct Transform
+struct Transform : public object
 {
-	////////////////
-	///   Data   ///
-	////////////////
-public:
+	REGISTER(Transform);
 
-	Vec3 position;
-	Vec3 scale;
-	Quat orientation;
-	Transform* parent;
-	
 	////////////////////////
 	///   Constructors   ///
-	////////////////////////
-public:
 
 	// Default constructor
 	Transform()
 	{
 		// Set scale to 1 (default for vec3 is 0)
-		scale = Vec3( 1, 1, 1 );
+		scale = Vec3(1, 1, 1);
 		parent = nullptr;
 	}
 
 	// Custom constructor
-	Transform( Vec3 _POSITION, Vec3 _SCALE, Quat _ORIENTATION )
+	Transform( Vec3 _position, Vec3 _scale, Quat _orientation )
 	{
-		position = _POSITION;
-		scale = _SCALE;
-		orientation = _ORIENTATION;
+		position = _position;
+		scale = _scale;
+		orientation = _orientation;
 		parent = nullptr;
 	}
 
+	//////////////////
+	///   Fields   ///
+
+	Vec3 position;
+	Vec3 scale;
+	Quat orientation;
+	Transform* parent;
+
 	///////////////////
 	///   Methods   ///
-	///////////////////
-public:
 
 	// Translate this object in local or global space
 	void translate( const Vec3& vec, const bool isLocal )

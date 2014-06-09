@@ -5,7 +5,6 @@
 
 ////////////////////////
 ///   Constructors   ///
-////////////////////////
 
 Material::Material( const Shader& _vertex, const Shader& _fragment )
 {
@@ -34,7 +33,6 @@ Material::~Material()
 
 ///////////////////////////////
 ///   Getters and Setters   ///
-///////////////////////////////
 
 GLuint Material::getID() const
 {

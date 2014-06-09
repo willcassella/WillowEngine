@@ -2,34 +2,33 @@
 #define QUAT_H_
 
 #include <cmath>
+#include "object.h"
 #include "Vec3.h"
 
 // TODO: conversion to euler angles, conversion to axis+angle, and rotation by euler angles
 
-struct Quat
+struct Quat : public object
 {
-	////////////////
-	///   Data   ///
-	////////////////
-private:
-
-	// Quaternion data members should never be acessed directly from outside
-	float x, y, z, w;
+	REGISTER(Quat);
 
 	////////////////////////
 	///   Constructors   ///
-	////////////////////////
-public:
 
 	// Default constructor, initializes without rotation
 	Quat();
 
 	// Custom constructor
-	Quat( const Vec3& axis, const float angle );
+	Quat(const Vec3& axis, const float angle);
+
+	////////////////
+	///   Data   ///
+private:
+
+	// Quaternion data members should never be acessed directly from outside
+	float x, y, z, w;
 
 	///////////////////
 	///   Methods   ///
-	///////////////////
 public:
 
 	// Rotate this quaternion by and axis and angle
@@ -40,8 +39,6 @@ public:
 
 	/////////////////////
 	///   Overloads   ///
-	/////////////////////
-public:
 
 	// Returns the quaternion result of one quaternion multiplied by another (rotation)
 	Quat operator*( const Quat& quat );

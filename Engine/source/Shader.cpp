@@ -3,7 +3,6 @@
 
 ////////////////////////
 ///   Constructors   ///
-////////////////////////
 
 Shader::Shader( std::string _source, GLenum type )
 {
@@ -22,7 +21,6 @@ Shader::~Shader()
 
 ///////////////////////////////
 ///   Getters and Setters   ///
-///////////////////////////////
 
 GLuint Shader::getID() const
 {
@@ -31,7 +29,6 @@ GLuint Shader::getID() const
 
 //////////////////////////
 ///   Static Members   ///
-//////////////////////////
 
 std::string Shader::basic_vert_source =
     "#version 330 core\n"

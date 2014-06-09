@@ -2,21 +2,30 @@
 #define GAMEOBJECT_H_
 
 #include <string>
+#include "object.h"
 #include "Transform.h"
 #include "StaticMesh.h"
 
-class GameObject
+class GameObject : public object
 {
-public:
+	REGISTER(GameObject);
 
-	GameObject( const std::string& _NAME );
-	GameObject( const std::string& _NAME, const StaticMesh& _MESH );
-	~GameObject();
+	////////////////////////
+	///   Constructors   ///
+
+	GameObject( const std::string& _name = "" );
 	
+	//////////////////
+	///   Fields   ///
+
 	std::string name;
 	Transform transform;
 	StaticMesh *mesh;
-	void Update();
+
+	///////////////////
+	///   Methods   ///
+
+	void tick(float timeInterval);
 };
 
 #endif

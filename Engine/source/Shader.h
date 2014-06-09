@@ -4,34 +4,33 @@
 #include <GL\glew.h>
 #include <string>
 
-class Shader
+#include "object.h"
+
+class Shader : public object
 {
+	REGISTER(Shader);
+
+	////////////////////////
+	///   Constructors   ///
+
+	Shader(std::string _source, GLenum type);
+	~Shader();
+
 	////////////////
 	///   Data   ///
-	////////////////
 private:
 
 	GLuint id;
 	std::string source;
 
-	////////////////////////
-	///   Constructors   ///
-	////////////////////////
-public:
-
-	Shader( std::string _source, GLenum type );
-	~Shader();
-
 	///////////////////////////////
 	///   Getters and Setters   ///
-	///////////////////////////////
 public:
 
 	GLuint getID() const;
 
 	//////////////////////////
 	///   Static Members   ///
-	//////////////////////////
 public:
 
 	static std::string basic_vert_source;

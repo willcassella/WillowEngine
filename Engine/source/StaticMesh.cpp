@@ -9,7 +9,6 @@
 
 ////////////////////////
 ///   Constructors   ///
-////////////////////////
 
 StaticMesh::StaticMesh( const std::string& path )
 {
@@ -41,7 +40,6 @@ StaticMesh::~StaticMesh()
 
 ///////////////////////////////
 ///   Getters and Setters   ///
-///////////////////////////////
 
 GLuint StaticMesh::getVAO() const
 {

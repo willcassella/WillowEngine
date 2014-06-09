@@ -6,7 +6,6 @@
 
 ////////////////////////
 ///   Constructors   ///
-////////////////////////
 
 Texture::Texture( const std::string& path )
 {
@@ -35,7 +34,6 @@ Texture::~Texture()
 
 ///////////////////////////////
 ///   Getters and Setters   ///
-///////////////////////////////
 
 GLuint Texture::getID() const
 {

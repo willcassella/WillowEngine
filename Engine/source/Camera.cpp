@@ -1,11 +1,7 @@
 #include "Camera.h"
-#include "Scene.h"
-
-#include "Mat4.h"
 
 ////////////////////////
 ///   Constructors   ///
-////////////////////////
 
 Camera::Camera( const float _VFOV, const float _RATIO, const float _ZMIN, const float _ZMAX )
 {
@@ -22,18 +18,8 @@ Camera::~Camera()
 	//Do nothing
 }
 
-///////////////////////////////
-///   Getters and Setters   ///
-///////////////////////////////
-
-Mat4 Camera::getPerspective()
-{
-	return this->perspective;
-}
-
 ///////////////////
 ///   Methods   ///
-///////////////////
 
 void Camera::Update( GLFWwindow* const window )
 {
@@ -84,4 +70,9 @@ void Camera::Update( GLFWwindow* const window )
 	// Tilt right
 	if( glfwGetKey( window, GLFW_KEY_X ) )
 		transform.rotate( Vec3( 0, 0, 1 ), 0.008f , true );
+}
+
+Mat4 Camera::getPerspective()
+{
+	return this->perspective;
 }

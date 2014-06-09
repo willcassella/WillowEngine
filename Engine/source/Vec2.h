@@ -61,7 +61,7 @@ public:
 	Vec2 operator-( const Vec2& rhs ) const;
 
 	// Subtract another vector from this vector and copy the result
-	Vec2 operator-=( const Vec2& rhs );
+	void operator-=( const Vec2& rhs );
 
 	// Multiply this vector by a float
 	Vec2 operator*( const float rhs ) const;

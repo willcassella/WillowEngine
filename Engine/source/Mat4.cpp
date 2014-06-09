@@ -7,7 +7,6 @@ const float Rad2Deg = 57.2957795f;
 
 ////////////////////////
 ///   Constructors   ///
-////////////////////////
 
 // Constructor, default sets to identity matrix
 Mat4::Mat4(	const float aa, const float ba, const float ca, const float da,
@@ -23,7 +22,6 @@ Mat4::Mat4(	const float aa, const float ba, const float ca, const float da,
 
 ///////////////////
 ///   Methods   ///
-///////////////////
 
 // Returns the inverse of this matrix
 Mat4 Mat4::inverse()
@@ -344,7 +342,6 @@ void Mat4::display() const
 
 /////////////////////
 ///   Rendering   ///
-/////////////////////
 
 // Generates a perspective projection matrix
 Mat4 Mat4::perspective( const float hFOV, const float vFOV, const float zMin, const float zMax )
@@ -442,7 +439,6 @@ Mat4 Mat4::rotate( const Quat& rot )
 
 /////////////////////
 ///   Overloads   ///
-/////////////////////
 
 // Multiply by another matrix
 Mat4 Mat4::operator*( const Mat4& rhs )

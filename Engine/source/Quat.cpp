@@ -4,7 +4,6 @@
 
 ////////////////////////
 ///   Constructors   ///
-////////////////////////
 
 // Default constructor
 Quat::Quat()
@@ -28,7 +27,6 @@ Quat::Quat( const Vec3& axis, const float angle )
 
 ///////////////////
 ///   Methods   ///
-///////////////////
 
 // Rotate this quaternion by and axis and angle
 void Quat::rotateByAxisAngle( const Vec3& axis, const float angle, const bool local )
@@ -54,7 +52,6 @@ void Quat::retrieve( float* const X, float* const Y, float* const Z, float* cons
 
 /////////////////////
 ///   Overloads   ///
-/////////////////////
 
 // Returns the quaternion result of one quaternion multiplied by another (rotation)
 Quat Quat::operator*( const Quat& quat )

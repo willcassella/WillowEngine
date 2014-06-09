@@ -75,7 +75,7 @@ Vec2 Vec2::operator-( const Vec2& rhs ) const
 }
 
 // Subtract another vector from this vector and copy the result
-Vec2 Vec2::operator-=( const Vec2& rhs )
+void Vec2::operator-=( const Vec2& rhs )
 {
 	x -= rhs.x; y -= rhs.y;
 }

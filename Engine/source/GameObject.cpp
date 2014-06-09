@@ -2,22 +2,18 @@
 #include "GameObject.h"
 #include "Vec3.h"
 
+////////////////////////
+///   Constructors   ///
+
 GameObject::GameObject( const std::string& _NAME )
 {
 	name = _NAME;
 }
 
-GameObject::GameObject( const std::string& _NAME, const StaticMesh& _MESH )
-{
-	
-}
+///////////////////
+///   Methods   ///
 
-GameObject::~GameObject()
+void GameObject::tick( float timeInterval )
 {
-	//Do nothing
-}
-
-void GameObject::Update()
-{
-	//transform.orientation.rotateByAxisAngle( Vec3( 0, 1, 0 ), 0.0005f );
+	// Do nothing
 }

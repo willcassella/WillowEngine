@@ -3,25 +3,18 @@
 
 #include <cstdio>
 #include <cmath>
+#include "object.h"
 #include "Vec3.h"
 #include "Quat.h"
 
 // TODO: Add a lookat() function
 
-struct Mat4
+struct Mat4 : public object
 {
-	////////////////
-	///   Data   ///
-	////////////////
-private:
-
-	// Matrix data members should never be accessed directly from outside
-	float values[4][4];
+	REGISTER(Mat4);
 
 	////////////////////////
 	///   Constructors   ///
-	////////////////////////
-public:
 
 	// Constructor, default sets to identity matrix
 	Mat4(	const float aa = 1, const float ba = 0, const float ca = 0, const float da = 0,
@@ -29,9 +22,15 @@ public:
 			const float ac = 0, const float bc = 0, const float cc = 1, const float dc = 0,
 			const float ad = 0, const float bd = 0, const float cd = 0, const float dd = 1 );
 
+	//////////////////
+	///   Fields   ///
+private:
+
+	// Matrix data members should never be accessed directly from outside
+	float values[4][4];
+
 	///////////////////
 	///   Methods   ///
-	///////////////////
 public:
 
 	// Returns the inverse of this matrix
@@ -42,8 +41,6 @@ public:
 
 	/////////////////////
 	///   Rendering   ///
-	/////////////////////
-public:
 
 	// Generates a perspective projection matrix
 	static Mat4 perspective( const float hFOV, const float vFOV, const float zMin, const float zMax );
@@ -68,8 +65,6 @@ public:
 
 	///////////////////////////////
 	///   Getters and Setters   ///
-	///////////////////////////////
-public:
 
 	// Get contents by row and column
 	inline float get( const std::size_t column, const std::size_t row ) const
@@ -85,8 +80,6 @@ public:
 
 	/////////////////////
 	///   Overloads   ///
-	/////////////////////
-public:
 
 	// Multiply by another matrix
 	Mat4 operator*( const Mat4& rhs );

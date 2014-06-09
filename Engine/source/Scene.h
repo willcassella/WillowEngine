@@ -2,18 +2,18 @@
 #define SCENE_H_
 
 #include <vector>
+#include "object.h"
 #include "GameObject.h"
 #include "Camera.h"
 
 // Scene class contains all game objects and scene information
 // This is going to need a massive overhaul once XML IO is functional
-class Scene
+class Scene : public object
 {
-	////////////////
-	///   Data   ///
-	////////////////
+	REGISTER(Scene);
 
-public:
+	//////////////////
+	///   Fields   ///
 
 	std::vector< GameObject* >	objects;
 	std::vector< Camera* >		cameras;

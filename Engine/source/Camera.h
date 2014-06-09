@@ -4,16 +4,21 @@
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 
-#include "Transform.h"
+#include "GameObject.h"
 #include "Mat4.h"
 
-class Camera
+class Camera : public GameObject
 {
-public:
+	REGISTER(Camera);
+
+	////////////////////////
+	///   Constructors   ///
+
+	Camera(const float vFOV = 43, const float ratio = 1280.0f / 720, const float zMin = 0.1f, const float zMax = 90);
+	~Camera();
 	
-	////////////////
-	///   Data   ///
-	////////////////
+	//////////////////
+	///   Fields   ///
 private:
 
 	float vFOV;
@@ -22,31 +27,12 @@ private:
 	float zMax;
 	Mat4 perspective;
 
-public:
-
-	Transform transform;
-
-	////////////////////////
-	///   Constructors   ///
-	////////////////////////
-public:
-
-	Camera( const float vFOV = 43, const float ratio = 1280.0f/720, const float zMin = 0.1f, const float zMax = 90 );
-	~Camera();
-	
-	///////////////////////////////
-	///   Getters and Setters   ///
-	///////////////////////////////
-public:
-
-	Mat4 getPerspective();
-
 	///////////////////
 	///   Methods   ///
-	///////////////////
 public:
 
 	void Update( GLFWwindow* const window );
+	Mat4 getPerspective();
 };
 
 #endif

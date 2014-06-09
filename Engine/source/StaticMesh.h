@@ -3,17 +3,25 @@
 
 #include <string>
 #include <vector>
+#include "object.h"
 #include "Material.h"
 #include "Vertex.h"
 
 typedef std::vector< Vertex > VertexArray;
 typedef std::vector< GLuint > ElementArray;
 
-class StaticMesh
+class StaticMesh : public object
 {	
+	REGISTER(StaticMesh);
+
+	////////////////////////
+	///   Constructors   ///
+
+	StaticMesh(const std::string& path);
+	~StaticMesh();
+
 	////////////////
 	///   Data   ///
-	////////////////
 private:
 
 	GLuint vao;
@@ -25,17 +33,8 @@ private:
 
 	Material* mat;
 
-	////////////////////////
-	///   Constructors   ///
-	////////////////////////
-public:
-
-	StaticMesh( const std::string& path );
-	~StaticMesh();
-
 	///////////////////////////////
 	///   Getters and Setters   ///
-	///////////////////////////////
 public:
 
 	GLuint getVAO() const;
