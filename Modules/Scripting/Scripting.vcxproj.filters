@@ -1,0 +1,283 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="source\AngelScript\as_atomic.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_builder.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_bytecode.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_callfunc.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_callfunc_arm.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_callfunc_mips.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_callfunc_ppc.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_callfunc_ppc_64.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_callfunc_sh4.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_callfunc_x64_gcc.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_callfunc_x64_mingw.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_callfunc_x64_msvc.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_callfunc_x86.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_callfunc_xenon.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_compiler.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_configgroup.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_context.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_datatype.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_gc.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_generic.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_globalproperty.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_memory.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_module.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_objecttype.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_outputbuffer.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_parser.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_restore.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_scriptcode.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_scriptengine.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_scriptfunction.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_scriptnode.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_scriptobject.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_string.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_string_util.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_thread.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_tokenizer.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_typeinfo.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AngelScript\as_variablescope.cpp">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GlobalFunctions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\scriptstdstring.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scripting.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\AngelScript\as_variablescope.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_array.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_atomic.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_builder.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_bytecode.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_callfunc.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_compiler.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_config.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_configgroup.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_context.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_criticalsection.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_datatype.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_debug.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_gc.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_generic.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_map.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_memory.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_module.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_objecttype.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_outputbuffer.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_parser.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_property.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_restore.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_scriptcode.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_scriptengine.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_scriptfunction.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_scriptnode.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_scriptobject.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_string.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_string_util.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_symboltable.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_texts.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_thread.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_tokendef.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_tokenizer.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AngelScript\as_typeinfo.h">
+      <Filter>Source Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\GlobalFunctions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\angelscript.h">
+      <Filter>Header Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="source\scriptstdstring.h">
+      <Filter>Header Files\AngelScript</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripting\Scripting.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="source\AngelScript\as_callfunc_arm_gcc.S">
+      <Filter>Source Files\AngelScript</Filter>
+    </None>
+    <None Include="source\AngelScript\as_callfunc_arm_msvc.asm">
+      <Filter>Source Files\AngelScript</Filter>
+    </None>
+    <None Include="source\AngelScript\as_callfunc_arm_xcode.S">
+      <Filter>Source Files\AngelScript</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{4177af00-0bcd-4198-bd1a-c970fa6a626b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{c4de399d-b734-4e87-99cc-93a8c6c067e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AngelScript">
+      <UniqueIdentifier>{b189508f-73cb-4bf8-8770-0c4c0f437998}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\AngelScript">
+      <UniqueIdentifier>{5028260b-29eb-43e3-8fd6-c97fa988a111}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{40581555-2863-47f3-92be-19aa0f9d8484}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="source\AngelScript\as_callfunc_x64_msvc_asm.asm">
+      <Filter>Source Files\AngelScript</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

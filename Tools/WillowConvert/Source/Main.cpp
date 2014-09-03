@@ -9,9 +9,7 @@ This program converts text files to .DAT for faster loading by the engine
 #include <fstream>
 #include <vector>
 
-#include "Vertex.h"
-#include "Vec2.h"
-#include "Vec3.h"
+#include <Render\Vertex.h>
 
 using namespace std;
 
@@ -32,13 +30,13 @@ inputType parseFileName(
 
 bool parseOBJ(
     const string& path,
-    vector< Vertex >* out_vertices,
+    vector< Render::Vertex >* out_vertices,
 	vector< unsigned int >* out_elements );
 
 bool writeMesh(
 	const string& path,
 	const string& name,
-	const vector< Vertex >& vertices,
+	const vector< Render::Vertex >& vertices,
 	const vector< unsigned int >& elements );
 
 int main()
@@ -65,7 +63,7 @@ int main()
 		return 0;
 	}
 
-	vector< Vertex > vertices;
+	vector< Render::Vertex > vertices;
 	vector< unsigned int > elements;
 	if( !parseOBJ( fileName, &vertices, &elements ) ) {
 		// Must have failed
@@ -88,15 +86,18 @@ inputType parseFileName( const string& fileName, string& name, string& extension
 	for( int i = (int)fileName.length() - 1; i > 0; i-- ) {
 		
 		// Find the period
-		if( fileName[i] == '.' ) {
+		if( fileName[i] == '.' ) 
+		{
 			
 			// Get the filename
-			for( int j = 0; j < i; j++ ) {
+			for( int j = 0; j < i; j++ ) 
+			{
 				name += fileName[j];
 			}
 
 			// Get the extension
-			for( int j = i + 1; j < fileName.length(); j++ ) {
+			for( unsigned int j = i + 1; j < fileName.length(); j++ ) 
+			{
 				extension += fileName[j];
 			}
 
@@ -126,15 +127,15 @@ inputType parseFileName( const string& fileName, string& name, string& extension
 
 bool parseOBJ(
     const string& path,
-    vector < Vertex >* out_vertices,
+    vector < Render::Vertex >* out_vertices,
 	vector < unsigned int >* out_elements
 )
 {
-	std::vector < Vec3 > temp_positions;
-	std::vector < Vec2 > temp_coordinates;
-	std::vector < Vec3 > temp_normals;
+	std::vector < Math::Vec3 > temp_positions;
+	std::vector < Math::Vec2 > temp_coordinates;
+	std::vector < Math::Vec3 > temp_normals;
 	
-	FILE * file = fopen( path.c_str(), "r" );
+	FILE* file = fopen( path.c_str(), "r" );
 	if( file == NULL )
 	{
 		cout << "File does not exist!\n";
@@ -152,7 +153,7 @@ bool parseOBJ(
 		// Parse vertices
 		if ( strcmp( lineHeader, "v" ) == 0 )
 		{
-			Vec3 vertex;
+			Math::Vec3 vertex;
 			fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z );
 			temp_positions.push_back(vertex);
 		}
@@ -160,7 +161,7 @@ bool parseOBJ(
 		// Parse texture coordinates
 		else if ( strcmp( lineHeader, "vt" ) == 0 )
 		{
-			Vec2 uv;
+			Math::Vec2 uv;
 			fscanf(file, "%f %f\n", &uv.x, &uv.y );
 			temp_coordinates.push_back(uv);
 		}
@@ -168,7 +169,7 @@ bool parseOBJ(
 		// Parse vertex normals
 		else if ( strcmp( lineHeader, "vn" ) == 0 )
 		{
-			Vec3 normal;
+			Math::Vec3 normal;
 			fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z );
 			temp_normals.push_back(normal);
 		}
@@ -190,14 +191,14 @@ bool parseOBJ(
 			for( int i = 0; i < 3; i++ )
 			{
 				// Construct a vertex
-				Vertex vert;
+				Render::Vertex vert;
 				vert.position = temp_positions.at( vertexIndex[i] - 1 );
 				vert.coordinates = temp_coordinates.at( uvIndex[i] - 1 );
 				vert.normal = temp_normals.at( normalIndex[i] - 1 );
 
 				// Search for the vertex
 				bool search_failed = true;
-				int index;
+				unsigned int index;
 				for( index = 0; index < out_vertices->size(); index++ )
 				{
 					// if it already exists
@@ -229,7 +230,7 @@ bool parseOBJ(
 bool writeMesh(
 	const string& path,
 	const string& name,
-	const vector < Vertex >& vertices,
+	const vector < Render::Vertex >& vertices,
 	const vector < unsigned int >& elements )
 {
 	// Find the number of vertices
@@ -241,7 +242,7 @@ bool writeMesh(
 	output.open( (name + ".dat").c_str(), ios::binary | ios::out );
 
 	output.write( (char*)&num_verts,	sizeof( int ) );
-	output.write( (char*)&vertices[0],	sizeof( Vertex ) * num_verts );
+	output.write( (char*)&vertices[0],	sizeof( Render::Vertex ) * num_verts );
 	output.write( (char*)&num_elems,	sizeof( int ) );
 	output.write( (char*)&elements[0],	sizeof( unsigned int ) * num_elems );
 

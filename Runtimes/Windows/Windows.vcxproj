@@ -18,13 +18,9 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Source\Main.cpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{4700682C-35A0-4338-9860-7330D1341505}</ProjectGuid>
-    <RootNamespace>OBJConvert</RootNamespace>
-    <ProjectName>WillowConvert</ProjectName>
+    <ProjectGuid>{006360EA-43D5-4C0F-87E2-86DB46E096E2}</ProjectGuid>
+    <RootNamespace>WillowEngine</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -70,45 +66,53 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IntDir>build\</IntDir>
+    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)Modules\Scripting\include;$(ProjectDir)thirdParty\glfw3\$(Platform)\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Engine\bin;$(SolutionDir)Modules\Scripting\bin;$(ProjectDir)thirdParty\glfw3\$(Platform)\lib-msvc110;C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
     <OutDir>bin\</OutDir>
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(LibraryPath)</LibraryPath>
+    <IntDir>build\</IntDir>
+    <TargetName>WillowEngine</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IntDir>build\</IntDir>
+    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)Modules\Scripting\include;$(ProjectDir)thirdParty\glfw3\$(Platform)\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Engine\bin;$(SolutionDir)Modules\Scripting\bin;$(ProjectDir)thirdParty\glfw3\$(Platform)\lib-msvc110;C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
     <OutDir>bin\</OutDir>
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(LibraryPath)</LibraryPath>
+    <IntDir>build\</IntDir>
+    <TargetName>WillowEngine</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IntDir>build\</IntDir>
+    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)Modules\Scripting\include;$(ProjectDir)thirdParty\glfw3\$(Platform)\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Engine\bin;$(SolutionDir)Modules\Scripting\bin;$(ProjectDir)thirdParty\glfw3\$(Platform)\lib-msvc110;$(LibraryPath)</LibraryPath>
     <OutDir>bin\</OutDir>
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(LibraryPath)</LibraryPath>
+    <IntDir>build\</IntDir>
+    <TargetName>WillowEngine</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IntDir>build\</IntDir>
+    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)Modules\Scripting\include;$(ProjectDir)thirdParty\glfw3\$(Platform)\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Engine\bin;$(SolutionDir)Modules\Scripting\bin;$(ProjectDir)thirdParty\glfw3\$(Platform)\lib-msvc110;$(LibraryPath)</LibraryPath>
     <OutDir>bin\</OutDir>
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(LibraryPath)</LibraryPath>
+    <IntDir>build\</IntDir>
+    <TargetName>WillowEngine</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <DisableSpecificWarnings>
-      </DisableSpecificWarnings>
-      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLFW_DLL;WIN32;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Utility.lib;Render.lib</AdditionalDependencies>
+      <AdditionalDependencies>Utility.lib;Engine.lib;Render.lib;glfw3dll.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
+      <IgnoreSpecificDefaultLibraries>msvcrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <Profile>true</Profile>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)Modules\Utility\bin\*.dll" "$(OutDir)" /d /y
-xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
+xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y
+xcopy "$(SolutionDir)Modules\Engine\bin\*.dll" "$(OutDir)" /d /y
+xcopy "$(ProjectDir)thirdParty\glfw3\$(Platform)\lib-msvc110\glfw3.dll" "$(OutDir)" /d /y</Command>
+      <Message>Copy dependancies into output</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -116,17 +120,23 @@ xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <DisableSpecificWarnings>
-      </DisableSpecificWarnings>
-      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLFW_DLL;WIN32;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Utility.lib;Render.lib</AdditionalDependencies>
+      <AdditionalDependencies>Utility.lib;Engine.lib;Render.lib;glfw3dll.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
+      <IgnoreSpecificDefaultLibraries>msvcrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <Profile>true</Profile>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)Modules\Utility\bin\*.dll" "$(OutDir)" /d /y
-xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
+xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y
+xcopy "$(SolutionDir)Modules\Engine\bin\*.dll" "$(OutDir)" /d /y
+xcopy "$(ProjectDir)thirdParty\glfw3\$(Platform)\lib-msvc110\glfw3.dll" "$(OutDir)" /d /y</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy dependancies into output</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -136,19 +146,25 @@ xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <DisableSpecificWarnings>
-      </DisableSpecificWarnings>
-      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLFW_DLL;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Utility.lib;Render.lib</AdditionalDependencies>
+      <AdditionalDependencies>Utility.lib;Engine.lib;Render.lib;glfw3dll.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)Modules\Utility\bin\*.dll" "$(OutDir)" /d /y
-xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
+xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y
+xcopy "$(SolutionDir)Modules\Engine\bin\*.dll" "$(OutDir)" /d /y
+xcopy "$(ProjectDir)thirdParty\glfw3\$(Platform)\lib-msvc110\glfw3.dll" "$(OutDir)" /d /y</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy dependancies into output</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -158,21 +174,42 @@ xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <DisableSpecificWarnings>
-      </DisableSpecificWarnings>
-      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLFW_DLL;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Utility.lib;Render.lib</AdditionalDependencies>
+      <AdditionalDependencies>Utility.lib;Engine.lib;Render.lib;glfw3dll.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)Modules\Utility\bin\*.dll" "$(OutDir)" /d /y
-xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
+xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y
+xcopy "$(SolutionDir)Modules\Engine\bin\*.dll" "$(OutDir)" /d /y
+xcopy "$(ProjectDir)thirdParty\glfw3\$(Platform)\lib-msvc110\glfw3.dll" "$(OutDir)" /d /y</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy dependancies into output</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="..\Dependancies\Scripts\Main.as" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Dependancies\logo\logo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resources\resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resources\Windows.rc" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

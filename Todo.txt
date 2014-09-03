@@ -1,0 +1,28 @@
+Refactoring:
+
+	X Core
+	X Render
+	X Engine
+	  Scripting
+	  Runtime
+	  WillowConvert
+	
+Features:
+
+	Impliment Resource ?
+	Impliment ResourcePointer<T>
+
+Refactoring:
+
+	Use Resource ?
+	Use ResourcePointer<T>
+
+Features:
+
+	Finish Reflection implimentation
+
+Refactoring:
+
+	Use Reflection
+
+	Switch to NMake build system
