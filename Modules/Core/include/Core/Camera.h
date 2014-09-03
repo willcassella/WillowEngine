@@ -1,12 +1,11 @@
-// Prop.h
+// Camera.h
 #pragma once
 
-#include <Render\StaticMesh.h>
 #include "GameObject.h"
 
-namespace Engine
+namespace Willow
 {
-	class ENGINE_API Prop : public GameObject
+	class CORE_API Camera : public GameObject
 	{
 		///////////////////////
 		///   Information   ///
@@ -18,18 +17,23 @@ namespace Engine
 		///   Fields   ///
 	public:
 
-		Render::StaticMesh* mesh;
+		float vFOV;
+		float ratio;
+		float zMin;
+		float zMax;
+		Math::Mat4 perspective;
 
 		////////////////////////
 		///   Constructors   ///
 	public:
 
-		Prop(const Willow::String& _name);
+		Camera(const String& _name = "", float vFOV = 43, float ratio = 1280.0f / 720, float zMin = 0.1f, float zMax = 90);
 
 		///////////////////
 		///   Methods   ///
 	public:
 
 		void tick(float timeInterval) override;
+		Math::Mat4 getPerspective() const;
 	};
 }

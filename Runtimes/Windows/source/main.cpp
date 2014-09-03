@@ -10,7 +10,7 @@
 #include <GLFW/glfw3.h>
 
 //Include modules headers
-#include <Engine\Scene.h>
+#include <Core\Scene.h>
 //#include <Scripting\Scripting.h>
 #include <Render\Render.h>
 
@@ -22,7 +22,7 @@ bool fullscreen = true;
 
 //Function Prototypes
 GLFWwindow* InitGLFW();
-void eventLoop(GLFWwindow* window, Engine::Scene& scene);
+void eventLoop(GLFWwindow* window, Willow::Scene& scene);
 void cleanUp(GLFWwindow* window);
 
 void windowSizeCallback(GLFWwindow* window, int x, int y)
@@ -33,7 +33,7 @@ void windowSizeCallback(GLFWwindow* window, int x, int y)
 
 int main(int argc, char* argv[])
 {	
-	using namespace Engine;
+	using namespace Willow;
 
 	std::cout << "Initializing subsystems... " << std::endl;
 	//Initialize GLFW and get a window
@@ -179,7 +179,7 @@ GLFWwindow* InitGLFW()
 	return window;
 }
 
-void eventLoop(GLFWwindow* window, Engine::Scene& scene)
+void eventLoop(GLFWwindow* window, Willow::Scene& scene)
 {
 	std::cout << "Entering event loop... " << std:: endl;
 

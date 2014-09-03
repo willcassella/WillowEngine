@@ -1,12 +1,12 @@
 // Camera.cpp
 
-#include "..\include\Engine\Camera.h"
-using namespace Engine;
+#include "..\include\Core\Camera.h"
+using namespace Willow;
 
 ////////////////////////
 ///   Constructors   ///
 
-Camera::Camera(const Willow::String& _name, float _vFOV, float _ratio, float _zMin, float _zMax)
+Camera::Camera(const String& _name, float _vFOV, float _ratio, float _zMin, float _zMax)
 	: Base(_name)
 {
 	this->vFOV = _vFOV;
@@ -71,7 +71,7 @@ void Camera::tick(float timeInterval)
 //		transform.rotate( Math::Vec3( 0, 0, 1 ), 0.008f , true );
 }
 
-Math::Mat4 Camera::getPerspective()
+Math::Mat4 Camera::getPerspective() const
 {
 	return perspective;
 }

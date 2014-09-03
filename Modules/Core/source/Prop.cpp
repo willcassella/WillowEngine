@@ -1,12 +1,12 @@
 // Prop.cpp
 
-#include "..\include\Engine\Prop.h"
-using namespace Engine;
+#include "..\include\Core\Prop.h"
+using namespace Willow;
 
 ////////////////////////
 ///   Constructors   ///
 
-Prop::Prop(const Willow::String& _name)
+Prop::Prop(const String& _name)
 	: Base(_name)
 {
 	// Do nothing

@@ -24,22 +24,22 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Engine\config.h">
+    <ClInclude Include="include\Core\Camera.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Engine\Game.h">
+    <ClInclude Include="include\Core\config.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Engine\GameObject.h">
+    <ClInclude Include="include\Core\Game.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Engine\Camera.h">
+    <ClInclude Include="include\Core\GameObject.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Engine\Prop.h">
+    <ClInclude Include="include\Core\Prop.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Engine\Scene.h">
+    <ClInclude Include="include\Core\Scene.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

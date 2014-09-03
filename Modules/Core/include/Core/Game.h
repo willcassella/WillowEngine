@@ -4,10 +4,10 @@
 #include "config.h"
 #include "Scene.h"
 
-namespace Engine
+namespace Willow
 {
-	// @TODO: Make this actually usefull
-	class ENGINE_API Game
+	// @TODO: Make this actually useful
+	class CORE_API Game
 	{
 		//////////////////
 		///   Fields   ///

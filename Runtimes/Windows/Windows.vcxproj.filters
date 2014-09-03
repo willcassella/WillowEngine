@@ -15,16 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Dependancies\Scripts\Main.as">
-      <Filter>Resource Files\Scripts</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\Dependancies\logo\logo.ico">
-      <Filter>Resource Files\images</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="source\main.cpp">
       <Filter>source</Filter>
     </ClCompile>

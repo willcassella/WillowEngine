@@ -5,10 +5,10 @@
 #include "Prop.h"
 #include "Camera.h"
 
-namespace Engine
+namespace Willow
 {
 	// Scene class contains all game objects and scene information
-	class ENGINE_API Scene
+	class CORE_API Scene
 	{
 		//////////////////
 		///   Fields   ///

@@ -5,22 +5,22 @@
 #include <Utility\Math\Transform.h>
 #include "config.h"
 
-namespace Engine
+namespace Willow
 {
-	class ENGINE_API GameObject
+	class CORE_API GameObject
 	{
 		//////////////////
 		///   Fields   ///
 	public:
 
-		Willow::String name;
+		String name;
 		Math::Transform transform;
 
 		////////////////////////
 		///   Constructors   ///
 	public:
 
-		GameObject(const Willow::String& _name = "");
+		GameObject(const String& _name = "");
 
 		///////////////////
 		///   Methods   ///

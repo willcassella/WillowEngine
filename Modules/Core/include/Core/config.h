@@ -1,8 +1,8 @@
 // config.h
 #pragma once
 
-#ifdef ENGINE_STATIC
-	#define IMPORT extern
+#ifdef CORE_STATIC
+	#define IMPORT
 	#define EXPORT
 #else
 	#ifdef WIN32
@@ -14,8 +14,8 @@
 	#endif
 #endif
 
-#ifdef ENGINE_BUILD
-	#define ENGINE_API EXPORT
+#ifdef CORE_BUILD
+	#define CORE_API EXPORT
 #else
-	#define ENGINE_API IMPORT
+	#define CORE_API IMPORT
 #endif

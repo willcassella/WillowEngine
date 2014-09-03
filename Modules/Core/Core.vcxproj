@@ -25,12 +25,12 @@
     <ClCompile Include="source\Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Engine\Camera.h" />
-    <ClInclude Include="include\Engine\config.h" />
-    <ClInclude Include="include\Engine\Game.h" />
-    <ClInclude Include="include\Engine\GameObject.h" />
-    <ClInclude Include="include\Engine\Prop.h" />
-    <ClInclude Include="include\Engine\Scene.h" />
+    <ClInclude Include="include\Core\Camera.h" />
+    <ClInclude Include="include\Core\config.h" />
+    <ClInclude Include="include\Core\Game.h" />
+    <ClInclude Include="include\Core\GameObject.h" />
+    <ClInclude Include="include\Core\Prop.h" />
+    <ClInclude Include="include\Core\Scene.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C257E175-629A-42F3-A52A-CEC2D0DBBCF2}</ProjectGuid>
@@ -83,7 +83,7 @@
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetExt>.dll</TargetExt>
-    <TargetName>$(ProjectName)</TargetName>
+    <TargetName>Willow_$(ProjectName)</TargetName>
     <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
@@ -93,12 +93,13 @@
     <TargetExt>.dll</TargetExt>
     <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(LibraryPath)</LibraryPath>
+    <TargetName>Willow_$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetExt>.dll</TargetExt>
-    <TargetName>$(ProjectName)</TargetName>
+    <TargetName>Willow_$(ProjectName)</TargetName>
     <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
@@ -106,7 +107,7 @@
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetExt>.dll</TargetExt>
-    <TargetName>$(ProjectName)</TargetName>
+    <TargetName>Willow_$(ProjectName)</TargetName>
     <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
@@ -115,11 +116,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;ENGINE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;CORE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Utility.lib;Render.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Willow_Utility.lib;Willow_Render.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib />
     <Lib />
@@ -136,11 +137,11 @@ xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;ENGINE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;CORE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Utility.lib;Render.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Willow_Utility.lib;Willow_Render.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib />
     <Lib />
@@ -159,13 +160,13 @@ xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;ENGINE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;CORE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Utility.lib;Render.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Willow_Utility.lib;Willow_Render.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib />
     <Lib />
@@ -184,13 +185,13 @@ xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;ENGINE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;CORE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Utility.lib;Render.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Willow_Utility.lib;Willow_Render.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib />
     <Lib />

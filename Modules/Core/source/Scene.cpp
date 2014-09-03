@@ -1,7 +1,7 @@
 // Scene.cpp
 
-#include "..\include\Engine\Scene.h"
-using namespace Engine;
+#include "..\include\Core\Scene.h"
+using namespace Willow;
 
 // @TODO: this needs some rethinking
 void Scene::update(float timeInterval)
@@ -19,7 +19,7 @@ void Scene::update(float timeInterval)
 
 void Scene::render() const
 {
-	for (Engine::Prop* object : this->objects)
+	for (Prop* object : this->objects)
 	{
 		Math::Mat4 model = object->transform.getModel();
 
