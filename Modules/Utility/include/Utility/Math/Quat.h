@@ -8,7 +8,7 @@
 
 namespace Math
 {
-	struct CORE_API Quat
+	struct UTILITY_API Quat
 	{
 		////////////////////////
 		///   Constructors   ///

@@ -1,16 +1,16 @@
 // StaticMesh.h
 #pragma once
 
-#include <vector>
 #include <Utility\String.h>
+#include <Utility\Array.h>
 #include <Utility\Math\Mat4.h>
 #include "Material.h"
 #include "Vertex.h"
 
 namespace Render
 {
-	typedef std::vector<Vertex> VertexArray;
-	typedef std::vector<BufferID> ElementArray;
+	template class RENDER_API Willow::Array < Vertex >;
+	template class RENDER_API Willow::Array < BufferID >;
 
 	class RENDER_API StaticMesh
 	{
@@ -29,12 +29,12 @@ namespace Render
 
 		// Render the mesh at a specific orienation, view, and perspective
 		void render(const Math::Mat4& orientation, const Math::Mat4& view, const Math::Mat4& perspective) const;
-		std::size_t getNumElements() const;
+		uint getNumElements() const;
 		Material& getMaterial() const;
 		void setMaterial(Material& _material);
 
 		// This should be refactored in the future
-		static bool loadBinaryModel(const Willow::String& path, std::vector<Vertex>* out_vertices, std::vector<BufferID>* out_elements);
+		static bool loadBinaryModel(const Willow::String& path, Willow::Array<Vertex>* out_vertices, Willow::Array<BufferID>* out_elements);
 
 		////////////////
 		///   Data   ///
@@ -44,8 +44,8 @@ namespace Render
 		BufferID vbo;
 		BufferID ebo;
 
-		VertexArray vertices;
-		ElementArray elements;
+		Willow::Array<Vertex> vertices;
+		Willow::Array<BufferID> elements;
 
 		Material* mat;
 	};

@@ -63,7 +63,7 @@ void StaticMesh::render(const Math::Mat4& orientation, const Math::Mat4& view, c
 	glBindVertexArray(0);
 }
 
-std::size_t StaticMesh::getNumElements() const
+uint StaticMesh::getNumElements() const
 {
 	return this->elements.size();
 }
@@ -99,7 +99,7 @@ void StaticMesh::setMaterial(Material& _mat)
 }
 
 // @TODO: this needs to be refactored
-bool StaticMesh::loadBinaryModel(const Willow::String& path, std::vector<Vertex>* out_vertices, std::vector<BufferID>* out_elements)
+bool StaticMesh::loadBinaryModel(const Willow::String& path, Willow::Array<Vertex>* out_vertices, Willow::Array<BufferID>* out_elements)
 {
 	// Attempt to open the file
 	std::ifstream input;
@@ -122,7 +122,7 @@ bool StaticMesh::loadBinaryModel(const Willow::String& path, std::vector<Vertex>
 	{
 		Vertex newVert;
 		input.read((char*)&newVert, sizeof(Vertex));
-		out_vertices->push_back(newVert);
+		out_vertices->add(newVert);
 	}
 
 	// Get the number of elements
@@ -134,7 +134,7 @@ bool StaticMesh::loadBinaryModel(const Willow::String& path, std::vector<Vertex>
 	{
 		BufferID newElem;
 		input.read((char*)&newElem, sizeof(unsigned int));
-		out_elements->push_back(newElem);
+		out_elements->add(newElem);
 	}
 
 	// Close the file

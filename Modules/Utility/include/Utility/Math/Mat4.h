@@ -11,7 +11,7 @@
 
 namespace Math
 {
-	struct CORE_API Mat4
+	struct UTILITY_API Mat4
 	{
 		////////////////////////
 		///   Constructors   ///

@@ -1,12 +1,15 @@
 // Scene.h
 #pragma once
 
-#include <vector>
 #include "Prop.h"
 #include "Camera.h"
 
 namespace Willow
 {
+	template class CORE_API Array < Prop* > ;
+	template class CORE_API Array < Camera* > ;
+	template class CORE_API Array < int > ;
+
 	// Scene class contains all game objects and scene information
 	class CORE_API Scene
 	{
@@ -14,8 +17,9 @@ namespace Willow
 		///   Fields   ///
 	public:
 
-		std::vector<Prop*> objects;
-		std::vector<Camera*> cameras;
+		float timeDilation = 1.0f;
+		Array<Prop*> objects;
+		Array<Camera*> cameras;
 
 		///////////////////
 		///   Methods   ///

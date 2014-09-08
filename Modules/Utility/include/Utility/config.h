@@ -1,7 +1,10 @@
 // config.h
 #pragma once
 
-#ifdef CORE_STATIC
+///////////////////////////////
+///   Build Configuration   ///
+
+#ifdef UTILITY_STATIC
 	#define IMPORT extern
 	#define EXPORT
 #else
@@ -14,8 +17,14 @@
 	#endif
 #endif
 
-#ifdef CORE_BUILD
-	#define CORE_API EXPORT
+#ifdef UTILITY_BUILD
+	#define UTILITY_API EXPORT
 #else
-	#define CORE_API IMPORT
+	#define UTILITY_API IMPORT
 #endif
+
+///////////////////////
+///   Definitions   ///
+
+#define interface class
+typedef unsigned int uint;

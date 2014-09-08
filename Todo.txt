@@ -1,8 +1,8 @@
 Refactoring:
 
-	X Core
+	X Core - now 'Utility'
 	X Render
-	X Engine
+	X Engine - now 'Core'
 	  Scripting
 	  Runtime
 	  WillowConvert

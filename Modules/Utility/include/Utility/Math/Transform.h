@@ -7,7 +7,7 @@
 
 namespace Math
 {
-	struct CORE_API Transform
+	struct UTILITY_API Transform
 	{
 		//////////////////
 		///   Fields   ///

@@ -47,14 +47,10 @@ int main(int argc, char* argv[])
 
 	//Initialize the renderer
 	Render::InitRenderer(Render::API::API_OPENGL);
-	
-
-
 
 	///////////////////////////////
 	///   Setting up a simple   ///
 	///          scene          ///
-	///////////////////////////////
 
 	Scene testScene;
 
@@ -110,10 +106,10 @@ int main(int argc, char* argv[])
 	crosshairs.transform.rotate(Math::Vec3::RIGHT, -3.14159f/2, false);
 	crosshairs.transform.parent = &cam.transform;
 
-	testScene.objects.push_back(&sponza);
-	testScene.objects.push_back(&gun);
-	testScene.objects.push_back(&crosshairs);
-	testScene.cameras.push_back(&cam);
+	testScene.objects.add(&sponza);
+	testScene.objects.add(&gun);
+	testScene.objects.add(&crosshairs);
+	testScene.cameras.add(&cam);
 
 
 
@@ -136,7 +132,7 @@ GLFWwindow* InitGLFW()
 	}
 	
 	// Make the window invisible
-	glfwWindowHint( GLFW_VISIBLE, GL_FALSE );
+	glfwWindowHint( GLFW_VISIBLE, false );
 
 	glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
 	glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 3 );
@@ -159,18 +155,18 @@ GLFWwindow* InitGLFW()
 	int posy = (screen_height - window_height)/2;
 
 	//move the window to the center of the screen
-	glfwSetWindowPos( window, posx, posy );
+	glfwSetWindowPos(window, posx, posy);
 
 	//Make the window visible
-	glfwShowWindow( window );
+	glfwShowWindow(window);
 
 	// Make the cursor invisible
-	glfwSetInputMode( window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 	// Move the cursor to the center of the screen
-	glfwSetCursorPos( window, window_width/2, window_height/2 );
+	glfwSetCursorPos(window, window_width/2, window_height/2);
 
 	//Set the window callbacks
-	glfwSetWindowSizeCallback( window, windowSizeCallback );
+	glfwSetWindowSizeCallback(window, windowSizeCallback);
 
 	// Create the frambuffer and viewport
 	glfwGetFramebufferSize(window, &window_width, &window_height);
@@ -181,40 +177,29 @@ GLFWwindow* InitGLFW()
 
 void eventLoop(GLFWwindow* window, Willow::Scene& scene)
 {
-	std::cout << "Entering event loop... " << std:: endl;
-
-	//Execute the main function
-	std::cout << "	Executing scripts..." << std::endl;
-	std::cout << "  (Script execution skipped)" << std::endl;
-	//ExecuteMain();
+	std::cout << "Entering event loop... " << std::endl;
 
 	double lastTime = glfwGetTime();
-	int nbFrames = 0;
-
-     // Measure speed
-     double currentTime = glfwGetTime();
-     nbFrames++;
+	double frameTime = lastTime;
+	int numFrames = 0;
 
 	//Begin the event loop
-	while ( !glfwWindowShouldClose(window) )
-	{
-		 
-		// Measure speed
+	while (!glfwWindowShouldClose(window))
+	{	 
+		// If we reported the frame time more than one second ago
 		double currentTime = glfwGetTime();
-		nbFrames++;
-		if ( currentTime - lastTime >= 1.0 )
+		numFrames++;
+
+		if (currentTime - lastTime >= 1.0)
 		{ 
-			// If last prinf() was more than 1 sec ago
-			 // printf and reset timer
-			 printf("%f ms/frame\n", 1000.0/double(nbFrames));
-			 nbFrames = 0;
-			 lastTime += 1.0;
-		};
-		
-		glfwPollEvents();
+			std::cout << 1000.0 / numFrames << " ms/frame" << std::endl;
+			numFrames = 0;
+			lastTime = currentTime;
+		}
 
 		// Update the scene
-		scene.update((float)(currentTime - lastTime));
+		scene.update((float)(currentTime - frameTime));
+		frameTime = glfwGetTime();
 
 		//render the frame
 		Render::clearBuffer();

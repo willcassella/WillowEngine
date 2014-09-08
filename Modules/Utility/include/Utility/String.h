@@ -5,7 +5,7 @@
 
 namespace Willow
 {
-	struct CORE_API String
+	struct UTILITY_API String
 	{
 		////////////////////////
 		///   Constructors   ///

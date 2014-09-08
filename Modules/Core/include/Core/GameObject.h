@@ -21,6 +21,7 @@ namespace Willow
 	public:
 
 		GameObject(const String& _name = "");
+		virtual ~GameObject();
 
 		///////////////////
 		///   Methods   ///

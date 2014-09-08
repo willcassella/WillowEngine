@@ -6,21 +6,22 @@ using namespace Willow;
 // @TODO: this needs some rethinking
 void Scene::update(float timeInterval)
 {
-	for (Prop* object : this->objects)
+	for (uint i = 0; i < objects.size(); i++)
 	{
-		object->tick(timeInterval);
+		objects[i]->tick(timeInterval * timeDilation);
 	}
 
-	for (Camera* cam : this->cameras)
+	for (uint i = 0; i < cameras.size(); i++)
 	{
-		cam->tick(timeInterval);
+		cameras[i]->tick(timeInterval * timeDilation);
 	}
 }
 
 void Scene::render() const
 {
-	for (Prop* object : this->objects)
+	for (uint i = 0; i < objects.size(); i++)
 	{
+		Prop* object = objects[i];
 		Math::Mat4 model = object->transform.getModel();
 
 		// WARNING: This assumes there is at least one camera in the scene, I will fix this later

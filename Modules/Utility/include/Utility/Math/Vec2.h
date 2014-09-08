@@ -6,7 +6,7 @@
 
 namespace Math
 {
-	struct CORE_API Vec2
+	struct UTILITY_API Vec2
 	{
 		//////////////////
 		///   Fields   ///
