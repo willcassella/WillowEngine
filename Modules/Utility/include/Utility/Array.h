@@ -6,7 +6,7 @@
 
 namespace Willow
 {
-	// A contigous container, implimented as a replacement for std::vector
+	// A contigous container, implemented as a replacement for std::vector
 	template <typename T>
 	class Array : public IEnumerable<T>
 	{
@@ -16,46 +16,84 @@ namespace Willow
 
 		Array()
 		{
-			vec = new std::vector<T>();
+			_vec = new std::vector<T>();
 		}
-
+		Array(Array<T>& copy)
+		{
+			_vec = new std::vector<T>(*copy._vec);
+		}
+		Array(Array<T>&& other)
+		{
+			this->_vec = other._vec;
+			other._vec = nullptr;
+		}
 		~Array()
 		{
-			delete vec;
+			delete _vec;
 		}
 
 		///////////////////
 		///   Methods   ///
 	public:
 
-		uint size() const override
+		size_t Size() const override
 		{
-			return (uint)vec->size();
+			return _vec->size();
 		}
-
-		void add(T item) override
+		void Add(T item) override
 		{
-			vec->push_back(item);
+			_vec->push_back(item);
+		}
+		T& First() override
+		{
+			return (*_vec)[0];
+		}
+		const T& First() const override
+		{
+			return (*_vec)[0];
+		}
+		T& Last() override
+		{
+			return (*_vec)[_vec->size() - 1];
+		}
+		const T& Last() const override
+		{
+			return (*_vec)[_vec->size() - 1];
 		}
 
 		/////////////////////
 		///   Operators   ///
 	public:
 
-		T& operator[](uint index) override
+		Array<T>& operator=(const Array<T>& rhs)
 		{
-			return (*vec)[index];
+			delete _vec;
+			_vec = new std::vector<T>(*rhs._vec);
+			return *this;
 		}
-
-		const T& operator[](uint index) const override
+		Array<T>& operator=(Array<T>&& other)
 		{
-			return (*vec)[index];
+			if (this != &other)
+			{
+				delete _vec;
+				this->_vec = other._vec;
+				other._vec = nullptr;
+			}
+			return *this;
+		}
+		T& operator[](uint32 index) override
+		{
+			return (*_vec)[index];
+		}
+		const T& operator[](uint32 index) const override
+		{
+			return (*_vec)[index];
 		}
 
 		////////////////
 		///   Data   ///
 	private:
 
-		std::vector<T>* vec;
+		std::vector<T>* _vec;
 	};
 }

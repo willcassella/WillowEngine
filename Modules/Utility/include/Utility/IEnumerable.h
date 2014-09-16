@@ -24,14 +24,18 @@ namespace Willow
 		///   Methods   ///
 	public:
 
-		virtual uint size() const = 0;
-		virtual void add(T item) = 0;
+		virtual size_t Size() const = 0;
+		virtual void Add(T item) = 0;
+		virtual T& First() = 0;
+		virtual const T& First() const = 0;
+		virtual T& Last() = 0;
+		virtual const T& Last() const = 0;
 
 		/////////////////////
 		///   Operators   ///
 	public:
 
-		virtual T& operator[](uint index) = 0;
-		virtual const T& operator[](uint index) const = 0;
+		virtual T& operator[](uint32 index) = 0;
+		virtual const T& operator[](uint32 index) const = 0;
 	};
 }

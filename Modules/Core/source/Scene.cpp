@@ -3,31 +3,34 @@
 #include "..\include\Core\Scene.h"
 using namespace Willow;
 
+///////////////////
+///   Methods   ///
+
 // @TODO: this needs some rethinking
-void Scene::update(float timeInterval)
+void Scene::Update(float timeInterval)
 {
-	for (uint i = 0; i < objects.size(); i++)
+	for (uint32 i = 0; i < Objects.Size(); i++)
 	{
-		objects[i]->tick(timeInterval * timeDilation);
+		Objects[i]->Tick(timeInterval * TimeDilation);
 	}
 
-	for (uint i = 0; i < cameras.size(); i++)
+	for (uint32 i = 0; i < Cameras.Size(); i++)
 	{
-		cameras[i]->tick(timeInterval * timeDilation);
+		Cameras[i]->Tick(timeInterval * TimeDilation);
 	}
 }
 
-void Scene::render() const
+void Scene::Render() const
 {
-	for (uint i = 0; i < objects.size(); i++)
+	for (uint32 i = 0; i < Objects.Size(); i++)
 	{
-		Prop* object = objects[i];
-		Math::Mat4 model = object->transform.getModel();
+		Prop* object = Objects[i];
+		Mat4 model = object->Transform.GetTransfomationMatrix();
 
 		// WARNING: This assumes there is at least one camera in the scene, I will fix this later
-		Math::Mat4 view = this->cameras[0]->transform.getModel().inverse();
-		Math::Mat4 proj = this->cameras[0]->getPerspective();
+		Mat4 view = this->Cameras[0]->Transform.GetTransfomationMatrix().Inverse();
+		Mat4 proj = this->Cameras[0]->GetPerspective();
 
-		object->mesh->render(model, view, proj);
+		object->mesh->Render(model, view, proj);
 	}
 }

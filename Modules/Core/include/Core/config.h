@@ -1,6 +1,9 @@
 // config.h
 #pragma once
 
+///////////////////////////////
+///   Build Configuration   ///
+
 #ifdef CORE_STATIC
 	#define IMPORT
 	#define EXPORT

@@ -11,29 +11,29 @@ namespace Willow
 		///   Information   ///
 	public:
 
-		typedef GameObject Base;
+		typedef GameObject Super;
 
 		//////////////////
 		///   Fields   ///
 	public:
 
-		float vFOV;
-		float ratio;
-		float zMin;
-		float zMax;
-		Math::Mat4 perspective;
+		float VFOV;
+		float Ratio;
+		float ZMin;
+		float ZMax;
+		Mat4 Perspective;
 
 		////////////////////////
 		///   Constructors   ///
 	public:
 
-		Camera(const String& _name = "", float vFOV = 43, float ratio = 1280.0f / 720, float zMin = 0.1f, float zMax = 90);
+		Camera(const String& name = "", float vFOV = 43.f, float ratio = 1280.f / 720.f, float zMin = 0.1f, float zMax = 90.f);
 
 		///////////////////
 		///   Methods   ///
 	public:
 
-		void tick(float timeInterval) override;
-		Math::Mat4 getPerspective() const;
+		void Tick(float timeInterval) override;
+		Mat4 GetPerspective() const;
 	};
 }

@@ -2,64 +2,59 @@
 
 #include "glew.h"
 #include "..\include\Render\Material.h"
-using namespace Render;
+using namespace Willow;
 
 ////////////////////////
 ///   Constructors   ///
 
-Material::Material(Shader& _vertex, Shader& _fragment)
+Material::Material()
 {
-	this->vertex = &_vertex;
-	this->fragment = &_fragment;
-	
-	this->id = glCreateProgram();
-
-	glAttachShader(this->id, this->vertex->getID());
-	glAttachShader(this->id, this->fragment->getID());
-
-	glBindFragDataLocation(this->id, 0, "outColor");
-	glLinkProgram(this->id);
-
-	// get matrix location
-	this->vModel = glGetUniformLocation(this->id, "vModel");
-	this->vView = glGetUniformLocation( this->id, "vView" );
-	this->vProjection = glGetUniformLocation( this->id, "vProjection" );
+	this->_id = glCreateProgram();
 }
 
 Material::~Material()
 {
-	glDeleteProgram( this->id );
+	glDeleteProgram(_id);
 }
 
-///////////////////////////////
-///   Getters and Setters   ///
+///////////////////
+///   Methods   ///
 
-BufferID Material::getID() const
+void Material::Compile()
 {
-	return this->id;
+	glAttachShader(_id, *VertexShader);
+	glAttachShader(_id, *FragmentShader);
+	glLinkProgram(_id);
+
+	glBindFragDataLocation(_id, 0, "outColor");
+
+	this->_vModel = glGetUniformLocation(_id, "vModel");
+	this->_vView = glGetUniformLocation(_id, "vView");
+	this->_vProjection = glGetUniformLocation(_id, "vProjection");
+
+	glDetachShader(_id, *VertexShader);
+	glDetachShader(_id, *FragmentShader);
 }
 
-Texture& Material::getTexture() const
+BufferID Material::GetModelID() const
 {
-	return *this->texture;
+	return _vModel;
 }
 
-void Material::setTexture(Texture& _texture)
+BufferID Material::GetViewID() const
 {
-	this->texture = &_texture;
+	return _vView;
 }
 
-BufferID Material::getModelID() const
+BufferID Material::GetProjectionID() const
 {
-	return this->vModel;
+	return _vProjection;
 }
 
-BufferID Material::getViewID() const
-{
-	return this->vView;
-}
+/////////////////////
+///   Operators   ///
 
-BufferID Material::getProjectionID() const
+Material::operator BufferID() const
 {
-	return this->vProjection;
+	return _id;
 }

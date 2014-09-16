@@ -5,140 +5,147 @@
 #include "glew.h"
 #include "..\include\Render\Vertex.h"
 #include "..\include\Render\StaticMesh.h"
-using namespace Render;
+using namespace Willow;
+
+bool LoadBinaryModel(const String& path, Array<Vertex>* outVertices, Array<BufferID>* outElements);
 
 ////////////////////////
 ///   Constructors   ///
 
-StaticMesh::StaticMesh(const Willow::String& path)
+StaticMesh::StaticMesh(const String& path)
+	: Super(path)
 {
-	loadBinaryModel(path, &this->vertices, &this->elements);
+	if (!LoadBinaryModel(path, &this->_vertices, &this->_elements))
+	{
+		this->_mat = nullptr;
+		return;
+	}
 
 	// Generate buffers and upload data
-	glGenVertexArrays(1, &this->vao);
-	glBindVertexArray(this->vao);
+	glGenVertexArrays(1, &this->_vao);
+	glBindVertexArray(this->_vao);
 	
-	glGenBuffers(1, &this->vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-	glBufferData(GL_ARRAY_BUFFER, this->vertices.size() * sizeof(Vertex), &this->vertices[0], GL_STATIC_DRAW);
+	glGenBuffers(1, &this->_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, this->_vbo);
+	glBufferData(GL_ARRAY_BUFFER, this->_vertices.Size() * sizeof(Vertex), &this->_vertices[0], GL_STATIC_DRAW);
 
-	glGenBuffers(1, &this->ebo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->elements.size() * sizeof(GLuint), &this->elements[0] , GL_STATIC_DRAW);
+	glGenBuffers(1, &this->_ebo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->_ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->_elements.Size() * sizeof(GLuint), &this->_elements[0] , GL_STATIC_DRAW);
 
-	this->mat = nullptr;
+	this->_mat = nullptr;
 
 	glBindVertexArray(0);
 }
 
 StaticMesh::~StaticMesh()
 {
-	glDeleteBuffers(1, &this->vbo);
-	glDeleteBuffers(1, &this->ebo);
-	glDeleteVertexArrays(1, &this->vao);
+	glDeleteBuffers(1, &this->_vbo);
+	glDeleteBuffers(1, &this->_ebo);
+	glDeleteVertexArrays(1, &this->_vao);
 }
 
 ///////////////////
 ///   Methods   ///
 
-void StaticMesh::render(const Math::Mat4& orientation, const Math::Mat4& view, const Math::Mat4& perspective) const
+void StaticMesh::Render(const Mat4& orientation, const Mat4& view, const Mat4& perspective) const
 {
 	// Bind the mesh
-	glBindVertexArray(this->vao);
+	glBindVertexArray(_vao);
 
 	// Bind the material
-	glUseProgram(this->getMaterial().getID());
+	glUseProgram(this->GetMaterial());
 
 	// Bind the texture
-	glBindTexture(GL_TEXTURE_2D, this->getMaterial().getTexture().getID());
+	glBindTexture(GL_TEXTURE_2D, this->GetMaterial().Textures->GetID());
 
 	// Upload the matrix to the GPU
-	glUniformMatrix4fv(this->getMaterial().getModelID(), 1, GL_FALSE, orientation[0]);
-	glUniformMatrix4fv(this->getMaterial().getViewID(), 1, GL_FALSE, view[0]);
-	glUniformMatrix4fv(this->getMaterial().getProjectionID(), 1, GL_FALSE, perspective[0]);
+	glUniformMatrix4fv(this->GetMaterial().GetModelID(), 1, GL_FALSE, orientation[0]);
+	glUniformMatrix4fv(this->GetMaterial().GetViewID(), 1, GL_FALSE, view[0]);
+	glUniformMatrix4fv(this->GetMaterial().GetProjectionID(), 1, GL_FALSE, perspective[0]);
 
 	//Draw the mesh
-	glDrawElements(GL_TRIANGLES, (GLsizei)this->getNumElements(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, (GLsizei)this->GetNumElements(), GL_UNSIGNED_INT, 0);
 
 	glBindVertexArray(0);
 }
 
-uint StaticMesh::getNumElements() const
+size_t StaticMesh::GetNumElements() const
 {
-	return this->elements.size();
+	return this->_elements.Size();
 }
 
-Material& StaticMesh::getMaterial() const
+Material& StaticMesh::GetMaterial() const
 {
-	return *this->mat;
+	return *this->_mat;
 }
 
-void StaticMesh::setMaterial(Material& _mat)
+void StaticMesh::SetMaterial(Material& mat)
 {
-	mat = &_mat;
+	_mat = &mat;
 
 	// Bind the VAO
-	glBindVertexArray( this->vao );
-	glBindBuffer( GL_ARRAY_BUFFER, this->vbo );
+	glBindVertexArray(this->_vao);
+	glBindBuffer(GL_ARRAY_BUFFER, this->_vbo);
 
 	// Set stuff
 	BufferID vPosition;
-	vPosition = glGetAttribLocation( mat->getID(), "vPosition" );
-    glEnableVertexAttribArray( vPosition );
-    glVertexAttribPointer( vPosition, 3, GL_FLOAT, GL_FALSE, sizeof( Vertex ), 0 );
+	vPosition = glGetAttribLocation(*_mat, "vPosition");
+    glEnableVertexAttribArray(vPosition);
+    glVertexAttribPointer(vPosition, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
 
-	BufferID vTexcoord = glGetAttribLocation( mat->getID(), "vTexcoord" );
-	glEnableVertexAttribArray( vTexcoord );
-	glVertexAttribPointer( vTexcoord, 2, GL_FLOAT, GL_FALSE, sizeof( Vertex ), (void*)sizeof( Math::Vec3 ) );
+	BufferID vTexcoord = glGetAttribLocation(*_mat, "vTexcoord");
+	glEnableVertexAttribArray(vTexcoord);
+	glVertexAttribPointer(vTexcoord, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(Vec3));
 
-	BufferID vNormal = glGetAttribLocation( mat->getID(), "vNormal" );
-	glEnableVertexAttribArray( vNormal );
-	glVertexAttribPointer( vNormal, 3, GL_FLOAT, GL_TRUE, sizeof( Vertex ), (void*)(sizeof( Math::Vec3) + sizeof( Math::Vec2 ) ));
+	BufferID vNormal = glGetAttribLocation(*_mat, "vNormal");
+	glEnableVertexAttribArray(vNormal);
+	glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_TRUE, sizeof(Vertex), (void*)(sizeof(Vec3) + sizeof(Vec2)));
 
-	glBindVertexArray( 0 );
+	glBindVertexArray(0);
 }
 
-// @TODO: this needs to be refactored
-bool StaticMesh::loadBinaryModel(const Willow::String& path, Willow::Array<Vertex>* out_vertices, Willow::Array<BufferID>* out_elements)
+bool LoadBinaryModel(const String& path, Array<Vertex>* outVertices, Array<BufferID>* outElements)
 {
 	// Attempt to open the file
 	std::ifstream input;
-	input.open(path, std::ios::binary | std::ios::in);
+	input.open(path.Cstr(), std::ios::binary | std::ios::in);
 
-	// Make sure the file opened sucessfully
-	if (!input.is_open()) 
+	// Make sure the file opened successfully
+	if (!input.is_open())
 	{
-		std::cout << path;
-		std::cout << " could not be opened!\n";
+		std::cout << "WARNING: '" << path << "' could not be opened\n";
 		return false;
 	}
 
 	// Get the number of vertices
 	int num_verts;
-	input.read((char*)&num_verts, sizeof(int));
+	input.read((char*)&num_verts, sizeof(int32));
 
 	// Add all the vertices
-	for (int i = 0; i < num_verts; i++) 
+	for (int32 i = 0; i < num_verts; i++)
 	{
 		Vertex newVert;
 		input.read((char*)&newVert, sizeof(Vertex));
-		out_vertices->add(newVert);
+		outVertices->Add(newVert);
 	}
 
 	// Get the number of elements
 	int num_elems;
-	input.read((char*)&num_elems, sizeof(int));
+	input.read((char*)&num_elems, sizeof(int32));
 
 	// Add all the elements
-	for (int i = 0; i < num_elems; i++) 
+	for (int i = 0; i < num_elems; i++)
 	{
 		BufferID newElem;
-		input.read((char*)&newElem, sizeof(unsigned int));
-		out_elements->add(newElem);
+		input.read((char*)&newElem, sizeof(uint32));
+		outElements->Add(newElem);
 	}
 
 	// Close the file
 	input.close();
+
+	std::cout << "'" << path << "' loaded\n";
 
 	return true;
 }

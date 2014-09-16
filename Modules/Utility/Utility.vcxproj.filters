@@ -27,9 +27,6 @@
     <ClCompile Include="source\Math\Vec3.cpp">
       <Filter>source\Math</Filter>
     </ClCompile>
-    <ClCompile Include="source\Math\Transform.cpp">
-      <Filter>source\Math</Filter>
-    </ClCompile>
     <ClCompile Include="source\String.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -39,9 +36,6 @@
       <Filter>include\Math</Filter>
     </ClInclude>
     <ClInclude Include="include\Utility\Math\Quat.h">
-      <Filter>include\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Utility\Math\Transform.h">
       <Filter>include\Math</Filter>
     </ClInclude>
     <ClInclude Include="include\Utility\Math\Vec2.h">

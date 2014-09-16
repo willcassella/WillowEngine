@@ -1,76 +1,59 @@
 // Shader.cpp
 
+#include <fstream>
+#include <string>
+#include <iostream>
 #include "glew.h"
 #include "..\include\Render\shader.h"
-using namespace Render;
-
+using namespace Willow;
 
 ////////////////////////
 ///   Constructors   ///
 
-Shader::Shader(const Willow::String& _source, ShaderType::ShaderType type)
+Shader::Shader(const String& path)
+	: Super(path)
 {
-	this->source = _source;
-	const char* temp_source = source;
-
-	switch (type)
+	// Aggregate the shader source code
+	std::ifstream file(path.Cstr());
+	std::string source;
+	std::string line;
+	while (getline(file, line))
 	{
-	case ShaderType::VERTEX_SHADER:
-		this->id = glCreateShader(GL_VERTEX_SHADER);
-		break;
-	case ShaderType::FRAGMENT_SHADER:
-		this->id = glCreateShader(GL_FRAGMENT_SHADER);
-		break;
-	case ShaderType::GEOMERTY_SHADER:
-		this->id = glCreateShader(GL_GEOMETRY_SHADER);
+		source += line + '\n';
 	}
 
-	glShaderSource(this->id, 1, &temp_source, nullptr);
-	glCompileShader(this->id);
+	// Identify the shader type
+	String type = path.GetFileExtension();
+
+	if (type == "vert")
+	{
+		this->_id = glCreateShader(GL_VERTEX_SHADER);
+	}
+	else if (type == "frag")
+	{
+		this->_id = glCreateShader(GL_FRAGMENT_SHADER);
+	}
+	else if (type == "geom")
+	{
+		this->_id = glCreateShader(GL_GEOMETRY_SHADER);
+	}
+
+	const char* tempSource = source.c_str();
+	glShaderSource(_id, 1, &tempSource, nullptr);
+	glCompileShader(_id);
+
+	std::cout << "'" << path << "' loaded\n";
 }
 
 Shader::~Shader()
 {
-	glDeleteShader(this->id);
+	glDeleteShader(this->_id);
 }
 
-///////////////////////////////
-///   Getters and Setters   ///
+/////////////////////
+///   Operators   ///
 
-BufferID Shader::getID() const
+Shader::operator BufferID() const
 {
-	return this->id;
+	return this->_id;
 }
-
-//////////////////////////
-///   Static Members   ///
-
-const Willow::String Shader::basic_vert_source =
-    "#version 330 core\n"
-    "in vec3 vPosition;"
-	"in vec3 vNormal;"
-    "in vec2 vTexcoord;"
-	"out vec3 Position;"
-	"out vec3 Normal;"
-	"out vec2 Texcoord;"
-	"uniform mat4 vModel;"
-	"uniform mat4 vView;"
-	"uniform mat4 vProjection;"
-    "void main() {"
-	"   gl_Position = vProjection * vView * vModel * vec4(vPosition, 1.0);"
-	"	Texcoord = vec2(vTexcoord.x, 1.0 - vTexcoord.y);"
-	"	Position = vPosition;"
-	"	Normal = vNormal;"
-    "}";
-
-const Willow::String Shader::basic_frag_source =
-    "#version 330 core\n"
-	"in vec3 Position;"
-	"in vec3 Normal;"
-    "in vec2 Texcoord;"
-    "out vec4 outColor;"
-    "uniform sampler2D tex;"
-	"float depth = gl_FragDepth;"
-    "void main() {"
-	"   outColor = texture(tex, Texcoord);"
-    "}";

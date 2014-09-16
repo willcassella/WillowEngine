@@ -1,7 +1,9 @@
 // Mat4.cpp
 
+#include <cmath>
+#include <cstdio>
 #include "..\..\include\Utility\Math\Mat4.h"
-using namespace Math;
+using namespace Willow;
 
 const float Deg2Rad = 0.0174532925f;
 const float Rad2Deg = 57.2957795f;
@@ -9,23 +11,21 @@ const float Rad2Deg = 57.2957795f;
 ////////////////////////
 ///   Constructors   ///
 
-// Constructor, default sets to identity matrix
-Mat4::Mat4(float aa, float ba, float ca, float da,
+Mat4::Mat4( float aa, float ba, float ca, float da,
 			float ab, float bb, float cb, float db,
 			float ac, float bc, float cc, float dc,
 			float ad, float bd, float cd, float dd )
 {
-	this->values[0][0] = aa; this->values[1][0] = ba; this->values[2][0] = ca; this->values[3][0] = da;
-	this->values[0][1] = ab; this->values[1][1] = bb; this->values[2][1] = cb; this->values[3][1] = db;
-	this->values[0][2] = ac; this->values[1][2] = bc; this->values[2][2] = cc; this->values[3][2] = dc;
-	this->values[0][3] = ad; this->values[1][3] = bd; this->values[2][3] = cd; this->values[3][3] = dd;
+	this->_values[0][0] = aa; this->_values[1][0] = ba; this->_values[2][0] = ca; this->_values[3][0] = da;
+	this->_values[0][1] = ab; this->_values[1][1] = bb; this->_values[2][1] = cb; this->_values[3][1] = db;
+	this->_values[0][2] = ac; this->_values[1][2] = bc; this->_values[2][2] = cc; this->_values[3][2] = dc;
+	this->_values[0][3] = ad; this->_values[1][3] = bd; this->_values[2][3] = cd; this->_values[3][3] = dd;
 }
 
 ///////////////////
 ///   Methods   ///
 
-// Returns the inverse of this matrix
-Mat4 Mat4::inverse() const
+Mat4 Mat4::Inverse() const
 {
 	// Based off http://www.cg.info.hiroshima-cu.ac.jp/~miyazaki/knowledge/teche23.html
 
@@ -35,157 +35,157 @@ Mat4 Mat4::inverse() const
 	///  COLUMN 1   ///
 
 	/// ROW 1
-	result.set( 0, 0,
-		values[1][1]*values[2][2]*values[3][3] +
-		values[2][1]*values[3][2]*values[1][3] +
-		values[3][1]*values[1][2]*values[2][3] -
-		values[1][1]*values[3][2]*values[2][3] -
-		values[2][1]*values[1][2]*values[3][3] -
-		values[3][1]*values[2][2]*values[1][3] );
+	result.Set( 0, 0,
+		_values[1][1]*_values[2][2]*_values[3][3] +
+		_values[2][1]*_values[3][2]*_values[1][3] +
+		_values[3][1]*_values[1][2]*_values[2][3] -
+		_values[1][1]*_values[3][2]*_values[2][3] -
+		_values[2][1]*_values[1][2]*_values[3][3] -
+		_values[3][1]*_values[2][2]*_values[1][3] );
 
 	/// ROW 2
-	result.set( 0, 1,
-		values[0][1]*values[3][2]*values[2][3] +
-		values[2][1]*values[0][2]*values[3][3] +
-		values[3][1]*values[2][2]*values[0][3] -
-		values[0][1]*values[2][2]*values[3][3] -
-		values[2][1]*values[3][2]*values[0][3] -
-		values[3][1]*values[0][2]*values[2][3] );
+	result.Set( 0, 1,
+		_values[0][1]*_values[3][2]*_values[2][3] +
+		_values[2][1]*_values[0][2]*_values[3][3] +
+		_values[3][1]*_values[2][2]*_values[0][3] -
+		_values[0][1]*_values[2][2]*_values[3][3] -
+		_values[2][1]*_values[3][2]*_values[0][3] -
+		_values[3][1]*_values[0][2]*_values[2][3] );
 
 	/// ROW 3
-	result.set( 0, 2,
-		values[0][1]*values[1][2]*values[3][3] +
-		values[1][1]*values[3][2]*values[0][3] +
-		values[3][1]*values[0][2]*values[1][3] -
-		values[0][1]*values[3][2]*values[1][3] -
-		values[1][1]*values[0][2]*values[3][3] -
-		values[3][1]*values[1][2]*values[0][3] );
+	result.Set( 0, 2,
+		_values[0][1]*_values[1][2]*_values[3][3] +
+		_values[1][1]*_values[3][2]*_values[0][3] +
+		_values[3][1]*_values[0][2]*_values[1][3] -
+		_values[0][1]*_values[3][2]*_values[1][3] -
+		_values[1][1]*_values[0][2]*_values[3][3] -
+		_values[3][1]*_values[1][2]*_values[0][3] );
 
-	/// ROW 4 (fixed)
-	result.set( 0, 3,
-		values[0][1]*values[2][2]*values[1][3] +
-		values[1][1]*values[0][2]*values[2][3] +
-		values[2][1]*values[1][2]*values[0][3] -
-		values[0][1]*values[1][2]*values[2][3] -
-		values[1][1]*values[2][2]*values[0][3] -
-		values[2][1]*values[0][2]*values[1][3] );
+	/// ROW 4
+	result.Set( 0, 3,
+		_values[0][1]*_values[2][2]*_values[1][3] +
+		_values[1][1]*_values[0][2]*_values[2][3] +
+		_values[2][1]*_values[1][2]*_values[0][3] -
+		_values[0][1]*_values[1][2]*_values[2][3] -
+		_values[1][1]*_values[2][2]*_values[0][3] -
+		_values[2][1]*_values[0][2]*_values[1][3] );
 
 	////////////////////
 	///   COLUMN 2   ///
 
 	/// ROW 1
-	result.set( 1, 0,
-		values[1][0]*values[3][2]*values[2][3] +
-		values[2][0]*values[1][2]*values[3][3] +
-		values[3][0]*values[2][2]*values[1][3] -
-		values[1][0]*values[2][2]*values[3][3] -
-		values[2][0]*values[3][2]*values[1][3] -
-		values[3][0]*values[1][2]*values[2][3] );
+	result.Set( 1, 0,
+		_values[1][0]*_values[3][2]*_values[2][3] +
+		_values[2][0]*_values[1][2]*_values[3][3] +
+		_values[3][0]*_values[2][2]*_values[1][3] -
+		_values[1][0]*_values[2][2]*_values[3][3] -
+		_values[2][0]*_values[3][2]*_values[1][3] -
+		_values[3][0]*_values[1][2]*_values[2][3] );
 
 	/// ROW 2
-	result.set( 1, 1,
-		values[0][0]*values[2][2]*values[3][3] +
-		values[2][0]*values[3][2]*values[0][3] +
-		values[3][0]*values[0][2]*values[2][3] -
-		values[0][0]*values[3][2]*values[2][3] -
-		values[2][0]*values[0][2]*values[3][3] -
-		values[3][0]*values[2][2]*values[0][3] );
+	result.Set( 1, 1,
+		_values[0][0]*_values[2][2]*_values[3][3] +
+		_values[2][0]*_values[3][2]*_values[0][3] +
+		_values[3][0]*_values[0][2]*_values[2][3] -
+		_values[0][0]*_values[3][2]*_values[2][3] -
+		_values[2][0]*_values[0][2]*_values[3][3] -
+		_values[3][0]*_values[2][2]*_values[0][3] );
 
 	/// ROW 3
-	result.set( 1, 2,
-		values[0][0]*values[3][2]*values[1][3] +
-		values[1][0]*values[0][2]*values[3][3] +
-		values[3][0]*values[1][2]*values[0][3] -
-		values[0][0]*values[1][2]*values[3][3] -
-		values[1][0]*values[3][2]*values[0][3] -
-		values[3][0]*values[0][2]*values[1][3] );
+	result.Set( 1, 2,
+		_values[0][0]*_values[3][2]*_values[1][3] +
+		_values[1][0]*_values[0][2]*_values[3][3] +
+		_values[3][0]*_values[1][2]*_values[0][3] -
+		_values[0][0]*_values[1][2]*_values[3][3] -
+		_values[1][0]*_values[3][2]*_values[0][3] -
+		_values[3][0]*_values[0][2]*_values[1][3] );
 
 	/// ROW 4
-	result.set( 1, 3,
-		values[0][0]*values[1][2]*values[2][3] +
-		values[1][0]*values[2][2]*values[0][3] +
-		values[2][0]*values[0][2]*values[1][3] -
-		values[0][0]*values[2][2]*values[1][3] -
-		values[1][0]*values[0][2]*values[2][3] -
-		values[2][0]*values[1][2]*values[0][3] );
+	result.Set( 1, 3,
+		_values[0][0]*_values[1][2]*_values[2][3] +
+		_values[1][0]*_values[2][2]*_values[0][3] +
+		_values[2][0]*_values[0][2]*_values[1][3] -
+		_values[0][0]*_values[2][2]*_values[1][3] -
+		_values[1][0]*_values[0][2]*_values[2][3] -
+		_values[2][0]*_values[1][2]*_values[0][3] );
 
 	////////////////////
 	///   COLUMN 3   ///
 
 	/// ROW 1
-	result.set( 2, 0,
-		values[1][0]*values[2][1]*values[3][3] +
-		values[2][0]*values[3][1]*values[1][3] +
-		values[3][0]*values[1][1]*values[2][3] -
-		values[1][0]*values[3][1]*values[2][3] -
-		values[2][0]*values[1][1]*values[3][3] -
-		values[3][0]*values[2][1]*values[1][3] );
+	result.Set( 2, 0,
+		_values[1][0]*_values[2][1]*_values[3][3] +
+		_values[2][0]*_values[3][1]*_values[1][3] +
+		_values[3][0]*_values[1][1]*_values[2][3] -
+		_values[1][0]*_values[3][1]*_values[2][3] -
+		_values[2][0]*_values[1][1]*_values[3][3] -
+		_values[3][0]*_values[2][1]*_values[1][3] );
 
 	/// ROW 2
-	result.set( 2, 1,
-		values[0][0]*values[3][1]*values[2][3] +
-		values[2][0]*values[0][1]*values[3][3] +
-		values[3][0]*values[2][1]*values[0][3] -
-		values[0][0]*values[2][1]*values[3][3] -
-		values[2][0]*values[3][1]*values[0][3] -
-		values[3][0]*values[0][1]*values[2][3] );
+	result.Set( 2, 1,
+		_values[0][0]*_values[3][1]*_values[2][3] +
+		_values[2][0]*_values[0][1]*_values[3][3] +
+		_values[3][0]*_values[2][1]*_values[0][3] -
+		_values[0][0]*_values[2][1]*_values[3][3] -
+		_values[2][0]*_values[3][1]*_values[0][3] -
+		_values[3][0]*_values[0][1]*_values[2][3] );
 
 	/// ROW 3
-	result.set( 2, 2,
-		values[0][0]*values[1][1]*values[3][3] +
-		values[1][0]*values[3][1]*values[0][3] +
-		values[3][0]*values[0][1]*values[1][3] -
-		values[0][0]*values[3][1]*values[1][3] -
-		values[1][0]*values[0][1]*values[3][3] -
-		values[3][0]*values[1][1]*values[0][3] );
+	result.Set( 2, 2,
+		_values[0][0]*_values[1][1]*_values[3][3] +
+		_values[1][0]*_values[3][1]*_values[0][3] +
+		_values[3][0]*_values[0][1]*_values[1][3] -
+		_values[0][0]*_values[3][1]*_values[1][3] -
+		_values[1][0]*_values[0][1]*_values[3][3] -
+		_values[3][0]*_values[1][1]*_values[0][3] );
 
 	/// ROW 4
-	result.set( 2, 3,
-		values[0][0]*values[2][1]*values[1][3] +
-		values[1][0]*values[0][1]*values[2][3] +
-		values[2][0]*values[1][1]*values[0][3] -
-		values[0][0]*values[1][1]*values[2][3] -
-		values[1][0]*values[2][1]*values[0][3] -
-		values[2][0]*values[0][1]*values[1][3] );
+	result.Set( 2, 3,
+		_values[0][0]*_values[2][1]*_values[1][3] +
+		_values[1][0]*_values[0][1]*_values[2][3] +
+		_values[2][0]*_values[1][1]*_values[0][3] -
+		_values[0][0]*_values[1][1]*_values[2][3] -
+		_values[1][0]*_values[2][1]*_values[0][3] -
+		_values[2][0]*_values[0][1]*_values[1][3] );
 
 	////////////////////
 	///   COLUMN 4   ///
 
 	/// ROW 1
-	result.set( 3, 0,
-		values[1][0]*values[3][1]*values[2][2] +
-		values[2][0]*values[1][1]*values[3][2] +
-		values[3][0]*values[2][1]*values[1][2] -
-		values[1][0]*values[2][1]*values[3][2] -
-		values[2][0]*values[3][1]*values[1][2] -
-		values[3][0]*values[1][1]*values[2][2] );
+	result.Set( 3, 0,
+		_values[1][0]*_values[3][1]*_values[2][2] +
+		_values[2][0]*_values[1][1]*_values[3][2] +
+		_values[3][0]*_values[2][1]*_values[1][2] -
+		_values[1][0]*_values[2][1]*_values[3][2] -
+		_values[2][0]*_values[3][1]*_values[1][2] -
+		_values[3][0]*_values[1][1]*_values[2][2] );
 
 	/// ROW 2
-	result.set( 3, 1,
-		values[0][0]*values[2][1]*values[3][2] +
-		values[2][0]*values[3][1]*values[0][2] +
-		values[3][0]*values[0][1]*values[2][2] -
-		values[0][0]*values[3][1]*values[2][2] -
-		values[2][0]*values[0][1]*values[3][2] -
-		values[3][0]*values[2][1]*values[0][2] );
+	result.Set( 3, 1,
+		_values[0][0]*_values[2][1]*_values[3][2] +
+		_values[2][0]*_values[3][1]*_values[0][2] +
+		_values[3][0]*_values[0][1]*_values[2][2] -
+		_values[0][0]*_values[3][1]*_values[2][2] -
+		_values[2][0]*_values[0][1]*_values[3][2] -
+		_values[3][0]*_values[2][1]*_values[0][2] );
 
 	/// ROW 3
-	result.set( 3, 2,
-		values[0][0]*values[3][1]*values[1][2] +
-		values[1][0]*values[0][1]*values[3][2] +
-		values[3][0]*values[1][1]*values[0][2] -
-		values[0][0]*values[1][1]*values[3][2] -
-		values[1][0]*values[3][1]*values[0][2] -
-		values[3][0]*values[0][1]*values[1][2] );
+	result.Set( 3, 2,
+		_values[0][0]*_values[3][1]*_values[1][2] +
+		_values[1][0]*_values[0][1]*_values[3][2] +
+		_values[3][0]*_values[1][1]*_values[0][2] -
+		_values[0][0]*_values[1][1]*_values[3][2] -
+		_values[1][0]*_values[3][1]*_values[0][2] -
+		_values[3][0]*_values[0][1]*_values[1][2] );
 
 	/// ROW 4
-	result.set( 3, 3,
-		values[0][0]*values[1][1]*values[2][2] +
-		values[1][0]*values[2][1]*values[0][2] +
-		values[2][0]*values[0][1]*values[1][2] -
-		values[0][0]*values[2][1]*values[1][2] -
-		values[1][0]*values[0][1]*values[2][2] -
-		values[2][0]*values[1][1]*values[0][2] );
+	result.Set( 3, 3,
+		_values[0][0]*_values[1][1]*_values[2][2] +
+		_values[1][0]*_values[2][1]*_values[0][2] +
+		_values[2][0]*_values[0][1]*_values[1][2] -
+		_values[0][0]*_values[2][1]*_values[1][2] -
+		_values[1][0]*_values[0][1]*_values[2][2] -
+		_values[2][0]*_values[1][1]*_values[0][2] );
 
 	return result;
 }
@@ -319,19 +319,18 @@ Mat4 Mat4::inverse() const
 //    return true;
 //}
 
-// Print the matrix to the console
-void Mat4::display() const
+void Mat4::Display() const
 {
 	// For each row
-	for(int row = 0; row < 4; row++) 
+	for(uint32 row = 0; row < 4; row++) 
 	{
 		printf("| ");
 			
 		// For each column
-		for(int col = 0; col < 4; col++) 
+		for(uint32 col = 0; col < 4; col++) 
 		{
 			// Print the value in that place
-			printf("%f  ", values[col][row]);
+			printf("%f  ", _values[col][row]);
 		}
 		// Start a new line
 		printf(" |\n");
@@ -339,8 +338,7 @@ void Mat4::display() const
 	printf("\n\n\n");
 }
 
-// Generates a perspective projection matrix
-Mat4 Mat4::perspective(float hFOV, float vFOV, float zMin, float zMax)
+Mat4 Mat4::Perspective(float hFOV, float vFOV, float zMin, float zMax)
 {
 	// Convert vertical and horizontal FOV to radians
 	float RadHFOV = hFOV * Deg2Rad;
@@ -363,30 +361,27 @@ Mat4 Mat4::perspective(float hFOV, float vFOV, float zMin, float zMax)
 		0,				0,					-1,						0 );
 }
 
-// Generates a persepctive projection matrix based off desired horizontal FOV and screen ratio
-Mat4 Mat4::perspectiveHFOV(float hFOV, float ratio, float zMin, float zMax)
+Mat4 Mat4::PerspectiveHFOV(float hFOV, float ratio, float zMin, float zMax)
 {
 	// Convert hFOV to radians
 	float RadHFOV = hFOV * Deg2Rad;
 
 	float vFOV = Rad2Deg * 2 * atan(tan(hFOV * 0.5f) * 1/ratio);
 
-	return perspective(hFOV, vFOV, zMin, zMax);
+	return Perspective(hFOV, vFOV, zMin, zMax);
 }
 
-// Generates a perspective projection matrix based off the desired vertical FOV and screen ratio
-Mat4 Mat4::perspectiveVFOV(float vFOV, float ratio, float zMin, float zMax)
+Mat4 Mat4::PerspectiveVFOV(float vFOV, float ratio, float zMin, float zMax)
 {
 	// Convert the vFOV to radians
 	float RadVFOV = vFOV * Deg2Rad;
 
 	float hFOV = Rad2Deg * 2 * atan(tan(RadVFOV * 0.5f) * ratio);
 
-	return perspective(hFOV, vFOV, zMin, zMax);
+	return Perspective(hFOV, vFOV, zMin, zMax);
 }
 
-// Generates an orthographic projection matrix
-Mat4 Mat4::orthographic(float xMin, float xMax, float yMin, float yMax, float zMin, float zMax)
+Mat4 Mat4::Orthographic(float xMin, float xMax, float yMin, float yMax, float zMin, float zMax)
 {
 	float width = xMax - xMin;
 	float height = yMax - yMin;
@@ -399,32 +394,31 @@ Mat4 Mat4::orthographic(float xMin, float xMax, float yMin, float yMax, float zM
 		0,			0,			0,			1 );
 }
 
-// Returns a translation matrix from a 3-length vector
-Mat4 Mat4::translate(const Vec3& vec)
+Mat4 Mat4::Translate(const Vec3& vec)
 {
 	return Mat4(
-		1,	0,	0,	vec.x,
-		0,	1,	0,	vec.y,
-		0,	0,	1,	vec.z,
+		1,	0,	0,	vec.X,
+		0,	1,	0,	vec.Y,
+		0,	0,	1,	vec.Z,
 		0,	0,	0,	1 );
 }
 
-// Returns a scale matrix from a 3-length vector
-Mat4 Mat4::scale(const Vec3& vec)
+Mat4 Mat4::Scale(const Vec3& vec)
 {
 	return Mat4(
-		vec.x,	0,	0,	0,
-		0,	vec.y,	0,	0,
-		0,	0,	vec.z,	0,
+		vec.X,	0,	0,	0,
+		0,	vec.Y,	0,	0,
+		0,	0,	vec.Z,	0,
 		0,	0,	0,	1	);
 }
 
-// Returns a rotation matrix from a quaternion
-Mat4 Mat4::rotate(const Quat& rot)
+Mat4 Mat4::Rotate(const Quat& rot)
 {
-	// Retreive the data members of rot
 	float x, y, z, w;
-	rot.retrieve(&x, &y, &z, &w);
+	x = rot.X;
+	y = rot.Y;
+	z = rot.Z;
+	w = rot.W;
 
 	return Mat4(
 		1 - 2*y*y - 2*z*z,	2*x*y + 2*z*w,		2*x*z - 2*y*w,		0,
@@ -436,7 +430,6 @@ Mat4 Mat4::rotate(const Quat& rot)
 /////////////////////
 ///   Operators   ///
 
-// Multiply by another matrix
 Mat4 Mat4::operator*(const Mat4& rhs) const
 {
 	Mat4 total;
@@ -444,22 +437,22 @@ Mat4 Mat4::operator*(const Mat4& rhs) const
 	// Based off http://www.open.gl/transformations
 
 	// For each row
-	for(unsigned int row = 0; row < 4; row++) 
+	for(uint32 row = 0; row < 4; row++) 
 	{
 		// For each column
-		for(unsigned int col = 0; col < 4; col++) 
+		for(uint32 col = 0; col < 4; col++) 
 		{
 			float value = 0;
 
 			// For each addition
-			for(unsigned int i = 0; i < 4; i++) 
+			for(uint32 i = 0; i < 4; i++) 
 			{
 				// add them up
-				value += values[i][row] * rhs.get(col, i);
+				value += _values[i][row] * rhs.Get(col, i);
 			}
 
 			// Assign it to the new matrix
-			total.set(col, row, value);
+			total.Set(col, row, value);
 		}
 	}
 
@@ -467,13 +460,12 @@ Mat4 Mat4::operator*(const Mat4& rhs) const
 	return total;
 }
 
-// Multiply by a 3-length vector
 Vec3 Mat4::operator*(const Vec3& rhs) const
 {
 	Vec3 result;
-	result.x = values[0][0] * rhs.x + values[1][0] * rhs.y + values[2][0] * rhs.z + values[3][0];
-	result.y = values[0][1] * rhs.x + values[1][1] * rhs.y + values[2][1] * rhs.z + values[3][1];
-	result.z = values[0][2] * rhs.x + values[1][2] * rhs.y + values[2][2] * rhs.z + values[3][2];
+	result.X = _values[0][0] * rhs.X + _values[1][0] * rhs.Y + _values[2][0] * rhs.Z + _values[3][0];
+	result.Y = _values[0][1] * rhs.X + _values[1][1] * rhs.Y + _values[2][1] * rhs.Z + _values[3][1];
+	result.Z = _values[0][2] * rhs.X + _values[1][2] * rhs.Y + _values[2][2] * rhs.Z + _values[3][2];
 
 	return result;
 }

@@ -5,7 +5,7 @@
 #include <Utility\Math\Vec3.h>
 #include "config.h"
 
-namespace Render
+namespace Willow
 {
 	struct RENDER_API Vertex
 	{
@@ -13,9 +13,9 @@ namespace Render
 		///   Fields   ///
 	public:
 
-		Math::Vec3 position;
-		Math::Vec2 coordinates;
-		Math::Vec3 normal;
+		Vec3 Position;
+		Vec2 TextureCoordinates;
+		Vec3 Normal;
 
 		/////////////////////
 		///   Operators   ///

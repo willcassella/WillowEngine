@@ -2,48 +2,39 @@
 #pragma once
 
 #include <Utility\String.h>
+#include <Resource\ResourcePtr.h>
 #include "Render.h"
 
-namespace Render
+namespace Willow
 {
-	namespace ShaderType
+	class RENDER_API Shader : public Resource
 	{
-		enum ShaderType
-		{
-			VERTEX_SHADER, FRAGMENT_SHADER, GEOMERTY_SHADER
-		};
-	}
+		///////////////////////
+		///   Information   ///
+	public:
 
-	class RENDER_API Shader
-	{
+		typedef Resource Super;
+
 		////////////////////////
 		///   Constructors   ///
 	public:
 
-		Shader(const Willow::String& _source, ShaderType::ShaderType type);
+		Shader(const String& path);
 		~Shader();
+		// @TODO: Implement move constructor, move destructor, and copy constructor
 
-		// @TODO: Impliment move constructor, move destructor, and copy constructor
-
-		///////////////////
-		///   Methods   ///
+		/////////////////////
+		///   Operators   ///
 	public:
 
-		// @TODO: Reimpliment as a cast operator?
-		BufferID getID() const;
-
-		//////////////////////////
-		///   Static Members   ///
-	public:
-
-		static const Willow::String basic_vert_source;
-		static const Willow::String basic_frag_source;
+		operator BufferID() const;
 
 		////////////////
 		///   Data   ///
 	private:
 
-		BufferID id;
-		Willow::String source;
+		BufferID _id;
 	};
+
+	template class RENDER_API ResourcePtr<Shader>;
 }

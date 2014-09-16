@@ -6,8 +6,8 @@ using namespace Willow;
 ////////////////////////
 ///   Constructors   ///
 
-Prop::Prop(const String& _name)
-	: Base(_name)
+Prop::Prop(const String& name)
+	: Super(name)
 {
 	// Do nothing
 }
@@ -15,7 +15,7 @@ Prop::Prop(const String& _name)
 ///////////////////
 ///   Methods   ///
 
-void Prop::tick(float timeInterval)
+void Prop::Tick(float timeInterval)
 {
 	// Do nothing
 }

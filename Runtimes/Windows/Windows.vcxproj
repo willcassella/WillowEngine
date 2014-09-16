@@ -66,29 +66,29 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Scripting\include;$(ProjectDir)thirdParty\glfw3\$(Platform)\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Scripting\bin;$(ProjectDir)thirdParty\glfw3\$(Platform)\lib-msvc110;C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Scripting\include;$(ProjectDir)thirdParty\glfw3\$(Platform)\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Scripting\bin;$(ProjectDir)thirdParty\glfw3\$(Platform)\lib-msvc110;C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetName>WillowEngine</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Scripting\include;$(ProjectDir)thirdParty\glfw3\$(Platform)\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Scripting\bin;$(ProjectDir)thirdParty\glfw3\$(Platform)\lib-msvc110;C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Scripting\include;$(ProjectDir)thirdParty\glfw3\$(Platform)\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Scripting\bin;$(ProjectDir)thirdParty\glfw3\$(Platform)\lib-msvc110;C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetName>WillowEngine</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Scripting\include;$(ProjectDir)thirdParty\glfw3\$(Platform)\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Scripting\bin;$(ProjectDir)thirdParty\glfw3\$(Platform)\lib-msvc110;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Scripting\include;$(ProjectDir)thirdParty\glfw3\$(Platform)\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Scripting\bin;$(ProjectDir)thirdParty\glfw3\$(Platform)\lib-msvc110;$(LibraryPath)</LibraryPath>
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetName>WillowEngine</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Scripting\include;$(ProjectDir)thirdParty\glfw3\$(Platform)\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Scripting\bin;$(ProjectDir)thirdParty\glfw3\$(Platform)\lib-msvc110;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Scripting\include;$(ProjectDir)thirdParty\glfw3\$(Platform)\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Scripting\bin;$(ProjectDir)thirdParty\glfw3\$(Platform)\lib-msvc110;$(LibraryPath)</LibraryPath>
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetName>WillowEngine</TargetName>
@@ -102,13 +102,14 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Willow_Utility.lib;Willow_Render.lib;Willow_Core.lib;glfw3dll.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Willow_Utility.lib;Willow_Resource.lib;Willow_Render.lib;Willow_Core.lib;glfw3dll.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <Profile>true</Profile>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)Modules\Utility\bin\*.dll" "$(OutDir)" /d /y
+xcopy "$(SolutionDir)Modules\Resource\bin\*.dll" "$(OutDir)" /d /y
 xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y
 xcopy "$(SolutionDir)Modules\Core\bin\*.dll" "$(OutDir)" /d /y
 xcopy "$(ProjectDir)thirdParty\glfw3\$(Platform)\lib-msvc110\glfw3.dll" "$(OutDir)" /d /y</Command>
@@ -124,13 +125,14 @@ xcopy "$(ProjectDir)thirdParty\glfw3\$(Platform)\lib-msvc110\glfw3.dll" "$(OutDi
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Willow_Utility.lib;Willow_Render.lib;Willow_Core.lib;glfw3dll.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Willow_Utility.lib;Willow_Resource.lib;Willow_Render.lib;Willow_Core.lib;glfw3dll.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <Profile>true</Profile>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)Modules\Utility\bin\*.dll" "$(OutDir)" /d /y
+xcopy "$(SolutionDir)Modules\Resource\bin\*.dll" "$(OutDir)" /d /y
 xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y
 xcopy "$(SolutionDir)Modules\Core\bin\*.dll" "$(OutDir)" /d /y
 xcopy "$(ProjectDir)thirdParty\glfw3\$(Platform)\lib-msvc110\glfw3.dll" "$(OutDir)" /d /y</Command>
@@ -152,13 +154,14 @@ xcopy "$(ProjectDir)thirdParty\glfw3\$(Platform)\lib-msvc110\glfw3.dll" "$(OutDi
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Willow_Utility.lib;Willow_Render.lib;Willow_Core.lib;glfw3dll.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Willow_Utility.lib;Willow_Resource.lib;Willow_Render.lib;Willow_Core.lib;glfw3dll.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <EntryPointSymbol>
       </EntryPointSymbol>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)Modules\Utility\bin\*.dll" "$(OutDir)" /d /y
+xcopy "$(SolutionDir)Modules\Resource\bin\*.dll" "$(OutDir)" /d /y
 xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y
 xcopy "$(SolutionDir)Modules\Core\bin\*.dll" "$(OutDir)" /d /y
 xcopy "$(ProjectDir)thirdParty\glfw3\$(Platform)\lib-msvc110\glfw3.dll" "$(OutDir)" /d /y</Command>
@@ -180,13 +183,14 @@ xcopy "$(ProjectDir)thirdParty\glfw3\$(Platform)\lib-msvc110\glfw3.dll" "$(OutDi
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Willow_Utility.lib;Willow_Render.lib;Willow_Core.lib;glfw3dll.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Willow_Utility.lib;Willow_Resource.lib;Willow_Render.lib;Willow_Core.lib;glfw3dll.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)Modules\Utility\bin\*.dll" "$(OutDir)" /d /y
+xcopy "$(SolutionDir)Modules\Resource\bin\*.dll" "$(OutDir)" /d /y
 xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y
 xcopy "$(SolutionDir)Modules\Core\bin\*.dll" "$(OutDir)" /d /y
 xcopy "$(ProjectDir)thirdParty\glfw3\$(Platform)\lib-msvc110\glfw3.dll" "$(OutDir)" /d /y</Command>

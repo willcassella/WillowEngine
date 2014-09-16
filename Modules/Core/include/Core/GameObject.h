@@ -2,8 +2,7 @@
 #pragma once
 
 #include <Utility\String.h>
-#include <Utility\Math\Transform.h>
-#include "config.h"
+#include "Transform.h"
 
 namespace Willow
 {
@@ -13,20 +12,20 @@ namespace Willow
 		///   Fields   ///
 	public:
 
-		String name;
-		Math::Transform transform;
+		String Name;
+		Transform Transform;
 
 		////////////////////////
 		///   Constructors   ///
 	public:
 
-		GameObject(const String& _name = "");
+		GameObject(const String& name = "");
 		virtual ~GameObject();
 
 		///////////////////
 		///   Methods   ///
 	public:
 
-		virtual void tick(float timeInterval) = 0;
+		virtual void Tick(float timeInterval);
 	};
 }

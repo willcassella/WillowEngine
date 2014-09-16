@@ -2,31 +2,40 @@
 #pragma once
 
 #include <Utility\String.h>
+#include <Resource\ResourcePtr.h>
 #include "Render.h"
 
-namespace Render
+namespace Willow
 {
-	class RENDER_API Texture
+	class RENDER_API Texture : public Resource
 	{
+		///////////////////////
+		///   Information   ///
+	public:
+
+		typedef Resource Super;
+
 		////////////////////////
 		///   Constructors   ///
 	public:
 
-		Texture(const Willow::String& path);
-		~Texture();
+		Texture(const String& path);
+		~Texture() override;
 
-		// @TODO: Impliment rule of five
+		// @TODO: Implement rule of five
 
 		///////////////////
 		///   Methods   ///
 	public:
 
-		BufferID getID() const;
+		BufferID GetID() const;
 
 		////////////////
 		///   Data   ///
 	private:
 
-		BufferID id;
+		BufferID _id;
 	};
+
+	template class RENDER_API ResourcePtr<Texture>;
 }

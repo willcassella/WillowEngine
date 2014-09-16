@@ -12,24 +12,24 @@ namespace Willow
 		///   Information   ///
 	public:
 
-		typedef GameObject Base;
+		typedef GameObject Super;
 
 		//////////////////
 		///   Fields   ///
 	public:
 
-		Render::StaticMesh* mesh;
+		ResourcePtr<StaticMesh> mesh;
 
 		////////////////////////
 		///   Constructors   ///
 	public:
 
-		Prop(const String& _name);
+		Prop(const String& name);
 
 		///////////////////
 		///   Methods   ///
 	public:
 
-		void tick(float timeInterval) override;
+		void Tick(float timeInterval) override;
 	};
 }

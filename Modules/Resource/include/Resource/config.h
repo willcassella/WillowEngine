@@ -4,8 +4,8 @@
 ///////////////////////////////
 ///   Build Configuration   ///
 
-#ifdef RENDER_STATIC
-	#define IMPORT extern
+#ifdef RESOURCE_STATIC
+	#define IMPORT
 	#define EXPORT
 #else
 	#ifdef WIN32
@@ -17,8 +17,8 @@
 	#endif
 #endif
 
-#ifdef RENDER_BUILD
-	#define RENDER_API EXPORT
+#ifdef RESOURCE_BUILD
+	#define RESOURCE_API EXPORT
 #else
-	#define RENDER_API IMPORT
+	#define RESOURCE_API IMPORT
 #endif

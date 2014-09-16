@@ -17,15 +17,15 @@ namespace Willow
 		///   Fields   ///
 	public:
 
-		float timeDilation = 1.0f;
-		Array<Prop*> objects;
-		Array<Camera*> cameras;
+		float TimeDilation = 1.0f;
+		Array<Prop*> Objects;
+		Array<Camera*> Cameras;
 
 		///////////////////
 		///   Methods   ///
 	public:
 
-		void update(float timeInterval);
-		void render() const;
+		void Update(float timeInterval);
+		void Render() const;
 	};
 }

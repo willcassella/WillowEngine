@@ -6,26 +6,26 @@ using namespace Willow;
 ////////////////////////
 ///   Constructors   ///
 
-Camera::Camera(const String& _name, float _vFOV, float _ratio, float _zMin, float _zMax)
-	: Base(_name)
+Camera::Camera(const String& name, float vFOV, float ratio, float zMin, float zMax)
+	: Super(name)
 {
-	this->vFOV = _vFOV;
-	this->ratio = _ratio;
-	this->zMin = _zMin;
-	this->zMax = _zMax;
+	this->VFOV = vFOV;
+	this->Ratio = ratio;
+	this->ZMin = zMin;
+	this->ZMax = zMax;
 
-	this->perspective = Math::Mat4::perspectiveVFOV(vFOV, ratio, zMin, zMax);
+	this->Perspective = Mat4::PerspectiveVFOV(VFOV, Ratio, ZMin, ZMax);
 }
 
 ///////////////////
 ///   Methods   ///
 
-void Camera::tick(float timeInterval)
+void Camera::Tick(float timeInterval)
 {
-	this->transform.translate(Math::Vec3(timeInterval), false);
+	this->Transform.Translate(Vec3(timeInterval), false);
 }
 
-Math::Mat4 Camera::getPerspective() const
+Mat4 Camera::GetPerspective() const
 {
-	return perspective;
+	return Perspective;
 }

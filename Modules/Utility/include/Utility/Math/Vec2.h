@@ -1,10 +1,9 @@
 // Vec2.h
 #pragma once
 
-#include <cmath>
 #include "..\config.h"
 
-namespace Math
+namespace Willow
 {
 	struct UTILITY_API Vec2
 	{
@@ -12,39 +11,39 @@ namespace Math
 		///   Fields   ///
 	public:
 
-		float x, y;
+		float X, Y;
 
 		////////////////////////
 		///   Constructors   ///
 	public:
 
-		Vec2(float _x = 0, float _y = 0);
+		Vec2(float x = 0.f, float y = 0.f);
 
 		///////////////////
 		///   Methods   ///
 	public:
 
 		// Returns the length of this vector
-		float length() const;
+		float Length() const;
 
 		// Returns the normalized version of this vector
-		Vec2 normalize() const;
+		Vec2 Normalize() const;
 
 		// Calculates the dot product of this and another vector
-		static float dot(const Vec2& a, const Vec2& b);
+		static float Dot(const Vec2& a, const Vec2& b);
 
 		// @TODO: Add cross product
 
 		// Calculates the angle between two vectors
-		static float angle(const Vec2& a, const Vec2& b);
+		static float Angle(const Vec2& a, const Vec2& b);
 
 		////////////////////////////
 		///   Static Instances   ///
 	public:
 
-		static const Vec2 ZERO;
-		static const Vec2 UP;
-		static const Vec2 RIGHT;
+		static const Vec2 Zero;
+		static const Vec2 Up;
+		static const Vec2 Right;
 
 		/////////////////////
 		///   Operators   ///
@@ -72,16 +71,16 @@ namespace Math
 
 		// @TODO: impliment operator*=(int rhs)
 
-		// Returns TRUE if this vector is equivilent to another vector
+		// Returns TRUE if this vector is equivalent to another vector
 		inline bool operator==(const Vec2& rhs) const
 		{
-			return x == rhs.x && y == rhs.y;
+			return X == rhs.X && Y == rhs.Y;
 		}
 
-		// Returns TRUE of this vector is NOT equivilent to another vector
+		// Returns TRUE of this vector is NOT equivalent to another vector
 		inline bool operator!=(const Vec2& rhs) const
 		{
-			return x != rhs.x || y != rhs.y;
+			return X != rhs.X || Y != rhs.Y;
 		}
 	};
 }

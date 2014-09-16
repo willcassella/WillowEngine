@@ -22,6 +22,9 @@
     <ClCompile Include="source\GameObject.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="source\Transform.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Core\Camera.h">
@@ -40,6 +43,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Core\Scene.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Transform.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

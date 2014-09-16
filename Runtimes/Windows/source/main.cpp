@@ -42,11 +42,8 @@ int main(int argc, char* argv[])
 	// Make an openGL context in window
 	glfwMakeContextCurrent(window);
 
-	//Initialize the scripting engine
-	//InitScriptingModule();
-
 	//Initialize the renderer
-	Render::InitRenderer(Render::API::API_OPENGL);
+	InitRenderer(API::OpenGL);
 
 	///////////////////////////////
 	///   Setting up a simple   ///
@@ -58,60 +55,55 @@ int main(int argc, char* argv[])
 	Prop gun("gun");
 	Prop crosshairs("crosshairs");
 
-	//Create a simple mesh to render
-	Render::StaticMesh sponza_mesh("sponza.dat");
-	Render::StaticMesh gun_mesh("battle_rifle.dat");
-	Render::StaticMesh crosshairs_mesh("battle_rifle_crosshairs.dat");
+	sponza.mesh = "data/sponza.dat";
+	gun.mesh = "data/battle_rifle.dat";
+	crosshairs.mesh = "data/battle_rifle_crosshairs.dat";
 
-	Render::Shader frag(Render::Shader::basic_frag_source, Render::ShaderType::FRAGMENT_SHADER);
-	Render::Shader vert(Render::Shader::basic_vert_source, Render::ShaderType::VERTEX_SHADER);
+	Material sponza_mat;
+	sponza_mat.VertexShader = "data/Default.vert";
+	sponza_mat.FragmentShader = "data/Default.frag";
+	sponza_mat.Textures = "data/sponza_tex.png";
+	sponza_mat.Compile();
 
-	Render::Material sponza_mat(vert, frag);
-	Render::Material gun_mat(vert, frag);
-	Render::Material crosshairs_mat(vert, frag);
+	Material gun_mat;
+	gun_mat.VertexShader = "data/Default.vert";
+	gun_mat.FragmentShader = "data/Default.frag";
+	gun_mat.Textures = "data/battle_rifle_tex.png";
+	gun_mat.Compile();
 
-	Render::Texture sponza_tex ("sponza_tex.png");
-	sponza_mat.setTexture(sponza_tex);
+	Material crosshairs_mat;
+	crosshairs_mat.VertexShader = "data/Default.vert";
+	crosshairs_mat.FragmentShader = "data/Default.frag";
+	crosshairs_mat.Textures = "data/battle_rifle_crosshair_tex.png";
+	crosshairs_mat.Compile();
 
-	Render::Texture gun_tex("battle_rifle_tex.png");
-	gun_mat.setTexture(gun_tex);
-
-	Render::Texture crosshairs_tex("battle_rifle_crosshair_tex.png");
-	crosshairs_mat.setTexture(crosshairs_tex);
-
-	sponza_mesh.setMaterial(sponza_mat);
-	gun_mesh.setMaterial(gun_mat);
-	crosshairs_mesh.setMaterial(crosshairs_mat);
-
-	sponza.mesh = &sponza_mesh;
-	gun.mesh = &gun_mesh;
-	crosshairs.mesh = &crosshairs_mesh;
+	sponza.mesh->SetMaterial(sponza_mat);
+	gun.mesh->SetMaterial(gun_mat);
+	crosshairs.mesh->SetMaterial(crosshairs_mat);
 
 	Camera cam("Camera", 43, float(window_width)/window_height, 0.01f, 90.0f);
 
-	cam.transform.position.z = 4;
-	cam.transform.position.y = 0;
+	cam.Transform.Location.Z = 4;
+	cam.Transform.Location.Y = 0;
 
-	gun.transform.scale = Math::Vec3(0.2f, 0.2f, 0.2f);
-	gun.transform.position.x = 0.08f;
-	gun.transform.position.z = -0.17f;
-	gun.transform.position.y = -0.14f;
-	gun.transform.rotate(Math::Vec3::UP, -3.14159f/2, false);
-	gun.transform.rotate(Math::Vec3::RIGHT, 3.14159f/25, false);
-	gun.transform.parent = &cam.transform;
+	gun.Transform.Scale3D = Vec3(0.2f, 0.2f, 0.2f);
+	gun.Transform.Location.X = 0.08f;
+	gun.Transform.Location.Z = -0.17f;
+	gun.Transform.Location.Y = -0.14f;
+	gun.Transform.Rotate(Vec3::Up, -3.14159f/2, false);
+	gun.Transform.Rotate(Vec3::Right, 3.14159f/25, false);
+	gun.Transform.Parent = &cam.Transform;
 
-	crosshairs.transform.scale = Math::Vec3(0.13f, 0.13f, 0.13f);
-	crosshairs.transform.position.z = -1;
-	crosshairs.transform.position.y = -0.02f;
-	crosshairs.transform.rotate(Math::Vec3::RIGHT, -3.14159f/2, false);
-	crosshairs.transform.parent = &cam.transform;
+	//crosshairs.Transform.Scale3D = Vec3(0.13f, 0.13f, 0.13f);
+	crosshairs.Transform.Location.Z = -1;
+	crosshairs.Transform.Location.Y = -0.02f;
+	crosshairs.Transform.Rotate(Vec3::Right, -3.14159f/2, false);
+	crosshairs.Transform.Parent = &cam.Transform;
 
-	testScene.objects.add(&sponza);
-	testScene.objects.add(&gun);
-	testScene.objects.add(&crosshairs);
-	testScene.cameras.add(&cam);
-
-
+	testScene.Objects.Add(&sponza);
+	testScene.Objects.Add(&gun);
+	testScene.Objects.Add(&crosshairs);
+	testScene.Cameras.Add(&cam);
 
 
 	//Execute the main event loops
@@ -125,17 +117,17 @@ int main(int argc, char* argv[])
 
 GLFWwindow* InitGLFW()
 {
-	//Initailize GLFW
+	//Initialize GLFW
 	if (!glfwInit())
 	{
 		exit(EXIT_FAILURE);
 	}
 	
 	// Make the window invisible
-	glfwWindowHint( GLFW_VISIBLE, false );
+	glfwWindowHint(GLFW_VISIBLE, false);
 
-	glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
-	glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 3 );
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
 	GLFWwindow* window = glfwCreateWindow(window_width, window_height, 
 		title, NULL, NULL);
@@ -168,7 +160,7 @@ GLFWwindow* InitGLFW()
 	//Set the window callbacks
 	glfwSetWindowSizeCallback(window, windowSizeCallback);
 
-	// Create the frambuffer and viewport
+	// Create the frame buffer and viewport
 	glfwGetFramebufferSize(window, &window_width, &window_height);
 	glViewport(0, 0, window_width, window_height);
 
@@ -198,12 +190,12 @@ void eventLoop(GLFWwindow* window, Willow::Scene& scene)
 		}
 
 		// Update the scene
-		scene.update((float)(currentTime - frameTime));
+		scene.Update((float)(currentTime - frameTime));
 		frameTime = glfwGetTime();
 
 		//render the frame
-		Render::clearBuffer();
-		scene.render();
+		Willow::ClearBuffer();
+		scene.Render();
 		glfwSwapBuffers(window);
 	}
 	std::cout << "Leaving event loop... " << std::endl;

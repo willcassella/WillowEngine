@@ -2,51 +2,55 @@
 #pragma once
 
 #include <Utility\String.h>
-#include <Utility\Array.h>
 #include <Utility\Math\Mat4.h>
 #include "Material.h"
 #include "Vertex.h"
 
-namespace Render
+namespace Willow
 {
-	template class RENDER_API Willow::Array < Vertex >;
-	template class RENDER_API Willow::Array < BufferID >;
+	template class RENDER_API Array<Vertex>;
+	template class RENDER_API Array<BufferID>;
 
-	class RENDER_API StaticMesh
+	class RENDER_API StaticMesh : public Resource
 	{
+		///////////////////////
+		///   Information   ///
+	public:
+
+		typedef Resource Super;
+
 		////////////////////////
 		///   Constructors   ///
 	public:
 
-		StaticMesh(const Willow::String& path);
-		~StaticMesh();
-
-		// @TODO: impliment rule of five
+		StaticMesh(const String& path);
+		~StaticMesh() override;
+		// @TODO: implement rule of five
 
 		///////////////////
 		///   Methods   ///
 	public:
 
-		// Render the mesh at a specific orienation, view, and perspective
-		void render(const Math::Mat4& orientation, const Math::Mat4& view, const Math::Mat4& perspective) const;
-		uint getNumElements() const;
-		Material& getMaterial() const;
-		void setMaterial(Material& _material);
-
-		// This should be refactored in the future
-		static bool loadBinaryModel(const Willow::String& path, Willow::Array<Vertex>* out_vertices, Willow::Array<BufferID>* out_elements);
+		// Render the mesh at a specific orientation, view, and perspective
+		void Render(const Mat4& orientation, const Mat4& view, const Mat4& perspective) const;
+		size_t GetNumElements() const;
+		Material& GetMaterial() const;
+		void SetMaterial(Material& material);
 
 		////////////////
 		///   Data   ///
 	private:
 
-		BufferID vao;
-		BufferID vbo;
-		BufferID ebo;
+		BufferID _vao;
+		BufferID _vbo;
+		BufferID _ebo;
 
-		Willow::Array<Vertex> vertices;
-		Willow::Array<BufferID> elements;
+		Array<Vertex> _vertices;
+		Array<BufferID> _elements;
 
-		Material* mat;
+		// @TODO: replace with ResourcePtr<Material>
+		Material* _mat;
 	};
+
+	template class RENDER_API ResourcePtr<StaticMesh>;
 }

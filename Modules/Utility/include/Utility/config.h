@@ -27,4 +27,13 @@
 ///   Definitions   ///
 
 #define interface class
-typedef unsigned int uint;
+
+// char is still char
+typedef short int16;
+typedef int int32;
+// long is not used
+typedef __int64 int64;
+typedef unsigned char byte;
+typedef unsigned short uint16;
+typedef unsigned int uint32;
+// unsigned long is not used

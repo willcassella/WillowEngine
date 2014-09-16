@@ -4,43 +4,51 @@
 #include "Shader.h"
 #include "Texture.h"
 
-namespace Render
+namespace Willow
 {
+	// @TODO: Implement Resource
 	class RENDER_API Material
 	{
+		//////////////////
+		///   Fields   ///
+	public:
+
+		ResourcePtr<Shader> VertexShader;
+		ResourcePtr<Shader> FragmentShader;
+		// @TODO: Replace with List<ResourcePtr<Texture>>
+		ResourcePtr<Texture> Textures;
+
 		////////////////////////
 		///   Constructors   ///
 	public:
 
-		Material(Shader& _vertex, Shader& _fragment);
+		Material();
 		~Material();
-
-		// @TODO: impliment rule of five
+		// @TODO: implement rule of five
 
 		///////////////////
 		///   Methods   ///
 	public:
 
-		BufferID getID() const;
-		Texture& getTexture() const;
-		void setTexture(Texture& _texture);
-		BufferID getModelID() const;
-		BufferID getViewID() const;
-		BufferID getProjectionID() const;
+		// @TODO: This needs work
+		void Compile();
+		BufferID GetModelID() const;
+		BufferID GetViewID() const;
+		BufferID GetProjectionID() const;
 
-		// @TODO: impliment material duplication
+		/////////////////////
+		///   Operators   ///
+	public:
+
+		operator BufferID() const;
 
 		////////////////
 		///   Data   ///
 	private:
 
-		BufferID id;
-		BufferID vModel;
-		BufferID vView;
-		BufferID vProjection;
-
-		Texture* texture;
-		Shader* vertex;
-		Shader* fragment;
+		BufferID _id;
+		BufferID _vModel;
+		BufferID _vView;
+		BufferID _vProjection;
 	};
 }

@@ -13,6 +13,6 @@ namespace Willow
 		///   Fields   ///
 	public:
 
-		Scene currentScene;
+		Scene CurrentScene;
 	};
 }

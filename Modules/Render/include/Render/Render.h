@@ -1,19 +1,20 @@
 // Render.h
 #pragma once
 
+#include <Utility\config.h>
 #include "config.h"
 
-namespace Render
+namespace Willow
 {
-	typedef unsigned int BufferID;
-	typedef unsigned int GValue;
+	typedef uint32 BufferID;
+	typedef uint32 GValue;
 
 	namespace API
 	{
 		enum API
 		{
-			API_NULL,
-			API_OPENGL
+			Null,
+			OpenGL
 		};
 	}
 
@@ -21,5 +22,5 @@ namespace Render
 	RENDER_API void InitRenderer(API::API API);
 
 	// Clear the screen for a new image
-	RENDER_API void clearBuffer();
+	RENDER_API void ClearBuffer();
 }

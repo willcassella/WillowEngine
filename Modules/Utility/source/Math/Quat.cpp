@@ -1,7 +1,8 @@
 // Quat.cpp
 
+#include <cmath>
 #include "..\..\include\Utility\Math\Quat.h"
-using namespace Math;
+using namespace Willow;
 
 ////////////////////////
 ///   Constructors   ///
@@ -9,7 +10,10 @@ using namespace Math;
 // Default constructor
 Quat::Quat()
 {
-	this->x = 0; this->y = 0; this->z = 0; this->w = 1;
+	this->X = 0;
+	this->Y = 0;
+	this->Z = 0;
+	this->W = 1;
 }
 
 // Custom constructor
@@ -17,20 +21,19 @@ Quat::Quat(const Vec3& axis, float angle)
 {
 	// Based off http://www.cprogramming.com/tutorial/3d/quaternions.html
 	// Make sure the axis vector is normalized
-	Vec3 kNormAxis = axis.normalize();
+	Vec3 kNormAxis = axis.Normalize();
 	float kSinHalfAngle = std::sinf(angle * 0.5f);
 
-	this->w = std::cosf(angle / 2);
-	this->x = kNormAxis.x * kSinHalfAngle;
-	this->y = kNormAxis.y * kSinHalfAngle;
-	this->z = kNormAxis.z * kSinHalfAngle;
+	this->W = std::cosf(angle / 2);
+	this->X = kNormAxis.X * kSinHalfAngle;
+	this->Y = kNormAxis.Y * kSinHalfAngle;
+	this->Z = kNormAxis.Z * kSinHalfAngle;
 }
 
 ///////////////////
 ///   Methods   ///
 
-// Rotate this quaternion by and axis and angle
-void Quat::rotateByAxisAngle(const Vec3& axis, float angle, bool local)
+void Quat::RotateByAxisAngle(const Vec3& axis, float angle, bool local)
 {
 	// Construct a quaternion from the axis and angle
 	Quat rotation(axis, angle);
@@ -47,24 +50,17 @@ void Quat::rotateByAxisAngle(const Vec3& axis, float angle, bool local)
 	}
 }
 
-// Returns the data members of this quaternion to external variables
-void Quat::retrieve(float* const X, float* const Y, float* const Z, float* const W) const
-{
-	*X = x; *Y = y; *Z = z; *W = w;
-}
-
 /////////////////////
 ///   Operators   ///
 
-// Returns the quaternion result of one quaternion multiplied by another (rotation)
 Quat Quat::operator*(const Quat& quat) const
 {
-	// implimented as described at http://www.cprogramming.com/tutorial/3d/quaternions.html
+	// implemented as described at http://www.cprogramming.com/tutorial/3d/quaternions.html
 	Quat total;
-	total.w = w * quat.w - x * quat.x - y * quat.y - z * quat.z;
-	total.x = w * quat.x + x * quat.w + y * quat.z - z * quat.y;
-	total.y = w * quat.y - x * quat.z + y * quat.w + z * quat.x;
-	total.z = w * quat.z + x * quat.y - y * quat.x + z * quat.w;
+	total.Z = W * quat.W - X * quat.Z - Y * quat.Y - Z * quat.Z;
+	total.X = W * quat.X + X * quat.W + Y * quat.Z - Z * quat.Y;
+	total.Y = W * quat.Y - X * quat.Z + Y * quat.W + Z * quat.X;
+	total.Z = W * quat.Z + X * quat.Y - Y * quat.X + Z * quat.W;
 
 	return total;
 }

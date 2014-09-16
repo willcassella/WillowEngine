@@ -3,12 +3,20 @@
 #include "..\include\Core\GameObject.h"
 using namespace Willow;
 
-GameObject::GameObject(const String& _name)
+////////////////////////
+///   Constructors   ///
+
+GameObject::GameObject(const String& name)
 {
-	this->name = _name;
+	this->Name = name;
 }
 
 GameObject::~GameObject()
+{
+	// Do nothing
+}
+
+void GameObject::Tick(float timeInterval)
 {
 	// Do nothing
 }

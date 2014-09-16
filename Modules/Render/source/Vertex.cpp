@@ -1,51 +1,43 @@
 // Vertex.cpp
 
 #include "..\include\Render\Vertex.h"
-using namespace Render;
+using namespace Willow;
 
 /////////////////////
 ///   Operators   ///
 
 bool Vertex::operator==(const Vertex& rhs)
 {
-	// Check position
-	if (position != rhs.position)
+	if (Position != rhs.Position)
 	{
 		return false;
 	}
-	// Check coordinates
-	if (coordinates != rhs.coordinates)
+	if (TextureCoordinates != rhs.TextureCoordinates)
 	{
 		return false;
 	}
-	// Check normal
-	if (normal != rhs.normal)
+	if (Normal != rhs.Normal)
 	{
 		return false;
 	}
 
-	// They all must have checked out
 	return true;
 }
 
 bool Vertex::operator!=(const Vertex& rhs)
 {
-	// Check position
-	if (position != rhs.position)
+	if (Position != rhs.Position)
 	{
 		return true;
 	}
-	// Check coordinates
-	if (coordinates != rhs.coordinates)
+	if (TextureCoordinates != rhs.TextureCoordinates)
 	{
 		return true;
 	}
-	// Check normal
-	if (normal != rhs.normal)
+	if (Normal != rhs.Normal)
 	{
 		return true;
 	}
 
-	// They must have all been equal
 	return false;
 }
