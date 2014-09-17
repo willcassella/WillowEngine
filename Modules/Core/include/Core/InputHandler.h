@@ -2,15 +2,16 @@
 #pragma once
 
 #include <Utility\String.h>
-#include <Utility\AssociativeArray.h>
+#include <Utility\Table.h>
 #include <Utility\Array.h>
 #include "InputDispatcher.h"
 
 namespace Willow
 {
-	template class CORE_API AssociativeArray<String, Array<IInputDispatcher*>>;
+	template class CORE_API Table<String, Array<IInputDispatcher*>>;
 
 	// @TODO: Make this a component instead of a member?
+	// @TODO: Make it so that there doesn't need to be an instance of this for each class
 	class CORE_API InputHandler
 	{
 		////////////////////////
@@ -62,6 +63,6 @@ namespace Willow
 		///   Data   ///
 	private:
 
-		AssociativeArray<String, Array<IInputDispatcher*>> _dispatchers;
+		Table<String, Array<IInputDispatcher*>> _dispatchers;
 	};
 }

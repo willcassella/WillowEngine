@@ -56,7 +56,7 @@
     <ClInclude Include="include\Utility\Array.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Utility\AssociativeArray.h">
+    <ClInclude Include="include\Utility\Table.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

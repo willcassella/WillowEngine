@@ -149,7 +149,7 @@
     <ClCompile Include="source\String.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Utility\AssociativeArray.h" />
+    <ClInclude Include="include\Utility\Table.h" />
     <ClInclude Include="include\Utility\config.h" />
     <ClInclude Include="include\Utility\IEnumerable.h" />
     <ClInclude Include="include\Utility\Math\Mat4.h" />

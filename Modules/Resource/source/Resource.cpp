@@ -1,10 +1,10 @@
 // Resource.cpp
 
-#include <map>
+#include <Utility\Table.h>
 #include "..\include\Resource\Resource.h"
 using namespace Willow;
 
-static std::map<String, Resource*> LoadedResources;
+static Table<String, Resource*> LoadedResources;
 
 ////////////////////////
 ///   Constructors   ///
@@ -30,7 +30,7 @@ String Resource::GetPath() const
 
 Resource* Resource::FindLoadedResource(const String& path)
 {
-	if (LoadedResources.find(path) == LoadedResources.end())
+	if (!LoadedResources.HasKey(path))
 	{
 		return nullptr;
 	}

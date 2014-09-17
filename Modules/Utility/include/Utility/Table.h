@@ -1,4 +1,4 @@
-// AssociativeArray.h
+// Table.h
 #pragma once
 
 #include <map>
@@ -6,27 +6,27 @@
 namespace Willow
 {
 	template <typename KeyType, typename ValueType>
-	class AssociativeArray
+	class Table
 	{
 		////////////////////////
 		///   Constructors   ///
 	public:
 
-		AssociativeArray()
+		Table()
 		{
 			_map = new std::map<KeyType, ValueType>;
 		}
-		AssociativeArray(const AssociativeArray& copy)
+		Table(const Table& copy)
 		{
 			delete _map;
 			_map = new std::map<KeyType, ValueType>(*copy._map);
 		}
-		AssociativeArray(AssociativeArray&& other)
+		Table(Table&& other)
 		{
 			_map = other._map;
 			other._map = nullptr;
 		}
-		~AssociativeArray()
+		~Table()
 		{
 			delete _map;
 		}

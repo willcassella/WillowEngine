@@ -117,7 +117,7 @@ GLFWwindow* InitGLFW()
 	// Make the window invisible
 	glfwWindowHint(GLFW_VISIBLE, false);
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
 	GLFWwindow* window = glfwCreateWindow(window_width, window_height, 

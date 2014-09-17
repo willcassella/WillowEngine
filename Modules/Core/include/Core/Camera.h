@@ -33,13 +33,12 @@ namespace Willow
 		///   Methods   ///
 	public:
 
-		void Tick(float timeInterval) override;
 		Mat4 GetPerspective() const;
 
 		///////////////////
 		///   Actions   ///
 	public:
 
-		void MoveForward(float value);
+		void MoveForward();
 	};
 }
