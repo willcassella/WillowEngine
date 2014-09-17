@@ -1,7 +1,7 @@
 // GameObject.h
 #pragma once
 
-#include <Utility\String.h>
+#include "InputHandler.h"
 #include "Transform.h"
 
 namespace Willow
@@ -14,6 +14,7 @@ namespace Willow
 
 		String Name;
 		Transform Transform;
+		InputHandler InputHandler;
 
 		////////////////////////
 		///   Constructors   ///

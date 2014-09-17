@@ -9,7 +9,7 @@ using namespace Willow;
 
 Vec3::Vec3(float x, float y, float z)
 {
-	this->X = x; this->Y = z; this->Z = z;
+	this->X = x; this->Y = y; this->Z = z;
 }
 
 ///////////////////

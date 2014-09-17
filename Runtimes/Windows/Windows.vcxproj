@@ -202,12 +202,6 @@ xcopy "$(ProjectDir)thirdParty\glfw3\$(Platform)\lib-msvc110\glfw3.dll" "$(OutDi
   <ItemGroup>
     <ClCompile Include="source\main.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="resources\resource.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="resources\Windows.rc" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

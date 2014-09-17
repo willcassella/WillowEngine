@@ -109,7 +109,7 @@ size_t String::Length(const char* string)
 String& String::operator=(const String& rhs)
 {
 	delete[] _value;
-	this->_value = new char[rhs.Length()];
+	this->_value = new char[rhs.Length() + 1];
 	strcpy(_value, rhs._value);
 	return *this;
 }
@@ -125,95 +125,41 @@ String& String::operator=(String&& other)
 	return *this;
 }
 
-//String& String::operator=(const char* rhs)
-//{
-//	delete[] _value;
-//	this->_value = new char[String::Length(rhs)];
-//	strcpy(_value, rhs);
-//	return *this;
-//}
-
 String& String::operator+=(const String& rhs)
 {
-	/*char* tempValue = new char[this->Length() + rhs.Length() + 1];
-	strcpy(tempValue, _value);
-	strcat(tempValue, rhs._value);
-	delete[] _value;
-	_value = tempValue;
-	return *this;*/
 	*this = *this + rhs;
 	return *this;
 }
-
-//String& String::operator+=(const char* rhs)
-//{
-//	char* tempValue = new char[this->Length() + String::Length(rhs) + 1];
-//	strcpy(tempValue, _value);
-//	strcat(tempValue, rhs);
-//	delete[] _value;
-//	_value = tempValue;
-//	return *this;
-//}
 
 bool Willow::operator==(const String& lhs, const String& rhs)
 {
 	return strcmp(lhs._value, rhs._value) == 0;
 }
 
-//bool Willow::operator==(const String& lhs, const char* rhs)
-//{
-//	return strcmp(lhs._value, rhs) == 0;
-//}
-
-//bool Willow::operator==(const char* lhs, const String& rhs)
-//{
-//	return strcmp(lhs, rhs._value) == 0;
-//}
-
 bool Willow::operator!=(const String& lhs, const String& rhs)
 {
 	return strcmp(lhs._value, rhs._value) != 0;
 }
-
-//bool Willow::operator!=(const String& lhs, const char* rhs)
-//{
-//	return strcmp(lhs._value, rhs) != 0;
-//}
-
-//bool Willow::operator!=(const char* lhs, const String& rhs)
-//{
-//	return strcmp(lhs, rhs._value) != 0;
-//}
 
 bool Willow::operator>(const String& lhs, const String& rhs)
 {
 	return strcmp(lhs._value, rhs._value) > 0;
 }
 
-//bool Willow::operator>(const String& lhs, const char* rhs)
-//{
-//	return strcmp(lhs._value, rhs) > 0;
-//}
-
-//bool Willow::operator>(const char* lhs, const String& rhs)
-//{
-//	return strcmp(lhs, rhs._value) > 0;
-//}
+bool Willow::operator>=(const String& lhs, const String& rhs)
+{
+	return lhs > rhs || lhs == rhs;
+}
 
 bool Willow::operator<(const String& lhs, const String& rhs)
 {
 	return strcmp(lhs._value, rhs._value) < 0;
 }
 
-//bool Willow::operator<(const String& lhs, const char* rhs)
-//{
-//	return strcmp(lhs._value, rhs) < 0;
-//}
-
-//bool Willow::operator<(const char* lhs, const String& rhs)
-//{
-//	return strcmp(lhs, rhs._value) < 0;
-//}
+bool Willow::operator<=(const String& lhs, const String& rhs)
+{
+	return lhs < rhs || lhs == rhs;
+}
 
 String Willow::operator+(const String& lhs, const String& rhs)
 {
@@ -222,22 +168,6 @@ String Willow::operator+(const String& lhs, const String& rhs)
 	strcat(string, rhs._value);
 	return string;
 }
-
-//String Willow::operator+(const String& lhs, const char* rhs)
-//{
-//	char* string = new char[lhs.Length() + String::Length(rhs) + 1];
-//	strcpy(string, lhs._value);
-//	strcat(string, rhs);
-//	return string;
-//}
-
-//String Willow::operator+(const char* lhs, const String& rhs)
-//{
-//	char* string = new char[String::Length(lhs), rhs.Length() + 1];
-//	strcpy(string, lhs);
-//	strcat(string, rhs._value);
-//	return string;
-//}
 
 std::ostream& Willow::operator<<(std::ostream& lhs, const String& rhs)
 {

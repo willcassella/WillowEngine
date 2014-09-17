@@ -82,7 +82,15 @@ namespace Willow
 		{
 			return *_resource;
 		}
+		const T& operator*() const
+		{
+			return *_resource;
+		}
 		T* operator->()
+		{
+			return _resource;
+		}
+		const T* operator->() const
 		{
 			return _resource;
 		}

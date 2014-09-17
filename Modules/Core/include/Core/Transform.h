@@ -24,6 +24,7 @@ namespace Willow
 		Vec3 Location;
 		Quat Orientation;
 		Vec3 Scale3D;
+		// @TODO: encapsulate this better
 		Transform* Parent;
 
 	private:

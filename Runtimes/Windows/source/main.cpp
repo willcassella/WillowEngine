@@ -11,7 +11,6 @@
 
 //Include modules headers
 #include <Core\Scene.h>
-//#include <Scripting\Scripting.h>
 #include <Render\Render.h>
 
 //Define context parameters
@@ -36,13 +35,13 @@ int main(int argc, char* argv[])
 	using namespace Willow;
 
 	std::cout << "Initializing subsystems... " << std::endl;
-	//Initialize GLFW and get a window
+	// Initialize GLFW and get a window
 	GLFWwindow* window = InitGLFW();
   
 	// Make an openGL context in window
 	glfwMakeContextCurrent(window);
 
-	//Initialize the renderer
+	// Initialize the renderer
 	InitRenderer(API::OpenGL);
 
 	///////////////////////////////
@@ -64,37 +63,29 @@ int main(int argc, char* argv[])
 	sponza_mat.FragmentShader = "data/Default.frag";
 	sponza_mat.Textures = "data/sponza_tex.png";
 	sponza_mat.Compile();
+	sponza.mesh->SetMaterial(sponza_mat);
 
 	Material gun_mat;
 	gun_mat.VertexShader = "data/Default.vert";
 	gun_mat.FragmentShader = "data/Default.frag";
 	gun_mat.Textures = "data/battle_rifle_tex.png";
 	gun_mat.Compile();
+	gun.mesh->SetMaterial(gun_mat);
 
 	Material crosshairs_mat;
 	crosshairs_mat.VertexShader = "data/Default.vert";
 	crosshairs_mat.FragmentShader = "data/Default.frag";
 	crosshairs_mat.Textures = "data/battle_rifle_crosshair_tex.png";
 	crosshairs_mat.Compile();
-
-	sponza.mesh->SetMaterial(sponza_mat);
-	gun.mesh->SetMaterial(gun_mat);
 	crosshairs.mesh->SetMaterial(crosshairs_mat);
 
 	Camera cam("Camera", 43, float(window_width)/window_height, 0.01f, 90.0f);
 
 	cam.Transform.Location.Z = 4;
-	cam.Transform.Location.Y = 0;
+	cam.Transform.Location.Y = 4;
 
-	gun.Transform.Scale3D = Vec3(0.2f, 0.2f, 0.2f);
-	gun.Transform.Location.X = 0.08f;
-	gun.Transform.Location.Z = -0.17f;
-	gun.Transform.Location.Y = -0.14f;
-	gun.Transform.Rotate(Vec3::Up, -3.14159f/2, false);
-	gun.Transform.Rotate(Vec3::Right, 3.14159f/25, false);
-	gun.Transform.Parent = &cam.Transform;
+	//gun.Transform.Parent = &cam.Transform;
 
-	//crosshairs.Transform.Scale3D = Vec3(0.13f, 0.13f, 0.13f);
 	crosshairs.Transform.Location.Z = -1;
 	crosshairs.Transform.Location.Y = -0.02f;
 	crosshairs.Transform.Rotate(Vec3::Right, -3.14159f/2, false);
@@ -182,12 +173,20 @@ void eventLoop(GLFWwindow* window, Willow::Scene& scene)
 		double currentTime = glfwGetTime();
 		numFrames++;
 
+		// @TODO: replace this with a config file or something
+#if defined(DEBUG)
 		if (currentTime - lastTime >= 1.0)
 		{ 
 			std::cout << 1000.0 / numFrames << " ms/frame" << std::endl;
 			numFrames = 0;
 			lastTime = currentTime;
 		}
+#endif
+
+		// Poll input events
+		glfwPollEvents();
+
+		scene.DispatchEvent("Forward", 0.001f);
 
 		// Update the scene
 		scene.Update((float)(currentTime - frameTime));

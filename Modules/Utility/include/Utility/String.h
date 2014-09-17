@@ -37,24 +37,14 @@ namespace Willow
 
 		String& operator=(const String& rhs);
 		String& operator=(String&& other);
-		//String& operator=(const char* rhs);
 		String& operator+=(const String& rhs);
-		//String& operator+=(const char* rhs);
 		friend UTILITY_API bool operator==(const String& lhs, const String& rhs);
-		//friend UTILITY_API bool operator==(const String& lhs, const char* rhs);
-		//friend UTILITY_API bool operator==(const char* lhs, const String& rhs);
 		friend UTILITY_API bool operator!=(const String& lhs, const String& rhs);
-		//friend UTILITY_API bool operator!=(const String& lhs, const char* rhs);
-		//friend UTILITY_API bool operator!=(const char* lhs, const String& rhs);
 		friend UTILITY_API bool operator>(const String& lhs, const String& rhs);
-		//friend UTILITY_API bool operator>(const String& lhs, const char* rhs);
-		//friend UTILITY_API bool operator>(const char* lhs, const String& rhs);
+		friend UTILITY_API bool operator>=(const String& lhs, const String& rhs);
 		friend UTILITY_API bool operator<(const String& lhs, const String& rhs);
-		//friend UTILITY_API bool operator<(const String& lhs, const char* rhs);
-		//friend UTILITY_API bool operator<(const char* lhs, const String& rhs);
+		friend UTILITY_API bool operator<=(const String& lhs, const String& rhs);
 		friend UTILITY_API String operator+(const String& lhs, const String& rhs);
-		//friend UTILITY_API String operator+(const String& lhs, const char* rhs);
-		//friend UTILITY_API String operator+(const char* lhs, const String& rhs);
 		friend UTILITY_API std::ostream& operator<<(std::ostream& lhs, const String& rhs);
 
 		////////////////

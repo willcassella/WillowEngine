@@ -17,6 +17,7 @@ namespace Willow
 		virtual void operator--() = 0;
 	};
 
+	// @TODO: Implement begin() and end()
 	template <typename T>
 	interface IEnumerable
 	{

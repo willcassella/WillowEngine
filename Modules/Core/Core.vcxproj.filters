@@ -25,6 +25,9 @@
     <ClCompile Include="source\Transform.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="source\InputHandler.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Core\Camera.h">
@@ -46,6 +49,12 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Core\Transform.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\InputHandler.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\InputDispatcher.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

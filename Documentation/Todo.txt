@@ -6,16 +6,6 @@ Refactoring:
 	  Scripting
 	  Runtime
 	  WillowConvert
-	
-Features:
-
-	Impliment Resource ?
-	Impliment ResourcePointer<T>
-
-Refactoring:
-
-	Use Resource ?
-	Use ResourcePointer<T>
 
 Features:
 

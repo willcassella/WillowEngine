@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="source\Camera.cpp" />
     <ClCompile Include="source\GameObject.cpp" />
+    <ClCompile Include="source\InputHandler.cpp" />
     <ClCompile Include="source\Prop.cpp" />
     <ClCompile Include="source\Scene.cpp" />
     <ClCompile Include="source\Transform.cpp" />
@@ -30,6 +31,8 @@
     <ClInclude Include="include\Core\config.h" />
     <ClInclude Include="include\Core\Game.h" />
     <ClInclude Include="include\Core\GameObject.h" />
+    <ClInclude Include="include\Core\InputDispatcher.h" />
+    <ClInclude Include="include\Core\InputHandler.h" />
     <ClInclude Include="include\Core\Prop.h" />
     <ClInclude Include="include\Core\Scene.h" />
     <ClInclude Include="include\Core\Transform.h" />

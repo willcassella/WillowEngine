@@ -20,6 +20,14 @@ void Scene::Update(float timeInterval)
 	}
 }
 
+void Scene::DispatchEvent(const String& eventName, float value)
+{
+	for (uint32 i = 0; i < Cameras.Size(); i++)
+	{
+		Cameras[i]->InputHandler.DispatchInput(eventName, value);
+	}
+}
+
 void Scene::Render() const
 {
 	for (uint32 i = 0; i < Objects.Size(); i++)

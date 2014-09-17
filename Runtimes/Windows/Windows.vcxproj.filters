@@ -1,15 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{54aef3ad-4ef4-4dbb-af39-6d9fb9fba686}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\Scripts">
-      <UniqueIdentifier>{6ff2505d-65ae-4229-bcfd-eb260ae57cf0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\images">
-      <UniqueIdentifier>{da4aac92-3488-41bf-8c91-c9a9d09d8ab8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="source">
       <UniqueIdentifier>{c975195a-c1d8-4483-9156-2d3ef6d99629}</UniqueIdentifier>
     </Filter>
@@ -18,15 +9,5 @@
     <ClCompile Include="source\main.cpp">
       <Filter>source</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="resources\resource.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="resources\Windows.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
   </ItemGroup>
 </Project>

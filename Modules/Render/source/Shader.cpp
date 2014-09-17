@@ -15,6 +15,15 @@ Shader::Shader(const String& path)
 {
 	// Aggregate the shader source code
 	std::ifstream file(path.Cstr());
+
+	// Make sure the file opened correctly
+	if (!file.is_open())
+	{
+		std::cout << "WARNING: '" << path << "' could not be opened\n";
+		this->_id = NULL;
+		return;
+	}
+
 	std::string source;
 	std::string line;
 	while (getline(file, line))
