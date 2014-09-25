@@ -9,17 +9,14 @@ namespace Willow
 	typedef uint32 BufferID;
 	typedef uint32 GValue;
 
-	namespace API
+	enum class API
 	{
-		enum API
-		{
-			Null,
-			OpenGL
-		};
-	}
+		Null,
+		OpenGL
+	};
 
 	// Sets up the defaults for the renderer
-	RENDER_API void InitRenderer(API::API API);
+	RENDER_API void InitRenderer(API api);
 
 	// Clear the screen for a new image
 	RENDER_API void ClearBuffer();

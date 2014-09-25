@@ -27,8 +27,6 @@ Mat4::Mat4( float aa, float ba, float ca, float da,
 
 Mat4 Mat4::Inverse() const
 {
-	// Based off http://www.cg.info.hiroshima-cu.ac.jp/~miyazaki/knowledge/teche23.html
-
 	Mat4 result;
 
 	///////////////////
@@ -319,25 +317,6 @@ Mat4 Mat4::Inverse() const
 //    return true;
 //}
 
-void Mat4::Display() const
-{
-	// For each row
-	for(uint32 row = 0; row < 4; row++) 
-	{
-		printf("| ");
-			
-		// For each column
-		for(uint32 col = 0; col < 4; col++) 
-		{
-			// Print the value in that place
-			printf("%f  ", _values[col][row]);
-		}
-		// Start a new line
-		printf(" |\n");
-	}
-	printf("\n\n\n");
-}
-
 Mat4 Mat4::Perspective(float hFOV, float vFOV, float zMin, float zMax)
 {
 	// Convert vertical and horizontal FOV to radians
@@ -430,11 +409,9 @@ Mat4 Mat4::Rotate(const Quat& rot)
 /////////////////////
 ///   Operators   ///
 
-Mat4 Mat4::operator*(const Mat4& rhs) const
+Mat4 Willow::operator*(const Mat4& lhs, const Mat4& rhs)
 {
 	Mat4 total;
-
-	// Based off http://www.open.gl/transformations
 
 	// For each row
 	for(uint32 row = 0; row < 4; row++) 
@@ -448,7 +425,7 @@ Mat4 Mat4::operator*(const Mat4& rhs) const
 			for(uint32 i = 0; i < 4; i++) 
 			{
 				// add them up
-				value += _values[i][row] * rhs.Get(col, i);
+				value += lhs.Get(i, row) * rhs.Get(col, i);
 			}
 
 			// Assign it to the new matrix
@@ -460,12 +437,54 @@ Mat4 Mat4::operator*(const Mat4& rhs) const
 	return total;
 }
 
-Vec3 Mat4::operator*(const Vec3& rhs) const
+Mat4& Willow::operator*=(Mat4& lhs, const Mat4& rhs)
+{
+	lhs = lhs * rhs;
+	return lhs;
+}
+
+Vec3 Willow::operator*(const Mat4& lhs, const Vec3& rhs)
 {
 	Vec3 result;
-	result.X = _values[0][0] * rhs.X + _values[1][0] * rhs.Y + _values[2][0] * rhs.Z + _values[3][0];
-	result.Y = _values[0][1] * rhs.X + _values[1][1] * rhs.Y + _values[2][1] * rhs.Z + _values[3][1];
-	result.Z = _values[0][2] * rhs.X + _values[1][2] * rhs.Y + _values[2][2] * rhs.Z + _values[3][2];
+	result.X = lhs.Get(0, 0) * rhs.X + lhs.Get(1, 0) * rhs.Y + lhs.Get(2, 0) * rhs.Z + lhs.Get(3, 0);
+	result.Y = lhs.Get(0, 1) * rhs.X + lhs.Get(1, 1) * rhs.Y + lhs.Get(2, 1) * rhs.Z + lhs.Get(3, 1);
+	result.Z = lhs.Get(0, 2) * rhs.X + lhs.Get(1, 2) * rhs.Y + lhs.Get(2, 2) * rhs.Z + lhs.Get(3, 2);
 
 	return result;
+}
+
+Vec3 Willow::operator*(const Vec3& lhs, const Mat4& rhs)
+{
+	Vec3 result;
+	result.X = rhs.Get(0, 0) * lhs.X + rhs.Get(1, 0) * lhs.Y + rhs.Get(2, 0) * lhs.Z + rhs.Get(3, 0);
+	result.Y = rhs.Get(0, 1) * lhs.X + rhs.Get(1, 1) * lhs.Y + rhs.Get(2, 1) * lhs.Z + rhs.Get(3, 1);
+	result.Z = rhs.Get(0, 2) * lhs.X + rhs.Get(1, 2) * lhs.Y + rhs.Get(2, 2) * lhs.Z + rhs.Get(3, 2);
+
+	return result;
+}
+
+Vec3& Willow::operator*=(Vec3& lhs, const Mat4& rhs)
+{
+	lhs = lhs * rhs;
+	return lhs;
+}
+
+std::ostream& Willow::operator<<(std::ostream& out, const Mat4& rhs)
+{
+	// For each row
+	for (uint32 row = 0; row < 4; row++)
+	{
+		out << "| ";
+
+		// For each column
+		for (uint32 col = 0; col < 4; col++)
+		{
+			// Print the value in that place
+			out << rhs._values[col][row] << " ";
+		}
+		// Start a new line
+		out << " |\n";
+	}
+	out << "\n\n\n";
+	return out;
 }

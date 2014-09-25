@@ -6,7 +6,7 @@ using namespace Willow;
 ////////////////////////
 ///   Constructors   ///
 
-Transform::Transform(Mobility::Mobility mobility, const Vec3& location, const Quat& orientation, const Vec3& scale3D)
+Transform::Transform(Mobility mobility, const Vec3& location, const Quat& orientation, const Vec3& scale3D)
 {
 	this->Location = location;
 	this->Scale3D = scale3D;

@@ -6,17 +6,17 @@ using namespace Willow;
 /////////////////////
 ///   Operators   ///
 
-bool Vertex::operator==(const Vertex& rhs)
+bool Willow::operator==(const Vertex& lhs, const Vertex& rhs)
 {
-	if (Position != rhs.Position)
+	if (lhs.Position != rhs.Position)
 	{
 		return false;
 	}
-	if (TextureCoordinates != rhs.TextureCoordinates)
+	if (lhs.TextureCoordinates != rhs.TextureCoordinates)
 	{
 		return false;
 	}
-	if (Normal != rhs.Normal)
+	if (lhs.Normal != rhs.Normal)
 	{
 		return false;
 	}
@@ -24,17 +24,17 @@ bool Vertex::operator==(const Vertex& rhs)
 	return true;
 }
 
-bool Vertex::operator!=(const Vertex& rhs)
+bool Willow::operator!=(const Vertex& lhs, const Vertex& rhs)
 {
-	if (Position != rhs.Position)
+	if (lhs.Position != rhs.Position)
 	{
 		return true;
 	}
-	if (TextureCoordinates != rhs.TextureCoordinates)
+	if (lhs.TextureCoordinates != rhs.TextureCoordinates)
 	{
 		return true;
 	}
-	if (Normal != rhs.Normal)
+	if (lhs.Normal != rhs.Normal)
 	{
 		return true;
 	}

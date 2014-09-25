@@ -8,6 +8,7 @@
 
 namespace Willow
 {
+	template class CORE_API List<Pair<String, Array<IInputDispatcher*>>>;
 	template class CORE_API Table<String, Array<IInputDispatcher*>>;
 
 	// @TODO: Make this a component instead of a member?

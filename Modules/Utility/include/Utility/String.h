@@ -1,4 +1,4 @@
-// string.h
+// String.h
 #pragma once
 
 #include <ostream>
@@ -37,7 +37,6 @@ namespace Willow
 
 		String& operator=(const String& rhs);
 		String& operator=(String&& other);
-		String& operator+=(const String& rhs);
 		friend UTILITY_API bool operator==(const String& lhs, const String& rhs);
 		friend UTILITY_API bool operator!=(const String& lhs, const String& rhs);
 		friend UTILITY_API bool operator>(const String& lhs, const String& rhs);
@@ -45,6 +44,7 @@ namespace Willow
 		friend UTILITY_API bool operator<(const String& lhs, const String& rhs);
 		friend UTILITY_API bool operator<=(const String& lhs, const String& rhs);
 		friend UTILITY_API String operator+(const String& lhs, const String& rhs);
+		friend UTILITY_API String& operator+=(String& lhs, const String& rhs);
 		friend UTILITY_API std::ostream& operator<<(std::ostream& lhs, const String& rhs);
 
 		////////////////

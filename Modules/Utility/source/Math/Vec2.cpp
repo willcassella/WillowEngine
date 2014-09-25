@@ -15,26 +15,22 @@ Vec2::Vec2(float x, float y)
 ///////////////////
 ///   Methods   ///
 
-// Returns the length of this vector
 float Vec2::Length() const
 {
 	return std::sqrtf(X*X + Y*Y);
 }
 
-// Returns the normal of this vector
 Vec2 Vec2::Normalize() const
 {
 	float length = this->Length();
 	return Vec2(X / length, Y / length);
 }
 
-// Calculates the dot product of this and another vector
 float Vec2::Dot(const Vec2& a, const Vec2& b)
 {
 	return a.X * b.X + a.Y * b.Y;
 }
 
-// Calculates the angle between two vectors
 float Vec2::Angle(const Vec2& a, const Vec2& b)
 {
 	return std::acos(Vec2::Dot(a.Normalize(), b.Normalize()));
@@ -50,39 +46,62 @@ const Vec2 Vec2::Right = Vec2(1, 0);
 /////////////////////
 ///   Operators   ///
 
-// Add another vector to this vector
-Vec2 Vec2::operator+(const Vec2& rhs) const
+Vec2 Willow::operator+(const Vec2& lhs, const Vec2& rhs)
 {
-	return Vec2(X + rhs.X, Y + rhs.Y);
+	return Vec2(lhs.X + rhs.X, lhs.Y + rhs.Y);
 }
 
-// Add this vector to another vector and copy the result
-Vec2& Vec2::operator+=(const Vec2& rhs)
+Vec2& Willow::operator+=(Vec2& lhs, const Vec2& rhs)
 {
-	*this = *this + rhs;
-	return *this;
+	lhs = lhs + rhs;
+	return lhs;
 }
 
-// Subtract another vector from this vector
-Vec2 Vec2::operator-(const Vec2& rhs) const
+Vec2 Willow::operator-(const Vec2& lhs, const Vec2& rhs)
 {
-	return Vec2(X - rhs.X, Y - rhs.Y);
+	return Vec2(lhs.X - rhs.X, lhs.Y - rhs.Y);
 }
 
-// Subtract another vector from this vector and copy the result
-Vec2& Vec2::operator-=(const Vec2& rhs)
+Vec2& Willow::operator-=(Vec2& lhs, const Vec2& rhs)
 {
-	*this = *this - rhs;
-	return *this;
+	lhs = lhs - rhs;
+	return lhs;
 }
 
-// Multiply this vector by a float
-Vec2 Vec2::operator*(float rhs) const
+Vec2 Willow::operator*(const Vec2& lhs, float rhs)
 {
-	return Vec2(X * rhs, Y * rhs);
+	return Vec2(lhs.X * rhs, lhs.Y * rhs);
 }
 
-Vec2 Vec2::operator*(int rhs) const
+Vec2 Willow::operator*(float lhs, const Vec2& rhs)
 {
-	return Vec2(X * rhs, Y * rhs);
+	return Vec2(rhs.X * lhs, rhs.Y * lhs);
+}
+
+Vec2& Willow::operator*=(Vec2& lhs, float rhs)
+{
+	lhs = lhs * rhs;
+	return lhs;
+}
+
+Vec2 Willow::operator*(const Vec2& lhs, int32 rhs)
+{
+	return Vec2(lhs.X * rhs, lhs.Y * rhs);
+}
+
+Vec2 Willow::operator*(int32 lhs, const Vec2& rhs)
+{
+	return Vec2(rhs.X * lhs, rhs.Y * lhs);
+}
+
+Vec2& Willow::operator*=(Vec2& lhs, int32 rhs)
+{
+	lhs = lhs * rhs;
+	return lhs;
+}
+
+std::ostream& Willow::operator<<(std::ostream& out, const Vec2& rhs)
+{
+	out << "<" << rhs.X << ", " << rhs.Y << ">";
+	return out;
 }

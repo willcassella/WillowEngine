@@ -15,20 +15,17 @@ Vec3::Vec3(float x, float y, float z)
 ///////////////////
 ///   Methods   ///
 
-// Returns the length of this vector
 float Vec3::Length() const
 {
 	return std::sqrtf(X * X + Y * Y + Z * Z);
 }
 
-// Returns the normal of this vector
 Vec3 Vec3::Normalize() const
 {
 	float length = this->Length();
 	return Vec3(X / length, Y / length, Z / length);
 }
 
-// Returns the cross product of vector a and vector b
 Vec3 Vec3::Cross(const Vec3& a, const Vec3& b)
 {
 	Vec3 result;
@@ -38,13 +35,11 @@ Vec3 Vec3::Cross(const Vec3& a, const Vec3& b)
 	return result;
 }
 
-// Returns the dot product of vector a and vector b
 float Vec3::Dot(const Vec3& a, const Vec3& b)
 {
 	return a.X * b.X + a.Y * b.Y + a.Z * b.Z;
 }
 
-// Calculates the angle between two vectors
 float Vec3::Angle(const Vec3& a, const Vec3& b)
 {
 	return std::acos(Vec3::Dot(a.Normalize(), b.Normalize()));
@@ -61,40 +56,62 @@ const Vec3 Vec3::Right = Vec3(1, 0, 0);
 /////////////////////
 ///   Operators   ///
 
-// Adds this vector to another vector
-Vec3 Vec3::operator+(const Vec3& rhs) const
+Vec3 Willow::operator+(const Vec3& lhs, const Vec3& rhs)
 {
-	return Vec3(X + rhs.X, Y + rhs.Y, Z + rhs.Z);
+	return Vec3(lhs.X + rhs.X, lhs.Y + rhs.Y, lhs.Z + rhs.Z);
 }
 
-// Adds this vector to another vector and copies the data
-Vec3& Vec3::operator+=(const Vec3& rhs)
+Vec3& Willow::operator+=(Vec3& lhs, const Vec3& rhs)
 {
-	*this = *this + rhs;
-	return *this;
+	lhs = lhs + rhs;
+	return lhs;
 }
 
-// Subtracts another vector from this vector
-Vec3 Vec3::operator-(const Vec3& rhs) const
+Vec3 Willow::operator-(const Vec3& lhs, const Vec3& rhs)
 {
-	return Vec3(X - rhs.X, Y - rhs.Y, Z - rhs.Z);
+	return Vec3(lhs.X - rhs.X, lhs.Y - rhs.Y, lhs.Z - rhs.Z);
 }
 
-// Subtracts another vector from this vector and copies the result
-Vec3& Vec3::operator-=(const Vec3& rhs)
+Vec3& Willow::operator-=(Vec3& lhs, const Vec3& rhs)
 {
-	*this = *this - rhs;
-	return *this;
+	lhs = lhs - rhs;
+	return lhs;
 }
 
-// Multiply this vector by a float
-Vec3 Vec3::operator*(float rhs) const
+Vec3 Willow::operator*(const Vec3& lhs, float rhs)
 {
-	return Vec3(X * rhs, Y * rhs, Z * rhs);
+	return Vec3(lhs.X * rhs, lhs.Y * rhs, lhs.Z * rhs);
 }
 
-// Multiply this vector by an int
-Vec3 Vec3::operator*(int rhs) const
+Vec3 Willow::operator*(float lhs, const Vec3& rhs)
 {
-	return Vec3(X * rhs, Y * rhs, Z * rhs);
+	return Vec3(rhs.X * lhs, rhs.Y * lhs, rhs.Z * lhs);
+}
+
+Vec3& Willow::operator*=(Vec3& lhs, float rhs)
+{
+	lhs = lhs * rhs;
+	return lhs;
+}
+
+Vec3 Willow::operator*(const Vec3& lhs, int32 rhs)
+{
+	return Vec3(lhs.X * rhs, lhs.Y * rhs, lhs.Z * rhs);
+}
+
+Vec3 Willow::operator*(int32 lhs, const Vec3& rhs)
+{
+	return Vec3(rhs.X * lhs, rhs.Y * lhs, rhs.Z * lhs);
+}
+
+Vec3& Willow::operator*=(Vec3& lhs, int32 rhs)
+{
+	lhs = lhs * rhs;
+	return lhs;
+}
+
+std::ostream& Willow::operator<<(std::ostream& out, const Vec3& rhs)
+{
+	out << "<" << rhs.X << ", " << rhs.Y << ", " << rhs.Z << ">";
+	return out;
 }

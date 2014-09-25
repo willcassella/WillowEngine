@@ -21,7 +21,7 @@ namespace Willow
 		///   Operators   ///
 	public:
 
-		bool operator==(const Vertex& rhs);
-		bool operator!=(const Vertex& rhs);
+		friend bool RENDER_API operator==(const Vertex& lhs, const Vertex& rhs);
+		friend bool RENDER_API operator!=(const Vertex& lhs, const Vertex& rhs);
 	};
 }

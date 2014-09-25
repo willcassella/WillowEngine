@@ -1,43 +1,77 @@
 // Table.h
 #pragma once
 
-#include <map>
+#include <utility>
+#include "List.h"
+#include "Pair.h"
 
 namespace Willow
 {
+	/** An associative array, replacement for std::map */
 	template <typename KeyType, typename ValueType>
 	class Table
 	{
+		///////////////////////
+		///   Information   ///
+	private:
+
+		typedef Pair<KeyType, ValueType> PairType;
+		typedef List<PairType> StorageType;
+
 		////////////////////////
 		///   Constructors   ///
 	public:
 
-		Table()
-		{
-			_map = new std::map<KeyType, ValueType>;
-		}
+		Table() = default;
 		Table(const Table& copy)
 		{
-			delete _map;
-			_map = new std::map<KeyType, ValueType>(*copy._map);
+			_values = copy._values;
 		}
 		Table(Table&& other)
 		{
-			_map = other._map;
-			other._map = nullptr;
+			_values = std::move(other._values);
 		}
-		~Table()
-		{
-			delete _map;
-		}
+		~Table() = default;
 
 		///////////////////
 		///   Methods   ///
 	public:
 
-		bool HasKey(const KeyType& key)
+		size_t Size() const
 		{
-			return _map->find(key) != _map->end();
+			return _values.Size();
+		}
+		bool HasKey(const KeyType& key) const
+		{
+			// Search for the key
+			for (const auto& i : _values)
+			{
+				if (i.First == key)
+				{
+					return true;
+				}
+			}
+
+			// The key must not have been found
+			return false;
+		}
+
+		// Iteration methods
+		typename StorageType::Iterator begin()
+		{
+			return _values.begin();
+		}
+		typename StorageType::ConstIterator begin() const
+		{
+			return _values.begin();
+		}
+		typename StorageType::Iterator end()
+		{
+			return _values.end();
+		}
+		typename StorageType::ConstIterator end() const
+		{
+			return _values.end();
 		}
 
 		/////////////////////
@@ -46,17 +80,24 @@ namespace Willow
 
 		ValueType& operator[](const KeyType& key)
 		{
-			return (*_map)[key];
-		}
-		const ValueType& operator[](const KeyType& key) const
-		{
-			return (*_map)[key];
+			// Search for the key
+			for (auto& i : _values)
+			{
+				if (i.First == key)
+				{
+					return i.Second;
+				}
+			}
+
+			// The key must not have been found, create new pair
+			_values.Add(PairType(key, ValueType()));
+			return _values.Last().Second;
 		}
 
 		////////////////
 		///   Data   ///
 	private:
 
-		std::map<KeyType, ValueType>* _map;
+		StorageType _values;
 	};
 }

@@ -95,7 +95,15 @@ Array<uint32> String::OccurencesOf(const String& string) const
 
 String String::GetFileExtension() const
 {
-	return SubString(this->OccurencesOf(".").Last() + 1);
+	auto occurences = this->OccurencesOf(".");
+	if (!occurences.IsEmpty())
+	{
+		return SubString(occurences.Last() + 1);
+	}
+	else
+	{
+		return "";
+	}
 }
 
 size_t String::Length(const char* string)
@@ -122,12 +130,6 @@ String& String::operator=(String&& other)
 		this->_value = other._value;
 		other._value = nullptr;
 	}
-	return *this;
-}
-
-String& String::operator+=(const String& rhs)
-{
-	*this = *this + rhs;
 	return *this;
 }
 
@@ -167,6 +169,12 @@ String Willow::operator+(const String& lhs, const String& rhs)
 	strcpy(string, lhs._value);
 	strcat(string, rhs._value);
 	return string;
+}
+
+String& Willow::operator+=(String& lhs, const String& rhs)
+{
+	lhs = lhs + rhs;
+	return lhs;
 }
 
 std::ostream& Willow::operator<<(std::ostream& lhs, const String& rhs)

@@ -1,18 +1,25 @@
 Refactoring:
 
-	X Core - now 'Utility'
-	X Render
-	X Engine - now 'Core'
 	  Scripting
 	  Runtime
 	  WillowConvert
 
 Features:
 
-	Finish Reflection implimentation
+	Finish Event system, OK if just Input events for now	
+
+	Implement IPlayer and Pawn
+
+	Figure out a better scene managment system (components for globally-aware members, maybe?)
+	
+	Finish Reflection implementation
 
 Refactoring:
 
 	Use Reflection
 
 	Switch to NMake build system
+
+Features:
+
+	Cross platform build system (Support for linux, mac, and emscripten)

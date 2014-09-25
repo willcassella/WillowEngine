@@ -1,6 +1,7 @@
 // Vec2.h
 #pragma once
 
+#include <ostream>
 #include "..\config.h"
 
 namespace Willow
@@ -23,18 +24,18 @@ namespace Willow
 		///   Methods   ///
 	public:
 
-		// Returns the length of this vector
+		/** Returns the length of this vector */
 		float Length() const;
 
-		// Returns the normalized version of this vector
+		/** Returns the normalized version of this vector */
 		Vec2 Normalize() const;
 
-		// Calculates the dot product of this and another vector
+		/** Returns the normalized version of this vector */
 		static float Dot(const Vec2& a, const Vec2& b);
 
 		// @TODO: Add cross product
 
-		// Calculates the angle between two vectors
+		/** Calculates the angle between two vectors */
 		static float Angle(const Vec2& a, const Vec2& b);
 
 		////////////////////////////
@@ -49,38 +50,24 @@ namespace Willow
 		///   Operators   ///
 	public:
 
-		// Add another vector to this vector
-		Vec2 operator+(const Vec2& rhs) const;
-
-		// Add this vector to another vector and copy the result
-		Vec2& operator+=(const Vec2& rhs);
-
-		// Subtract another vector from this vector
-		Vec2 operator-(const Vec2& rhs) const;
-
-		// Subtract another vector from this vector and copy the result
-		Vec2& operator-=(const Vec2& rhs);
-
-		// Multiply this vector by a float
-		Vec2 operator*(float rhs) const;
-
-		// @TODO: impliment operator*=(float rhs)
-
-		// Multiply this vector by an int @TODO: investigate if this is necessary, with the above operator
-		Vec2 operator*(int rhs) const;
-
-		// @TODO: impliment operator*=(int rhs)
-
-		// Returns TRUE if this vector is equivalent to another vector
-		inline bool operator==(const Vec2& rhs) const
+		friend UTILITY_API Vec2 operator+(const Vec2& lhs, const Vec2& rhs);
+		friend UTILITY_API Vec2& operator+=(Vec2& lhs, const Vec2& rhs);
+		friend UTILITY_API Vec2 operator-(const Vec2& lhs, const Vec2& rhs);
+		friend UTILITY_API Vec2& operator-=(Vec2& lhs, const Vec2& rhs);
+		friend UTILITY_API Vec2 operator*(const Vec2& lhs, float rhs);
+		friend UTILITY_API Vec2 operator*(float lhs, const Vec2& rhs);
+		friend UTILITY_API Vec2& operator*=(Vec2& lhs, float rhs);
+		friend UTILITY_API Vec2 operator*(const Vec2& lhs, int32 rhs);
+		friend UTILITY_API Vec2 operator*(int32 lhs, const Vec2& rhs);
+		friend UTILITY_API Vec2& operator*=(Vec2& lhs, int32 rhs);
+		friend UTILITY_API inline bool operator==(const Vec2& lhs, const Vec2& rhs)
 		{
-			return X == rhs.X && Y == rhs.Y;
+			return lhs.X == rhs.X && lhs.Y == rhs.Y;
 		}
-
-		// Returns TRUE of this vector is NOT equivalent to another vector
-		inline bool operator!=(const Vec2& rhs) const
+		friend UTILITY_API inline bool operator!=(const Vec2& lhs, const Vec2& rhs)
 		{
-			return X != rhs.X || Y != rhs.Y;
+			return lhs.X != rhs.X || lhs.Y != rhs.Y;
 		}
+		friend UTILITY_API std::ostream& operator<<(std::ostream& out, const Vec2& rhs);
 	};
 }

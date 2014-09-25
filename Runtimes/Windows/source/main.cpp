@@ -61,29 +61,30 @@ int main(int argc, char* argv[])
 	Material sponza_mat;
 	sponza_mat.VertexShader = "data/Default.vert";
 	sponza_mat.FragmentShader = "data/Default.frag";
-	sponza_mat.Textures = "data/sponza_tex.png";
+	sponza_mat.Textures["fDiffuse"] = "data/sponza_tex.png";
 	sponza_mat.Compile();
 	sponza.mesh->SetMaterial(sponza_mat);
 
 	Material gun_mat;
 	gun_mat.VertexShader = "data/Default.vert";
 	gun_mat.FragmentShader = "data/Default.frag";
-	gun_mat.Textures = "data/battle_rifle_tex.png";
+	gun_mat.Textures["fDiffuse"] = "data/battle_rifle_tex.png";
 	gun_mat.Compile();
 	gun.mesh->SetMaterial(gun_mat);
 
 	Material crosshairs_mat;
 	crosshairs_mat.VertexShader = "data/Default.vert";
 	crosshairs_mat.FragmentShader = "data/Default.frag";
-	crosshairs_mat.Textures = "data/battle_rifle_crosshair_tex.png";
+	crosshairs_mat.Textures["fDiffuse"] = "data/battle_rifle_crosshair_tex.png";
 	crosshairs_mat.Compile();
 	crosshairs.mesh->SetMaterial(crosshairs_mat);
 
 	Camera cam("Camera", 43, float(window_width)/window_height, 0.01f, 90.0f);
 
 	cam.Transform.Location.Z = 4;
-	cam.Transform.Location.Y = 4;
+	cam.Transform.Location.Y = 0;
 
+	// @TODO: Parenting seems to be broken...
 	//gun.Transform.Parent = &cam.Transform;
 
 	crosshairs.Transform.Location.Z = -1;

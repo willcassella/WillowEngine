@@ -149,9 +149,10 @@
     <ClCompile Include="source\String.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Utility\List.h" />
+    <ClInclude Include="include\Utility\Pair.h" />
     <ClInclude Include="include\Utility\Table.h" />
     <ClInclude Include="include\Utility\config.h" />
-    <ClInclude Include="include\Utility\IEnumerable.h" />
     <ClInclude Include="include\Utility\Math\Mat4.h" />
     <ClInclude Include="include\Utility\Math\Quat.h" />
     <ClInclude Include="include\Utility\Math\Vec2.h" />

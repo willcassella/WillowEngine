@@ -1,12 +1,17 @@
 // Material.h
 #pragma once
 
+#include <Utility\Table.h>
+#include <Utility\Math\Mat4.h>
 #include "Shader.h"
 #include "Texture.h"
 
 namespace Willow
 {
-	// @TODO: Implement Resource
+	template class RENDER_API List<Pair<String, ResourcePtr<Texture>>>;
+	template class RENDER_API Table<String, ResourcePtr<Texture>>;
+
+	// @TODO: Implement Resource (?)
 	class RENDER_API Material
 	{
 		//////////////////
@@ -15,8 +20,7 @@ namespace Willow
 
 		ResourcePtr<Shader> VertexShader;
 		ResourcePtr<Shader> FragmentShader;
-		// @TODO: Replace with List<ResourcePtr<Texture>>
-		ResourcePtr<Texture> Textures;
+		Table<String, ResourcePtr<Texture>> Textures;
 
 		////////////////////////
 		///   Constructors   ///
@@ -24,22 +28,24 @@ namespace Willow
 
 		Material();
 		~Material();
-		// @TODO: implement rule of five
+		// @TODO: Implement rule of 5
 
 		///////////////////
 		///   Methods   ///
 	public:
 
-		// @TODO: This needs work
+		// @TODO: This needs some serious work. Once I have a more finalized rendering pipeline set up I'll do some major refactoring here
 		void Compile();
-		BufferID GetModelID() const;
-		BufferID GetViewID() const;
-		BufferID GetProjectionID() const;
+		void Bind() const;
+		void UploadModelMatrix(const Mat4& matrix);
+		void UploadViewMatrix(const Mat4& matrix);
+		void UploadProjectionMatrix(const Mat4& matrix);
 
 		/////////////////////
 		///   Operators   ///
 	public:
 
+		// @TODO: I think I'll replace this with a method after all
 		operator BufferID() const;
 
 		////////////////

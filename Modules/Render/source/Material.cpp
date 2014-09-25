@@ -36,19 +36,33 @@ void Material::Compile()
 	glDetachShader(_id, *FragmentShader);
 }
 
-BufferID Material::GetModelID() const
+void Material::Bind() const
 {
-	return _vModel;
+	glUseProgram(_id);
+
+	uint32 texIndex = 0;
+	for (const auto& i : Textures)
+	{
+		glActiveTexture(GL_TEXTURE0 + texIndex);
+		glBindTexture(GL_TEXTURE_2D, i.Second->GetID());
+
+		glUniform1i(glGetUniformLocation(_id, i.First.Cstr()), texIndex);
+	}
 }
 
-BufferID Material::GetViewID() const
+void Material::UploadModelMatrix(const Mat4& matrix)
 {
-	return _vView;
+	glUniformMatrix4fv(_vModel, 1, GL_FALSE, matrix[0]);
 }
 
-BufferID Material::GetProjectionID() const
+void Material::UploadViewMatrix(const Mat4& matrix)
 {
-	return _vProjection;
+	glUniformMatrix4fv(_vView, 1, GL_FALSE, matrix[0]);
+}
+
+void Material::UploadProjectionMatrix(const Mat4& matrix)
+{
+	glUniformMatrix4fv(_vProjection, 1, GL_FALSE, matrix[0]);
 }
 
 /////////////////////

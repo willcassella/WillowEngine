@@ -7,7 +7,7 @@
 #include "..\include\Render\StaticMesh.h"
 using namespace Willow;
 
-bool LoadBinaryModel(const String& path, Array<Vertex>* outVertices, Array<BufferID>* outElements);
+bool LoadModel(const String& path, Array<Vertex>* outVertices, Array<BufferID>* outElements);
 
 ////////////////////////
 ///   Constructors   ///
@@ -15,27 +15,27 @@ bool LoadBinaryModel(const String& path, Array<Vertex>* outVertices, Array<Buffe
 StaticMesh::StaticMesh(const String& path)
 	: Super(path)
 {
-	if (!LoadBinaryModel(path, &this->_vertices, &this->_elements))
+	if (!LoadModel(path, &this->_vertices, &this->_elements))
 	{
 		this->_mat = nullptr;
 		return;
 	}
 
 	// Generate buffers and upload data
-	glGenVertexArrays(1, &this->_vao);
-	glBindVertexArray(this->_vao);
+	glGenVertexArrays(1, &_vao);
+	glBindVertexArray(_vao);
 	
-	glGenBuffers(1, &this->_vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, this->_vbo);
-	glBufferData(GL_ARRAY_BUFFER, this->_vertices.Size() * sizeof(Vertex), &this->_vertices[0], GL_STATIC_DRAW);
+	glGenBuffers(1, &_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+	glBufferData(GL_ARRAY_BUFFER, _vertices.Size() * sizeof(Vertex), &_vertices[0], GL_STATIC_DRAW);
 
-	glGenBuffers(1, &this->_ebo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->_ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->_elements.Size() * sizeof(GLuint), &this->_elements[0] , GL_STATIC_DRAW);
+	glGenBuffers(1, &_ebo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _elements.Size() * sizeof(BufferID), &_elements[0] , GL_STATIC_DRAW);
 
 	this->_mat = nullptr;
 
-	glBindVertexArray(0);
+	glBindVertexArray(NULL);
 }
 
 StaticMesh::~StaticMesh()
@@ -54,30 +54,27 @@ void StaticMesh::Render(const Mat4& orientation, const Mat4& view, const Mat4& p
 	glBindVertexArray(_vao);
 
 	// Bind the material
-	glUseProgram(this->GetMaterial());
-
-	// Bind the texture
-	glBindTexture(GL_TEXTURE_2D, this->GetMaterial().Textures->GetID());
+	this->GetMaterial().Bind();
 
 	// Upload the matrix to the GPU
-	glUniformMatrix4fv(this->GetMaterial().GetModelID(), 1, GL_FALSE, orientation[0]);
-	glUniformMatrix4fv(this->GetMaterial().GetViewID(), 1, GL_FALSE, view[0]);
-	glUniformMatrix4fv(this->GetMaterial().GetProjectionID(), 1, GL_FALSE, perspective[0]);
+	_mat->UploadModelMatrix(orientation);
+	_mat->UploadViewMatrix(view);
+	_mat->UploadProjectionMatrix(perspective);
 
 	//Draw the mesh
-	glDrawElements(GL_TRIANGLES, (GLsizei)this->GetNumElements(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, (GLsizei)_elements.Size(), GL_UNSIGNED_INT, 0);
 
-	glBindVertexArray(0);
+	glBindVertexArray(NULL);
 }
 
-size_t StaticMesh::GetNumElements() const
+Material& StaticMesh::GetMaterial()
 {
-	return this->_elements.Size();
+	return *_mat;
 }
 
-Material& StaticMesh::GetMaterial() const
+const Material& StaticMesh::GetMaterial() const
 {
-	return *this->_mat;
+	return *_mat;
 }
 
 void StaticMesh::SetMaterial(Material& mat)
@@ -85,8 +82,8 @@ void StaticMesh::SetMaterial(Material& mat)
 	_mat = &mat;
 
 	// Bind the VAO
-	glBindVertexArray(this->_vao);
-	glBindBuffer(GL_ARRAY_BUFFER, this->_vbo);
+	glBindVertexArray(_vao);
+	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
 
 	// Set stuff
 	BufferID vPosition;
@@ -102,10 +99,10 @@ void StaticMesh::SetMaterial(Material& mat)
 	glEnableVertexAttribArray(vNormal);
 	glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_TRUE, sizeof(Vertex), (void*)(sizeof(Vec3) + sizeof(Vec2)));
 
-	glBindVertexArray(0);
+	glBindVertexArray(NULL);
 }
 
-bool LoadBinaryModel(const String& path, Array<Vertex>* outVertices, Array<BufferID>* outElements)
+bool LoadModel(const String& path, Array<Vertex>* const outVertices, Array<BufferID>* const outElements)
 {
 	// Attempt to open the file
 	std::ifstream input;

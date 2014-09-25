@@ -5,7 +5,6 @@
 
 namespace Willow
 {
-	// @TODO: Implement rule of 5
 	template <class T> // T must be a child of Resource
 	class ResourcePtr
 	{
@@ -15,11 +14,24 @@ namespace Willow
 
 		ResourcePtr(const String& path = "")
 		{
-			AssignResource(path);
+			this->AssignResource(path);
+		}
+		ResourcePtr(const ResourcePtr& copy)
+		{
+			this->_resource = copy._resource;
+			if (_resource)
+			{
+				_resource->_refs++;
+			}
+		}
+		ResourcePtr(ResourcePtr&& other)
+		{
+			this->_resource = other._resource;
+			other._resource = nullptr;
 		}
 		~ResourcePtr()
 		{
-			DeassignResource();
+			this->DeassignResource();
 		}
 
 		///////////////////
@@ -32,6 +44,7 @@ namespace Willow
 		}
 		bool IsLoaded() const
 		{
+			// @TODO: Maybe do something else with this?
 			return _resource != nullptr;
 		}
 
@@ -39,9 +52,6 @@ namespace Willow
 
 		void AssignResource(const String& path)
 		{
-			// Deassign from old resource (if any)
-			DeassignResource();
-
 			// Assign to a new resource
 			if (path.IsNullOrEmpty())
 			{
@@ -94,18 +104,43 @@ namespace Willow
 		{
 			return _resource;
 		}
-		void operator=(const String& path)
+		ResourcePtr<T>& operator=(const String& path)
 		{
-			AssignResource(path);
+			this->DeassignResource();
+			this->AssignResource(path);
+			return *this;
 		}
-		void operator=(const ResourcePtr<T>& rhs)
+		ResourcePtr<T>& operator=(const ResourcePtr<T>& rhs)
 		{
-			this->_resource = rhs._resource;
-
-			if (_resource)
+			if (this != &rhs)
 			{
-				_resource->_refs++;
+				this->DeassignResource();
+				this->_resource = rhs._resource;
+
+				if (_resource)
+				{
+					_resource->_refs++;
+				}
 			}
+			return *this;
+		}
+		ResourcePtr<T>& operator=(ResourcePtr<T>&& other)
+		{
+			if (this != &other)
+			{
+				this->DeassignResource();
+				this->_resource = other._resource;
+				other._resource = nullptr;
+			}
+			return *this;
+		}
+		bool operator==(const ResourcePtr<T>& rhs) const
+		{
+			return _resource == rhs._resource;
+		}
+		bool operator!=(const ResourcePtr<T>& rhs) const
+		{
+			return _resource != rhs._resource;
 		}
 
 		////////////////

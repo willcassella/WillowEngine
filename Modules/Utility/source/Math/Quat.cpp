@@ -7,7 +7,6 @@ using namespace Willow;
 ////////////////////////
 ///   Constructors   ///
 
-// Default constructor
 Quat::Quat()
 {
 	this->X = 0;
@@ -16,10 +15,8 @@ Quat::Quat()
 	this->W = 1;
 }
 
-// Custom constructor
 Quat::Quat(const Vec3& axis, float angle)
 {
-	// Based off http://www.cprogramming.com/tutorial/3d/quaternions.html
 	// Make sure the axis vector is normalized
 	Vec3 kNormAxis = axis.Normalize();
 	float kSinHalfAngle = std::sinf(angle * 0.5f);
@@ -53,14 +50,25 @@ void Quat::RotateByAxisAngle(const Vec3& axis, float angle, bool local)
 /////////////////////
 ///   Operators   ///
 
-Quat Quat::operator*(const Quat& quat) const
+Quat Willow::operator*(const Quat& lhs, const Quat& rhs)
 {
-	// implemented as described at http://www.cprogramming.com/tutorial/3d/quaternions.html
 	Quat total;
-	total.Z = W * quat.W - X * quat.Z - Y * quat.Y - Z * quat.Z;
-	total.X = W * quat.X + X * quat.W + Y * quat.Z - Z * quat.Y;
-	total.Y = W * quat.Y - X * quat.Z + Y * quat.W + Z * quat.X;
-	total.Z = W * quat.Z + X * quat.Y - Y * quat.X + Z * quat.W;
+	total.Z = lhs.W * rhs.W - lhs.X * rhs.Z - lhs.Y * rhs.Y - lhs.Z * rhs.Z;
+	total.X = lhs.W * rhs.X + lhs.X * rhs.W + lhs.Y * rhs.Z - lhs.Z * rhs.Y;
+	total.Y = lhs.W * rhs.Y - lhs.X * rhs.Z + lhs.Y * rhs.W + lhs.Z * rhs.X;
+	total.Z = lhs.W * rhs.Z + lhs.X * rhs.Y - lhs.Y * rhs.X + lhs.Z * rhs.W;
 
 	return total;
+}
+
+Quat& Willow::operator*=(Quat& lhs, const Quat& rhs)
+{
+	lhs = lhs * rhs;
+	return lhs;
+}
+
+std::ostream& Willow::operator<<(std::ostream& out, const Quat& rhs)
+{
+	out << "<" << rhs.X << ", " << rhs.Y << ", " << rhs.Z << ", " << rhs.W << ">";
+	return out;
 }

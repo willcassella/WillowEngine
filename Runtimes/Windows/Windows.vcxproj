@@ -200,7 +200,7 @@ xcopy "$(ProjectDir)thirdParty\glfw3\$(Platform)\lib-msvc110\glfw3.dll" "$(OutDi
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\Main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

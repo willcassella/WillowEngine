@@ -30,14 +30,16 @@ namespace Willow
 		/////////////////////
 		///   Operators   ///
 
-		Quat operator*(const Quat& quat) const;
-		inline bool operator==(const Quat& rhs) const
+		friend UTILITY_API Quat operator*(const Quat& lhs, const Quat& rhs);
+		friend UTILITY_API Quat& operator*=(Quat& lhs, const Quat& rhs);
+		friend UTILITY_API inline bool operator==(const Quat& lhs, const Quat& rhs)
 		{
-			return X == rhs.X && Y == rhs.Y && Z == rhs.Z && W == rhs.W;
+			return lhs.X == rhs.X && lhs.Y == rhs.Y && lhs.Z == rhs.Z;
 		}
-		inline bool operator!=(const Quat& rhs) const
+		friend UTILITY_API inline bool operator!=(const Quat& lhs, const Quat& rhs)
 		{
-			return X != rhs.X || Y != rhs.Y || Z != rhs.Z || W != rhs.W;
+			return lhs.X != rhs.X || lhs.Y != rhs.Y || lhs.Z != rhs.Z;
 		}
+		friend UTILITY_API std::ostream& operator<<(std::ostream& out, const Quat& rhs);
 	};
 }

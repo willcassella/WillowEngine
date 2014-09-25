@@ -33,8 +33,8 @@ namespace Willow
 
 		// Render the mesh at a specific orientation, view, and perspective
 		void Render(const Mat4& orientation, const Mat4& view, const Mat4& perspective) const;
-		size_t GetNumElements() const;
-		Material& GetMaterial() const;
+		Material& GetMaterial();
+		const Material& GetMaterial() const;
 		void SetMaterial(Material& material);
 
 		////////////////
@@ -45,6 +45,7 @@ namespace Willow
 		BufferID _vbo;
 		BufferID _ebo;
 
+		// @TODO: Determine if its worth holding onto these
 		Array<Vertex> _vertices;
 		Array<BufferID> _elements;
 

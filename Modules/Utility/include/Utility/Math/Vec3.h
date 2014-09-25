@@ -1,6 +1,7 @@
 // Vec3.h
 #pragma once
 
+#include <ostream>
 #include "..\config.h"
 
 namespace Willow
@@ -42,22 +43,24 @@ namespace Willow
 		///   Operators   ///
 	public:
 
-		Vec3 operator+(const Vec3& rhs) const;
-		Vec3& operator+=(const Vec3& rhs);
-		Vec3 operator-(const Vec3& rhs) const;
-		Vec3& operator-=(const Vec3& rhs);
-		Vec3 operator*(float rhs) const;
-
-		// @TODO: Impliment operator*=(float rhs)
-
-		Vec3 operator*(const int rhs) const;
-		inline bool operator==(const Vec3& rhs) const
+		friend UTILITY_API Vec3 operator+(const Vec3& lhs, const Vec3& rhs);
+		friend UTILITY_API Vec3& operator+=(Vec3& lhs, const Vec3& rhs);
+		friend UTILITY_API Vec3 operator-(const Vec3& lhs, const Vec3& rhs);
+		friend UTILITY_API Vec3& operator-=(Vec3& lhs, const Vec3& rhs);
+		friend UTILITY_API Vec3 operator*(const Vec3& lhs, float rhs);
+		friend UTILITY_API Vec3 operator*(float lhs, const Vec3& rhs);
+		friend UTILITY_API Vec3& operator*=(Vec3& lhs, float rhs);
+		friend UTILITY_API Vec3 operator*(const Vec3& lhs, int32 rhs);
+		friend UTILITY_API Vec3 operator*(int32 lhs, const Vec3& rhs);
+		friend UTILITY_API Vec3& operator*=(Vec3& lhs, int32 rhs);
+		friend UTILITY_API inline bool operator==(const Vec3& lhs, const Vec3& rhs)
 		{
-			return X == rhs.X && Y == rhs.Y && Z == rhs.Z;
+			return lhs.X == rhs.X && lhs.Y == rhs.Y && lhs.Z == rhs.Z;
 		}
-		inline bool operator!=(const Vec3& rhs) const
+		friend UTILITY_API inline bool operator!=(const Vec3& lhs, const Vec3& rhs)
 		{
-			return X != rhs.X || Y != rhs.Y || Z != rhs.Z;
+			return lhs.X != rhs.X || lhs.Y != rhs.Y || lhs.Z != rhs.Z;
 		}
+		friend UTILITY_API std::ostream& operator<<(std::ostream& out, const Vec3& rhs);
 	};
 }

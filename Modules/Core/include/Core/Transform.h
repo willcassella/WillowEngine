@@ -6,14 +6,11 @@
 
 namespace Willow
 {
-	namespace Mobility
+	enum class Mobility
 	{
-		enum Mobility
-		{
-			Static, 
-			Moveable
-		};
-	}
+		Static, 
+		Moveable
+	};
 
 	struct CORE_API Transform
 	{
@@ -29,19 +26,19 @@ namespace Willow
 
 	private:
 
-		Mobility::Mobility _mobility;
+		Mobility _mobility;
 
 		////////////////////////
 		///   Constructors   ///
 	public:
 
-		Transform(Mobility::Mobility mobility = Mobility::Static, const Vec3& location = Vec3(), const Quat& orientation = Quat(), const Vec3& scale3D = Vec3(1.f, 1.f, 1.f));
+		Transform(Mobility mobility = Mobility::Static, const Vec3& location = Vec3(), const Quat& orientation = Quat(), const Vec3& scale3D = Vec3(1.f, 1.f, 1.f));
 
 		///////////////////
 		///   Methods   ///
 	public:
 
-		Mobility::Mobility GetMobility() const;
+		Mobility GetMobility() const;
 		bool IsStatic() const;
 		void Translate(const Vec3& vec, bool isLocal = true);
 		void Scale(const Vec3& vec, bool isLocal = true);

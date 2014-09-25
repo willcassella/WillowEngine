@@ -21,7 +21,6 @@ namespace Willow
 
 		Texture(const String& path);
 		~Texture() override;
-
 		// @TODO: Implement rule of five
 
 		///////////////////
