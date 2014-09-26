@@ -154,6 +154,10 @@ namespace Willow
 		{
 			return _count;
 		}
+		bool IsEmpty() const
+		{
+			return this->Size() == 0;
+		}
 		bool HasElement(const T& item) const
 		{
 			for (const auto& i : *this)
@@ -272,7 +276,7 @@ namespace Willow
 			assert(index < _count);
 
 			Node* target = _first;
-			for (uint32 i = 0; i <= index; i++)
+			for (uint32 i = 0; i < index; i++)
 			{
 				target = target->Next;
 			}
@@ -284,7 +288,7 @@ namespace Willow
 			assert(index < _count);
 
 			Node* target = _first;
-			for (uint32 i = 0; i <= index; i++)
+			for (uint32 i = 0; i < index; i++)
 			{
 				target = target->Next;
 			}

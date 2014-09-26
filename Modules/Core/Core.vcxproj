@@ -21,7 +21,7 @@
   <ItemGroup>
     <ClCompile Include="source\Camera.cpp" />
     <ClCompile Include="source\GameObject.cpp" />
-    <ClCompile Include="source\InputHandler.cpp" />
+    <ClCompile Include="source\EventManager.cpp" />
     <ClCompile Include="source\Prop.cpp" />
     <ClCompile Include="source\Scene.cpp" />
     <ClCompile Include="source\Transform.cpp" />
@@ -31,8 +31,9 @@
     <ClInclude Include="include\Core\config.h" />
     <ClInclude Include="include\Core\Game.h" />
     <ClInclude Include="include\Core\GameObject.h" />
+    <ClInclude Include="include\Core\IEventDispatcher.h" />
     <ClInclude Include="include\Core\InputDispatcher.h" />
-    <ClInclude Include="include\Core\InputHandler.h" />
+    <ClInclude Include="include\Core\EventManager.h" />
     <ClInclude Include="include\Core\Prop.h" />
     <ClInclude Include="include\Core\Scene.h" />
     <ClInclude Include="include\Core\Transform.h" />
@@ -122,6 +123,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;CORE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -143,6 +145,7 @@ xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;CORE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -166,6 +169,7 @@ xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;CORE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -191,6 +195,7 @@ xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;CORE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

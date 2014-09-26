@@ -267,6 +267,7 @@ namespace Willow
 
 			return true;
 		}
+		// @TODO: Make this a friend operator
 		bool operator!=(const Array<T>& rhs) const
 		{
 			return !(*this == rhs);

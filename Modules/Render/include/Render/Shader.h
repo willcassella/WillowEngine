@@ -35,6 +35,4 @@ namespace Willow
 
 		BufferID _id;
 	};
-
-	template class RENDER_API ResourcePtr<Shader>;
 }

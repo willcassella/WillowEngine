@@ -8,9 +8,6 @@
 
 namespace Willow
 {
-	template class RENDER_API List<Pair<String, ResourcePtr<Texture>>>;
-	template class RENDER_API Table<String, ResourcePtr<Texture>>;
-
 	// @TODO: Implement Resource (?)
 	class RENDER_API Material
 	{

@@ -187,7 +187,7 @@ void eventLoop(GLFWwindow* window, Willow::Scene& scene)
 		// Poll input events
 		glfwPollEvents();
 
-		scene.DispatchEvent("Forward", 0.001f);
+		scene.DispatchEvent("Forward", 0);
 
 		// Update the scene
 		scene.Update((float)(currentTime - frameTime));

@@ -16,7 +16,7 @@ Camera::Camera(const String& name, float vFOV, float ratio, float zMin, float zM
 
 	this->Perspective = Mat4::PerspectiveVFOV(VFOV, Ratio, ZMin, ZMax);
 
-	InputHandler.BindAction("Forward", this, &Camera::MoveForward);
+	EventManager.BindAction("Forward", this, &Camera::MoveForward);
 }
 
 ///////////////////

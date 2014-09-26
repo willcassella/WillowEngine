@@ -22,3 +22,5 @@
 #else
 	#define CORE_API IMPORT
 #endif
+
+#include <Utility\config.h>

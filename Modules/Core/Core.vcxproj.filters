@@ -25,7 +25,7 @@
     <ClCompile Include="source\Transform.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="source\InputHandler.cpp">
+    <ClCompile Include="source\EventManager.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -51,10 +51,13 @@
     <ClInclude Include="include\Core\Transform.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\InputHandler.h">
+    <ClInclude Include="include\Core\InputDispatcher.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\InputDispatcher.h">
+    <ClInclude Include="include\Core\EventManager.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\IEventDispatcher.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

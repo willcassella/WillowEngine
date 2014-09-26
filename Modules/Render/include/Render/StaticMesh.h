@@ -8,9 +8,6 @@
 
 namespace Willow
 {
-	template class RENDER_API Array<Vertex>;
-	template class RENDER_API Array<BufferID>;
-
 	class RENDER_API StaticMesh : public Resource
 	{
 		///////////////////////
@@ -52,6 +49,4 @@ namespace Willow
 		// @TODO: replace with ResourcePtr<Material>
 		Material* _mat;
 	};
-
-	template class RENDER_API ResourcePtr<StaticMesh>;
 }
