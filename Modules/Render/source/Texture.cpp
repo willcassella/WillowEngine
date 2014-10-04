@@ -1,6 +1,6 @@
 // Texture.cpp
 
-#include <iostream>
+#include <Utility\Console.h>
 #include <SOIL.h>
 #include "glew.h"
 #include "..\include\Render\Texture.h"
@@ -29,15 +29,16 @@ Texture::Texture(const String& path)
 
 	if (!image)
 	{
-		std::cout << "WARNING: '" << path << "' could not be opened\n";
+		Console::Warning("'@' could not be opened", path);
 		SOIL_free_image_data(image);
 		return;
 	}
 
+	// @TODO: Switch to FreeImage
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 	SOIL_free_image_data(image);
 
-	std::cout << "'" << path << "' loaded\n";
+	Console::WriteLine("'@' loaded", path);
 }
 
 Texture::~Texture()

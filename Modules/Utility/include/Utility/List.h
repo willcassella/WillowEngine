@@ -150,7 +150,7 @@ namespace Willow
 		///   Methods   ///
 	public:
 
-		size_t Size() const
+		uint32 Size() const
 		{
 			return _count;
 		}

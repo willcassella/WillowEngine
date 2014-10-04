@@ -1,6 +1,8 @@
 // string.cpp
 
 #include <cstring>
+#include <ctype.h>
+#include "..\include\Utility\Math\Math.h"
 #include "..\include\Utility\String.h"
 using namespace Willow;
 
@@ -41,7 +43,7 @@ bool String::IsNullOrEmpty() const
 	return _value == nullptr || this->Length() == 0;
 }
 
-size_t String::Length() const
+uint32 String::Length() const
 {
 	return String::Length(_value);
 }
@@ -77,9 +79,33 @@ String String::SubString(uint32 start, uint32 end) const
 	return str;
 }
 
-Array<uint32> String::OccurencesOf(const String& string) const
+String String::ToUpper() const
 {
-	Array<uint32> occurences;
+	String str = *this;
+
+	for (uint32 i = 0; i < str.Length(); i++)
+	{
+		str._value[i] = toupper(str._value[i]);
+	}
+
+	return str;
+}
+
+String String::ToLower() const
+{
+	String str = *this;
+
+	for (uint32 i = 0; i < str.Length(); i++)
+	{
+		str._value[i] = tolower(str._value[i]);
+	}
+
+	return str;
+}
+
+List<uint32> String::OccurencesOf(const String& string) const
+{
+	List<uint32> occurences;
 
 	for (uint32 i = 0; i < this->Length(); i++)
 	{
@@ -98,7 +124,7 @@ String String::GetFileExtension() const
 	auto occurences = this->OccurencesOf(".");
 	if (!occurences.IsEmpty())
 	{
-		return SubString(occurences.Last() + 1);
+		return this->SubString(occurences.Last() + 1);
 	}
 	else
 	{
@@ -106,9 +132,37 @@ String String::GetFileExtension() const
 	}
 }
 
-size_t String::Length(const char* string)
+String String::GetFileName() const
 {
-	return strlen(string);
+	String name = *this;
+
+	auto forwardSlashes = name.OccurencesOf("/");
+	auto backSlashes = name.OccurencesOf("\\");
+
+	if (!forwardSlashes.IsEmpty())
+	{
+		if (!backSlashes.IsEmpty())
+		{
+			name = name.SubString(Max(forwardSlashes.Last(), backSlashes.Last()));
+		}
+		else
+		{
+			name = name.SubString(forwardSlashes.Last());
+		}
+	}
+
+	auto dots = name.OccurencesOf(".");
+	if (!dots.IsEmpty())
+	{
+		return name.SubString(0, dots.Last());
+	}
+
+	return name;
+}
+
+uint32 String::Length(const char* string)
+{
+	return (uint32)strlen(string);
 }
 
 /////////////////////
@@ -174,11 +228,5 @@ String Willow::operator+(const String& lhs, const String& rhs)
 String& Willow::operator+=(String& lhs, const String& rhs)
 {
 	lhs = lhs + rhs;
-	return lhs;
-}
-
-std::ostream& Willow::operator<<(std::ostream& lhs, const String& rhs)
-{
-	lhs << rhs._value;
 	return lhs;
 }

@@ -40,6 +40,5 @@ namespace Willow
 		{
 			return lhs.X != rhs.X || lhs.Y != rhs.Y || lhs.Z != rhs.Z;
 		}
-		friend UTILITY_API std::ostream& operator<<(std::ostream& out, const Quat& rhs);
 	};
 }

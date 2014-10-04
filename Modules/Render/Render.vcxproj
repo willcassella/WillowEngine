@@ -127,13 +127,14 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>Willow_Utility.lib;Willow_Resource.lib;SOIL.lib;OpenGL32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
     </Link>
     <Lib />
     <Lib>
       <AdditionalDependencies>glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)Modules\Utility\bin\*.dll" "$(OutDir)" /d /y</Command>
+      <Command>xcopy "$(OutDir)$(TargetFileName)" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -147,13 +148,14 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>Willow_Utility.lib;Willow_Resource.lib;SOIL64.lib;opengl32.lib;glew32s.lib</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
     </Link>
     <Lib />
     <Lib>
       <AdditionalDependencies>glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)Modules\Utility\bin\*.dll" "$(OutDir)" /d /y</Command>
+      <Command>xcopy "$(OutDir)$(TargetFileName)" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -171,13 +173,14 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>Willow_Utility.lib;Willow_Resource.lib;SOIL.lib;OpenGL32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
     </Link>
     <Lib />
     <Lib>
       <AdditionalDependencies>glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)Modules\Utility\bin\*.dll" "$(OutDir)" /d /y</Command>
+      <Command>xcopy "$(OutDir)$(TargetFileName)" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -195,13 +198,14 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>Willow_Utility.lib;Willow_Resource.lib;SOIL64.lib;opengl32.lib;glew32s.lib</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
     </Link>
     <Lib />
     <Lib>
       <AdditionalDependencies>glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)Modules\Utility\bin\*.dll" "$(OutDir)" /d /y</Command>
+      <Command>xcopy "$(OutDir)$(TargetFileName)" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

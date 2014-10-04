@@ -6,35 +6,62 @@
 #define WinMain main
 #endif
 
-#include <iostream>
 #include <GLFW/glfw3.h>
-
-//Include modules headers
+#include <Utility\Console.h>
+#include <Utility\Math\Vec2.h>
 #include <Core\Scene.h>
-#include <Render\Render.h>
+#include <Core\FPSCamera.h>
+using namespace Willow;
 
 //Define context parameters
-int window_width = 1280;
-int window_height = 720;
-const char* title = "Willow Engine";
-bool fullscreen = true;
+int32 window_width = 1280;
+int32 window_height = 720;
 
 //Function Prototypes
 GLFWwindow* InitGLFW();
 void eventLoop(GLFWwindow* window, Willow::Scene& scene);
 void cleanUp(GLFWwindow* window);
 
-void windowSizeCallback(GLFWwindow* window, int x, int y)
+struct
+{
+	//////////////////
+	///   Fields   ///
+public:
+
+	Willow::Vec2 Position;
+
+	///////////////////
+	///   Methods   ///
+public:
+
+	void UpdatePosition(GLFWwindow* window)
+	{
+		double x;
+		double y;
+
+		glfwGetCursorPos(window, &x, &y);
+
+		Position.X = (float)x - window_width / 2;
+		Position.Y = (float)y - window_height / 2;
+	}
+	void SetPosition(GLFWwindow* window, float x, float y)
+	{
+		glfwSetCursorPos(window, x + window_width / 2, y + window_height / 2);
+		Position.X = x;
+		Position.X = y;
+	}
+
+} Cursor;
+
+void windowSizeCallback(GLFWwindow* window, int32 x, int32 y)
 {
 	//Resize the viewport
 	glViewport(0, 0, x, y);
 }
 
-int main(int argc, char* argv[])
+int WinMain(int32 argc, char* argv[])
 {	
-	using namespace Willow;
-
-	std::cout << "Initializing subsystems... " << std::endl;
+	Console::WriteLine("Initializing subsystems...");
 	// Initialize GLFW and get a window
 	GLFWwindow* window = InitGLFW();
   
@@ -52,11 +79,8 @@ int main(int argc, char* argv[])
 
 	Prop sponza("sponza");
 	Prop gun("gun");
-	Prop crosshairs("crosshairs");
 
 	sponza.mesh = "data/sponza.dat";
-	gun.mesh = "data/battle_rifle.dat";
-	crosshairs.mesh = "data/battle_rifle_crosshairs.dat";
 
 	Material sponza_mat;
 	sponza_mat.VertexShader = "data/Default.vert";
@@ -65,6 +89,8 @@ int main(int argc, char* argv[])
 	sponza_mat.Compile();
 	sponza.mesh->SetMaterial(sponza_mat);
 
+	gun.mesh = "data/battle_rifle.dat";
+
 	Material gun_mat;
 	gun_mat.VertexShader = "data/Default.vert";
 	gun_mat.FragmentShader = "data/Default.frag";
@@ -72,31 +98,11 @@ int main(int argc, char* argv[])
 	gun_mat.Compile();
 	gun.mesh->SetMaterial(gun_mat);
 
-	Material crosshairs_mat;
-	crosshairs_mat.VertexShader = "data/Default.vert";
-	crosshairs_mat.FragmentShader = "data/Default.frag";
-	crosshairs_mat.Textures["fDiffuse"] = "data/battle_rifle_crosshair_tex.png";
-	crosshairs_mat.Compile();
-	crosshairs.mesh->SetMaterial(crosshairs_mat);
-
-	Camera cam("Camera", 43, float(window_width)/window_height, 0.01f, 90.0f);
-
-	cam.Transform.Location.Z = 4;
-	cam.Transform.Location.Y = 0;
-
-	// @TODO: Parenting seems to be broken...
-	//gun.Transform.Parent = &cam.Transform;
-
-	crosshairs.Transform.Location.Z = -1;
-	crosshairs.Transform.Location.Y = -0.02f;
-	crosshairs.Transform.Rotate(Vec3::Right, -3.14159f/2, false);
-	crosshairs.Transform.Parent = &cam.Transform;
+	TestGame::FPSCamera cam("Camera", 43, float(window_width)/window_height, 0.01f, 90.0f);
 
 	testScene.Objects.Add(&sponza);
 	testScene.Objects.Add(&gun);
-	testScene.Objects.Add(&crosshairs);
 	testScene.Cameras.Add(&cam);
-
 
 	//Execute the main event loops
 	eventLoop(window, testScene);
@@ -121,8 +127,7 @@ GLFWwindow* InitGLFW()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
-	GLFWwindow* window = glfwCreateWindow(window_width, window_height, 
-		title, NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(window_width, window_height, "Willow Engine", NULL, NULL);
 
 	//make sure the window was initialized properly
 	if (!window)
@@ -161,49 +166,80 @@ GLFWwindow* InitGLFW()
 
 void eventLoop(GLFWwindow* window, Willow::Scene& scene)
 {
-	std::cout << "Entering event loop... " << std::endl;
+	Console::WriteLine("Entering event loop...");
 
-	double lastTime = glfwGetTime();
-	double frameTime = lastTime;
-	int numFrames = 0;
+	double previous = glfwGetTime();
+	double lastTime = previous;
+	double lag = 0.0;
+	uint32 numFrames = 0;
+	uint32 numUpdates = 0;
 
-	//Begin the event loop
+	// Begin the event loop
 	while (!glfwWindowShouldClose(window))
 	{	 
-		// If we reported the frame time more than one second ago
 		double currentTime = glfwGetTime();
+		lag += currentTime - previous;
+		previous = currentTime;
 		numFrames++;
 
-		// @TODO: replace this with a config file or something
-#if defined(DEBUG)
 		if (currentTime - lastTime >= 1.0)
-		{ 
-			std::cout << 1000.0 / numFrames << " ms/frame" << std::endl;
+		{
+			Console::WriteLine("@ ms/frame = @ fps", 1000.0 / numFrames, numFrames);
+			Console::WriteLine("@ updates/second", numUpdates);
 			numFrames = 0;
+			numUpdates = 0;
 			lastTime = currentTime;
 		}
-#endif
 
 		// Poll input events
 		glfwPollEvents();
 
-		scene.DispatchEvent("Forward", 0);
+		Cursor.UpdatePosition(window);
 
-		// Update the scene
-		scene.Update((float)(currentTime - frameTime));
-		frameTime = glfwGetTime();
+		while (lag >= scene.TimeStep)
+		{
+			// Dispatch events
+			float speed = 0.05f;
+			if (glfwGetKey(window, GLFW_KEY_W))
+			{
+				scene.DispatchEvent("MoveForward", speed);
+			}
+			if (glfwGetKey(window, GLFW_KEY_S))
+			{
+				scene.DispatchEvent("MoveForward", -speed);
+			}
+			if (glfwGetKey(window, GLFW_KEY_D))
+			{
+				scene.DispatchEvent("MoveRight", speed);
+			}
+			if (glfwGetKey(window, GLFW_KEY_A))
+			{
+				scene.DispatchEvent("MoveRight", -speed);
+			}
+
+			scene.DispatchEvent("LookUp", Cursor.Position.Y / 100);
+			scene.DispatchEvent("LookRight", Cursor.Position.X / 100);
+			Cursor.SetPosition(window, 0, 0);
+
+			// Update the scene
+			scene.Update();
+
+			lag -= scene.TimeStep;
+			numUpdates++;
+		}
 
 		//render the frame
-		Willow::ClearBuffer();
+		ClearBuffer();
 		scene.Render();
 		glfwSwapBuffers(window);
 	}
-	std::cout << "Leaving event loop... " << std::endl;
+
+	Console::WriteLine("Leaving event loop...");
 }
 
 void cleanUp(GLFWwindow* window)
 {
-	std::cout << "Shutting down..." << std::endl;
+	Console::WriteLine("Shutting down...");
 	
 	//Delete the window (along with the context)
 	glfwDestroyWindow( window );

@@ -109,9 +109,3 @@ Vec3& Willow::operator*=(Vec3& lhs, int32 rhs)
 	lhs = lhs * rhs;
 	return lhs;
 }
-
-std::ostream& Willow::operator<<(std::ostream& out, const Vec3& rhs)
-{
-	out << "<" << rhs.X << ", " << rhs.Y << ", " << rhs.Z << ">";
-	return out;
-}

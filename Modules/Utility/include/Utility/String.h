@@ -1,12 +1,10 @@
 // String.h
 #pragma once
 
-#include <ostream>
-#include "Array.h"
+#include "List.h"
 
 namespace Willow
 {
-	template class UTILITY_API Array<uint32>;
 	struct UTILITY_API String
 	{
 		////////////////////////
@@ -23,13 +21,16 @@ namespace Willow
 	public:
 
 		bool IsNullOrEmpty() const;
-		size_t Length() const;
+		uint32 Length() const;
 		const char* Cstr() const;
 		String SubString(uint32 start) const;
 		String SubString(uint32 start, uint32 end) const;
-		Array<uint32> OccurencesOf(const String& string) const;
+		String ToUpper() const;
+		String ToLower() const;
+		List<uint32> OccurencesOf(const String& string) const;
 		String GetFileExtension() const;
-		static size_t Length(const char* string);
+		String GetFileName() const;
+		static uint32 Length(const char* string);
 
 		/////////////////////
 		///   Operators   ///
@@ -45,7 +46,6 @@ namespace Willow
 		friend UTILITY_API bool operator<=(const String& lhs, const String& rhs);
 		friend UTILITY_API String operator+(const String& lhs, const String& rhs);
 		friend UTILITY_API String& operator+=(String& lhs, const String& rhs);
-		friend UTILITY_API std::ostream& operator<<(std::ostream& lhs, const String& rhs);
 
 		////////////////
 		///   Data   ///

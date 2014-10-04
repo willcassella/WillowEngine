@@ -20,6 +20,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="source\WillowConvert.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\WillowConvert\WillowConvert.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{4700682C-35A0-4338-9860-7330D1341505}</ProjectGuid>
@@ -72,43 +76,41 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IntDir>build\</IntDir>
     <OutDir>bin\</OutDir>
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Resource\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Resource\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IntDir>build\</IntDir>
     <OutDir>bin\</OutDir>
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Resource\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Resource\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IntDir>build\</IntDir>
     <OutDir>bin\</OutDir>
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Resource\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Resource\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IntDir>build\</IntDir>
     <OutDir>bin\</OutDir>
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Resource\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Resource\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <DisableSpecificWarnings>
-      </DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Utility.lib;Render.lib</AdditionalDependencies>
+      <AdditionalDependencies>Willow_Utility.lib;Willow_Render.lib;Willow_Resource.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)Modules\Utility\bin\*.dll" "$(OutDir)" /d /y
-xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
+      <Command>xcopy "$(OutDir)$(TargetFileName)" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -116,17 +118,15 @@ xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <DisableSpecificWarnings>
-      </DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Utility.lib;Render.lib</AdditionalDependencies>
+      <AdditionalDependencies>Willow_Utility.lib;Willow_Render.lib;Willow_Resource.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)Modules\Utility\bin\*.dll" "$(OutDir)" /d /y
-xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
+      <Command>xcopy "$(OutDir)$(TargetFileName)" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -136,19 +136,17 @@ xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <DisableSpecificWarnings>
-      </DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Utility.lib;Render.lib</AdditionalDependencies>
+      <AdditionalDependencies>Willow_Utility.lib;Willow_Render.lib;Willow_Resource.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)Modules\Utility\bin\*.dll" "$(OutDir)" /d /y
-xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
+      <Command>xcopy "$(OutDir)$(TargetFileName)" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -158,19 +156,17 @@ xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <DisableSpecificWarnings>
-      </DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Utility.lib;Render.lib</AdditionalDependencies>
+      <AdditionalDependencies>Willow_Utility.lib;Willow_Render.lib;Willow_Resource.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)Modules\Utility\bin\*.dll" "$(OutDir)" /d /y
-xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
+      <Command>xcopy "$(OutDir)$(TargetFileName)" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

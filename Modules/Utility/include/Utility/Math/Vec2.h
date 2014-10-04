@@ -1,7 +1,6 @@
 // Vec2.h
 #pragma once
 
-#include <ostream>
 #include "..\config.h"
 
 namespace Willow
@@ -68,6 +67,5 @@ namespace Willow
 		{
 			return lhs.X != rhs.X || lhs.Y != rhs.Y;
 		}
-		friend UTILITY_API std::ostream& operator<<(std::ostream& out, const Vec2& rhs);
 	};
 }

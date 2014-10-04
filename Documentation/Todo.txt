@@ -11,6 +11,8 @@ Features:
 	Implement IPlayer and Pawn
 
 	Figure out a better scene managment system (components for globally-aware members, maybe?)
+
+	Massive refactoring run
 	
 	Finish Reflection implementation
 

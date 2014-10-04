@@ -61,7 +61,6 @@ namespace Willow
 		friend UTILITY_API Vec3 operator*(const Mat4& lhs, const Vec3& rhs);
 		friend UTILITY_API Vec3 operator*(const Vec3& lhs, const Mat4& rhs);
 		friend UTILITY_API Vec3& operator*=(Vec3& lhs, const Mat4& rhs);
-		friend std::ostream& operator<<(std::ostream& out, const Mat4& rhs);
 
 		////////////////
 		///   Data   ///

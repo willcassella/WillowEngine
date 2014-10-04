@@ -15,6 +15,7 @@ namespace Willow
 	public:
 
 		float TimeDilation = 1.0f;
+		float TimeStep = 1.f / 60;
 		List<Prop*> Objects;
 		List<Camera*> Cameras;
 
@@ -22,7 +23,7 @@ namespace Willow
 		///   Methods   ///
 	public:
 
-		void Update(float timeInterval);
+		void Update();
 		void DispatchEvent(const String& eventName, float value);
 		void Render() const;
 	};

@@ -30,6 +30,9 @@
     <ClCompile Include="source\String.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="source\Console.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Utility\Math\Mat4.h">
@@ -60,6 +63,18 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Utility\Pair.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\Math\Math.h">
+      <Filter>include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\ProgramOptions.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\Queue.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\Console.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

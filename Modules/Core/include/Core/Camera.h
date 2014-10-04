@@ -34,11 +34,5 @@ namespace Willow
 	public:
 
 		Mat4 GetPerspective() const;
-
-		///////////////////
-		///   Actions   ///
-	public:
-
-		void MoveForward();
 	};
 }

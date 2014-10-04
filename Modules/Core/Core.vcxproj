@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Camera.cpp" />
+    <ClCompile Include="source\FPSCamera.cpp" />
     <ClCompile Include="source\GameObject.cpp" />
     <ClCompile Include="source\EventManager.cpp" />
     <ClCompile Include="source\Prop.cpp" />
@@ -29,6 +30,7 @@
   <ItemGroup>
     <ClInclude Include="include\Core\Camera.h" />
     <ClInclude Include="include\Core\config.h" />
+    <ClInclude Include="include\Core\FPSCamera.h" />
     <ClInclude Include="include\Core\Game.h" />
     <ClInclude Include="include\Core\GameObject.h" />
     <ClInclude Include="include\Core\IEventDispatcher.h" />
@@ -46,28 +48,28 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -135,8 +137,7 @@
       <AdditionalDependencies>Render_d.lib</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)Modules\Utility\bin\*.dll" "$(OutDir)" /d /y
-xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
+      <Command>xcopy "$(OutDir)$(TargetFileName)" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -157,8 +158,7 @@ xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
       <AdditionalDependencies>Render64_d.lib</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)Modules\Utility\bin\*.dll" "$(OutDir)" /d /y
-xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
+      <Command>xcopy "$(OutDir)$(TargetFileName)" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -183,8 +183,7 @@ xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
       <AdditionalDependencies>Render.lib</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)Modules\Utility\bin\*.dll" "$(OutDir)" /d /y
-xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
+      <Command>xcopy "$(OutDir)$(TargetFileName)" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -209,8 +208,7 @@ xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
       <AdditionalDependencies>Render64.lib</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)Modules\Utility\bin\*.dll" "$(OutDir)" /d /y
-xcopy "$(SolutionDir)Modules\Render\bin\*.dll" "$(OutDir)" /d /y</Command>
+      <Command>xcopy "$(OutDir)$(TargetFileName)" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

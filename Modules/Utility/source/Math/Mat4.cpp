@@ -469,22 +469,22 @@ Vec3& Willow::operator*=(Vec3& lhs, const Mat4& rhs)
 	return lhs;
 }
 
-std::ostream& Willow::operator<<(std::ostream& out, const Mat4& rhs)
-{
-	// For each row
-	for (uint32 row = 0; row < 4; row++)
-	{
-		out << "| ";
-
-		// For each column
-		for (uint32 col = 0; col < 4; col++)
-		{
-			// Print the value in that place
-			out << rhs._values[col][row] << " ";
-		}
-		// Start a new line
-		out << " |\n";
-	}
-	out << "\n\n\n";
-	return out;
-}
+//std::ostream& Willow::operator<<(std::ostream& out, const Mat4& rhs)
+//{
+//	// For each row
+//	for (uint32 row = 0; row < 4; row++)
+//	{
+//		out << "| ";
+//
+//		// For each column
+//		for (uint32 col = 0; col < 4; col++)
+//		{
+//			// Print the value in that place
+//			out << rhs._values[col][row] << " ";
+//		}
+//		// Start a new line
+//		out << " |\n";
+//	}
+//	out << "\n\n\n";
+//	return out;
+//}

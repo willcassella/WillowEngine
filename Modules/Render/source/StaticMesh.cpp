@@ -1,7 +1,8 @@
 // StaticMesh.cpp
 
 #include <fstream>
-#include <iostream>
+#include <Utility\Array.h>
+#include <Utility\Console.h>
 #include "glew.h"
 #include "..\include\Render\Vertex.h"
 #include "..\include\Render\StaticMesh.h"
@@ -15,11 +16,16 @@ bool LoadModel(const String& path, Array<Vertex>* outVertices, Array<BufferID>* 
 StaticMesh::StaticMesh(const String& path)
 	: Super(path)
 {
-	if (!LoadModel(path, &this->_vertices, &this->_elements))
+	Array<Vertex> vertices;
+	Array<BufferID> elements;
+
+	if (!LoadModel(path, &vertices, &elements))
 	{
 		this->_mat = nullptr;
 		return;
 	}
+
+	this->_numElements = elements.Size();
 
 	// Generate buffers and upload data
 	glGenVertexArrays(1, &_vao);
@@ -27,11 +33,11 @@ StaticMesh::StaticMesh(const String& path)
 	
 	glGenBuffers(1, &_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
-	glBufferData(GL_ARRAY_BUFFER, _vertices.Size() * sizeof(Vertex), &_vertices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices.Size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
 
 	glGenBuffers(1, &_ebo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _elements.Size() * sizeof(BufferID), &_elements[0] , GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.Size() * sizeof(BufferID), &elements[0] , GL_STATIC_DRAW);
 
 	this->_mat = nullptr;
 
@@ -62,7 +68,7 @@ void StaticMesh::Render(const Mat4& orientation, const Mat4& view, const Mat4& p
 	_mat->UploadProjectionMatrix(perspective);
 
 	//Draw the mesh
-	glDrawElements(GL_TRIANGLES, (GLsizei)_elements.Size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, (GLsizei)_numElements, GL_UNSIGNED_INT, 0);
 
 	glBindVertexArray(NULL);
 }
@@ -111,7 +117,7 @@ bool LoadModel(const String& path, Array<Vertex>* const outVertices, Array<Buffe
 	// Make sure the file opened successfully
 	if (!input.is_open())
 	{
-		std::cout << "WARNING: '" << path << "' could not be opened\n";
+		Console::Warning("'@' could not be opened", path);
 		return false;
 	}
 
@@ -142,7 +148,7 @@ bool LoadModel(const String& path, Array<Vertex>* const outVertices, Array<Buffe
 	// Close the file
 	input.close();
 
-	std::cout << "'" << path << "' loaded\n";
+	Console::WriteLine("'@' loaded", path);
 
 	return true;
 }

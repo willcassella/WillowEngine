@@ -2,7 +2,7 @@
 
 #include <fstream>
 #include <string>
-#include <iostream>
+#include <Utility\Console.h>
 #include "glew.h"
 #include "..\include\Render\shader.h"
 using namespace Willow;
@@ -19,7 +19,7 @@ Shader::Shader(const String& path)
 	// Make sure the file opened correctly
 	if (!file.is_open())
 	{
-		std::cout << "WARNING: '" << path << "' could not be opened\n";
+		Console::Warning("'@' could not be opened", path);
 		this->_id = NULL;
 		return;
 	}
@@ -51,7 +51,7 @@ Shader::Shader(const String& path)
 	glShaderSource(_id, 1, &tempSource, nullptr);
 	glCompileShader(_id);
 
-	std::cout << "'" << path << "' loaded\n";
+	Console::WriteLine("'@' loaded", path);
 }
 
 Shader::~Shader()

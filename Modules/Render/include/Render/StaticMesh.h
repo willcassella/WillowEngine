@@ -4,7 +4,6 @@
 #include <Utility\String.h>
 #include <Utility\Math\Mat4.h>
 #include "Material.h"
-#include "Vertex.h"
 
 namespace Willow
 {
@@ -42,9 +41,7 @@ namespace Willow
 		BufferID _vbo;
 		BufferID _ebo;
 
-		// @TODO: Determine if its worth holding onto these
-		Array<Vertex> _vertices;
-		Array<BufferID> _elements;
+		uint32 _numElements;
 
 		// @TODO: replace with ResourcePtr<Material>
 		Material* _mat;
