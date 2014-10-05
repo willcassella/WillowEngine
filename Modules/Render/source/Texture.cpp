@@ -1,7 +1,7 @@
 // Texture.cpp
 
 #include <Utility\Console.h>
-#include <SOIL.h>
+#include <FreeImage.h>
 #include "glew.h"
 #include "..\include\Render\Texture.h"
 using namespace Willow;
@@ -12,6 +12,24 @@ using namespace Willow;
 Texture::Texture(const String& path)
 	: Super(path)
 {
+	// Open the file
+	FREE_IMAGE_FORMAT format = FreeImage_GetFileType(path.Cstr());
+	FIBITMAP* image = FreeImage_Load(format, path.Cstr(), 0);
+
+	if (!image)
+	{
+		Console::Warning("'@' could not be opened", path);
+		this->_id = 0;
+		return;
+	}
+
+	FIBITMAP* temp = image;
+	image = FreeImage_ConvertTo32Bits(image);
+	FreeImage_Unload(temp);
+
+	int32 width = FreeImage_GetWidth(image);
+	int32 height = FreeImage_GetHeight(image);
+
 	// Create and bind the buffer
 	glGenTextures(1, &this->_id);
 	glBindTexture(GL_TEXTURE_2D, this->_id);
@@ -24,19 +42,10 @@ Texture::Texture(const String& path)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	int32 width, height;
-	byte* image = SOIL_load_image(path.Cstr(), &width, &height, 0, SOIL_LOAD_RGB);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, FreeImage_GetBits(image));
 
-	if (!image)
-	{
-		Console::Warning("'@' could not be opened", path);
-		SOIL_free_image_data(image);
-		return;
-	}
-
-	// @TODO: Switch to FreeImage
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-	SOIL_free_image_data(image);
+	// Done using the image
+	FreeImage_Unload(image);
 
 	Console::WriteLine("'@' loaded", path);
 }

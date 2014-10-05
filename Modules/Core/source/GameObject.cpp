@@ -2,6 +2,7 @@
 
 #include <map>
 #include "..\include\Core\GameObject.h"
+#include "..\include\Core\Game.h"
 using namespace Willow;
 
 ////////////////////////
@@ -21,8 +22,3 @@ void GameObject::Tick(float timeInterval)
 {
 	// Do nothing
 }
-
-//void GameObject::BindAction(const String& action, ActionHandler handler)
-//{
-//	
-//}

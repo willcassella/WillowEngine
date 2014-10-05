@@ -14,8 +14,9 @@ int main(int32 argCount, char* args[])
 		return 0;
 	}
 
-	Console::WriteLine("\n---WillowConvert---\n\n");
-	Console::WriteLine("Enter the path to a file to convert:\n");
+	Console::WriteLine("---WillowConvert---");
+	Console::NewLine();
+	Console::WriteLine("Enter the path to a file to convert:");
 
 	while (true)
 	{

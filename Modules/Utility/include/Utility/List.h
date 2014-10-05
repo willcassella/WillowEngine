@@ -29,8 +29,8 @@ namespace Willow
 		public:
 
 			Node(T value, Node* prev = nullptr, Node* next = nullptr)
+				: Value(value)
 			{
-				this->Value = value;
 				this->Next = next;
 				this->Prev = prev;
 			}
@@ -126,10 +126,7 @@ namespace Willow
 			this->_last = nullptr;
 			this->_count = 0;
 
-			for (const auto& i : copy)
-			{
-				this->Add(i);
-			}
+			*this = copy;
 		}
 		List(List&& other)
 		{
@@ -204,8 +201,49 @@ namespace Willow
 			assert(_last);
 			return _last->Value;
 		}
+		List<uint32> OccurrencesOf(const T& value) const
+		{
+			List<uint32> occurrences;
 
-		//  Iteration functions
+			for (uint32 i = 0; i < this->Size(); i++)
+			{
+				if ((*this)[i] == value)
+				{
+					occurrences.Add(i);
+				}
+			}
+
+			return occurrences;
+		}
+		void RemoveAt(uint32 index)
+		{
+			// If this index doesn't exist
+			if (index >= _count)
+			{
+				return;
+			}
+
+			Node* current = _first;
+			for (uint32 i = 0; i < _count; i++)
+			{
+				current = current->Next;
+			}
+
+			current->Prev->Next = current->Next;
+			current->Next->Prev = current->Prev;
+
+			delete current;
+			count--;
+		}
+		void RemoveAll(const T& value)
+		{
+			for (uint32 i : this->OccurrencesOf(value))
+			{
+				this->RemoveAt(i);
+			}
+		}
+
+		/* Iteration methods */
 		Iterator begin()
 		{
 			return Iterator(_first);
@@ -295,6 +333,7 @@ namespace Willow
 
 			return target->Value;
 		}
+		// @TODO: operator== and operator!=
 
 		////////////////
 		///   Data   ///

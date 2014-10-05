@@ -3,7 +3,7 @@
 
 #include <cassert>
 #include <utility>
-#include "config.h"
+#include "List.h"
 
 namespace Willow
 {
@@ -170,6 +170,21 @@ namespace Willow
 			assert(_freeIndex > 0);
 			return _values[_freeIndex - 1];
 		}
+		List<uint32> OccurrencesOf(const T& value) const
+		{
+			List<uint32> occurrences;
+
+			for (uint32 i = 0; i < this->Size(); i++)
+			{
+				if ((*this)[i] == value)
+				{
+					occurrences.Add(i);
+				}
+			}
+
+			return occurrences;
+		}
+		// @TODO: RemoveAt and RemoveAll
 
 		/* Iteration methods */
 		Iterator begin()
@@ -248,18 +263,16 @@ namespace Willow
 			assert(index < _freeIndex);
 			return _values[index];
 		}
-		
-		// @TODO: Make this a friend operator
-		bool operator==(const Array<T>& rhs) const
+		friend bool operator==(const Array<T>& lhs, const Array<T>& rhs)
 		{
-			if (this->Size() != rhs.Size())
+			if (lhs.Size() != rhs.Size())
 			{
 				return false;
 			}
 
-			for (uint32 i = 0; i < this->Size(); i++)
+			for (uint32 i = 0; i < lhs.Size(); i++)
 			{
-				if ((*this)[i] != rhs[i])
+				if (lhs[i] != rhs[i])
 				{
 					return false;
 				}
@@ -267,10 +280,9 @@ namespace Willow
 
 			return true;
 		}
-		// @TODO: Make this a friend operator
-		bool operator!=(const Array<T>& rhs) const
+		friend bool operator!=(const Array<T>& lhs, const Array<T>& rhs)
 		{
-			return !(*this == rhs);
+			return !(lhs == rhs);
 		}
 
 		////////////////

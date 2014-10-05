@@ -28,7 +28,7 @@
     <ClCompile Include="source\EventManager.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="source\FPSCamera.cpp">
+    <ClCompile Include="source\Game.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -61,9 +61,6 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Core\IEventDispatcher.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Core\FPSCamera.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

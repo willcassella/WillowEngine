@@ -9,8 +9,8 @@
 #include <GLFW/glfw3.h>
 #include <Utility\Console.h>
 #include <Utility\Math\Vec2.h>
-#include <Core\Scene.h>
-#include <Core\FPSCamera.h>
+#include <Core\Game.h>
+#include <ExampleGame\FPSCamera.h>
 using namespace Willow;
 
 //Define context parameters
@@ -75,8 +75,6 @@ int WinMain(int32 argc, char* argv[])
 	///   Setting up a simple   ///
 	///          scene          ///
 
-	Scene testScene;
-
 	Prop sponza("sponza");
 	Prop gun("gun");
 
@@ -98,14 +96,15 @@ int WinMain(int32 argc, char* argv[])
 	gun_mat.Compile();
 	gun.mesh->SetMaterial(gun_mat);
 
-	TestGame::FPSCamera cam("Camera", 43, float(window_width)/window_height, 0.01f, 90.0f);
+	ExampleGame::FPSCamera cam("Camera", 43, float(window_width)/window_height, 0.01f, 90.0f);
 
-	testScene.Objects.Add(&sponza);
-	testScene.Objects.Add(&gun);
-	testScene.Cameras.Add(&cam);
+	Game::Instance().GetCurrentScene().Objects.Add(&gun);
+	Game::Instance().GetCurrentScene().Objects.Add(&sponza);
+
+	Game::Instance().GetCurrentScene().Cameras.Add(&cam);
 
 	//Execute the main event loops
-	eventLoop(window, testScene);
+	eventLoop(window, Game::Instance().GetCurrentScene());
 	
 	//Cleanup the engine
 	cleanUp(window);
@@ -164,7 +163,7 @@ GLFWwindow* InitGLFW()
 	return window;
 }
 
-void eventLoop(GLFWwindow* window, Willow::Scene& scene)
+void eventLoop(GLFWwindow* window, Scene& scene)
 {
 	Console::WriteLine("Entering event loop...");
 
