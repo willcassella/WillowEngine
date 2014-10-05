@@ -7,7 +7,7 @@ using namespace Willow;
 ///   Constructors   ///
 
 Prop::Prop(const String& name)
-	: Super(name)
+	: Super(name), MeshComponent(*this)
 {
 	// Do nothing
 }
@@ -15,7 +15,9 @@ Prop::Prop(const String& name)
 ///////////////////
 ///   Methods   ///
 
-void Prop::Tick(float timeInterval)
+List<Component*> Prop::GetComponents()
 {
-	// Do nothing
+	List<Component*> components = Super::GetComponents();
+	components.Add(&MeshComponent);
+	return components;
 }

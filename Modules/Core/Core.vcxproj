@@ -20,15 +20,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Camera.cpp" />
+    <ClCompile Include="source\Component.cpp" />
     <ClCompile Include="source\Game.cpp" />
     <ClCompile Include="source\GameObject.cpp" />
     <ClCompile Include="source\EventManager.cpp" />
     <ClCompile Include="source\Prop.cpp" />
     <ClCompile Include="source\Scene.cpp" />
+    <ClCompile Include="source\StaticMeshComponent.cpp" />
     <ClCompile Include="source\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Core\Camera.h" />
+    <ClInclude Include="include\Core\Component.h" />
+    <ClInclude Include="include\Core\StaticMeshComponent.h" />
     <ClInclude Include="include\Core\config.h" />
     <ClInclude Include="include\Core\Game.h" />
     <ClInclude Include="include\Core\GameObject.h" />

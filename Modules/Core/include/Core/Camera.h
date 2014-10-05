@@ -21,7 +21,6 @@ namespace Willow
 		float Ratio;
 		float ZMin;
 		float ZMax;
-		Mat4 Perspective;
 
 		////////////////////////
 		///   Constructors   ///

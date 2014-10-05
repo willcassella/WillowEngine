@@ -13,8 +13,6 @@ Camera::Camera(const String& name, float vFOV, float ratio, float zMin, float zM
 	this->Ratio = ratio;
 	this->ZMin = zMin;
 	this->ZMax = zMax;
-
-	this->Perspective = Mat4::PerspectiveVFOV(VFOV, Ratio, ZMin, ZMax);
 }
 
 ///////////////////
@@ -22,5 +20,5 @@ Camera::Camera(const String& name, float vFOV, float ratio, float zMin, float zM
 
 Mat4 Camera::GetPerspective() const
 {
-	return Perspective;
+	return Mat4::PerspectiveVFOV(VFOV, Ratio, ZMin, ZMax);
 }

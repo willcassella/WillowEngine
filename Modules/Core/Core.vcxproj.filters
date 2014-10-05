@@ -31,6 +31,12 @@
     <ClCompile Include="source\Game.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="source\StaticMeshComponent.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Component.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Core\Camera.h">
@@ -61,6 +67,12 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Core\IEventDispatcher.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\StaticMeshComponent.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Component.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

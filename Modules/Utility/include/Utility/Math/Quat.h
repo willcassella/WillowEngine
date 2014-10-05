@@ -25,6 +25,7 @@ namespace Willow
 		///   Methods   ///
 	public:
 
+		/** Rotate this quaternion around an axis by a certain angle */
 		void RotateByAxisAngle(const Vec3& axis, float angle, bool local);
 
 		/////////////////////

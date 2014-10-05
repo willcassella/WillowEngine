@@ -8,15 +8,15 @@
 
 namespace Willow
 {
-	/** Enum of supported input types */
-	enum class InputType
-	{
-		None, OBJ
-	};
-
 	// @TODO: Make these all normal functions, not part of a class (maybe a namespace instead)
 	namespace WillowConvert
 	{
+		/** Enum of supported input types */
+		enum class InputType
+		{
+			None, OBJ
+		};
+
 		/////////////////////
 		///   Functions   ///
 

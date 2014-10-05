@@ -18,22 +18,22 @@ namespace Willow
 	public:
 
 		Pair(A first = A(), B second = B())
+			: First(first), Second(second)
 		{
-			First = first;
-			Second = second;
+			// All done
 		}
 
 		/////////////////////
 		///   Operators   ///
 	public:
 
-		bool operator==(const Pair<A, B>& rhs) const
+		friend bool operator==(const Pair<A, B>& lhs, const Pair<A, B>& rhs)
 		{
-			return First == rhs.First && Second == rhs.Second;
+			return lhs.First == rhs.First && lhs.Second == rhs.Second;
 		}
-		bool operator!=(const Pair<A, B>& rhs) const
+		friend bool operator!=(const Pair<A, B>& lhs, const Pair<A, B>& rhs)
 		{
-			return First != rhs.First && Second != rhs.Second;
+			return !(lhs == rhs);
 		}
 	};
 }

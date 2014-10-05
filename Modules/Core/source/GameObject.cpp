@@ -1,24 +1,53 @@
 // GameObject.cpp
 
-#include <map>
 #include "..\include\Core\GameObject.h"
-#include "..\include\Core\Game.h"
 using namespace Willow;
 
 ////////////////////////
 ///   Constructors   ///
 
 GameObject::GameObject(const String& name)
+	: Name(name)
 {
-	this->Name = name;
+	this->_scene = nullptr;
+	this->_isDestroyed = false;
 }
 
-GameObject::~GameObject()
+Scene& GameObject::GetScene()
+{
+	assert(_scene);
+	return *_scene;
+}
+
+const Scene& GameObject::GetScene() const
+{
+	assert(_scene);
+	return *_scene;
+}
+
+void GameObject::Destroy()
+{
+	this->OnDestroy();
+	_isDestroyed = true;
+}
+
+bool GameObject::IsDestroyed() const
+{
+	return _isDestroyed;
+}
+
+List<Component*> GameObject::GetComponents()
+{
+	// Base GameObject class has no components
+	return List<Component*>();
+}
+
+void GameObject::Tick(float timeInterval)
 {
 	// Do nothing
 }
 
-void GameObject::Tick(float timeInterval)
+void GameObject::OnDestroy()
 {
 	// Do nothing
 }

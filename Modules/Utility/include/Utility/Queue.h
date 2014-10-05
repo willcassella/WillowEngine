@@ -64,7 +64,7 @@ namespace Willow
 		}
 		~Queue()
 		{
-			this->Destroy();
+			this->Clear();
 		}
 
 		///////////////////
@@ -73,17 +73,17 @@ namespace Willow
 
 		const T& Peek() const
 		{
-			assert(!this->IsEmpty());
+			assert(_first);
 			return _first->Value;
 		}
 		T Pop()
 		{
-			assert(!this->IsEmpty());
+			assert(_first);
 
 			T value = std::move(_first->Value);
+
 			Node* temp = _first;
 			_first = _first->Next;
-
 			delete temp;
 			_count--;
 
@@ -100,14 +100,14 @@ namespace Willow
 			{
 				_first = new Node(std::move(item));
 				_last = _first;
-				_count++;
 			}
 			else
 			{
 				_last->Next = new Node(std::move(item));
 				_last = _last->Next;
-				_count++;
 			}
+
+			_count++;
 		}
 		uint32 Size() const
 		{
@@ -115,12 +115,9 @@ namespace Willow
 		}
 		bool IsEmpty() const
 		{
-			return _count == 0;
+			return this->Size() == 0;
 		}
-
-	private:
-
-		void Destroy()
+		void Clear()
 		{
 			while (_first)
 			{
@@ -141,7 +138,7 @@ namespace Willow
 		{
 			if (this != &copy)
 			{
-				this->Destroy();
+				this->Clear();
 
 				Node* next = copy._first;
 				while (next)

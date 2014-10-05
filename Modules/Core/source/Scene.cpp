@@ -3,20 +3,55 @@
 #include "..\include\Core\Scene.h"
 using namespace Willow;
 
+////////////////////////
+///   Constructors   ///
+
+Scene::~Scene()
+{
+	// Delete all objects
+	for (auto& object : _objects)
+	{
+		delete object;
+	}
+}
+
 ///////////////////
 ///   Methods   ///
 
-// @TODO: this needs some rethinking
 void Scene::Update()
 {
-	for (auto& object : Objects)
+	// Update all objects
+	for (auto& object : _objects)
 	{
+		// If the object is stale
+		if (object->IsDestroyed())
+		{
+			_staleObjects.Push(object);
+			continue;
+		}
+
+		// Update the object
 		object->Tick(TimeDilation);
+		
+		// Update its components
+		for (auto& component : object->GetComponents())
+		{
+			component->OnSceneUpdate(TimeDilation);
+		}
 	}
 
-	for (auto& cam : Cameras)
+	// Remove stale objects
+	while (!_staleObjects.IsEmpty())
 	{
-		cam->Tick(TimeDilation);
+		GameObject* object = _staleObjects.Pop();
+		_objects.RemoveAll(object);
+		delete object;
+	}
+
+	// Add new objects
+	while (!_freshObjects.IsEmpty())
+	{
+		_objects.Add(_freshObjects.Pop());
 	}
 }
 
@@ -29,16 +64,17 @@ void Scene::DispatchEvent(const String& eventName, float value)
 	}
 }
 
+// @TODO: This needs work
 void Scene::Render() const
 {
-	for (auto& prop : Objects)
+	Mat4 view = Cameras[0]->Transform.GetTransfomationMatrix().Inverse();
+	Mat4 proj = Cameras[0]->GetPerspective();
+
+	for (auto& object : _objects)
 	{
-		Mat4 model = prop->Transform.GetTransfomationMatrix();
-
-		// WARNING: This assumes there is at least one camera in the scene, I will fix this later
-		Mat4 view = this->Cameras[0]->Transform.GetTransfomationMatrix().Inverse();
-		Mat4 proj = this->Cameras[0]->GetPerspective();
-
-		prop->mesh->Render(model, view, proj);
+		for (auto& component : object->GetComponents())
+		{
+			component->OnRender(view, proj);
+		}
 	}
 }

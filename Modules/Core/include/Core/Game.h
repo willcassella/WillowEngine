@@ -25,7 +25,7 @@ namespace Willow
 		Scene& GetCurrentScene();
 		const Scene& GetCurrentScene() const;
 
-		/** Sets the currently simulated scene to an old one @TODO: This needs work */
+		/** Sets the currently simulated scene */
 		void SetCurrentScene(Scene& scene);
 
 		//////////////////

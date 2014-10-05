@@ -2,6 +2,7 @@
 #pragma once
 
 #include <cassert>
+#include <utility>
 #include "config.h"
 
 namespace Willow
@@ -53,10 +54,6 @@ namespace Willow
 			///   Operators   ///
 		public:
 
-			bool operator!=(const Iterator& rhs) const
-			{
-				return _node != rhs._node;
-			}
 			Iterator& operator++()
 			{
 				_node = _node->Next;
@@ -65,6 +62,10 @@ namespace Willow
 			T& operator*()
 			{
 				return _node->Value;
+			}
+			friend bool operator!=(const Iterator& lhs, const Iterator& rhs)
+			{
+				return lhs._node != rhs._node;
 			}
 
 			////////////////
@@ -80,7 +81,7 @@ namespace Willow
 			///   Constructors   ///
 		public:
 
-			ConstIterator(typename List<T>::Node* node)
+			ConstIterator(Node* node)
 			{
 				this->_node = node;
 			}
@@ -89,10 +90,6 @@ namespace Willow
 			///   Operators   ///
 		public:
 
-			bool operator!=(const ConstIterator& rhs) const
-			{
-				return _node != rhs._node;
-			}
 			ConstIterator& operator++()
 			{
 				_node = _node->Next;
@@ -102,12 +99,16 @@ namespace Willow
 			{
 				return _node->Value;
 			}
+			friend bool operator!=(const ConstIterator& lhs, const ConstIterator& rhs)
+			{
+				return lhs._node != rhs._node;
+			}
 
 			////////////////
 			///   Data   ///
 		private:
 
-			typename List<T>::Node* _node;
+			Node* _node;
 		};
 
 		////////////////////////
@@ -140,7 +141,7 @@ namespace Willow
 		}
 		~List()
 		{
-			this->Destroy();
+			this->Clear();
 		}
 
 		///////////////////
@@ -176,7 +177,7 @@ namespace Willow
 			}
 			else
 			{
-				_last->Next = new Node(item, _last);
+				_last->Next = new Node(std::move(item), _last);
 				_last = _last->Next;
 			}
 			_count++;
@@ -218,29 +219,65 @@ namespace Willow
 		void RemoveAt(uint32 index)
 		{
 			// If this index doesn't exist
-			if (index >= _count)
+			if (index >= this->Size())
 			{
 				return;
 			}
 
 			Node* current = _first;
-			for (uint32 i = 0; i < _count; i++)
+			for (uint32 i = 0; i < index; i++)
 			{
 				current = current->Next;
 			}
 
-			current->Prev->Next = current->Next;
-			current->Next->Prev = current->Prev;
+			if (current->Prev)
+			{
+				current->Prev->Next = current->Next;
+			}
+			if (current->Next)
+			{
+				current->Next->Prev = current->Prev;
+			}
+			if (current == _first)
+			{
+				_first = current->Next;
+			}
+			if (current == _last)
+			{
+				_last = current->Prev;
+			}
 
 			delete current;
-			count--;
+			_count--;
 		}
 		void RemoveAll(const T& value)
 		{
-			for (uint32 i : this->OccurrencesOf(value))
+			uint32 i = 0;
+			while (i < this->Size())
 			{
-				this->RemoveAt(i);
+				if ((*this)[i] == value)
+				{
+					this->RemoveAt(i);
+				}
+				else
+				{
+					++i;
+				}
 			}
+		}
+		void Clear()
+		{
+			Node* next = _first;
+			while (next)
+			{
+				Node* current = next;
+				next = current->Next;
+				delete current;
+			}
+
+			_first = nullptr;
+			_last = nullptr;
+			_count = 0;
 		}
 
 		/* Iteration methods */
@@ -261,34 +298,20 @@ namespace Willow
 			return ConstIterator(nullptr);
 		}
 
-	private:
-
-		void Destroy()
-		{
-			Node* next = _first;
-			while (next != nullptr)
-			{
-				Node* current = next;
-				next = current->Next;
-				delete current;
-			}
-
-			_first = nullptr;
-			_last = nullptr;
-			_count = 0;
-		}
-
 		/////////////////////
 		///   Operators   ///
 	public:
 
 		List<T>& operator=(const List<T>& rhs)
 		{
-			this->Destroy();
-
-			for (const auto& i : rhs)
+			if (this != &rhs)
 			{
-				this->Add(i);
+				this->Clear();
+
+				for (const auto& i : rhs)
+				{
+					this->Add(i);
+				}
 			}
 
 			return *this;
@@ -297,21 +320,22 @@ namespace Willow
 		{
 			if (this != &other)
 			{
-				this->Destroy();
+				this->Clear();
 
-				this->_first = other._first;
-				this->_last = other._last;
-				this->_count = other._count;
+				_first = other._first;
+				_last = other._last;
+				_count = other._count;
 
 				other._first = nullptr;
 				other._last = nullptr;
 				other._count = 0;
 			}
+
 			return *this;
 		}
 		T& operator[](uint32 index)
 		{
-			assert(index < _count);
+			assert(index < this->Size());
 
 			Node* target = _first;
 			for (uint32 i = 0; i < index; i++)
@@ -323,7 +347,7 @@ namespace Willow
 		}
 		const T& operator[](uint32 index) const
 		{
-			assert(index < _count);
+			assert(index < this->Size());
 
 			Node* target = _first;
 			for (uint32 i = 0; i < index; i++)
@@ -333,7 +357,27 @@ namespace Willow
 
 			return target->Value;
 		}
-		// @TODO: operator== and operator!=
+		friend bool operator==(const List<T>& lhs, const List<T>& rhs)
+		{
+			if (lhs.Size() != rhs.Size())
+			{
+				return false;
+			}
+
+			for (uint32 i = 0; i < lhs.Size(); i++)
+			{
+				if (lhs[i] != rhs[i])
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+		friend bool operator!=(const List<T>& lhs, const List<T>& rhs)
+		{
+			return !(lhs == rhs);
+		}
 
 		////////////////
 		///   Data   ///

@@ -23,10 +23,19 @@ namespace Willow
 		///   Methods   ///
 	public:
 
+		/** Returns the length of this vector */
 		float Length() const;
+
+		/** Returns the normalized version of this vector */
 		Vec3 Normalize() const;
+
+		/** Returns the dot product of two vectors */
 		static float Dot(const Vec3& a, const Vec3& b);
+
+		/** Returns the cross product of two vectors */
 		static Vec3 Cross(const Vec3& a, const Vec3& b);
+
+		/** Returns the angle between two vectors */
 		static float Angle(const Vec3& a, const Vec3& b);
 
 		////////////////////////////

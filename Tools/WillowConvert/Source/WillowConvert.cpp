@@ -44,7 +44,7 @@ bool WillowConvert::Convert(const String& path, const List<String>& options)
 ///////////////////////////
 ///   Parse Functions   ///
 
-InputType WillowConvert::ParsePath(const String& path)
+WillowConvert::InputType WillowConvert::ParsePath(const String& path)
 {
 	String extension = path.GetFileExtension();
 

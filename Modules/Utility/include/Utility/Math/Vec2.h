@@ -29,12 +29,10 @@ namespace Willow
 		/** Returns the normalized version of this vector */
 		Vec2 Normalize() const;
 
-		/** Returns the normalized version of this vector */
+		/** Returns the dot product of two vectors */
 		static float Dot(const Vec2& a, const Vec2& b);
 
-		// @TODO: Add cross product
-
-		/** Calculates the angle between two vectors */
+		/** Returns the angle between two vectors */
 		static float Angle(const Vec2& a, const Vec2& b);
 
 		////////////////////////////

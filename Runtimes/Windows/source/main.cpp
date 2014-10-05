@@ -11,6 +11,7 @@
 #include <Utility\Math\Vec2.h>
 #include <Core\Game.h>
 #include <ExampleGame\FPSCamera.h>
+#include <Core\Prop.h>
 using namespace Willow;
 
 //Define context parameters
@@ -19,7 +20,7 @@ int32 window_height = 720;
 
 //Function Prototypes
 GLFWwindow* InitGLFW();
-void eventLoop(GLFWwindow* window, Willow::Scene& scene);
+void eventLoop(GLFWwindow* window);
 void cleanUp(GLFWwindow* window);
 
 struct
@@ -62,6 +63,7 @@ void windowSizeCallback(GLFWwindow* window, int32 x, int32 y)
 int WinMain(int32 argc, char* argv[])
 {	
 	Console::WriteLine("Initializing subsystems...");
+
 	// Initialize GLFW and get a window
 	GLFWwindow* window = InitGLFW();
   
@@ -75,36 +77,35 @@ int WinMain(int32 argc, char* argv[])
 	///   Setting up a simple   ///
 	///          scene          ///
 
-	Prop sponza("sponza");
-	Prop gun("gun");
+	Scene& test = Game::Instance().GetCurrentScene();
 
-	sponza.mesh = "data/sponza.dat";
+	auto& sponza = test.AddObject(new Prop("sponza"));
+	auto& gun = test.AddObject(new Prop("gun"));
+
+	sponza.MeshComponent.Mesh = "data/sponza.dat";
 
 	Material sponza_mat;
 	sponza_mat.VertexShader = "data/Default.vert";
 	sponza_mat.FragmentShader = "data/Default.frag";
 	sponza_mat.Textures["fDiffuse"] = "data/sponza_tex.png";
 	sponza_mat.Compile();
-	sponza.mesh->SetMaterial(sponza_mat);
+	sponza.MeshComponent.Mesh->SetMaterial(sponza_mat);
 
-	gun.mesh = "data/battle_rifle.dat";
+	gun.MeshComponent.Mesh = "data/battle_rifle.dat";
 
 	Material gun_mat;
 	gun_mat.VertexShader = "data/Default.vert";
 	gun_mat.FragmentShader = "data/Default.frag";
 	gun_mat.Textures["fDiffuse"] = "data/battle_rifle_tex.png";
 	gun_mat.Compile();
-	gun.mesh->SetMaterial(gun_mat);
+	gun.MeshComponent.Mesh->SetMaterial(gun_mat);
 
-	ExampleGame::FPSCamera cam("Camera", 43, float(window_width)/window_height, 0.01f, 90.0f);
+	auto& cam = test.AddObject(new ExampleGame::FPSCamera("Camera", 43, float(window_width) / window_height, 0.01f, 90.0f));
 
-	Game::Instance().GetCurrentScene().Objects.Add(&gun);
-	Game::Instance().GetCurrentScene().Objects.Add(&sponza);
+	test.Cameras.Add(&cam);
 
-	Game::Instance().GetCurrentScene().Cameras.Add(&cam);
-
-	//Execute the main event loops
-	eventLoop(window, Game::Instance().GetCurrentScene());
+	//Execute the main event loop
+	eventLoop(window);
 	
 	//Cleanup the engine
 	cleanUp(window);
@@ -163,7 +164,7 @@ GLFWwindow* InitGLFW()
 	return window;
 }
 
-void eventLoop(GLFWwindow* window, Scene& scene)
+void eventLoop(GLFWwindow* window)
 {
 	Console::WriteLine("Entering event loop...");
 
@@ -176,6 +177,8 @@ void eventLoop(GLFWwindow* window, Scene& scene)
 	// Begin the event loop
 	while (!glfwWindowShouldClose(window))
 	{	 
+		Scene& scene = Game::Instance().GetCurrentScene();
+
 		double currentTime = glfwGetTime();
 		lag += currentTime - previous;
 		previous = currentTime;

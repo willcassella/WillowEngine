@@ -37,7 +37,7 @@ namespace Willow
 		///   Methods   ///
 	public:
 
-		size_t Size() const
+		uint32 Size() const
 		{
 			return _values.Size();
 		}
@@ -56,7 +56,7 @@ namespace Willow
 			return false;
 		}
 
-		// Iteration methods
+		/* Iteration methods */
 		typename StorageType::Iterator begin()
 		{
 			return _values.begin();
@@ -78,6 +78,24 @@ namespace Willow
 		///   Operators   ///
 	public:
 
+		Table<KeyType, ValueType>& operator=(const Table<KeyType, ValueType>& rhs)
+		{
+			if (this != &rhs)
+			{
+				_values = rhs._values;
+			}
+
+			return *this;
+		}
+		Table<KeyType, ValueType>& operator=(Table<KeyType, ValueType>&& other)
+		{
+			if (this != &other)
+			{
+				_values = std::move(other._values);
+			}
+
+			return *this;
+		}
 		ValueType& operator[](const KeyType& key)
 		{
 			// Search for the key
@@ -90,8 +108,31 @@ namespace Willow
 			}
 
 			// The key must not have been found, create new pair
-			_values.Add(PairType(key, ValueType()));
+			_values.Add(PairType(key));
 			return _values.Last().Second;
+		}
+		const ValueType& operator[](const KeyType& key) const
+		{
+			// Search for the key
+			for (const auto& i : _values)
+			{
+				if (i.First == key)
+				{
+					return i.Second;
+				}
+			}
+
+			// The key must not have been found, create new pair
+			_values.Add(PairType(key));
+			return _values.Last().Second;
+		}
+		friend bool operator==(const Table<KeyType, ValueType>& lhs, const Table<KeyType, ValueType>& rhs)
+		{
+			return lhs._values == rhs._values;
+		}
+		friend bool operator!=(const Table<KeyType, ValueType>& lhs, const Table<KeyType, ValueType>& rhs)
+		{
+			return !(lhs == rhs);
 		}
 
 		////////////////

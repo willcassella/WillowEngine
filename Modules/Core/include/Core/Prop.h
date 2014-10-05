@@ -1,8 +1,8 @@
 // Prop.h
 #pragma once
 
-#include <Render\StaticMesh.h>
 #include "GameObject.h"
+#include "StaticMeshComponent.h"
 
 namespace Willow
 {
@@ -18,18 +18,19 @@ namespace Willow
 		///   Fields   ///
 	public:
 
-		ResourcePtr<StaticMesh> mesh;
+		StaticMeshComponent MeshComponent;
 
 		////////////////////////
 		///   Constructors   ///
 	public:
 
 		Prop(const String& name);
+		~Prop() override = default;
 
 		///////////////////
 		///   Methods   ///
 	public:
 
-		void Tick(float timeInterval) override;
+		List<Component*> GetComponents() override;
 	};
 }
