@@ -36,10 +36,14 @@ bool GameObject::IsDestroyed() const
 	return _isDestroyed;
 }
 
-List<Component*> GameObject::GetComponents()
+List<Component*>& GameObject::GetComponents()
 {
-	// Base GameObject class has no components
-	return List<Component*>();
+	return _components;
+}
+
+const List<Component*>& GameObject::GetComponents() const
+{
+	return _components;
 }
 
 void GameObject::Tick(float timeInterval)

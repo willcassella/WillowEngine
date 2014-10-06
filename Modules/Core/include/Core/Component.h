@@ -1,6 +1,7 @@
 // Component.h
 #pragma once
 
+#include <Utility\Math\Mat4.h>
 #include "config.h"
 
 namespace Willow
@@ -24,6 +25,9 @@ namespace Willow
 		///   Methods   ///
 	public:
 
+		bool IsEnabled() const;
+		void Enable();
+		void Disable();
 		GameObject& GetOwner();
 		const GameObject& GetOwner() const;
 
@@ -37,5 +41,6 @@ namespace Willow
 	private:
 
 		GameObject& _owner;
+		bool _isEnabled;
 	};
 }

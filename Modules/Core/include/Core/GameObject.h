@@ -14,6 +14,7 @@ namespace Willow
 	public:
 
 		friend class Scene;
+		friend Component;
 
 		//////////////////
 		///   Fields   ///
@@ -43,8 +44,8 @@ namespace Willow
 		const Scene& GetScene() const;
 		void Destroy();
 		bool IsDestroyed() const;
-		// @TODO: Should there be a const version of this?
-		virtual List<Component*> GetComponents();
+		List<Component*>& GetComponents();
+		const List<Component*>& GetComponents() const;
 
 	protected:
 
@@ -55,6 +56,7 @@ namespace Willow
 		///   Data   ///
 	private:
 
+		List<Component*> _components;
 		Scene* _scene;
 		bool _isDestroyed;
 	};

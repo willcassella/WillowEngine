@@ -10,11 +10,35 @@ using namespace Willow;
 Component::Component(GameObject& owner)
 	: _owner(owner)
 {
-	// All done
+	_owner._components.Add(this);
+	_isEnabled = true;
 }
 
 ///////////////////
 ///   Methods   ///
+
+bool Component::IsEnabled() const
+{
+	return _isEnabled;
+}
+
+void Component::Enable()
+{
+	if (!this->IsEnabled())
+	{
+		this->GetOwner()._components.Add(this);
+		_isEnabled = true;
+	}
+}
+
+void Component::Disable()
+{
+	if (this->IsEnabled())
+	{
+		this->GetOwner()._components.RemoveAll(this);
+		_isEnabled = false;
+	}
+}
 
 GameObject& Component::GetOwner()
 {

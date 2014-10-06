@@ -11,10 +11,6 @@ namespace Willow
 	// @TODO: this needs some serious work
 	class CORE_API Scene
 	{
-		///////////////////////
-		///   Information   ///
-	public:
-
 		//////////////////
 		///   Fields   ///
 	public:

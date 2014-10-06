@@ -26,11 +26,5 @@ namespace Willow
 
 		Prop(const String& name);
 		~Prop() override = default;
-
-		///////////////////
-		///   Methods   ///
-	public:
-
-		List<Component*> GetComponents() override;
 	};
 }

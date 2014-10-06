@@ -11,13 +11,3 @@ Prop::Prop(const String& name)
 {
 	// Do nothing
 }
-
-///////////////////
-///   Methods   ///
-
-List<Component*> Prop::GetComponents()
-{
-	List<Component*> components = Super::GetComponents();
-	components.Add(&MeshComponent);
-	return components;
-}
