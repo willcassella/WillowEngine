@@ -137,7 +137,7 @@ namespace Willow
 				Node* temp = _first;
 				_first = _first->Next;
 				delete temp;
-				--count;
+				--_count;
 			}
 
 			_last = nullptr;
