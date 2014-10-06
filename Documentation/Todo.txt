@@ -5,9 +5,9 @@ Refactoring:
 
 Features:
 
-	Finish Event system	
+	Implement Player and Pawn system
 
-	Implement IPlayer and Pawn
+	Finish Event system	
 
 	Massive refactoring run
 	
@@ -17,8 +17,14 @@ Refactoring:
 
 	Use Reflection
 
-	Switch to NMake build system
-
 Features:
+
+	Improved rendering pipeline
+	
+	Multi-surface rendering
+
+Distant Features:
+
+	Switch to NMake build system
 
 	Cross platform build system (Support for linux, mac, and emscripten)
