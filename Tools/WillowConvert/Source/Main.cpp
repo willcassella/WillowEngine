@@ -21,6 +21,7 @@ int main(int32 argCount, char* args[])
 	while (true)
 	{
 		String path = Console::Prompt();
+		Console::NewLine();
 		 
 		if (path.IsNullOrEmpty())
 		{

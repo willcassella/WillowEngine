@@ -1,7 +1,6 @@
 // WillowConvert.cpp
 
 #include <fstream>
-#include <cstring>
 #include <Utility\Console.h>
 #include "..\include\WillowConvert\WillowConvert.h"
 using namespace Willow;
@@ -96,7 +95,7 @@ bool WillowConvert::ParseOBJFile(const String& path, Array<Vertex>* const outVer
 		}
 
 		// Parse vertices
-		if (strcmp(lineHeader, "v") == 0)
+		if (String::Compare(lineHeader, "v") == 0)
 		{
 			Vec3 vertex;
 			fscanf(file, "%f %f %f\n", &vertex.X, &vertex.Y, &vertex.Z);
@@ -105,7 +104,7 @@ bool WillowConvert::ParseOBJFile(const String& path, Array<Vertex>* const outVer
 		}
 
 		// Parse texture coordinates
-		if (strcmp(lineHeader, "vt") == 0)
+		if (String::Compare(lineHeader, "vt") == 0)
 		{
 			Vec2 coordinate;
 			fscanf(file, "%f %f\n", &coordinate.X, &coordinate.Y);
@@ -114,7 +113,7 @@ bool WillowConvert::ParseOBJFile(const String& path, Array<Vertex>* const outVer
 		}
 
 		// Parse vertex normals
-		if (strcmp(lineHeader, "vn") == 0)
+		if (String::Compare(lineHeader, "vn") == 0)
 		{
 			Vec3 normal;
 			fscanf(file, "%f %f %f\n", &normal.X, &normal.Y, &normal.Z);
@@ -123,7 +122,7 @@ bool WillowConvert::ParseOBJFile(const String& path, Array<Vertex>* const outVer
 		}
 
 		// Parse faces
-		if (strcmp(lineHeader, "f") == 0)
+		if (String::Compare(lineHeader, "f") == 0)
 		{
 			uint32 vertexIndex[3], uvIndex[3], normalIndex[3];
 			int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1],

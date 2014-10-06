@@ -7,7 +7,7 @@ using namespace Willow;
 ///   Constructors   ///
 
 Prop::Prop(const String& name)
-	: Super(name), MeshComponent(*this)
+	: Super(name), MeshComponent(This)
 {
 	// Do nothing
 }

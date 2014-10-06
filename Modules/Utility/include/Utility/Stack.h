@@ -1,4 +1,4 @@
-// Queue.h
+// Stack.h
 #pragma once
 
 #include <cassert>
@@ -8,10 +8,10 @@
 namespace Willow
 {
 	template <typename T>
-	class Queue
+	class Stack
 	{
 		//////////////////////
-		///   Subclasses   ///
+		///   SubClasses   ///
 	private:
 
 		class Node
@@ -30,7 +30,7 @@ namespace Willow
 			Node(T value)
 				: Value(value)
 			{
-				// Done
+				// All done
 			}
 		};
 
@@ -38,21 +38,21 @@ namespace Willow
 		///   Constructors   ///
 	public:
 
-		Queue()
+		Stack()
 		{
-			_first = nullptr;
-			_last = nullptr;
-			_count = 0;
+			this->_first = nullptr;
+			this->_last = nullptr;
+			this->_count = 0;
 		}
-		Queue(const Queue<T>& copy)
+		Stack(const Stack<T>& copy)
 		{
-			_first = nullptr;
-			_last = nullptr;
-			_count = 0;
+			this->_first = nullptr;
+			this->_last = nullptr;
+			this->_count = 0;
 
 			This = copy;
 		}
-		Queue(Queue<T>&& other)
+		Stack(Stack<T>&& other)
 		{
 			this->_first = other._first;
 			this->_last = other._last;
@@ -62,7 +62,7 @@ namespace Willow
 			other._last = nullptr;
 			other._count = 0;
 		}
-		~Queue()
+		~Stack()
 		{
 			this->Clear();
 		}
@@ -71,19 +71,19 @@ namespace Willow
 		///   Methods   ///
 	public:
 
-		/** Returns the number of elements in this queue */
+		/** Returns the number of elements in this stack */
 		uint32 Size() const
 		{
 			return _count;
 		}
 
-		/** Returns whether there are no elements in this queue */
+		/** Returns whether there are no elements in this stack */
 		bool IsEmpty() const
 		{
 			return this->Size() == 0;
 		}
 
-		/** Returns a const reference to the first item in this queue
+		/** Returns a const reference to the first item in this stack
 		* WARNING: Check IsEmpty() first */
 		const T& Peek() const
 		{
@@ -91,7 +91,7 @@ namespace Willow
 			return _first->Value;
 		}
 
-		/** Adds a new item to the end of this queue */
+		/** Adds a new item to the end of this stack */
 		void Push(T item)
 		{
 			if (_count == 0)
@@ -101,14 +101,15 @@ namespace Willow
 			}
 			else
 			{
-				_last->Next = new Node(std::move(item));
-				_last = _last->Next;
+				Node* next = _first;
+				_first = new Node(std::move(item));
+				_first->Next = next;
 			}
 
 			++_count;
 		}
 
-		/** Removes the first item in this queue
+		/** Removes the first item in this stack
 		WARNING: Check IsEmpty() first */
 		T Pop()
 		{
@@ -119,7 +120,7 @@ namespace Willow
 			Node* temp = _first;
 			_first = _first->Next;
 			delete temp;
-			_count--;
+			--_count;
 
 			if (_count == 0)
 			{
@@ -129,7 +130,7 @@ namespace Willow
 			return value;
 		}
 
-		/** Removes all elements in this queue */
+		/** Removes all elements in this stack */
 		void Clear()
 		{
 			while (_first)
@@ -137,7 +138,7 @@ namespace Willow
 				Node* temp = _first;
 				_first = _first->Next;
 				delete temp;
-				--count;
+				--_count;
 			}
 
 			_last = nullptr;
@@ -147,7 +148,7 @@ namespace Willow
 		///   Operators   ///
 	public:
 
-		Queue<T>& operator=(const Queue<T>& copy)
+		Stack<T>& operator=(const Stack<T>& copy)
 		{
 			if (this != &copy)
 			{
@@ -160,17 +161,18 @@ namespace Willow
 					next = next->Next;
 				}
 			}
-			
+
 			return This;
 		}
-		Queue<T>& operator=(Queue<T>&& other)
+		Stack<T>& operator=(Stack<T>&& other)
 		{
 			if (this != &other)
 			{
-				this->Destroy();
-				_first = other._first;
-				_last = other._last;
-				_count = other._count;
+				this->Clear();
+
+				this->_first = other._first;
+				this->_last = other._last;
+				this->_count = other._count;
 
 				other._first = nullptr;
 				other._last = nullptr;
@@ -179,7 +181,7 @@ namespace Willow
 
 			return This;
 		}
-		friend bool operator==(const Queue<T>& lhs, const Queue<T>& rhs)
+		friend bool operator==(const Stack<T>& lhs, const Stack<T>& rhs)
 		{
 			if (lhs.Size() != rhs.Size())
 			{
@@ -202,7 +204,7 @@ namespace Willow
 
 			return true;
 		}
-		friend bool operator!=(const Queue<T>& lhs, const Queue<T>& rhs)
+		friend inline bool operator!=(const Stack<T>& lhs, const Stack<T>& rhs)
 		{
 			return !(lhs == rhs);
 		}

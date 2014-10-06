@@ -81,7 +81,7 @@ String String::SubString(uint32 start, uint32 end) const
 
 String String::ToUpper() const
 {
-	String str = *this;
+	String str = This;
 
 	for (uint32 i = 0; i < str.Length(); i++)
 	{
@@ -93,7 +93,7 @@ String String::ToUpper() const
 
 String String::ToLower() const
 {
-	String str = *this;
+	String str = This;
 
 	for (uint32 i = 0; i < str.Length(); i++)
 	{
@@ -134,7 +134,7 @@ String String::GetFileExtension() const
 
 String String::GetFileName() const
 {
-	String name = *this;
+	String name = This;
 
 	auto forwardSlashes = name.OccurencesOf("/");
 	auto backSlashes = name.OccurencesOf("\\");
@@ -165,6 +165,18 @@ uint32 String::Length(const char* string)
 	return (uint32)strlen(string);
 }
 
+int32 String::Compare(const char* stringA, const char* stringB, bool caseSensitive)
+{
+	if (caseSensitive)
+	{
+		return strcmp(stringA, stringB);
+	}
+	else
+	{
+		return _strcmpi(stringA, stringB);
+	}
+}
+
 /////////////////////
 ///   Operators   ///
 
@@ -173,7 +185,7 @@ String& String::operator=(const String& rhs)
 	delete[] _value;
 	this->_value = new char[rhs.Length() + 1];
 	strcpy(_value, rhs._value);
-	return *this;
+	return This;
 }
 
 String& String::operator=(String&& other)
@@ -184,22 +196,22 @@ String& String::operator=(String&& other)
 		this->_value = other._value;
 		other._value = nullptr;
 	}
-	return *this;
+	return This;
 }
 
 bool Willow::operator==(const String& lhs, const String& rhs)
 {
-	return strcmp(lhs._value, rhs._value) == 0;
+	return String::Compare(lhs._value, rhs._value) == 0;
 }
 
 bool Willow::operator!=(const String& lhs, const String& rhs)
 {
-	return strcmp(lhs._value, rhs._value) != 0;
+	return String::Compare(lhs._value, rhs._value) != 0;
 }
 
 bool Willow::operator>(const String& lhs, const String& rhs)
 {
-	return strcmp(lhs._value, rhs._value) > 0;
+	return String::Compare(lhs._value, rhs._value) > 0;
 }
 
 bool Willow::operator>=(const String& lhs, const String& rhs)
@@ -209,7 +221,7 @@ bool Willow::operator>=(const String& lhs, const String& rhs)
 
 bool Willow::operator<(const String& lhs, const String& rhs)
 {
-	return strcmp(lhs._value, rhs._value) < 0;
+	return String::Compare(lhs._value, rhs._value) < 0;
 }
 
 bool Willow::operator<=(const String& lhs, const String& rhs)

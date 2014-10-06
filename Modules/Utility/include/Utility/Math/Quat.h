@@ -19,6 +19,9 @@ namespace Willow
 		///   Constructors   ///
 
 		Quat();
+		/** Constructs a new Quaternion
+		axis - the axis about which this rotation represents
+		angle - the amount (in degrees) to rotate about axis */
 		Quat(const Vec3& axis, float angle);
 
 		///////////////////

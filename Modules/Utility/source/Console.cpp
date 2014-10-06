@@ -1,8 +1,6 @@
 // Console.cpp
 
 #include <iostream>
-#include <string>
-#include <cstdarg>
 #include "..\include\Utility\Console.h"
 using namespace Willow;
 

@@ -17,15 +17,23 @@ namespace Willow
 		///   Methods   ///
 	private:
 
+		/** Writes the warning message prefix to the console */
 		static void PrintWarningPrefix();
+
+		/** Writes the error message prefix to the console */
 		static void PrintErrorPrefix();
+
+		/** Writes the input prefix to the console */
 		static void PrintInputPrefix();
+
+		/** Returns a string with the users input from the console */
 		static String GetInput();
 
+		/** Writes a formatted message to the console, with only one value */
 		template <typename FirstType>
 		static void PrintFormatted(const String& format, const FirstType& value)
 		{
-			// Iterate through the rest of the format string
+			// Iterate through the format string
 			for (const char* character = format.Cstr(); *character != '\0'; character++)
 			{
 				// If we hit the placeholder character
@@ -44,6 +52,7 @@ namespace Willow
 			}
 		}
 
+		/** Writes a formatted message to the console, with any number of values */
 		template <typename FirstType, typename ... ArgTypes>
 		static void PrintFormatted(const String& format, const FirstType& value, const ArgTypes& ... values)
 		{
@@ -67,7 +76,10 @@ namespace Willow
 
 	public:
 
+		/** Send the console caret to the start of the next line */
 		static void NewLine();
+
+		/** Writes the value to the console */
 		static void Write(const String& message);
 		static void Write(char value);
 		static void Write(int16 value);
@@ -78,6 +90,8 @@ namespace Willow
 		static void Write(uint32 value);
 		static void Write(float value);
 		static void Write(double value);
+
+		/** Writes the value to the console, and then send the caret to the start of the next line */
 		static void WriteLine(const String& message);
 		static void WriteLine(char value);
 		static void WriteLine(int16 value);
@@ -88,16 +102,24 @@ namespace Willow
 		static void WriteLine(uint32 value);
 		static void WriteLine(float value);
 		static void WriteLine(double value);
+
+		/** Writes a warning message to the console */
 		static void Warning(const String& warning);
+
+		/** Write an error message to the console */
 		static void Error(const String& error);
+
+		/** Prompts the user for input from the console, and returns their input */
 		static String Prompt(const String& message = "");
 
+		/** Writes a formatted string to the console */
 		template <typename ... ArgTypes> 
 		static void Write(const String& format, const ArgTypes& ... values)
 		{
 			Console::PrintFormatted(format, values...);
 		}
 
+		/** Writes a formatted string to the console, and returns the caret to the start of the next line */
 		template <typename ... ArgTypes> 
 		static void WriteLine(const String& format, const ArgTypes& ... values)
 		{
@@ -105,6 +127,7 @@ namespace Willow
 			Console::NewLine();
 		}
 
+		/** Writes a formatted warning message to the console */
 		template <typename ... ArgTypes> 
 		static void Warning(const String& format, const ArgTypes& ... values)
 		{
@@ -112,6 +135,7 @@ namespace Willow
 			Console::WriteLine(format, values...);
 		}
 		
+		/** Writes a formatted error message to the console */
 		template <typename ... ArgTypes> 
 		static void Error(const String& format, const ArgTypes& ... values)
 		{
@@ -119,6 +143,7 @@ namespace Willow
 			Console::WriteLine(format, values...);
 		}
 
+		/** Writes a formatted prompt to the console, and returns their input */
 		template <typename ... ArgTypes> 
 		static String Prompt(const String& format, const ArgTypes& ... values)
 		{

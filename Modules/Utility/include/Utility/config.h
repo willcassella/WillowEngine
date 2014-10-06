@@ -28,6 +28,8 @@
 
 #define interface class
 
+#define This (*this)
+
 // char is still char
 typedef short int16;
 typedef int int32;

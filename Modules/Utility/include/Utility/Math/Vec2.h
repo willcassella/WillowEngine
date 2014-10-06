@@ -17,6 +17,9 @@ namespace Willow
 		///   Constructors   ///
 	public:
 
+		/** Constructs a new 2-length vector
+		x - the x component of the vector
+		y - the y component of the vector */
 		Vec2(float x = 0.f, float y = 0.f);
 
 		///////////////////

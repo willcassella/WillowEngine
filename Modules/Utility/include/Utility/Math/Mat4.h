@@ -13,28 +13,50 @@ namespace Willow
 		///   Constructors   ///
 	public:
 
-		Mat4(float aa = 1, float ba = 0, float ca = 0, float da = 0,
-			 float ab = 0, float bb = 1, float cb = 0, float db = 0,
-			 float ac = 0, float bc = 0, float cc = 1, float dc = 0,
-			 float ad = 0, float bd = 0, float cd = 0, float dd = 1);
+		/** Constructs a new 4x4 matrix
+		default - identity matrix
+		values - what to set each element of the matrix to */
+		Mat4(float aa = 1.f, float ba = 0.f, float ca = 0.f, float da = 0.f,
+			 float ab = 0.f, float bb = 1.f, float cb = 0.f, float db = 0.f,
+			 float ac = 0.f, float bc = 0.f, float cc = 1.f, float dc = 0.f,
+			 float ad = 0.f, float bd = 0.f, float cd = 0.f, float dd = 1.f);
 
 		///////////////////
 		///   Methods   ///
 	public:
 
+		/** Returns the inverse of this matrix */
 		Mat4 Inverse() const;
+
+		/** Generates a perspective projection matrix with the given properties */
 		static Mat4 Perspective(float hFOV, float vFOV, float zMin, float zMax);
+
+		/** Generates a perspective projection matrix with the following horizontal FOV */
 		static Mat4 PerspectiveHFOV(float hFOV, float ratio, float zMin, float zMax);
+
+		/** Generates a perspective projection matrix with the following vertical FOV */
 		static Mat4 PerspectiveVFOV(float vFOV, float ratio, float zMin, float zMax);
+
+		/** Generates an orthographic projection matrix with the given properties */
 		static Mat4 Orthographic(float xMin, float xMax, float yMin, float yMax, float zMin, float zMax);
+
+		/** Generates a transformation matrix representing a translation */
 		static Mat4 Translate(const Vec3& vec);
+
+		/** Generates a transformation matrix representing a Scale */
 		static Mat4 Scale(const Vec3& vec);
+
+		/** Generates a transformation matrix representing a rotation */
 		static Mat4 Rotate(const Quat& rot);
+
+		/** Gets the value at the specified column and row */
 		inline float Get(uint32 column, uint32 row) const
 		{ 
 			assert(column < 4 && row < 4);
 			return _values[column][row];
 		}
+
+		/** Sets the value at the specified column and row */
 		inline void Set(uint32 column, uint32 row, float value)
 		{
 			assert(column < 4 && row < 4);
@@ -57,10 +79,14 @@ namespace Willow
 		}
 		friend UTILITY_API Mat4 operator*(const Mat4& lhs, const Mat4& rhs);
 		friend UTILITY_API Mat4& operator*=(Mat4& lhs, const Mat4& rhs);
-		// @TODO: For now I'm assuming matrix - vector multiplication is commutative, but I really need to investigate that
 		friend UTILITY_API Vec3 operator*(const Mat4& lhs, const Vec3& rhs);
 		friend UTILITY_API Vec3 operator*(const Vec3& lhs, const Mat4& rhs);
 		friend UTILITY_API Vec3& operator*=(Vec3& lhs, const Mat4& rhs);
+		friend UTILITY_API bool operator==(const Mat4& lhs, const Mat4& rhs);
+		friend UTILITY_API inline bool operator!=(const Mat4& lhs, const Mat4& rhs)
+		{
+			return !(lhs == rhs);
+		}
 
 		////////////////
 		///   Data   ///

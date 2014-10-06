@@ -30,18 +30,18 @@ namespace Willow
 			///   Operators   ///
 		public:
 
-			bool operator!=(const Iterator& rhs) const
-			{
-				return _value != rhs._value;
-			}
 			Iterator& operator++()
 			{
 				++_value;
-				return *this;
+				return This;
 			}
 			T& operator*()
 			{
 				return *_value;
+			}
+			friend bool operator!=(const Iterator& lhs, const Iterator& rhs)
+			{
+				return lhs._value != rhs._value;
 			}
 
 			////////////////
@@ -66,18 +66,18 @@ namespace Willow
 			///   Operators   ///
 		public:
 
-			bool operator!=(const ConstIterator& rhs) const
-			{
-				return _value != rhs._value;
-			}
 			ConstIterator& operator++()
 			{
 				++_value;
-				return *this;
+				return This;
 			}
 			const T& operator*() const
 			{
 				return *_value;
+			}
+			friend bool operator!=(const ConstIterator& lhs, const ConstIterator& rhs)
+			{
+				return lhs._value != rhs._value;
 			}
 
 			////////////////
@@ -91,6 +91,8 @@ namespace Willow
 		///   Constructors   ///
 	public:
 
+		/** Constructs a new array
+		size - the starting size of the array*/
 		Array(uint32 size = 0)
 		{
 			this->_size = size;
@@ -99,14 +101,11 @@ namespace Willow
 		}
 		Array(const Array<T>& copy)
 		{
-			this->_size = copy._size;
-			this->_freeIndex = copy._freeIndex;
-			this->_values = new T[_size];
+			this->_size = 0;
+			this->_freeIndex = 0;
+			this->_values = nullptr;
 
-			for (uint32 i = 0; i < _freeIndex; i++)
-			{
-				_values[i] = copy._values[i];
-			}
+			This = copy;
 		}
 		Array(Array<T>&& other)
 		{
@@ -127,14 +126,33 @@ namespace Willow
 		///   Methods   ///
 	public:
 
+		/** Returns the number of elements in this array */
 		uint32 Size() const
 		{
 			return _freeIndex;
 		}
+
+		/** Returns whether this array has any elements */
 		bool IsEmpty() const
 		{
 			return this->Size() == 0;
 		}
+
+		/** Returns whether a copy of item exists in this array */
+		bool HasElement(const T& item)
+		{
+			for (const auto& element : This)
+			{
+				if (element == item)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		/** Appends a new item to the end of this list */
 		void Add(T item)
 		{
 			if (_freeIndex >= _size)
@@ -150,33 +168,47 @@ namespace Willow
 			}
 			_values[_freeIndex++] = std::move(item);
 		}
+
+		/** Returns a reference to the first element in this array
+		* WARNING: Check IsEmpty() before calling this */
 		T& First()
 		{
-			assert(_freeIndex > 0);
+			assert(!this->IsEmpty());
 			return _values[0];
 		}
+
+		/** Returns a reference to the first element in this array
+		* WARNING: Check IsEmpty() before calling this */
 		const T& First() const
 		{
-			assert(_freeIndex > 0);
+			assert(!this->IsEmpty());
 			return _values[0];
 		}
+
+		/** Returns a reference to the last element in this array
+		* WARNING: Check IsEmpty() before calling this */
 		T& Last()
 		{
-			assert(_freeIndex > 0);
+			assert(!this->IsEmpty());
 			return _values[_freeIndex - 1];
 		}
+
+		/** Returns a reference to the last element in this array
+		* WARNING: Check IsEmpty() before calling this */
 		const T& Last() const
 		{
-			assert(_freeIndex > 0);
+			assert(!this->IsEmpty());
 			return _values[_freeIndex - 1];
 		}
+
+		/** Returns the indices at which a copy of value occurs in this array */
 		List<uint32> OccurrencesOf(const T& value) const
 		{
 			List<uint32> occurrences;
 
-			for (uint32 i = 0; i < this->Size(); i++)
+			for (uint32 i = 0; i < this->Size(); ++i)
 			{
-				if ((*this)[i] == value)
+				if (This[i] == value)
 				{
 					occurrences.Add(i);
 				}
@@ -184,7 +216,57 @@ namespace Willow
 
 			return occurrences;
 		}
-		// @TODO: RemoveAt and RemoveAll
+
+		/** Deletes the value stored at the specified index in this array
+		* WARNING: This offsets the index of every proceeding element by -1 */
+		void RemoveAt(uint32 index)
+		{
+			if (index >= _freeIndex)
+			{
+				return;
+			}
+
+			for (uint32 i = index; i < _freeIndex - 1; ++i)
+			{
+				_values[i] = std::move(values[i] + 1);
+			}
+
+			_freeIndex--;
+		}
+
+		/** Deletes all instances of the specified value in this array
+		* WARNING: This offsets the index of every proceeding element */
+		void RemoveAll(const T& value)
+		{
+			uint32 i = 0;
+			while (i < this->Size())
+			{
+				if (This[i] == value)
+				{
+					this->RemoveAt(i);
+				}
+				else
+				{
+					++i;
+				}
+			}
+		}
+
+		/** Deletes all values from this array, preserving size */
+		void Clear()
+		{
+			_freeIndex = 0;
+		}
+
+		/** Deletes all values from this array, resetting size */
+		void Reset(uint32 size = 0)
+		{
+			delete[] _values;
+
+			_size = size;
+			_values = new T[size];
+			_freeIndex = 0;
+		}
 
 		/* Iteration methods */
 		Iterator begin()
@@ -208,6 +290,8 @@ namespace Willow
 
 		void Resize(uint32 size)
 		{
+			assert(size >= _size);
+
 			T* newValues = new T[size];
 
 			for (uint32 i = 0; i < _freeIndex; i++)
@@ -226,17 +310,19 @@ namespace Willow
 
 		Array<T>& operator=(const Array<T>& rhs)
 		{
-			delete[] _values;
-			this->_size = rhs._size;
-			this->_freeIndex = rhs._freeIndex;
-
-			this->_values = new T[_size];
-			for (uint32 i = 0; i < _freeIndex; i++)
+			if (this != &rhs)
 			{
-				_values[i] = rhs._values[i];
-			}
+				delete[] _values;
+				this->_size = rhs._size;
+				this->_freeIndex = rhs._freeIndex;
 
-			return *this;
+				this->_values = new T[_size];
+				for (uint32 i = 0; i < _freeIndex; i++)
+				{
+					_values[i] = rhs._values[i];
+				}
+			}
+			return This;
 		}
 		Array<T>& operator=(Array<T>&& other)
 		{
@@ -251,7 +337,7 @@ namespace Willow
 				other._size = 0;
 				other._freeIndex = 0;
 			}
-			return *this;
+			return This;
 		}
 		T& operator[](uint32 index)
 		{
@@ -280,7 +366,7 @@ namespace Willow
 
 			return true;
 		}
-		friend bool operator!=(const Array<T>& lhs, const Array<T>& rhs)
+		friend inline bool operator!=(const Array<T>& lhs, const Array<T>& rhs)
 		{
 			return !(lhs == rhs);
 		}

@@ -168,6 +168,7 @@
     <ClInclude Include="include\Utility\Pair.h" />
     <ClInclude Include="include\Utility\ProgramOptions.h" />
     <ClInclude Include="include\Utility\Queue.h" />
+    <ClInclude Include="include\Utility\Stack.h" />
     <ClInclude Include="include\Utility\Table.h" />
     <ClInclude Include="include\Utility\config.h" />
     <ClInclude Include="include\Utility\Math\Mat4.h" />

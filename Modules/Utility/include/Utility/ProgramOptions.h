@@ -11,12 +11,15 @@ namespace Willow
 		///   Constructors   ///
 	public:
 
-		ProgramOptions(int32 argc, char** argv);
+		ProgramOptions(int32 argc, char** argv)
+		{
+			// do nothing
+		}
 
 		///////////////////
 		///   Methods   ///
 	public:
 
-
+		// @TODO: Finish this
 	};
 }

@@ -38,12 +38,12 @@ void Quat::RotateByAxisAngle(const Vec3& axis, float angle, bool local)
 	if (local) 
 	{
 		// Perform a local rotation
-		*this = rotation * *this;
+		This = rotation * This;
 	}
 	else 
 	{
 		// Perform a global rotation
-		*this  = *this * rotation;
+		This  = This * rotation;
 	}
 }
 

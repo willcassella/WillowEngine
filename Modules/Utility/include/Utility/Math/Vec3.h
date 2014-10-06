@@ -17,6 +17,10 @@ namespace Willow
 		///   Constructors   ///
 	public:
 
+		/** Constructs a new 3-length vector
+		x - the x component of the vector
+		y - the y component of the vector
+		z - the z component of the vector */
 		Vec3(float x = 0.f, float y = 0.f, float z = 0.f);
 
 		///////////////////

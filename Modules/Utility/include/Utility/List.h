@@ -57,7 +57,7 @@ namespace Willow
 			Iterator& operator++()
 			{
 				_node = _node->Next;
-				return *this;
+				return This;
 			}
 			T& operator*()
 			{
@@ -93,7 +93,7 @@ namespace Willow
 			ConstIterator& operator++()
 			{
 				_node = _node->Next;
-				return *this;
+				return This;
 			}
 			const T& operator*() const
 			{
@@ -127,7 +127,7 @@ namespace Willow
 			this->_last = nullptr;
 			this->_count = 0;
 
-			*this = copy;
+			This = copy;
 		}
 		List(List&& other)
 		{
@@ -148,17 +148,22 @@ namespace Willow
 		///   Methods   ///
 	public:
 
+		/** Returns the number of elements in this list */
 		uint32 Size() const
 		{
 			return _count;
 		}
+
+		/** Returns whether this list has any elements */
 		bool IsEmpty() const
 		{
 			return this->Size() == 0;
 		}
+
+		/** Returns whether a copy of item exists in this list */
 		bool HasElement(const T& item) const
 		{
-			for (const auto& i : *this)
+			for (const auto& i : This)
 			{
 				if (i == item)
 				{
@@ -168,6 +173,8 @@ namespace Willow
 
 			return false;
 		}
+
+		/** Appends a new item to the end of this list */
 		void Add(T item)
 		{
 			if (_count == 0)
@@ -182,33 +189,47 @@ namespace Willow
 			}
 			_count++;
 		}
+
+		/** Returns a reference to the first element in this list 
+		* WARNING: Check IsEmpty() before calling this */
 		T& First()
 		{
 			assert(_first);
 			return _first->Value;
 		}
+
+		/** Returns a reference to the first element in this list
+		* WARNING: Check IsEmpty() before calling this */
 		const T& First() const
 		{
 			assert(_first);
 			return _first->Value;
 		}
+
+		/** Returns a reference to the last element in this list
+		* WARNING: Check IsEmpty() before calling this */
 		T& Last()
 		{
 			assert(_last);
 			return _last->Value;
 		}
+
+		/** Returns a reference to the last element in this list
+		* WARNING: Check IsEmpty() before calling this */
 		const T& Last() const
 		{
 			assert(_last);
 			return _last->Value;
 		}
+
+		/** Returns the indices at which a copy of value occurs in this list */
 		List<uint32> OccurrencesOf(const T& value) const
 		{
 			List<uint32> occurrences;
 
 			for (uint32 i = 0; i < this->Size(); i++)
 			{
-				if ((*this)[i] == value)
+				if (This[i] == value)
 				{
 					occurrences.Add(i);
 				}
@@ -216,6 +237,9 @@ namespace Willow
 
 			return occurrences;
 		}
+
+		/** Deletes the value stored at the specified index in this list
+		* WARNING: This offsets the index of every proceeding element by -1 */
 		void RemoveAt(uint32 index)
 		{
 			// If this index doesn't exist
@@ -250,12 +274,15 @@ namespace Willow
 			delete current;
 			_count--;
 		}
+
+		/** Deletes all instances of the specified value in this list
+		* WARNING: This offsets the index of every proceeding element */
 		void RemoveAll(const T& value)
 		{
 			uint32 i = 0;
 			while (i < this->Size())
 			{
-				if ((*this)[i] == value)
+				if (This[i] == value)
 				{
 					this->RemoveAt(i);
 				}
@@ -265,6 +292,8 @@ namespace Willow
 				}
 			}
 		}
+
+		/** Deletes all values in this list */
 		void Clear()
 		{
 			Node* next = _first;
@@ -314,7 +343,7 @@ namespace Willow
 				}
 			}
 
-			return *this;
+			return This;
 		}
 		List<T>& operator=(List<T>&& other)
 		{
@@ -331,7 +360,7 @@ namespace Willow
 				other._count = 0;
 			}
 
-			return *this;
+			return This;
 		}
 		T& operator[](uint32 index)
 		{

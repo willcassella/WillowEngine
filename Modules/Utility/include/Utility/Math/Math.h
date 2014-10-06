@@ -7,7 +7,8 @@ namespace Willow
 {
 	//////////////////////////
 	///   Math Functions   ///
-
+	
+	/** Returns the max of two values, with preference to a */
 	template <typename T>
 	T Max(const T& a, const T& b)
 	{
@@ -21,6 +22,7 @@ namespace Willow
 		}
 	}
 
+	/** Returns the least of two values, with preference to a */
 	template <typename T>
 	T Min(const T& a, const T& b)
 	{

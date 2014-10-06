@@ -77,5 +77,8 @@
     <ClInclude Include="include\Utility\Console.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\Utility\Stack.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
