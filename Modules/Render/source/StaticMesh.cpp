@@ -8,7 +8,7 @@
 #include "..\include\Render\StaticMesh.h"
 using namespace Willow;
 
-bool LoadModel(const String& path, Array<Vertex>* outVertices, Array<BufferID>* outElements);
+bool LoadModel(const String& path, Array<Vertex>* const outVertices, Array<BufferID>* const outElements);
 
 ////////////////////////
 ///   Constructors   ///
@@ -38,8 +38,6 @@ StaticMesh::StaticMesh(const String& path)
 	glGenBuffers(1, &_ebo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.Size() * sizeof(BufferID), &elements[0] , GL_STATIC_DRAW);
-
-	this->_mat = nullptr;
 
 	glBindVertexArray(NULL);
 }
@@ -83,9 +81,14 @@ const Material& StaticMesh::GetMaterial() const
 	return *_mat;
 }
 
-void StaticMesh::SetMaterial(Material& mat)
+void StaticMesh::SetMaterial(const String& path)
 {
-	_mat = &mat;
+	_mat = path;
+
+	if (!_mat.IsLoaded())
+	{
+		return;
+	}
 
 	// Bind the VAO
 	glBindVertexArray(_vao);
@@ -93,15 +96,15 @@ void StaticMesh::SetMaterial(Material& mat)
 
 	// Set stuff
 	BufferID vPosition;
-	vPosition = glGetAttribLocation(*_mat, "vPosition");
+	vPosition = glGetAttribLocation(_mat->GetID(), "vPosition");
     glEnableVertexAttribArray(vPosition);
     glVertexAttribPointer(vPosition, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
 
-	BufferID vTexcoord = glGetAttribLocation(*_mat, "vTexcoord");
+	BufferID vTexcoord = glGetAttribLocation(_mat->GetID(), "vTexcoord");
 	glEnableVertexAttribArray(vTexcoord);
 	glVertexAttribPointer(vTexcoord, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(Vec3));
 
-	BufferID vNormal = glGetAttribLocation(*_mat, "vNormal");
+	BufferID vNormal = glGetAttribLocation(_mat->GetID(), "vNormal");
 	glEnableVertexAttribArray(vNormal);
 	glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_TRUE, sizeof(Vertex), (void*)(sizeof(Vec3) + sizeof(Vec2)));
 

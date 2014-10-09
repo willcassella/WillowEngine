@@ -1,6 +1,7 @@
 // string.cpp
 
 #include <cstring>
+#include <string>
 #include <ctype.h>
 #include "..\include\Utility\Math\Math.h"
 #include "..\include\Utility\String.h"
@@ -119,12 +120,12 @@ List<uint32> String::OccurencesOf(const String& string) const
 	return occurences;
 }
 
-String String::GetFileExtension() const
+String String::GetFileExtension(const String& path)
 {
-	auto occurences = this->OccurencesOf(".");
+	auto occurences = path.OccurencesOf(".");
 	if (!occurences.IsEmpty())
 	{
-		return this->SubString(occurences.Last() + 1);
+		return path.SubString(occurences.Last() + 1);
 	}
 	else
 	{
@@ -132,9 +133,9 @@ String String::GetFileExtension() const
 	}
 }
 
-String String::GetFileName() const
+String String::GetFileName(const String& path)
 {
-	String name = This;
+	String name = path;
 
 	auto forwardSlashes = name.OccurencesOf("/");
 	auto backSlashes = name.OccurencesOf("\\");
@@ -160,6 +161,41 @@ String String::GetFileName() const
 	return name;
 }
 
+Pair<String, String> String::ParseEquality(const String& equality)
+{
+	String key;
+	String value;
+
+	// Remove equal signs from equality
+	auto occurences = equality.OccurencesOf("=");
+	if (!occurences.IsEmpty())
+	{
+		key = equality.SubString(0, occurences.First());
+		key = String::RemovePadding(key);
+		value = equality.SubString(occurences.Last() + 1, equality.Length());
+		value = String::RemovePadding(value);
+	}
+
+	return Pair<String, String>(key, value);
+}
+
+String String::RemovePadding(const String& string)
+{
+	uint32 start = 0;
+	while (string._value[start] == ' ')
+	{
+		++start;
+	}
+
+	uint32 end = string.Length() - 1;
+	while (string._value[end] == ' ')
+	{
+		--end;
+	}
+
+	return string.SubString(start, end + 1);
+}
+
 uint32 String::Length(const char* string)
 {
 	return (uint32)strlen(string);
@@ -174,6 +210,64 @@ int32 String::Compare(const char* stringA, const char* stringB, bool caseSensiti
 	else
 	{
 		return _strcmpi(stringA, stringB);
+	}
+}
+
+char String::ToChar(const String& string)
+{
+	return (char)std::stoi(string.Cstr());
+}
+
+int16 String::ToInt16(const String& string)
+{
+	return (int16)std::stoi(string.Cstr());
+}
+
+int32 String::ToInt32(const String& string)
+{
+	return std::stoi(string.Cstr());
+}
+
+int64 String::ToInt64(const String& string)
+{
+	return std::stol(string.Cstr());
+}
+
+byte String::ToByte(const String& string)
+{
+	return (byte)std::stoul(string.Cstr());
+}
+
+static uint16 ToUInt16(const String& string)
+{
+	return (uint16)std::stoul(string.Cstr());
+}
+
+static uint32 ToUint32(const String& string)
+{
+	return (uint32)std::stoul(string.Cstr());
+}
+
+static float ToFloat(const String& string)
+{
+	return std::stof(string.Cstr());
+}
+
+static double ToDouble(const String& string)
+{
+	return std::stod(string.Cstr());
+}
+
+static bool ToBool(const String& string)
+{
+	String value = string.ToLower();
+	if (value == "true" || value == "1")
+	{
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
 

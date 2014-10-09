@@ -2,6 +2,7 @@
 #pragma once
 
 #include "List.h"
+#include "Pair.h"
 
 namespace Willow
 {
@@ -47,12 +48,20 @@ namespace Willow
 
 		/** Returns a list of the starting indices at which the given string appears in this string */
 		List<uint32> OccurencesOf(const String& string) const;
-
+		
 		/** If this string represents a path to a file, returns the file extension */
-		String GetFileExtension() const;
+		static String GetFileExtension(const String& path);
 
 		/** If this string represents a path to a file, returns the name of the file */
-		String GetFileName() const;
+		static String GetFileName(const String& path);
+
+		/** Parses a string in the form 'key = value'
+		* Returns a pair of the key and value
+		* Returns an empty pair if the string could not be parsed*/
+		static Pair<String, String> ParseEquality(const String& equality);
+
+		/** Removes spaces from the front and end of string */
+		static String RemovePadding(const String& string);
 
 		/** Returns the length of a c-style string */
 		static uint32 Length(const char* string);
@@ -63,6 +72,36 @@ namespace Willow
 		<0 - stringA is alphabetically lower than stringB
 		>0 - stringB is alphabetically higher than stringB */
 		static int32 Compare(const char* stringA, const char* stringB, bool caseSensitive = true);
+
+		/** Attempts to parse the string as a char */
+		static char ToChar(const String& string);
+
+		/** Attempts to parse the string as an int16 */
+		static int16 ToInt16(const String& string);
+
+		/** Attempts to parse the string as an int32 */
+		static int32 ToInt32(const String& string);
+
+		/** Attempts to parse the string as an int64 */
+		static int64 ToInt64(const String& string);
+
+		/** Attempts to parse the string as a byte */
+		static byte ToByte(const String& string);
+
+		/** Attempts to parse the string as a uint16 */
+		static uint16 ToUInt16(const String& string);
+
+		/** Attempts to parse the string as a uint32 */
+		static uint32 ToUint32(const String& string);
+
+		/** Attempts to parse the string as a float */
+		static float ToFloat(const String& string);
+
+		/** Attempts to parse the string as a double */
+		static double ToDouble(const String& string);
+
+		/** Attempts to parse the string as a bool */
+		static bool ToBool(const String& string);
 
 		/////////////////////
 		///   Operators   ///

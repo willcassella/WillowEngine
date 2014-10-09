@@ -10,8 +10,9 @@
 #include <Utility\Console.h>
 #include <Utility\Math\Vec2.h>
 #include <Core\Game.h>
-#include <ExampleGame\FPSCamera.h>
 #include <Core\Prop.h>
+#include <ExampleGame\FPSCamera.h>
+#include <ExampleGame\Ghost.h>
 using namespace Willow;
 
 //Define context parameters
@@ -80,25 +81,14 @@ int WinMain(int32 argc, char* argv[])
 	Scene& test = Game::Instance().GetCurrentScene();
 
 	auto& sponza = test.AddObject(new Prop("sponza"));
-	auto& gun = test.AddObject(new Prop("gun"));
+	auto& gun = test.AddObject(new ExampleGame::Ghost("gun"));
 
 	sponza.MeshComponent.Mesh = "data/sponza.dat";
-
-	Material sponza_mat;
-	sponza_mat.VertexShader = "data/Default.vert";
-	sponza_mat.FragmentShader = "data/Default.frag";
-	sponza_mat.Textures["fDiffuse"] = "data/sponza_tex.png";
-	sponza_mat.Compile();
-	sponza.MeshComponent.Mesh->SetMaterial(sponza_mat);
+	sponza.MeshComponent.Mesh->SetMaterial("data/Sponza.mat");
 
 	gun.MeshComponent.Mesh = "data/battle_rifle.dat";
 
-	Material gun_mat;
-	gun_mat.VertexShader = "data/Default.vert";
-	gun_mat.FragmentShader = "data/Default.frag";
-	gun_mat.Textures["fDiffuse"] = "data/battle_rifle_tex.png";
-	gun_mat.Compile();
-	gun.MeshComponent.Mesh->SetMaterial(gun_mat);
+	gun.MeshComponent.Mesh->SetMaterial("data/Gun.mat");
 
 	auto& cam = test.AddObject(new ExampleGame::FPSCamera("Camera", 43, float(window_width) / window_height, 0.01f, 90.0f));
 
@@ -173,9 +163,10 @@ void eventLoop(GLFWwindow* window)
 	double lag = 0.0;
 	uint32 numFrames = 0;
 	uint32 numUpdates = 0;
+	bool exit = false;
 
 	// Begin the event loop
-	while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(window) && !exit)
 	{	 
 		Scene& scene = Game::Instance().GetCurrentScene();
 
@@ -217,6 +208,14 @@ void eventLoop(GLFWwindow* window)
 			if (glfwGetKey(window, GLFW_KEY_A))
 			{
 				scene.DispatchEvent("MoveRight", -speed);
+			}
+			if (glfwGetKey(window, GLFW_KEY_SPACE))
+			{
+				scene.DispatchEvent("Poof", 0);
+			}
+			if (glfwGetKey(window, GLFW_KEY_ESCAPE))
+			{
+				exit = true;
 			}
 
 			scene.DispatchEvent("LookUp", Cursor.Position.Y / 100);

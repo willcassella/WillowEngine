@@ -34,7 +34,7 @@ namespace Willow
 		static void PrintFormatted(const String& format, const FirstType& value)
 		{
 			// Iterate through the format string
-			for (const char* character = format.Cstr(); *character != '\0'; character++)
+			for (const char* character = format.Cstr(); *character != '\0'; ++character)
 			{
 				// If we hit the placeholder character
 				if (*character == '@')
@@ -57,7 +57,7 @@ namespace Willow
 		static void PrintFormatted(const String& format, const FirstType& value, const ArgTypes& ... values)
 		{
 			// Iterate through the format string
-			for (const char* character = format.Cstr(); *character != '\0'; character++)
+			for (const char* character = format.Cstr(); *character != '\0'; ++character)
 			{
 				// If we hit the placeholder character
 				if (*character == '@')
@@ -76,10 +76,10 @@ namespace Willow
 
 	public:
 
-		/** Send the console caret to the start of the next line */
+		/** Sends the console caret to the start of the next line */
 		static void NewLine();
 
-		/** Writes the value to the console */
+		/** Writes a value to the console */
 		static void Write(const String& message);
 		static void Write(char value);
 		static void Write(int16 value);
@@ -91,7 +91,7 @@ namespace Willow
 		static void Write(float value);
 		static void Write(double value);
 
-		/** Writes the value to the console, and then send the caret to the start of the next line */
+		/** Writes a value to the console, and then send the caret to the start of the next line */
 		static void WriteLine(const String& message);
 		static void WriteLine(char value);
 		static void WriteLine(int16 value);

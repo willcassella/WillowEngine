@@ -1,7 +1,6 @@
 // Shader.cpp
 
-#include <fstream>
-#include <string>
+#include <Utility\TextFileReader.h>
 #include <Utility\Console.h>
 #include "glew.h"
 #include "..\include\Render\shader.h"
@@ -13,26 +12,20 @@ using namespace Willow;
 Shader::Shader(const String& path)
 	: Super(path)
 {
-	// Aggregate the shader source code
-	std::ifstream file(path.Cstr());
+	TextFileReader file(path);
 
 	// Make sure the file opened correctly
-	if (!file.is_open())
+	if (!file.FileOpen())
 	{
-		Console::Warning("'@' could not be opened", path);
+		Console::Warning("Shader at '@' could not be opened", path);
 		this->_id = NULL;
 		return;
 	}
 
-	std::string source;
-	std::string line;
-	while (getline(file, line))
-	{
-		source += line + '\n';
-	}
+	String source = file.Dump();
 
 	// Identify the shader type
-	String type = path.GetFileExtension();
+	String type = String::GetFileExtension(path);
 
 	if (type == "vert")
 	{
@@ -47,7 +40,7 @@ Shader::Shader(const String& path)
 		this->_id = glCreateShader(GL_GEOMETRY_SHADER);
 	}
 
-	const char* tempSource = source.c_str();
+	const char* tempSource = source.Cstr();
 	glShaderSource(_id, 1, &tempSource, nullptr);
 	glCompileShader(_id);
 
@@ -59,10 +52,10 @@ Shader::~Shader()
 	glDeleteShader(this->_id);
 }
 
-/////////////////////
-///   Operators   ///
+///////////////////
+///   Methods   ///
 
-Shader::operator BufferID() const
+BufferID Shader::GetID() const
 {
-	return this->_id;
+	return _id;
 }

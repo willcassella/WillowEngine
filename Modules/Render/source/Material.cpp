@@ -1,5 +1,7 @@
 // Material.cpp
 
+#include <Utility\TextFileReader.h>
+#include <Utility\Console.h>
 #include "glew.h"
 #include "..\include\Render\Material.h"
 using namespace Willow;
@@ -7,9 +9,49 @@ using namespace Willow;
 ////////////////////////
 ///   Constructors   ///
 
-Material::Material()
+Material::Material(const String& path)
+	: Super(path)
 {
+	TextFileReader file(path);
+
+	if (!file.FileOpen())
+	{
+		Console::Warning("Material at '@' could not be loaded", path);
+		return;
+	}
+
+	String line;
+	while (file.GetNextLine(&line))
+	{
+		if (line == "Shaders:")
+		{
+			for (file.GetNextLine(&line); !line.IsNullOrEmpty(); file.GetNextLine(&line))
+			{
+				auto shader = String::ParseEquality(line);
+
+				if (shader.First == "VertexShader")
+				{
+					this->VertexShader = shader.Second;
+				}
+				else if (shader.First == "FragmentShader")
+				{
+					this->FragmentShader = shader.Second;
+				}
+			}
+		}
+		else if (line == "Textures:")
+		{
+			for (file.GetNextLine(&line); !line.IsNullOrEmpty(); file.GetNextLine(&line))
+			{
+				auto texture = String::ParseEquality(line);
+
+				this->Textures[texture.First] = texture.Second;
+			}
+		}
+	}
+
 	this->_id = glCreateProgram();
+	this->Compile();
 }
 
 Material::~Material()
@@ -22,8 +64,8 @@ Material::~Material()
 
 void Material::Compile()
 {
-	glAttachShader(_id, *VertexShader);
-	glAttachShader(_id, *FragmentShader);
+	glAttachShader(_id, VertexShader->GetID());
+	glAttachShader(_id, FragmentShader->GetID());
 	glLinkProgram(_id);
 
 	glBindFragDataLocation(_id, 0, "outColor");
@@ -32,8 +74,8 @@ void Material::Compile()
 	this->_vView = glGetUniformLocation(_id, "vView");
 	this->_vProjection = glGetUniformLocation(_id, "vProjection");
 
-	glDetachShader(_id, *VertexShader);
-	glDetachShader(_id, *FragmentShader);
+	glDetachShader(_id, VertexShader->GetID());
+	glDetachShader(_id, FragmentShader->GetID());
 }
 
 void Material::Bind() const
@@ -50,25 +92,22 @@ void Material::Bind() const
 	}
 }
 
-void Material::UploadModelMatrix(const Mat4& matrix)
+BufferID Material::GetID() const
+{
+	return _id;
+}
+
+void Material::UploadModelMatrix(const Mat4& matrix) const
 {
 	glUniformMatrix4fv(_vModel, 1, GL_FALSE, matrix[0]);
 }
 
-void Material::UploadViewMatrix(const Mat4& matrix)
+void Material::UploadViewMatrix(const Mat4& matrix) const
 {
 	glUniformMatrix4fv(_vView, 1, GL_FALSE, matrix[0]);
 }
 
-void Material::UploadProjectionMatrix(const Mat4& matrix)
+void Material::UploadProjectionMatrix(const Mat4& matrix) const
 {
 	glUniformMatrix4fv(_vProjection, 1, GL_FALSE, matrix[0]);
-}
-
-/////////////////////
-///   Operators   ///
-
-Material::operator BufferID() const
-{
-	return _id;
 }

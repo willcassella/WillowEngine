@@ -5,7 +5,9 @@
 
 namespace Willow
 {
-	template <class T> // T must be a child of Resource
+	/** An opaque pointer to a resource
+	* WARNING: ResourceType must be a subclass of Resource */
+	template <class ResourceType>
 	class ResourcePtr
 	{
 		////////////////////////
@@ -16,7 +18,7 @@ namespace Willow
 		{
 			this->AssignResource(path);
 		}
-		ResourcePtr(const ResourcePtr& copy)
+		ResourcePtr(const ResourcePtr<ResourceType>& copy)
 		{
 			this->_resource = copy._resource;
 			if (_resource)
@@ -24,7 +26,7 @@ namespace Willow
 				_resource->_refs++;
 			}
 		}
-		ResourcePtr(ResourcePtr&& other)
+		ResourcePtr(ResourcePtr<ResourceType>&& other)
 		{
 			this->_resource = other._resource;
 			other._resource = nullptr;
@@ -40,7 +42,7 @@ namespace Willow
 
 		void MakeUnique()
 		{
-			// Make this resource pointer unique
+			// @TODO: Make this resource pointer unique
 		}
 		bool IsLoaded() const
 		{
@@ -64,11 +66,11 @@ namespace Willow
 			if (!res)
 			{
 				// Create a new resource
-				res = new T(path);
+				res = new ResourceType(path);
 			}
 
 			// increase the ref count and point to the resource
-			this->_resource = (T*)res;
+			this->_resource = (ResourceType*)res;
 			_resource->_refs++;
 		}
 		void DeassignResource()
@@ -88,29 +90,29 @@ namespace Willow
 		///   Operators   ///
 	public:
 
-		T& operator*()
+		ResourceType& operator*()
 		{
 			return *_resource;
 		}
-		const T& operator*() const
+		const ResourceType& operator*() const
 		{
 			return *_resource;
 		}
-		T* operator->()
+		ResourceType* operator->()
 		{
 			return _resource;
 		}
-		const T* operator->() const
+		const ResourceType* operator->() const
 		{
 			return _resource;
 		}
-		ResourcePtr<T>& operator=(const String& path)
+		ResourcePtr<ResourceType>& operator=(const String& path)
 		{
 			this->DeassignResource();
 			this->AssignResource(path);
 			return *this;
 		}
-		ResourcePtr<T>& operator=(const ResourcePtr<T>& rhs)
+		ResourcePtr<ResourceType>& operator=(const ResourcePtr<ResourceType>& rhs)
 		{
 			if (this != &rhs)
 			{
@@ -124,7 +126,7 @@ namespace Willow
 			}
 			return *this;
 		}
-		ResourcePtr<T>& operator=(ResourcePtr<T>&& other)
+		ResourcePtr<ResourceType>& operator=(ResourcePtr<ResourceType>&& other)
 		{
 			if (this != &other)
 			{
@@ -134,11 +136,11 @@ namespace Willow
 			}
 			return *this;
 		}
-		bool operator==(const ResourcePtr<T>& rhs) const
+		bool operator==(const ResourcePtr<ResourceType>& rhs) const
 		{
 			return _resource == rhs._resource;
 		}
-		bool operator!=(const ResourcePtr<T>& rhs) const
+		bool operator!=(const ResourcePtr<ResourceType>& rhs) const
 		{
 			return _resource != rhs._resource;
 		}
@@ -147,6 +149,6 @@ namespace Willow
 		///   Data   ///
 	private:
 
-		T* _resource = nullptr;
+		ResourceType* _resource = nullptr;
 	};
 }

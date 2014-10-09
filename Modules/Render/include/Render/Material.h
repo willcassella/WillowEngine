@@ -8,9 +8,14 @@
 
 namespace Willow
 {
-	// @TODO: Implement Resource (?)
-	class RENDER_API Material
+	class RENDER_API Material : public Resource
 	{
+		///////////////////////
+		///   Information   ///
+	public:
+
+		typedef Resource Super;
+
 		//////////////////
 		///   Fields   ///
 	public:
@@ -23,9 +28,10 @@ namespace Willow
 		///   Constructors   ///
 	public:
 
-		Material();
-		~Material();
-		// @TODO: Implement rule of 5
+		Material(const String& path);
+		Material(const Material& copy) = delete;
+		Material(Material&& other) = delete;
+		~Material() override;
 
 		///////////////////
 		///   Methods   ///
@@ -34,16 +40,17 @@ namespace Willow
 		// @TODO: This needs some serious work. Once I have a more finalized rendering pipeline set up I'll do some major refactoring here
 		void Compile();
 		void Bind() const;
-		void UploadModelMatrix(const Mat4& matrix);
-		void UploadViewMatrix(const Mat4& matrix);
-		void UploadProjectionMatrix(const Mat4& matrix);
+		BufferID GetID() const;
+		void UploadModelMatrix(const Mat4& matrix) const;
+		void UploadViewMatrix(const Mat4& matrix) const;
+		void UploadProjectionMatrix(const Mat4& matrix) const;
 
 		/////////////////////
 		///   Operators   ///
 	public:
 
-		// @TODO: I think I'll replace this with a method after all
-		operator BufferID() const;
+		Material& operator=(const Material& rhs) = delete;
+		Material& operator=(Material&& copy) = delete;
 
 		////////////////
 		///   Data   ///

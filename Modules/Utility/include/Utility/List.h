@@ -179,7 +179,7 @@ namespace Willow
 		{
 			if (_count == 0)
 			{
-				_first = new Node(item);
+				_first = new Node(std::move(item));
 				_last = _first;
 			}
 			else

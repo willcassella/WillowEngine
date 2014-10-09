@@ -57,10 +57,9 @@ void Scene::Update()
 
 void Scene::DispatchEvent(const String& eventName, float value)
 {
-	// @TODO: This should work for more than just cameras
-	for (auto& cam : Cameras)
+	for (auto& object : _objects)
 	{
-		cam->EventManager.DispatchInputEvent(eventName, value);
+		object->EventManager.DispatchInputEvent(eventName, value);
 	}
 }
 

@@ -1,8 +1,6 @@
 // StaticMesh.h
 #pragma once
 
-#include <Utility\String.h>
-#include <Utility\Math\Mat4.h>
 #include "Material.h"
 
 namespace Willow
@@ -20,18 +18,26 @@ namespace Willow
 	public:
 
 		StaticMesh(const String& path);
+		StaticMesh(const StaticMesh& copy) = delete;
+		StaticMesh(StaticMesh&& other) = delete;
 		~StaticMesh() override;
-		// @TODO: implement rule of five
 
 		///////////////////
 		///   Methods   ///
 	public:
 
-		// Render the mesh at a specific orientation, view, and perspective
+		/** Render the mesh at a specific orientation, view, and perspective */
 		void Render(const Mat4& orientation, const Mat4& view, const Mat4& perspective) const;
 		Material& GetMaterial();
 		const Material& GetMaterial() const;
-		void SetMaterial(Material& material);
+		void SetMaterial(const String& path);
+
+		/////////////////////
+		///   Operators   ///
+	public:
+
+		StaticMesh& operator=(const StaticMesh& copy) = delete;
+		StaticMesh& operator=(StaticMesh&& other) = delete;
 
 		////////////////
 		///   Data   ///
@@ -40,10 +46,7 @@ namespace Willow
 		BufferID _vao;
 		BufferID _vbo;
 		BufferID _ebo;
-
 		uint32 _numElements;
-
-		// @TODO: replace with ResourcePtr<Material>
-		Material* _mat;
+		ResourcePtr<Material> _mat;
 	};
 }

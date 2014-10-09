@@ -1,7 +1,6 @@
 // Shader.h
 #pragma once
 
-#include <Utility\String.h>
 #include <Resource\ResourcePtr.h>
 #include "Render.h"
 
@@ -20,14 +19,22 @@ namespace Willow
 	public:
 
 		Shader(const String& path);
-		~Shader();
-		// @TODO: Implement move constructor, move destructor, and copy constructor
+		Shader(const Shader& copy) = delete;
+		Shader(Shader&& other) = delete;
+		~Shader() override;
+
+		///////////////////
+		///   Methods   ///
+	public:
+
+		BufferID GetID() const;
 
 		/////////////////////
 		///   Operators   ///
 	public:
 
-		operator BufferID() const;
+		Shader& operator=(const Shader& copy) = delete;
+		Shader& operator=(Shader&& other) = delete;
 
 		////////////////
 		///   Data   ///

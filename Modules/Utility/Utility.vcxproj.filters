@@ -33,6 +33,12 @@
     <ClCompile Include="source\Console.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="source\TextFileReader.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Switch.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Utility\Math\Mat4.h">
@@ -78,6 +84,12 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Utility\Stack.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\Switch.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\TextFileReader.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

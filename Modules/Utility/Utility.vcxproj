@@ -155,6 +155,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source\Console.cpp" />
+    <ClCompile Include="source\Switch.cpp" />
+    <ClCompile Include="source\TextFileReader.cpp" />
     <ClCompile Include="source\Math\Mat4.cpp" />
     <ClCompile Include="source\Math\Quat.cpp" />
     <ClCompile Include="source\Math\Vec2.cpp" />
@@ -163,12 +165,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Utility\Console.h" />
+    <ClInclude Include="include\Utility\TextFileReader.h" />
     <ClInclude Include="include\Utility\List.h" />
     <ClInclude Include="include\Utility\Math\Math.h" />
     <ClInclude Include="include\Utility\Pair.h" />
     <ClInclude Include="include\Utility\ProgramOptions.h" />
     <ClInclude Include="include\Utility\Queue.h" />
     <ClInclude Include="include\Utility\Stack.h" />
+    <ClInclude Include="include\Utility\Switch.h" />
     <ClInclude Include="include\Utility\Table.h" />
     <ClInclude Include="include\Utility\config.h" />
     <ClInclude Include="include\Utility\Math\Mat4.h" />
