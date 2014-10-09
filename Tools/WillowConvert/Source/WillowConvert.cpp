@@ -28,7 +28,7 @@ bool WillowConvert::Convert(const String& path, const List<String>& options)
 		{
 			return false;
 		}
-		if (!WriteStaticMesh(path.GetFileName(), vertices, elements))
+		if (!WriteStaticMesh(String::GetFileName(path), vertices, elements))
 		{
 			return false;
 		}
@@ -45,7 +45,7 @@ bool WillowConvert::Convert(const String& path, const List<String>& options)
 
 WillowConvert::InputType WillowConvert::ParsePath(const String& path)
 {
-	String extension = path.GetFileExtension();
+	String extension = String::GetFileExtension(path);
 
 	// Make sure the filename is valid
 	if (extension.IsNullOrEmpty())

@@ -20,14 +20,22 @@ namespace Willow
 	public:
 
 		Texture(const String& path);
+		Texture(const Texture& copy) = delete;
+		Texture(Texture&& other) = delete;
 		~Texture() override;
-		// @TODO: Implement rule of five
 
 		///////////////////
 		///   Methods   ///
 	public:
 
 		BufferID GetID() const;
+
+		/////////////////////
+		///   Operators   ///
+	public:
+
+		Texture& operator=(const Texture& copy) = delete;
+		Texture& operator=(Texture&& other) = delete;
 
 		////////////////
 		///   Data   ///
