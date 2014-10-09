@@ -81,17 +81,14 @@ int WinMain(int32 argc, char* argv[])
 	Scene& test = Game::Instance().GetCurrentScene();
 
 	auto& sponza = test.AddObject(new Prop("sponza"));
-	auto& gun = test.AddObject(new ExampleGame::Ghost("gun"));
-
 	sponza.MeshComponent.Mesh = "data/sponza.dat";
 	sponza.MeshComponent.Mesh->SetMaterial("data/Sponza.mat");
 
+	auto& gun = test.AddObject(new ExampleGame::Ghost("gun"));
 	gun.MeshComponent.Mesh = "data/battle_rifle.dat";
-
 	gun.MeshComponent.Mesh->SetMaterial("data/Gun.mat");
 
 	auto& cam = test.AddObject(new ExampleGame::FPSCamera("Camera", 43, float(window_width) / window_height, 0.01f, 90.0f));
-
 	test.Cameras.Add(&cam);
 
 	//Execute the main event loop
