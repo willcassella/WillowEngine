@@ -21,7 +21,6 @@ StaticMesh::StaticMesh(const String& path)
 
 	if (!LoadModel(path, &vertices, &elements))
 	{
-		this->_mat = nullptr;
 		return;
 	}
 

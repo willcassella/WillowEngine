@@ -61,7 +61,7 @@ void windowSizeCallback(GLFWwindow* window, int32 x, int32 y)
 	glViewport(0, 0, x, y);
 }
 
-int WinMain(int32 argc, char* argv[])
+int main(int32 argc, char* argv[])
 {	
 	Console::WriteLine("Initializing subsystems...");
 
@@ -213,6 +213,10 @@ void eventLoop(GLFWwindow* window)
 			if (glfwGetKey(window, GLFW_KEY_ESCAPE))
 			{
 				exit = true;
+			}
+			if (glfwGetKey(window, GLFW_KEY_Q))
+			{
+				scene.DispatchEvent("Spin", speed);
 			}
 
 			scene.DispatchEvent("LookUp", Cursor.Position.Y / 100);

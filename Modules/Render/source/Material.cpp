@@ -89,6 +89,7 @@ void Material::Bind() const
 		glBindTexture(GL_TEXTURE_2D, i.Second->GetID());
 
 		glUniform1i(glGetUniformLocation(_id, i.First.Cstr()), texIndex);
+		++texIndex;
 	}
 }
 

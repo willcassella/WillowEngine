@@ -35,6 +35,7 @@ namespace ExampleGame
 	public:
 
 		void Disappear();
+		void Spin(float value);
 
 		////////////////
 		///   Data   ///

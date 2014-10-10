@@ -10,6 +10,7 @@ Ghost::Ghost(const Willow::String& name)
 	: Super(name), MeshComponent(This), Slider(This)
 {
 	EventManager.BindAction("Poof", this, &Ghost::Disappear);
+	EventManager.BindAxis("Spin", this, &Ghost::Spin);
 	hasDisappeared = false;
 }
 
@@ -28,4 +29,9 @@ void Ghost::Disappear()
 		MeshComponent.Enable();
 		hasDisappeared = false;
 	}
+}
+
+void Ghost::Spin(float value)
+{
+	Transform.Rotate(Willow::Vec3::Up, value);
 }

@@ -158,7 +158,7 @@ xcopy "$(ProjectDir)thirdParty\glfw3\$(Platform)\glfw3.dll" "$(SolutionDir)bin\"
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>Willow_Utility.lib;Willow_Resource.lib;Willow_Render.lib;Willow_Core.lib;ExampleGame.lib;glfw3dll.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EntryPointSymbol>
       </EntryPointSymbol>
     </Link>
@@ -187,7 +187,7 @@ xcopy "$(ProjectDir)thirdParty\glfw3\$(Platform)\glfw3.dll" "$(SolutionDir)bin\"
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>Willow_Utility.lib;Willow_Resource.lib;Willow_Render.lib;Willow_Core.lib;ExampleGame.lib;glfw3dll.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
     </Link>
