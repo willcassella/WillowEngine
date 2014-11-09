@@ -13,6 +13,12 @@
     <Filter Include="include\Math">
       <UniqueIdentifier>{5cbad73f-f731-4a9c-b73f-89c28a6dbead}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\Reflection">
+      <UniqueIdentifier>{05942a23-9504-4513-b064-8eb587ac37b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Reflection">
+      <UniqueIdentifier>{3cf0861f-ffe7-4532-b493-5b48e935f849}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Math\Mat4.cpp">
@@ -37,6 +43,36 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="source\Switch.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\object.cpp">
+      <Filter>source\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\Type.cpp">
+      <Filter>source\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\ClassType.cpp">
+      <Filter>source\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\PrimitiveType.cpp">
+      <Filter>source\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\PointerType.cpp">
+      <Filter>source\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\TemplateType.cpp">
+      <Filter>source\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\NonReflectedType.cpp">
+      <Filter>source\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\InterfaceType.cpp">
+      <Filter>source\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\Serialization.cpp">
+      <Filter>source\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Resource.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -90,6 +126,51 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Utility\TextFileReader.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\Reflection\object.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\Reflection\Interface.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\Reflection\Field.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\Reflection\Type.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\Reflection\ClassType.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\Reflection\PrimitiveType.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\Reflection\PointerType.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\Reflection\TemplateType.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\Reflection\NonReflectedType.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\Reflection\Reflection.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\Reflection\InterfaceType.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\Reflection\Serialization.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\Reflection\Property.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\Resource.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\ResourcePtr.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

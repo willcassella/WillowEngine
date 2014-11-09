@@ -8,7 +8,7 @@
 #include "..\include\Render\StaticMesh.h"
 using namespace Willow;
 
-bool LoadModel(const String& path, Array<Vertex>* const outVertices, Array<BufferID>* const outElements);
+bool LoadModel(const String& path, Array<Vertex>& outVertices, Array<uint32>& outElements);
 
 ////////////////////////
 ///   Constructors   ///
@@ -17,9 +17,9 @@ StaticMesh::StaticMesh(const String& path)
 	: Super(path)
 {
 	Array<Vertex> vertices;
-	Array<BufferID> elements;
+	Array<uint32> elements;
 
-	if (!LoadModel(path, &vertices, &elements))
+	if (!LoadModel(path, vertices, elements))
 	{
 		return;
 	}
@@ -36,7 +36,7 @@ StaticMesh::StaticMesh(const String& path)
 
 	glGenBuffers(1, &_ebo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.Size() * sizeof(BufferID), &elements[0] , GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.Size() * sizeof(uint32), &elements[0] , GL_STATIC_DRAW);
 
 	glBindVertexArray(NULL);
 }
@@ -57,7 +57,7 @@ void StaticMesh::Render(const Mat4& orientation, const Mat4& view, const Mat4& p
 	glBindVertexArray(_vao);
 
 	// Bind the material
-	this->GetMaterial().Bind();
+	this->GetMaterial()->Bind();
 
 	// Upload the matrix to the GPU
 	_mat->UploadModelMatrix(orientation);
@@ -70,19 +70,19 @@ void StaticMesh::Render(const Mat4& orientation, const Mat4& view, const Mat4& p
 	glBindVertexArray(NULL);
 }
 
-Material& StaticMesh::GetMaterial()
+ResourcePtr<Material>& StaticMesh::GetMaterial()
 {
-	return *_mat;
+	return _mat;
 }
 
-const Material& StaticMesh::GetMaterial() const
+const ResourcePtr<Material>& StaticMesh::GetMaterial() const
 {
-	return *_mat;
+	return _mat;
 }
 
-void StaticMesh::SetMaterial(const String& path)
+void StaticMesh::SetMaterial(const ResourcePtr<Material>& material)
 {
-	_mat = path;
+	_mat = material;
 
 	if (!_mat.IsLoaded())
 	{
@@ -101,16 +101,16 @@ void StaticMesh::SetMaterial(const String& path)
 
 	BufferID vTexcoord = glGetAttribLocation(_mat->GetID(), "vTexcoord");
 	glEnableVertexAttribArray(vTexcoord);
-	glVertexAttribPointer(vTexcoord, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(Vec3));
+	glVertexAttribPointer(vTexcoord, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(float) * 3));
 
 	BufferID vNormal = glGetAttribLocation(_mat->GetID(), "vNormal");
 	glEnableVertexAttribArray(vNormal);
-	glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_TRUE, sizeof(Vertex), (void*)(sizeof(Vec3) + sizeof(Vec2)));
+	glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_TRUE, sizeof(Vertex), (void*)(sizeof(float) * 3 + sizeof(float) * 2));
 
 	glBindVertexArray(NULL);
 }
 
-bool LoadModel(const String& path, Array<Vertex>* const outVertices, Array<BufferID>* const outElements)
+bool LoadModel(const String& path, Array<Vertex>& outVertices, Array<uint32>& outElements)
 {
 	// Attempt to open the file
 	std::ifstream input;
@@ -124,27 +124,29 @@ bool LoadModel(const String& path, Array<Vertex>* const outVertices, Array<Buffe
 	}
 
 	// Get the number of vertices
-	int num_verts;
-	input.read((char*)&num_verts, sizeof(int32));
+	uint32 numVerts;
+	input.read((char*)&numVerts, sizeof(uint32));
+	outVertices.Reset(numVerts);
 
 	// Add all the vertices
-	for (int32 i = 0; i < num_verts; i++)
+	for (uint32 i = 0; i < numVerts; ++i)
 	{
 		Vertex newVert;
 		input.read((char*)&newVert, sizeof(Vertex));
-		outVertices->Add(newVert);
+		outVertices.Add(newVert);
 	}
 
 	// Get the number of elements
-	int num_elems;
-	input.read((char*)&num_elems, sizeof(int32));
+	uint32 numElems;
+	input.read((char*)&numElems, sizeof(uint32));
+	outElements.Reset(numElems);
 
 	// Add all the elements
-	for (int i = 0; i < num_elems; i++)
+	for (uint32 i = 0; i < numElems; ++i)
 	{
-		BufferID newElem;
+		uint32 newElem;
 		input.read((char*)&newElem, sizeof(uint32));
-		outElements->Add(newElem);
+		outElements.Add(newElem);
 	}
 
 	// Close the file

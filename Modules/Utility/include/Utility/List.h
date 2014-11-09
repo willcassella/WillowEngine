@@ -3,14 +3,21 @@
 
 #include <cassert>
 #include <utility>
-#include "config.h"
+#include "String.h"
 
 namespace Willow
 {
 	/** A linked list, replacement for std::list */
 	template <typename T>
-	class List
+	class List : public object
 	{
+		///////////////////////
+		///   Information   ///
+	public:
+
+		REFLECTABLE
+		EXTENDS(object)
+
 		//////////////////////
 		///   SubClasses   ///
 	private:
@@ -148,6 +155,27 @@ namespace Willow
 		///   Methods   ///
 	public:
 
+		/** Returns the state of this list as a string */
+		String ToString() const override
+		{
+			String string = "{";
+			bool fence = false;
+			for (const auto& item : This)
+			{
+				if (fence)
+				{
+					string += ", ";
+				}
+				else
+				{
+					fence = true;
+				}
+
+				string += ValueToString(item);
+			}
+			return string + "}";
+		}
+
 		/** Returns the number of elements in this list */
 		uint32 Size() const
 		{
@@ -227,7 +255,7 @@ namespace Willow
 		{
 			List<uint32> occurrences;
 
-			for (uint32 i = 0; i < this->Size(); i++)
+			for (uint32 i = 0; i < this->Size(); ++i)
 			{
 				if (This[i] == value)
 				{
@@ -249,7 +277,7 @@ namespace Willow
 			}
 
 			Node* current = _first;
-			for (uint32 i = 0; i < index; i++)
+			for (uint32 i = 0; i < index; ++i)
 			{
 				current = current->Next;
 			}
@@ -367,7 +395,7 @@ namespace Willow
 			assert(index < this->Size());
 
 			Node* target = _first;
-			for (uint32 i = 0; i < index; i++)
+			for (uint32 i = 0; i < index; ++i)
 			{
 				target = target->Next;
 			}
@@ -379,12 +407,26 @@ namespace Willow
 			assert(index < this->Size());
 
 			Node* target = _first;
-			for (uint32 i = 0; i < index; i++)
+			for (uint32 i = 0; i < index; ++i)
 			{
 				target = target->Next;
 			}
 
 			return target->Value;
+		}
+		friend List<T> operator+(const List<T>& lhs, const List<T>& rhs)
+		{
+			List<T> result = lhs;
+			for (const auto& item : rhs)
+			{
+				result.Add(item);
+			}
+			return result;
+		}
+		friend List<T>& operator+=(List<T>& lhs, const List<T>& rhs)
+		{
+			lhs = lhs + rhs;
+			return lhs;
 		}
 		friend bool operator==(const List<T>& lhs, const List<T>& rhs)
 		{
@@ -393,7 +435,7 @@ namespace Willow
 				return false;
 			}
 
-			for (uint32 i = 0; i < lhs.Size(); i++)
+			for (uint32 i = 0; i < lhs.Size(); ++i)
 			{
 				if (lhs[i] != rhs[i])
 				{
@@ -416,4 +458,8 @@ namespace Willow
 		Node* _last;
 		uint32 _count;
 	};
+
+	BEGIN_TEMPLATE_INFO(Willow::List, typename T)
+	HAS_FACTORY
+	END_REFLECTION_INFO
 }

@@ -2,7 +2,7 @@
 #pragma once
 
 #include <Core\GameObject.h>
-#include <Core\StaticMeshComponent.h>
+#include <Render\StaticMeshComponent.h>
 #include "SlideComponent.h"
 #include "config.h"
 
@@ -14,13 +14,14 @@ namespace ExampleGame
 		///   Information   ///
 	public:
 
-		typedef GameObject Super;
+		REFLECTABLE
+		EXTENDS(Willow::GameObject)
 
 		/////////////////////////
 		///   Constructors   ///
 	public:
 
-		Ghost(const Willow::String& name);
+		Ghost(const Willow::String& name = "");
 		~Ghost() override = default;
 
 		//////////////////////

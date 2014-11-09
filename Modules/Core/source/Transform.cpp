@@ -3,6 +3,16 @@
 #include "..\include\Core\Transform.h"
 using namespace Willow;
 
+//////////////////////
+///   Reflection   ///
+
+BEGIN_CLASS_INFO(Willow::Transform)
+HAS_FACTORY
+FIELD(Location)
+FIELD(Orientation)
+FIELD(Scale3D)
+END_REFLECTION_INFO
+
 ////////////////////////
 ///   Constructors   ///
 

@@ -43,7 +43,7 @@ namespace Willow
 
 		/** Reads the next line in the file into outLine
 		* If the file has nothing left, returns false */
-		bool GetNextLine(String* const outLine);
+		bool GetNextLine(String& outLine);
 
 		/////////////////////
 		///   Operators   ///

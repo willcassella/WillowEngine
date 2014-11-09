@@ -10,7 +10,7 @@
 #include <Utility\Console.h>
 #include <Utility\Math\Vec2.h>
 #include <Core\Game.h>
-#include <Core\Prop.h>
+#include <Render\Prop.h>
 #include <ExampleGame\FPSCamera.h>
 #include <ExampleGame\Ghost.h>
 using namespace Willow;
@@ -80,16 +80,18 @@ int main(int32 argc, char* argv[])
 
 	Scene& test = Game::Instance().GetCurrentScene();
 
-	auto& sponza = test.AddObject(new Prop("sponza"));
+	auto& sponza = test.AddObject<Prop>("sponza");
 	sponza.MeshComponent.Mesh = "data/sponza.dat";
-	sponza.MeshComponent.Mesh->SetMaterial("data/Sponza.mat");
+	sponza.MeshComponent.Mesh->SetMaterial(String("data/Sponza.mat"));
 
-	auto& gun = test.AddObject(new ExampleGame::Ghost("gun"));
+	auto& gun = test.AddObject<ExampleGame::Ghost>("gun");
 	gun.MeshComponent.Mesh = "data/battle_rifle.dat";
-	gun.MeshComponent.Mesh->SetMaterial("data/Gun.mat");
+	gun.MeshComponent.Mesh->SetMaterial(String("data/Gun.mat"));
 
-	auto& cam = test.AddObject(new ExampleGame::FPSCamera("Camera", 43, float(window_width) / window_height, 0.01f, 90.0f));
+	auto& cam = test.AddObject<ExampleGame::FPSCamera>("Camera");
 	test.Cameras.Add(&cam);
+
+	Console::WriteLine(cam.GetComponents().GetType() == TypeInfo<List<Component*>>());
 
 	//Execute the main event loop
 	eventLoop(window);

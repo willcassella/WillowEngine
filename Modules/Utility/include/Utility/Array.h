@@ -3,16 +3,21 @@
 
 #include <cassert>
 #include <utility>
-#include "List.h"
+#include "Reflection\Reflection.h"
 
 namespace Willow
 {
 	/** A contigous container, replacement for std::vector */
 	template <typename T>
-	class Array
+	class Array : public object
 	{
 		///////////////////////
 		///   Information   ///
+	public:
+
+		REFLECTABLE
+		EXTENDS(object)
+
 	private:
 
 		class Iterator
@@ -294,7 +299,7 @@ namespace Willow
 
 			T* newValues = new T[size];
 
-			for (uint32 i = 0; i < _freeIndex; i++)
+			for (uint32 i = 0; i < _freeIndex; ++i)
 			{
 				newValues[i] = std::move(_values[i]);
 			}
@@ -317,7 +322,7 @@ namespace Willow
 				this->_freeIndex = rhs._freeIndex;
 
 				this->_values = new T[_size];
-				for (uint32 i = 0; i < _freeIndex; i++)
+				for (uint32 i = 0; i < _freeIndex; ++i)
 				{
 					_values[i] = rhs._values[i];
 				}
@@ -349,6 +354,20 @@ namespace Willow
 			assert(index < _freeIndex);
 			return _values[index];
 		}
+		friend Array<T> operator+(const Array<T>& lhs, const Array<T>& rhs)
+		{
+			Array<T> result = lhs;
+			for (const auto& item : rhs)
+			{
+				result.Add(item);
+			}
+			return result;
+		}
+		friend Array<T>& operator+=(Array<T>& lhs, const Array<T>& rhs)
+		{
+			lhs = lhs + rhs;
+			return lhs;
+		}
 		friend bool operator==(const Array<T>& lhs, const Array<T>& rhs)
 		{
 			if (lhs.Size() != rhs.Size())
@@ -356,7 +375,7 @@ namespace Willow
 				return false;
 			}
 
-			for (uint32 i = 0; i < lhs.Size(); i++)
+			for (uint32 i = 0; i < lhs.Size(); ++i)
 			{
 				if (lhs[i] != rhs[i])
 				{
@@ -379,4 +398,8 @@ namespace Willow
 		uint32 _size;
 		uint32 _freeIndex;
 	};
+
+	BEGIN_TEMPLATE_INFO(Willow::Array, typename T)
+	HAS_FACTORY
+	END_REFLECTION_INFO
 }

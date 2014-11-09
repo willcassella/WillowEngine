@@ -7,8 +7,15 @@
 
 namespace Willow
 {
-	struct UTILITY_API Quat
+	class UTILITY_API Quat : public object
 	{
+		///////////////////////
+		///   Information   ///
+	public:
+
+		REFLECTABLE
+		EXTENDS(object)
+
 		//////////////////
 		///   Fields   ///
 	public:

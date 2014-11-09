@@ -3,6 +3,12 @@
 #include "..\include\ExampleGame\SlideComponent.h"
 using namespace ExampleGame;
 
+//////////////////////
+///   Reflection   ///
+
+BEGIN_CLASS_INFO(ExampleGame::SlideComponent)
+END_REFLECTION_INFO
+
 ////////////////////////
 ///   Constructors   ///
 
@@ -15,7 +21,7 @@ SlideComponent::SlideComponent(Willow::GameObject& owner)
 ///////////////////
 ///   Methods   ///
 
-void SlideComponent::OnSceneUpdate(float timeInterval)
+void SlideComponent::Update(float timeInterval)
 {
-	this->GetOwner().Transform.Translate(Willow::Vec3(0.001f));
+	this->GetOwner().Transform.Translate(Willow::Vec3(0.008f));
 }

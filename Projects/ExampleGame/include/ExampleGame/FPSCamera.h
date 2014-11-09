@@ -12,7 +12,8 @@ namespace ExampleGame
 		///   Information   ///
 	public:
 
-		typedef Willow::Camera Super;
+		REFLECTABLE
+		EXTENDS(Willow::Camera)
 
 		////////////////////////
 		///   Constructors   ///

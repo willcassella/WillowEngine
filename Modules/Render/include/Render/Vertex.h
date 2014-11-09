@@ -13,15 +13,20 @@ namespace Willow
 		///   Fields   ///
 	public:
 
-		Vec3 Position;
-		Vec2 TextureCoordinates;
-		Vec3 Normal;
+		float X, Y, Z; // Position coordinates
+		float U, V; // UV coordinates
+		float I, J, K; // Normal direction
 
 		/////////////////////
 		///   Operators   ///
 	public:
 
-		friend bool RENDER_API operator==(const Vertex& lhs, const Vertex& rhs);
-		friend bool RENDER_API operator!=(const Vertex& lhs, const Vertex& rhs);
+		friend RENDER_API bool operator==(const Vertex& lhs, const Vertex& rhs);
+		friend RENDER_API inline bool operator!=(const Vertex& lhs, const Vertex& rhs)
+		{
+			return !(lhs == rhs);
+		}
 	};
+
+	NON_REFLECTABLE(Willow::Vertex)
 }

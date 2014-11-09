@@ -11,7 +11,8 @@ namespace Willow
 		///   Information   ///
 	public:
 
-		typedef GameObject Super;
+		REFLECTABLE
+		EXTENDS(GameObject)
 
 		//////////////////
 		///   Fields   ///

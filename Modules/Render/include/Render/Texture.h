@@ -2,7 +2,7 @@
 #pragma once
 
 #include <Utility\String.h>
-#include <Resource\ResourcePtr.h>
+#include <Utility\ResourcePtr.h>
 #include "Render.h"
 
 namespace Willow
@@ -43,4 +43,6 @@ namespace Willow
 
 		BufferID _id;
 	};
+
+	NON_REFLECTABLE(Willow::Texture)
 }

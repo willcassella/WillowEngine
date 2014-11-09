@@ -12,7 +12,8 @@ namespace ExampleGame
 		///   Information   ///
 	public:
 
-		typedef Willow::Component Super;
+		REFLECTABLE
+		EXTENDS(Willow::Component)
 
 		////////////////////////
 		///   Constructors   ///
@@ -25,6 +26,6 @@ namespace ExampleGame
 		///   Methods   ///
 	protected:
 
-		void OnSceneUpdate(float timeInterval) override;
+		void Update(float timeInterval) override;
 	};
 }

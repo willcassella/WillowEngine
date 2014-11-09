@@ -4,6 +4,16 @@
 #include "..\..\include\Utility\Math\Vec3.h"
 using namespace Willow;
 
+//////////////////////
+///   Reflection   ///
+
+BEGIN_CLASS_INFO(Willow::Vec3)
+HAS_FACTORY
+FIELD(X)
+FIELD(Y)
+FIELD(Z)
+END_REFLECTION_INFO
+
 ////////////////////////
 ///   Constructors   ///
 
@@ -43,6 +53,11 @@ float Vec3::Dot(const Vec3& a, const Vec3& b)
 float Vec3::Angle(const Vec3& a, const Vec3& b)
 {
 	return std::acos(Vec3::Dot(a.Normalize(), b.Normalize()));
+}
+
+String Vec3::ToString() const
+{
+	return String::Format("<@, @, @>", X, Y, Z);
 }
 
 ////////////////////////////

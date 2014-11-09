@@ -69,29 +69,29 @@
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetExt>.dll</TargetExt>
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Core\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Core\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Core\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Core\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetExt>.dll</TargetExt>
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Core\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Core\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Core\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Core\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetExt>.dll</TargetExt>
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Core\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Core\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Core\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Core\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetExt>.dll</TargetExt>
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Core\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Core\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Core\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Core\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -103,7 +103,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Willow_Utility.lib;Willow_Resource.lib;Willow_Render.lib;Willow_Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Willow_Utility.lib;Willow_Render.lib;Willow_Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(OutDir)$(TargetFileName)" "$(SolutionDir)bin\" /d /y</Command>
@@ -119,7 +119,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Willow_Utility.lib;Willow_Resource.lib;Willow_Render.lib;Willow_Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Willow_Utility.lib;Willow_Render.lib;Willow_Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(OutDir)$(TargetFileName)" "$(SolutionDir)bin\" /d /y</Command>
@@ -139,7 +139,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Willow_Utility.lib;Willow_Resource.lib;Willow_Render.lib;Willow_Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Willow_Utility.lib;Willow_Render.lib;Willow_Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(OutDir)$(TargetFileName)" "$(SolutionDir)bin\" /d /y</Command>
@@ -159,7 +159,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Willow_Utility.lib;Willow_Resource.lib;Willow_Render.lib;Willow_Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Willow_Utility.lib;Willow_Render.lib;Willow_Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(OutDir)$(TargetFileName)" "$(SolutionDir)bin\" /d /y</Command>

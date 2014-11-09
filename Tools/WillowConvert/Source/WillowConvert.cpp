@@ -1,6 +1,7 @@
 // WillowConvert.cpp
 
 #include <fstream>
+#include <Utility\TextFileReader.h>
 #include <Utility\Console.h>
 #include "..\include\WillowConvert\WillowConvert.h"
 using namespace Willow;
@@ -22,9 +23,9 @@ bool WillowConvert::Convert(const String& path, const List<String>& options)
 	if (input == InputType::OBJ)
 	{
 		Array<Vertex> vertices;
-		Array<BufferID> elements;
+		Array<uint32> elements;
 
-		if (!ParseOBJFile(path, &vertices, &elements, 0))
+		if (!ParseOBJFile(path, vertices, elements, 0))
 		{
 			return false;
 		}
@@ -71,90 +72,88 @@ WillowConvert::InputType WillowConvert::ParsePath(const String& path)
 	}
 }
 
-bool WillowConvert::ParseOBJFile(const String& path, Array<Vertex>* const outVertices, Array<BufferID>* const outElements, uint32 compression)
+bool WillowConvert::ParseOBJFile(const String& path, Array<Vertex>& outVertices, Array<uint32>& outElements, bool compress)
 {
 	Array<Vec3> positions;
 	Array<Vec2> coordinates;
 	Array<Vec3> normals;
 
-	FILE* file = fopen(path.Cstr(), "r");
-	if (file == NULL)
+	TextFileReader file(path);
+
+	if (!file.FileOpen())
 	{
 		Console::Error("'@' does not exist!", path);
 		return false;
 	}
 
-	while (true)
+	String line;
+	while (file.GetNextLine(line))
 	{
-		char lineHeader[128];
-		// read the first word of the line
-		int res = fscanf(file, "%s", lineHeader);
-		if (res == EOF)
-		{
-			break;
-		}
-
 		// Parse vertices
-		if (String::Compare(lineHeader, "v") == 0)
+		if (line.StartsWith("v "))
 		{
 			Vec3 vertex;
-			fscanf(file, "%f %f %f\n", &vertex.X, &vertex.Y, &vertex.Z);
+			String::ParseValues(line, "v @ @ @", vertex.X, vertex.Y, vertex.Z);
 			positions.Add(vertex);
 			continue;
 		}
 
 		// Parse texture coordinates
-		if (String::Compare(lineHeader, "vt") == 0)
+		if (line.StartsWith("vt "))
 		{
 			Vec2 coordinate;
-			fscanf(file, "%f %f\n", &coordinate.X, &coordinate.Y);
+			String::ParseValues(line, "vt @ @", coordinate.X, coordinate.Y);
 			coordinates.Add(coordinate);
 			continue;
 		}
 
 		// Parse vertex normals
-		if (String::Compare(lineHeader, "vn") == 0)
+		if (line.StartsWith("vn "))
 		{
 			Vec3 normal;
-			fscanf(file, "%f %f %f\n", &normal.X, &normal.Y, &normal.Z);
+			String::ParseValues(line, "vn @ @ @", normal.X, normal.Y, normal.Z);
 			normals.Add(normal);
 			continue;
 		}
 
 		// Parse faces
-		if (String::Compare(lineHeader, "f") == 0)
+		if (line.StartsWith("f "))
 		{
 			uint32 vertexIndex[3], uvIndex[3], normalIndex[3];
-			int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1],
-				&normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
-			if (matches != 9)
-			{
-				Console::Error("'@' can't be read by OBJ parser : Try exporting with other options", path);
-				fclose(file);
-				return false;
-			}
+			String::ParseValues(line, "f @/@/@ @/@/@ @/@/@", vertexIndex[0], uvIndex[0], normalIndex[0], vertexIndex[1], uvIndex[1], normalIndex[1], 
+				vertexIndex[2], uvIndex[2], normalIndex[2]);
 
 			// For each vertex in the face (3)
-			for (int32 i = 0; i < 3; i++)
+			for (uint32 i = 0; i < 3; ++i)
 			{
 				// Construct a vertex
 				Vertex vertex;
-				vertex.Position = positions[vertexIndex[i] - 1];
-				vertex.TextureCoordinates = coordinates[uvIndex[i] - 1];
-				vertex.Normal = normals[normalIndex[i] - 1];
+				Vec3& position = positions[vertexIndex[i] - 1];
+				vertex.X = position.X;
+				vertex.Y = position.Y;
+				vertex.Z = position.Z;
 
-				if (compression > 0)
+				Vec2& textureCoords = coordinates[uvIndex[i] - 1];
+				vertex.U = textureCoords.X;
+				vertex.V = textureCoords.Y;
+
+				Vec3& normal = normals[normalIndex[i] - 1];
+				vertex.I = normal.X;
+				vertex.J = normal.Y;
+				vertex.K = normal.Z;
+
+				if (compress)
 				{
 					// Search for the vertex
 					bool duplicateFound = false;
-					BufferID index = 0;
-					for (const auto& vert : *outVertices)
+					uint32 index = 0;
+					for (const auto& vert : outVertices)
 					{
 						// if it already exists
 						if (vert == vertex)
 						{
 							// Add its index to elements
-							outElements->Add(index);
+							outElements.Add(index);
 							duplicateFound = true;
 							break;
 						}
@@ -163,27 +162,26 @@ bool WillowConvert::ParseOBJFile(const String& path, Array<Vertex>* const outVer
 
 					if (!duplicateFound)
 					{
-						outVertices->Add(vertex);
-						outElements->Add(index);
+						outVertices.Add(vertex);
+						outElements.Add(index);
 					}
 				}
 				else
 				{
-					outVertices->Add(vertex);
-					outElements->Add(outVertices->Size() - 1);
+					outVertices.Add(vertex);
+					outElements.Add(outVertices.Size() - 1);
 				}
 			}
 		}
 	}
 
-	fclose(file);
 	return true;
 }
 
 ///////////////////////////
 ///   Write Functions   ///
 
-bool WillowConvert::WriteStaticMesh(const String& name, const Array<Vertex>& vertices, const Array<BufferID>& elements)
+bool WillowConvert::WriteStaticMesh(const String& name, const Array<Vertex>& vertices, const Array<uint32>& elements)
 {
 	// Get the size of each array
 	uint32 numVerts = vertices.Size();
@@ -191,12 +189,12 @@ bool WillowConvert::WriteStaticMesh(const String& name, const Array<Vertex>& ver
 
 	// Write it to a file
 	std::ofstream output;
-	output.open((name + ".dat").Cstr(), std::ios::binary | std::ios::out);
+	output.open((name + ".wmesh").Cstr(), std::ios::binary | std::ios::out);
 
 	output.write((char*)&numVerts, sizeof(uint32));
 	output.write((char*)&vertices[0], sizeof(Vertex) * numVerts);
 	output.write((char*)&numElements, sizeof(uint32));
-	output.write((char*)&elements[0], sizeof(BufferID) * numElements);
+	output.write((char*)&elements[0], sizeof(uint32) * numElements);
 
 	output.close();
 

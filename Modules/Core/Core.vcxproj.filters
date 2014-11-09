@@ -16,9 +16,6 @@
     <ClCompile Include="source\Scene.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="source\Prop.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="source\GameObject.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -29,9 +26,6 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="source\Game.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\StaticMeshComponent.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="source\Component.cpp">
@@ -51,9 +45,6 @@
     <ClInclude Include="include\Core\GameObject.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Prop.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Scene.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -67,9 +58,6 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Core\IEventDispatcher.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Core\StaticMeshComponent.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Core\Component.h">

@@ -22,3 +22,8 @@
 #else
 	#define RENDER_API IMPORT
 #endif
+
+////////////////////
+///   Includes   ///
+
+#include <Utility\Reflection\Reflection.h>

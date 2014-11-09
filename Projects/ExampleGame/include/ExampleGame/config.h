@@ -23,4 +23,7 @@
 	#define EXAMPLEGAME_API IMPORT
 #endif
 
-#include <Utility\config.h>
+////////////////////
+///   Includes   ///
+
+#include <Utility\Reflection\Reflection.h>

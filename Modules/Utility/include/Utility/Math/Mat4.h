@@ -2,13 +2,21 @@
 #pragma once
 
 #include <cassert>
+
 #include "Vec3.h"
 #include "Quat.h"
 
 namespace Willow
 {
-	struct UTILITY_API Mat4
+	class UTILITY_API Mat4 : public object
 	{
+		///////////////////////
+		///   Information   ///
+	public:
+
+		REFLECTABLE
+		EXTENDS(object)
+
 		////////////////////////
 		///   Constructors   ///
 	public:
@@ -51,7 +59,7 @@ namespace Willow
 
 		/** Gets the value at the specified column and row */
 		inline float Get(uint32 column, uint32 row) const
-		{ 
+		{
 			assert(column < 4 && row < 4);
 			return _values[column][row];
 		}
@@ -80,8 +88,6 @@ namespace Willow
 		friend UTILITY_API Mat4 operator*(const Mat4& lhs, const Mat4& rhs);
 		friend UTILITY_API Mat4& operator*=(Mat4& lhs, const Mat4& rhs);
 		friend UTILITY_API Vec3 operator*(const Mat4& lhs, const Vec3& rhs);
-		friend UTILITY_API Vec3 operator*(const Vec3& lhs, const Mat4& rhs);
-		friend UTILITY_API Vec3& operator*=(Vec3& lhs, const Mat4& rhs);
 		friend UTILITY_API bool operator==(const Mat4& lhs, const Mat4& rhs);
 		friend UTILITY_API inline bool operator!=(const Mat4& lhs, const Mat4& rhs)
 		{

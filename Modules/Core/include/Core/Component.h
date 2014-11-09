@@ -6,12 +6,14 @@
 
 namespace Willow
 {
-	class CORE_API Component
+	class CORE_API Component : public object
 	{
 		///////////////////////
 		///   Information   ///
 	public:
 
+		REFLECTABLE
+		EXTENDS(object)
 		friend class Scene;
 
 		////////////////////////
@@ -33,14 +35,14 @@ namespace Willow
 
 	protected:
 
-		virtual void OnSceneUpdate(float timeInterval);
-		virtual void OnRender(const Mat4& view, const Mat4& proj);
+		virtual void Update(float timeInterval);
+		virtual void Render(const Mat4& view, const Mat4& proj);
 
 		////////////////
 		///   Data   ///
 	private:
 
-		GameObject& _owner;
+		GameObject* _owner;
 		bool _isEnabled;
 	};
 }

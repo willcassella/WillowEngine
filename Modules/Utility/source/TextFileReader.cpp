@@ -120,7 +120,7 @@ String TextFileReader::Dump(bool lineEndings)
 	return source.c_str();
 }
 
-bool TextFileReader::GetNextLine(String* const outLine)
+bool TextFileReader::GetNextLine(String& outLine)
 {
 	std::string line;
 	bool end = true;
@@ -129,7 +129,7 @@ bool TextFileReader::GetNextLine(String* const outLine)
 		std::getline(_impl->file, line);
 		end = !(!_impl->file);
 	}
-	*outLine = line.c_str();
+	outLine = line.c_str();
 	return end;
 }
 

@@ -4,6 +4,15 @@
 #include "..\..\include\Utility\Math\Vec2.h"
 using namespace Willow;
 
+//////////////////////
+///   Reflection   ///
+
+BEGIN_CLASS_INFO(Willow::Vec2)
+HAS_FACTORY
+FIELD(X)
+FIELD(Y)
+END_REFLECTION_INFO
+
 ////////////////////////
 ///   Constructors   ///
 
@@ -34,6 +43,11 @@ float Vec2::Dot(const Vec2& a, const Vec2& b)
 float Vec2::Angle(const Vec2& a, const Vec2& b)
 {
 	return std::acos(Vec2::Dot(a.Normalize(), b.Normalize()));
+}
+
+String Vec2::ToString() const
+{
+	return String::Format("< @, @ >", X, Y);
 }
 
 ////////////////////////////

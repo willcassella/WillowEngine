@@ -3,6 +3,13 @@
 #include "..\include\ExampleGame\FPSCamera.h"
 using namespace ExampleGame;
 
+//////////////////////
+///   Reflection   ///
+
+BEGIN_CLASS_INFO(ExampleGame::FPSCamera)
+HAS_FACTORY
+END_REFLECTION_INFO
+
 ////////////////////////
 ///   Constructors   ///
 

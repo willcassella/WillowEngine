@@ -8,36 +8,21 @@ using namespace Willow;
 
 bool Willow::operator==(const Vertex& lhs, const Vertex& rhs)
 {
-	if (lhs.Position != rhs.Position)
+	// Compare position
+	if (lhs.X != rhs.X || lhs.Y != rhs.Y || lhs.Z != rhs.Z)
 	{
 		return false;
 	}
-	if (lhs.TextureCoordinates != rhs.TextureCoordinates)
+	// Compare texture coordinates
+	if (lhs.U != rhs.Y || lhs.V != rhs.V)
 	{
 		return false;
 	}
-	if (lhs.Normal != rhs.Normal)
+	// Compare normal direction
+	if (lhs.I != rhs.I || lhs.J != rhs.J || lhs.K != rhs.K)
 	{
 		return false;
 	}
 
 	return true;
-}
-
-bool Willow::operator!=(const Vertex& lhs, const Vertex& rhs)
-{
-	if (lhs.Position != rhs.Position)
-	{
-		return true;
-	}
-	if (lhs.TextureCoordinates != rhs.TextureCoordinates)
-	{
-		return true;
-	}
-	if (lhs.Normal != rhs.Normal)
-	{
-		return true;
-	}
-
-	return false;
 }

@@ -61,4 +61,6 @@ namespace Willow
 		BufferID _vView;
 		BufferID _vProjection;
 	};
+
+	NON_REFLECTABLE(Willow::Material)
 }

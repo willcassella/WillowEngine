@@ -3,6 +3,15 @@
 #include "..\include\Core\Scene.h"
 using namespace Willow;
 
+//////////////////////
+///   Reflection   ///
+
+BEGIN_CLASS_INFO(Willow::Scene)
+HAS_FACTORY
+FIELD(TimeDilation)
+FIELD(TimeStep)
+END_REFLECTION_INFO
+
 ////////////////////////
 ///   Constructors   ///
 
@@ -31,12 +40,12 @@ void Scene::Update()
 		}
 
 		// Update the object
-		object->Tick(TimeDilation);
+		object->Update(TimeDilation);
 		
 		// Update its components
 		for (auto& component : object->GetComponents())
 		{
-			component->OnSceneUpdate(TimeDilation);
+			component->Update(TimeDilation);
 		}
 	}
 
@@ -73,7 +82,7 @@ void Scene::Render() const
 	{
 		for (auto& component : object->GetComponents())
 		{
-			component->OnRender(view, proj);
+			component->Render(view, proj);
 		}
 	}
 }

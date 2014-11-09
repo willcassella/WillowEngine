@@ -30,13 +30,13 @@ namespace Willow
 		InputType ParsePath(const String& path);
 
 		/** Parses a .obj file and fills an array of vertices and elements. 
-		* Compression - whether to reduce the size of the mesh .dat file by reusing vertices where possible. May take a long time to parse. */
-		bool ParseOBJFile(const String& path, Array<Vertex>* const outVertices, Array<BufferID>* const outElements, uint32 compression = 0);
+		* compress - whether to reduce the size of the mesh .dat file by reusing vertices where possible. May take a long time to parse. */
+		bool ParseOBJFile(const String& path, Array<Vertex>& outVertices, Array<uint32>& outElements, bool compress = false);
 
 		///////////////////////////
 		///   Write Functions   ///
 
 		/** Writes a mesh (defined by an array of vertices and elements) to a file that can be loaded by the engine */
-		bool WriteStaticMesh(const String& name, const Array<Vertex>& vertices, const Array<BufferID>& elements);
+		bool WriteStaticMesh(const String& name, const Array<Vertex>& vertices, const Array<uint32>& elements);
 	};
 }

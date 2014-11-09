@@ -3,15 +3,20 @@
 
 #include <cassert>
 #include <utility>
-#include "config.h"
+#include "Reflection\Reflection.h"
 
 namespace Willow
 {
 	template <typename T>
-	class Queue
+	class Queue : public object
 	{
-		//////////////////////
-		///   Subclasses   ///
+		///////////////////////
+		///   Information   ///
+	public:
+
+		REFLECTABLE
+		EXTENDS(object)
+
 	private:
 
 		class Node
@@ -215,4 +220,8 @@ namespace Willow
 		Node* _last;
 		uint32 _count;
 	};
+
+	BEGIN_TEMPLATE_INFO(Willow::Queue, typename T)
+	HAS_FACTORY
+	END_REFLECTION_INFO
 }

@@ -2,17 +2,21 @@
 #pragma once
 
 #include <utility>
-#include "List.h"
-#include "Pair.h"
+#include "Reflection\Reflection.h"
 
 namespace Willow
 {
 	/** An associative array, replacement for std::map */
 	template <typename KeyType, typename ValueType>
-	class Table
+	class Table : public object
 	{
 		///////////////////////
 		///   Information   ///
+	public:
+
+		REFLECTABLE
+		EXTENDS(object)
+
 	private:
 
 		typedef Pair<KeyType, ValueType> PairType;
@@ -150,4 +154,8 @@ namespace Willow
 
 		StorageType _values;
 	};
+
+	BEGIN_TEMPLATE_INFO(Willow::Table, typename KeyType, typename ValueType)
+	HAS_FACTORY
+	END_REFLECTION_INFO
 }

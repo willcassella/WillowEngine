@@ -21,11 +21,11 @@ Material::Material(const String& path)
 	}
 
 	String line;
-	while (file.GetNextLine(&line))
+	while (file.GetNextLine(line))
 	{
 		if (line == "Shaders:")
 		{
-			for (file.GetNextLine(&line); !line.IsNullOrEmpty(); file.GetNextLine(&line))
+			for (file.GetNextLine(line); !line.IsNullOrEmpty(); file.GetNextLine(line))
 			{
 				auto shader = String::ParseEquality(line);
 
@@ -41,7 +41,7 @@ Material::Material(const String& path)
 		}
 		else if (line == "Textures:")
 		{
-			for (file.GetNextLine(&line); !line.IsNullOrEmpty(); file.GetNextLine(&line))
+			for (file.GetNextLine(line); !line.IsNullOrEmpty(); file.GetNextLine(line))
 			{
 				auto texture = String::ParseEquality(line);
 

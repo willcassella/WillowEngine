@@ -15,6 +15,9 @@ namespace Willow
 		OpenGL
 	};
 
+	/////////////////////
+	///   Functions   ///
+
 	// Sets up the defaults for the renderer
 	RENDER_API void InitRenderer(API api);
 

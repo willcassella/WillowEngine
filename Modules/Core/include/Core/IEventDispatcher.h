@@ -5,13 +5,13 @@
 
 namespace Willow
 {
-	interface IEventDispatcher
+	interface IEventDispatcher : public Interface
 	{
-		////////////////////////
-		///   Constructors   ///
+		///////////////////////
+		///   Information   ///
 	public:
 
-		virtual ~IEventDispatcher() = default;
+		REFLECTABLE_INTERFACE
 
 		///////////////////
 		///   Methods   ///
@@ -19,4 +19,7 @@ namespace Willow
 
 		virtual void Dispatch(float value) const = 0;
 	};
+
+	BEGIN_INTERFACE_INFO(Willow::IEventDispatcher)
+	END_REFLECTION_INFO
 }

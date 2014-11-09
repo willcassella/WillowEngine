@@ -3,6 +3,17 @@
 #include "..\include\Core\Camera.h"
 using namespace Willow;
 
+//////////////////////
+///   Reflection   ///
+
+BEGIN_CLASS_INFO(Willow::Camera)
+HAS_FACTORY
+FIELD(VFOV)
+FIELD(Ratio)
+FIELD(ZMin)
+FIELD(ZMax)
+END_REFLECTION_INFO
+
 ////////////////////////
 ///   Constructors   ///
 

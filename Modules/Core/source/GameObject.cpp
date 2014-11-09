@@ -3,6 +3,15 @@
 #include "..\include\Core\GameObject.h"
 using namespace Willow;
 
+//////////////////////
+///   Reflection   ///
+
+BEGIN_CLASS_INFO(Willow::GameObject)
+HAS_FACTORY
+FIELD(Name)
+FIELD(Transform)
+END_REFLECTION_INFO
+
 ////////////////////////
 ///   Constructors   ///
 
@@ -13,16 +22,39 @@ GameObject::GameObject(const String& name)
 	this->_isDestroyed = false;
 }
 
+GameObject::~GameObject()
+{
+	for (auto& component : _managedComponents)
+	{
+		delete component;
+	}
+}
+
+///////////////////
+///   Methods   ///
+
 Scene& GameObject::GetScene()
 {
-	assert(_scene);
-	return *_scene;
+	if (_scene)
+	{
+		return *_scene;
+	}
+	else
+	{
+		throw String("GameObject is not associated with a scene");
+	}
 }
 
 const Scene& GameObject::GetScene() const
 {
-	assert(_scene);
-	return *_scene;
+	if (_scene)
+	{
+		return *_scene;
+	}
+	else
+	{
+		throw String("GameObject is not associated with a scene");
+	}
 }
 
 void GameObject::Destroy()
@@ -36,17 +68,12 @@ bool GameObject::IsDestroyed() const
 	return _isDestroyed;
 }
 
-List<Component*>& GameObject::GetComponents()
+List<Component*> GameObject::GetComponents() const
 {
 	return _components;
 }
 
-const List<Component*>& GameObject::GetComponents() const
-{
-	return _components;
-}
-
-void GameObject::Tick(float timeInterval)
+void GameObject::Update(float timeInterval)
 {
 	// Do nothing
 }

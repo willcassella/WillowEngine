@@ -24,22 +24,18 @@
     <ClCompile Include="source\Game.cpp" />
     <ClCompile Include="source\GameObject.cpp" />
     <ClCompile Include="source\EventManager.cpp" />
-    <ClCompile Include="source\Prop.cpp" />
     <ClCompile Include="source\Scene.cpp" />
-    <ClCompile Include="source\StaticMeshComponent.cpp" />
     <ClCompile Include="source\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Core\Camera.h" />
     <ClInclude Include="include\Core\Component.h" />
-    <ClInclude Include="include\Core\StaticMeshComponent.h" />
     <ClInclude Include="include\Core\config.h" />
     <ClInclude Include="include\Core\Game.h" />
     <ClInclude Include="include\Core\GameObject.h" />
     <ClInclude Include="include\Core\IEventDispatcher.h" />
     <ClInclude Include="include\Core\InputDispatcher.h" />
     <ClInclude Include="include\Core\EventManager.h" />
-    <ClInclude Include="include\Core\Prop.h" />
     <ClInclude Include="include\Core\Scene.h" />
     <ClInclude Include="include\Core\Transform.h" />
   </ItemGroup>
@@ -95,15 +91,15 @@
     <IntDir>build\</IntDir>
     <TargetExt>.dll</TargetExt>
     <TargetName>Willow_$(ProjectName)</TargetName>
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Render\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Render\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Utility\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetExt>.dll</TargetExt>
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Render\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Render\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Utility\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(LibraryPath)</LibraryPath>
     <TargetName>Willow_$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -111,16 +107,16 @@
     <IntDir>build\</IntDir>
     <TargetExt>.dll</TargetExt>
     <TargetName>Willow_$(ProjectName)</TargetName>
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Render\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Render\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Utility\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetExt>.dll</TargetExt>
     <TargetName>Willow_$(ProjectName)</TargetName>
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Render\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Render\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Utility\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -132,7 +128,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Willow_Utility.lib;Willow_Resource.lib;Willow_Render.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Willow_Utility.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib />
     <Lib />
@@ -153,7 +149,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Willow_Utility.lib;Willow_Resource.lib;Willow_Render.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Willow_Utility.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib />
     <Lib />
@@ -178,7 +174,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Willow_Utility.lib;Willow_Resource.lib;Willow_Render.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Willow_Utility.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib />
     <Lib />
@@ -203,7 +199,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Willow_Utility.lib;Willow_Resource.lib;Willow_Render.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Willow_Utility.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib />
     <Lib />

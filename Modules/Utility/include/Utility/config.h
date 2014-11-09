@@ -1,6 +1,8 @@
 // config.h
 #pragma once
 
+#include <cstdint>
+
 ///////////////////////////////
 ///   Build Configuration   ///
 
@@ -27,15 +29,19 @@
 ///   Definitions   ///
 
 #define interface class
-
 #define This (*this)
 
+// bool is still bool
 // char is still char
-typedef short int16;
-typedef int int32;
-// long is not used
-typedef __int64 int64;
-typedef unsigned char byte;
-typedef unsigned short uint16;
-typedef unsigned int uint32;
-// unsigned long is not used
+typedef int8_t byte;
+typedef int16_t int16;
+typedef int32_t int32;
+typedef int64_t int64;
+typedef uint8_t ubyte;
+typedef uint16_t uint16;
+typedef	uint32_t uint32;
+typedef uint64_t uint64;
+// float is still float
+// double is still double
+
+// NOTE: All dependant modules should include <Utility\Reflection\Reflection.h> in their config files

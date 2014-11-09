@@ -3,6 +3,13 @@
 #include "..\include\ExampleGame\Ghost.h"
 using namespace ExampleGame;
 
+//////////////////////
+///   Reflection   ///
+
+BEGIN_CLASS_INFO(ExampleGame::Ghost)
+HAS_FACTORY
+END_REFLECTION_INFO
+
 ////////////////////////
 ///   Constructors   ///
 

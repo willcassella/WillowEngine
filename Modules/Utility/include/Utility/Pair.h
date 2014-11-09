@@ -1,11 +1,20 @@
 // Pair.h
 #pragma once
 
+#include "String.h"
+
 namespace Willow
 {
 	template <typename A, typename B>
-	class Pair
+	class Pair : public object
 	{
+		///////////////////////
+		///   Information   ///
+	public:
+
+		REFLECTABLE
+		EXTENDS(object)
+
 		//////////////////
 		///   Fields   ///
 	public:
@@ -23,6 +32,16 @@ namespace Willow
 			// All done
 		}
 
+		///////////////////
+		///   Methods   ///
+	public:
+
+		/** Returns the state of this pair as a string */
+		String ToString() const override
+		{
+			return String::Format("{@, @}", ValueToString(First), ValueToString(Second));
+		}
+
 		/////////////////////
 		///   Operators   ///
 	public:
@@ -36,4 +55,8 @@ namespace Willow
 			return !(lhs == rhs);
 		}
 	};
+
+	BEGIN_TEMPLATE_INFO(Willow::Pair, typename A, typename B)
+	HAS_FACTORY
+	END_REFLECTION_INFO
 }

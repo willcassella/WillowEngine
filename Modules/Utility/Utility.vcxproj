@@ -95,6 +95,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>UTILITY_BUILD;WIN32;_CRT_SECURE_NO_WARNINGS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -109,6 +110,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>UTILITY_BUILD;WIN32;_CRT_SECURE_NO_WARNINGS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -125,6 +127,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>UTILITY_BUILD;WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -143,6 +146,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>UTILITY_BUILD;WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -155,6 +159,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source\Console.cpp" />
+    <ClCompile Include="source\Reflection\ClassType.cpp" />
+    <ClCompile Include="source\Reflection\InterfaceType.cpp" />
+    <ClCompile Include="source\Reflection\NonReflectedType.cpp" />
+    <ClCompile Include="source\Reflection\object.cpp" />
+    <ClCompile Include="source\Reflection\PointerType.cpp" />
+    <ClCompile Include="source\Reflection\PrimitiveType.cpp" />
+    <ClCompile Include="source\Reflection\Serialization.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\TemplateType.cpp" />
+    <ClCompile Include="source\Reflection\Type.cpp" />
+    <ClCompile Include="source\Resource.cpp" />
     <ClCompile Include="source\Switch.cpp" />
     <ClCompile Include="source\TextFileReader.cpp" />
     <ClCompile Include="source\Math\Mat4.cpp" />
@@ -165,6 +184,21 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Utility\Console.h" />
+    <ClInclude Include="include\Utility\Reflection\ClassType.h" />
+    <ClInclude Include="include\Utility\Reflection\Field.h" />
+    <ClInclude Include="include\Utility\Reflection\Interface.h" />
+    <ClInclude Include="include\Utility\Reflection\InterfaceType.h" />
+    <ClInclude Include="include\Utility\Reflection\NonReflectedType.h" />
+    <ClInclude Include="include\Utility\Reflection\object.h" />
+    <ClInclude Include="include\Utility\Reflection\PointerType.h" />
+    <ClInclude Include="include\Utility\Reflection\PrimitiveType.h" />
+    <ClInclude Include="include\Utility\Reflection\Property.h" />
+    <ClInclude Include="include\Utility\Reflection\Serialization.h" />
+    <ClInclude Include="include\Utility\Reflection\TemplateType.h" />
+    <ClInclude Include="include\Utility\Reflection\Type.h" />
+    <ClInclude Include="include\Utility\Reflection\Reflection.h" />
+    <ClInclude Include="include\Utility\Resource.h" />
+    <ClInclude Include="include\Utility\ResourcePtr.h" />
     <ClInclude Include="include\Utility\TextFileReader.h" />
     <ClInclude Include="include\Utility\List.h" />
     <ClInclude Include="include\Utility\Math\Math.h" />

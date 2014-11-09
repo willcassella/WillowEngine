@@ -4,6 +4,17 @@
 #include "..\..\include\Utility\Math\Quat.h"
 using namespace Willow;
 
+//////////////////////
+///   Reflection   ///
+
+BEGIN_CLASS_INFO(Willow::Quat)
+HAS_FACTORY
+FIELD(X)
+FIELD(Y)
+FIELD(Z)
+FIELD(W)
+END_REFLECTION_INFO
+
 ////////////////////////
 ///   Constructors   ///
 

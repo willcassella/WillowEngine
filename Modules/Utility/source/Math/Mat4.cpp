@@ -1,12 +1,18 @@
 // Mat4.cpp
 
 #include <cmath>
-#include <cstdio>
 #include "..\..\include\Utility\Math\Mat4.h"
 using namespace Willow;
 
 const float Deg2Rad = 0.0174532925f;
 const float Rad2Deg = 57.2957795f;
+
+//////////////////////
+///   Reflection   ///
+
+BEGIN_CLASS_INFO(Willow::Mat4)
+HAS_FACTORY
+END_REFLECTION_INFO
 
 ////////////////////////
 ///   Constructors   ///
@@ -414,15 +420,15 @@ Mat4 Willow::operator*(const Mat4& lhs, const Mat4& rhs)
 	Mat4 total;
 
 	// For each row
-	for(uint32 row = 0; row < 4; row++) 
+	for(uint32 row = 0; row < 4; ++row) 
 	{
 		// For each column
-		for(uint32 col = 0; col < 4; col++) 
+		for(uint32 col = 0; col < 4; ++col) 
 		{
 			float value = 0;
 
 			// For each addition
-			for(uint32 i = 0; i < 4; i++) 
+			for(uint32 i = 0; i < 4; ++i) 
 			{
 				// add them up
 				value += lhs.Get(i, row) * rhs.Get(col, i);
@@ -451,22 +457,6 @@ Vec3 Willow::operator*(const Mat4& lhs, const Vec3& rhs)
 	result.Z = lhs.Get(0, 2) * rhs.X + lhs.Get(1, 2) * rhs.Y + lhs.Get(2, 2) * rhs.Z + lhs.Get(3, 2);
 
 	return result;
-}
-
-Vec3 Willow::operator*(const Vec3& lhs, const Mat4& rhs)
-{
-	Vec3 result;
-	result.X = rhs.Get(0, 0) * lhs.X + rhs.Get(1, 0) * lhs.Y + rhs.Get(2, 0) * lhs.Z + rhs.Get(3, 0);
-	result.Y = rhs.Get(0, 1) * lhs.X + rhs.Get(1, 1) * lhs.Y + rhs.Get(2, 1) * lhs.Z + rhs.Get(3, 1);
-	result.Z = rhs.Get(0, 2) * lhs.X + rhs.Get(1, 2) * lhs.Y + rhs.Get(2, 2) * lhs.Z + rhs.Get(3, 2);
-
-	return result;
-}
-
-Vec3& Willow::operator*=(Vec3& lhs, const Mat4& rhs)
-{
-	lhs = lhs * rhs;
-	return lhs;
 }
 
 bool Willow::operator==(const Mat4& lhs, const Mat4& rhs)

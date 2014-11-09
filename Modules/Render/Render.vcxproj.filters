@@ -34,6 +34,12 @@
     <ClInclude Include="include\Render\Vertex.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\Render\Prop.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Render\StaticMeshComponent.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Material.cpp">
@@ -52,6 +58,12 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="source\Vertex.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Prop.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\StaticMeshComponent.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,13 +1,20 @@
 // Switch.h
 #pragma once
 
-#include "config.h"
+#include "Reflection\Reflection.h"
 
 namespace Willow
 {
 	/** A class encapsulating a reactive flag */
-	class UTILITY_API Switch
+	class UTILITY_API Switch : public object
 	{
+		///////////////////////
+		///   Information   ///
+	public:
+
+		REFLECTABLE
+		EXTENDS(object)
+
 		////////////////////////
 		///   Constructors   ///
 	public:
@@ -20,6 +27,9 @@ namespace Willow
 
 		/** Returns the new state of the switch */
 		bool Toggle();
+
+		/** Returns the state of this switch as a string */
+		String ToString() const override;
 
 		/////////////////////
 		///   Operators   ///

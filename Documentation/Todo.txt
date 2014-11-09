@@ -1,6 +1,5 @@
 Refactoring:
 
-	  Scripting
 	  Runtime
 
 Features:
@@ -10,12 +9,8 @@ Features:
 	Finish Event system	
 
 	Massive refactoring run
-	
-	Finish Reflection implementation
 
-Refactoring:
-
-	Use Reflection
+	Decouple Render from Core (so render relies on core, not the other way around)
 
 Features:
 

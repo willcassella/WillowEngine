@@ -35,4 +35,17 @@ namespace Willow
 			return b;
 		}
 	}
+
+	template <typename ValueType, typename RangeType>
+	bool InRange(const ValueType& value, const RangeType& lower, const RangeType& upper, bool inclusive = true)
+	{
+		if (inclusive)
+		{
+			return value >= lower && value <= upper;
+		}
+		else
+		{
+			return value > lower && value < upper;
+		}
+	}
 }

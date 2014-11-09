@@ -3,6 +3,13 @@
 #include "..\include\Utility\Switch.h"
 using namespace Willow;
 
+//////////////////////
+///   Reflection   ///
+
+BEGIN_CLASS_INFO(Willow::Switch)
+HAS_FACTORY
+END_REFLECTION_INFO
+
 ////////////////////////
 ///   Constructors   ///
 
@@ -26,4 +33,9 @@ bool Switch::Toggle()
 	}
 
 	return _value;
+}
+
+String Switch::ToString() const
+{
+	return ValueToString(_value);
 }

@@ -7,13 +7,15 @@
 
 namespace Willow
 {
-	class CORE_API GameObject
+	class CORE_API GameObject : public object
 	{
 		///////////////////////
 		///   Information   ///
 	public:
 
-		friend class Scene;
+		REFLECTABLE
+		EXTENDS(object)
+		friend Scene;
 		friend Component;
 
 		//////////////////
@@ -30,11 +32,7 @@ namespace Willow
 	public:
 
 		GameObject(const String& name = "");
-
-	protected:
-
-		/* GameObjects should be deleted through the scene. Use Destroy() instead */
-		virtual ~GameObject() = default;
+		~GameObject() override;
 
 		///////////////////
 		///   Methods   ///
@@ -44,12 +42,35 @@ namespace Willow
 		const Scene& GetScene() const;
 		void Destroy();
 		bool IsDestroyed() const;
-		List<Component*>& GetComponents();
-		const List<Component*>& GetComponents() const;
+		List<Component*> GetComponents() const;
+
+		template <class ComponentType>
+		ComponentType& AddComponent()
+		{
+			ComponentType* component = new ComponentType(This);
+			_managedComponents.Add(component);
+			return *component;
+		}
+
+		template <class ComponentType>
+		List<ComponentType*> GetComponentsOfType()
+		{
+			List<ComponentType*> matches;
+
+			for (auto& component : _components)
+			{
+				if (component->IsA<ComponentType>())
+				{
+					matches.Add((ComponentType*)component);
+				}
+			}
+
+			return matches;
+		}
 
 	protected:
 
-		virtual void Tick(float timeInterval);
+		virtual void Update(float timeInterval);
 		virtual void OnDestroy();
 
 		////////////////
@@ -57,6 +78,7 @@ namespace Willow
 	private:
 
 		List<Component*> _components;
+		List<Component*> _managedComponents;
 		Scene* _scene;
 		bool _isDestroyed;
 	};

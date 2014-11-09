@@ -12,8 +12,15 @@ namespace Willow
 		Moveable
 	};
 
-	struct CORE_API Transform
+	class CORE_API Transform : public object
 	{
+		///////////////////////
+		///   Information   ///
+	public:
+
+		REFLECTABLE
+		EXTENDS(object)
+
 		//////////////////
 		///   Fields   ///
 	public:

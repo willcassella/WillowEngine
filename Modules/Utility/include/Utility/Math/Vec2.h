@@ -1,12 +1,19 @@
 // Vec2.h
 #pragma once
 
-#include "..\config.h"
+#include "..\Reflection\Reflection.h"
 
 namespace Willow
 {
-	struct UTILITY_API Vec2
+	class UTILITY_API Vec2 : public object
 	{
+		///////////////////////
+		///   Information   ///
+	public:
+
+		REFLECTABLE
+		EXTENDS(object)
+
 		//////////////////
 		///   Fields   ///
 	public:
@@ -37,6 +44,8 @@ namespace Willow
 
 		/** Returns the angle between two vectors */
 		static float Angle(const Vec2& a, const Vec2& b);
+
+		String ToString() const override;
 
 		////////////////////////////
 		///   Static Instances   ///
