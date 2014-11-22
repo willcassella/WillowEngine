@@ -1,7 +1,7 @@
 // Serialization.h
 #pragma once
 
-#include "..\TextFileReader.h"
+#include "../TextFileReader.h"
 
 namespace Willow
 {

@@ -1,7 +1,7 @@
 // Math.h
 #pragma once
 
-#include "..\config.h"
+#include "../config.h"
 
 namespace Willow
 {

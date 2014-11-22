@@ -27,7 +27,7 @@ namespace Willow
 		virtual const Type& GetFieldType() const = 0;
 
 		/** Returns the type that owns this field */
-		virtual const class ClassType& GetOwnerType() const = 0;
+		virtual const ClassType& GetOwnerType() const = 0;
 
 		/** Returns the value of this field within the given owner 
 		WARNING: FieldType must not be a PrimitiveType (check GetFieldType().IsA<PrimitiveType>() first)*/

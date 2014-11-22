@@ -1,11 +1,11 @@
 // ClassType.h
 #pragma once
 
-#include "..\List.h"
+#include "../List.h"
 #include "Field.h"
 #include "Property.h"
 #include "InterfaceType.h"
-#include "..\Console.h"
+#include "../Console.h"
 
 namespace Willow
 {

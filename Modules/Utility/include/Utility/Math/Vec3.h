@@ -1,7 +1,7 @@
 // Vec3.h
 #pragma once
 
-#include "..\Reflection\Reflection.h"
+#include "../Reflection/Reflection.h"
 
 namespace Willow
 {

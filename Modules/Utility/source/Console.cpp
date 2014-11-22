@@ -1,7 +1,7 @@
 // Console.cpp
 
 #include <iostream>
-#include "..\include\Utility\Console.h"
+#include "../include/Utility/Console.h"
 using namespace Willow;
 
 #define MAX_INPUT_SIZE 256

@@ -26,7 +26,7 @@ namespace Willow
 		///   Constructors   ///
 	public:
 
-		Pair(A first = A(), B second = B())
+		Pair(const A& first = A(), const B& second = B())
 			: First(first), Second(second)
 		{
 			// All done

@@ -1,9 +1,9 @@
 // Type.h
 #pragma once
 
-#include "..\String.h"
-#include "..\List.h"
-#include "..\Pair.h"
+#include "../String.h"
+#include "../List.h"
+#include "../Pair.h"
 
 namespace Willow
 {

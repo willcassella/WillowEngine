@@ -3,7 +3,7 @@
 
 #include <cassert>
 #include <utility>
-#include "Reflection\Reflection.h"
+#include "Reflection/Reflection.h"
 
 namespace Willow
 {
@@ -233,7 +233,7 @@ namespace Willow
 
 			for (uint32 i = index; i < _freeIndex - 1; ++i)
 			{
-				_values[i] = std::move(values[i] + 1);
+				_values[i] = std::move(_values[i] + 1);
 			}
 
 			_freeIndex--;

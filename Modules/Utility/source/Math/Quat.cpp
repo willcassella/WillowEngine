@@ -1,7 +1,7 @@
 // Quat.cpp
 
 #include <cmath>
-#include "..\..\include\Utility\Math\Quat.h"
+#include "../../include/Utility/Math/Quat.h"
 using namespace Willow;
 
 //////////////////////

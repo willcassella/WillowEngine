@@ -2,8 +2,8 @@
 
 #include <fstream>
 #include <string>
-#include "..\include\Utility\TextFileReader.h"
-#include "..\include\Utility\Console.h"
+#include "../include/Utility/TextFileReader.h"
+#include "../include/Utility/Console.h"
 using namespace Willow;
 
 //////////////////////////

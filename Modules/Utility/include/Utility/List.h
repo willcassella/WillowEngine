@@ -123,25 +123,18 @@ namespace Willow
 	public:
 
 		List()
+			: _first(nullptr), _last(nullptr), _count(0)
 		{
-			this->_first = nullptr;
-			this->_last = nullptr;
-			_count = 0;
+			// All done!
 		}
 		List(const List& copy)
+			: _first(nullptr), _last(nullptr), _count(0)
 		{
-			this->_first = nullptr;
-			this->_last = nullptr;
-			this->_count = 0;
-
 			This = copy;
 		}
 		List(List&& other)
+			: _first(other._first), _last(other._last), _count(other._count)
 		{
-			this->_first = other._first;
-			this->_last = other._last;
-			this->_count = other._count;
-
 			other._first = nullptr;
 			other._last = nullptr;
 			other._count = 0;

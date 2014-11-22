@@ -173,7 +173,6 @@
     </ClCompile>
     <ClCompile Include="source\Reflection\TemplateType.cpp" />
     <ClCompile Include="source\Reflection\Type.cpp" />
-    <ClCompile Include="source\Resource.cpp" />
     <ClCompile Include="source\Switch.cpp" />
     <ClCompile Include="source\TextFileReader.cpp" />
     <ClCompile Include="source\Math\Mat4.cpp" />
@@ -188,6 +187,7 @@
     <ClInclude Include="include\Utility\Reflection\Field.h" />
     <ClInclude Include="include\Utility\Reflection\Interface.h" />
     <ClInclude Include="include\Utility\Reflection\InterfaceType.h" />
+    <ClInclude Include="include\Utility\Reflection\Module.h" />
     <ClInclude Include="include\Utility\Reflection\NonReflectedType.h" />
     <ClInclude Include="include\Utility\Reflection\object.h" />
     <ClInclude Include="include\Utility\Reflection\PointerType.h" />
@@ -197,8 +197,6 @@
     <ClInclude Include="include\Utility\Reflection\TemplateType.h" />
     <ClInclude Include="include\Utility\Reflection\Type.h" />
     <ClInclude Include="include\Utility\Reflection\Reflection.h" />
-    <ClInclude Include="include\Utility\Resource.h" />
-    <ClInclude Include="include\Utility\ResourcePtr.h" />
     <ClInclude Include="include\Utility\TextFileReader.h" />
     <ClInclude Include="include\Utility\List.h" />
     <ClInclude Include="include\Utility\Math\Math.h" />

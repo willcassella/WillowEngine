@@ -1,7 +1,7 @@
 // object.cpp
 #pragma once
 
-#include "..\..\include\Utility\Reflection\Reflection.h"
+#include "../../include/Utility/Reflection/Reflection.h"
 using namespace Willow;
 
 ///////////////////
@@ -46,9 +46,16 @@ bool object::IsA(const Type& type) const
 	}
 }
 
-bool object::Implements(const InterfaceType& interf) const
+bool object::Implements(const Type& interf) const
 {
-	return this->GetType().ImplementsInterface(interf);
+	if (interf.IsA<InterfaceType>())
+	{
+		return this->GetType().ImplementsInterface(Cast<InterfaceType>(interf));
+	}
+	else
+	{
+		return false;
+	}
 }
 
 /////////////////////

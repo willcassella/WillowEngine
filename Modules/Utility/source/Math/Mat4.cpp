@@ -1,7 +1,7 @@
 // Mat4.cpp
 
 #include <cmath>
-#include "..\..\include\Utility\Math\Mat4.h"
+#include "../../include/Utility/Math/Mat4.h"
 using namespace Willow;
 
 const float Deg2Rad = 0.0174532925f;

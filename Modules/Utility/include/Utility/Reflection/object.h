@@ -1,7 +1,7 @@
 // object.h
 #pragma once
 
-#include "..\config.h"
+#include "../config.h"
 
 namespace Willow
 {
@@ -18,16 +18,16 @@ namespace Willow
 	public:
 
 		/** Gets the type information for this object */
-		virtual const class ClassType& GetType() const = 0;
+		virtual const ClassType& GetType() const = 0;
 
 		/** Returns the state of this object as a String */
-		virtual class String ToString() const;
+		virtual String ToString() const;
 		
 		/** Returns whether this object is a compatible type with the given type */
-		bool IsA(const class Type& type) const;
+		bool IsA(const Type& type) const;
 
 		/** Returns whether this object implements the given interface */
-		bool Implements(const class InterfaceType& interf) const;
+		bool Implements(const Type& interf) const;
 
 		/** Returns whether this object is a compatbile type with the given type */
 		template <class OtherType>
@@ -40,15 +40,7 @@ namespace Willow
 		template <class UserInterface>
 		bool Implements() const
 		{
-			const Type& type = TypeInfo<UserInterface>();
-			if (type.IsA<InterfaceType>())
-			{
-				return this->Implements(Cast<InterfaceType>(type));
-			}
-			else
-			{
-				return false;
-			}
+			return this->Implements(TypeInfo<UserInterface>());
 		}
 
 		/////////////////////
@@ -76,6 +68,7 @@ namespace Willow
 
 	/** Converts an object to another type, returning a new value, useful for primitives held as Strings
 	* WARNING: value must be compatible with TargetType */
+	// @TODO: This may have to be either removed or moved, to maintain compatibility with Clang
 	template <typename TargetType>
 	TargetType Convert(const object& value)
 	{

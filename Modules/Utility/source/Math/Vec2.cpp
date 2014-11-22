@@ -1,7 +1,7 @@
 // Vec2.cpp
 
 #include <cmath>
-#include "..\..\include\Utility\Math\Vec2.h"
+#include "../../include/Utility/Math/Vec2.h"
 using namespace Willow;
 
 //////////////////////

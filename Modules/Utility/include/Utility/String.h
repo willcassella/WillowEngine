@@ -2,15 +2,9 @@
 #pragma once
 
 #include "Reflection\object.h"
-#include "Reflection\Interface.h"
 
 namespace Willow
 {
-	/** Forward declerations */
-	template <typename T> class List;
-	template <typename A, typename B> class Pair;
-	template <typename T> struct __type_info__;
-
 	class UTILITY_API String : public object
 	{
 		///////////////////////

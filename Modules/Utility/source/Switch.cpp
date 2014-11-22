@@ -1,6 +1,6 @@
 // Switch.cpp
 
-#include "..\include\Utility\Switch.h"
+#include "../include/Utility/Switch.h"
 using namespace Willow;
 
 //////////////////////
