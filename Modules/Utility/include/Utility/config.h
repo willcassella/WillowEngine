@@ -96,6 +96,40 @@ namespace Willow
 	/////////////////////
 	///   Functions   ///
 
+	// To String
+	UTILITY_API String ValueToString(const object& value);
+	UTILITY_API String ValueToString(const Interface& value);
+	UTILITY_API String ValueToString(const char* value);
+	UTILITY_API String ValueToString(const void* value);
+	UTILITY_API String ValueToString(bool value);
+	UTILITY_API String ValueToString(char value);
+	UTILITY_API String ValueToString(byte value);
+	UTILITY_API String ValueToString(int16 value);
+	UTILITY_API String ValueToString(int32 value);
+	UTILITY_API String ValueToString(int64 value);
+	UTILITY_API String ValueToString(ubyte value);
+	UTILITY_API String ValueToString(uint16 value);
+	UTILITY_API String ValueToString(uint32 value);
+	UTILITY_API String ValueToString(uint64 value);
+	UTILITY_API String ValueToString(float value);
+	UTILITY_API String ValueToString(double value);
+
+	// From String
+	UTILITY_API String ValueFromString(const String& string, const void*& outValue);
+	UTILITY_API String ValueFromString(const String& string, bool& outValue);
+	UTILITY_API String ValueFromString(const String& string, char& outValue);
+	UTILITY_API String ValueFromString(const String& string, byte& outValue);
+	UTILITY_API String ValueFromString(const String& string, int16& outValue);
+	UTILITY_API String ValueFromString(const String& string, int32& outValue);
+	UTILITY_API String ValueFromString(const String& string, int64& outValue);
+	UTILITY_API String ValueFromString(const String& string, ubyte& outValue);
+	UTILITY_API String ValueFromString(const String& string, uint16& outValue);
+	UTILITY_API String ValueFromString(const String& string, uint32& outValue);
+	UTILITY_API String ValueFromString(const String& string, uint64& outValue);
+	UTILITY_API String ValueFromString(const String& string, float& outValue);
+	UTILITY_API String ValueFromString(const String& string, double& outValue);
+
+	// Reflection
 	template <typename T> const Type& TypeInfo();
 	template <typename ... Types> List<const Type&> MultipleTypeInfo();
 }

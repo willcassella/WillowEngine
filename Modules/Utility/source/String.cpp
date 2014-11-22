@@ -3,8 +3,8 @@
 #include <cstring>
 #include <string>
 #include <ctype.h>
-#include "..\include\Utility\Math\Math.h"
-#include "..\include\Utility\Reflection\Reflection.h"
+#include "../include/Utility/Math/Math.h"
+#include "../include/Utility/Reflection/Reflection.h"
 using namespace Willow;
 
 //////////////////////
