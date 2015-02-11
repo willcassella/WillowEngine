@@ -1,66 +1,63 @@
-// Material.h
+// Material.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <Utility\Table.h>
-#include <Utility\Math\Mat4.h>
+#include <Math/Mat4.h>
+#include <Resource/ResourceHandle.h>
 #include "Shader.h"
 #include "Texture.h"
 
-namespace Willow
+// @TODO: Change this to composition (vs inheritance)
+class RENDER_API Material : public TextFile
 {
-	class RENDER_API Material : public Resource
-	{
-		///////////////////////
-		///   Information   ///
-	public:
+	///////////////////////
+	///   Information   ///
+public:
 
-		typedef Resource Super;
+	REFLECTABLE_CLASS;
+	EXTENDS(TextFile);
 
-		//////////////////
-		///   Fields   ///
-	public:
+	////////////////////////
+	///   Constructors   ///
+public:
 
-		ResourcePtr<Shader> VertexShader;
-		ResourcePtr<Shader> FragmentShader;
-		Table<String, ResourcePtr<Texture>> Textures;
+	Material(const String& path);
+	Material(const Material& copy) = delete;
+	Material(Material&& move) = delete;
+	~Material() override;
 
-		////////////////////////
-		///   Constructors   ///
-	public:
+	//////////////////
+	///   Fields   ///
+public:
 
-		Material(const String& path);
-		Material(const Material& copy) = delete;
-		Material(Material&& other) = delete;
-		~Material() override;
+	ResourceHandle<Shader> VertexShader;
+	ResourceHandle<Shader> FragmentShader;
+	Table<String, ResourceHandle<Texture>> Textures;
 
-		///////////////////
-		///   Methods   ///
-	public:
+	///////////////////
+	///   Methods   ///
+public:
 
-		// @TODO: This needs some serious work. Once I have a more finalized rendering pipeline set up I'll do some major refactoring here
-		void Compile();
-		void Bind() const;
-		BufferID GetID() const;
-		void UploadModelMatrix(const Mat4& matrix) const;
-		void UploadViewMatrix(const Mat4& matrix) const;
-		void UploadProjectionMatrix(const Mat4& matrix) const;
+	// @TODO: This needs some serious work. Once I have a more finalized rendering pipeline set up I'll do some major refactoring here
+	void Compile();
+	void Bind() const;
+	BufferID GetID() const;
+	void UploadModelMatrix(const Mat4& matrix) const;
+	void UploadViewMatrix(const Mat4& matrix) const;
+	void UploadProjectionMatrix(const Mat4& matrix) const;
 
-		/////////////////////
-		///   Operators   ///
-	public:
+	/////////////////////
+	///   Operators   ///
+public:
 
-		Material& operator=(const Material& rhs) = delete;
-		Material& operator=(Material&& copy) = delete;
+	Material& operator=(const Material& copy) = delete;
+	Material& operator=(Material&& move) = delete;
 
-		////////////////
-		///   Data   ///
-	private:
+	////////////////
+	///   Data   ///
+private:
 
-		BufferID _id;
-		BufferID _vModel;
-		BufferID _vView;
-		BufferID _vProjection;
-	};
-
-	NON_REFLECTABLE(Willow::Material)
-}
+	BufferID _id;
+	BufferID _vModel;
+	BufferID _vView;
+	BufferID _vProjection;
+};

@@ -21,24 +21,18 @@
   <ItemGroup>
     <ClInclude Include="include\Render\config.h" />
     <ClInclude Include="include\Render\Material.h" />
-    <ClInclude Include="include\Render\Prop.h" />
     <ClInclude Include="include\Render\Render.h" />
     <ClInclude Include="include\Render\Shader.h" />
     <ClInclude Include="include\Render\StaticMesh.h" />
-    <ClInclude Include="include\Render\StaticMeshComponent.h" />
     <ClInclude Include="include\Render\Texture.h" />
-    <ClInclude Include="include\Render\Vertex.h" />
     <ClInclude Include="source\glew.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Material.cpp" />
-    <ClCompile Include="source\Prop.cpp" />
     <ClCompile Include="source\Render.cpp" />
     <ClCompile Include="source\Shader.cpp" />
     <ClCompile Include="source\StaticMesh.cpp" />
-    <ClCompile Include="source\StaticMeshComponent.cpp" />
     <ClCompile Include="source\Texture.cpp" />
-    <ClCompile Include="source\Vertex.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D3DE9FCC-C429-4E36-A88E-DAC1004F1944}</ProjectGuid>
@@ -91,33 +85,33 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
-    <TargetName>Willow_$(ProjectName)</TargetName>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Core\bin;$(ProjectDir)thirdParty\FreeImage\$(Platform);$(ProjectDir)thirdParty\glew-1.11.0\$(Platform);C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Core\include;$(ProjectDir)thirdParty\FreeImage\include;$(ProjectDir)thirdParty\glew-1.11.0\include;$(IncludePath)</IncludePath>
+    <TargetName>$(ProjectName)</TargetName>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Math\bin;$(SolutionDir)Modules\Resource\bin;$(ProjectDir)thirdParty\glew-1.11.0\$(Platform);C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Math\include;$(SolutionDir)Modules\Resource\include;$(ProjectDir)thirdParty\glew-1.11.0\include;$(IncludePath)</IncludePath>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Core\bin;$(ProjectDir)thirdParty\FreeImage\$(Platform);$(ProjectDir)thirdParty\glew-1.11.0\$(Platform);C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Core\include;$(ProjectDir)thirdParty\FreeImage\include;$(ProjectDir)thirdParty\glew-1.11.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Math\bin;$(SolutionDir)Modules\Resource\bin;$(ProjectDir)thirdParty\glew-1.11.0\$(Platform);C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Math\include;$(SolutionDir)Modules\Resource\include;$(ProjectDir)thirdParty\glew-1.11.0\include;$(IncludePath)</IncludePath>
     <TargetExt>.dll</TargetExt>
-    <TargetName>Willow_$(ProjectName)</TargetName>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
-    <TargetName>Willow_$(ProjectName)</TargetName>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Core\bin;$(ProjectDir)thirdParty\FreeImage\$(Platform);$(ProjectDir)thirdParty\glew-1.11.0\$(Platform);$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Core\include;$(ProjectDir)thirdParty\FreeImage\include;$(ProjectDir)thirdParty\glew-1.11.0\include;$(IncludePath)</IncludePath>
+    <TargetName>$(ProjectName)</TargetName>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Math\bin;$(SolutionDir)Modules\Resource\bin;$(ProjectDir)thirdParty\glew-1.11.0\$(Platform);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Math\include;$(SolutionDir)Modules\Resource\include;$(ProjectDir)thirdParty\glew-1.11.0\include;$(IncludePath)</IncludePath>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
-    <TargetName>Willow_$(ProjectName)</TargetName>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Core\bin;$(ProjectDir)thirdParty\FreeImage\$(Platform);$(ProjectDir)thirdParty\glew-1.11.0\$(Platform);$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Core\include;$(ProjectDir)thirdParty\FreeImage\include;$(ProjectDir)thirdParty\glew-1.11.0\include;$(IncludePath)</IncludePath>
+    <TargetName>$(ProjectName)</TargetName>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Math\bin;$(SolutionDir)Modules\Resource\bin;$(ProjectDir)thirdParty\glew-1.11.0\$(Platform);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Math\include;$(SolutionDir)Modules\Resource\include;$(ProjectDir)thirdParty\glew-1.11.0\include;$(IncludePath)</IncludePath>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -125,12 +119,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>RENDER_BUILD;WIN32;_CRT_SECURE_NO_WARNINGS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;RENDER_BUILD;WINDOWS;BITS_32;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4251;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Willow_Utility.lib;Willow_Core.lib;FreeImage.lib;glew32s.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Core.lib;Math.lib;Resource.lib;glew32s.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
     </Link>
     <Lib />
@@ -138,8 +132,7 @@
       <AdditionalDependencies>glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(OutDir)$(TargetFileName)" "$(SolutionDir)bin\" /d /y
-xcopy "$(ProjectDir)thirdParty\FreeImage\$(Platform)\FreeImage.dll" "$(SolutionDir)bin\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -147,12 +140,12 @@ xcopy "$(ProjectDir)thirdParty\FreeImage\$(Platform)\FreeImage.dll" "$(SolutionD
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>RENDER_BUILD;WIN32;_CRT_SECURE_NO_WARNINGS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;RENDER_BUILD;WINDOWS;BITS_64;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4251;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Willow_Utility.lib;Willow_Core.lib;FreeImage.lib;glew32s.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>Core.lib;Math.lib;Resource.lib;glew32s.lib;opengl32.lib</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
     </Link>
     <Lib />
@@ -160,8 +153,7 @@ xcopy "$(ProjectDir)thirdParty\FreeImage\$(Platform)\FreeImage.dll" "$(SolutionD
       <AdditionalDependencies>glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(OutDir)$(TargetFileName)" "$(SolutionDir)bin\" /d /y
-xcopy "$(ProjectDir)thirdParty\FreeImage\$(Platform)\FreeImage.dll" "$(SolutionDir)bin\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -171,14 +163,14 @@ xcopy "$(ProjectDir)thirdParty\FreeImage\$(Platform)\FreeImage.dll" "$(SolutionD
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>RENDER_BUILD;WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;RENDER_BUILD;WINDOWS;BITS_32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4251;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Willow_Utility.lib;Willow_Core.lib;FreeImage.lib;glew32s.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Core.lib;Math.lib;Resource.lib;glew32s.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
     </Link>
     <Lib />
@@ -186,8 +178,7 @@ xcopy "$(ProjectDir)thirdParty\FreeImage\$(Platform)\FreeImage.dll" "$(SolutionD
       <AdditionalDependencies>glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(OutDir)$(TargetFileName)" "$(SolutionDir)bin\" /d /y
-xcopy "$(ProjectDir)thirdParty\FreeImage\$(Platform)\FreeImage.dll" "$(SolutionDir)bin\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -197,14 +188,14 @@ xcopy "$(ProjectDir)thirdParty\FreeImage\$(Platform)\FreeImage.dll" "$(SolutionD
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>RENDER_BUILD;WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;RENDER_BUILD;WINDOWS;BITS_64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4251;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Willow_Utility.lib;Willow_Core.lib;FreeImage.lib;glew32s.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>Core.lib;Math.lib;Resource.lib;glew32s.lib;opengl32.lib</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
     </Link>
     <Lib />
@@ -212,8 +203,7 @@ xcopy "$(ProjectDir)thirdParty\FreeImage\$(Platform)\FreeImage.dll" "$(SolutionD
       <AdditionalDependencies>glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(OutDir)$(TargetFileName)" "$(SolutionDir)bin\" /d /y
-xcopy "$(ProjectDir)thirdParty\FreeImage\$(Platform)\FreeImage.dll" "$(SolutionDir)bin\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

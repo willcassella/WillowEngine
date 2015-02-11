@@ -1,19 +1,16 @@
-// Ghost.cpp
+// Ghost.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
 #include "..\include\ExampleGame\Ghost.h"
-using namespace ExampleGame;
 
 //////////////////////
 ///   Reflection   ///
 
-BEGIN_CLASS_INFO(ExampleGame::Ghost)
-HAS_FACTORY
-END_REFLECTION_INFO
+CLASS_REFLECTION(Ghost);
 
 ////////////////////////
 ///   Constructors   ///
 
-Ghost::Ghost(const Willow::String& name)
+Ghost::Ghost(const String& name)
 	: Super(name), MeshComponent(This), Slider(This)
 {
 	EventManager.BindAction("Poof", this, &Ghost::Disappear);
@@ -40,5 +37,5 @@ void Ghost::Disappear()
 
 void Ghost::Spin(float value)
 {
-	Transform.Rotate(Willow::Vec3::Up, value);
+	Transform.Rotate(Vec3::Up, value);
 }

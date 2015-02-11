@@ -1,54 +1,53 @@
-// StaticMesh.h
+// StaticMesh.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
+#include <Resource/Mesh.h>
 #include "Material.h"
 
-namespace Willow
+class RENDER_API StaticMesh : public Mesh
 {
-	class RENDER_API StaticMesh : public Resource
-	{
-		///////////////////////
-		///   Information   ///
-	public:
+	///////////////////////
+	///   Information   ///
+public:
 
-		typedef Resource Super;
+	REFLECTABLE_CLASS;
+	EXTENDS(Mesh);
 
-		////////////////////////
-		///   Constructors   ///
-	public:
+	////////////////////////
+	///   Constructors   ///
+public:
 
-		StaticMesh(const String& path);
-		StaticMesh(const StaticMesh& copy) = delete;
-		StaticMesh(StaticMesh&& other) = delete;
-		~StaticMesh() override;
+	StaticMesh(const String& path);
+	StaticMesh(const StaticMesh& copy) = delete;
+	StaticMesh(StaticMesh&& move) = delete;
+	~StaticMesh() override;
 
-		///////////////////
-		///   Methods   ///
-	public:
+	///////////////////
+	///   Methods   ///
+public:
+	
+	/** Get the material for this mesh */
+	ResourceHandle<Material> GetMaterial() const;
 
-		/** Render the mesh at a specific orientation, view, and perspective */
-		void Render(const Mat4& orientation, const Mat4& view, const Mat4& perspective) const;
-		ResourcePtr<Material>& GetMaterial();
-		const ResourcePtr<Material>& GetMaterial() const;
-		void SetMaterial(const ResourcePtr<Material>& material);
+	/** Sets the material for this mesh */
+	void SetMaterial(const ResourceHandle<Material>& material);
 
-		/////////////////////
-		///   Operators   ///
-	public:
+	/** Render the mesh at a specific orientation, view, and perspective */
+	void Render(const Mat4& orientation, const Mat4& view, const Mat4& perspective) const;
 
-		StaticMesh& operator=(const StaticMesh& copy) = delete;
-		StaticMesh& operator=(StaticMesh&& other) = delete;
+	/////////////////////
+	///   Operators   ///
+public:
 
-		////////////////
-		///   Data   ///
-	private:
+	StaticMesh& operator=(const StaticMesh& copy) = delete;
+	StaticMesh& operator=(StaticMesh&& move) = delete;
 
-		BufferID _vao;
-		BufferID _vbo;
-		BufferID _ebo;
-		uint32 _numElements;
-		ResourcePtr<Material> _mat;
-	};
+	////////////////
+	///   Data   ///
+private:
 
-	NON_REFLECTABLE(Willow::StaticMesh)
-}
+	BufferID _vao;
+	BufferID _vbo;
+	BufferID _ebo;
+	ResourceHandle<Material> _material;
+};

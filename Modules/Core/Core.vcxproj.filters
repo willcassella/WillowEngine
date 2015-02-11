@@ -2,66 +2,172 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="include">
-      <UniqueIdentifier>{70a96a91-66f9-40e8-81e6-67edcbd4cbfe}</UniqueIdentifier>
+      <UniqueIdentifier>{7e34d977-b4e9-4ada-8120-af0db7b52f45}</UniqueIdentifier>
     </Filter>
     <Filter Include="source">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+      <UniqueIdentifier>{89a8bc04-2173-4351-8d27-b27366ea153f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Containers">
+      <UniqueIdentifier>{8e1c55de-ecec-45d6-97c5-900c2172f717}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Reflection">
+      <UniqueIdentifier>{19d6548f-a4ad-4b44-aaeb-fb269e8942f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Reflection">
+      <UniqueIdentifier>{143a9d2d-9753-466f-aa37-4c439f237fe6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Misc">
+      <UniqueIdentifier>{5892826b-e413-4845-bed8-acfd618eaf8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Misc">
+      <UniqueIdentifier>{4a8a20ac-15f9-4ad5-a0ea-c39892ad9393}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\Camera.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Scene.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\GameObject.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Transform.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\EventManager.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Game.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Component.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="include\Core\Camera.h">
-      <Filter>include</Filter>
+    <ClInclude Include="include\Core\Containers\Array.h">
+      <Filter>include\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Containers\ArrayList.h">
+      <Filter>include\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Containers\List.h">
+      <Filter>include\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Containers\Pair.h">
+      <Filter>include\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Containers\Queue.h">
+      <Filter>include\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Containers\Stack.h">
+      <Filter>include\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Containers\Table.h">
+      <Filter>include\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Reflection\ClassInfo.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Reflection\Factory.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Reflection\FieldInfo.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Reflection\InterfaceInfo.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Reflection\Module.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Reflection\PointerInfo.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Reflection\PrimitiveInfo.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Reflection\Reference.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Reflection\Reflection.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Reflection\Registration.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Reflection\StructInfo.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Reflection\TypeInfo.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Reflection\Unpack.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Reflection\Value.h">
+      <Filter>include\Reflection</Filter>
     </ClInclude>
     <ClInclude Include="include\Core\config.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Game.h">
+    <ClInclude Include="include\Core\Exception.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\GameObject.h">
+    <ClInclude Include="include\Core\Console.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Scene.h">
+    <ClInclude Include="include\Core\Interface.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Transform.h">
+    <ClInclude Include="include\Core\Object.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\InputDispatcher.h">
+    <ClInclude Include="include\Core\String.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\EventManager.h">
+    <ClInclude Include="include\Core\System.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\IEventDispatcher.h">
+    <ClInclude Include="include\Core\Misc\DateTime.h">
+      <Filter>include\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Application.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Component.h">
-      <Filter>include</Filter>
-    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\String.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Console.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\Value.cpp">
+      <Filter>source\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Object.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\TypeInfo.cpp">
+      <Filter>source\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\ClassInfo.cpp">
+      <Filter>source\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\PrimitiveInfo.cpp">
+      <Filter>source\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\PointerInfo.cpp">
+      <Filter>source\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Interface.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\StructInfo.cpp">
+      <Filter>source\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\InterfaceInfo.cpp">
+      <Filter>source\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\Unpack.cpp">
+      <Filter>source\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\Reference.cpp">
+      <Filter>source\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\Module.cpp">
+      <Filter>source\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="source\config.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Application.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ProjectPony.vcxproj.filters">
+      <Filter>source</Filter>
+    </None>
   </ItemGroup>
 </Project>

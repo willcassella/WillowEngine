@@ -1,26 +1,22 @@
-// Render.h
+// Render.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <Utility\config.h>
 #include "config.h"
 
-namespace Willow
-{
-	typedef uint32 BufferID;
-	typedef uint32 GValue;
+/////////////////
+///   Types   ///
 
-	enum class API
-	{
-		Null,
-		OpenGL
-	};
+typedef uint32 BufferID;
+typedef uint32 GValue;
 
-	/////////////////////
-	///   Functions   ///
+/////////////////////
+///   Functions   ///
 
-	// Sets up the defaults for the renderer
-	RENDER_API void InitRenderer(API api);
+/** Sets up the renderer */
+RENDER_API void SetupRenderer();
 
-	// Clear the screen for a new image
-	RENDER_API void ClearBuffer();
-}
+/** Clear the screen for a new image */
+RENDER_API void ClearScreen();
+
+/** Render a frame */
+//RENDER_API void Draw();

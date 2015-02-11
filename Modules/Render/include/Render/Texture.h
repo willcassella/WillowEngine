@@ -1,48 +1,43 @@
-// Texture.h
+// Texture.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <Utility\String.h>
-#include <Utility\ResourcePtr.h>
+#include <Resource/Image.h>
 #include "Render.h"
 
-namespace Willow
+class RENDER_API Texture : public Image
 {
-	class RENDER_API Texture : public Resource
-	{
-		///////////////////////
-		///   Information   ///
-	public:
+	///////////////////////
+	///   Information   ///
+public:
 
-		typedef Resource Super;
+	REFLECTABLE_CLASS;
+	EXTENDS(Image);
 
-		////////////////////////
-		///   Constructors   ///
-	public:
+	////////////////////////
+	///   Constructors   ///
+public:
 
-		Texture(const String& path);
-		Texture(const Texture& copy) = delete;
-		Texture(Texture&& other) = delete;
-		~Texture() override;
+	Texture(const String& path);
+	Texture(const Texture& copy) = delete;
+	Texture(Texture&& move) = delete;
+	~Texture() override;
 
-		///////////////////
-		///   Methods   ///
-	public:
+	///////////////////
+	///   Methods   ///
+public:
 
-		BufferID GetID() const;
+	BufferID GetID() const;
 
-		/////////////////////
-		///   Operators   ///
-	public:
+	/////////////////////
+	///   Operators   ///
+public:
 
-		Texture& operator=(const Texture& copy) = delete;
-		Texture& operator=(Texture&& other) = delete;
+	Texture& operator=(const Texture& copy) = delete;
+	Texture& operator=(Texture&& move) = delete;
 
-		////////////////
-		///   Data   ///
-	private:
+	////////////////
+	///   Data   ///
+private:
 
-		BufferID _id;
-	};
-
-	NON_REFLECTABLE(Willow::Texture)
-}
+	BufferID _id;
+};

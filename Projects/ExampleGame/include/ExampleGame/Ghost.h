@@ -1,47 +1,43 @@
-// Ghost.h
+// Ghost.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <Core\GameObject.h>
-#include <Render\StaticMeshComponent.h>
+#include <Engine/StaticMeshComponent.h>
+#include <Engine/GameObject.h>
 #include "SlideComponent.h"
-#include "config.h"
 
-namespace ExampleGame
+class EXAMPLEGAME_API Ghost : public GameObject
 {
-	class EXAMPLEGAME_API Ghost : public Willow::GameObject
-	{
-		///////////////////////
-		///   Information   ///
-	public:
+	///////////////////////
+	///   Information   ///
+public:
 
-		REFLECTABLE
-		EXTENDS(Willow::GameObject)
+	REFLECTABLE_CLASS;
+	EXTENDS(GameObject);
 
-		/////////////////////////
-		///   Constructors   ///
-	public:
+	/////////////////////////
+	///   Constructors   ///
+public:
 
-		Ghost(const Willow::String& name = "");
-		~Ghost() override = default;
+	Ghost(const String& name = "");
+	~Ghost() override = default;
 
-		//////////////////////
-		///   Components   ///
-	public:
+	//////////////////////
+	///   Components   ///
+public:
 
-		Willow::StaticMeshComponent MeshComponent;
-		SlideComponent Slider;
+	StaticMeshComponent MeshComponent;
+	SlideComponent Slider;
 
-		///////////////////
-		///   Actions   ///
-	public:
+	///////////////////
+	///   Actions   ///
+public:
 
-		void Disappear();
-		void Spin(float value);
+	void Disappear();
+	void Spin(float value);
 
-		////////////////
-		///   Data   ///
-	protected:
+	////////////////
+	///   Data   ///
+protected:
 
-		bool hasDisappeared;
-	};
-}
+	bool hasDisappeared;
+};

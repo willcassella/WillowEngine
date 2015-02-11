@@ -1,0 +1,2 @@
+// LocalPlayer.h
+#pragma once

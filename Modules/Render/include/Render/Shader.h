@@ -1,47 +1,44 @@
-// Shader.h
+// Shader.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <Utility\ResourcePtr.h>
+#include <Resource/TextFile.h>
 #include "Render.h"
 
-namespace Willow
+// @TODO: Prefer composition over inheritance
+class RENDER_API Shader : public TextFile
 {
-	class RENDER_API Shader : public Resource
-	{
-		///////////////////////
-		///   Information   ///
-	public:
+	///////////////////////
+	///   Information   ///
+public:
 
-		typedef Resource Super;
+	REFLECTABLE_CLASS;
+	EXTENDS(TextFile);
 
-		////////////////////////
-		///   Constructors   ///
-	public:
+	////////////////////////
+	///   Constructors   ///
+public:
 
-		Shader(const String& path);
-		Shader(const Shader& copy) = delete;
-		Shader(Shader&& other) = delete;
-		~Shader() override;
+	Shader(const String& path);
+	Shader(const Shader& copy) = delete;
+	Shader(Shader&& move) = delete;
+	~Shader() override;
 
-		///////////////////
-		///   Methods   ///
-	public:
+	///////////////////
+	///   Methods   ///
+public:
 
-		BufferID GetID() const;
+	BufferID GetID() const;
 
-		/////////////////////
-		///   Operators   ///
-	public:
+	/////////////////////
+	///   Operators   ///
+public:
 
-		Shader& operator=(const Shader& copy) = delete;
-		Shader& operator=(Shader&& other) = delete;
+	Shader& operator=(const Shader& copy) = delete;
+	Shader& operator=(Shader&& move) = delete;
 
-		////////////////
-		///   Data   ///
-	private:
+	////////////////
+	///   Data   ///
+private:
 
-		BufferID _id;
-	};
-
-	NON_REFLECTABLE(Willow::Shader)
-}
+	BufferID _id;
+};

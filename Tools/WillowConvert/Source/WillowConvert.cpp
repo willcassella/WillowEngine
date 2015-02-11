@@ -1,10 +1,12 @@
-// WillowConvert.cpp
+// WillowConvert.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
 #include <fstream>
-#include <Utility\TextFileReader.h>
-#include <Utility\Console.h>
-#include "..\include\WillowConvert\WillowConvert.h"
-using namespace Willow;
+#include <Core/Console.h>
+#include <Math/Vec2.h>
+#include <Math/Vec3.h>
+#include <Resource/TextFile.h>
+#include <Resource/ResourceHandle.h>
+#include "../include/WillowConvert/WillowConvert.h"
 
 ////////////////////////////
 ///   Public Functions   ///
@@ -22,7 +24,7 @@ bool WillowConvert::Convert(const String& path, const List<String>& options)
 	// If we're parsing an OBJ file
 	if (input == InputType::OBJ)
 	{
-		Array<Vertex> vertices;
+		Array<Mesh::Vertex> vertices;
 		Array<uint32> elements;
 
 		if (!ParseOBJFile(path, vertices, elements, 0))
@@ -49,7 +51,7 @@ WillowConvert::InputType WillowConvert::ParsePath(const String& path)
 	String extension = String::GetFileExtension(path);
 
 	// Make sure the filename is valid
-	if (extension.IsNullOrEmpty())
+	if (extension.IsEmpty())
 	{
 		// There was no extension
 		Console::Error("Invalid filename: no extension");
@@ -72,28 +74,26 @@ WillowConvert::InputType WillowConvert::ParsePath(const String& path)
 	}
 }
 
-bool WillowConvert::ParseOBJFile(const String& path, Array<Vertex>& outVertices, Array<uint32>& outElements, bool compress)
+bool WillowConvert::ParseOBJFile(const String& path, Array<Mesh::Vertex>& outVertices, Array<uint32>& outElements, bool compress)
 {
 	Array<Vec3> positions;
 	Array<Vec2> coordinates;
 	Array<Vec3> normals;
 
-	TextFileReader file(path);
+	ResourceHandle<TextFile> file(path);
 
-	if (!file.FileOpen())
+	if (!file.IsLoaded())
 	{
-		Console::Error("'@' does not exist!", path);
 		return false;
 	}
 
-	String line;
-	while (file.GetNextLine(line))
+	for (const String& line : file->GetLines())
 	{
 		// Parse vertices
 		if (line.StartsWith("v "))
 		{
 			Vec3 vertex;
-			String::ParseValues(line, "v @ @ @", vertex.X, vertex.Y, vertex.Z);
+			String::Parse(line, "v @ @ @", vertex.X, vertex.Y, vertex.Z);
 			positions.Add(vertex);
 			continue;
 		}
@@ -102,7 +102,7 @@ bool WillowConvert::ParseOBJFile(const String& path, Array<Vertex>& outVertices,
 		if (line.StartsWith("vt "))
 		{
 			Vec2 coordinate;
-			String::ParseValues(line, "vt @ @", coordinate.X, coordinate.Y);
+			String::Parse(line, "vt @ @", coordinate.X, coordinate.Y);
 			coordinates.Add(coordinate);
 			continue;
 		}
@@ -111,7 +111,7 @@ bool WillowConvert::ParseOBJFile(const String& path, Array<Vertex>& outVertices,
 		if (line.StartsWith("vn "))
 		{
 			Vec3 normal;
-			String::ParseValues(line, "vn @ @ @", normal.X, normal.Y, normal.Z);
+			String::Parse(line, "vn @ @ @", normal.X, normal.Y, normal.Z);
 			normals.Add(normal);
 			continue;
 		}
@@ -120,14 +120,14 @@ bool WillowConvert::ParseOBJFile(const String& path, Array<Vertex>& outVertices,
 		if (line.StartsWith("f "))
 		{
 			uint32 vertexIndex[3], uvIndex[3], normalIndex[3];
-			String::ParseValues(line, "f @/@/@ @/@/@ @/@/@", vertexIndex[0], uvIndex[0], normalIndex[0], vertexIndex[1], uvIndex[1], normalIndex[1], 
+			String::Parse(line, "f @/@/@ @/@/@ @/@/@", vertexIndex[0], uvIndex[0], normalIndex[0], vertexIndex[1], uvIndex[1], normalIndex[1], 
 				vertexIndex[2], uvIndex[2], normalIndex[2]);
 
 			// For each vertex in the face (3)
 			for (uint32 i = 0; i < 3; ++i)
 			{
 				// Construct a vertex
-				Vertex vertex;
+				Mesh::Vertex vertex;
 				Vec3& position = positions[vertexIndex[i] - 1];
 				vertex.X = position.X;
 				vertex.Y = position.Y;
@@ -181,7 +181,7 @@ bool WillowConvert::ParseOBJFile(const String& path, Array<Vertex>& outVertices,
 ///////////////////////////
 ///   Write Functions   ///
 
-bool WillowConvert::WriteStaticMesh(const String& name, const Array<Vertex>& vertices, const Array<uint32>& elements)
+bool WillowConvert::WriteStaticMesh(const String& name, const Array<Mesh::Vertex>& vertices, const Array<uint32>& elements)
 {
 	// Get the size of each array
 	uint32 numVerts = vertices.Size();
@@ -192,7 +192,7 @@ bool WillowConvert::WriteStaticMesh(const String& name, const Array<Vertex>& ver
 	output.open((name + ".wmesh").Cstr(), std::ios::binary | std::ios::out);
 
 	output.write((char*)&numVerts, sizeof(uint32));
-	output.write((char*)&vertices[0], sizeof(Vertex) * numVerts);
+	output.write((char*)&vertices[0], sizeof(Mesh::Vertex) * numVerts);
 	output.write((char*)&numElements, sizeof(uint32));
 	output.write((char*)&elements[0], sizeof(uint32) * numElements);
 

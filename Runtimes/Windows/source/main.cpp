@@ -1,5 +1,4 @@
-// Willow Engine Init code!
-// By Will Cassella
+// main.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
 // Show console in debug mode
 #ifdef DEBUG
@@ -7,13 +6,12 @@
 #endif
 
 #include <GLFW/glfw3.h>
-#include <Utility\Console.h>
-#include <Utility\Math\Vec2.h>
-#include <Core\Game.h>
-#include <Render\Prop.h>
+#include <Core/Console.h>
+#include <Math/Vec2.h>
+#include <Engine/Game.h>
+#include <Render/Render.h>
 #include <ExampleGame\FPSCamera.h>
 #include <ExampleGame\Ghost.h>
-using namespace Willow;
 
 //Define context parameters
 int32 window_width = 1280;
@@ -30,7 +28,7 @@ struct
 	///   Fields   ///
 public:
 
-	Willow::Vec2 Position;
+	Vec2 Position;
 
 	///////////////////
 	///   Methods   ///
@@ -72,7 +70,7 @@ int main(int32 argc, char* argv[])
 	glfwMakeContextCurrent(window);
 
 	// Initialize the renderer
-	InitRenderer(API::OpenGL);
+	SetupRenderer();
 
 	///////////////////////////////
 	///   Setting up a simple   ///
@@ -84,14 +82,12 @@ int main(int32 argc, char* argv[])
 	sponza.MeshComponent.Mesh = "data/sponza.dat";
 	sponza.MeshComponent.Mesh->SetMaterial(String("data/Sponza.mat"));
 
-	auto& gun = test.AddObject<ExampleGame::Ghost>("gun");
+	auto& gun = test.AddObject<Ghost>("gun");
 	gun.MeshComponent.Mesh = "data/battle_rifle.dat";
 	gun.MeshComponent.Mesh->SetMaterial(String("data/Gun.mat"));
 
-	auto& cam = test.AddObject<ExampleGame::FPSCamera>("Camera");
+	auto& cam = test.AddObject<FPSCamera>("Camera");
 	test.Cameras.Add(&cam);
-
-	Console::WriteLine(cam.GetComponents().GetType() == TypeInfo<List<Component*>>());
 
 	//Execute the main event loop
 	eventLoop(window);
@@ -233,7 +229,6 @@ void eventLoop(GLFWwindow* window)
 		}
 
 		//render the frame
-		ClearBuffer();
 		scene.Render();
 		glfwSwapBuffers(window);
 	}

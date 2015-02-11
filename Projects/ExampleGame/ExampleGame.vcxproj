@@ -69,44 +69,44 @@
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetExt>.dll</TargetExt>
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Core\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Core\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Math\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Engine\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Math\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Engine\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetExt>.dll</TargetExt>
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Core\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Core\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Math\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Engine\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Math\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Engine\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetExt>.dll</TargetExt>
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Core\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Core\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Math\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Engine\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Math\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Engine\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetExt>.dll</TargetExt>
-    <IncludePath>$(SolutionDir)Modules\Utility\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Core\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Utility\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Core\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Math\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Render\include;$(SolutionDir)Modules\Engine\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Math\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Render\bin;$(SolutionDir)Modules\Engine\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>EXAMPLEGAME_BUILD;WIN32;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>EXAMPLEGAME_BUILD;WINDOWS;BITS_32;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4251</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Willow_Utility.lib;Willow_Render.lib;Willow_Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Core.lib;Math.lib;Resource.lib;Render.lib;Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(OutDir)$(TargetFileName)" "$(SolutionDir)bin\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -114,15 +114,15 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>EXAMPLEGAME_BUILD;WIN32;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>EXAMPLEGAME_BUILD;WINDOWS;BITS_64;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4251</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Willow_Utility.lib;Willow_Render.lib;Willow_Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Core.lib;Math.lib;Resource.lib;Render.lib;Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(OutDir)$(TargetFileName)" "$(SolutionDir)bin\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -132,17 +132,17 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>EXAMPLEGAME_BUILD;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>EXAMPLEGAME_BUILD;WINDOWS;BITS_32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4251</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Willow_Utility.lib;Willow_Render.lib;Willow_Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Core.lib;Math.lib;Resource.lib;Render.lib;Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(OutDir)$(TargetFileName)" "$(SolutionDir)bin\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -152,17 +152,17 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>EXAMPLEGAME_BUILD;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>EXAMPLEGAME_BUILD;WINDOWS;BITS_64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4251</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Willow_Utility.lib;Willow_Render.lib;Willow_Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Core.lib;Math.lib;Resource.lib;Render.lib;Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(OutDir)$(TargetFileName)" "$(SolutionDir)bin\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

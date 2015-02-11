@@ -1,21 +1,10 @@
-// config.h
+// config.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
+
+#include <Core/Reflection/Module.h>
 
 ///////////////////////////////
 ///   Build Configuration   ///
-
-#ifdef RENDER_STATIC
-	#define IMPORT extern
-	#define EXPORT
-#else
-	#ifdef WIN32
-		#define IMPORT __declspec(dllimport)
-		#define EXPORT __declspec(dllexport)
-	#else
-		#define IMPORT
-		#define EXPORT
-	#endif
-#endif
 
 #ifdef RENDER_BUILD
 	#define RENDER_API EXPORT
@@ -23,7 +12,10 @@
 	#define RENDER_API IMPORT
 #endif
 
-////////////////////
-///   Includes   ///
+//////////////////////////
+///   Initialization   ///
 
-#include <Utility\Reflection\Reflection.h>
+namespace Render
+{
+	RENDER_API const Module* GetModuleInfo();
+}

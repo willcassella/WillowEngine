@@ -1,18 +1,17 @@
-// SlideComponent.cpp
+// SlideComponent.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
+#include <Engine/GameObject.h>
 #include "..\include\ExampleGame\SlideComponent.h"
-using namespace ExampleGame;
 
 //////////////////////
 ///   Reflection   ///
 
-BEGIN_CLASS_INFO(ExampleGame::SlideComponent)
-END_REFLECTION_INFO
+CLASS_REFLECTION(SlideComponent);
 
 ////////////////////////
 ///   Constructors   ///
 
-SlideComponent::SlideComponent(Willow::GameObject& owner)
+SlideComponent::SlideComponent(GameObject& owner)
 	: Super(owner)
 {
 	// All done
@@ -23,5 +22,5 @@ SlideComponent::SlideComponent(Willow::GameObject& owner)
 
 void SlideComponent::Update(float timeInterval)
 {
-	this->GetOwner().Transform.Translate(Willow::Vec3(0.008f));
+	GetOwner().Transform.Translate(Vec3(0.008f));
 }

@@ -1,10 +1,12 @@
-// Material.cpp
+// Material.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
-#include <Utility\TextFileReader.h>
-#include <Utility\Console.h>
 #include "glew.h"
-#include "..\include\Render\Material.h"
-using namespace Willow;
+#include "../include/Render/Material.h"
+
+//////////////////////
+///   Reflection   ///
+
+CLASS_REFLECTION(Material);
 
 ////////////////////////
 ///   Constructors   ///
@@ -12,46 +14,49 @@ using namespace Willow;
 Material::Material(const String& path)
 	: Super(path)
 {
-	TextFileReader file(path);
+	bool shaders = false;
+	bool textures = false;
 
-	if (!file.FileOpen())
-	{
-		Console::Warning("Material at '@' could not be loaded", path);
-		return;
-	}
-
-	String line;
-	while (file.GetNextLine(line))
+	for (const String& line : GetLines())
 	{
 		if (line == "Shaders:")
 		{
-			for (file.GetNextLine(line); !line.IsNullOrEmpty(); file.GetNextLine(line))
-			{
-				auto shader = String::ParseEquality(line);
-
-				if (shader.First == "VertexShader")
-				{
-					this->VertexShader = shader.Second;
-				}
-				else if (shader.First == "FragmentShader")
-				{
-					this->FragmentShader = shader.Second;
-				}
-			}
+			shaders = true;
+			textures = false;
+			continue;
 		}
 		else if (line == "Textures:")
 		{
-			for (file.GetNextLine(line); !line.IsNullOrEmpty(); file.GetNextLine(line))
-			{
-				auto texture = String::ParseEquality(line);
+			shaders = false;
+			textures = true;
+			continue;
+		}
 
-				this->Textures[texture.First] = texture.Second;
+		if (shaders)
+		{
+			Pair<String, String> pair;
+			String::Parse("@ = @", pair.First, pair.Second);
+
+			if (pair.First == "VertexShader")
+			{
+				VertexShader = pair.Second;
 			}
+			else if (pair.First == "FragmentShader")
+			{
+				FragmentShader = pair.Second;
+			}
+		}
+		else if (textures)
+		{
+			Pair<String, String> pair;
+			String::Parse("@ = @", pair.First, pair.Second);
+
+			Textures[pair.First] = pair.Second;
 		}
 	}
 
-	this->_id = glCreateProgram();
-	this->Compile();
+	_id = glCreateProgram();
+	Compile();
 }
 
 Material::~Material()
@@ -70,9 +75,9 @@ void Material::Compile()
 
 	glBindFragDataLocation(_id, 0, "outColor");
 
-	this->_vModel = glGetUniformLocation(_id, "vModel");
-	this->_vView = glGetUniformLocation(_id, "vView");
-	this->_vProjection = glGetUniformLocation(_id, "vProjection");
+	_vModel = glGetUniformLocation(_id, "vModel");
+	_vView = glGetUniformLocation(_id, "vView");
+	_vProjection = glGetUniformLocation(_id, "vProjection");
 
 	glDetachShader(_id, VertexShader->GetID());
 	glDetachShader(_id, FragmentShader->GetID());

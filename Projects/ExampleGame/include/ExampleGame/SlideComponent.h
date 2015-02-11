@@ -1,31 +1,27 @@
-// SlideComponent.h
+// SlideComponent.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <Core\GameObject.h>
+#include <Engine/Component.h>
 #include "config.h"
 
-namespace ExampleGame
+class EXAMPLEGAME_API SlideComponent : public Component
 {
-	class EXAMPLEGAME_API SlideComponent : public Willow::Component
-	{
-		///////////////////////
-		///   Information   ///
-	public:
+	///////////////////////
+	///   Information   ///
+public:
 
-		REFLECTABLE
-		EXTENDS(Willow::Component)
+	REFLECTABLE_CLASS;
+	EXTENDS(Component);
 
-		////////////////////////
-		///   Constructors   ///
-	public:
+	////////////////////////
+	///   Constructors   ///
+public:
 
-		SlideComponent(Willow::GameObject& owner);
-		~SlideComponent() override = default;
+	SlideComponent(GameObject& owner);
 
-		///////////////////
-		///   Methods   ///
-	protected:
+	///////////////////
+	///   Methods   ///
+protected:
 
-		void Update(float timeInterval) override;
-	};
-}
+	void Update(float timeInterval) override;
+};

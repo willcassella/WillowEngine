@@ -19,25 +19,16 @@
     <ClInclude Include="include\Render\Material.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Render\Render.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="include\Render\Shader.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Render\StaticMesh.h">
+    <ClInclude Include="include\Render\Render.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Render\Texture.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Render\Vertex.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Render\Prop.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Render\StaticMeshComponent.h">
+    <ClInclude Include="include\Render\StaticMesh.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
@@ -48,22 +39,13 @@
     <ClCompile Include="source\Shader.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="source\StaticMesh.cpp">
+    <ClCompile Include="source\Render.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="source\Texture.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="source\Render.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Vertex.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Prop.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\StaticMeshComponent.cpp">
+    <ClCompile Include="source\StaticMesh.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

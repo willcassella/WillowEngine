@@ -1,10 +1,12 @@
-// Texture.cpp
+// Texture.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
-#include <Utility\Console.h>
-#include <FreeImage.h>
 #include "glew.h"
-#include "..\include\Render\Texture.h"
-using namespace Willow;
+#include "../include/Render/Texture.h"
+
+//////////////////////
+///   Reflection   ///
+
+CLASS_REFLECTION(Texture);
 
 ////////////////////////
 ///   Constructors   ///
@@ -12,27 +14,9 @@ using namespace Willow;
 Texture::Texture(const String& path)
 	: Super(path)
 {
-	// Open the file
-	FREE_IMAGE_FORMAT format = FreeImage_GetFileType(path.Cstr());
-	FIBITMAP* image = FreeImage_Load(format, path.Cstr(), 0);
-
-	if (!image)
-	{
-		Console::Warning("'@' could not be opened", path);
-		this->_id = 0;
-		return;
-	}
-
-	FIBITMAP* temp = image;
-	image = FreeImage_ConvertTo32Bits(image);
-	FreeImage_Unload(temp);
-
-	int32 width = FreeImage_GetWidth(image);
-	int32 height = FreeImage_GetHeight(image);
-
 	// Create and bind the buffer
-	glGenTextures(1, &this->_id);
-	glBindTexture(GL_TEXTURE_2D, this->_id);
+	glGenTextures(1, &_id);
+	glBindTexture(GL_TEXTURE_2D, _id);
 
 	// Set wrapping parameters to repeat
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -42,17 +26,14 @@ Texture::Texture(const String& path)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, FreeImage_GetBits(image));
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, GetWidth(), GetHeight(), 0, GL_BGRA, GL_UNSIGNED_BYTE, GetBitmap());
 
-	// Done using the image
-	FreeImage_Unload(image);
-
-	Console::WriteLine("'@' loaded", path);
+	// @TODO: Discard FreeImage instance of image (since it now exists on the GPU)
 }
 
 Texture::~Texture()
 {
-	glDeleteTextures(1, &this->_id);
+	glDeleteTextures(1, &_id);
 }
 
 ///////////////////
@@ -60,5 +41,5 @@ Texture::~Texture()
 
 BufferID Texture::GetID() const
 {
-	return this->_id;
+	return _id;
 }

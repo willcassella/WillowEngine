@@ -10,16 +10,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Main.cpp">
+    <ClInclude Include="include\WillowConvert\WillowConvert.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\main.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="source\WillowConvert.cpp">
       <Filter>source</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="include\WillowConvert\WillowConvert.h">
-      <Filter>include</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

@@ -7,6 +7,9 @@
     <Filter Include="resources">
       <UniqueIdentifier>{149cc7d6-ab9d-4ac4-b325-7764af76e6da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{8df7a849-39f9-4838-b534-82cb506cb6d0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Main.cpp">
@@ -21,6 +24,9 @@
   <ItemGroup>
     <ClInclude Include="resources\resource.h">
       <Filter>resources</Filter>
+    </ClInclude>
+    <ClInclude Include="include\LocalPlayer.h">
+      <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

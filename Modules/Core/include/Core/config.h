@@ -1,29 +1,28 @@
-// config.h
+// config.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
+
+#include "System.h"
 
 ///////////////////////////////
 ///   Build Configuration   ///
 
-#ifdef CORE_STATIC
-	#define IMPORT
-	#define EXPORT
-#else
-	#ifdef WIN32
-		#define IMPORT __declspec(dllimport)
-		#define EXPORT __declspec(dllexport)
-	#else
-		#define IMPORT
-		#define EXPORT
-	#endif
-#endif
-
-#ifdef CORE_BUILD
+#if defined	CORE_BUILD
 	#define CORE_API EXPORT
 #else
 	#define CORE_API IMPORT
 #endif
 
-////////////////////
-///   Includes   ///
+//////////////////////////////
+///   Module Information   ///
 
-#include <Utility\Reflection\Reflection.h>
+/** Defined in 'Reflection/Module.h' */
+class Module;
+
+namespace Core
+{
+	CORE_API const Module* GetModuleInfo();
+}
+
+#if defined CORE_BUILD
+	#define THIS_MODULE Core::GetModuleInfo()
+#endif

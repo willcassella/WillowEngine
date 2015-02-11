@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\Camera.cpp" />
+    <ClCompile Include="source\CameraComponent.cpp" />
+    <ClCompile Include="source\Component.cpp" />
+    <ClCompile Include="source\Game.cpp" />
+    <ClCompile Include="source\GameObject.cpp" />
+    <ClCompile Include="source\EventManager.cpp" />
+    <ClCompile Include="source\Scene.cpp" />
+    <ClCompile Include="source\Transform.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Engine\Camera.h" />
+    <ClInclude Include="include\Engine\CameraComponent.h" />
+    <ClInclude Include="include\Engine\Component.h" />
+    <ClInclude Include="include\Engine\config.h" />
+    <ClInclude Include="include\Engine\EventDispatcher.h" />
+    <ClInclude Include="include\Engine\EventManager.h" />
+    <ClInclude Include="include\Engine\Game.h" />
+    <ClInclude Include="include\Engine\GameObject.h" />
+    <ClInclude Include="include\Engine\IEventDispatcher.h" />
+    <ClInclude Include="include\Engine\InputDispatcher.h" />
+    <ClInclude Include="include\Engine\Pawn.h" />
+    <ClInclude Include="include\Engine\Scene.h" />
+    <ClInclude Include="include\Engine\Transform.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C257E175-629A-42F3-A52A-CEC2D0DBBCF2}</ProjectGuid>
+    <RootNamespace>Engine</RootNamespace>
+    <ProjectName>Engine</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>bin\</OutDir>
+    <IntDir>build\</IntDir>
+    <TargetExt>.dll</TargetExt>
+    <TargetName>$(ProjectName)</TargetName>
+    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Math\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Render\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Math\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Render\bin;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>bin\</OutDir>
+    <IntDir>build\</IntDir>
+    <TargetExt>.dll</TargetExt>
+    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Math\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Render\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Math\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Render\bin;$(LibraryPath)</LibraryPath>
+    <TargetName>$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>bin\</OutDir>
+    <IntDir>build\</IntDir>
+    <TargetExt>.dll</TargetExt>
+    <TargetName>$(ProjectName)</TargetName>
+    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Math\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Render\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Math\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Render\bin;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>bin\</OutDir>
+    <IntDir>build\</IntDir>
+    <TargetExt>.dll</TargetExt>
+    <TargetName>$(ProjectName)</TargetName>
+    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Math\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Render\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Math\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Render\bin;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>ENGINE_BUILD;WINDOWS;BITS_32;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Core.lib;Math.lib;Resource.lib;Render.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Lib />
+    <Lib />
+    <Lib>
+      <AdditionalDependencies>Render_d.lib</AdditionalDependencies>
+    </Lib>
+    <PostBuildEvent>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>ENGINE_BUILD;WINDOWS;BITS_64;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Core.lib;Math.lib;Resource.lib;Render.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Lib />
+    <Lib />
+    <Lib>
+      <AdditionalDependencies>Render64_d.lib</AdditionalDependencies>
+    </Lib>
+    <PostBuildEvent>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>ENGINE_BUILD;WINDOWS;BITS_32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>Core.lib;Math.lib;Resource.lib;Render.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Lib />
+    <Lib />
+    <Lib>
+      <AdditionalDependencies>Render.lib</AdditionalDependencies>
+    </Lib>
+    <PostBuildEvent>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>ENGINE_BUILD;WINDOWS;BITS_64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>Core.lib;Math.lib;Resource.lib;Render.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Lib />
+    <Lib />
+    <Lib>
+      <AdditionalDependencies>Render64.lib</AdditionalDependencies>
+    </Lib>
+    <PostBuildEvent>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

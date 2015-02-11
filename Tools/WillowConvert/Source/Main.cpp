@@ -1,11 +1,10 @@
-// Main.cpp
-// This program converts text files to .DAT for faster loading by the engine
+// Main.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
+/** This program converts text files to .DAT for faster loading by the engine */
 
-#include <Utility\Console.h>
-#include "..\include\WillowConvert\WillowConvert.h"
-using namespace Willow;
+#include <Core/Console.h>
+#include "../include/WillowConvert/WillowConvert.h"
 
-int main(int32 argCount, char* args[])
+int main(int32 argCount, char** args)
 {
 	// If files were passed in
 	if (argCount > 1)
@@ -23,7 +22,7 @@ int main(int32 argCount, char* args[])
 		String path = Console::Prompt();
 		Console::NewLine();
 		 
-		if (path.IsNullOrEmpty())
+		if (path.IsEmpty())
 		{
 			break;
 		}

@@ -1,10 +1,12 @@
-// Shader.cpp
+// Shader.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
-#include <Utility\TextFileReader.h>
-#include <Utility\Console.h>
 #include "glew.h"
-#include "..\include\Render\shader.h"
-using namespace Willow;
+#include "../include/Render/shader.h"
+
+//////////////////////
+///   Reflection   ///
+
+CLASS_REFLECTION(Shader);
 
 ////////////////////////
 ///   Constructors   ///
@@ -12,44 +14,31 @@ using namespace Willow;
 Shader::Shader(const String& path)
 	: Super(path)
 {
-	TextFileReader file(path);
-
-	// Make sure the file opened correctly
-	if (!file.FileOpen())
-	{
-		Console::Warning("Shader at '@' could not be opened", path);
-		this->_id = NULL;
-		return;
-	}
-
-	String source = file.Dump();
-
 	// Identify the shader type
 	String type = String::GetFileExtension(path);
 
 	if (type == "vert")
 	{
-		this->_id = glCreateShader(GL_VERTEX_SHADER);
+		_id = glCreateShader(GL_VERTEX_SHADER);
 	}
 	else if (type == "frag")
 	{
-		this->_id = glCreateShader(GL_FRAGMENT_SHADER);
+		_id = glCreateShader(GL_FRAGMENT_SHADER);
 	}
 	else if (type == "geom")
 	{
-		this->_id = glCreateShader(GL_GEOMETRY_SHADER);
+		_id = glCreateShader(GL_GEOMETRY_SHADER);
 	}
 
+	String source = DumpLines();
 	const char* tempSource = source.Cstr();
 	glShaderSource(_id, 1, &tempSource, nullptr);
 	glCompileShader(_id);
-
-	Console::WriteLine("'@' loaded", path);
 }
 
 Shader::~Shader()
 {
-	glDeleteShader(this->_id);
+	glDeleteShader(_id);
 }
 
 ///////////////////

@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{70a96a91-66f9-40e8-81e6-67edcbd4cbfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\Camera.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scene.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GameObject.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Transform.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\EventManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Game.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Component.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CameraComponent.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Engine\Camera.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\CameraComponent.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Component.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\config.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\EventDispatcher.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\EventManager.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Game.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\GameObject.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\IEventDispatcher.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\InputDispatcher.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Pawn.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Scene.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Transform.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
