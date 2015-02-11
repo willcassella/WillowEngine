@@ -176,7 +176,7 @@ xcopy "$(ProjectDir)thirdParty\FreeImage\$(Platform)\FreeImage.dll" "$(SolutionD
   <ItemGroup>
     <ClInclude Include="include\Resource\config.h" />
     <ClInclude Include="include\Resource\Image.h" />
-    <ClInclude Include="include\Resource\Resource.h" />
+    <ClInclude Include="include\Resource\SystemResource.h" />
     <ClInclude Include="include\Resource\ResourceHandle.h" />
     <ClInclude Include="include\Resource\Mesh.h" />
     <ClInclude Include="include\Resource\TextFile.h" />
@@ -184,7 +184,7 @@ xcopy "$(ProjectDir)thirdParty\FreeImage\$(Platform)\FreeImage.dll" "$(SolutionD
   <ItemGroup>
     <ClCompile Include="source\config.cpp" />
     <ClCompile Include="source\Image.cpp" />
-    <ClCompile Include="source\Resource.cpp" />
+    <ClCompile Include="source\SystemResource.cpp" />
     <ClCompile Include="source\Mesh.cpp" />
     <ClCompile Include="source\TextFile.cpp" />
   </ItemGroup>

@@ -1,9 +1,9 @@
-// Resource.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
+// SystemResource.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
 #include "config.h"
 
-class RESOURCE_API Resource : public Object
+class RESOURCE_API SystemResource : public Object
 {
 	///////////////////////
 	///   Information   ///
@@ -18,10 +18,10 @@ public:
 public:
 
 	/** Loads a resource from the given file path */
-	Resource(const String& path);
-	Resource(const Resource& copy) = delete;
-	Resource(Resource&& other) = delete;
-	~Resource() override;
+	SystemResource(const String& path);
+	SystemResource(const SystemResource& copy) = delete;
+	SystemResource(SystemResource&& other) = delete;
+	~SystemResource() override;
 
 	///////////////////
 	///   Methods   ///
@@ -31,14 +31,14 @@ public:
 		
 private:
 
-	static Resource* FindLoadedResource(const String& path);
+	static SystemResource* FindLoadedResource(const String& path);
 
 	/////////////////////
 	///   Operators   ///
 public:
 
-	Resource& operator=(const Resource& copy) = delete;
-	Resource& operator=(Resource&& other) = delete;
+	SystemResource& operator=(const SystemResource& copy) = delete;
+	SystemResource& operator=(SystemResource&& other) = delete;
 
 	////////////////
 	///   Data   ///

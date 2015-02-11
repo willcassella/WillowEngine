@@ -1,15 +1,16 @@
 // ResourceHandle.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "Resource.h"
+#include "SystemResource.h"
 
 // @TODO: Refactor this
+// @TODO: Make this a struct
 
 /////////////////
 ///   Types   ///
 
 /** An opaque pointer to a Resource
-* WARNING: ResourceType must be a subclass of Resource */
+* WARNING: ResourceType must be a subclass of SystemResource */
 template <class ResourceType>
 class ResourceHandle : public Object
 {
@@ -56,7 +57,7 @@ public:
 	///   Methods   ///
 public:
 
-	/** Returns whether the Resource this ResourceHandle points to has been fully loaded */
+	/** Returns whether the SystemResource this ResourceHandle points to has been fully loaded */
 	bool IsLoaded() const
 	{
 		// @TODO: Maybe implemented a smarter version of this (to enable loading on a separate thread)
@@ -65,7 +66,7 @@ public:
 
 private:
 
-	/** Assigns this ResourceHandle to the Resource   */
+	/** Assigns this ResourceHandle to the system resource at the given path */
 	void AssignResource(const String& path)
 	{
 		// Assign to a new resource
@@ -76,7 +77,7 @@ private:
 		}
 
 		// Check if this resource has been already created
-		Resource* res = Resource::FindLoadedResource(path);
+		SystemResource* res = SystemResource::FindLoadedResource(path);
 		if (!res)
 		{
 			// Create a new resource
@@ -165,4 +166,4 @@ private:
 ///   Reflection   ///
 
 template <class ResourceType>
-CLASS_REFLECTION(ResourceHandle<ResourceType>);
+const ClassInfo ResourceHandle<ResourceType>::StaticTypeInfo = ClassInfo::Create<ResourceType>(String::Format("RessourceHandle<@>", TypeOf<ResourceType>().GetName()));

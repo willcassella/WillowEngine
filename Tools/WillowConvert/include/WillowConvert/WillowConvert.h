@@ -24,7 +24,7 @@ namespace WillowConvert
 	InputType ParsePath(const String& path);
 
 	/** Parses a .obj file and fills an array of vertices and elements. 
-	* compress - whether to reduce the size of the mesh .DAT file by reusing vertices where possible. May take a long time to parse. */
+	* 'compress' - whether to reduce the size of the produced .wmesh file by reusing vertices where possible. May take a long time to parse. */
 	bool ParseOBJFile(const String& path, Array<Mesh::Vertex>& outVertices, Array<uint32>& outElements, bool compress = false);
 
 	///////////////////////////

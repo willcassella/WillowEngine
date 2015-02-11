@@ -17,7 +17,9 @@ public:
 	///   Constructors   ///
 public:
 
-	// @TODO: Documentation
+	/** Creates reflection information for the given interface
+	* NOTE: Do not use this outside of the registration function for a interface
+	* 'name' - The fully-qualified name of the interface */
 	template <class AnyInterfaceType>
 	static InterfaceInfo Create(const String& name)
 	{
@@ -47,8 +49,10 @@ public:
 	* NOTE: Always returns false - interfaces are never instantiable */
 	bool IsInstantiable() const override;
 
+	
 	bool IsCastableTo(const TypeInfo& type) const override;
 
+	/** @TODO: Documentation */
 	Value StackInstance() const override;
 
 	Reference HeapInstance() const override;

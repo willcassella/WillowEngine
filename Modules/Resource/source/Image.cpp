@@ -13,7 +13,7 @@ CLASS_REFLECTION(Image);
 ///   Constructors   ///
 
 Image::Image(const String& path)
-	: Resource(path)
+	: Super(path)
 {
 	// Open the file
 	FREE_IMAGE_FORMAT format = FreeImage_GetFileType(path.Cstr());

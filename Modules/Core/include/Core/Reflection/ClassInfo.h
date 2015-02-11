@@ -20,7 +20,9 @@ public:
 	///   Constructors   ///
 public:
 
-	// @TODO: Documentation
+	/** Creates reflection information for the given class
+	* NOTE: Do not use this outside of the registration function for a class
+	* 'name' - The fully-qualified name of the class */
 	template <class AnyClass>
 	static ClassInfo Create(const String& name)
 	{

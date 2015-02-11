@@ -1,16 +1,16 @@
 // Mesh.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "Resource.h"
+#include "SystemResource.h"
 
-class RESOURCE_API Mesh : public Resource
+class RESOURCE_API Mesh : public SystemResource
 {
 	///////////////////////
 	///   Information   ///
 public:
 
 	REFLECTABLE_CLASS;
-	EXTENDS(Resource);
+	EXTENDS(SystemResource);
 
 	///////////////////////
 	///   Inner Types   ///

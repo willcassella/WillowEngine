@@ -6,7 +6,7 @@
 #include "Shader.h"
 #include "Texture.h"
 
-// @TODO: Change this to composition (vs inheritance)
+// @TODO: This should not inherit from TextFile
 class RENDER_API Material : public TextFile
 {
 	///////////////////////

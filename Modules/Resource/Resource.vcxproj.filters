@@ -12,9 +12,6 @@
     <ClInclude Include="include\Resource\Image.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Resource\Resource.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="include\Resource\config.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -27,11 +24,11 @@
     <ClInclude Include="include\Resource\TextFile.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\Resource\SystemResource.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\Resource.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="source\Image.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -42,6 +39,9 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="source\TextFile.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SystemResource.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

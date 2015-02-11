@@ -22,7 +22,8 @@ public:
 public:
 
 	/** Creates reflection information for the given struct
-	* NOTE: Do not use this outside of the registration function for a struct */
+	* NOTE: Do not use this outside of the registration function for a struct 
+	* 'name' - The fully-qualified name of the struct */
 	template <class AnyStructType>
 	static StructInfo Create(const String& name)
 	{

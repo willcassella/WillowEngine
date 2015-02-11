@@ -708,7 +708,7 @@ namespace Implementation
 
 	/** Convert a MSVC c-string literal to a String
 	* NOTE: A MSVC c-string literal cannot be parsed from a String */
-	template <size_t size>
+	template <std::size_t size>
 	struct ToString < const char[size] >
 	{
 		inline static String Function(const char value[size])

@@ -4,6 +4,7 @@
 #include <Resource/Mesh.h>
 #include "Material.h"
 
+// @TODO: This should not inherit from MeshFile
 class RENDER_API StaticMesh : public Mesh
 {
 	///////////////////////
