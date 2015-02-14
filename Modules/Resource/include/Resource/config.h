@@ -15,4 +15,5 @@
 //////////////////////////
 ///   Initialization   ///
 
+// @TODO: Update this to match other modules
 RESOURCE_API const Module* Initialize_Resource();

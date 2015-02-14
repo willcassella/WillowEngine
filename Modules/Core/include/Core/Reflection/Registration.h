@@ -20,6 +20,3 @@
 
 // @TODO: Documentation
 #define HAS_FACTORY .SetFactory(&StackFactory<UserType>, &HeapFactory<UserType>)
-
-// @TODO: Documentation
-#define IMPLEMENTS(...) // @TODO: Implement this
