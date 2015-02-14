@@ -25,4 +25,4 @@ public:
 };
 
 /** 'Interface' is abstract */
-FORCEINLINE Interface::~Interface() {};
+inline Interface::~Interface() {};
