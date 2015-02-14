@@ -31,7 +31,7 @@
     <ClInclude Include="include\Core\Containers\Table.h" />
     <ClInclude Include="include\Core\Exception.h" />
     <ClInclude Include="include\Core\Interface.h" />
-    <ClInclude Include="include\Core\Misc\DateTime.h" />
+    <ClInclude Include="include\Core\Misc\TimeStamp.h" />
     <ClInclude Include="include\Core\Object.h" />
     <ClInclude Include="include\Core\Reflection\ClassInfo.h" />
     <ClInclude Include="include\Core\Reflection\Factory.h" />

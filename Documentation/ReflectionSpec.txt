@@ -1,0 +1,67 @@
+The game engine has a number of special functions, which I'm calling "Operations". They behave differently for each type, 
+and have some sort of behavior on every type in the engine (even if that behavior is a compiler error/runtime exception).
+These operations can be called directly or indirectly.
+Direct calls work by just calling the operation directly (like a normal function call)
+Indirect calls work by querying for type information, then calling the operation through the TypeInfo object by passing a Reference.
+Some operations are vulnerable to polymorphism, such that the underlying type of an object may be lost if it is referenced as a base.
+
+Some operations may not be implemented on all types, and attempts to call them indirectly will thrown an exception; however it is always possible
+to query if the operation is implemented - so try/catch should not be needed.
+
+Operations are cut up into two sections, 'Basic operations' and 'Advanced operations'.
+
+'Basic operations' are unaware of the reflection system, and are implemented entirely using templates and normal language features.
+
+'Advanced operations' make use of the reflection system for their implementation, or rely on it in some way
+
+Basic operations:
+
+String ToString(const T& value), polymorphism-proof: Formats the state of an object as a string, for printing to the console/whatever
+	Default uses member function, specialized for primitive/basic types
+	Explicit call to unimplemented causes compile-time error
+	Indirect call to unimplemented throws exception
+
+String FromString(const String& string), polymorphism-proof: Sets the state of an object based on a string (overwriting current state)
+	Default uses member function, specialized for primitive/basic types
+	Explicit call to unimplemented causes compile-time error
+	Indirect call to unimplemented throws exception
+
+T StackConstruct(), polymorphism-proof: Returns a new instance of the type, stored on the stack (so mmm not needed)
+	Default uses default constructor
+	Explicit call to unimplemented causes compile-time error
+	Indirect call to unimplemented throws exception
+
+T& HeapConstruct(), polymorphism-proof: Returns a new instance of the type, stored on the heap (using 'new', so mmm needed)
+	Default uses default constructor
+	Explicit call to unimplemented causes compile-time error
+	Indirect call to unimplemented throws exception
+
+T StackCopy(const T& copy): Returns a copy of the given object, stored on the heap
+	Default uses copy constructor
+	Explicit call to unimplemented causes compile-time error
+	Indirect call to unimplemented throws exception
+
+T& HeapCopy(const T& copy): Returns a copy of the given object, stored on the stack
+	Default uses copy constructor
+	Explicit call to unimplemented causes comiple-time error
+	Indirect call to unimplemented throws exception
+
+Advanced operations:
+
+const TypeInfo& TypeOf(), polymorphism-proof: Returns the type information for an explicit type
+	Default uses static member, specialized for primitive/basic types
+	Explicit call to unimplemented causes compile-time error
+	Indirect call not possible
+
+const TypeInfo& TypeOf(const T& value), polymorphism-proof: Returns the type information for an object
+	Default uses member function, specialized for primitive/basic types
+	Explicit call to unimplemented causes compile-time error
+	Indirect call not possible
+
+void ToArchive(const T& value, Arhive& archive), polymorphism-proof:
+	Default uses reflection information, prefers member function
+	Implementation depends on implementation of TypeOf
+
+void FromArchive(T& value, const Arhive& archive), polymorphism-proof:
+	Default uses reflection information, prefers member function
+	Implementation depends on implementation of TypeOf

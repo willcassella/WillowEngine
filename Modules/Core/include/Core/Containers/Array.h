@@ -3,7 +3,6 @@
 
 #include <cassert>
 #include <utility>
-#include <initializer_list>
 #include "../config.h"
 
 /** A linear, contiguous array. Replacement for 'std::vector'.
@@ -41,16 +40,16 @@ public:
 		///   Operators   ///
 	public:
 
-		inline Iterator& operator++()
+		FORCEINLINE Iterator& operator++()
 		{
 			++_value;
 			return This;
 		}
-		inline T& operator*()
+		FORCEINLINE T& operator*()
 		{
 			return *_value;
 		}
-		friend inline bool operator!=(const Iterator& lhs, const Iterator& rhs)
+		friend FORCEINLINE bool operator!=(const Iterator& lhs, const Iterator& rhs)
 		{
 			return lhs._value != rhs._value;
 		}
@@ -78,16 +77,16 @@ public:
 		///   Operators   ///
 	public:
 
-		inline ConstIterator& operator++()
+		FORCEINLINE ConstIterator& operator++()
 		{
 			++_value;
 			return This;
 		}
-		inline const T& operator*() const
+		FORCEINLINE const T& operator*() const
 		{
 			return *_value;
 		}
-		friend inline bool operator!=(const ConstIterator& lhs, const ConstIterator& rhs)
+		friend FORCEINLINE bool operator!=(const ConstIterator& lhs, const ConstIterator& rhs)
 		{
 			return lhs._value != rhs._value;
 		}
@@ -161,19 +160,19 @@ public:
 public:
 
 	/** Returns the number of elements in this Array */
-	inline uint32 Size() const
+	FORCEINLINE uint32 Size() const
 	{
 		return _numElements;
 	}
 
 	/** Returns the number of elements that can be put into this Array before needing to re-allocate */
-	inline uint32 Capacity() const
+	FORCEINLINE uint32 Capacity() const
 	{
 		return _allocSize;
 	}
 
 	/** Returns whether this Array is empty */
-	inline bool IsEmpty() const
+	FORCEINLINE bool IsEmpty() const
 	{
 		return Size() == 0;
 	}
@@ -212,7 +211,7 @@ public:
 
 	/** Returns a reference to the element at the given index 
 	* WARNING: Make sure the index exists in this Array */
-	inline T& Get(uint32 index)
+	FORCEINLINE T& Get(uint32 index)
 	{
 		assert(index < Size());
 		return FastGet(index);
@@ -220,7 +219,7 @@ public:
 
 	/** Returns an immutable reference to the element at the given index
 	* WARNING: Make sure the index exists in this Array */
-	inline const T& Get(uint32 index) const
+	FORCEINLINE const T& Get(uint32 index) const
 	{
 		assert(index < Size());
 		return FastGet(index);
@@ -228,7 +227,7 @@ public:
 
 	/** Returns a reference to the first element in this Array
 	* WARNING: Check 'IsEmpty()' before calling this */
-	inline T& First()
+	FORCEINLINE T& First()
 	{
 		assert(Size() > 0);
 		return FastGet(0);
@@ -236,7 +235,7 @@ public:
 
 	/** Returns an immutable reference to the first element in this Array
 	* WARNING: Check 'IsEmpty()' before calling this */
-	inline const T& First() const
+	FORCEINLINE const T& First() const
 	{
 		assert(Size() > 0);
 		return FastGet(0);
@@ -244,7 +243,7 @@ public:
 
 	/** Returns a reference to the last element in this Array
 	* WARNING: Check 'IsEmpty()' before calling this */
-	inline T& Last()
+	FORCEINLINE T& Last()
 	{
 		assert(Size() > 0);
 		return FastGet(Size() - 1);
@@ -252,14 +251,14 @@ public:
 
 	/** Returns an immutable reference to the last element in this Array
 	* WARNING: Check 'IsEmpty()' before calling this */
-	inline const T& Last() const
+	FORCEINLINE const T& Last() const
 	{
 		assert(Size() > 0);
 		return FastGet(Size() - 1);
 	}
 		
 	/** Returns a portion of this Array from the given index to the end */
-	inline Array Slice(uint32 start) const
+	FORCEINLINE Array Slice(uint32 start) const
 	{
 		return Slice(start, Size());
 	}
@@ -384,14 +383,14 @@ public:
 	}
 
 	/** Frees unused space in internal array, so that 'Capacity() == Size()' */
-	inline void ShrinkWrap()
+	FORCEINLINE void ShrinkWrap()
 	{
 		Resize(Size());
 	}
 
 	/** Quickly deletes all values from this Array, preserving size 
 	* NOTE: Does not actually call destructor on existing elements. For that call 'Reset(Size())' */
-	inline void Clear()
+	FORCEINLINE void Clear()
 	{
 		_numElements = 0;
 	}
@@ -407,19 +406,19 @@ public:
 	}
 
 	/* Iteration methods */
-	inline Iterator begin()
+	FORCEINLINE Iterator begin()
 	{
 		return Iterator(_values);
 	}
-	inline ConstIterator begin() const
+	FORCEINLINE ConstIterator begin() const
 	{
 		return ConstIterator(_values);
 	}
-	inline Iterator end()
+	FORCEINLINE Iterator end()
 	{
 		return Iterator(&_values[Size()]);
 	}
-	inline ConstIterator end() const
+	FORCEINLINE ConstIterator end() const
 	{
 		return ConstIterator(&_values[Size()]);
 	}
@@ -428,21 +427,21 @@ private:
 
 	/** Returns a reference to the element at the given index
 	* WARNING: Only use this if you KNOW (algorithmically) that the index exists in this Array */
-	inline T& FastGet(uint32 index)
+	FORCEINLINE T& FastGet(uint32 index)
 	{
 		return _values[index];
 	}
 
 	/** Returns an immutable reference to the element at the given index 
 	* WARNING: Only use this if you KNOW (algorithmically) that the index exists in this Array */
-	inline const T& FastGet(uint32 index) const
+	FORCEINLINE const T& FastGet(uint32 index) const
 	{
 		return _values[index];
 	}
 
 	/** Adds an element to the end of this Array without checking for available space
 	* WARNING: Only use this if you KNOW (algorithmically) that there is enough space */
-	inline void FastAdd(const T& value)
+	FORCEINLINE void FastAdd(const T& value)
 	{
 		_values[_numElements++] = value;
 	}
@@ -554,7 +553,7 @@ public:
 
 		return true;
 	}
-	friend inline bool operator!=(const Array& lhs, const Array& rhs)
+	friend FORCEINLINE bool operator!=(const Array& lhs, const Array& rhs)
 	{
 		return !(lhs == rhs);
 	}

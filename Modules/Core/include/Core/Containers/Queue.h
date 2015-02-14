@@ -51,64 +51,64 @@ public:
 public:
 
 	/** Returns the number of elements in this Queue */
-	inline uint32 Size() const
+	FORCEINLINE uint32 Size() const
 	{
 		return _values.Size();
 	}
 
 	/** Returns whether this Queue is empty */
-	inline bool IsEmpty() const
+	FORCEINLINE bool IsEmpty() const
 	{
 		return _values.IsEmpty();
 	}
 
 	/** Returns a reference to the first element in this Queue
 	* WARNING: Check 'IsEmpty()' first */
-	inline T& Peek()
+	FORCEINLINE T& Peek()
 	{
 		return _values.First();
 	}
 
 	/** Returns an immutable reference to the first element in this Queue
 	* WARNING: Check 'IsEmpty()' first */
-	inline const T& Peek() const
+	FORCEINLINE const T& Peek() const
 	{
 		return _values.First();
 	}
 
 	/** Appends a new element to the end of this Queue */
-	inline void Push(const T& item)
+	FORCEINLINE void Push(const T& item)
 	{
 		_values.Add(item);
 	}
 
 	/** Removes the first element in this Queue
 	WARNING: Check 'IsEmpty()' first */
-	inline T Pop()
+	FORCEINLINE T Pop()
 	{
 		return _values.RemoveAt(0);
 	}
 
 	/** Deletes all elements in this Queue */
-	inline void Clear()
+	FORCEINLINE void Clear()
 	{
 		_values.Clear();
 	}
 
 	/** Iteration methods */
-	inline Iterator begin()
+	FORCEINLINE Iterator begin()
 	{
 		return _values.begin();
 	}
-	inline ConstIterator begin() const
+	FORCEINLINE ConstIterator begin() const
 	{
 		return _values.begin();
 	}
-	inline Iterator end()
+	FORCEINLINE Iterator end()
 	{
 		return _values.end();
 	}
-	inline ConstIterator end() const
+	FORCEINLINE ConstIterator end() const
 	{
 		return _values.end();
 	}
@@ -137,11 +137,11 @@ public:
 
 		return This;
 	}
-	friend inline bool operator==(const Queue& lhs, const Queue& rhs)
+	friend FORCEINLINE bool operator==(const Queue& lhs, const Queue& rhs)
 	{
 		return lhs._values == rhs._values;
 	}
-	friend inline bool operator!=(const Queue& lhs, const Queue& rhs)
+	friend FORCEINLINE bool operator!=(const Queue& lhs, const Queue& rhs)
 	{
 		return lhs._values != rhs._values;
 	}

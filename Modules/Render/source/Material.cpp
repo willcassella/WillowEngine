@@ -35,7 +35,7 @@ Material::Material(const String& path)
 		if (shaders)
 		{
 			Pair<String, String> pair;
-			String::Parse("@ = @", pair.First, pair.Second);
+			String::Parse(line, "@ = @", pair.First, pair.Second);
 
 			if (pair.First == "VertexShader")
 			{
@@ -49,7 +49,7 @@ Material::Material(const String& path)
 		else if (textures)
 		{
 			Pair<String, String> pair;
-			String::Parse("@ = @", pair.First, pair.Second);
+			String::Parse(line, "@ = @", pair.First, pair.Second);
 
 			Textures[pair.First] = pair.Second;
 		}

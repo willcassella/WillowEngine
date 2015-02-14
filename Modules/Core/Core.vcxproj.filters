@@ -108,11 +108,11 @@
     <ClInclude Include="include\Core\System.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Misc\DateTime.h">
-      <Filter>include\Misc</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Application.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Misc\TimeStamp.h">
+      <Filter>include\Misc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

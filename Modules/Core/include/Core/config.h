@@ -22,7 +22,3 @@ namespace Core
 {
 	CORE_API const Module* GetModuleInfo();
 }
-
-#if defined CORE_BUILD
-	#define THIS_MODULE Core::GetModuleInfo()
-#endif

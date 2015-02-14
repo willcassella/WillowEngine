@@ -107,12 +107,12 @@ namespace Implementation
 		/** Defined in 'StructInfo.cpp' */
 		static const StructInfo StaticTypeInfo;
 
-		inline static const TypeInfo& Function()
+		FORCEINLINE static const TypeInfo& Function()
 		{
 			return StaticTypeInfo;
 		}
 
-		inline static const TypeInfo& Function(const String& value)
+		FORCEINLINE static const TypeInfo& Function(const String& value)
 		{
 			return StaticTypeInfo;
 		}
@@ -125,12 +125,12 @@ namespace Implementation
 		/** Defined below */
 		static const StructInfo StaticTypeInfo;
 
-		inline static const TypeInfo& Function()
+		FORCEINLINE static const TypeInfo& Function()
 		{
 			return StaticTypeInfo;
 		}
 
-		inline static const TypeInfo& Function(const Array<T>& value)
+		FORCEINLINE static const TypeInfo& Function(const Array<T>& value)
 		{
 			return StaticTypeInfo;
 		}
@@ -147,12 +147,12 @@ namespace Implementation
 		/** Defined below */
 		static const StructInfo StaticTypeInfo;
 
-		inline static const TypeInfo& Function()
+		FORCEINLINE static const TypeInfo& Function()
 		{
 			return StaticTypeInfo;
 		}
 
-		inline static const TypeInfo& Function(const List<T>& value)
+		FORCEINLINE static const TypeInfo& Function(const List<T>& value)
 		{
 			return StaticTypeInfo;
 		}
@@ -172,7 +172,7 @@ namespace Implementation
 	//		return type;
 	//	}
 
-	//	inline static const TypeInfo& Function(const ArrayList<T>& value)
+	//	FORCEINLINE static const TypeInfo& Function(const ArrayList<T>& value)
 	//	{
 	//		return Function();
 	//	}
@@ -185,12 +185,12 @@ namespace Implementation
 		/** Defined below */
 		static const StructInfo StaticTypeInfo;
 
-		inline static const TypeInfo& Function()
+		FORCEINLINE static const TypeInfo& Function()
 		{
 			return StaticTypeInfo;
 		}
 
-		inline static const TypeInfo& Function(const Queue<T, StorageType>& value)
+		FORCEINLINE static const TypeInfo& Function(const Queue<T, StorageType>& value)
 		{
 			return StaticTypeInfo;
 		}
@@ -208,12 +208,12 @@ namespace Implementation
 		/** Defined below */
 		static const StructInfo StaticTypeInfo;
 
-		inline static const TypeInfo& Function()
+		FORCEINLINE static const TypeInfo& Function()
 		{
 			return StaticTypeInfo;
 		}
 
-		inline static const TypeInfo& Function(const Stack<T, StorageType>& value)
+		FORCEINLINE static const TypeInfo& Function(const Stack<T, StorageType>& value)
 		{
 			return StaticTypeInfo;
 		}
@@ -231,12 +231,12 @@ namespace Implementation
 		/** Defined below */
 		static const StructInfo StaticTypeInfo;
 
-		inline static const TypeInfo& Function()
+		FORCEINLINE static const TypeInfo& Function()
 		{
 			return StaticTypeInfo;
 		}
 
-		inline static const TypeInfo& Function(const Table<KeyType, ValueType>& value)
+		FORCEINLINE static const TypeInfo& Function(const Table<KeyType, ValueType>& value)
 		{
 			return StaticTypeInfo;
 		}
@@ -254,12 +254,12 @@ namespace Implementation
 		/** Defined below */
 		static const StructInfo StaticTypeInfo;
 
-		inline static const TypeInfo& Function()
+		FORCEINLINE static const TypeInfo& Function()
 		{
 			return StaticTypeInfo;
 		}
 
-		inline static const TypeInfo& Function(const Pair<A, B>& value)
+		FORCEINLINE static const TypeInfo& Function(const Pair<A, B>& value)
 		{
 			return StaticTypeInfo;
 		}

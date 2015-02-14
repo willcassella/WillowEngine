@@ -41,11 +41,11 @@ public:
 	///   Operators   ///
 public:
 
-	friend inline bool operator==(const Pair& lhs, const Pair& rhs)
+	friend FORCEINLINE bool operator==(const Pair& lhs, const Pair& rhs)
 	{
 		return lhs.First == rhs.First && lhs.Second == rhs.Second;
 	}
-	friend inline bool operator!=(const Pair& lhs, const Pair& rhs)
+	friend FORCEINLINE bool operator!=(const Pair& lhs, const Pair& rhs)
 	{
 		return lhs.First != rhs.First || lhs.Second != rhs.Second;
 	}

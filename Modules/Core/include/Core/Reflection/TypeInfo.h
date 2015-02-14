@@ -63,7 +63,7 @@ public:
 		
 	/** Returns whether this type is castable (via 'reinterpret_cast') to the given type */
 	template <typename AnyType>
-	inline bool IsCastableTo() const
+	FORCEINLINE bool IsCastableTo() const
 	{
 		return IsCastableTo(TypeOf<AnyType>());
 	}
@@ -74,11 +74,11 @@ public:
 
 	TypeInfo& operator=(const TypeInfo& copy) = delete;
 	TypeInfo& operator=(TypeInfo&& move) = delete;
-	friend inline CORE_API bool operator==(const TypeInfo& lhs, const TypeInfo& rhs)
+	friend FORCEINLINE CORE_API bool operator==(const TypeInfo& lhs, const TypeInfo& rhs)
 	{
 		return lhs._name == rhs._name;
 	}
-	friend inline CORE_API bool operator!=(const TypeInfo& lhs, const TypeInfo& rhs)
+	friend FORCEINLINE CORE_API bool operator!=(const TypeInfo& lhs, const TypeInfo& rhs)
 	{
 		return lhs._name != rhs._name;
 	}
@@ -101,7 +101,7 @@ namespace Implementation
 	struct Cast
 	{
 		/** Attempt to cast reference */
-		inline static TargetType* Function(AnyType& value)
+		FORCEINLINE static TargetType* Function(AnyType& value)
 		{
 			if (::TypeOf(value).template IsCastableTo<TargetType>())
 			{
@@ -114,7 +114,7 @@ namespace Implementation
 		}
 
 		/** Attempt to cast immutable reference */
-		inline static const TargetType* Function(const AnyType& value)
+		FORCEINLINE static const TargetType* Function(const AnyType& value)
 		{
 			if (::TypeOf(value).template IsCastableTo<TargetType>())
 			{
@@ -142,7 +142,7 @@ namespace Implementation
 * WARNING: Returns 'nullptr' if the cast is invalid (value does not legally translate to the given type)
 * DO NOT OVERLOAD: Specialize struct 'Implementation::Cast' */
 template <typename TargetType, typename AnyType>
-inline TargetType* Cast(AnyType& value)
+FORCEINLINE TargetType* Cast(AnyType& value)
 {
 	return Implementation::Cast<TargetType, AnyType>::Function(value);
 }
@@ -151,7 +151,7 @@ inline TargetType* Cast(AnyType& value)
 * WARNING: Returns 'nullptr' if the cast is invalid (value does not legally translate to the given type)
 * DO NOT OVERLOAD: Specialize struct 'Implementation::Cast' */
 template <typename TargetType, typename AnyType>
-inline const TargetType* Cast(const AnyType& value)
+FORCEINLINE const TargetType* Cast(const AnyType& value)
 {
 	return Implementation::Cast<TargetType, AnyType>::Function(value);
 }

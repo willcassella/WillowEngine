@@ -92,9 +92,9 @@ bool WillowConvert::ParseOBJFile(const String& path, Array<Mesh::Vertex>& outVer
 		// Parse vertices
 		if (line.StartsWith("v "))
 		{
-			Vec3 vertex;
-			String::Parse(line, "v @ @ @", vertex.X, vertex.Y, vertex.Z);
-			positions.Add(vertex);
+			Vec3 position;
+			String::Parse(line, "v @ @ @", position.X, position.Y, position.Z);
+			positions.Add(position);
 			continue;
 		}
 
@@ -128,16 +128,16 @@ bool WillowConvert::ParseOBJFile(const String& path, Array<Mesh::Vertex>& outVer
 			{
 				// Construct a vertex
 				Mesh::Vertex vertex;
-				Vec3& position = positions[vertexIndex[i] - 1];
+				Vec3 position = positions[vertexIndex[i] - 1];
 				vertex.X = position.X;
 				vertex.Y = position.Y;
 				vertex.Z = position.Z;
 
-				Vec2& textureCoords = coordinates[uvIndex[i] - 1];
+				Vec2 textureCoords = coordinates[uvIndex[i] - 1];
 				vertex.U = textureCoords.X;
 				vertex.V = textureCoords.Y;
 
-				Vec3& normal = normals[normalIndex[i] - 1];
+				Vec3 normal = normals[normalIndex[i] - 1];
 				vertex.I = normal.X;
 				vertex.J = normal.Y;
 				vertex.K = normal.Z;

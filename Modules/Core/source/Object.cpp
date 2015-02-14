@@ -2,6 +2,11 @@
 
 #include "../include/Core/Reflection/ClassInfo.h"
 
+//////////////////////
+///   Reflection   ///
+
+const ClassInfo Object::StaticTypeInfo = ClassInfo(sizeof(Object), "Object", nullptr, true);
+
 ///////////////////
 ///   Methods   ///
 
@@ -19,5 +24,3 @@ bool Object::Implements(const InterfaceInfo& interf) const
 {
 	return GetType().ImplementsInterface(interf);
 }
-
-const ClassInfo& Object::StaticTypeInfo = ClassInfo(sizeof(Object), "Object", nullptr, true);

@@ -42,9 +42,9 @@ typedef std::uint64_t uint64;
 
 /** Determine architecture */
 #if BITS_32
-	typedef uint32 PtrType;
+	typedef uint32 PointerT;
 #elif BITS_64
-	typedef uint64 PtrType;
+	typedef uint64 PointerT;
 #endif
 
 ///////////////////////
@@ -53,3 +53,10 @@ typedef std::uint64_t uint64;
 /** Shortcut for dereferencing 'this', useful for calling operators on self and returning reference to self in a clean way.
 * Still, prefer using 'this->' over 'This'. */
 #define This (*this)
+
+/** Inline macro */
+#if defined _MSC_VER
+	#define FORCEINLINE __forceinline
+#elif defined __clang__ || defined __GNUC__
+	#define FORCEINLINE _attribute__((always_inline))
+#endif

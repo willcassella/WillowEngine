@@ -56,16 +56,16 @@ public:
 		///   Operators   ///
 	public:
 
-		inline Iterator& operator++()
+		FORCEINLINE Iterator& operator++()
 		{
 			_node = _node->Next;
 			return This;
 		}
-		inline T& operator*()
+		FORCEINLINE T& operator*()
 		{
 			return _node->Value;
 		}
-		friend inline bool operator!=(const Iterator& lhs, const Iterator& rhs)
+		friend FORCEINLINE bool operator!=(const Iterator& lhs, const Iterator& rhs)
 		{
 			return lhs._node != rhs._node;
 		}
@@ -93,16 +93,16 @@ public:
 		///   Operators   ///
 	public:
 
-		inline ConstIterator& operator++()
+		FORCEINLINE ConstIterator& operator++()
 		{
 			_node = _node->Next;
 			return This;
 		}
-		inline const T& operator*() const
+		FORCEINLINE const T& operator*() const
 		{
 			return _node->Value;
 		}
-		friend inline bool operator!=(const ConstIterator& lhs, const ConstIterator& rhs)
+		friend FORCEINLINE bool operator!=(const ConstIterator& lhs, const ConstIterator& rhs)
 		{
 			return lhs._node != rhs._node;
 		}
@@ -168,13 +168,13 @@ public:
 public:
 
 	/** Returns the number of elements in this List */
-	inline uint32 Size() const
+	FORCEINLINE uint32 Size() const
 	{
 		return _numElements;
 	}
 
 	/** Returns whether this List is empty */
-	inline bool IsEmpty() const
+	FORCEINLINE bool IsEmpty() const
 	{
 		return Size() == 0;
 	}
@@ -262,7 +262,7 @@ public:
 	}
 
 	/** Returns a portion of this List from the given index to the end */
-	inline List Slice(uint32 start)
+	FORCEINLINE List Slice(uint32 start)
 	{
 		return Slice(start, Size());
 	}
@@ -426,19 +426,19 @@ public:
 	}
 
 	/* Iteration methods */
-	inline Iterator begin()
+	FORCEINLINE Iterator begin()
 	{
 		return Iterator(_first);
 	}
-	inline ConstIterator begin() const
+	FORCEINLINE ConstIterator begin() const
 	{
 		return ConstIterator(_first);
 	}
-	inline Iterator end()
+	FORCEINLINE Iterator end()
 	{
 		return Iterator(nullptr);
 	}
-	inline ConstIterator end() const
+	FORCEINLINE ConstIterator end() const
 	{
 		return ConstIterator(nullptr);
 	}
@@ -546,7 +546,7 @@ public:
 		}
 		return result;
 	}
-	friend inline List& operator+=(List& lhs, const List& rhs)
+	friend FORCEINLINE List& operator+=(List& lhs, const List& rhs)
 	{
 		lhs = lhs + rhs;
 		return lhs;
@@ -574,7 +574,7 @@ public:
 
 		return true;
 	}
-	friend inline bool operator!=(const List& lhs, const List& rhs)
+	friend FORCEINLINE bool operator!=(const List& lhs, const List& rhs)
 	{
 		return !(lhs == rhs);
 	}

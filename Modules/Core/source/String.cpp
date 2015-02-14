@@ -4,68 +4,6 @@
 #include <string>
 #include "../include/Core/String.h"
 
-////////////////
-///   Data   ///
-
-// @TODO: Do something else with this?
-const Table<char, char> LowerToUpper = {
-	{ 'a', 'A' },
-	{ 'b', 'B' },
-	{ 'c', 'C' },
-	{ 'd', 'D' },
-	{ 'e', 'E' },
-	{ 'f', 'F' },
-	{ 'g', 'G' },
-	{ 'h', 'H' },
-	{ 'i', 'I' },
-	{ 'j', 'J' },
-	{ 'k', 'K' },
-	{ 'l', 'L' },
-	{ 'm', 'M' },
-	{ 'n', 'N' },
-	{ 'o', 'O' },
-	{ 'p', 'P' },
-	{ 'q', 'Q' },
-	{ 'r', 'R' },
-	{ 's', 'S' },
-	{ 't', 'T' },
-	{ 'u', 'U' },
-	{ 'v', 'V' },
-	{ 'w', 'W' },
-	{ 'x', 'X' },
-	{ 'y', 'Y' },
-	{ 'z', 'Z' }
-};
-
-const Table <char, char> UpperToLower = {
-	{ 'A', 'a' },
-	{ 'B', 'b' },
-	{ 'C', 'c' },
-	{ 'D', 'd' },
-	{ 'E', 'e' },
-	{ 'F', 'f' },
-	{ 'G', 'g' },
-	{ 'H', 'h' },
-	{ 'I', 'i' },
-	{ 'J', 'j' },
-	{ 'K', 'k' },
-	{ 'L', 'l' },
-	{ 'M', 'm' },
-	{ 'N', 'n' },
-	{ 'O', 'o' },
-	{ 'P', 'p' },
-	{ 'Q', 'q' },
-	{ 'R', 'r' },
-	{ 'S', 's' },
-	{ 'T', 't' },
-	{ 'U', 'u' },
-	{ 'V', 'v' },
-	{ 'W', 'w' },
-	{ 'X', 'x' },
-	{ 'Y', 'y' },
-	{ 'Z', 'z' }
-};
-
 ///////////////////
 ///   Methods   ///
 
@@ -81,20 +19,95 @@ String String::SubString(uint32 start, uint32 end) const
 
 String String::ToUpper() const
 {
-	Array<char> result;
+	Array<char> result(Length());
 
 	for (uint32 i = 0; i < Length(); ++i)
 	{
-		const char* character = LowerToUpper.Find(This[i]);
+		char character = This[i];
 
-		// If the character is already uppercase or not an uppercase-able character
-		if (character == nullptr)
+		switch (character)
 		{
-			result.Add(This[i]);
-		}
-		else
-		{
-			result.Add(*character);
+		case 'a':
+			result.Add('A');
+			break;
+		case 'b':
+			result.Add('B');
+			break;
+		case 'c':
+			result.Add('C');
+			break;
+		case 'd':
+			result.Add('D');
+			break;
+		case 'e':
+			result.Add('E');
+			break;
+		case 'f':
+			result.Add('F');
+			break;
+		case 'g':
+			result.Add('G');
+			break;
+		case 'h':
+			result.Add('H');
+			break;
+		case 'i':
+			result.Add('I');
+			break;
+		case 'j':
+			result.Add('J');
+			break;
+		case 'k':
+			result.Add('K');
+			break;
+		case 'l':
+			result.Add('L');
+			break;
+		case 'm':
+			result.Add('M');
+			break;
+		case 'n':
+			result.Add('N');
+			break;
+		case 'o':
+			result.Add('O');
+			break;
+		case 'p':
+			result.Add('P');
+			break;
+		case 'q':
+			result.Add('Q');
+			break;
+		case 'r':
+			result.Add('R');
+			break;
+		case 's':
+			result.Add('S');
+			break;
+		case 't':
+			result.Add('T');
+			break;
+		case 'u':
+			result.Add('U');
+			break;
+		case 'v':
+			result.Add('V');
+			break;
+		case 'w':
+			result.Add('W');
+			break;
+		case 'x':
+			result.Add('X');
+			break;
+		case 'y':
+			result.Add('Y');
+			break;
+		case 'z':
+			result.Add('Z');
+			break;
+		default:
+			result.Add(character);
+			break;
 		}
 	}
 
@@ -103,20 +116,95 @@ String String::ToUpper() const
 
 String String::ToLower() const
 {
-	Array<char> result;
+	Array<char> result(Length());
 
 	for (uint32 i = 0; i < Length(); ++i)
 	{
-		const char* character = UpperToLower.Find(This[i]);
+		char character = This[i];
 
-		// If the character is already lowercase or not a lowercase-able character
-		if (character == nullptr)
+		switch (character)
 		{
-			result.Add(This[i]);
-		}
-		else
-		{
-			result.Add(*character);
+		case 'A':
+			result.Add('a');
+			break;
+		case 'B':
+			result.Add('b');
+			break;
+		case 'C':
+			result.Add('c');
+			break;
+		case 'D':
+			result.Add('d');
+			break;
+		case 'E':
+			result.Add('e');
+			break;
+		case 'F':
+			result.Add('f');
+			break;
+		case 'G':
+			result.Add('g');
+			break;
+		case 'H':
+			result.Add('h');
+			break;
+		case 'I':
+			result.Add('i');
+			break;
+		case 'J':
+			result.Add('j');
+			break;
+		case 'K':
+			result.Add('k');
+			break;
+		case 'L':
+			result.Add('l');
+			break;
+		case 'M':
+			result.Add('m');
+			break;
+		case 'N':
+			result.Add('n');
+			break;
+		case 'O':
+			result.Add('o');
+			break;
+		case 'P':
+			result.Add('p');
+			break;
+		case 'Q':
+			result.Add('q');
+			break;
+		case 'R':
+			result.Add('r');
+			break;
+		case 'S':
+			result.Add('s');
+			break;
+		case 'T':
+			result.Add('t');
+			break;
+		case 'U':
+			result.Add('u');
+			break;
+		case 'V':
+			result.Add('v');
+			break;
+		case 'W':
+			result.Add('w');
+			break;
+		case 'X':
+			result.Add('x');
+			break;
+		case 'Y':
+			result.Add('y');
+			break;
+		case 'Z':
+			result.Add('z');
+			break;
+		default:
+			result.Add(character);
+			break;
 		}
 	}
 
@@ -238,7 +326,7 @@ String String::GetFileName(const String& path)
 			name = name.SubString(forwardSlashes.Last());
 		}
 	}
-	else
+	else if (!backSlashes.IsEmpty())
 	{
 		name = name.SubString(backSlashes.Last());
 	}
@@ -303,26 +391,257 @@ String operator+(const String& lhs, const String& rhs)
 //////////////////////////
 ///   Implementation   ///
 
-String Implementation::FloatToString(float value)
+namespace Implementation
 {
-	return String(std::to_string(value).c_str());
-}
+	template <typename IntType>
+	FORCEINLINE String IntToString(IntType value)
+	{
+		String result;
 
-String Implementation::FloatFromString(float& value, const String& string)
-{
-	size_t remainder;
-	value = std::stof(string.Cstr(), &remainder);
-	return "Not finished";
-}
+		if (value < 0)
+		{
+			result = '-';
+			value *= -1;
+		}
 
-String Implementation::DoubleToString(double value)
-{
-	return String(std::to_string(value).c_str());
-}
+		if (value == 0)
+		{
+			return '0';
+		}
 
-String Implementation::DoubleFromString(double& value, const String& string)
-{
-	size_t remainder;
-	value = std::stod(string.Cstr(), &remainder);
-	return "Not finished";
+		while (value != 0)
+		{
+			IntType digit = value % 10;
+
+			switch (digit)
+			{
+			case 0:
+				result += '0';
+				break;
+			case 1:
+				result += '1';
+				break;
+			case 2:
+				result += '2';
+				break;
+			case 3:
+				result += '3';
+				break;
+			case 4:
+				result += '4';
+				break;
+			case 5:
+				result += '5';
+				break;
+			case 6:
+				result += '6';
+				break;
+			case 7:
+				result += '7';
+				break;
+			case 8:
+				result += '8';
+				break;
+			case 9:
+				result += '9';
+			}
+
+			value /= 10;
+		}
+
+		return result.Reverse();
+	}
+
+	template <typename IntType>
+	FORCEINLINE String IntFromString(IntType& value, const String& string)
+	{
+		value = 0;
+
+		for (uint32 i = 0; i < string.Length(); ++i)
+		{
+			switch (string[i])
+			{
+			case '0':
+				value *= 10;
+				break;
+			case '1':
+				value *= 10;
+				value += 1;
+				break;
+			case '2':
+				value *= 10;
+				value += 2;
+				break;
+			case '3':
+				value *= 10;
+				value += 3;
+				break;
+			case '4':
+				value *= 10;
+				value += 4;
+				break;
+			case '5':
+				value *= 10;
+				value += 5;
+				break;
+			case '6':
+				value *= 10;
+				value += 6;
+				break;
+			case '7':
+				value *= 10;
+				value += 7;
+				break;
+			case '8':
+				value *= 10;
+				value += 8;
+				break;
+			case '9':
+				value *= 10;
+				value += 9;
+				break;
+			default:
+				return string.SubString(i);
+			}
+		}
+
+		return "";
+	}
+
+	String ToString<bool>::Function(bool value)
+	{
+		if (value)
+		{
+			return String("true");
+		}
+		else
+		{
+			return String("false");
+		}
+	}
+
+	String FromString<bool>::Function(bool& value, const String& string)
+	{
+		String head = string.SubString(0, 6).ToLower();
+
+		if (head.StartsWith("true"))
+		{
+			value = true;
+			return string.SubString(4);
+		}
+		else if (head.StartsWith("false"))
+		{
+			value = false;
+			return string.SubString(5);
+		}
+		else
+		{
+			return string;
+		}
+	}
+
+	String ToString<char>::Function(char value)
+	{
+		return String(value);
+	}
+
+	String FromString<char>::Function(char& value, const String& string)
+	{
+		value = string[1];
+		return string.SubString(1);
+	}
+
+	String ToString<byte>::Function(byte value)
+	{
+		return IntToString(value);
+	}
+
+	String FromString<byte>::Function(byte& value, const String& string)
+	{
+		return IntFromString(value, string);
+	}
+
+	String ToString<int16>::Function(int16 value)
+	{
+		return IntToString(value);
+	}
+
+	String FromString<int16>::Function(int16& value, const String& string)
+	{
+		return IntFromString(value, string);
+	}
+
+	String ToString<int32>::Function(int32 value)
+	{
+		return IntToString(value);
+	}
+
+	String FromString<int32>::Function(int32& value, const String& string)
+	{
+		return IntFromString(value, string);
+	}
+
+	String ToString<int64>::Function(int64 value)
+	{
+		return IntToString(value);
+	}
+
+	String FromString<int64>::Function(int64& value, const String& string)
+	{
+		return IntFromString(value, string);
+	}
+
+	String ToString<uint16>::Function(uint16 value)
+	{
+		return IntToString(value);
+	}
+
+	String FromString<uint16>::Function(uint16& value, const String& string)
+	{
+		return IntFromString(value, string);
+	}
+
+	String ToString<uint32>::Function(uint32 value)
+	{
+		return IntToString(value);
+	}
+
+	String FromString<uint32>::Function(uint32& value, const String& string)
+	{
+		return IntFromString(value, string);
+	}
+
+	String ToString<uint64>::Function(uint64 value)
+	{
+		return IntToString(value);
+	}
+
+	String FromString<uint64>::Function(uint64& value, const String& string)
+	{
+		return IntFromString(value, string);
+	}
+
+	String ToString<float>::Function(float value)
+	{
+		return String(std::to_string(value).c_str());
+	}
+
+	String FromString<float>::Function(float& value, const String& string)
+	{
+		size_t remainder;
+		value = std::stof(string.Cstr(), &remainder);
+		return string.SubString(static_cast<uint32>(remainder));
+	}
+
+	String ToString<double>::Function(double value)
+	{
+		return String(std::to_string(value).c_str());
+	}
+
+	String FromString<double>::Function(double& value, const String& string)
+	{
+		size_t remainder;
+		value = std::stod(string.Cstr(), &remainder);
+		return string.SubString(static_cast<uint32>(remainder));
+	}
 }

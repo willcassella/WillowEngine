@@ -49,16 +49,16 @@ public:
 		///   Operators   ///
 	public:
 
-		inline Iterator& operator++()
+		FORCEINLINE Iterator& operator++()
 		{
 			_node = 
 			return This;
 		}
-		inline T& operator*()
+		FORCEINLINE T& operator*()
 		{
 			return _node->Value;
 		}
-		friend inline bool operator!=(const Iterator& lhs, const Iterator& rhs)
+		friend FORCEINLINE bool operator!=(const Iterator& lhs, const Iterator& rhs)
 		{
 			return lhs._node == rhs._node;
 		}
@@ -87,16 +87,16 @@ public:
 		///   Operators   ///
 	public:
 
-		inline ConstIterator& operator++()
+		FORCEINLINE ConstIterator& operator++()
 		{
 			_node = _node->Next;
 			return This;
 		}
-		inline const T& operator*() const
+		FORCEINLINE const T& operator*() const
 		{
 			return _node->Value;
 		}
-		friend inline bool operator!=(const ConstIterator& lhs, const ConstIterator& rhs)
+		friend FORCEINLINE bool operator!=(const ConstIterator& lhs, const ConstIterator& rhs)
 		{
 			return lhs._node != rhs._node;
 		}

@@ -207,21 +207,21 @@ namespace Implementation
 
 /** Unpack Value */
 template <typename TargetType>
-inline TargetType Unpack(Value& value)
+FORCEINLINE TargetType Unpack(Value& value)
 {
 	return Implementation::Unpack<TargetType>::Function(value);
 }
 
 /** Unpack immutable Value */
 template <typename TargetType>
-inline TargetType Unpack(const Value& value)
+FORCEINLINE TargetType Unpack(const Value& value)
 {
 	return Implementation::Unpack<TargetType>::Function(value);
 }
 
 /** Unpack Reference */
 template <typename TargetType>
-inline TargetType Unpack(const Reference& value)
+FORCEINLINE TargetType Unpack(const Reference& value)
 {
 	return Implementation::Unpack<TargetType>::Function(value);
 }

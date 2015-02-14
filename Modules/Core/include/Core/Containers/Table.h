@@ -24,7 +24,6 @@ public:
 	///   Constructors   ///
 public:
 
-	// @TODO: Do I have to write these?
 	Table()
 		: _values()
 	{
@@ -38,6 +37,8 @@ public:
 			This[value.First] = value.Second;
 		}
 	}
+
+	/** @TODO: Remove these constructors / operators once Microsoft FIXES THEIR FUCKING COMPILER */
 	Table(const Table& copy)
 		: _values(copy._values)
 	{
@@ -58,7 +59,7 @@ public:
 public:
 
 	/** Returns the number of key-value pairs in this table */
-	inline uint32 Size() const
+	FORCEINLINE uint32 Size() const
 	{
 		return _values.Size();
 	}
@@ -92,7 +93,7 @@ public:
 	}
 
 	/** Returns whether the given key-value pair exists in this Table */
-	inline bool Contains(const Pair<KeyType, ValueType>& pair)
+	FORCEINLINE bool Contains(const Pair<KeyType, ValueType>& pair)
 	{
 		return _values.Contains(pair);
 	}
@@ -126,25 +127,25 @@ public:
 	}
 
 	/** Deletes all key-value pairs from the table */
-	inline void Clear()
+	FORCEINLINE void Clear()
 	{
 		_values.Clear();
 	}
 
 	/* Iteration methods */
-	inline Iterator begin()
+	FORCEINLINE Iterator begin()
 	{
 		return _values.begin();
 	}
-	inline ConstIterator begin() const
+	FORCEINLINE ConstIterator begin() const
 	{
 		return _values.begin();
 	}
-	inline Iterator end()
+	FORCEINLINE Iterator end()
 	{
 		return _values.end();
 	}
-	inline ConstIterator end() const
+	FORCEINLINE ConstIterator end() const
 	{
 		return _values.end();
 	}

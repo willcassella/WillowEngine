@@ -15,7 +15,7 @@ namespace Implementation
 	template <typename AnyType>
 	struct StackFactory
 	{
-		inline static Value Function()
+		FORCEINLINE static Value Function()
 		{
 			return AnyType();
 		}
@@ -25,7 +25,7 @@ namespace Implementation
 	template <typename AnyType>
 	struct HeapFactory
 	{
-		inline static Reference Function()
+		FORCEINLINE static Reference Function()
 		{
 			return *new AnyType();
 		}
@@ -35,7 +35,7 @@ namespace Implementation
 	template <>
 	struct StackFactory < bool >
 	{
-		inline static Value Function()
+		FORCEINLINE static Value Function()
 		{
 			return bool(false);
 		}
@@ -45,7 +45,7 @@ namespace Implementation
 	template <>
 	struct HeapFactory < bool >
 	{
-		inline static Reference Function()
+		FORCEINLINE static Reference Function()
 		{
 			return *new bool(false);
 		}
@@ -55,7 +55,7 @@ namespace Implementation
 	template <>
 	struct StackFactory < char >
 	{
-		inline static Value Function()
+		FORCEINLINE static Value Function()
 		{
 			return char('\0');
 		}
@@ -65,7 +65,7 @@ namespace Implementation
 	template <>
 	struct HeapFactory < char >
 	{
-		inline static Reference Function()
+		FORCEINLINE static Reference Function()
 		{
 			return *new char('\0');
 		}
@@ -75,7 +75,7 @@ namespace Implementation
 	template <>
 	struct StackFactory < byte >
 	{
-		inline static Value Function()
+		FORCEINLINE static Value Function()
 		{
 			return byte(0);
 		}
@@ -85,7 +85,7 @@ namespace Implementation
 	template<>
 	struct HeapFactory < byte >
 	{
-		inline static Reference Function()
+		FORCEINLINE static Reference Function()
 		{
 			return *new byte(0);
 		}
@@ -95,7 +95,7 @@ namespace Implementation
 	template <>
 	struct StackFactory < int16 >
 	{
-		inline static Value Function()
+		FORCEINLINE static Value Function()
 		{
 			return int16(0);
 		}
@@ -105,7 +105,7 @@ namespace Implementation
 	template <>
 	struct HeapFactory < int16 >
 	{
-		inline static Reference Function()
+		FORCEINLINE static Reference Function()
 		{
 			return *new int16(0);
 		}
@@ -115,7 +115,7 @@ namespace Implementation
 	template <>
 	struct StackFactory < int32 >
 	{
-		inline static Value Function()
+		FORCEINLINE static Value Function()
 		{
 			return int32(0);
 		}
@@ -125,7 +125,7 @@ namespace Implementation
 	template <>
 	struct HeapFactory < int32 >
 	{
-		inline static Reference Function()
+		FORCEINLINE static Reference Function()
 		{
 			return *new int32(0);
 		}
@@ -135,7 +135,7 @@ namespace Implementation
 	template <>
 	struct StackFactory < int64 >
 	{
-		inline static Value Function()
+		FORCEINLINE static Value Function()
 		{
 			return int64(0);
 		}
@@ -145,7 +145,7 @@ namespace Implementation
 	template <>
 	struct HeapFactory < int64 >
 	{
-		inline static Reference Function()
+		FORCEINLINE static Reference Function()
 		{
 			return *new int64(0);
 		}
@@ -155,7 +155,7 @@ namespace Implementation
 	template <>
 	struct StackFactory < uint16 >
 	{
-		inline static Value Function()
+		FORCEINLINE static Value Function()
 		{
 			return uint16(0);
 		}
@@ -165,7 +165,7 @@ namespace Implementation
 	template <>
 	struct HeapFactory < uint16 >
 	{
-		inline static Reference Function()
+		FORCEINLINE static Reference Function()
 		{
 			return *new uint16(0);
 		}
@@ -175,7 +175,7 @@ namespace Implementation
 	template <>
 	struct StackFactory < uint32 >
 	{
-		inline static Value Function()
+		FORCEINLINE static Value Function()
 		{
 			return int32(0);
 		}
@@ -185,7 +185,7 @@ namespace Implementation
 	template <>
 	struct HeapFactory < uint32 >
 	{
-		inline static Reference Function()
+		FORCEINLINE static Reference Function()
 		{
 			return *new uint32(0);
 		}
@@ -195,7 +195,7 @@ namespace Implementation
 	template <>
 	struct StackFactory < uint64 >
 	{
-		inline static Value Function()
+		FORCEINLINE static Value Function()
 		{
 			return uint64(0);
 		}
@@ -205,7 +205,7 @@ namespace Implementation
 	template <>
 	struct HeapFactory < uint64 >
 	{
-		inline static Reference Function()
+		FORCEINLINE static Reference Function()
 		{
 			return *new uint64(0);
 		}
@@ -215,7 +215,7 @@ namespace Implementation
 	template <>
 	struct StackFactory < float >
 	{
-		inline static Value Function()
+		FORCEINLINE static Value Function()
 		{
 			return float(0);
 		}
@@ -225,7 +225,7 @@ namespace Implementation
 	template <>
 	struct HeapFactory < float >
 	{
-		inline static Reference Function()
+		FORCEINLINE static Reference Function()
 		{
 			return *new float(0);
 		}
@@ -235,7 +235,7 @@ namespace Implementation
 	template <>
 	struct StackFactory < double >
 	{
-		inline static Value Function()
+		FORCEINLINE static Value Function()
 		{
 			return double(0);
 		}
@@ -245,7 +245,7 @@ namespace Implementation
 	template <>
 	struct HeapFactory < double >
 	{
-		inline static Reference Function()
+		FORCEINLINE static Reference Function()
 		{
 			return *new double(0);
 		}
@@ -255,7 +255,7 @@ namespace Implementation
 	template <typename AnyType>
 	struct StackFactory < AnyType* >
 	{
-		inline static Value Function()
+		FORCEINLINE static Value Function()
 		{
 			// Fuck you, error C2275
 			AnyType* value = nullptr;
@@ -267,7 +267,7 @@ namespace Implementation
 	template <typename AnyType>
 	struct HeapFactory < AnyType* >
 	{
-		inline static Reference Function()
+		FORCEINLINE static Reference Function()
 		{
 			return *new AnyType*(nullptr);
 		}

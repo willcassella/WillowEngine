@@ -1,7 +1,6 @@
 // ClassInfo.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <type_traits>
 #include "TypeInfo.h"
 #include "FieldInfo.h"
 

@@ -82,12 +82,12 @@ namespace Implementation
 	{
 		static const PointerInfo StaticPointerInfo;
 
-		inline static const TypeInfo& Function()
+		FORCEINLINE static const TypeInfo& Function()
 		{
 			return StaticPointerInfo;
 		}
 
-		inline static const TypeInfo& Function(AnyType* value)
+		FORCEINLINE static const TypeInfo& Function(AnyType* value)
 		{
 			return StaticPointerInfo;
 		}
@@ -103,12 +103,12 @@ namespace Implementation
 	{
 		static const PointerInfo StaticPointerInfo;
 
-		inline static const TypeInfo& Function()
+		FORCEINLINE static const TypeInfo& Function()
 		{
 			return StaticPointerInfo;
 		}
 
-		inline static const TypeInfo& Function(const AnyType* value)
+		FORCEINLINE static const TypeInfo& Function(const AnyType* value)
 		{
 			return StaticPointerInfo;
 		}

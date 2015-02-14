@@ -21,7 +21,7 @@ public:
 	/** Returns a String representation of this Object */
 	virtual String ToString() const;
 
-	/** Returns the underlying type of this Object */
+	/** Returns the type information for this object */
 	virtual const ClassInfo& GetType() const = 0;
 
 	/** Returns whether this object is an instance of the given class */
@@ -32,7 +32,7 @@ public:
 
 	/** Returns whether this Object is an instance of the given class */
 	template <class AnyClass>
-	inline bool IsA() const
+	FORCEINLINE bool IsA() const
 	{
 		// If your code fails here, 'AnyClass' is not a reflectable class
 		return IsA(AnyClass::StaticTypeInfo);
@@ -40,12 +40,12 @@ public:
 
 	/** Returns whether this Object implements the given interface */
 	template <class AnyInterface>
-	inline bool Implements() const
+	FORCEINLINE bool Implements() const
 	{
 		// If your code fails here, 'AnyInterface' is not a reflectable interface
 		return Implements(AnyInterface::StaticTypeInfo());
 	}
 
 	/** Type information for 'Object' */
-	static const ClassInfo& StaticTypeInfo;
+	static const ClassInfo StaticTypeInfo;
 };

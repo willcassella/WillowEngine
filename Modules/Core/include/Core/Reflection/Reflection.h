@@ -1,5 +1,5 @@
 // Reflection.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
-/** Many types in the reflection system are highly inter-related, so this
+/** Many types in the reflection system are highly inter-dependent, so this
 * header has forward-declarations for all of them */
 #pragma once
 
@@ -17,6 +17,12 @@ class ClassInfo;
 
 /** Defined in 'InterfaceInfo.h' */
 class InterfaceInfo;
+
+/** Defined in 'PrimitiveInfo.h' */
+class PrimitiveInfo;
+
+/** Defined in 'PointerInfo.h' */
+class PointerInfo;
 
 /** Defined in 'Reference.h' */
 struct Reference;
@@ -37,12 +43,12 @@ namespace Implementation
 	template <typename AnyType>
 	struct TypeOf
 	{
-		inline static const TypeInfo& Function()
+		FORCEINLINE static const TypeInfo& Function()
 		{
 			return AnyType::StaticTypeInfo;
 		}
 
-		inline static const TypeInfo& Function(const AnyType& value)
+		FORCEINLINE static const TypeInfo& Function(const AnyType& value)
 		{
 			return value.GetType();
 		}
@@ -63,7 +69,7 @@ Reference HeapFactory();
 /** Retrieves the type information for the given type
 * DO NOT OVERLOAD: Specialize struct 'Implementation::TypeOf' */
 template <typename AnyType>
-inline const TypeInfo& TypeOf()
+FORCEINLINE const TypeInfo& TypeOf()
 {
 	return Implementation::TypeOf<AnyType>::Function();
 }
@@ -71,7 +77,7 @@ inline const TypeInfo& TypeOf()
 /** Retrieves the type information for the given value 
 * DO NOT OVERLOAD: Specialize struct 'Implementation::TypeOf' */
 template <typename AnyType>
-inline const TypeInfo& TypeOf(const AnyType& value)
+FORCEINLINE const TypeInfo& TypeOf(const AnyType& value)
 {
 	return Implementation::TypeOf<AnyType>::Function(value);
 }
@@ -84,7 +90,7 @@ inline const TypeInfo& TypeOf(const AnyType& value)
 #define REFLECTABLE_STRUCT						\
 public:											\
 	static const StructInfo StaticTypeInfo;		\
-	inline const StructInfo& GetType() const	\
+	FORCEINLINE const StructInfo& GetType() const	\
 	{											\
 		return StaticTypeInfo;					\
 	}
