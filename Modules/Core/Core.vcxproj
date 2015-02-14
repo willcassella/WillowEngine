@@ -55,6 +55,7 @@
     <ClCompile Include="source\config.cpp" />
     <ClCompile Include="source\Console.cpp" />
     <ClCompile Include="source\Interface.cpp" />
+    <ClCompile Include="source\Misc\TimeStamp.cpp" />
     <ClCompile Include="source\Object.cpp" />
     <ClCompile Include="source\Reflection\ClassInfo.cpp" />
     <ClCompile Include="source\Reflection\InterfaceInfo.cpp" />

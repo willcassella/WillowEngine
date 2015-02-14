@@ -164,6 +164,9 @@
     <ClCompile Include="source\Application.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="source\Misc\TimeStamp.cpp">
+      <Filter>source\Misc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="ProjectPony.vcxproj.filters">
