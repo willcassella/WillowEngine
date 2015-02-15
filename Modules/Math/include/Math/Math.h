@@ -8,7 +8,7 @@
 	
 /** Returns the max of two values, with preference to 'a' */
 template <typename T>
-const T& Max(const T& a, const T& b)
+FORCEINLINE const T& Max(const T& a, const T& b)
 {
 	if (a >= b)
 	{
@@ -22,7 +22,7 @@ const T& Max(const T& a, const T& b)
 
 /** Returns the least of two values, with preference to 'a' */
 template <typename T>
-const T& Min(const T& a, const T& b)
+FORCEINLINE const T& Min(const T& a, const T& b)
 {
 	if (a <= b)
 	{
@@ -47,3 +47,5 @@ bool InRange(const T& value, const T& lower, const T& upper, bool inclusive = tr
 		return value > lower && value < upper;
 	}
 }
+
+// @TODO: sin, cosine, sqrt, tan, etc

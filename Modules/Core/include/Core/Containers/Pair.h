@@ -1,30 +1,27 @@
 // Pair.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
+#include "../config.h"
+
 /** A pair of values */
-template <typename A, typename B>
+template <typename FirstType, typename SecondType>
 struct Pair final
 {
 	////////////////////////
 	///   Constructors   ///
 public:
 
-	/** Default-construct a Pair */
 	Pair()
 		: First(), Second()
 	{
 		// All done
 	}
-
-	/** Construct a Pair given an instance of the 'A' type */
-	Pair(const A& first)
+	Pair(const FirstType& first)
 		: First(first), Second()
 	{
 		// All done
 	}
-
-	/** Construct a Pair given an instance of the 'A' type and the 'B' type */
-	Pair(const A& first, const B& second)
+	Pair(const FirstType& first, const SecondType& second)
 		: First(first), Second(second)
 	{
 		// All done
@@ -34,8 +31,8 @@ public:
 	///   Fields   ///
 public:
 
-	A First;
-	B Second;
+	FirstType First;
+	SecondType Second;
 
 	/////////////////////
 	///   Operators   ///

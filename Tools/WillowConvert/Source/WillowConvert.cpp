@@ -2,8 +2,6 @@
 
 #include <fstream>
 #include <Core/Console.h>
-#include <Math/Vec2.h>
-#include <Math/Vec3.h>
 #include <Resource/TextFile.h>
 #include <Resource/ResourceHandle.h>
 #include "../include/WillowConvert/WillowConvert.h"
@@ -76,9 +74,13 @@ WillowConvert::InputType WillowConvert::ParsePath(const String& path)
 
 bool WillowConvert::ParseOBJFile(const String& path, Array<Mesh::Vertex>& outVertices, Array<uint32>& outElements, bool compress)
 {
-	Array<Vec3> positions;
-	Array<Vec2> coordinates;
-	Array<Vec3> normals;
+	typedef Tuple<float, float, float> Position;
+	typedef Pair<float, float> UVCoordinate;
+	typedef Tuple<float, float, float> Normal;
+
+	Array<Position> positions;
+	Array<UVCoordinate> coordinates;
+	Array<Normal> normals;
 
 	ResourceHandle<TextFile> file(path);
 
@@ -92,8 +94,8 @@ bool WillowConvert::ParseOBJFile(const String& path, Array<Mesh::Vertex>& outVer
 		// Parse vertices
 		if (line.StartsWith("v "))
 		{
-			Vec3 position;
-			String::Parse(line, "v @ @ @", position.X, position.Y, position.Z);
+			Position position;
+			String::Parse(line, "v @ @ @", position.First, position.Second, position.Third);
 			positions.Add(position);
 			continue;
 		}
@@ -101,8 +103,8 @@ bool WillowConvert::ParseOBJFile(const String& path, Array<Mesh::Vertex>& outVer
 		// Parse texture coordinates
 		if (line.StartsWith("vt "))
 		{
-			Vec2 coordinate;
-			String::Parse(line, "vt @ @", coordinate.X, coordinate.Y);
+			UVCoordinate coordinate;
+			String::Parse(line, "vt @ @", coordinate.First, coordinate.Second);
 			coordinates.Add(coordinate);
 			continue;
 		}
@@ -110,8 +112,8 @@ bool WillowConvert::ParseOBJFile(const String& path, Array<Mesh::Vertex>& outVer
 		// Parse vertex normals
 		if (line.StartsWith("vn "))
 		{
-			Vec3 normal;
-			String::Parse(line, "vn @ @ @", normal.X, normal.Y, normal.Z);
+			Normal normal;
+			String::Parse(line, "vn @ @ @", normal.First, normal.Second, normal.Third);
 			normals.Add(normal);
 			continue;
 		}
@@ -128,19 +130,19 @@ bool WillowConvert::ParseOBJFile(const String& path, Array<Mesh::Vertex>& outVer
 			{
 				// Construct a vertex
 				Mesh::Vertex vertex;
-				Vec3 position = positions[vertexIndex[i] - 1];
-				vertex.X = position.X;
-				vertex.Y = position.Y;
-				vertex.Z = position.Z;
+				Position position = positions[vertexIndex[i] - 1];
+				vertex.X = position.First;
+				vertex.Y = position.Second;
+				vertex.Z = position.Third;
 
-				Vec2 textureCoords = coordinates[uvIndex[i] - 1];
-				vertex.U = textureCoords.X;
-				vertex.V = textureCoords.Y;
+				UVCoordinate textureCoords = coordinates[uvIndex[i] - 1];
+				vertex.U = textureCoords.First;
+				vertex.V = textureCoords.Second;
 
-				Vec3 normal = normals[normalIndex[i] - 1];
-				vertex.I = normal.X;
-				vertex.J = normal.Y;
-				vertex.K = normal.Z;
+				Normal normal = normals[normalIndex[i] - 1];
+				vertex.I = normal.First;
+				vertex.J = normal.Second;
+				vertex.K = normal.Third;
 
 				if (compress)
 				{

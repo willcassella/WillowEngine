@@ -29,6 +29,7 @@
     <ClInclude Include="include\Core\Containers\Queue.h" />
     <ClInclude Include="include\Core\Containers\Stack.h" />
     <ClInclude Include="include\Core\Containers\Table.h" />
+    <ClInclude Include="include\Core\Containers\Tuple.h" />
     <ClInclude Include="include\Core\Exception.h" />
     <ClInclude Include="include\Core\Interface.h" />
     <ClInclude Include="include\Core\Misc\TimeStamp.h" />

@@ -42,9 +42,6 @@
     <ClInclude Include="include\Core\Containers\Stack.h">
       <Filter>include\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Containers\Table.h">
-      <Filter>include\Containers</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Reflection\ClassInfo.h">
       <Filter>include\Reflection</Filter>
     </ClInclude>
@@ -113,6 +110,12 @@
     </ClInclude>
     <ClInclude Include="include\Core\Misc\TimeStamp.h">
       <Filter>include\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Containers\Table.h">
+      <Filter>include\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Containers\Tuple.h">
+      <Filter>include\Containers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

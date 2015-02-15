@@ -248,8 +248,8 @@ namespace Implementation
 		StructInfo::Create<Table<KeyType, ValueType>>(String::Format("Table<@, @>", ::TypeOf<KeyType>().GetName(), ::TypeOf<ValueType>().GetName()));
 
 	/** TypeOf for Pair */
-	template <typename A, typename B>
-	struct TypeOf < Pair<A, B> >
+	template <typename FirstType, typename SecondType>
+	struct TypeOf < Pair<FirstType, SecondType> >
 	{
 		/** Defined below */
 		static const StructInfo StaticTypeInfo;
@@ -259,13 +259,83 @@ namespace Implementation
 			return StaticTypeInfo;
 		}
 
-		FORCEINLINE static const TypeInfo& Function(const Pair<A, B>& value)
+		FORCEINLINE static const TypeInfo& Function(const Pair<FirstType, SecondType>& value)
 		{
 			return StaticTypeInfo;
 		}
 	};
 
 	/** Register TypeInfo for Pair */
-	template <typename A, typename B>
-	const StructInfo TypeOf<Pair<A, B>>::StaticTypeInfo = StructInfo::Create<Pair<A, B>>(String::Format("Pair<@, @>", ::TypeOf<A>().GetName(), ::TypeOf<B>().GetName()));
+	template <typename FirstType, typename SecondType>
+	const StructInfo TypeOf<Pair<FirstType, SecondType>>::StaticTypeInfo = StructInfo::Create<Pair<FirstType, SecondType>>(
+		String::Format("Pair<@, @>", ::TypeOf<FirstType>().GetName(), ::TypeOf<SecondType>().GetName()));
+
+	/** TypeOf for 3 Tuple */
+	template <typename FirstType, typename SecondType, typename ThirdType>
+	struct TypeOf < Tuple<FirstType, SecondType, ThirdType> >
+	{
+		/** Defined below */
+		static const StructInfo StaticTypeInfo;
+
+		FORCEINLINE static const TypeInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const TypeInfo& Function(const Tuple<FirstType, SecondType, ThirdType>& value)
+		{
+			return StaticTypeInfo;
+		}
+	};
+
+	/** Register TypeInfo for 3 Tuple */
+	template <typename FirstType, typename SecondType, typename ThirdType>
+	const StructInfo TypeOf<Tuple<FirstType, SecondType, ThirdType>>::StaticTypeInfo = StructInfo::Create<Tuple<FirstType, SecondType, ThirdType>>(
+		String::Format("Tuple<@, @, @>", ::TypeOf<FirstType>().GetName(), ::TypeOf<SecondType>().GetName(), ::TypeOf<ThirdType>().GetName()));
+
+	/** TypeInfo for 4 Tuple */
+	template <typename FirstType, typename SecondType, typename ThirdType, typename FourthType>
+	struct TypeOf < Tuple<FirstType, SecondType, ThirdType, FourthType> >
+	{
+		/** Defined below */
+		static const StructInfo StaticTypeInfo;
+
+		FORCEINLINE static const TypeInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const TypeInfo& Function(const Tuple<FirstType, SecondType, ThirdType, FourthType>& value)
+		{
+			return StaticTypeInfo;
+		}
+	};
+
+	/** Register TypeInfo for 4 Tuple */
+	template <typename FirstType, typename SecondType, typename ThirdType, typename FourthType>
+	const StructInfo TypeOf<Tuple<FirstType, SecondType, ThirdType, FourthType>>::StaticTypeInfo = StructInfo::Create<Tuple<FirstType, SecondType, ThirdType, FourthType>>(
+		String::Format("Tuple<@, @, @, @>", ::TypeOf<FirstType>().Getname(), ::TypeOf<SecondType>().GetName(), ::TypeOf<ThirdType>().GetName(), ::TypeOf<FourthType>().GetName()));
+
+	/** TypeInfo for 5 Tuple */
+	template <typename FirstType, typename SecondType, typename ThirdType, typename FourthType, typename FifthType>
+	struct TypeOf < Tuple<FirstType, SecondType, ThirdType, FourthType, FifthType> >
+	{
+		/** Defined below */
+		static const StructInfo StaticTypeInfo;
+
+		FORCEINLINE static const TypeInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const TypeInfo& Function(const Tuple<FirstType, SecondType, ThirdType, FourthType, FifthType>& value)
+		{
+			return StaticTypeInfo;
+		}
+	};
+
+	/** Register TypeInfo for 5 Tuple */
+	template <typename FirstType, typename SecondType, typename ThirdType, typename FourthType, typename FifthType>
+	const StructInfo TypeOf<Tuple<FirstType, SecondType, ThirdType, FourthType, FifthType>>::StaticTypeInfo = StructInfo::Create<Tuple<FirstType, SecondType, ThirdType, FourthType, FifthType>>(
+		String::Format("Tuple<@, @, @, @>", ::TypeOf<FirstType>().GetName(), ::TypeOf<SecondType>().GetName(), ::TypeOf<ThirdType>().GetName(), ::TypeOf<FourthType>().GetName(), ::TypeOf<FifthType>().GetName()));
 }

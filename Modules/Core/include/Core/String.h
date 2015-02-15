@@ -2,6 +2,7 @@
 /** All code for creating and manipulating Strings lives here */
 #pragma once
 
+#include "Containers/Tuple.h"
 #include "Containers/List.h"
 #include "Containers/Queue.h"
 #include "Containers/Stack.h"
@@ -824,30 +825,30 @@ namespace Implementation
 	};
 
 	/** Convert a Pair to a String */
-	template <typename A, typename B>
-	struct ToString < Pair<A, B> >
+	template <typename FirstType, typename SecondType>
+	struct ToString < Pair<FirstType, SecondType> >
 	{
-		FORCEINLINE static String Function(const Pair<A, B>& value)
+		FORCEINLINE static String Function(const Pair<FirstType, SecondType>& value)
 		{
 			return String::Format("{@ | @}", value.First, value.Second);
 		}
 	};
 
-	/** Convert a Pair with A as a String to a String */
-	template <typename B>
-	struct ToString < Pair<String, B> >
+	/** Convert a Pair with 'FirstType' as a String to a String */
+	template <typename SecondType>
+	struct ToString < Pair<String, SecondType> >
 	{
-		FORCEINLINE static String Function(const Pair<String, B>& value)
+		FORCEINLINE static String Function(const Pair<String, SecondType>& value)
 		{
 			return String::Format("{\"@\" | @}", value.First, value.Second);
 		}
 	};
 
-	/** Convert a Pair with B as a String to a String */
-	template <typename A>
-	struct ToString < Pair<A, String> >
+	/** Convert a Pair with 'SecondType' as a String to a String */
+	template <typename FirstType>
+	struct ToString < Pair<FirstType, String> >
 	{
-		FORCEINLINE static String Function(const Pair<A, String>& value)
+		FORCEINLINE static String Function(const Pair<FirstType, String>& value)
 		{
 			return String::Format("{@ | \"@\"}", value.First, value.Second);
 		}
@@ -864,10 +865,10 @@ namespace Implementation
 	};
 
 	/** Parse a Pair from a String */
-	template <typename A, typename B>
-	struct FromString < Pair<A, B> >
+	template <typename FirstType, typename SecondType>
+	struct FromString < Pair<FirstType, SecondType> >
 	{
-		FORCEINLINE static String Function(Pair<A, B>& value, const String& string)
+		FORCEINLINE static String Function(Pair<FirstType, SecondType>& value, const String& string)
 		{
 			return String::Parse(string, "{@ | @}", value.First, value.Second);
 		}

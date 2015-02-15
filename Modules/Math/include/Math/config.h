@@ -11,3 +11,11 @@
 #else
 	#define MATH_API IMPORT
 #endif
+
+//////////////////////////////
+///   Module Information   ///
+
+namespace Math
+{
+	MATH_API const Module* GetModuleInfo();
+}

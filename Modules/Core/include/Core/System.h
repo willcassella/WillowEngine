@@ -56,12 +56,12 @@ typedef std::uint64_t uint64;
 
 /** Inline macro */
 #if defined _MSC_VER
-	/** We're on MSVC, so we can use the __forceinline attribute */
+	/** We're on MSVC, so use the __forceinline attribute */
 	#define FORCEINLINE __forceinline
 #elif defined __clang__ || defined __GNUC__
-	/** We're on clang or gcc, so we can use this syntax */
-	#define FORCEINLINE __attribute__((always_inline))
+	/** We're on clang or gcc, so use the __attribute__((always_inline)) attribute */
+	#define FORCEINLINE inline __attribute__((always_inline))
 #else
-	/** We're on some other random compiler, so we have to do this */
+	/** We're on some unknown compiler, so just use normal inline */
 	#define FORCEINLINE inline
 #endif
