@@ -502,6 +502,17 @@ namespace Implementation
 		}
 	};
 
+	/** Convert a clang/gcc c-string literal to a String
+	* NOTE: A clang/gcc c-string literal cannot be parsed from a String */
+	template <std::size_t size>
+	struct ToString < char[size] >
+	{
+		FORCEINLINE static String Function(const char value[size])
+		{
+			return String(value);
+		}
+	};
+
 	/** Convert a String to a String */
 	template <>
 	struct CORE_API ToString < String >
