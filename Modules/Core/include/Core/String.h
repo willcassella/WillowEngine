@@ -448,10 +448,7 @@ namespace Implementation
 			PointerT address = reinterpret_cast<PointerT>(value);
 			String result = "0x";
 
-			while (address != 0)
-			{
-
-			}
+			return result + "address"; // @TODO: Implement this
 		}
 	};
 
@@ -463,14 +460,8 @@ namespace Implementation
 		{
 			if (string.StartsWith("0x"))
 			{
-				// @TODO: Update this for hexadecimal
-				String valueString = string.SubString(2);
-				PointerT numericValue;
-
-				String remainingString = ::FromString(numericValue, valueString);
-					
-				value = reinterpret_cast<const AnyType*>(numericValue);
-				return remainingString;
+				value = nullptr;
+				return string.SubString(9); // @TODO: Implement this
 			}
 			else
 			{
@@ -830,8 +821,7 @@ namespace Implementation
 		static String Function(Table<KeyType, ValueType>& value, const String& string)
 		{
 			value.Clear();
-
-
+			return string; // @TODO: Implement this
 		}
 	};
 
