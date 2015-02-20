@@ -152,6 +152,8 @@ xcopy "$(ProjectDir)thirdParty\glfw3\$(Platform)\glfw3.dll" "$(SolutionDir)bin\"
       <DisableSpecificWarnings>4251;</DisableSpecificWarnings>
       <ExceptionHandling>Sync</ExceptionHandling>
       <StringPooling>true</StringPooling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -181,6 +183,8 @@ xcopy "$(ProjectDir)thirdParty\glfw3\$(Platform)\glfw3.dll" "$(SolutionDir)bin\"
       <DisableSpecificWarnings>4251;</DisableSpecificWarnings>
       <ExceptionHandling>Sync</ExceptionHandling>
       <StringPooling>true</StringPooling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

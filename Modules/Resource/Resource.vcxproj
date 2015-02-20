@@ -140,6 +140,8 @@ xcopy "$(ProjectDir)thirdParty\FreeImage\$(Platform)\FreeImage.dll" "$(SolutionD
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>RESOURCE_BUILD;WINDOWS;BITS_32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4251</DisableSpecificWarnings>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -161,6 +163,8 @@ xcopy "$(ProjectDir)thirdParty\FreeImage\$(Platform)\FreeImage.dll" "$(SolutionD
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>RESOURCE_BUILD;WINDOWS;BITS_64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4251</DisableSpecificWarnings>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

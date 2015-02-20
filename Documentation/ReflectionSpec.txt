@@ -1,5 +1,5 @@
-The game engine has a number of special functions, which I'm calling "Operations". They behave differently for each type, 
-and have some sort of behavior on every type in the engine (even if that behavior is a compiler error/runtime exception).
+The game engine has a number of special functions, which I'm calling "operations". They behave differently for each type, 
+and have some sort of behaviour on every type in the engine (even if that behaviour is a compiler error/runtime exception).
 These operations can be called directly or indirectly.
 Direct calls work by just calling the operation directly (like a normal function call)
 Indirect calls work by querying for type information, then calling the operation through the TypeInfo object by passing a Reference.
@@ -43,7 +43,7 @@ T StackCopy(const T& copy): Returns a copy of the given object, stored on the he
 
 T& HeapCopy(const T& copy): Returns a copy of the given object, stored on the stack
 	Default uses copy constructor
-	Explicit call to unimplemented causes comiple-time error
+	Explicit call to unimplemented causes compile-time error
 	Indirect call to unimplemented throws exception
 
 Advanced operations:
