@@ -445,10 +445,7 @@ namespace Implementation
 	{
 		FORCEINLINE static String Function(const AnyType* value)
 		{
-			PointerT address = reinterpret_cast<PointerT>(value);
-			String result = "0x";
-
-			return result + "address"; // @TODO: Implement this
+			return "0xAddress"; // @TODO: Implement this
 		}
 	};
 
