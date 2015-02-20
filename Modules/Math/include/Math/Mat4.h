@@ -55,17 +55,49 @@ public:
 	Mat4 Inverse() const;
 
 	/** Parse a Mat4 from a String */
-	static String FromString(Mat4& value, const String& string);
+	FORCEINLINE static String FromString(Mat4& value, const String& string)
+	{
+		return String::Parse(string,
+			"[ @, @, @, @ ]\n"
+			"| @, @, @, @ |\n"
+			"| @, @, @, @ |\n"
+			"[ @, @, @, @ ]",
+			value._values[0][0], value._values[1][0], value._values[2][0], value._values[3][0],
+			value._values[0][1], value._values[1][1], value._values[2][1], value._values[3][1],
+			value._values[0][2], value._values[1][2], value._values[2][2], value._values[3][2],
+			value._values[0][3], value._values[1][3], value._values[2][3], value._values[3][3]);
+	}
 
 	/** Generates a perspective projection matrix with the given properties */
-	static Mat4 Perspective(float hFOV, float vFOV, float zMin, float zMax);
+	FORCEINLINE static Mat4 Perspective(float hFOV, float vFOV, float zMin, float zMax)
+	{
+		// Convert vertical and horizontal FOV to radians
+		float RadHFOV = hFOV * Deg2Rad;
+		float RadVFOV = vFOV * Deg2Rad;
+
+		float xMax = tanf(RadHFOV * 0.5f) * zMin;
+		float xMin = -xMax;
+
+		float yMax = tanf(RadVFOV * 0.5f) * zMin;
+		float yMin = -yMax;
+
+		float width = xMax - xMin;
+		float height = yMax - yMin;
+		float depth = zMax - zMin;
+
+		return Mat4(
+			2*zMin/width,	0,				(xMax+xMin)/width,	0,
+			0,				2*zMin/height,	(yMax+yMin)/height, 0,
+			0,				0,				-(zMax+zMin)/depth, -2*zMax*zMin/depth,
+			0,				0,				-1,					0);
+	}
 
 	/** Generates a perspective projection matrix with the following horizontal FOV */
 	FORCEINLINE static Mat4 PerspectiveHFOV(float hFOV, float ratio, float zMin, float zMax)
 	{
 		// Convert hFOV to radians
 		float RadHFOV = hFOV * Deg2Rad;
-		float vFOV = Rad2Deg * 2 * atan(tan(RadHFOV * 0.5f) * 1 / ratio); // @TODO: Investigate RadHFOV
+		float vFOV = Rad2Deg * 2 * atan(tan(RadHFOV * 0.5f) * 1 / ratio);
 
 		return Perspective(hFOV, vFOV, zMin, zMax);
 	}
@@ -158,7 +190,33 @@ public:
 		assert(index < 16);
 		return _values[index];
 	}
-	friend MATH_API Mat4 operator*(const Mat4& lhs, const Mat4& rhs);
+	friend MATH_API FORCEINLINE Mat4 operator*(const Mat4& lhs, const Mat4& rhs)
+	{
+		Mat4 total;
+
+		// For each row
+		for (uint32 row = 0; row < 4; ++row)
+		{
+			// For each column
+			for (uint32 col = 0; col < 4; ++col)
+			{
+				float value = 0;
+
+				// For each addition
+				for (uint32 i = 0; i < 4; ++i)
+				{
+					// add them up
+					value += lhs.Get(i, row) * rhs.Get(col, i);
+				}
+
+				// Assign it to the new matrix
+				total.Set(col, row, value);
+			}
+		}
+
+		// Return the product of the two matrices
+		return total;
+	}
 	friend MATH_API FORCEINLINE Mat4& operator*=(Mat4& lhs, const Mat4& rhs)
 	{
 		lhs = lhs * rhs;

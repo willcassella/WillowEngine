@@ -40,7 +40,7 @@ typedef std::uint64_t uint64;
 // float is still float
 // double is still double
 
-/** Determine architecture */
+/** Determine numeric size of pointers */
 #if BITS_32
 	typedef uint32 PointerT;
 #elif BITS_64
@@ -49,10 +49,6 @@ typedef std::uint64_t uint64;
 
 ///////////////////////
 ///   Definitions   ///
-
-/** Shortcut for dereferencing 'this', useful for calling operators on self and returning reference to self in a clean way.
-* Still, prefer using 'this->' over 'This'. */
-#define This (*this)
 
 /** Inline macro */
 #if defined _MSC_VER
@@ -65,3 +61,7 @@ typedef std::uint64_t uint64;
 	/** We're on some unknown compiler, so just use normal inline */
 	#define FORCEINLINE inline
 #endif
+
+/** Shortcut for dereferencing 'this', useful for calling operators on self and returning reference to self in a clean way.
+* Still, prefer using 'this->' over 'This'. */
+#define This (*this)

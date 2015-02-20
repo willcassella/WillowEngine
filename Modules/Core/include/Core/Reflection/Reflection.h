@@ -87,34 +87,34 @@ FORCEINLINE const TypeInfo& TypeOf(const AnyType& value)
 
 /** Put this macro in the Information section of a struct you'd like to reflect
 * NOTE: Any struct that uses this macro must also use the 'BEGIN_STRUCT_REFLECTION' macro in their source file */
-#define REFLECTABLE_STRUCT						\
-public:											\
-	static const StructInfo StaticTypeInfo;		\
+#define REFLECTABLE_STRUCT							\
+public:												\
+	static const StructInfo StaticTypeInfo;			\
 	FORCEINLINE const StructInfo& GetType() const	\
-	{											\
-		return StaticTypeInfo;					\
+	{												\
+		return StaticTypeInfo;						\
 	}
 
 /** Put this macro in the Information section of a class you'd like to reflect
 * NOTE: Any class that uses this macro must also use the' BEGIN_CLASS_REFLECTION' macro in their source file */
-#define REFLECTABLE_CLASS						\
-public:											\
-	static const ClassInfo StaticTypeInfo;		\
-	const ClassInfo& GetType() const override	\
-	{											\
-		return StaticTypeInfo;					\
+#define REFLECTABLE_CLASS							\
+public:												\
+	static const ClassInfo StaticTypeInfo;			\
+	const ClassInfo& GetType() const override		\
+	{												\
+		return StaticTypeInfo;						\
 	}
 
 /** Put this macro in the Information section of an interface you'd like to reflect
 * NOTE: Any interface that uses this macro @TODO: Finish documentation here */
-#define REFLECTABLE_INTERFACE					\
-public:											\
+#define REFLECTABLE_INTERFACE						\
+public:												\
 	static const InterfaceInfo StaticTypeInfo;
 
 /** Put this macro in the Information section of a class which extends the given type
 * NOTE: All reflectable classes must use this macro */
-#define EXTENDS(T)								\
-public:											\
+#define EXTENDS(T)									\
+public:												\
 	typedef T Super;
 
 /* NOTE: Reflection registration macros are declared in 'Registration.h' */
