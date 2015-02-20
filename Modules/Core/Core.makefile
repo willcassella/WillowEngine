@@ -1,8 +1,8 @@
 # Core.makefile
 
 CXX=clang++
-CFLAGS=-std=c++11 -D BITS_64 -Wall
-LFLAGS=-fPIC -shared
+CFLAGS=-std=c++11 -Ofast -Wall -D BITS_64
+LFLAGS=-fPIC -shared -Wl,-soname=Core.so
 OUT=-o bin/Core.so
 
 all: setup

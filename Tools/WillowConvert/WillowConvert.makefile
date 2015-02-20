@@ -1,11 +1,11 @@
 # WillowConvert.makefile
 
 CXX=clang++
-CFLAGS=-std=c++11 -Wall -D BITS_64 -I ../../Modules/Core/include -I ../../Modules/Resource/include
-LFLAGS=-Wl,-rpath,./
+CFLAGS=-std=c++11 -Ofast -Wall -D BITS_64 -I ../../Modules/Core/include -I ../../Modules/Resource/include
+LFLAGS=-Wl,-rpath=./
 OUT=-o bin/WillowConvert.out
 
-all: setup
+all: Resource setup
 	$(CXX) $(CFLAGS) Source/*.cpp ../../Modules/Core/bin/Core.so ../../Modules/Resource/bin/Resource.so  $(LFLAGS) $(OUT)
 
 Resource:

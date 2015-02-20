@@ -1,8 +1,8 @@
 # Resource.makefile
 
 CXX=clang++
-CFLAGS=-std=c++11 -D BITS_64 -Wall -I ../Core/include
-LFLAGS=-fPIC -shared -Wl,-rpath,./ -l freeimage
+CFLAGS=-std=c++11 -Ofast -Wall -D BITS_64 -I ../Core/include
+LFLAGS=-fPIC -shared -Wl,-soname=Resource.so,-rpath=./ -l freeimage
 OUT=-o bin/Resource.so
 
 all: Core setup
