@@ -2,9 +2,11 @@
 
 CXX=clang++
 CFLAGS=-std=c++11 -Ofast -Wall -D BITS_64
-LFLAGS=-fPIC -shared -Wl,-soname=Core.so
+LFLAGS=-fPIC -shared -Wl,-soname='Core.so'
 DEPS=
 OUT=-o bin/Core.so
+
+.PHONY: setup
 
 all: setup
 	$(CXX) $(CFLAGS) source/*.cpp source/Misc/*.cpp source/Reflection/*.cpp $(LFLAGS) $(DEPS) $(OUT)
