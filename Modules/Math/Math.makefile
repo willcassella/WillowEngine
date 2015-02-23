@@ -6,13 +6,10 @@ LFLAGS=-fPIC -shared -Wl,-soname='Math.so',-rpath='$$ORIGIN'
 DEPS=../Core/bin/Core.so
 OUT=-o bin/Math.so
 
-.PHONY: Core setup
+.PHONY: setup
 
-all: Core setup
+all: setup
 	$(CXX) $(CFLAGS) source/*.cpp $(LFLAGS) $(DEPS) $(OUT)
-
-Core:
-	make -C ../Core/ -f Core.makefile
 
 setup:
 	mkdir -p bin

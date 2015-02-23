@@ -6,13 +6,10 @@ LFLAGS=-Wl,-rpath='$$ORIGIN'
 DEPS=../../Modules/Core/bin/Core.so ../../Modules/Resource/bin/Resource.so
 OUT=-o bin/WillowConvert.out
 
-.PHONY: Resource setup
+.PHONY: setup
 
-all: Resource setup
+all: setup
 	$(CXX) $(CFLAGS) Source/*.cpp $(LFLAGS) $(DEPS) $(OUT)
-
-Resource:
-	make -C ../../Modules/Resource -f Resource.makefile
 
 setup:
 	mkdir -p bin
