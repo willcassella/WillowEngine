@@ -644,4 +644,30 @@ namespace Implementation
 		value = std::stod(string.Cstr(), &remainder);
 		return string.SubString(static_cast<uint32>(remainder));
 	}
+
+	String FromString<String>::Function(String& value, const String& string)
+	{
+		if (string.StartsWith('"'))
+		{
+			for (uint32 i = 1; i < string.Length(); ++i)
+			{
+				if (string[i] == '"')
+				{
+					return string.SubString(i + 1);
+				}
+				else
+				{
+					value += string[i];
+				}
+			}
+
+			// We've reached the end of the String
+			return "";
+		}
+		else
+		{
+			value = "";
+			return string;
+		}
+	}
 }

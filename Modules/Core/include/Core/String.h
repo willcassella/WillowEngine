@@ -272,6 +272,16 @@ namespace Implementation
 		}
 	};
 
+	/** Default implementation of ToExplicitString (no quotation marks) */
+	template <typename AnyType>
+	struct ToExplicitString
+	{
+		FORCEINLINE static String Function(const AnyType& value)
+		{
+			return ::ToString(value);
+		}
+	};
+
 	/** Default implementation of FromString */
 	template <typename AnyType>
 	struct FromString
@@ -468,6 +478,27 @@ namespace Implementation
 		}
 	};
 
+	/** Convert a non-const c-string to a String
+	* NOTE: A non-const c-string cannot be parsed from a String */
+	template <>
+	struct CORE_API ToString < char* >
+	{
+		FORCEINLINE static String Function(const char* value)
+		{
+			return String(value);
+		}
+	};
+
+	/** Convert a non-const c-string to an explicit String */
+	template <>
+	struct CORE_API ToExplicitString < char* >
+	{
+		FORCEINLINE static String Function(const char* value)
+		{
+			return '"' + String(value) + '"';
+		}
+	};
+
 	/** Convert a c-string to a String
 	* NOTE: c-strings cannot be parsed from a String */
 	template <>
@@ -479,14 +510,13 @@ namespace Implementation
 		}
 	};
 
-	/** Convert a MSVC c-string literal to a String
-	* NOTE: A MSVC c-string literal cannot be parsed from a String */
-	template <std::size_t size>
-	struct ToString < const char[size] >
+	/** Convert a c-string to an explicit String */
+	template <>
+	struct CORE_API ToExplicitString < const char* >
 	{
-		FORCEINLINE static String Function(const char value[size])
+		FORCEINLINE static String Function(const char* value)
 		{
-			return String(value);
+			return '"' + String(value) + '"';
 		}
 	};
 
@@ -501,6 +531,37 @@ namespace Implementation
 		}
 	};
 
+	/** Convert a clang/gcc c-string literal to an Explicit String */
+	template <std::size_t size>
+	struct ToExplicitString < char[size] >
+	{
+		FORCEINLINE static String Function(const char value[size])
+		{
+			return '"' + String(value) + '"';
+		}
+	};
+
+	/** Convert a MSVC c-string literal to a String
+	* NOTE: A MSVC c-string literal cannot be parsed from a String */
+	template <std::size_t size>
+	struct ToString < const char[size] >
+	{
+		FORCEINLINE static String Function(const char value[size])
+		{
+			return String(value);
+		}
+	};
+
+	/** Convert a MSVC c-string literal to an explicit String */
+	template <std::size_t size>
+	struct ToExplicitString < const char[size] >
+	{
+		FORCEINLINE static String Function(const char value[size])
+		{
+			return '"' + String(value) + '"';
+		}
+	};
+
 	/** Convert a String to a String */
 	template <>
 	struct CORE_API ToString < String >
@@ -511,22 +572,28 @@ namespace Implementation
 		}
 	};
 
+	/** Convert a String to an explicit String */
+	template <>
+	struct CORE_API ToExplicitString < String >
+	{
+		FORCEINLINE static String Function(const String& value)
+		{
+			return '"' + value + '"';
+		}
+	};
+
 	/** Parse a String from a String */
 	template <>
 	struct CORE_API FromString < String >
 	{
-		static String Function(String& value, const String& string)
-		{
-			// @TODO: Implement this
-			return "";
-		}
+		static String Function(String& value, const String& string);
 	};
 
 	///////////////////////////
 	///   Container Types   ///
 
 	/** Convert a generic container to a String */
-	template <typename ContainerType, typename ElementType>
+	template <class ContainerType, typename ElementType>
 	struct ContainerToString
 	{
 		static String Function(const ContainerType& value)
@@ -545,57 +612,10 @@ namespace Implementation
 					result += ", ";
 				}
 
-				result += ::ToString(element);
+				result += ToExplicitString<ElementType>::Function(element);
 			}
 
 			return result + '}';
-		}
-	};
-
-	/** Convert a generic container of Strings to a String */
-	template <typename ContainerType>
-	struct ContainerToString < ContainerType, String >
-	{
-		static String Function(const ContainerType& value)
-		{
-			String result('{');
-
-			bool first = true;
-			for (const String& element : value)
-			{
-				if (first)
-				{
-					first = false;
-				}
-				else
-				{
-					result += ", ";
-				}
-
-				result += '"' + element + '"';
-			}
-
-			return result + '}';
-		}
-	};
-
-	/** Parse a generic container from a String */
-	template <typename ContainerType, typename ElementType>
-	struct ContainerFromString
-	{
-		static String Function(ContainerType& value, void(ContainerType::*addFunc)(const ElementType&), const String& string)
-		{
-			if (string.StartsWith('{'))
-			{
-				while (true)
-				{
-
-				}
-			}
-			else
-			{
-				return string;
-			}
 		}
 	};
 
@@ -609,17 +629,6 @@ namespace Implementation
 		}
 	};
 
-	/** Parse an Array from a String */
-	template <typename T>
-	struct FromString < Array<T> >
-	{
-		FORCEINLINE static String Function(Array<T>& value, const String& string)
-		{
-			value.Clear();
-			return ContainerFromString<Array<T>, T>::Function(value, &Array<T>::Add, string);
-		}
-	};
-
 	/** Convert a List to a String */
 	template <typename T>
 	struct ToString < List<T> >
@@ -627,17 +636,6 @@ namespace Implementation
 		FORCEINLINE static String Function(const List<T>& value)
 		{
 			return ContainerToString<List<T>, T>::Function(value);
-		}
-	};
-
-	/** Parse a List from a String */
-	template <typename T>
-	struct FromString < List<T> >
-	{
-		FORCEINLINE static String Function(List<T>& value, const String& string)
-		{
-			value.Clear();
-			return ContainerFromString<List<T>, T>::Function(value, &List<T>::Add, string);
 		}
 	};
 
@@ -651,16 +649,6 @@ namespace Implementation
 	//	}
 	//};
 
-	///** Parse an ArrayList from a String */
-	//template <typename T>
-	//struct FromString < ArrayList<T> >
-	//{
-	//	FORCEINLINE static String Function(ArrayList<T>& value, const String& string)
-	//	{
-	//		return ContainerFromString(value, string);
-	//	}
-	//};
-
 	/** Convert a Queue to a String */
 	template <typename T, template <typename F> class StorageType>
 	struct ToString < Queue<T, StorageType> >
@@ -671,17 +659,6 @@ namespace Implementation
 		}
 	};
 
-	/** Parse a Queue from a String */
-	template <typename T, template <typename F> class StorageType>
-	struct FromString < Queue<T, StorageType> >
-	{
-		FORCEINLINE static String Function(Queue<T, StorageType>& value, const String& string)
-		{
-			value.Clear();
-			return ContainerFromString<Queue<T, StorageType>, T>::Function(value, &Queue<T, StorageType>::Push, string);
-		}
-	};
-
 	/** Convert a Stack to a String */
 	template <typename T, template <typename F> class StorageType>
 	struct ToString < Stack<T, StorageType> >
@@ -689,17 +666,6 @@ namespace Implementation
 		FORCEINLINE static String Function(const Stack<T, StorageType>& value)
 		{
 			return ContainerToString<Stack<T, StorageType>, T>(value);
-		}
-	};
-
-	/** Parse a Stack from a String */
-	template <typename T, template <typename F> class StorageType>
-	struct FromString < Stack<T, StorageType> >
-	{
-		FORCEINLINE static String Function(Stack<T, StorageType>& value, const String& string)
-		{
-			value.Clear();
-			return ContainerFromString<Stack<T, StorageType>, T>::Function(value, &Stack<T, StorageType>::Push, string);
 		}
 	};
 
@@ -723,102 +689,14 @@ namespace Implementation
 					result += ", ";
 				}
 
-				result += String::Format("{@ : @}", pair.First, pair.Second);
+				result += String::Format(
+					"{@ : @}", 
+					ToExplicitString<KeyType>::Function(pair.First), 
+					ToExplicitString<ValueType>::Function(pair.Second)
+				);
 			}
 
 			return result + '}';
-		}
-	};
-
-	/** Convert a Table with Strings as keys to a String */
-	template <typename ValueType>
-	struct ToString < Table<String, ValueType> >
-	{
-		static String Function(const Table<String, ValueType>& value)
-		{
-			String result = '{';
-
-			bool first = true;
-			for (const auto& pair : value)
-			{
-				if (first)
-				{
-					first = false;
-				}
-				else
-				{
-					result += ", ";
-				}
-
-				result += String::Format("{\"@\" : @}", pair.First, pair.Second);
-			}
-
-			return result + '}';
-		}
-	};
-
-	/** Convert a Table with Strings as values to a String */
-	template <typename KeyType>
-	struct ToString < Table<KeyType, String> >
-	{
-		static String Function(const Table<KeyType, String>& value)
-		{
-			String result = '{';
-
-			bool first = true;
-			for (const auto& pair : value)
-			{
-				if (first)
-				{
-					first = false;
-				}
-				else
-				{
-					result += ", ";
-				}
-
-				result += String::Format("{@ : \"@\"}", pair.First, pair.Second);
-			}
-
-			return result + '}';
-		}
-	};
-
-	/** Convert a Table with Strings as keys and values to a String */
-	template <>
-	struct ToString < Table<String, String> >
-	{
-		static String Function(const Table<String, String>& value)
-		{
-			String result = '{';
-
-			bool first = true;
-			for (const auto& pair : value)
-			{
-				if (first)
-				{
-					first = false;
-				}
-				else
-				{
-					result += ", ";
-				}
-
-				result += String::Format("{\"@\" : \"@\"}", pair.First, pair.Second);
-			}
-
-			return result + '}';
-		}
-	};
-
-	/** Parse a Table from a String */
-	template <typename KeyType, typename ValueType>
-	struct FromString < Table<KeyType, ValueType> >
-	{
-		static String Function(Table<KeyType, ValueType>& value, const String& string)
-		{
-			value.Clear();
-			return string; // @TODO: Implement this
 		}
 	};
 
@@ -828,47 +706,11 @@ namespace Implementation
 	{
 		FORCEINLINE static String Function(const Pair<FirstType, SecondType>& value)
 		{
-			return String::Format("{@ | @}", value.First, value.Second);
-		}
-	};
-
-	/** Convert a Pair with 'FirstType' as a String to a String */
-	template <typename SecondType>
-	struct ToString < Pair<String, SecondType> >
-	{
-		FORCEINLINE static String Function(const Pair<String, SecondType>& value)
-		{
-			return String::Format("{\"@\" | @}", value.First, value.Second);
-		}
-	};
-
-	/** Convert a Pair with 'SecondType' as a String to a String */
-	template <typename FirstType>
-	struct ToString < Pair<FirstType, String> >
-	{
-		FORCEINLINE static String Function(const Pair<FirstType, String>& value)
-		{
-			return String::Format("{@ | \"@\"}", value.First, value.Second);
-		}
-	};
-
-	/** Convert a Pair of Strings to a String */
-	template <>
-	struct ToString < Pair<String, String> >
-	{
-		FORCEINLINE static String Function(const Pair<String, String>& value)
-		{
-			return String::Format("{\"@\" | \"@\"}", value.First, value.Second);
-		}
-	};
-
-	/** Parse a Pair from a String */
-	template <typename FirstType, typename SecondType>
-	struct FromString < Pair<FirstType, SecondType> >
-	{
-		FORCEINLINE static String Function(Pair<FirstType, SecondType>& value, const String& string)
-		{
-			return String::Parse(string, "{@ | @}", value.First, value.Second);
+			return String::Format(
+				"{@ | @}", 
+				ToExplicitString<FirstType>::Function(value.First), 
+				ToExplicitString<SecondType>::Function(value.Second)
+			);
 		}
 	};
 }

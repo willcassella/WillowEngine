@@ -89,8 +89,8 @@ FORCEINLINE const TypeInfo& TypeOf(const AnyType& value)
 * NOTE: Any struct that uses this macro must also use the 'BEGIN_STRUCT_REFLECTION' macro in their source file */
 #define REFLECTABLE_STRUCT							\
 public:												\
-	static const StructInfo StaticTypeInfo;			\
-	FORCEINLINE const StructInfo& GetType() const	\
+	static const ::StructInfo StaticTypeInfo;		\
+	FORCEINLINE const ::StructInfo& GetType() const	\
 	{												\
 		return StaticTypeInfo;						\
 	}
@@ -99,8 +99,8 @@ public:												\
 * NOTE: Any class that uses this macro must also use the' BEGIN_CLASS_REFLECTION' macro in their source file */
 #define REFLECTABLE_CLASS							\
 public:												\
-	static const ClassInfo StaticTypeInfo;			\
-	const ClassInfo& GetType() const override		\
+	static const ::ClassInfo StaticTypeInfo;		\
+	const ::ClassInfo& GetType() const override		\
 	{												\
 		return StaticTypeInfo;						\
 	}
@@ -109,7 +109,7 @@ public:												\
 * NOTE: Any interface that uses this macro @TODO: Finish documentation here */
 #define REFLECTABLE_INTERFACE						\
 public:												\
-	static const InterfaceInfo StaticTypeInfo;
+	static const ::InterfaceInfo StaticTypeInfo;
 
 /** Put this macro in the Information section of a class which extends the given type
 * NOTE: All reflectable classes must use this macro */
