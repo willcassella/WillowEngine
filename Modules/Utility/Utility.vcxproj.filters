@@ -72,6 +72,9 @@
     <ClCompile Include="source\Reflection\Serialization.cpp">
       <Filter>source\Reflection</Filter>
     </ClCompile>
+    <ClCompile Include="source\Resource.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Utility\Math\Mat4.h">
@@ -166,6 +169,12 @@
     </ClInclude>
     <ClInclude Include="include\Utility\Reflection\Module.h">
       <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\Resource.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\ResourcePtr.h">
+      <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
