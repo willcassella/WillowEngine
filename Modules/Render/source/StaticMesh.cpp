@@ -43,9 +43,9 @@ StaticMesh::StaticMesh(const String& path)
 
 StaticMesh::~StaticMesh()
 {
-	glDeleteBuffers(1, &this->_vbo);
-	glDeleteBuffers(1, &this->_ebo);
-	glDeleteVertexArrays(1, &this->_vao);
+	glDeleteBuffers(1, &_vbo);
+	glDeleteBuffers(1, &_ebo);
+	glDeleteVertexArrays(1, &_vao);
 }
 
 ///////////////////
@@ -57,7 +57,7 @@ void StaticMesh::Render(const Mat4& orientation, const Mat4& view, const Mat4& p
 	glBindVertexArray(_vao);
 
 	// Bind the material
-	this->GetMaterial()->Bind();
+	_mat->Bind();
 
 	// Upload the matrix to the GPU
 	_mat->UploadModelMatrix(orientation);
@@ -68,11 +68,6 @@ void StaticMesh::Render(const Mat4& orientation, const Mat4& view, const Mat4& p
 	glDrawElements(GL_TRIANGLES, (GLsizei)_numElements, GL_UNSIGNED_INT, 0);
 
 	glBindVertexArray(NULL);
-}
-
-ResourcePtr<Material>& StaticMesh::GetMaterial()
-{
-	return _mat;
 }
 
 const ResourcePtr<Material>& StaticMesh::GetMaterial() const
@@ -101,11 +96,11 @@ void StaticMesh::SetMaterial(const ResourcePtr<Material>& material)
 
 	BufferID vTexcoord = glGetAttribLocation(_mat->GetID(), "vTexcoord");
 	glEnableVertexAttribArray(vTexcoord);
-	glVertexAttribPointer(vTexcoord, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(float) * 3));
+	glVertexAttribPointer(vTexcoord, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, U));
 
 	BufferID vNormal = glGetAttribLocation(_mat->GetID(), "vNormal");
 	glEnableVertexAttribArray(vNormal);
-	glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_TRUE, sizeof(Vertex), (void*)(sizeof(float) * 3 + sizeof(float) * 2));
+	glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_TRUE, sizeof(Vertex), (void*)offsetof(Vertex, I));
 
 	glBindVertexArray(NULL);
 }

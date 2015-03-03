@@ -28,7 +28,6 @@ namespace Willow
 
 		/** Render the mesh at a specific orientation, view, and perspective */
 		void Render(const Mat4& orientation, const Mat4& view, const Mat4& perspective) const;
-		ResourcePtr<Material>& GetMaterial();
 		const ResourcePtr<Material>& GetMaterial() const;
 		void SetMaterial(const ResourcePtr<Material>& material);
 

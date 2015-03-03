@@ -72,7 +72,7 @@ int main(int32 argc, char* argv[])
 	glfwMakeContextCurrent(window);
 
 	// Initialize the renderer
-	InitRenderer(API::OpenGL);
+	InitRenderer(window_width, window_height);
 
 	///////////////////////////////
 	///   Setting up a simple   ///
@@ -233,7 +233,7 @@ void eventLoop(GLFWwindow* window)
 		}
 
 		//render the frame
-		ClearBuffer();
+		BeginFrame();
 		scene.Render();
 		glfwSwapBuffers(window);
 	}
