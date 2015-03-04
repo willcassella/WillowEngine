@@ -24,9 +24,8 @@ Shader::Shader(const String& path)
 
 	String source = file.Dump();
 
-	// Identify the shader type
+	// Identify the shader type and construct the shader
 	String type = String::GetFileExtension(path);
-
 	if (type == "vert")
 	{
 		this->_id = glCreateShader(GL_VERTEX_SHADER);
@@ -40,9 +39,24 @@ Shader::Shader(const String& path)
 		this->_id = glCreateShader(GL_GEOMETRY_SHADER);
 	}
 
+	// Compile the shader
 	const char* tempSource = source.Cstr();
 	glShaderSource(_id, 1, &tempSource, nullptr);
 	glCompileShader(_id);
+
+	// Make sure the shader compiled successfully
+	GLint compiled;
+	glGetShaderiv(_id, GL_COMPILE_STATUS, &compiled);
+	if (!compiled)
+	{
+		GLsizei length;
+		glGetShaderiv(_id, GL_INFO_LOG_LENGTH, &length);
+
+		GLchar* log = new GLchar[length + 1];
+		glGetShaderInfoLog(_id, length, &length, log);
+		Console::Error("Shader compilation failed: \"@\"", log);
+		delete[] log;
+	}
 
 	Console::WriteLine("'@' loaded", path);
 }

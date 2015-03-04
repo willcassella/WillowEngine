@@ -68,11 +68,25 @@ void Material::Compile()
 	glAttachShader(_id, FragmentShader->GetID());
 	glLinkProgram(_id);
 
+	// Make sure program successfully linked
+	GLint linked;
+	glGetProgramiv(_id, GL_LINK_STATUS, &linked);
+	if (!linked)
+	{
+		GLsizei length;
+		glGetProgramiv(_id, GL_INFO_LOG_LENGTH, &length);
+
+		GLchar* log = new GLchar[length + 1];
+		glGetProgramInfoLog(_id, length, &length, log);
+		Console::WriteLine("Material compilation failed: \"@\"", log);
+		delete[] log;
+	}
+
 	glBindFragDataLocation(_id, 0, "outColor");
 
-	this->_vModel = glGetUniformLocation(_id, "vModel");
-	this->_vView = glGetUniformLocation(_id, "vView");
-	this->_vProjection = glGetUniformLocation(_id, "vProjection");
+	_vModel = glGetUniformLocation(_id, "vModel");
+	_vView = glGetUniformLocation(_id, "vView");
+	_vProjection = glGetUniformLocation(_id, "vProjection");
 
 	glDetachShader(_id, VertexShader->GetID());
 	glDetachShader(_id, FragmentShader->GetID());
