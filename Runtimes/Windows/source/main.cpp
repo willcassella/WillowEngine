@@ -235,6 +235,7 @@ void eventLoop(GLFWwindow* window)
 		//render the frame
 		BeginFrame();
 		scene.Render();
+		EndFrame();
 		glfwSwapBuffers(window);
 	}
 

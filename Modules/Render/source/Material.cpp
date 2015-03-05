@@ -82,8 +82,6 @@ void Material::Compile()
 		delete[] log;
 	}
 
-	glBindFragDataLocation(_id, 0, "outColor");
-
 	_vModel = glGetUniformLocation(_id, "vModel");
 	_vView = glGetUniformLocation(_id, "vView");
 	_vProjection = glGetUniformLocation(_id, "vProjection");

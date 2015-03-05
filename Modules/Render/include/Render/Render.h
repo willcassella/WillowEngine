@@ -30,8 +30,11 @@ extern BufferID roughnessBuffer;
 /////////////////////
 ///   Functions   ///
 
-// Sets up the defaults for the renderer with the given height and width
+/** Sets up the defaults for the renderer with the given height and width */
 RENDER_API void InitRenderer(uint32 width, uint32 height);
+
+/** Cleans up renderer buffers */
+RENDER_API void CleanUpRenderer();
 
 /** Resize the renderer drawing area */
 RENDER_API void Resize(uint32 width, uint32 height);

@@ -8,6 +8,7 @@ using Willow::Console;
 ////////////////
 ///   Data   ///
 
+/** GBuffer and its sub-buffers */
 BufferID gBuffer = NULL;
 BufferID depthBuffer = NULL;
 BufferID diffuseBuffer = NULL;
@@ -15,6 +16,11 @@ BufferID normalBuffer = NULL;
 BufferID specularBuffer = NULL;
 BufferID metallicBuffer = NULL;
 BufferID roughnessBuffer = NULL;
+
+/** VAO, VBO, and material for screen-sized quad */
+BufferID screenQuadVAO = NULL;
+BufferID screenQuadVBO = NULL;
+BufferID screenQuadProgram = NULL;
 
 /////////////////////
 ///   Functions   ///
@@ -43,7 +49,6 @@ void InitRenderer(uint32 width, uint32 height)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL); // 1 32-bit floating point component for depth
@@ -108,6 +113,64 @@ void InitRenderer(uint32 width, uint32 height)
 	{
 		Console::WriteLine("Error creating the GBuffer");
 	}
+
+	// Create a VAO for screen quad
+	glGenVertexArrays(1, &screenQuadVAO);
+	glBindVertexArray(screenQuadVAO);
+
+	// Create and upload a VBO for screen quad
+	glGenBuffers(1, &screenQuadVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, screenQuadVBO);
+	float screenQuadData[] = {
+		-1.f, 1.f, 0.f, 1.f, // Top-left point
+		-1.f, -1.f, 0.f, 0.f, // Bottom-left point
+		1.f, -1.f, 1.f, 0.f, // Bottom-right point
+		1.f, 1.f, 1.f, 1.f // Top-right point
+	};
+	glBufferData(GL_ARRAY_BUFFER, sizeof(screenQuadData), screenQuadData, GL_STATIC_DRAW);
+
+	// Create and upload a shader program for the screen quad
+	GLuint vShader = glCreateShader(GL_VERTEX_SHADER);
+	const char* vSource =
+		"#version 330 core\n"
+		"in vec2 position;\n"
+		"in vec2 vTexCoord;\n"
+		"out vec2 texCoord;\n"
+		"void main() { gl_Position = vec4(position, 0, 1); texCoord = vTexCoord; }";
+	glShaderSource(vShader, 1, &vSource, nullptr);
+	glCompileShader(vShader);
+
+	GLuint fShader = glCreateShader(GL_FRAGMENT_SHADER);
+	const char* fSource =
+		"#version 330 core\n"
+		"uniform sampler2D activeBuffer;\n"
+		"in vec2 texCoord;\n"
+		"layout(location = 0) out vec4 outColor;\n"
+		"void main() { outColor = texture(activeBuffer, texCoord); }";
+	glShaderSource(fShader, 1, &fSource, nullptr);
+	glCompileShader(fShader);
+
+	screenQuadProgram = glCreateProgram();
+	glAttachShader(screenQuadProgram, vShader);
+	glAttachShader(screenQuadProgram, fShader);
+	glLinkProgram(screenQuadProgram);
+	glUseProgram(screenQuadProgram);
+
+	// Specify shader data
+	GLint positionAttrib = glGetAttribLocation(screenQuadProgram, "position");
+	glEnableVertexAttribArray(positionAttrib);
+	glVertexAttribPointer(positionAttrib, 2, GL_FLOAT, false, sizeof(float)*4, 0);
+
+	GLint coordinateAttrib = glGetAttribLocation(screenQuadProgram, "vTexCoord");
+	glEnableVertexAttribArray(coordinateAttrib);
+	glVertexAttribPointer(coordinateAttrib, 2, GL_FLOAT, false, sizeof(float)*4, (void*)(sizeof(float)*2));
+
+	glUniform1i(glGetUniformLocation(screenQuadProgram, "activeBuffer"), 0);
+}
+
+void CleanUpRenderer()
+{
+	// @TODO: Do something here
 }
 
 void Resize(uint32 width, uint32 height)
@@ -117,6 +180,8 @@ void Resize(uint32 width, uint32 height)
 
 void BeginFrame()
 {
+	glEnable(GL_DEPTH_TEST);
+
 	// Bind the GBuffer and its sub-buffers for drawing
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, gBuffer);
 	BufferID drawBuffers[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4 };
@@ -131,6 +196,19 @@ void EndFrame()
 	// Bind the default framebuffer for drawing
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
+	// Clear the frame
+	glDisable(GL_DEPTH_TEST);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	// Bind the screen quad
+	glBindVertexArray(screenQuadVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, screenQuadVBO);
+	glUseProgram(screenQuadProgram);
+
 	// Bind the GBuffer's sub-buffers as textures for reading
-	
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, diffuseBuffer);
+
+	// Draw the screen quad
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }

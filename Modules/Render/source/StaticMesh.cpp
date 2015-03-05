@@ -89,8 +89,7 @@ void StaticMesh::SetMaterial(const ResourcePtr<Material>& material)
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
 
 	// Set stuff
-	BufferID vPosition;
-	vPosition = glGetAttribLocation(_mat->GetID(), "vPosition");
+	BufferID vPosition = glGetAttribLocation(_mat->GetID(), "vPosition");
     glEnableVertexAttribArray(vPosition);
     glVertexAttribPointer(vPosition, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
 
