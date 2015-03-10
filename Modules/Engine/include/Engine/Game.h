@@ -1,7 +1,6 @@
 // Game.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "config.h"
 #include "Scene.h"
 
 // @TODO: Make this actually useful

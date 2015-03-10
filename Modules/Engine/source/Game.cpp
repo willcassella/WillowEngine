@@ -1,6 +1,6 @@
 // Game.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
-#include "..\include\Engine\Game.h"
+#include "../include/Engine/Game.h"
 
 ////////////////////////
 ///   Constructors   ///

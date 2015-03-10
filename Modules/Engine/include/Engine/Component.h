@@ -3,6 +3,18 @@
 
 #include "config.h"
 
+////////////////////////////////
+///   Forward-declarations   ///
+
+/** Defined in 'GameObject.h' */
+class GameObject;
+
+/** Defined in 'Scene.h' */
+class Scene;
+
+/////////////////
+///   Types   ///
+
 class ENGINE_API Component : public Object
 {
 	///////////////////////
@@ -11,13 +23,13 @@ public:
 
 	REFLECTABLE_CLASS;
 	EXTENDS(Object);
-	friend class Scene;
+	friend Scene;
 
 	////////////////////////
 	///   Constructors   ///
 public:
 
-	Component(class GameObject& owner);
+	Component(GameObject& owner);
 
 	///////////////////
 	///   Methods   ///
@@ -26,12 +38,10 @@ public:
 	/** Returns whether this component is enabled on the GameObject that owns it */
 	bool IsEnabled() const;
 
-	/** Enable this component, if it is disabled 
-	* If the component is already enabled, this has no effect */
+	/** Enables this component, if it is currently disabled */
 	void Enable();
 
-	/** Disable the component, if it is enabled
-	* If the component is already disabled, this has no effect */
+	/** Disable the component, if it is currently enabled */
 	void Disable();
 
 	/** Returns the GameObject that this component is attached to */
@@ -42,10 +52,13 @@ public:
 
 protected:
 
+	/** Update the state of this Component (called once per scene update) */
 	virtual void Update(float timeInterval);
 
+	/** Function called when this component is disabled */
 	virtual void OnDisabled();
 
+	/** Function called when this component is enabled */
 	virtual void OnEnabled();
 
 	////////////////

@@ -1,6 +1,6 @@
 // Scene.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
-#include "..\include\Engine\Scene.h"
+#include "../include/Engine/Scene.h"
 
 //////////////////////
 ///   Reflection   ///
@@ -61,7 +61,6 @@ void Scene::Update()
 	while (!_freshObjects.IsEmpty())
 	{
 		GameObject* freshObject = _freshObjects.Pop();
-		freshObject->_scene = this;
 		
 		// Activate all the object's components
 		for (auto component : freshObject->GetComponents())

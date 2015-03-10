@@ -48,8 +48,9 @@
     <ClInclude Include="include\Core\Reflection\TypeInfo.h" />
     <ClInclude Include="include\Core\Reflection\Unpack.h" />
     <ClInclude Include="include\Core\Reflection\Value.h" />
+    <ClInclude Include="include\Core\Resource\ResourceHandle.h" />
     <ClInclude Include="include\Core\String.h" />
-    <ClInclude Include="include\Core\System.h" />
+    <ClInclude Include="include\Core\env.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Application.cpp" />

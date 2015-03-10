@@ -1,6 +1,6 @@
 // Transform.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
-#include "..\include\Engine\Transform.h"
+#include "../include/Engine/Transform.h"
 
 //////////////////////
 ///   Reflection   ///
@@ -11,24 +11,12 @@ STRUCT_REFLECTION(Transform)
 .AddField("Scale3D", &Transform::Scale3D)
 .AddField("Parent", &Transform::Parent);
 
-////////////////////////
-///   Constructors   ///
-
-Transform::Transform(Mobility mobility, const Vec3& location, const Quat& orientation, const Vec3& scale3D)
-{
-	this->Location = location;
-	this->Scale3D = scale3D;
-	this->Orientation = orientation;
-	this->Parent = nullptr;
-	this->_mobility = mobility;
-}
-
 ///////////////////
 ///   Methods   ///
 
 String Transform::ToString() const
 {
-	return "Transform"; // @TODO: Improve this?
+	return TypeOf<String>().GetName();
 }
 
 void Transform::Translate(const Vec3& vec, bool isLocal)

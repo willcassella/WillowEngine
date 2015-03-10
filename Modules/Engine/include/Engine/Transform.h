@@ -22,17 +22,20 @@ public:
 	///   Constructors   ///
 public:
 
-	Transform(Mobility mobility = Mobility::Static, const Vec3& location = Vec3(), const Quat& orientation = Quat(), const Vec3& scale3D = Vec3(1.f, 1.f, 1.f));
+	Transform(Mobility mobility = Mobility::Static)
+		: _mobility(mobility)
+	{
+		// All done
+	}
 
 	//////////////////
 	///   Fields   ///
 public:
 
-	Vec3 Location;
-	Quat Orientation;
-	Vec3 Scale3D;
-	// @TODO: encapsulate this better
-	Transform* Parent;
+	Vec3 Location = Vec3(0, 0, 0);
+	Quat Orientation = Quat();
+	Vec3 Scale3D = Vec3(1, 1, 1);
+	Transform* Parent = nullptr;
 
 	///////////////////
 	///   Methods   ///
@@ -42,10 +45,16 @@ public:
 	String ToString() const;
 
 	/** Returns the mobility of this transform */
-	Mobility GetMobility() const;
+	FORCEINLINE Mobility GetMobility() const
+	{
+		return _mobility;
+	}
 
 	/** Returns whether this transform's mobility is "Static" */
-	bool IsStatic() const;
+	FORCEINLINE bool IsStatic() const
+	{
+		return _mobility == Mobility::Static;
+	}
 
 	/** Translates this transform by the given vector
 	* 'vec' - The vector to translate this transform by
@@ -69,5 +78,6 @@ public:
 	///   Data   ///
 private:
 
+	// @TODO: Make this actually do something
 	Mobility _mobility;
 };

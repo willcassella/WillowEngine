@@ -2,6 +2,7 @@
 #pragma once
 
 #include "GameObject.h"
+#include "CameraComponent.h"
 
 class ENGINE_API Camera : public GameObject
 {
@@ -16,20 +17,20 @@ public:
 	///   Constructors   ///
 public:
 
-	Camera(const String& name = "", float vFOV = 43.f, float ratio = 1280.f / 720.f, float zMin = 0.1f, float zMax = 90.f);
+	Camera(const String& name = "");
 
-	//////////////////
-	///   Fields   ///
+	//////////////////////
+	///   Components   ///
 public:
 
-	float VFOV;
-	float Ratio;
-	float ZMin;
-	float ZMax;
+	CameraComponent CameraComponent;
 
 	///////////////////
 	///   Methods   ///
 public:
 
-	Mat4 GetPerspective() const;
+	FORCEINLINE Mat4 GetPerspective() const
+	{
+		return CameraComponent.GetPerspective();
+	}
 };

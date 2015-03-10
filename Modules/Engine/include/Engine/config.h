@@ -7,7 +7,15 @@
 ///   Build Configuration   ///
 
 #ifdef ENGINE_BUILD
-	#define ENGINE_API EXPORT
+#	define ENGINE_API EXPORT
 #else
-	#define ENGINE_API IMPORT
+#	define ENGINE_API IMPORT
 #endif
+
+//////////////////////////////
+///   Module Information   ///
+
+namespace Engine
+{
+	ENGINE_API const Module* GetModuleInfo();
+}

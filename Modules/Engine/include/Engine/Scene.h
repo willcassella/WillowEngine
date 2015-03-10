@@ -36,18 +36,10 @@ public:
 	void Update();
 	void DispatchEvent(const String& eventName, float value);
 
-	template <class GameObjectClass>
-	GameObjectClass& AddObject(const String& name)
-	{
-		GameObjectClass* object = new GameObjectClass(name);
-		_freshObjects.Push(object);
-		return *object;
-	}
-
 	template <class GameObjectClass, typename ... ParamTypes>
-	GameObjectClass& AddObject(const String& name, ParamTypes ... params)
+	GameObjectClass& AddObject(const String& name, const ParamTypes& ... params)
 	{
-		GameObjectClass* object = new GameObjectClass(name, params...);
+		GameObjectClass* object = new GameObjectClass(name, params);
 		_freshObjects.Push(object);
 		return *object;
 	}

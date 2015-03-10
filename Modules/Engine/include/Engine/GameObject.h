@@ -20,15 +20,15 @@ public:
 	///   Constructors   ///
 public:
 
-	// @TODO: Rule of five
 	GameObject(const String& name = "");
+	GameObject(const GameObject& copy) = delete;
+	GameObject(GameObject&& move) = delete;
 	~GameObject() override;
 
 	//////////////////
 	///   Fields   ///
 public:
 
-	String Name;
 	Transform Transform;
 	EventManager EventManager;
 
@@ -36,48 +36,104 @@ public:
 	///   Methods   ///
 public:
 
-	Scene& GetScene();
-	const Scene& GetScene() const;
-	void Destroy();
-	bool IsDestroyed() const;
-	List<Component*> GetComponents() const;
-
-	template <class ComponentType>
-	ComponentType& AddComponent()
+	/** Returns the name of this GameObject */
+	FORCEINLINE const String& GetName() const
 	{
-		ComponentType* component = new ComponentType(This);
-		_managedComponents.Add(component);
-		return *component;
+		return _name;
 	}
 
-	template <class ComponentType>
-	List<ComponentType*> GetComponentsOfType()
+	/** Returns whether this GameObject will be destroyed at the end of the scene update */
+	FORCEINLINE bool IsDestroyed() const
 	{
-		List<ComponentType*> matches;
+		return _isDestroyed;
+	}
 
-		for (auto& component : _components)
+	/** Returns a collection of all the Components attached to this GameObject */
+	FORCEINLINE const Array<Component*>& GetComponents()
+	{
+		return _components;
+	}
+
+	/** Returns a collection of the Components attached to this GameObject */
+	FORCEINLINE Array<const Component*> GetComponents() const
+	{
+		return Array<const Component*>(_components.CArray(), _components.Size());
+	}
+
+	/** Returns a collection of Components of the specified type attached to this GameObject */
+	template <class ComponentType>
+	Array<ComponentType*> GetComponentsOfType()
+	{
+		Array<ComponentType*> matches;
+
+		for (Component* component : _components)
 		{
-			if (component->IsA<ComponentType>())
+			ComponentType* castedComponent = Cast<ComponentType>(*component);
+
+			if (castedComponent)
 			{
-				matches.Add((ComponentType*)component);
+				matches.Add(castedComponent);
 			}
 		}
 
 		return matches;
 	}
 
+	/** Returns a collection of Components of the specified type attached to this GameObject */
+	template <class ComponentType>
+	Array<const ComponentType*> GetComponentsOfType() const
+	{
+		Array<ComponentType*> matches;
+
+		for (Component* component : _components)
+		{
+			ComponentType* castedComponent = Cast<ComponentType>(*component);
+
+			if (castedComponent)
+			{
+				matches.Add(castedComponent);
+			}
+		}
+
+		return matches;
+	}
+
+	/** Adds a Component of the specified type to this GameObject */
+	template <class ComponentType>
+	ComponentType& AddComponent()
+	{
+		ComponentType* component = new ComponentType(This);
+		_managedComponent.Add(component);
+		return *component;
+	}
+
+	/** Initiates the destruction procedure for this GameObject */
+	void Destroy();
+
 protected:
 
+	/** Updates the state of this GameObject (called once per scene update) */
 	virtual void Update(float timeInterval);
+
+	/** Behavior for this GameObject upon spawning */
 	virtual void OnSpawn();
+
+	/** Behavior for this GameObject upon removal from scene */
 	virtual void OnDestroy();
+
+	/////////////////////
+	///   Operators   ///
+public:
+
+	GameObject& operator=(const GameObject& copy) = delete;
+	GameObject& operator=(GameObject&& move) = delete;
 
 	////////////////
 	///   Data   ///
 private:
 
-	List<Component*> _components;
-	List<Component*> _managedComponents;
-	Scene* _scene;
+	String _name;
 	bool _isDestroyed;
+	Array<Component*> _managedComponent;
+	Array<Component*> _components;
 };

@@ -22,6 +22,9 @@
     <Filter Include="source\Misc">
       <UniqueIdentifier>{4a8a20ac-15f9-4ad5-a0ea-c39892ad9393}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\Resource">
+      <UniqueIdentifier>{fb140647-8278-4c28-84c3-89fe9203547a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Core\Containers\Array.h">
@@ -102,9 +105,6 @@
     <ClInclude Include="include\Core\String.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\System.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Application.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -116,6 +116,12 @@
     </ClInclude>
     <ClInclude Include="include\Core\Containers\Tuple.h">
       <Filter>include\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Resource\ResourceHandle.h">
+      <Filter>include\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\env.h">
+      <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

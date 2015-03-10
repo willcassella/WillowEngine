@@ -177,6 +177,18 @@ public:
 		return Size() == 0;
 	}
 
+	/** Converts this Array to a c-style array */
+	FORCEINLINE T* CArray()
+	{
+		return _values;
+	}
+
+	/** Converts this Array to a c-style array */
+	FORCEINLINE const T* CArray() const
+	{
+		return _values;
+	}
+
 	/** Returns whether a copy of the given value exists in this Array */
 	bool Contains(const T& value)
 	{
@@ -207,6 +219,34 @@ public:
 		}
 
 		FastAdd(value);
+	}
+
+	// @TODO: Test this
+	/** Insert the given value at the given index */
+	void Insert(const T& value, uint32 index)
+	{
+		// If our insert index is beyond the size of the array
+		if (index > Size())
+		{
+			// Add it to the end
+			Add(value);
+			return;
+		}
+
+		// If the array is already full
+		if (Size() >= Capacity())
+		{
+			Resize(Capacity() * 2);
+		}
+
+		// Move all proceeding elements back one index
+		for (uint32 i = Size(); i > index; --i)
+		{
+			_values[i] = std::move(_values[i - 1]);
+		}
+
+		// Insert the value
+		_values[index] = value;
 	}
 
 	/** Returns a reference to the element at the given index 

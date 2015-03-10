@@ -288,7 +288,7 @@ namespace Implementation
 	{
 		FORCEINLINE static String Function(AnyType& value, const String& string)
 		{
-			return AnyType::FromString(value, string);
+			return value.FromString(value, string);
 		}
 	};
 

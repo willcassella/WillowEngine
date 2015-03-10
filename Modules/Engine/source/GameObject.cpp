@@ -1,27 +1,26 @@
 // GameObject.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
-#include "..\include\Engine\GameObject.h"
+#include "../include/Engine/GameObject.h"
 
 //////////////////////
 ///   Reflection   ///
 
 CLASS_REFLECTION(GameObject)
-.AddField("Name", &GameObject::Name)
+.AddField("Name", &GameObject::_name) // @TODO: Register this differently?
 .AddField("Transform", &GameObject::Transform);
 
 ////////////////////////
 ///   Constructors   ///
 
 GameObject::GameObject(const String& name)
-	: Name(name)
+	: _name(name), _isDestroyed(false), _components()
 {
-	this->_scene = nullptr;
-	this->_isDestroyed = false;
+	// All done
 }
 
 GameObject::~GameObject()
 {
-	for (auto& component : _managedComponents)
+	for (Component* component : _managedComponent)
 	{
 		delete component;
 	}
@@ -30,44 +29,10 @@ GameObject::~GameObject()
 ///////////////////
 ///   Methods   ///
 
-Scene& GameObject::GetScene()
-{
-	if (_scene)
-	{
-		return *_scene;
-	}
-	else
-	{
-		throw String("GameObject is not associated with a scene");
-	}
-}
-
-const Scene& GameObject::GetScene() const
-{
-	if (_scene)
-	{
-		return *_scene;
-	}
-	else
-	{
-		throw String("GameObject is not associated with a scene");
-	}
-}
-
 void GameObject::Destroy()
 {
 	this->OnDestroy();
 	_isDestroyed = true;
-}
-
-bool GameObject::IsDestroyed() const
-{
-	return _isDestroyed;
-}
-
-List<Component*> GameObject::GetComponents() const
-{
-	return _components;
 }
 
 void GameObject::Update(float timeInterval)

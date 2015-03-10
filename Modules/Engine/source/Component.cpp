@@ -1,7 +1,7 @@
 // Component.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
-#include "..\include\Engine\GameObject.h"
-#include "..\include\Engine\Component.h"
+#include "../include/Engine/GameObject.h"
+#include "../include/Engine/Component.h"
 
 //////////////////////
 ///   Reflection   ///

@@ -7,9 +7,9 @@
 ///   Build configuration   ///
 
 #if defined MATH_BUILD
-	#define MATH_API EXPORT
+#	define MATH_API EXPORT
 #else
-	#define MATH_API IMPORT
+#	define MATH_API IMPORT
 #endif
 
 //////////////////////////////
