@@ -13,8 +13,7 @@ END_REFLECTION_INFO
 ////////////////////////
 ///   Constructors   ///
 
-FPSCamera::FPSCamera(const Willow::String& name, float vFOV, float ratio, float zMin, float zMax)
-	: Super(name, vFOV, ratio, zMin, zMax)
+FPSCamera::FPSCamera()
 {
 	EventManager.BindAxis("MoveForward", this, &FPSCamera::MoveForward);
 	EventManager.BindAxis("MoveRight", this, &FPSCamera::MoveRight);

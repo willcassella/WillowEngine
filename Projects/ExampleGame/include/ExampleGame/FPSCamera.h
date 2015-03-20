@@ -19,7 +19,7 @@ namespace ExampleGame
 		///   Constructors   ///
 	public:
 
-		FPSCamera(const Willow::String& name = "", float vFOV = 43.f, float ratio = 1280.f / 720.f, float zMin = 0.1f, float zMax = 90.f);
+		FPSCamera();
 
 		///////////////////
 		///   Actions   ///

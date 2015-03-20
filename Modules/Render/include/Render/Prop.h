@@ -15,16 +15,16 @@ namespace Willow
 		REFLECTABLE
 		EXTENDS(GameObject)
 
+		////////////////////////
+		///   Constructors   ///
+	public:
+
+		Prop();
+
 		//////////////////
 		///   Fields   ///
 	public:
 
 		StaticMeshComponent MeshComponent;
-
-		////////////////////////
-		///   Constructors   ///
-	public:
-
-		Prop(const String& name = "");
 	};
 }

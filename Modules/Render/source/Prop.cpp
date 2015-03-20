@@ -14,8 +14,8 @@ END_REFLECTION_INFO
 ////////////////////////
 ///   Constructors   ///
 
-Prop::Prop(const String& name)
-	: Super(name), MeshComponent(This)
+Prop::Prop()
+	: MeshComponent(This)
 {
 	// Do nothing
 }

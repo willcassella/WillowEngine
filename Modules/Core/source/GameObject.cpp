@@ -15,8 +15,7 @@ END_REFLECTION_INFO
 ////////////////////////
 ///   Constructors   ///
 
-GameObject::GameObject(const String& name)
-	: Name(name)
+GameObject::GameObject()
 {
 	this->_scene = nullptr;
 	this->_isDestroyed = false;

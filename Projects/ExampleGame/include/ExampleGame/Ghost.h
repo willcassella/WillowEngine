@@ -21,8 +21,7 @@ namespace ExampleGame
 		///   Constructors   ///
 	public:
 
-		Ghost(const Willow::String& name = "");
-		~Ghost() override = default;
+		Ghost();
 
 		//////////////////////
 		///   Components   ///

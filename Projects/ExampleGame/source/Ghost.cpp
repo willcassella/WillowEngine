@@ -13,8 +13,8 @@ END_REFLECTION_INFO
 ////////////////////////
 ///   Constructors   ///
 
-Ghost::Ghost(const Willow::String& name)
-	: Super(name), MeshComponent(This), Slider(This)
+Ghost::Ghost()
+	: MeshComponent(This), Slider(This)
 {
 	EventManager.BindAction("Poof", this, &Ghost::Disappear);
 	EventManager.BindAxis("Spin", this, &Ghost::Spin);

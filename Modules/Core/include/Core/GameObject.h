@@ -31,7 +31,7 @@ namespace Willow
 		///   Constructors   ///
 	public:
 
-		GameObject(const String& name = "");
+		GameObject();
 		~GameObject() override;
 
 		///////////////////

@@ -9,7 +9,7 @@ namespace Willow
 {
 	// Scene class contains all game objects and scene information
 	// @TODO: this needs some serious work
-	class CORE_API Scene : public object
+	class CORE_API Scene final : public object
 	{
 		///////////////////////
 		///   Information   ///
@@ -46,15 +46,8 @@ namespace Willow
 		template <class GameObjectClass>
 		GameObjectClass& AddObject(const String& name)
 		{
-			GameObjectClass* object = new GameObjectClass(name);
-			_freshObjects.Push(object);
-			return *object;
-		}
-
-		template <class GameObjectClass, typename ... ParamTypes>
-		GameObjectClass& AddObject(const String& name, ParamTypes ... params)
-		{
-			GameObjectClass* object = new GameObjectClass(name, params...);
+			GameObjectClass* object = new GameObjectClass();
+			object->Name = name;
 			_freshObjects.Push(object);
 			return *object;
 		}
