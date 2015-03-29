@@ -1,20 +1,18 @@
 // Queue.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "List.h"
+#include "Array.h"
 
-/** Push and pop the British way!
-* NOTE: 'StorageType' must be a linear collection that follows the
-* Willow engine collection interface (such as 'Array', or 'List') */
-template <typename T, template <typename F> class StorageType = List>
+/** Push and pop the British way! */
+template <typename T>
 struct Queue final
 {
 	///////////////////////
 	///   Inner Types   ///
 public:
 
-	typedef typename StorageType<T>::Iterator Iterator;
-	typedef typename StorageType<T>::ConstIterator ConstIterator;
+	typedef typename Array<T>::Iterator Iterator;
+	typedef typename Array<T>::ConstIterator ConstIterator;
 
 	////////////////////////
 	///   Constructors   ///
@@ -29,21 +27,6 @@ public:
 		: _values(init)
 	{
 		// All done
-	}
-	Queue(const Queue& copy)
-		: _values(copy._values)
-	{
-		// All done
-	}
-
-	template <template <typename F> class OtherStorageType>
-	Queue(const Queue<T, OtherStorageType>& copy)
-		: _values()
-	{
-		for (const auto& value : copy)
-		{
-			Push(value);
-		}
 	}
 
 	///////////////////
@@ -128,15 +111,6 @@ public:
 
 		return This;
 	}
-	Queue& operator=(const Queue& copy)
-	{
-		if (this != &copy)
-		{
-			_values = copy._values;
-		}
-
-		return This;
-	}
 	friend FORCEINLINE bool operator==(const Queue& lhs, const Queue& rhs)
 	{
 		return lhs._values == rhs._values;
@@ -146,22 +120,9 @@ public:
 		return lhs._values != rhs._values;
 	}
 
-	template <template <typename F> class OtherStorageType>
-	Queue& operator=(const Queue<T, OtherStorageType>& copy)
-	{
-		Clear();
-
-		for (const auto& value : copy)
-		{
-			Push(value);
-		}
-
-		return This;
-	}
-
 	////////////////
 	///   Data   ///
 private:
 
-	StorageType<T> _values;
+	Array<T> _values;
 };

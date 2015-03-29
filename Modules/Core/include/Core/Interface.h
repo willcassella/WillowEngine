@@ -1,7 +1,6 @@
 // Interface.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "String.h"
 #include "Reflection/Reflection.h"
 
 /** Base of every interface in the engine */
@@ -17,10 +16,7 @@ public:
 	///   Methods   ///
 public:
 
-	/** Returns a String representation of this Object */
-	String ToString() const;
-
-	/** Returns the underlying type of this Object */
+	/** Returns the underlying type of the Object implementing this interface */
 	const ClassInfo& GetType() const;
 };
 

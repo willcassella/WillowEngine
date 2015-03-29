@@ -3,6 +3,8 @@
 * header has forward-declarations for all of them */
 #pragma once
 
+#include "../config.h"
+
 ////////////////////////////////
 ///   Forward-declarations   ///
 
@@ -18,33 +20,21 @@ class ClassInfo;
 /** Defined in 'InterfaceInfo.h' */
 class InterfaceInfo;
 
-/** Defined in 'PrimitiveInfo.h' */
-class PrimitiveInfo;
-
-/** Defined in 'PointerInfo.h' */
-class PointerInfo;
-
-/** Defined in 'Reference.h' */
-struct Reference;
-
-/** Defined in 'Value.h' */
-struct Value;
+/** Defined in 'Variant.h' */
+struct Variant;
 
 //////////////////////////
 ///   Implementation   ///
 
 namespace Implementation
 {
-	/** Defined in 'Unpack.h' */
-	template <typename TargetType>
-	struct Unpack;
-
 	/** Default implementation of 'TypeOf' */
 	template <typename AnyType>
 	struct TypeOf
 	{
 		FORCEINLINE static const TypeInfo& Function()
 		{
+			static_assert(!std::is_same<AnyType, Variant>::value, "'Variant' has no static type information");
 			return AnyType::StaticTypeInfo;
 		}
 
@@ -58,13 +48,13 @@ namespace Implementation
 /////////////////////
 ///   Functions   ///
 
-/** Defined in 'Factory.h' */
-template <typename AnyType>
-Value StackFactory();
+/** Defined in 'TypeInfo.h' */
+template <typename TargetType, typename AnyType>
+TargetType* Cast(AnyType& value);
 
-/** Defined in 'Factory.h' */
-template <typename AnyType>
-Reference HeapFactory();
+/** Defined in 'TypeInfo.h' */
+template <typename TargetType, typename AnyType>
+const TargetType* Cast(const AnyType& value);
 
 /** Retrieves the type information for the given type
 * DO NOT OVERLOAD: Specialize struct 'Implementation::TypeOf' */
@@ -86,7 +76,7 @@ FORCEINLINE const TypeInfo& TypeOf(const AnyType& value)
 ///   Macros   ///
 
 /** Put this macro in the Information section of a struct you'd like to reflect
-* NOTE: Any struct that uses this macro must also use the 'BEGIN_STRUCT_REFLECTION' macro in their source file */
+* NOTE: Any struct that uses this macro must also use the 'STRUCT_REFLECTION' macro in their source file */
 #define REFLECTABLE_STRUCT							\
 public:												\
 	static const ::StructInfo StaticTypeInfo;		\
@@ -96,7 +86,7 @@ public:												\
 	}
 
 /** Put this macro in the Information section of a class you'd like to reflect
-* NOTE: Any class that uses this macro must also use the' BEGIN_CLASS_REFLECTION' macro in their source file */
+* NOTE: Any class that uses this macro must also use the'CLASS_REFLECTION' macro in their source file */
 #define REFLECTABLE_CLASS							\
 public:												\
 	static const ::ClassInfo StaticTypeInfo;		\
@@ -116,5 +106,3 @@ public:												\
 #define EXTENDS(T)									\
 public:												\
 	typedef T Super;
-
-/* NOTE: Reflection registration macros are declared in 'Registration.h' */

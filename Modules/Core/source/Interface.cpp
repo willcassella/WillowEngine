@@ -10,8 +10,3 @@ const ClassInfo& Interface::GetType() const
 {
 	return reinterpret_cast<const Object*>(this)->GetType();
 }
-
-String Interface::ToString() const
-{
-	return reinterpret_cast<const Object*>(this)->ToString();
-}

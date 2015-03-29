@@ -50,7 +50,7 @@ Value InterfaceInfo::StackInstance() const
 	return Value(); // Null Value
 }
 
-Reference InterfaceInfo::HeapInstance() const
+Variant InterfaceInfo::HeapInstance() const
 {
-	return Reference(); // Null Reference
+	return Variant(); // Null Reference
 }

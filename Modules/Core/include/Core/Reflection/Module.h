@@ -2,10 +2,9 @@
 #pragma once
 
 #include "PointerInfo.h"
-#include "Registration.h"
 
 /** Class holding a collection of Type information, associated with a .DLL/.SO */
-class CORE_API Module final : public Object
+class CORE_API Module final : Object
 {
 	///////////////////////
 	///   Information   ///
@@ -41,8 +40,8 @@ public:
 	/** Returns a collection of all the types defined in this Module */
 	Array<const TypeInfo*> GetTypes() const;
 
-	/** Searches for the type with the given name in this module 
-	* WARNING: returns 'nullptr' if the type was not found */
+	/** Searches for the type with the given name in this module
+	* NOTE: returns a null pointer if the type was not found */
 	const TypeInfo* FindType(const String& name) const;
 
 	/////////////////////

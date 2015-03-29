@@ -27,7 +27,15 @@ public:
 	template <class AnyStructType>
 	static StructInfo Create(const String& name)
 	{
+		static_assert(std::is_default_constructible<AnyStructType>::value, "Structs must be default-constructible");
+		static_assert(!std::is_polymorphic<AnyStructType>::value, "Structs may not be polymorphic");
 		return StructInfo(sizeof(AnyStructType), name, &StackFactory<AnyStructType>, &HeapFactory<AnyStructType>);
+	}
+
+	template <template <typename ... DependentTypes> class AnyStructTemplateType, typename ... DependentTypes>
+	static StructInfo CreateTemplate(const String& name)
+	{
+		
 	}
 
 	StructInfo(const StructInfo& copy) = delete;
@@ -36,7 +44,7 @@ public:
 
 private:
 
-	StructInfo(uint32 size, const String& name, Value(*stackFactory)(), Reference(*heapFactory)());
+	StructInfo(uint32 size, const String& name, Value(*stackFactory)(), Variant(*heapFactory)());
 
 	///////////////////
 	///   Methods   ///
@@ -63,7 +71,7 @@ public:
 
 	/** Returns a reference to an instance of this struct allocated on the heap
 	* NOTE: Callee has ownership over the lifetime of returned value (it must be deleted manually) */
-	Reference HeapInstance() const override;
+	Variant HeapInstance() const override;
 
 	/** Returns a list of all the fields of this type */
 	Array<const IFieldInfo*> GetFields() const;
@@ -90,9 +98,8 @@ public:
 	///   Data   ///
 private:
 
-	Value(*_stackFactory)();
-	Reference(*_heapFactory)();
 	Table<String, IFieldInfo*> _fields;
+	Array<const TypeInfo*> _dependentTypes;
 };
 
 //////////////////////////
@@ -138,7 +145,8 @@ namespace Implementation
 
 	/** Register TypeInfo for Array */
 	template <typename T>
-	const StructInfo TypeOf<Array<T>>::StaticTypeInfo = StructInfo::Create<Array<T>>(String::Format("Array<@>", ::TypeOf<T>().GetName()));
+	const StructInfo TypeOf<Array<T>>::StaticTypeInfo = 
+		StructInfo::CreateTemplate<Array, T>("Array");
 
 	/** TypeOf for List */
 	template <typename T>
@@ -160,23 +168,8 @@ namespace Implementation
 
 	/** Register TypeInfo for List */
 	template <typename T>
-	const StructInfo TypeOf<List<T>>::StaticTypeInfo = StructInfo::Create<List<T>>(String::Format("List<@>", ::TypeOf<T>().GetName()));
-
-	///** TypeOf for ArrayList */
-	//template <typename T>
-	//struct TypeOf < ArrayList<T> >
-	//{
-	//	static const TypeInfo& Function()
-	//	{
-	//		static StructInfo type = StructInfo::Create<ArrayList<T>>(String::Format("ArrayList<@>", ::TypeOf<T>().GetName()));
-	//		return type;
-	//	}
-
-	//	FORCEINLINE static const TypeInfo& Function(const ArrayList<T>& value)
-	//	{
-	//		return Function();
-	//	}
-	//};
+	const StructInfo TypeOf<List<T>>::StaticTypeInfo = 
+		StructInfo::CreateTemplate<List, T>("List");
 
 	/** TypeOf for Queue */
 	template <typename T, template <typename F> class StorageType>
@@ -197,9 +190,8 @@ namespace Implementation
 	};
 
 	/** Register TypeInfo for Queue */
-	template <typename T, template <typename F> class StorageType>
-	const StructInfo TypeOf<Queue<T, StorageType>>::StaticTypeInfo = 
-		StructInfo::Create<Queue<T, StorageType>>(String::Format("Queue<@, @>", ::TypeOf<T>().GetName(), ::TypeOf<StorageType<T>>().GetName()));
+	//template <typename T, template <typename F> class StorageType>
+	//const StructInfo TypeOf<Queue<T, StorageType>>::StaticTypeInfo = StructInfo::CreateTemplate<Queue<
 
 	/** TypeOf for Stack */
 	template <typename T, template <typename F> class StorageType>
@@ -245,7 +237,7 @@ namespace Implementation
 	/** Register TypeInfo for Table */
 	template <typename KeyType, typename ValueType>
 	const StructInfo TypeOf<Table<KeyType, ValueType>>::StaticTypeInfo = 
-		StructInfo::Create<Table<KeyType, ValueType>>(String::Format("Table<@, @>", ::TypeOf<KeyType>().GetName(), ::TypeOf<ValueType>().GetName()));
+		StructInfo::CreateTemplate<Table, KeyType, ValueType>("Table");
 
 	/** TypeOf for Pair */
 	template <typename FirstType, typename SecondType>
@@ -267,8 +259,8 @@ namespace Implementation
 
 	/** Register TypeInfo for Pair */
 	template <typename FirstType, typename SecondType>
-	const StructInfo TypeOf<Pair<FirstType, SecondType>>::StaticTypeInfo = StructInfo::Create<Pair<FirstType, SecondType>>(
-		String::Format("Pair<@, @>", ::TypeOf<FirstType>().GetName(), ::TypeOf<SecondType>().GetName()));
+	const StructInfo TypeOf<Pair<FirstType, SecondType>>::StaticTypeInfo = 
+		StructInfo::CreateTemplate<Pair, FirstType, SecondType>("Pair");
 
 	/** TypeOf for 3 Tuple */
 	template <typename FirstType, typename SecondType, typename ThirdType>
@@ -290,8 +282,8 @@ namespace Implementation
 
 	/** Register TypeInfo for 3 Tuple */
 	template <typename FirstType, typename SecondType, typename ThirdType>
-	const StructInfo TypeOf<Tuple<FirstType, SecondType, ThirdType>>::StaticTypeInfo = StructInfo::Create<Tuple<FirstType, SecondType, ThirdType>>(
-		String::Format("Tuple<@, @, @>", ::TypeOf<FirstType>().GetName(), ::TypeOf<SecondType>().GetName(), ::TypeOf<ThirdType>().GetName()));
+	const StructInfo TypeOf<Tuple<FirstType, SecondType, ThirdType>>::StaticTypeInfo = 
+		StructInfo::CreateTemplate<Tuple, FirstType, SecondType, ThirdType>("Tuple");
 
 	/** TypeInfo for 4 Tuple */
 	template <typename FirstType, typename SecondType, typename ThirdType, typename FourthType>
@@ -313,8 +305,8 @@ namespace Implementation
 
 	/** Register TypeInfo for 4 Tuple */
 	template <typename FirstType, typename SecondType, typename ThirdType, typename FourthType>
-	const StructInfo TypeOf<Tuple<FirstType, SecondType, ThirdType, FourthType>>::StaticTypeInfo = StructInfo::Create<Tuple<FirstType, SecondType, ThirdType, FourthType>>(
-		String::Format("Tuple<@, @, @, @>", ::TypeOf<FirstType>().Getname(), ::TypeOf<SecondType>().GetName(), ::TypeOf<ThirdType>().GetName(), ::TypeOf<FourthType>().GetName()));
+	const StructInfo TypeOf<Tuple<FirstType, SecondType, ThirdType, FourthType>>::StaticTypeInfo = 
+		StructInfo::CreateTemplate<Tuple, FirstType, SecondType, ThirdType, FourthType>("Tuple");
 
 	/** TypeInfo for 5 Tuple */
 	template <typename FirstType, typename SecondType, typename ThirdType, typename FourthType, typename FifthType>
@@ -336,6 +328,17 @@ namespace Implementation
 
 	/** Register TypeInfo for 5 Tuple */
 	template <typename FirstType, typename SecondType, typename ThirdType, typename FourthType, typename FifthType>
-	const StructInfo TypeOf<Tuple<FirstType, SecondType, ThirdType, FourthType, FifthType>>::StaticTypeInfo = StructInfo::Create<Tuple<FirstType, SecondType, ThirdType, FourthType, FifthType>>(
-		String::Format("Tuple<@, @, @, @>", ::TypeOf<FirstType>().GetName(), ::TypeOf<SecondType>().GetName(), ::TypeOf<ThirdType>().GetName(), ::TypeOf<FourthType>().GetName(), ::TypeOf<FifthType>().GetName()));
+	const StructInfo TypeOf<Tuple<FirstType, SecondType, ThirdType, FourthType, FifthType>>::StaticTypeInfo =
+		StructInfo::CreateTemplate<Tuple, FirstType, SecondType, ThirdType, FourthType, FifthType>("Tuple");
 }
+
+//////////////////
+///   Macros   ///
+
+/** Put this macro in the source file of a struct you'd like to reflect
+* NOTE: The struct must use the 'REFLECTABLE_STRUCT' flag in its "Information" section */
+#define STRUCT_REFLECTION(T) const ::StructInfo T::StaticTypeInfo = ::StructInfo::Create<T>(#T)
+
+/** Put this macro in the header file a struct template you'd like to reflect
+* NOTE: The struct must use the 'REFLECTABLE_STRUCT' flag in its "Information" section */
+#define TEMPLATE_STRUCT_REFLECTION(T, ...) const ::StructInfo T<_VA_ARGS_>::StaticTypeInfo = ::StructInfo::CreateTemplate<T, _VA_ARGS_>(#T)

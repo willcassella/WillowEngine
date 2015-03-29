@@ -23,7 +23,8 @@ public:
 	template <typename AnyPrimitiveType>
 	static PrimitiveInfo Create(const String& name)
 	{
-		return PrimitiveInfo(sizeof(AnyPrimitiveType), name, &StackFactory<AnyPrimitiveType>, &HeapFactory<AnyPrimitiveType>);
+		AnyPrimitiveType* dummy = nullptr;
+		return PrimitiveInfo(dummy, name);
 	}
 
 	PrimitiveInfo(const PrimitiveInfo& copy) = delete;
@@ -31,7 +32,12 @@ public:
 
 protected:
 
-	PrimitiveInfo(uint32 size, const String& name, Value(*stackFactory)(), Reference(*heapFactory)());
+	template <typename AnyPrimitiveType>
+	PrimitiveInfo(AnyPrimitiveType* dummy, const String& name)
+		: Super(dummy, name)
+	{
+		// All done
+	}
 
 	///////////////////
 	///   Methods   ///
@@ -45,19 +51,8 @@ public:
 	* NOTE: Always returns false - primitives are never polymorphic */
 	bool IsPolymorphic() const final override;
 
-	/** Returns whether this type is instantiable
-	* NOTE: Always returns true - primitives are always instantiable */
-	bool IsInstantiable() const final override;
-
 	/** Returns whether this type is castable (via reinterpret_cast) to the given type */
 	bool IsCastableTo(const TypeInfo& type) const override;
-
-	/** Returns an instance of this type, allocated on the stack */
-	Value StackInstance() const final override;
-
-	/** Returns a Reference to an instance of this type, allocated on the heap
-	* WARNING: Callee has ownership over the lifetime of returned value (it must be deleted manually) */
-	Reference HeapInstance() const final override;
 
 	/////////////////////
 	///   Operators   ///
@@ -65,13 +60,6 @@ public:
 
 	PrimitiveInfo& operator=(const PrimitiveInfo& copy) = delete;
 	PrimitiveInfo& operator=(PrimitiveInfo&& move) = delete;
-
-	////////////////
-	///   Data   ///
-protected:
-
-	Value(*_stackFactory)();
-	Reference(*_heapFactory)();
 };
 
 //////////////////////////

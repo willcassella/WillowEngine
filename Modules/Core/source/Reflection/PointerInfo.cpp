@@ -11,7 +11,7 @@ CLASS_REFLECTION(PointerInfo);
 ////////////////////////
 ///   Constructors   ///
 
-PointerInfo::PointerInfo(uint32 size, Value(*stackFactory)(), Reference(*heapFactory)(), const TypeInfo* pointedType, bool isConst)
+PointerInfo::PointerInfo(uint32 size, Value(*stackFactory)(), Variant(*heapFactory)(), const TypeInfo* pointedType, bool isConst)
 	: Super(size, "", stackFactory, heapFactory), _pointedType(pointedType), _isConst(isConst)
 {
 	// All done

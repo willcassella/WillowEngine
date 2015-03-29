@@ -13,7 +13,7 @@
 #	define IMPORT
 #	define EXPORT
 #else
-	/** Modules are being linked dynamically (as .DLL or .SO files) */
+	/** Modules are being linked dynamically (as .dll or .so files) */
 #	if defined WINDOWS
 		/** The engine is being compiled on Windows */
 #		define IMPORT __declspec(dllimport)
@@ -52,7 +52,7 @@ typedef std::uint64_t uint64;
 
 /** Inline macro */
 #if defined _MSC_VER
-	/** We're on MSVC, so use the __forceinline attribute */
+	/** We're on MSVC, so use the __forceinline specifier */
 #	define FORCEINLINE __forceinline
 #elif defined __clang__ || defined __GNUC__
 	/** We're on clang or gcc, so use the __attribute__((always_inline)) attribute */
@@ -63,5 +63,5 @@ typedef std::uint64_t uint64;
 #endif
 
 /** Shortcut for dereferencing 'this', useful for calling operators on self and returning reference to self in a clean way.
-* Still, prefer using 'this->' over 'This'. */
+* Still, you should prefer using 'this' over 'This'. */
 #define This (*this)

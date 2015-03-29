@@ -48,9 +48,6 @@
     <ClInclude Include="include\Core\Reflection\ClassInfo.h">
       <Filter>include\Reflection</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Reflection\Factory.h">
-      <Filter>include\Reflection</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Reflection\FieldInfo.h">
       <Filter>include\Reflection</Filter>
     </ClInclude>
@@ -66,25 +63,13 @@
     <ClInclude Include="include\Core\Reflection\PrimitiveInfo.h">
       <Filter>include\Reflection</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Reflection\Reference.h">
-      <Filter>include\Reflection</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Reflection\Reflection.h">
-      <Filter>include\Reflection</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Core\Reflection\Registration.h">
       <Filter>include\Reflection</Filter>
     </ClInclude>
     <ClInclude Include="include\Core\Reflection\StructInfo.h">
       <Filter>include\Reflection</Filter>
     </ClInclude>
     <ClInclude Include="include\Core\Reflection\TypeInfo.h">
-      <Filter>include\Reflection</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Core\Reflection\Unpack.h">
-      <Filter>include\Reflection</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Core\Reflection\Value.h">
       <Filter>include\Reflection</Filter>
     </ClInclude>
     <ClInclude Include="include\Core\config.h">
@@ -123,6 +108,15 @@
     <ClInclude Include="include\Core\env.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\Core\Reflection\Variant.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Misc\Signature.h">
+      <Filter>include\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Operations.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\String.cpp">
@@ -130,9 +124,6 @@
     </ClCompile>
     <ClCompile Include="source\Console.cpp">
       <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Reflection\Value.cpp">
-      <Filter>source\Reflection</Filter>
     </ClCompile>
     <ClCompile Include="source\Object.cpp">
       <Filter>source</Filter>
@@ -156,12 +147,6 @@
       <Filter>source\Reflection</Filter>
     </ClCompile>
     <ClCompile Include="source\Reflection\InterfaceInfo.cpp">
-      <Filter>source\Reflection</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Reflection\Unpack.cpp">
-      <Filter>source\Reflection</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Reflection\Reference.cpp">
       <Filter>source\Reflection</Filter>
     </ClCompile>
     <ClCompile Include="source\Reflection\Module.cpp">

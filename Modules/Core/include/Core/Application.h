@@ -2,9 +2,9 @@
 #pragma once
 
 #include "String.h"
-#include "Reflection/Reflection.h"
+#include "Object.h"
 
-struct CORE_API Application final
+class CORE_API Application final : public Object
 {
 	///////////////////////
 	///   Information   ///

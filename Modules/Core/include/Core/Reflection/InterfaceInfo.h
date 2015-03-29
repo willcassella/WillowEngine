@@ -4,7 +4,7 @@
 #include "TypeInfo.h"
 
 /** Type information for interfaces */
-class CORE_API InterfaceInfo final : public TypeInfo
+class CORE_API InterfaceInfo : public TypeInfo
 {
 	///////////////////////
 	///   Information   ///
@@ -23,15 +23,21 @@ public:
 	template <class AnyInterfaceType>
 	static InterfaceInfo Create(const String& name)
 	{
-		return InterfaceInfo(sizeof(AnyInterfaceType), name);
+		AnyInterfaceType* dummy = nullptr;
+		return InterfaceInfo(dummy, name);
 	}
 
 	InterfaceInfo(const InterfaceInfo& copy) = delete;
 	InterfaceInfo(InterfaceInfo&& move);
 
-private:
+protected:
 
-	InterfaceInfo(uint32 size, const String& name);
+	template <class AnyInterfaceType>
+	InterfaceInfo(AnyInterfaceType* dummy, const String& name)
+		: Super(dummy, name)
+	{
+		// All done
+	}
 
 	///////////////////
 	///   Methods   ///
@@ -39,23 +45,19 @@ public:
 
 	/** Returns whether this type is abstract
 	* NOTE: Always returns true - interfaces are always abstract */
-	bool IsAbstract() const override;
+	FORCEINLINE bool IsAbstract() const override
+	{
+		return true;
+	}
 
 	/** Returns whether this type is polymorphic
 	* NOTE: Always returns true - interfaces are always polymorphic */
-	bool IsPolymorphic() const override;
-
-	/** Returns whether this type is instantiable
-	* NOTE: Always returns false - interfaces are never instantiable */
-	bool IsInstantiable() const override;
-
+	FORCEINLINE bool IsPolymorphic() const override
+	{
+		return true;
+	}
 	
 	bool IsCastableTo(const TypeInfo& type) const override;
-
-	/** @TODO: Documentation */
-	Value StackInstance() const override;
-
-	Reference HeapInstance() const override;
 
 	/////////////////////
 	///   Operators   ///

@@ -10,7 +10,7 @@ CLASS_REFLECTION(StructInfo);
 ////////////////////////
 ///   Constructors   ///
 
-StructInfo::StructInfo(uint32 size, const String& name, Value(*stackFactory)(), Reference(*heapFactory)())
+StructInfo::StructInfo(uint32 size, const String& name, Value(*stackFactory)(), Variant(*heapFactory)())
 	: Super(size, name), _stackFactory(stackFactory), _heapFactory(heapFactory), _fields()
 {
 	// All done
@@ -59,7 +59,7 @@ Value StructInfo::StackInstance() const
 	return _stackFactory();
 }
 
-Reference StructInfo::HeapInstance() const
+Variant StructInfo::HeapInstance() const
 {
 	return _heapFactory();
 }

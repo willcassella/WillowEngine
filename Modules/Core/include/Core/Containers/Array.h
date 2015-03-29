@@ -21,9 +21,19 @@ template <typename T>
 struct Array final
 {
 	///////////////////////
+	///   Information   ///
+public:
+
+	static_assert(std::is_default_constructible<T>::value, 
+		"The type given to 'Array' must be default-constructible");
+	static_assert(!std::is_reference<T>::value,
+		"You can't create an 'Array' of references, dumbass");
+
+	///////////////////////
 	///   Inner Types   ///
 public:
 
+	/** Forward iterator for a mutable Array */
 	struct Iterator final
 	{
 		////////////////////////
@@ -61,6 +71,7 @@ public:
 		T* _value;
 	};
 
+	/** Forward iterator for an immutable Array */
 	struct ConstIterator final
 	{
 		////////////////////////

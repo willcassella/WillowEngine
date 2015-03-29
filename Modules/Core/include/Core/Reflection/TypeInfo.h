@@ -1,6 +1,7 @@
 // TypeInfo.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
+#include "../String.h"
 #include "../Object.h"
 
 /////////////////
@@ -15,6 +16,7 @@ public:
 
 	REFLECTABLE_CLASS;
 	EXTENDS(Object);
+	friend Variant;
 
 	////////////////////////
 	///   Constructors   ///
@@ -26,7 +28,34 @@ public:
 
 protected:
 
-	TypeInfo(uint32 size, const String& name);
+	/** @TODO: Documentation */
+	template <typename AnyType>
+	TypeInfo(AnyType* dummy, const String& name)
+		: _name(name)
+	{
+		_constructor = []()->void* 
+		{ 
+			return Implementation::Construct<AnyType>::Function();
+		};
+		_copyConstructor = [](const void* copy)->void* 
+		{ 
+			return Implementation::CopyConstruct<AnyType>::Function(*static_cast<const AnyType*>(copy)); 
+		};
+		_copyAssignmentOperator = [](void* value, const void* copy)->bool 
+		{
+			return Implementation::CopyAssign<AnyType>::Function(*static_cast<AnyType*>(value), *static_cast<const AnyType*>(copy));
+		};
+		_destructor = [](void* value)->bool
+		{
+			return Implementation::Destroy<AnyType>::Function(*static_cast<AnyType*>(value));
+		};
+
+		_size = sizeof(AnyType);
+		_isDefaultConstructible = std::is_default_constructible<AnyType>::value;
+		_isCopyConstructible = std::is_copy_constructible<AnyType>::value;
+		_isCopyAssignable = std::is_copy_assignable<AnyType>::value;
+		_isDestructible = std::is_destructible<AnyType>::value;
+	}
 
 	///////////////////
 	///   Methods   ///
@@ -39,29 +68,46 @@ public:
 	virtual String GetName() const;
 
 	/** Returns whether this type is abstract
-	* i.e - it has at least one pure virtual function */
+	* i.e - It has at least one pure virtual function */
 	virtual bool IsAbstract() const = 0;
 
 	/** Returns whether this type is polymorphic
-	* i.e - it is a class or interface (has virtual functions) */
+	* i.e - It has at least one virtual function */
 	virtual bool IsPolymorphic() const = 0;
 
-	/** Returns whether this type is instantiable via 'Instantiate()' */
-	virtual bool IsInstantiable() const = 0;
+	/** Returns whether this type is default-constructible */
+	FORCEINLINE bool IsDefaultConstructible() const
+	{
+		return _isDefaultConstructible;
+	}
 
-	/** Returns whether this type is castable (via 'reinterpret_cast') to the given type */
+	/** Returns whether this type is copy-constructible */
+	FORCEINLINE bool IsCopyConstructible() const
+	{
+		return _isCopyConstructible;
+	}
+
+	/** Returns whether this type is copy-assignable */
+	FORCEINLINE bool IsCopyAssignable() const
+	{
+		return _isCopyAssignable;
+	}
+
+	/** Returns whether this type is destructible */
+	FORCEINLINE bool IsDestructible() const
+	{
+		return _isDestructible;
+	}
+
+	/** Returns whether this type is bitwise castable to the given type */
 	virtual bool IsCastableTo(const TypeInfo& type) const = 0;
 
-	/** Returns an instance of this type, allocated on the stack
-	* WARNING: Returns a null Value if this type is not instantiable (check 'IsInstantiable()') */
-	virtual Value StackInstance() const = 0;
-
-	/** Returns a Reference to an instance of this type, allocated on the heap
-	* WARNING: Callee has ownership over the lifetime of returned value (it must be deleted manually)
-	* WARNING: Returns a null Reference if this type is not instantiable (check 'IsIntantiable()') */
-	virtual Reference HeapInstance() const = 0;
-		
-	/** Returns whether this type is castable (via 'reinterpret_cast') to the given type */
+	/** Returns a Variant to an instance of this type
+	* NOTE: Callee has ownership over the lifetime of returned value (it must be deleted manually)
+	* NOTE: Returns a "void" Variant if this type is not default-constructible, check 'IsConstructible()' before calling */
+	Variant Construct() const;
+	
+	/** Returns whether this type is bitwise castable to the given type */
 	template <typename AnyType>
 	FORCEINLINE bool IsCastableTo() const
 	{
@@ -76,19 +122,29 @@ public:
 	TypeInfo& operator=(TypeInfo&& move) = delete;
 	friend FORCEINLINE CORE_API bool operator==(const TypeInfo& lhs, const TypeInfo& rhs)
 	{
-		return lhs._name == rhs._name;
+		return lhs.GetName() == rhs.GetName();
 	}
 	friend FORCEINLINE CORE_API bool operator!=(const TypeInfo& lhs, const TypeInfo& rhs)
 	{
-		return lhs._name != rhs._name;
+		return lhs.GetName() != rhs.GetName();
 	}
 
 	////////////////
 	///   Data   ///
-protected:
+private:
 
-	uint32 _size;
 	String _name;
+	void*(*_constructor)();
+	void*(*_copyConstructor)(const void*);
+	bool(*_copyAssignmentOperator)(void*, const void*);
+	bool(*_destructor)(void*);
+	String(*_toStringOperation)(const void*);
+	String(*_fromStringOperation)(void*, const String&);
+	uint32 _size;
+	bool _isDefaultConstructible;
+	bool _isCopyConstructible;
+	bool _isCopyAssignable;
+	bool _isDestructible;
 };
 
 //////////////////////////
@@ -96,7 +152,7 @@ protected:
 
 namespace Implementation
 {
-	/** Default implementation of Cast */
+	/** Default implementation of "Cast" */
 	template <typename TargetType, typename AnyType>
 	struct Cast
 	{
@@ -113,7 +169,7 @@ namespace Implementation
 			}
 		}
 
-		/** Attempt to cast immutable reference */
+		/** Attempt to cast const reference */
 		FORCEINLINE static const TargetType* Function(const AnyType& value)
 		{
 			if (::TypeOf(value).template IsCastableTo<TargetType>())
@@ -126,32 +182,27 @@ namespace Implementation
 			}
 		}
 	};
-
-	/** Casting to references */
-	template <typename TargetType, typename AnyType>
-	struct Cast < TargetType&, AnyType >
-	{
-		// No casting to references!
-	};
 }
 
 /////////////////////
 ///   Functions   ///
 
 /** Safely casts from a reference of one type to the target class/interface/type
-* WARNING: Returns 'nullptr' if the cast is invalid (value does not legally translate to the given type)
+* WARNING: Returns a null pointer if the cast is invalid (value does not legally translate to the given type)
 * DO NOT OVERLOAD: Specialize struct 'Implementation::Cast' */
 template <typename TargetType, typename AnyType>
 FORCEINLINE TargetType* Cast(AnyType& value)
 {
+	static_assert(!std::is_reference<TargetType>::value, "Using 'Cast' to cast to a reference type is not allowed");
 	return Implementation::Cast<TargetType, AnyType>::Function(value);
 }
 
 /** Safely casts from an immutable reference of one type to the target class/interface/type
-* WARNING: Returns 'nullptr' if the cast is invalid (value does not legally translate to the given type)
+* WARNING: Returns a null pointer if the cast is invalid (value does not legally translate to the given type)
 * DO NOT OVERLOAD: Specialize struct 'Implementation::Cast' */
 template <typename TargetType, typename AnyType>
 FORCEINLINE const TargetType* Cast(const AnyType& value)
 {
+	static_assert(!std::is_reference<TargetType>::value, "Using 'Cast' to cast to a reference is not allowed");
 	return Implementation::Cast<TargetType, AnyType>::Function(value);
 }

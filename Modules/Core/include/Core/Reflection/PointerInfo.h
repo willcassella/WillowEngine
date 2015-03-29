@@ -23,15 +23,7 @@ public:
 	template <typename PointedType>
 	static PointerInfo Create(bool isConst)
 	{
-		if (isConst)
-		{
-			/** @TODO: Update this */
-			return PointerInfo(sizeof(const PointedType*), &StackFactory<const PointedType*>, &HeapFactory<const PointedType*>, &TypeOf<PointedType>(), true);
-		}
-		else
-		{
-			return PointerInfo(sizeof(PointedType*), &StackFactory<PointedType*>, &HeapFactory<PointedType*>, &TypeOf<PointedType>(), false);
-		}
+		
 	}
 
 	PointerInfo(const PointerInfo& copy) = delete;
@@ -39,7 +31,12 @@ public:
 
 private:
 
-	PointerInfo(uint32 size, Value(*stackFactory)(), Reference(*heapFactory)(), const TypeInfo* pointedType, bool isConst);
+	template <typename PointedType>
+	PointerInfo(PointedType* dummy, bool isConst)
+		: Super(dummy, ""), _pointedType(&TypeOf<PointedType>()), _isConst(isConst)
+	{
+		// All done
+	}
 
 	///////////////////
 	///   Methods   ///
@@ -116,7 +113,7 @@ namespace Implementation
 
 	/** Initialize const pointer information */
 	template <typename AnyType>
-	const PointerInfo TypeOf<const AnyType*>::StaticPointerInfo = PointerInfo::Create<AnyType>(true);
+	const PointerInfo TypeOf<const AnyType*>::StaticPointerInfo = PointerInfo::Create<const AnyType>(true);
 
 	// @TODO: Support for nullptr and void*
 }

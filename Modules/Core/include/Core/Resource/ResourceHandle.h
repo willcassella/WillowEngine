@@ -1,25 +1,21 @@
 // ResourceHandle.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "SystemResource.h"
-
-// @TODO: Refactor this
-// @TODO: Make this a struct
+#include "../Reflection/Registration.h"
 
 /////////////////
 ///   Types   ///
 
 /** An opaque pointer to a Resource
-* WARNING: ResourceType must be a subclass of SystemResource */
+* NOTE: ResourceType must be a subclass of 'Resource' */
 template <class ResourceType>
-class ResourceHandle : public Object
+struct ResourceHandle
 {
 	///////////////////////
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS;
-	EXTENDS(Object);
+	REFLECTABLE_STRUCT;
 
 	////////////////////////
 	///   Constructors   ///
@@ -48,7 +44,7 @@ public:
 	{
 		move._resource = nullptr;
 	}
-	~ResourceHandle() override
+	~ResourceHandle()
 	{
 		DeassignResource();
 	}
@@ -88,7 +84,6 @@ private:
 		_resource = (ResourceType*)res;
 		_resource->_refs++;
 	}
-
 
 	void DeassignResource()
 	{
@@ -166,4 +161,4 @@ private:
 ///   Reflection   ///
 
 template <class ResourceType>
-const ClassInfo ResourceHandle<ResourceType>::StaticTypeInfo = ClassInfo::Create<ResourceType>(String::Format("RessourceHandle<@>", TypeOf<ResourceType>().GetName()));
+const ClassInfo ResourceHandle<ResourceType>::StaticTypeInfo = ClassInfo::Create<ResourceType>(String::Format("ResourceHandle<@>", TypeOf<ResourceType>().GetName()));

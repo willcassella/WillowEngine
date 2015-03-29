@@ -3,6 +3,9 @@
 
 #include "../config.h"
 
+/////////////////
+///   Types   ///
+
 struct CORE_API TimeStamp final
 {
 	//////////////////
@@ -11,3 +14,11 @@ public:
 
 
 };
+
+//////////////////
+///   Macros   ///
+
+/** Creates a new TimeStamp holding the  */
+#define TIMESTAMP_TIME_NOW ::TimeStamp(__TIME__)
+#define TIMESTAMP_DATE_NOW ::TimeStamp(__DATE__)
+#define TIMESTAMP_DATE_TIME_NOW ::TimeStamp(__TIME__, __DATE__)

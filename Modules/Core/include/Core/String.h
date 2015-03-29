@@ -1,5 +1,4 @@
 // String.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
-/** All code for creating and manipulating Strings lives here */
 #pragma once
 
 #include "Containers/Tuple.h"
@@ -7,27 +6,14 @@
 #include "Containers/Queue.h"
 #include "Containers/Stack.h"
 #include "Containers/Table.h"
-
-////////////////////////////////
-///   Forward declarations   ///
-
-/** Defined below */
-struct String;
-
-/** Defined below */
-template <typename AnyType>
-FORCEINLINE String ToString(const AnyType&);
-
-/** Defined below */
-template <typename AnyType>
-FORCEINLINE String FromString(AnyType&, const String&);
+#include "Operations.h"
 
 /////////////////
 ///   Types   ///
 
 /** A String. Basically just an array of characters, and the
 * operations associated with that. */
-struct CORE_API String
+struct CORE_API String final
 {
 	////////////////////////
 	///   Constructors   ///
@@ -259,19 +245,6 @@ private:
 
 namespace Implementation
 {
-	///////////////////////////////////
-	///   Default Implementations   ///
-
-	/** Default implementation of ToString */
-	template <typename AnyType>
-	struct ToString
-	{
-		FORCEINLINE static String Function(const AnyType& value)
-		{
-			return value.ToString();
-		}
-	};
-
 	/** Default implementation of ToExplicitString (no quotation marks) */
 	template <typename AnyType>
 	struct ToExplicitString
@@ -279,16 +252,6 @@ namespace Implementation
 		FORCEINLINE static String Function(const AnyType& value)
 		{
 			return ::ToString(value);
-		}
-	};
-
-	/** Default implementation of FromString */
-	template <typename AnyType>
-	struct FromString
-	{
-		FORCEINLINE static String Function(AnyType& value, const String& string)
-		{
-			return value.FromString(value, string);
 		}
 	};
 
@@ -478,6 +441,9 @@ namespace Implementation
 		}
 	};
 
+	////////////////////////
+	///   String Types   ///
+
 	/** Convert a non-const c-string to a String
 	* NOTE: A non-const c-string cannot be parsed from a String */
 	template <>
@@ -593,10 +559,10 @@ namespace Implementation
 	///   Container Types   ///
 
 	/** Convert a generic container to a String */
-	template <class ContainerType, typename ElementType>
+	template <template <typename ElementType> class ContainerType, typename ElementType>
 	struct ContainerToString
 	{
-		static String Function(const ContainerType& value)
+		static String Function(const ContainerType<ElementType>& value)
 		{
 			String result('{');
 
@@ -625,7 +591,7 @@ namespace Implementation
 	{
 		FORCEINLINE static String Function(const Array<T>& value)
 		{
-			return ContainerToString<Array<T>, T>::Function(value);
+			return ContainerToString<Array, T>::Function(value);
 		}
 	};
 
@@ -635,37 +601,27 @@ namespace Implementation
 	{
 		FORCEINLINE static String Function(const List<T>& value)
 		{
-			return ContainerToString<List<T>, T>::Function(value);
+			return ContainerToString<List, T>::Function(value);
 		}
 	};
 
-	///** Convert an ArrayList to a String */
-	//template <typename T>
-	//struct ToString < ArrayList<T> >
-	//{
-	//	FORCEINLINE static String Function(const ArrayList<T>& value)
-	//	{
-	//		return ContainerToString(value);
-	//	}
-	//};
-
 	/** Convert a Queue to a String */
-	template <typename T, template <typename F> class StorageType>
-	struct ToString < Queue<T, StorageType> >
+	template <typename T>
+	struct ToString < Queue<T> >
 	{
-		FORCEINLINE static String Function(const Queue<T, StorageType>& value)
+		FORCEINLINE static String Function(const Queue<T>& value)
 		{
-			return ContainerToString<Queue<T, StorageType>, T>::Function(value);
+			return ContainerToString<Queue, T>::Function(value);
 		}
 	};
 
 	/** Convert a Stack to a String */
-	template <typename T, template <typename F> class StorageType>
-	struct ToString < Stack<T, StorageType> >
+	template <typename T>
+	struct ToString < Stack<T> >
 	{
-		FORCEINLINE static String Function(const Stack<T, StorageType>& value)
+		FORCEINLINE static String Function(const Stack<T>& value)
 		{
-			return ContainerToString<Stack<T, StorageType>, T>(value);
+			return ContainerToString<Stack, T>(value);
 		}
 	};
 
@@ -713,23 +669,4 @@ namespace Implementation
 			);
 		}
 	};
-}
-
-/////////////////////
-///   Functions   ///
-
-/** Converts the given value to a String 
-* DO NOT OVERLOAD: Specialize struct Implementation::ToString */
-template <typename AnyType>
-FORCEINLINE String ToString(const AnyType& value)
-{
-	return Implementation::ToString<AnyType>::Function(value);
-}
-
-/** Parse the given String as the given value's type, returning the remaining String 
-* DO NOT OVERLOAD: Specialize struct Implementation::FromString */
-template <typename AnyType>
-FORCEINLINE String FromString(AnyType& value, const String& string)
-{
-	return Implementation::FromString<AnyType>::Function(value, string);
 }

@@ -11,7 +11,7 @@ CLASS_REFLECTION(PrimitiveInfo);
 ////////////////////////
 ///   Constructors   ///
 
-PrimitiveInfo::PrimitiveInfo(uint32 size, const String& name, Value(*stackFactory)(), Reference(*heapFactory)())
+PrimitiveInfo::PrimitiveInfo(uint32 size, const String& name, Value(*stackFactory)(), Variant(*heapFactory)())
 	: Super(size, name), _stackFactory(stackFactory), _heapFactory(heapFactory)
 {
 	// All done
@@ -51,7 +51,7 @@ Value PrimitiveInfo::StackInstance() const
 	return _stackFactory();
 }
 
-Reference PrimitiveInfo::HeapInstance() const
+Variant PrimitiveInfo::HeapInstance() const
 {
 	return _heapFactory();
 }

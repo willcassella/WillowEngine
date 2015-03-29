@@ -5,7 +5,7 @@
 #include "FieldInfo.h"
 
 /** Type information for classes */
-class CORE_API ClassInfo final : public TypeInfo
+class CORE_API ClassInfo : public TypeInfo
 {
 	///////////////////////
 	///   Information   ///
@@ -25,45 +25,46 @@ public:
 	template <class AnyClass>
 	static ClassInfo Create(const String& name)
 	{
-		return ClassInfo(sizeof(AnyClass), name, &AnyClass::Super::StaticTypeInfo, std::is_abstract<AnyClass>::value);
+		static_assert(std::is_base_of<Object, AnyClass>::value, "Classes must be extend 'Object'");
+		AnyClass* dummy = nullptr;
+		return ClassInfo(dummy, name);
 	}
 	
 	ClassInfo(const ClassInfo& copy) = delete;
 	ClassInfo(ClassInfo&& move);
-	~ClassInfo() override;
 
-private:
+protected:
 
-	ClassInfo(uint32 size, const String& name, const ClassInfo* base, bool isAbstract);
+	template <class AnyClass>
+	ClassInfo(AnyClass* dummy, const String& name)
+		: Super(dummy, name)
+	{
+		_base = &AnyClass::Super::StaticTypeInfo;
+		_isAbstract = std::is_abstract<AnyClass>::value;
+	}
 
 	///////////////////
 	///   Methods   ///
 public:
 
 	/** Returns whether this class is abstract */
-	bool IsAbstract() const override;
+	FORCEINLINE bool IsAbstract() const final override
+	{
+		return _isAbstract;
+	}
 
 	/** Returns whether this class is polymorphic 
 	* NOTE: Always returns true - classes are always polymorphic */
-	bool IsPolymorphic() const override;
-
-	/** Returns whether this class is instantiable */
-	bool IsInstantiable() const override;
+	FORCEINLINE bool IsPolymorphic() const final override
+	{
+		return true;
+	}
 
 	/** Returns whether this type castable (via reinterpret_cast) to the given type */
 	bool IsCastableTo(const TypeInfo& type) const override;
-		
-	/** Returns an instance of this class, allocated on the stack
-	* WARNING: Returns a null Value if this class is not instantiable (check 'IsInstantiable()') */
-	Value StackInstance() const override;
-
-	/** Returns a Reference to an instance of this class, allocated on the heap
-	* WARNING: Callee has ownership over the lifetime of returned value (it must be deleted manually)
-	* WARNING: Returns a null Reference if this class is not instantiable (check 'IsIntantiable()') */
-	Reference HeapInstance() const override;
 
 	/** Returns a list of all the fields of this type */
-	Array<const IFieldInfo*> GetFields() const;
+	Array<FieldInfo> GetFields() const;
 
 	/** Returns whether this class extends the given class */
 	bool ExtendsClass(const ClassInfo& type) const;
@@ -72,16 +73,13 @@ public:
 	bool ImplementsInterface(const InterfaceInfo& interf) const;
 
 	/** Searches for the field in this type */
-	const IFieldInfo* FindField(const String& name) const;
-
-	/** Sets the factory function for this type
-	* NOTE: You should always call this with '&StackFactory<MyType>()', and '&HeapFactory<MyType>()'
-	* NOTE: When using macros, this is automatically configured by using the 'HAS_FACTORY' flag */
-	ClassInfo&& SetFactory(Value(*stackFactory)(), Reference(*heapFactory)());
+	FORCEINLINE const FieldInfo* FindField(const String& name) const
+	{
+		return _fields.Find(name);
+	}
 
 	/** Adds a field to this type's fields
-	* NOTE: Only register fields that were added by this class, DO NOT include base class fields. You can Register base classes with the SetBase() method 
-	* NOTE: When using macros, this is automatically configured by using the 'FIELD(F)' macro */
+	* NOTE: Only register fields that were added by this class, DO NOT include base class fields */
 	template <class OwnerType, typename FieldType>
 	ClassInfo&& AddField(const String& name, FieldType OwnerType::*field)
 	{
@@ -101,10 +99,14 @@ public:
 protected:
 
 	const ClassInfo* _base;
-	bool _isAbstract;
-	bool _isInstantiable;
-	Value(*_stackFactory)();
-	Reference(*_heapFactory)();
+	Table<String, FieldInfo> _fields;
 	Array<const InterfaceInfo*> _interfaces;
-	Table<String, IFieldInfo*> _fields;
+	bool _isAbstract;
 };
+
+//////////////////
+///   Macros   ///
+
+/** Put this macro into the source file of a class you'd like to reflect
+* NOTE: The class muse use the 'REFLECTABLE_CLASS' flag in it's header */
+#define CLASS_REFLECTION(T) const ::ClassInfo T::StaticTypeInfo = ::ClassInfo::Create<T>(#T)
