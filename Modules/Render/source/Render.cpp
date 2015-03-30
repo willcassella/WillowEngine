@@ -141,10 +141,12 @@ void InitRenderer(uint32 width, uint32 height)
 	GLuint fShader = glCreateShader(GL_FRAGMENT_SHADER);
 	const char* fSource =
 		"#version 330 core\n"
-		"uniform sampler2D activeBuffer;\n"
+		"uniform sampler2D diffuseBuffer;\n"
+		//"uniform sampler2D normalBuffer;\n"
+		//"uniform sampler2D specularBuffer;\n"
 		"in vec2 texCoord;\n"
 		"layout(location = 0) out vec4 outColor;\n"
-		"void main() { outColor = texture(activeBuffer, texCoord); }";
+		"void main() { outColor = texture(diffuseBuffer, texCoord); }";
 	glShaderSource(fShader, 1, &fSource, nullptr);
 	glCompileShader(fShader);
 
@@ -163,7 +165,7 @@ void InitRenderer(uint32 width, uint32 height)
 	glEnableVertexAttribArray(coordinateAttrib);
 	glVertexAttribPointer(coordinateAttrib, 2, GL_FLOAT, false, sizeof(float)*4, (void*)(sizeof(float)*2));
 
-	glUniform1i(glGetUniformLocation(screenQuadProgram, "activeBuffer"), 0);
+	glUniform1i(glGetUniformLocation(screenQuadProgram, "diffuseBuffer"), 0);
 }
 
 void CleanUpRenderer()
