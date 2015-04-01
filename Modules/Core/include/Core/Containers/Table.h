@@ -116,8 +116,6 @@ public:
 	/** Inserts a new key-value pair, replacing the existing entry if there is a conflict */
 	void Insert(const KeyType& key, const ValueType& value)
 	{
-		auto existingEntry = Find(key);
-
 		for (auto& entry : _values)
 		{
 			if (entry.First == key)
