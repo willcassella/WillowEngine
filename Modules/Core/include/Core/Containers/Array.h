@@ -3,6 +3,7 @@
 
 #include <cassert>
 #include <utility>
+#include <new>
 #include "../config.h"
 
 /** A linear, contiguous array. Replacement for 'std::vector'.
