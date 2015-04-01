@@ -12,10 +12,10 @@
 * - Fastest random element access
 * - Fastest creation/deletion
 * - Most efficient memory usage (after 'ShrinkWrap()')
+* - Unlike std::vector, the given type does not have to be default-constructible
 * Cons:
 * - Taking pointers to elements is not safe
-* - Element type must be default-constructible
-* - Element removal is an O(n) operation
+* - Element removal and insertion is at worst an O(n) operation
 * - Adding beyond 'Capacity()' requires reallocation of the entire Array */
 template <typename T>
 struct Array final
@@ -24,8 +24,8 @@ struct Array final
 	///   Information   ///
 public:
 
-	static_assert(std::is_default_constructible<T>::value, 
-		"The type given to 'Array' must be default-constructible");
+	static_assert(std::is_destructible<T>::value,
+		"The given inner type of 'Array' must have a public destructor");
 	static_assert(!std::is_reference<T>::value,
 		"You can't create an 'Array' of references, dumbass");
 
@@ -115,7 +115,7 @@ public:
 
 	/** Default-constructs an Array */
 	Array()
-		: _allocSize(0), _values(nullptr), _numElements(0)
+		: _values(nullptr), _allocSize(0), _numElements(0)
 	{
 		// All done
 	}
@@ -123,9 +123,10 @@ public:
 	/** Constructs a new Array
 	* 'size' - the starting size of the array */
 	Array(uint32 size)
-		: _allocSize(size), _values(new T[_allocSize]), _numElements(0)
+		: Array()
 	{
-		// All done
+		_values = (T*)new byte[sizeof(T) * size];
+		_allocSize = size;
 	}
 
 	/** Constructs a new Array from a c-style array */
@@ -155,15 +156,19 @@ public:
 		}
 	}
 	Array(Array&& move)
-		: _allocSize(move._allocSize), _values(move._values), _numElements(move._numElements)
+		: _values(move._values), _allocSize(move._allocSize), _numElements(move._numElements)
 	{
 		move._values = nullptr;
-		move._numElements = 0;
 		move._allocSize = 0;
+		move._numElements = 0;
 	}
 	~Array()
 	{
-		delete[] _values;
+		for (uint32 i = 0; i < _numElements; ++i)
+		{
+			_values[i].~T();
+		}
+		delete[] (byte*)_values;
 	}
 
 	///////////////////
@@ -214,8 +219,8 @@ public:
 		return false;
 	}
 
-	/** Appends a new element to the end of this Array */
-	void Add(const T& value)
+	/** Appends a new element to the end of this Array, returning the new element's index */
+	uint32 Add(const T& value)
 	{
 		if (Size() >= Capacity())
 		{
@@ -229,19 +234,19 @@ public:
 			}
 		}
 
-		FastAdd(value);
+		return FastAdd(value);
 	}
 
 	// @TODO: Test this
-	/** Insert the given value at the given index */
-	void Insert(const T& value, uint32 index)
+	/** Insert the given value at the given index, returning the index of the new element
+	* (which may be different from the given index) */
+	uint32 Insert(const T& value, uint32 index)
 	{
 		// If our insert index is beyond the size of the array
 		if (index > Size())
 		{
 			// Add it to the end
-			Add(value);
-			return;
+			return Add(value);
 		}
 
 		// If the array is already full
@@ -250,14 +255,19 @@ public:
 			Resize(Capacity() * 2);
 		}
 
-		// Move all proceeding elements back one index
-		for (uint32 i = Size(); i > index; --i)
+		// Move element on the end up an index
+		new(_values + _numElements) T(std::move(_values[_numElements - 1]));
+
+		// Move all proceeding elements up an index
+		for (uint32 i = _numElements - 1; i > index; --i)
 		{
 			_values[i] = std::move(_values[i - 1]);
 		}
 
 		// Insert the value
 		_values[index] = value;
+		++_numElements;
+		return index;
 	}
 
 	/** Returns a reference to the element at the given index 
@@ -322,6 +332,11 @@ public:
 			return Array();
 		}
 
+		if (end > Size())
+		{
+			end = Size();
+		}
+
 		return Array(_values + start, end - start);
 	}
 
@@ -345,17 +360,11 @@ public:
 	* NOTE: This may offset the index of every proceeding element by -1 */
 	void DeleteAt(uint32 index)
 	{
-		if (index >= Size())
-		{
-			return;
-		}
-
-		for (uint32 i = index; i < Size() - 1; ++i)
+		for (uint32 i = index; i < Size(); ++i)
 		{
 			_values[i] = std::move(_values[i + 1]);
 		}
-
-		--_numElements;
+		_values[--_numElements].~T();
 	}
 
 	/** Deletes the first occurrence of the given value in this Array
@@ -404,13 +413,12 @@ public:
 		}
 	}
 
-	/** Returns a copy of the value stored at the given index before deleting it
-	* WARNING: Make sure the index exists in this Array
+	/** Extracts the value stored at the given index before deleting it
+	* WARNING: Make sure the given index exists in this Array
 	* NOTE: This offsets the index of every proceeding element by -1 */
 	T RemoveAt(uint32 index)
 	{
-		assert(index < Size());
-		T value = std::move(FastGet(index));
+		T value = std::move(Get(index));
 		DeleteAt(index);
 		return value;
 	}
@@ -419,15 +427,21 @@ public:
 	* NOTE: To prevent loss of data, ensure that the given size is greater than the current size of the array */
 	void Resize(uint32 size)
 	{
-		T* newValues = new T[size];
+		T* newValues = (T*)new byte[sizeof(T) * size];
 
 		uint32 i;
 		for (i = 0; i < size && i < Size(); ++i)
 		{
-			newValues[i] = std::move(_values[i]);
+			// Move all elements below 'size' into new array
+			new(newValues + i) T(std::move(_values[i]));
 		}
+		for (i = 0; i < Size(); ++i)
+		{
+			// Destroy all elements in old array
+			_values[i].~T();
+		}
+		delete[] (byte*)_values;
 
-		delete[] _values;
 		_values = newValues;
 		_allocSize = size;
 		_numElements = i;
@@ -439,21 +453,27 @@ public:
 		Resize(Size());
 	}
 
-	/** Quickly deletes all values from this Array, preserving size 
-	* NOTE: Does not actually call destructor on existing elements. For that call 'Reset(Size())' */
+	/** Quickly deletes all values from this Array, preserving size */
 	FORCEINLINE void Clear()
 	{
+		for (uint32 i = _numElements; i > 0; --i)
+		{
+			_values[i - 1].~T();
+		}
 		_numElements = 0;
 	}
 
 	/** Deletes all values from this Array, resetting size */
 	void Reset(uint32 size)
 	{
-		delete[] _values;
-
-		_allocSize = size;
-		_values = new T[_allocSize];
+		for (uint32 i = 0; i < Size(); ++i)
+		{
+			_values[i].~T();
+		}
 		_numElements = 0;
+
+		_values = (T*)new byte[sizeof(T) * size];
+		_allocSize = size;
 	}
 
 	/* Iteration methods */
@@ -483,7 +503,7 @@ private:
 		return _values[index];
 	}
 
-	/** Returns an immutable reference to the element at the given index 
+	/** Returns an immutable reference to the element at the given index
 	* WARNING: Only use this if you KNOW (algorithmically) that the index exists in this Array */
 	FORCEINLINE const T& FastGet(uint32 index) const
 	{
@@ -491,10 +511,12 @@ private:
 	}
 
 	/** Adds an element to the end of this Array without checking for available space
+	* Returns the index of the new element
 	* WARNING: Only use this if you KNOW (algorithmically) that there is enough space */
-	FORCEINLINE void FastAdd(const T& value)
+	FORCEINLINE uint32 FastAdd(const T& value)
 	{
-		_values[_numElements++] = value;
+		new(_values + _numElements) T(value);
+		return _numElements++;
 	}
 
 	/////////////////////
@@ -529,7 +551,7 @@ public:
 	{
 		if (this != &move)
 		{
-			delete[] _values;
+			Reset(0);
 			_allocSize = move._allocSize;
 			_values = move._values;
 			_numElements = move._numElements;
@@ -540,12 +562,12 @@ public:
 		}
 		return This;
 	}
-	T& operator[](uint32 index)
+	FORCEINLINE T& operator[](uint32 index)
 	{
 		assert(index < Size());
 		return FastGet(index);
 	}
-	const T& operator[](uint32 index) const
+	FORCEINLINE const T& operator[](uint32 index) const
 	{
 		assert(index < Size());
 		return FastGet(index);
@@ -568,21 +590,14 @@ public:
 	}
 	friend Array& operator+=(Array& lhs, const Array& rhs)
 	{
-		if (lhs.Capacity() >= lhs.Size() + rhs.Size())
-		{
-			for (const auto& item : rhs)
-			{
-				lhs.FastAdd(item);
-			}
-		}
-		else
+		if (lhs.Capacity() < lhs.Size() + rhs.Size())
 		{
 			lhs.Resize(lhs.Size() + rhs.Size());
+		}
 
-			for (const auto& item : rhs)
-			{
-				lhs.FastAdd(item);
-			}
+		for (const auto& item : rhs)
+		{
+			lhs.FastAdd(item);
 		}
 
 		return lhs;
@@ -612,8 +627,8 @@ public:
 	////////////////
 	///   Data   ///
 private:
-
-	uint32 _allocSize;
+	
 	T* _values;
+	uint32 _allocSize;
 	uint32 _numElements;
 };

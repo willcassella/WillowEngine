@@ -1,6 +1,7 @@
 // ClassInfo.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
 #include "../../include/Core/Reflection/ClassInfo.h"
+#include "../../include/Core/Reflection/InterfaceInfo.h"
 
 ///////////////////////
 ///   Information   ///
@@ -22,35 +23,23 @@ ClassInfo::ClassInfo(ClassInfo&& move)
 bool ClassInfo::IsCastableTo(const TypeInfo& type) const
 {
 	// If the given type is a class
-	if (type.IsA<ClassInfo>())
+	if (type.GetType().Extends<ClassInfo>())
 	{
 		// Check if this class is the given class or extends the given class
-		return type == This || ExtendsClass(static_cast<const ClassInfo&>(type));
+		return type == This || Extends(static_cast<const ClassInfo&>(type));
 	}
 	// If the given type is an interface
-	else if (type.IsA<InterfaceInfo>())
+	else if (type.GetType().Extends<InterfaceInfo>())
 	{
 		// Check if this class implements the given interface
-		return ImplementsInterface(static_cast<const InterfaceInfo&>(type));
+		return Implements(static_cast<const InterfaceInfo&>(type));
 	}
 
 	// If neither is true, the types are definitely not compatible
 	return false;
 }
 
-Array<FieldInfo> ClassInfo::GetFields() const
-{
-	Array<FieldInfo> fields(_fields.Size());
-
-	for (auto field : _fields)
-	{
-		fields.Add(field.Second);
-	}
-
-	return fields;
-}
-
-bool ClassInfo::ExtendsClass(const ClassInfo& type) const
+bool ClassInfo::Extends(const ClassInfo& type) const
 {
 	// If we have a base class
 	if (_base)
@@ -64,7 +53,7 @@ bool ClassInfo::ExtendsClass(const ClassInfo& type) const
 		else
 		{
 			// The base class might extend that class
-			return _base->ExtendsClass(type);
+			return _base->Extends(type);
 		}
 	}
 	else
@@ -74,7 +63,7 @@ bool ClassInfo::ExtendsClass(const ClassInfo& type) const
 	}
 }
 
-bool ClassInfo::ImplementsInterface(const InterfaceInfo& interf) const
+bool ClassInfo::Implements(const InterfaceInfo& interf) const
 {
 	// Check if the interface is implemented at this level
 	for (auto implementedInterf : _interfaces)
@@ -88,7 +77,7 @@ bool ClassInfo::ImplementsInterface(const InterfaceInfo& interf) const
 	// Check if the base class implements this interface
 	if (_base)
 	{
-		return _base->ImplementsInterface(interf);
+		return _base->Implements(interf);
 	}
 	else
 	{

@@ -20,5 +20,6 @@ class Module;
 
 namespace Core
 {
+	/** Gets module information for the 'Core' module */
 	CORE_API const Module* GetModuleInfo();
 }

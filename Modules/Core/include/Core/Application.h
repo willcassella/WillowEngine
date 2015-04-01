@@ -10,6 +10,8 @@ class CORE_API Application final : public Object
 	///   Information   ///
 public:
 
+	REFLECTABLE_CLASS;
+	EXTENDS(Object);
 	friend TypeInfo;
 
 	////////////////////////

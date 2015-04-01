@@ -117,6 +117,9 @@
     <ClInclude Include="include\Core\Operations.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\Core\Reflection\VoidInfo.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\String.cpp">
@@ -160,6 +163,12 @@
     </ClCompile>
     <ClCompile Include="source\Misc\TimeStamp.cpp">
       <Filter>source\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\FieldInfo.cpp">
+      <Filter>source\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\VoidInfo.cpp">
+      <Filter>source\Reflection</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

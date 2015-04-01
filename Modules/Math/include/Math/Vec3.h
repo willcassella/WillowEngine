@@ -54,12 +54,6 @@ public:
 		return Vec3(X / length, Y / length, Z / length);
 	}
 
-	/** Parse a Vec3 from a String */
-	FORCEINLINE static String FromString(Vec3& value, const String& string)
-	{
-		return String::Parse(string, "<@, @, @>", value.X, value.Y, value.Z);
-	}
-
 	/** Returns the dot product of two vectors */
 	FORCEINLINE static float Dot(const Vec3& a, const Vec3& b)
 	{

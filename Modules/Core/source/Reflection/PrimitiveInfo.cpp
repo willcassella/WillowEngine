@@ -1,7 +1,7 @@
 // PrimitiveInfo.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
-#include "../../include/Core/Reflection/Registration.h"
-#include "../../include/Core/Reflection/Factory.h"
+#include "../../include/Core/Reflection/PrimitiveInfo.h"
+#include "../../include/Core/Reflection/ClassInfo.h"
 
 //////////////////////
 ///   Reflection   ///
@@ -11,14 +11,8 @@ CLASS_REFLECTION(PrimitiveInfo);
 ////////////////////////
 ///   Constructors   ///
 
-PrimitiveInfo::PrimitiveInfo(uint32 size, const String& name, Value(*stackFactory)(), Variant(*heapFactory)())
-	: Super(size, name), _stackFactory(stackFactory), _heapFactory(heapFactory)
-{
-	// All done
-}
-
 PrimitiveInfo::PrimitiveInfo(PrimitiveInfo&& move)
-	: Super(std::move(move)), _stackFactory(move._stackFactory), _heapFactory(move._heapFactory)
+	: Super(std::move(move))
 {
 	// All done
 }
@@ -26,34 +20,9 @@ PrimitiveInfo::PrimitiveInfo(PrimitiveInfo&& move)
 ///////////////////
 ///   Methods   ///
 
-bool PrimitiveInfo::IsAbstract() const
-{
-	return false;
-}
-
-bool PrimitiveInfo::IsPolymorphic() const
-{
-	return false;
-}
-
-bool PrimitiveInfo::IsInstantiable() const
-{
-	return true;
-}
-
 bool PrimitiveInfo::IsCastableTo(const TypeInfo& type) const
 {
 	return type == This; // Primitives are not castable to anything other than themselves
-}
-
-Value PrimitiveInfo::StackInstance() const
-{
-	return _stackFactory();
-}
-
-Variant PrimitiveInfo::HeapInstance() const
-{
-	return _heapFactory();
 }
 
 //////////////////////////

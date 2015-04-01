@@ -1,7 +1,7 @@
 // Variant.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "TypeInfo.h"
+#include "VoidInfo.h"
 
 /////////////////
 ///   Types   ///
@@ -124,7 +124,7 @@ namespace Implementation
 	{
 		FORCEINLINE static TargetType* Function(Variant value)
 		{
-			
+			// @TODO: Implement this
 		}
 	};
 }

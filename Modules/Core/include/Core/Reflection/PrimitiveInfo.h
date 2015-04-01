@@ -45,11 +45,17 @@ public:
 
 	/** Returns whether this type is abstract
 	* NOTE: Always returns false - primitives are never abstract */
-	bool IsAbstract() const final override;
+	FORCEINLINE bool IsAbstract() const final override
+	{
+		return false;
+	}
 
 	/** Returns whether this type is polymorphic
 	* NOTE: Always returns false - primitives are never polymorphic */
-	bool IsPolymorphic() const final override;
+	FORCEINLINE bool IsPolymorphic() const final override
+	{
+		return false;
+	}
 
 	/** Returns whether this type is castable (via reinterpret_cast) to the given type */
 	bool IsCastableTo(const TypeInfo& type) const override;

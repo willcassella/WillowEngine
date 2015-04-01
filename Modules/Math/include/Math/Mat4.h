@@ -54,20 +54,6 @@ public:
 	/** Returns the inverse of this matrix */
 	Mat4 Inverse() const;
 
-	/** Parse a Mat4 from a String */
-	FORCEINLINE static String FromString(Mat4& value, const String& string)
-	{
-		return String::Parse(string,
-			"[ @, @, @, @ ]\n"
-			"| @, @, @, @ |\n"
-			"| @, @, @, @ |\n"
-			"[ @, @, @, @ ]",
-			value._values[0][0], value._values[1][0], value._values[2][0], value._values[3][0],
-			value._values[0][1], value._values[1][1], value._values[2][1], value._values[3][1],
-			value._values[0][2], value._values[1][2], value._values[2][2], value._values[3][2],
-			value._values[0][3], value._values[1][3], value._values[2][3], value._values[3][3]);
-	}
-
 	/** Generates a perspective projection matrix with the given properties */
 	FORCEINLINE static Mat4 Perspective(float hFOV, float vFOV, float zMin, float zMax)
 	{

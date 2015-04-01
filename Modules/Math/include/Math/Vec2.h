@@ -65,12 +65,6 @@ public:
 		return acos(Vec2::Dot(a.Normalize(), b.Normalize()));
 	}
 
-	/** Parse a Vec2 from a String */
-	FORCEINLINE static String FromString(Vec2& value, const String& string)
-	{
-		return String::Parse(string, "<@, @>", value.X, value.Y);
-	}
-
 	////////////////////////////
 	///   Static Instances   ///
 public:

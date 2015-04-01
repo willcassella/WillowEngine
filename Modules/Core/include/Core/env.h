@@ -9,7 +9,7 @@
 
 /** Determine linkage */
 #if defined LINK_STATIC
-	/** Modules are being linked statically (as .lib or .o files) */
+	/** Modules are being linked statically (as .lib or .ar files) */
 #	define IMPORT
 #	define EXPORT
 #else
@@ -47,8 +47,8 @@ typedef std::uint64_t uint64;
 	typedef uint64 PointerT;
 #endif
 
-///////////////////////
-///   Definitions   ///
+//////////////////
+///   Macros   ///
 
 /** Inline macro */
 #if defined _MSC_VER

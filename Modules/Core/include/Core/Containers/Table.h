@@ -38,22 +38,6 @@ public:
 		}
 	}
 
-	/** @TODO: Remove these constructors / operators once Microsoft FIXES THEIR FUCKING COMPILER */
-	Table(const Table& copy)
-		: _values(copy._values)
-	{
-		// All done
-	}
-	Table(Table&& move)
-		: _values(std::move(move._values))
-	{
-		// All done
-	}
-	~Table()
-	{
-		// Do nothing
-	}
-
 	///////////////////
 	///   Methods   ///
 public:
@@ -67,7 +51,7 @@ public:
 	/** Searches for the value associated with the given key in this table */
 	ValueType* Find(const KeyType& key)
 	{
-		for (const auto& pair : _values)
+		for (auto& pair : _values)
 		{
 			if (pair.First == key)
 			{
@@ -126,6 +110,23 @@ public:
 		return false;
 	}
 
+	/** Inserts a new key-value pair, replacing the existing entry if there is a conflict */
+	void Insert(const KeyType& key, const ValueType& value)
+	{
+		auto existingEntry = Find(key);
+
+		for (auto& entry : _values)
+		{
+			if (entry.First == key)
+			{
+				entry.Second = value;
+				return;
+			}
+		}
+
+		_values.Add(PairType(key, value));
+	}
+
 	/** Deletes all key-value pairs from the table */
 	FORCEINLINE void Clear()
 	{
@@ -162,24 +163,6 @@ public:
 		{
 			This[value.First] == value.Second;
 		}
-	}
-	Table& operator=(const Table& copy)
-	{
-		if (this != &copy)
-		{
-			_values = copy._values;
-		}
-
-		return This;
-	}
-	Table& operator=(Table&& move)
-	{
-		if (this != &move)
-		{
-			_values = std::move(move._values);
-		}
-
-		return This;
 	}
 	ValueType& operator[](const KeyType& key)
 	{

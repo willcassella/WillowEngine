@@ -1,6 +1,8 @@
 // Module.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
+#include "ClassInfo.h"
+#include "StructInfo.h"
 #include "PointerInfo.h"
 
 /** Class holding a collection of Type information, associated with a .DLL/.SO */

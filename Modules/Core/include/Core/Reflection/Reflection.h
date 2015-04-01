@@ -20,6 +20,9 @@ class ClassInfo;
 /** Defined in 'InterfaceInfo.h' */
 class InterfaceInfo;
 
+/** Defined in 'VoidInfo.h' */
+class VoidInfo;
+
 /** Defined in 'Variant.h' */
 struct Variant;
 

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -46,6 +46,7 @@
     <ClInclude Include="include\Core\Reflection\Reflection.h" />
     <ClInclude Include="include\Core\Reflection\StructInfo.h" />
     <ClInclude Include="include\Core\Reflection\TypeInfo.h" />
+    <ClInclude Include="include\Core\Reflection\VoidInfo.h" />
     <ClInclude Include="include\Core\Resource\ResourceHandle.h" />
     <ClInclude Include="include\Core\String.h" />
     <ClInclude Include="include\Core\env.h" />
@@ -58,12 +59,14 @@
     <ClCompile Include="source\Misc\TimeStamp.cpp" />
     <ClCompile Include="source\Object.cpp" />
     <ClCompile Include="source\Reflection\ClassInfo.cpp" />
+    <ClCompile Include="source\Reflection\FieldInfo.cpp" />
     <ClCompile Include="source\Reflection\InterfaceInfo.cpp" />
     <ClCompile Include="source\Reflection\Module.cpp" />
     <ClCompile Include="source\Reflection\PointerInfo.cpp" />
     <ClCompile Include="source\Reflection\PrimitiveInfo.cpp" />
     <ClCompile Include="source\Reflection\StructInfo.cpp" />
     <ClCompile Include="source\Reflection\TypeInfo.cpp" />
+    <ClCompile Include="source\Reflection\VoidInfo.cpp" />
     <ClCompile Include="source\String.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -78,26 +81,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>

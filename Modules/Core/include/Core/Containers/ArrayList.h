@@ -12,8 +12,7 @@
 * - Taking pointers to elements is not safe
 * - Element type must be default-constructible
 * - Adding beyond MaxSize() requires reallocation of the entire List
-* - Random access requires traversing the List (slow)
-* -  */
+* - Random access requires traversing the List (slow) */
 template <typename T>
 struct ArrayList
 {

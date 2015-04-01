@@ -45,14 +45,14 @@ public:
 
 	/** Returns whether this type is abstract
 	* NOTE: Always returns true - interfaces are always abstract */
-	FORCEINLINE bool IsAbstract() const override
+	FORCEINLINE bool IsAbstract() const final override
 	{
 		return true;
 	}
 
 	/** Returns whether this type is polymorphic
 	* NOTE: Always returns true - interfaces are always polymorphic */
-	FORCEINLINE bool IsPolymorphic() const override
+	FORCEINLINE bool IsPolymorphic() const final override
 	{
 		return true;
 	}

@@ -8,7 +8,7 @@
 ///   Types   ///
 
 /** Type information for structs */
-class CORE_API StructInfo final : public TypeInfo
+class CORE_API StructInfo : public TypeInfo
 {
 	///////////////////////
 	///   Information   ///
@@ -29,7 +29,9 @@ public:
 	{
 		static_assert(std::is_default_constructible<AnyStructType>::value, "Structs must be default-constructible");
 		static_assert(!std::is_polymorphic<AnyStructType>::value, "Structs may not be polymorphic");
-		return StructInfo(sizeof(AnyStructType), name, &StackFactory<AnyStructType>, &HeapFactory<AnyStructType>);
+		
+		AnyStructType* dummy = nullptr;
+		return StructInfo(dummy, name);
 	}
 
 	template <template <typename ... DependentTypes> class AnyStructTemplateType, typename ... DependentTypes>
@@ -40,11 +42,15 @@ public:
 
 	StructInfo(const StructInfo& copy) = delete;
 	StructInfo(StructInfo&& move);
-	~StructInfo() override;
 
-private:
+protected:
 
-	StructInfo(uint32 size, const String& name, Value(*stackFactory)(), Variant(*heapFactory)());
+	template <class AnyStructType>
+	StructInfo(AnyStructType* dummy, const String& name)
+		: Super(dummy, name)
+	{
+		// All done
+	}
 
 	///////////////////
 	///   Methods   ///
@@ -53,37 +59,46 @@ public:
 	/** Returns whether this type is abstract
 	* i.e - it has at least one pure virtual function
 	* NOTE: Always returns false - structs are never abstract */
-	bool IsAbstract() const override;
+	FORCEINLINE bool IsAbstract() const final override
+	{
+		return false;
+	}
 
 	/** Returns whether this type is polymorphic 
 	* NOTE: Always returns false - structs are never polymorphic */
-	bool IsPolymorphic() const override;
-
-	/** Returns whether this type is instantiable via 'Instantiate()'
-	* NOTE: Always returns true - structs are always instantiable */
-	bool IsInstantiable() const override;
+	FORCEINLINE bool IsPolymorphic() const final override
+	{
+		return false;
+	}
 
 	/** Returns whether this type is castable (via 'reinterpret_cast') to the given type */
 	bool IsCastableTo(const TypeInfo& type) const override;
 
-	/** Returns an instance of this struct, allocated on the stack */
-	Value StackInstance() const override;
-
-	/** Returns a reference to an instance of this struct allocated on the heap
-	* NOTE: Callee has ownership over the lifetime of returned value (it must be deleted manually) */
-	Variant HeapInstance() const override;
-
 	/** Returns a list of all the fields of this type */
-	Array<const IFieldInfo*> GetFields() const;
+	FORCEINLINE const Array<FieldInfo>& GetFields() const
+	{
+		return _fields;
+	}
 
 	/** Searches for the field in this type */
-	const IFieldInfo* FindField(const String& name) const;
+	FORCEINLINE const FieldInfo* FindField(const String& name) const
+	{
+		auto index = _fieldTable.Find(name);
+		if (index)
+		{
+			return &_fields[*index];
+		}
+		else
+		{
+			return nullptr;
+		}
+	}
 
 	/** Register fields with this struct */
 	template <class OwnerType, typename FieldType>
 	StructInfo&& AddField(const String& name, FieldType OwnerType::*field)
 	{	
-		_fields[name] = new FieldInfo<OwnerType, FieldType>(name, field);
+		_fieldTable.Insert(name, _fields.Add(FieldInfo(name, field)));
 		return std::move(This);
 	}
 
@@ -98,7 +113,8 @@ public:
 	///   Data   ///
 private:
 
-	Table<String, IFieldInfo*> _fields;
+	Table<String, uint32> _fieldTable;
+	Array<FieldInfo> _fields;
 	Array<const TypeInfo*> _dependentTypes;
 };
 
@@ -172,8 +188,8 @@ namespace Implementation
 		StructInfo::CreateTemplate<List, T>("List");
 
 	/** TypeOf for Queue */
-	template <typename T, template <typename F> class StorageType>
-	struct TypeOf < Queue<T, StorageType> >
+	template <typename T>
+	struct TypeOf < Queue<T> >
 	{
 		/** Defined below */
 		static const StructInfo StaticTypeInfo;
@@ -183,19 +199,20 @@ namespace Implementation
 			return StaticTypeInfo;
 		}
 
-		FORCEINLINE static const TypeInfo& Function(const Queue<T, StorageType>& value)
+		FORCEINLINE static const TypeInfo& Function(const Queue<T>& value)
 		{
 			return StaticTypeInfo;
 		}
 	};
 
 	/** Register TypeInfo for Queue */
-	//template <typename T, template <typename F> class StorageType>
-	//const StructInfo TypeOf<Queue<T, StorageType>>::StaticTypeInfo = StructInfo::CreateTemplate<Queue<
+	template <typename T>
+	const StructInfo TypeOf<Queue<T>>::StaticTypeInfo =
+		StructInfo::CreateTemplate<Queue, T>("Queue");
 
 	/** TypeOf for Stack */
-	template <typename T, template <typename F> class StorageType>
-	struct TypeOf < Stack<T, StorageType> >
+	template <typename T>
+	struct TypeOf < Stack<T> >
 	{
 		/** Defined below */
 		static const StructInfo StaticTypeInfo;
@@ -205,16 +222,16 @@ namespace Implementation
 			return StaticTypeInfo;
 		}
 
-		FORCEINLINE static const TypeInfo& Function(const Stack<T, StorageType>& value)
+		FORCEINLINE static const TypeInfo& Function(const Stack<T>& value)
 		{
 			return StaticTypeInfo;
 		}
 	};
 
 	/** Register TypeInfo for Stack */
-	template <typename T, template <typename F> class StorageType>
-	const StructInfo TypeOf<Stack<T, StorageType>>::StaticTypeInfo = 
-		StructInfo::Create<Stack<T, StorageType>>(String::Format("Stack<@, @>", ::TypeOf<T>().GetName(), ::TypeOf<StorageType<T>>().GetName()));
+	template <typename T>
+	const StructInfo TypeOf<Stack<T>>::StaticTypeInfo = 
+		StructInfo::CreateTemplate<Stack, T>("Stack");
 
 	/** TypeOf for Table */
 	template <typename KeyType, typename ValueType>
@@ -262,9 +279,9 @@ namespace Implementation
 	const StructInfo TypeOf<Pair<FirstType, SecondType>>::StaticTypeInfo = 
 		StructInfo::CreateTemplate<Pair, FirstType, SecondType>("Pair");
 
-	/** TypeOf for 3 Tuple */
-	template <typename FirstType, typename SecondType, typename ThirdType>
-	struct TypeOf < Tuple<FirstType, SecondType, ThirdType> >
+	/** TypeOf for Tuple */
+	template <typename ... AnyTypes>
+	struct TypeOf < Tuple<AnyTypes...> >
 	{
 		/** Defined below */
 		static const StructInfo StaticTypeInfo;
@@ -274,62 +291,16 @@ namespace Implementation
 			return StaticTypeInfo;
 		}
 
-		FORCEINLINE static const TypeInfo& Function(const Tuple<FirstType, SecondType, ThirdType>& value)
+		FORCEINLINE static const TypeInfo& Function(const Tuple<AnyTypes...>& value)
 		{
 			return StaticTypeInfo;
 		}
 	};
 
-	/** Register TypeInfo for 3 Tuple */
-	template <typename FirstType, typename SecondType, typename ThirdType>
-	const StructInfo TypeOf<Tuple<FirstType, SecondType, ThirdType>>::StaticTypeInfo = 
-		StructInfo::CreateTemplate<Tuple, FirstType, SecondType, ThirdType>("Tuple");
-
-	/** TypeInfo for 4 Tuple */
-	template <typename FirstType, typename SecondType, typename ThirdType, typename FourthType>
-	struct TypeOf < Tuple<FirstType, SecondType, ThirdType, FourthType> >
-	{
-		/** Defined below */
-		static const StructInfo StaticTypeInfo;
-
-		FORCEINLINE static const TypeInfo& Function()
-		{
-			return StaticTypeInfo;
-		}
-
-		FORCEINLINE static const TypeInfo& Function(const Tuple<FirstType, SecondType, ThirdType, FourthType>& value)
-		{
-			return StaticTypeInfo;
-		}
-	};
-
-	/** Register TypeInfo for 4 Tuple */
-	template <typename FirstType, typename SecondType, typename ThirdType, typename FourthType>
-	const StructInfo TypeOf<Tuple<FirstType, SecondType, ThirdType, FourthType>>::StaticTypeInfo = 
-		StructInfo::CreateTemplate<Tuple, FirstType, SecondType, ThirdType, FourthType>("Tuple");
-
-	/** TypeInfo for 5 Tuple */
-	template <typename FirstType, typename SecondType, typename ThirdType, typename FourthType, typename FifthType>
-	struct TypeOf < Tuple<FirstType, SecondType, ThirdType, FourthType, FifthType> >
-	{
-		/** Defined below */
-		static const StructInfo StaticTypeInfo;
-
-		FORCEINLINE static const TypeInfo& Function()
-		{
-			return StaticTypeInfo;
-		}
-
-		FORCEINLINE static const TypeInfo& Function(const Tuple<FirstType, SecondType, ThirdType, FourthType, FifthType>& value)
-		{
-			return StaticTypeInfo;
-		}
-	};
-
-	/** Register TypeInfo for 5 Tuple */
-	template <typename FirstType, typename SecondType, typename ThirdType, typename FourthType, typename FifthType>
-	const StructInfo TypeOf<Tuple<FirstType, SecondType, ThirdType, FourthType, FifthType>>::StaticTypeInfo =
-		StructInfo::CreateTemplate<Tuple, FirstType, SecondType, ThirdType, FourthType, FifthType>("Tuple");
+	/** Register TypeInfo for Tuple */
+	template <typename ... AnyTypes>
+	const StructInfo TypeOf<Tuple<AnyTypes...>>::StaticTypeInfo =
+		StructInfo::CreateTemplate<Tuple, AnyTypes...>("Tuple");
 }
 
 //////////////////

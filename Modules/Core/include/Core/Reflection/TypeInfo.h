@@ -17,6 +17,9 @@ public:
 	REFLECTABLE_CLASS;
 	EXTENDS(Object);
 	friend Variant;
+	friend VoidInfo;
+	template <typename AnyType> friend String ToString(const AnyType&);
+	template <typename AnyType> friend String FromString(AnyType&, const String&);
 
 	////////////////////////
 	///   Constructors   ///
@@ -56,6 +59,11 @@ protected:
 		_isCopyAssignable = std::is_copy_assignable<AnyType>::value;
 		_isDestructible = std::is_destructible<AnyType>::value;
 	}
+
+private:
+
+	/** Special constructor for creating TypeInfo for 'void'  */
+	TypeInfo(const String& name);
 
 	///////////////////
 	///   Methods   ///
@@ -138,8 +146,8 @@ private:
 	void*(*_copyConstructor)(const void*);
 	bool(*_copyAssignmentOperator)(void*, const void*);
 	bool(*_destructor)(void*);
-	String(*_toStringOperation)(const void*);
-	String(*_fromStringOperation)(void*, const String&);
+	String(*_toStringImplementation)(const void*);
+	String(*_fromStringImplementation)(void*, const String&);
 	uint32 _size;
 	bool _isDefaultConstructible;
 	bool _isCopyConstructible;
@@ -205,4 +213,11 @@ FORCEINLINE const TargetType* Cast(const AnyType& value)
 {
 	static_assert(!std::is_reference<TargetType>::value, "Using 'Cast' to cast to a reference is not allowed");
 	return Implementation::Cast<TargetType, AnyType>::Function(value);
+}
+
+// @TODO: Documentation
+template <typename AnyType>
+String ToString(const AnyType& value)
+{
+	return TypeOf<AnyType>()._toStringImplementation(&value);
 }

@@ -4,13 +4,14 @@
 #include "TypeInfo.h"
 
 /** Abstract interface for handling field information */
-struct CORE_API FieldInfo final
+class CORE_API FieldInfo final : public Object
 {
 	///////////////////////
 	///   Information   ///
 public:
 
-	REFLECTABLE_STRUCT;
+	REFLECTABLE_CLASS;
+	EXTENDS(Object);
 	friend ClassInfo;
 	friend StructInfo;
 
@@ -18,7 +19,13 @@ public:
 	///   Constructors   ///
 private:
 
-
+	template <class OwnerType, typename FieldType>
+	FieldInfo(const String& name, FieldType OwnerType::*field)
+		: _name(name)
+	{
+		_fieldType = &TypeOf<FieldType>();
+		_ownerType = &TypeOf<OwnerType>();
+	}
 
 	///////////////////
 	///   Methods   ///

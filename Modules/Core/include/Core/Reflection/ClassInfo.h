@@ -43,6 +43,16 @@ protected:
 		_isAbstract = std::is_abstract<AnyClass>::value;
 	}
 
+private:
+
+	/** Special constructor used to construct TypeInfo for "Object" class */
+	ClassInfo()
+		: Super(static_cast<Object*>(nullptr), "Object")
+	{
+		_base = nullptr;
+		_isAbstract = true;
+	}
+
 	///////////////////
 	///   Methods   ///
 public:
@@ -64,27 +74,52 @@ public:
 	bool IsCastableTo(const TypeInfo& type) const override;
 
 	/** Returns a list of all the fields of this type */
-	Array<FieldInfo> GetFields() const;
+	FORCEINLINE const Array<FieldInfo>& GetFields() const
+	{
+		return _fields;
+	}
 
 	/** Returns whether this class extends the given class */
-	bool ExtendsClass(const ClassInfo& type) const;
+	bool Extends(const ClassInfo& type) const;
 
 	/** Returns whether this class implements the given interface */
-	bool ImplementsInterface(const InterfaceInfo& interf) const;
+	bool Implements(const InterfaceInfo& interf) const;
 
 	/** Searches for the field in this type */
 	FORCEINLINE const FieldInfo* FindField(const String& name) const
 	{
-		return _fields.Find(name);
+		auto index = _fieldTable.Find(name);
+		if (index)
+		{
+			return &_fields[*index];
+		}
+		else
+		{
+			return nullptr;
+		}
 	}
 
 	/** Adds a field to this type's fields
 	* NOTE: Only register fields that were added by this class, DO NOT include base class fields */
 	template <class OwnerType, typename FieldType>
-	ClassInfo&& AddField(const String& name, FieldType OwnerType::*field)
+	FORCEINLINE ClassInfo&& AddField(const String& name, FieldType OwnerType::*field)
 	{
-		_fields[name] = new FieldInfo<OwnerType, FieldType>(name, field);
+		_fieldTable.Insert(name, _fields.Add(FieldInfo(name, field)));
 		return std::move(This);
+	}
+
+	/** Returns whether this class extends the given class */
+	template <class AnyClass>
+	FORCEINLINE bool Extends() const
+	{
+		return Extends(AnyClass::StaticTypeInfo);
+	}
+	
+	/** Returns whether this class implements the given interface */
+	template <class AnyInterface>
+	FORCEINLINE bool Implements() const
+	{
+		return Implements(AnyInterface::StaticTypeInfo);
 	}
 
 	/////////////////////
@@ -98,9 +133,10 @@ public:
 	///   Data   ///
 protected:
 
-	const ClassInfo* _base;
-	Table<String, FieldInfo> _fields;
+	Table<String, uint32> _fieldTable;
+	Array<FieldInfo> _fields;
 	Array<const InterfaceInfo*> _interfaces;
+	const ClassInfo* _base;
 	bool _isAbstract;
 };
 

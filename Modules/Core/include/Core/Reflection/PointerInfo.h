@@ -21,9 +21,10 @@ public:
 
 	// @TODO: Documentation
 	template <typename PointedType>
-	static PointerInfo Create(bool isConst)
+	static PointerInfo Create()
 	{
-		
+		PointedType** dummy = nullptr;
+		return PointerInfo(dummy);
 	}
 
 	PointerInfo(const PointerInfo& copy) = delete;
@@ -32,10 +33,11 @@ public:
 private:
 
 	template <typename PointedType>
-	PointerInfo(PointedType* dummy, bool isConst)
-		: Super(dummy, ""), _pointedType(&TypeOf<PointedType>()), _isConst(isConst)
+	PointerInfo(PointedType** dummy)
+		: Super(dummy, "")
 	{
-		// All done
+		_pointedType = &TypeOf<std::remove_const<PointedType>::type>();
+		_isConst = std::is_const<PointedType>::value;
 	}
 
 	///////////////////
@@ -48,10 +50,16 @@ public:
 	bool IsCastableTo(const TypeInfo& type) const override;
 
 	/** Returns whether this pointer points to an immutable value (e.g 'const int*' vs 'int*') */
-	bool IsConst() const;
+	FORCEINLINE bool IsConst() const
+	{
+		return _isConst;
+	}
 
 	/** Returns the type pointed to by this pointer */
-	const TypeInfo& GetPointedType() const;
+	FORCEINLINE const TypeInfo& GetPointedType() const
+	{
+		return *_pointedType;
+	}
 
 	/////////////////////
 	///   Operators   ///
@@ -73,10 +81,11 @@ private:
 
 namespace Implementation
 {
-	/** TypeInfo for non-const pointers */
+	/** TypeInfo for pointers */
 	template <typename AnyType>
 	struct TypeOf < AnyType* >
 	{
+		/** Defined below */
 		static const PointerInfo StaticPointerInfo;
 
 		FORCEINLINE static const TypeInfo& Function()
@@ -90,30 +99,9 @@ namespace Implementation
 		}
 	};
 
-	/** Initialize non-const pointer information */
+	/** Initialize pointer information */
 	template <typename AnyType>
-	const PointerInfo TypeOf<AnyType*>::StaticPointerInfo = PointerInfo::Create<AnyType>(false);
-
-	/** TypeInfo for const pointers */
-	template <typename AnyType>
-	struct TypeOf < const AnyType* >
-	{
-		static const PointerInfo StaticPointerInfo;
-
-		FORCEINLINE static const TypeInfo& Function()
-		{
-			return StaticPointerInfo;
-		}
-
-		FORCEINLINE static const TypeInfo& Function(const AnyType* value)
-		{
-			return StaticPointerInfo;
-		}
-	};
-
-	/** Initialize const pointer information */
-	template <typename AnyType>
-	const PointerInfo TypeOf<const AnyType*>::StaticPointerInfo = PointerInfo::Create<const AnyType>(true);
+	const PointerInfo TypeOf<AnyType*>::StaticPointerInfo = PointerInfo::Create<AnyType>();
 
 	// @TODO: Support for nullptr and void*
 }

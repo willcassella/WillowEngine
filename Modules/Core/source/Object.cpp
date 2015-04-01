@@ -5,4 +5,4 @@
 //////////////////////
 ///   Reflection   ///
 
-const ClassInfo Object::StaticTypeInfo = ClassInfo(sizeof(Object), "Object", nullptr, true);
+const ClassInfo Object::StaticTypeInfo = ClassInfo();

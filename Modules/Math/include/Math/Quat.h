@@ -74,12 +74,6 @@ public:
 		}
 	}
 
-	/** Parse a Quat from a String */
-	FORCEINLINE static String FromString(Quat& value, const String& string)
-	{
-		return String::Parse(string, "<@, @, @, @>", value.X, value.Y, value.Z, value.W);
-	}
-
 	/////////////////////
 	///   Operators   ///
 public:
