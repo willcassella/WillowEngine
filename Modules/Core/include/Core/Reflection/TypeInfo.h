@@ -18,6 +18,9 @@ public:
 	EXTENDS(Object);
 	friend Variant;
 	friend VoidInfo;
+	template <typename AnyType> friend AnyType* CopyConstruct(const AnyType&);
+	template <typename AnyType> friend bool CopyAssign(AnyType&, const AnyType&);
+	template <typename AnyType> friend bool Destroy(AnyType&);
 	template <typename AnyType> friend String ToString(const AnyType&);
 	template <typename AnyType> friend String FromString(AnyType&, const String&);
 
@@ -54,15 +57,20 @@ protected:
 		};
 
 		_size = sizeof(AnyType);
-		_isDefaultConstructible = std::is_default_constructible<AnyType>::value;
-		_isCopyConstructible = std::is_copy_constructible<AnyType>::value;
-		_isCopyAssignable = std::is_copy_assignable<AnyType>::value;
-		_isDestructible = std::is_destructible<AnyType>::value;
+		_isAbstract = std::is_abstract<AnyType>::value;
+		_isPolymorphic = std::is_polymorphic<AnyType>::value;
+		_isDefaultConstructible = Implementation::Construct<AnyType>::IsConstructible;
+		_isCopyConstructible = Implementation::CopyConstruct<AnyType>::IsCopyConstructible;
+		_isCopyAssignable = Implementation::CopyAssign<AnyType>::IsCopyAssignable;
+		_isDestructible = Implementation::Destroy<AnyType>::IsDestructible;
+
+		RegisterWithApplication();
 	}
 
 private:
 
-	/** Special constructor for creating TypeInfo for 'void'  */
+	// @TODO: Find better way of doing this?
+	/** Special constructor for creating TypeInfo for 'void' */
 	TypeInfo(const String& name);
 
 	///////////////////
@@ -70,18 +78,27 @@ private:
 public:
 
 	/** Returns the static size of this type */
-	uint32 GetSize() const;
+	FORCEINLINE uint32 GetSize() const
+	{
+		return _size;
+	}
 
 	/** Returns the name of this type */
 	virtual String GetName() const;
 
 	/** Returns whether this type is abstract
 	* i.e - It has at least one pure virtual function */
-	virtual bool IsAbstract() const = 0;
+	FORCEINLINE bool IsAbstract() const
+	{
+		return _isAbstract;
+	}
 
 	/** Returns whether this type is polymorphic
 	* i.e - It has at least one virtual function */
-	virtual bool IsPolymorphic() const = 0;
+	FORCEINLINE bool IsPolymorphic() const
+	{
+		return _isPolymorphic;
+	}
 
 	/** Returns whether this type is default-constructible */
 	FORCEINLINE bool IsDefaultConstructible() const
@@ -122,6 +139,11 @@ public:
 		return IsCastableTo(TypeOf<AnyType>());
 	}
 
+private:
+
+	/** Registers this TypeInfo object with the global 'Application' object */
+	void RegisterWithApplication();
+
 	/////////////////////
 	///   Operators   ///
 public:
@@ -149,6 +171,8 @@ private:
 	String(*_toStringImplementation)(const void*);
 	String(*_fromStringImplementation)(void*, const String&);
 	uint32 _size;
+	bool _isAbstract;
+	bool _isPolymorphic;
 	bool _isDefaultConstructible;
 	bool _isCopyConstructible;
 	bool _isCopyAssignable;
@@ -215,9 +239,122 @@ FORCEINLINE const TargetType* Cast(const AnyType& value)
 	return Implementation::Cast<TargetType, AnyType>::Function(value);
 }
 
-// @TODO: Documentation
+//////////////////////
+///   Operations   ///
+
+/** Returns a pointer to a new instance of the given type (if it is default-constructible)
+* NOTE: If the type is not default-constructible, returns a null pointer
+* You can override this behavior by implementing a public default constructor,
+* or by specializing the 'Implementation::Construct' struct */
 template <typename AnyType>
-String ToString(const AnyType& value)
+FORCEINLINE AnyType* Construct()
 {
-	return TypeOf<AnyType>()._toStringImplementation(&value);
+	// Call the implementation directly
+	return Implementation::Construct<AnyType>::Function();
+}
+
+/** Returns a pointer to a new instance of the given type, copied from the given value (if it is copy-constructible)
+* NOTE: If the type is not copy-constructible, returns a null pointer
+* You can override this behavior by implementing a public copy constructor,
+* or by specializing the 'Implementation::CopyConstruct' struct */
+template <typename AnyType>
+FORCEINLINE AnyType* CopyConstruct(const AnyType& copy)
+{
+	if (!std::is_polymorphic<AnyType>::value)
+	{
+		// Call the implementation directly
+		return Implementation::CopyConstruct<AnyType>::Function(copy);
+	}
+	else
+	{
+		// Get the copy's type and call its implementation through that
+		return TypeOf<copy>()._copyConstructor(&copy);
+	}
+}
+
+/** Assigns the given instance to the value of another given instance of the same type (if it is copy-assignable)
+* NOTE: If the type is not copy-assignable, returns 'false'
+* NOTE: If the given values are not of the same type, returns 'false'
+* You can override this behavior by implementing a public copy-assignment operator,
+* or by specializing the 'Implementation::CopyAssign' struct */
+template <typename AnyType>
+FORCEINLINE bool CopyAssign(AnyType& value, const AnyType& copy)
+{
+	if (!std::is_polymorphic<AnyType>::value)
+	{
+		// Call the implementation directly
+		return Implementation::CopyAssign<AnyType>::Function(value, copy);
+	}
+	else
+	{
+		const TypeInfo* valueType = &TypeOf(value);
+
+		// Make sure the types are compatible
+		if (TypeOf(copy).IsCastableTo(*valueType))
+		{
+			// Call the implementation through reflection
+			return valueType->_copyAssignmentOperator(&value, &copy);
+		}
+		else
+		{
+			return false;
+		}
+	}
+}
+
+/** Destroys the given instance using 'delete' (if the type is destructible)
+* NOTE: If the type is not destructible, returns 'false'
+* You can override this behavior by implementing a public destructor,
+* or by specializing the 'Implementation::Destruct' struct */
+template <typename AnyType>
+FORCEINLINE bool Destroy(AnyType& value)
+{
+	if (!std::is_polymorphic<AnyType>::value)
+	{
+		// Call the implementation directly
+		return Implementation::Destroy<AnyType>::Function(value);
+	}
+	else
+	{
+		// Get the value's type and call its implementation through that
+		return TypeOf(value)._destructor(&value);
+	}
+}
+
+/** Formats the state of the given value as a String
+* NOTE: The default behavior is to return the value's type name
+* You can override this behavior by implementing the 'String ToString() const' public member function,
+* or by specializing the 'Implementation::ToString' struct */
+template <typename AnyType>
+FORCEINLINE String ToString(const AnyType& value)
+{
+	if (!std::is_polymorphic<AnyType>::value)
+	{
+		// Call the implementation directly
+		return Implementation::ToString<AnyType>::Function(value);
+	}
+	else
+	{
+		// Get the value's type and call its implementation through that
+		return TypeOf(value)._toStringImplementation(&value);
+	}
+}
+
+/** Sets the state of the given value by parsing a String, returning the remainder of the String
+* NOTE: The default behavior is to not modify the value and return the String as is
+* You can override this behavior by implementing the 'String FromString(const String& string)' public member function,
+* or by specializing the 'Implementation::FromString' struct */
+template <typename AnyType>
+FORCEINLINE String FromString(AnyType& value, const String& string)
+{
+	if (!std::is_polymorphic<AnyType>::value)
+	{
+		// Call the implementation directly
+		return Implementation::FromString<AnyType>::Function(value, string);
+	}
+	else
+	{
+		// Get the value's type and call its implementation through that
+		return TypeOf(value)._fromStringImplementation(&value, string);
+	}
 }

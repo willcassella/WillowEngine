@@ -12,9 +12,13 @@ CLASS_REFLECTION(TypeInfo);
 ///   Constructors   ///
 
 TypeInfo::TypeInfo(TypeInfo&& move)
-	: _size(move._size), _name(std::move(move._name))
+	: _name(std::move(move._name)), _constructor(move._constructor), _copyConstructor(move._copyConstructor),
+	_copyAssignmentOperator(move._copyAssignmentOperator), _destructor(move._destructor), _toStringImplementation(move._toStringImplementation),
+	_fromStringImplementation(move._fromStringImplementation), _size(move._size), _isAbstract(move._isAbstract), _isPolymorphic(move._isPolymorphic),
+	_isDefaultConstructible(move._isDefaultConstructible), _isCopyConstructible(move._isCopyConstructible), _isCopyAssignable(move._isCopyAssignable),
+	_isDestructible(move._isDestructible)
 {
-	Application::Instance()._types.Add(this);
+	RegisterWithApplication();
 }
 
 TypeInfo::~TypeInfo()
@@ -28,4 +32,9 @@ TypeInfo::~TypeInfo()
 String TypeInfo::GetName() const
 {
 	return _name;
+}
+
+void TypeInfo::RegisterWithApplication()
+{
+	Application::Instance()._types.Add(this);
 }

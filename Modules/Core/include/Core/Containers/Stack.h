@@ -11,7 +11,10 @@ struct Stack final
 	///   Inner Types   ///
 public:
 
+	/** Forward iterator for a mutable Stack */
 	typedef typename Array<T>::ReverseIterator Iterator;
+
+	/** Forward iterator for an immutable Stack */
 	typedef typename Array<T>::ConstReverseIterator ConstIterator;
 
 	////////////////////////

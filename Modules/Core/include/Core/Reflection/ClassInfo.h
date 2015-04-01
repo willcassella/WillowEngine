@@ -25,22 +25,21 @@ public:
 	template <class AnyClass>
 	static ClassInfo Create(const String& name)
 	{
-		static_assert(std::is_base_of<Object, AnyClass>::value, "Classes must be extend 'Object'");
 		AnyClass* dummy = nullptr;
 		return ClassInfo(dummy, name);
 	}
 	
 	ClassInfo(const ClassInfo& copy) = delete;
-	ClassInfo(ClassInfo&& move);
+	ClassInfo(ClassInfo&& move) = default;
 
 protected:
 
+	// @TODO: Documentation
 	template <class AnyClass>
 	ClassInfo(AnyClass* dummy, const String& name)
-		: Super(dummy, name)
+		: Super(dummy, name), _base(&AnyClass::Super::StaticTypeInfo)
 	{
-		_base = &AnyClass::Super::StaticTypeInfo;
-		_isAbstract = std::is_abstract<AnyClass>::value;
+		static_assert(std::is_base_of<Object, AnyClass>::value, "Classes must be extend 'Object'");
 	}
 
 private:
@@ -50,25 +49,11 @@ private:
 		: Super(static_cast<Object*>(nullptr), "Object")
 	{
 		_base = nullptr;
-		_isAbstract = true;
 	}
 
 	///////////////////
 	///   Methods   ///
 public:
-
-	/** Returns whether this class is abstract */
-	FORCEINLINE bool IsAbstract() const final override
-	{
-		return _isAbstract;
-	}
-
-	/** Returns whether this class is polymorphic 
-	* NOTE: Always returns true - classes are always polymorphic */
-	FORCEINLINE bool IsPolymorphic() const final override
-	{
-		return true;
-	}
 
 	/** Returns whether this type castable (via reinterpret_cast) to the given type */
 	bool IsCastableTo(const TypeInfo& type) const override;
@@ -104,7 +89,7 @@ public:
 	template <class OwnerType, typename FieldType>
 	FORCEINLINE ClassInfo&& AddField(const String& name, FieldType OwnerType::*field)
 	{
-		_fieldTable.Insert(name, _fields.Add(FieldInfo(name, field)));
+		_fieldTable.Insert(name, _fields.Add(FieldInfo(field, name)));
 		return std::move(This);
 	}
 
@@ -137,7 +122,6 @@ protected:
 	Array<FieldInfo> _fields;
 	Array<const InterfaceInfo*> _interfaces;
 	const ClassInfo* _base;
-	bool _isAbstract;
 };
 
 //////////////////

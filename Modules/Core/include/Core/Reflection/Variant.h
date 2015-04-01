@@ -71,13 +71,14 @@ public:
 		else
 		{
 			bool sucess = _type->_destructor(_value);
-			
+
 			if (sucess)
 			{
 				_value = nullptr;
+				_type = &TypeOf<void>();
+				_isImmutable = true;
 			}
-
-			return sucess; // @TODO: Finish implementing this
+			return sucess;
 		}
 	}
 

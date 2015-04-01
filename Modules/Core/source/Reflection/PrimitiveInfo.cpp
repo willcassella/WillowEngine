@@ -8,15 +8,6 @@
 
 CLASS_REFLECTION(PrimitiveInfo);
 
-////////////////////////
-///   Constructors   ///
-
-PrimitiveInfo::PrimitiveInfo(PrimitiveInfo&& move)
-	: Super(std::move(move))
-{
-	// All done
-}
-
 ///////////////////
 ///   Methods   ///
 

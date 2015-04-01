@@ -17,7 +17,10 @@ private:
 
 public:
 
+	/** Forward iterator for a mutable Table */
 	typedef typename StorageType::Iterator Iterator;
+
+	/** Forward iterator for an immutable Table */
 	typedef typename StorageType::ConstIterator ConstIterator;
 
 	////////////////////////

@@ -11,7 +11,10 @@ struct Queue final
 	///   Inner Types   ///
 public:
 
+	/** Forward iterator for a mutable Queue */
 	typedef typename Array<T>::Iterator Iterator;
+
+	/** Forward iterator for an immutable Queue */
 	typedef typename Array<T>::ConstIterator ConstIterator;
 
 	////////////////////////

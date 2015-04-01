@@ -89,7 +89,8 @@ public:												\
 	}
 
 /** Put this macro in the Information section of a class you'd like to reflect
-* NOTE: Any class that uses this macro must also use the'CLASS_REFLECTION' macro in their source file */
+* NOTE: Any class that uses this macro must also use the 'EXTENDS' macro in the Information section of their
+* header, as well as the 'CLASS_REFLECTION' macro in their source file */
 #define REFLECTABLE_CLASS							\
 public:												\
 	static const ::ClassInfo StaticTypeInfo;		\
@@ -104,8 +105,9 @@ public:												\
 public:												\
 	static const ::InterfaceInfo StaticTypeInfo;
 
-/** Put this macro in the Information section of a class which extends the given type
-* NOTE: All reflectable classes must use this macro */
+/** Put this macro in the Information section of a class
+* NOTE: All reflectable classes must use this macro 
+* T: The class which this class extends */
 #define EXTENDS(T)									\
 public:												\
 	typedef T Super;

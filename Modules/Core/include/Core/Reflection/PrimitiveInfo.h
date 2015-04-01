@@ -28,7 +28,7 @@ public:
 	}
 
 	PrimitiveInfo(const PrimitiveInfo& copy) = delete;
-	PrimitiveInfo(PrimitiveInfo&& move);
+	PrimitiveInfo(PrimitiveInfo&& move) = default;
 
 protected:
 
@@ -36,26 +36,15 @@ protected:
 	PrimitiveInfo(AnyPrimitiveType* dummy, const String& name)
 		: Super(dummy, name)
 	{
-		// All done
+		static_assert(std::is_arithmetic<AnyPrimitiveType>::value || 
+			std::is_pointer<AnyPrimitiveType>::value ||
+			std::is_fundamental<AnyPrimitiveType>::value,
+			"Primitives types must be primitive");
 	}
 
 	///////////////////
 	///   Methods   ///
 public:
-
-	/** Returns whether this type is abstract
-	* NOTE: Always returns false - primitives are never abstract */
-	FORCEINLINE bool IsAbstract() const final override
-	{
-		return false;
-	}
-
-	/** Returns whether this type is polymorphic
-	* NOTE: Always returns false - primitives are never polymorphic */
-	FORCEINLINE bool IsPolymorphic() const final override
-	{
-		return false;
-	}
 
 	/** Returns whether this type is castable (via reinterpret_cast) to the given type */
 	bool IsCastableTo(const TypeInfo& type) const override;

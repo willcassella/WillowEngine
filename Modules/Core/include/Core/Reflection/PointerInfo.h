@@ -28,7 +28,7 @@ public:
 	}
 
 	PointerInfo(const PointerInfo& copy) = delete;
-	PointerInfo(PointerInfo&& move);
+	PointerInfo(PointerInfo&& move) = default;
 
 private:
 
@@ -36,7 +36,7 @@ private:
 	PointerInfo(PointedType** dummy)
 		: Super(dummy, "")
 	{
-		_pointedType = &TypeOf<std::remove_const<PointedType>::type>();
+		_pointedType = &TypeOf<PointedType>();
 		_isConst = std::is_const<PointedType>::value;
 	}
 

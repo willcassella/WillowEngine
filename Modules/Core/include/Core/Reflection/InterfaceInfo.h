@@ -1,6 +1,7 @@
 // InterfaceInfo.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
+#include "../Interface.h"
 #include "TypeInfo.h"
 
 /** Type information for interfaces */
@@ -28,34 +29,22 @@ public:
 	}
 
 	InterfaceInfo(const InterfaceInfo& copy) = delete;
-	InterfaceInfo(InterfaceInfo&& move);
+	InterfaceInfo(InterfaceInfo&& move) = default;
 
 protected:
 
+	// @TODO: Documentation
 	template <class AnyInterfaceType>
 	InterfaceInfo(AnyInterfaceType* dummy, const String& name)
 		: Super(dummy, name)
 	{
-		// All done
+		static_assert(std::is_base_of<Interface, AnyInterfaceType>::value, "Interfaces must extend the 'Interface' class");
+		static_assert(std::is_abstract<AnyInterfaceType>::value, "Interfaces must be abstract");
 	}
 
 	///////////////////
 	///   Methods   ///
 public:
-
-	/** Returns whether this type is abstract
-	* NOTE: Always returns true - interfaces are always abstract */
-	FORCEINLINE bool IsAbstract() const final override
-	{
-		return true;
-	}
-
-	/** Returns whether this type is polymorphic
-	* NOTE: Always returns true - interfaces are always polymorphic */
-	FORCEINLINE bool IsPolymorphic() const final override
-	{
-		return true;
-	}
 	
 	bool IsCastableTo(const TypeInfo& type) const override;
 

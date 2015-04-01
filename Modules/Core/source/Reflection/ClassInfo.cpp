@@ -8,15 +8,6 @@
 
 CLASS_REFLECTION(ClassInfo);
 
-////////////////////////
-///   Constructors   ///
-
-ClassInfo::ClassInfo(ClassInfo&& move)
-	: Super(std::move(move)), _base(move._base), _isAbstract(move._isAbstract), _interfaces(std::move(move._interfaces)), _fields(std::move(move._fields))
-{
-	// All done
-}
-
 ///////////////////
 ///   Methods   ///
 

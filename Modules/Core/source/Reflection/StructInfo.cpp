@@ -8,15 +8,6 @@
 
 CLASS_REFLECTION(StructInfo);
 
-////////////////////////
-///   Constructors   ///
-
-StructInfo::StructInfo(StructInfo&& move)
-	: Super(std::move(move)), _fields(std::move(move._fields))
-{
-	// All done
-}
-
 ///////////////////
 ///   Methods   ///
 

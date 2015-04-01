@@ -1,4 +1,7 @@
 // Operations.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
+/** "Operations" are a collection of generic functions that can be performed on polymorphic and non-polymorphic types.
+* These functions can see through polymorphism (using the reflection system), so even if the visible type doesn't implement 
+* the desired function, it can still be called if the derived type does. */
 #pragma once
 
 #include <type_traits>
@@ -13,45 +16,27 @@ struct String;
 /////////////////////
 ///   Functions   ///
 
-/** Returns a pointer to a new instance of the given type (if it is default-constructible)
-* NOTE: If the type is not default-constructible, returns a null pointer
-* You can override this behavior by implementing a public default constructor,
-* or by specializing the 'Implementation::Construct' struct */
+/** Defined in 'TypeInfo.h' */
 template <typename AnyType>
 AnyType* Construct();
 
-/** Returns a pointer to a new instance of the given type, copied from the given value (if it is copy-constructible)
-* NOTE: If the type is not copy-constructible, returns a null pointer
-* You can override this behavior by implementing a public copy constructor,
-* or by specializing the 'Implementation::CopyConstruct' struct */
+/** Defined in 'TypeInfo.h' */
 template <typename AnyType>
 AnyType* CopyConstruct(const AnyType& copy);
 
-/** Assigns the given instance to the value of another given instance of the same type (if it is copy-assignable)
-* NOTE: If the type is not copy-assignable, returns 'false' 
-* You can override this behavior by implementing a public copy-assignment operator,
-* or by specializing the 'Implementation::CopyAssign' struct */
+/** Defined in 'TypeInfo.h' */
 template <typename AnyType>
 bool CopyAssign(AnyType& value, const AnyType& copy);
 
-/** Destroys the given instance using 'delete' (if the type is destructible)
-* NOTE: If the type is not destructible, returns 'false'
-* You can override this behavior by implementing a public destructor,
-* or by specializing the 'Implementation::Destruct' struct */
+/** Defined in 'TypeInfo.h' */
 template <typename AnyType>
 bool Destroy(AnyType& value);
 
-/** Formats the state of the given value as a String
-* NOTE: The default behavior is to return the value's type name
-* You can override this behavior by implementing the 'String ToString() const' public member function,
-* or by specializing the 'Implementation::ToString' struct */
+/** Defined in 'TypeInfo.h' */
 template <typename AnyType>
 String ToString(const AnyType& value);
 
-/** Sets the state of the given value by parsing a String, returning the remainder of the String
-* NOTE: The default behavior is to not modify the value and return the String as is
-* You can override this behavior by implementing the 'String FromString(const String& string)' public member function,
-* or by specializing the 'Implementation::FromString' struct */
+/** Defined in 'TypeInfo.h' */
 template <typename AnyType>
 String FromString(AnyType& value, const String& string);
 
@@ -89,8 +74,10 @@ namespace Implementation
 
 		FORCEINLINE static AnyType* Function()
 		{
-			return GetConstructor<AnyType, std::is_default_constructible<AnyType>::value>::Function();
+			return GetConstructor<AnyType, IsConstructible>::Function();
 		}
+
+		static const bool IsConstructible = std::is_default_constructible<AnyType>::value;
 	};
 
 	/** Default implementation of 'CopyConstruct' */
@@ -122,8 +109,10 @@ namespace Implementation
 
 		FORCEINLINE static AnyType* Function(const AnyType& copy)
 		{
-			return GetCopyConstructor<AnyType, std::is_copy_constructible<AnyType>::value>::Function(copy);
+			return GetCopyConstructor<AnyType, IsCopyConstructible>::Function(copy);
 		}
+
+		static const bool IsCopyConstructible = std::is_copy_constructible<AnyType>::value;
 	};
 
 	/** Default implementation of 'CopyAssign' */
@@ -156,8 +145,10 @@ namespace Implementation
 
 		FORCEINLINE static bool Function(AnyType& value, const AnyType& copy)
 		{
-			return GetCopyAssignmentOperator<AnyType, std::is_copy_assignable<AnyType>::value>::Function(value, copy);
+			return GetCopyAssignmentOperator<AnyType, IsCopyAssignable>::Function(value, copy);
 		}
+
+		static const bool IsCopyAssignable = std::is_copy_assignable<AnyType>::value;
 	};
 
 	/** Default implementation of 'Destroy' */
@@ -190,8 +181,10 @@ namespace Implementation
 
 		FORCEINLINE static bool Function(AnyType& value)
 		{
-			return GetDestructor<AnyType, std::is_destructible<AnyType>::value>::Function(value);
+			return GetDestructor<AnyType, IsDestructible>::Function(value);
 		}
+
+		static const bool IsDestructible = std::is_destructible<AnyType>::value;
 	};
 
 	/** Default implementation of 'ToString' */

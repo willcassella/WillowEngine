@@ -2,21 +2,12 @@
 
 #include "../../include/Core/Reflection/PointerInfo.h"
 #include "../../include/Core/Reflection/ClassInfo.h"
-#include "../../include/Core/Reflection/StructInfo.h"
+#include "../../include/Core/Reflection/StructInfo.h" // @TODO: Figure out better way to do this?
 
 //////////////////////
 ///   Reflection   ///
 
 CLASS_REFLECTION(PointerInfo);
-
-////////////////////////
-///   Constructors   ///
-
-PointerInfo::PointerInfo(PointerInfo&& move)
-	: Super(std::move(move)), _pointedType(move._pointedType), _isConst(move._isConst)
-{
-	// All done
-}
 
 ///////////////////
 ///   Methods   ///

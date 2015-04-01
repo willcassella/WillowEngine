@@ -3,7 +3,6 @@
 
 #include "TypeInfo.h"
 
-/** Abstract interface for handling field information */
 class CORE_API FieldInfo final : public Object
 {
 	///////////////////////
@@ -19,9 +18,19 @@ public:
 	///   Constructors   ///
 private:
 
+	/** Creates a named field */
 	template <class OwnerType, typename FieldType>
-	FieldInfo(const String& name, FieldType OwnerType::*field)
+	FieldInfo(FieldType OwnerType::*field, const String& name)
 		: _name(name)
+	{
+		_fieldType = &TypeOf<FieldType>();
+		_ownerType = &TypeOf<OwnerType>();
+	}
+
+	/** Creates a named field with a description */
+	template <class OwnerType, typename FieldType>
+	FieldInfo(FieldType OwnerType::*field, const String& name, const String& description)
+		: _name(name), _description(description)
 	{
 		_fieldType = &TypeOf<FieldType>();
 		_ownerType = &TypeOf<OwnerType>();
@@ -56,14 +65,11 @@ public:
 	}
 
 	/** Returns a Variant (with the same mutability as "owner") to the value of this field on the given Variant
-	* WARNING: "owner" may not be a null Reference
-	* @TODO: Exception info */
+	* NOTE: The value referenced by 'owner' must be of the same or extension of the type referenced by 'GetOwnerType()' */
 	Variant GetValue(Variant owner) const;
 
-	/** Sets the value of this field on the given Reference to the given Value
-	* NOTE: "owner" may not be an immutable Reference
-	* WARNING: "owner" may not be a null Reference
-	* @TODO: Exception info */
+	/** Sets the value of this field on the given Variant to the given Value
+	* NOTE: The value referenced by 'owner' must be of the same or extension of the type referenced by 'GetOwnerType()' */
 	void SetValue(Variant owner, Variant value) const;
 
 	////////////////
@@ -74,4 +80,6 @@ private:
 	String _description;
 	const TypeInfo* _fieldType;
 	const TypeInfo* _ownerType;
+	void(*_setter)(void*);
+	void*(*_getter)();
 };

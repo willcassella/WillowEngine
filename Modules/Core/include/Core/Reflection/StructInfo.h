@@ -26,10 +26,7 @@ public:
 	* 'name' - The fully-qualified name of the struct */
 	template <class AnyStructType>
 	static StructInfo Create(const String& name)
-	{
-		static_assert(std::is_default_constructible<AnyStructType>::value, "Structs must be default-constructible");
-		static_assert(!std::is_polymorphic<AnyStructType>::value, "Structs may not be polymorphic");
-		
+	{		
 		AnyStructType* dummy = nullptr;
 		return StructInfo(dummy, name);
 	}
@@ -37,39 +34,26 @@ public:
 	template <template <typename ... DependentTypes> class AnyStructTemplateType, typename ... DependentTypes>
 	static StructInfo CreateTemplate(const String& name)
 	{
-		
+		// @TODO: Implement this
 	}
 
 	StructInfo(const StructInfo& copy) = delete;
-	StructInfo(StructInfo&& move);
+	StructInfo(StructInfo&& move) = default;
 
 protected:
 
+	// @TODO: Documentation
 	template <class AnyStructType>
 	StructInfo(AnyStructType* dummy, const String& name)
 		: Super(dummy, name)
 	{
-		// All done
+		static_assert(std::is_default_constructible<AnyStructType>::value, "Structs must be default-constructible");
+		static_assert(!std::is_polymorphic<AnyStructType>::value, "Structs may not be polymorphic");
 	}
 
 	///////////////////
 	///   Methods   ///
 public:
-
-	/** Returns whether this type is abstract
-	* i.e - it has at least one pure virtual function
-	* NOTE: Always returns false - structs are never abstract */
-	FORCEINLINE bool IsAbstract() const final override
-	{
-		return false;
-	}
-
-	/** Returns whether this type is polymorphic 
-	* NOTE: Always returns false - structs are never polymorphic */
-	FORCEINLINE bool IsPolymorphic() const final override
-	{
-		return false;
-	}
 
 	/** Returns whether this type is castable (via 'reinterpret_cast') to the given type */
 	bool IsCastableTo(const TypeInfo& type) const override;
@@ -98,7 +82,7 @@ public:
 	template <class OwnerType, typename FieldType>
 	StructInfo&& AddField(const String& name, FieldType OwnerType::*field)
 	{	
-		_fieldTable.Insert(name, _fields.Add(FieldInfo(name, field)));
+		_fieldTable.Insert(name, _fields.Add(FieldInfo(field, name)));
 		return std::move(This);
 	}
 

@@ -8,15 +8,6 @@
 
 CLASS_REFLECTION(InterfaceInfo);
 
-////////////////////////
-///   Constructors   ///
-
-InterfaceInfo::InterfaceInfo(InterfaceInfo&& move)
-	: Super(std::move(move))
-{
-	// All done
-}
-
 ///////////////////
 ///   Methods   ///
 
