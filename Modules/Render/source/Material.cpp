@@ -82,9 +82,9 @@ void Material::Compile()
 		delete[] log;
 	}
 
-	_vModel = glGetUniformLocation(_id, "vModel");
-	_vView = glGetUniformLocation(_id, "vView");
-	_vProjection = glGetUniformLocation(_id, "vProjection");
+	_model = glGetUniformLocation(_id, "model");
+	_view = glGetUniformLocation(_id, "view");
+	_projection = glGetUniformLocation(_id, "projection");
 
 	glDetachShader(_id, VertexShader->GetID());
 	glDetachShader(_id, FragmentShader->GetID());
@@ -112,15 +112,15 @@ BufferID Material::GetID() const
 
 void Material::UploadModelMatrix(const Mat4& matrix) const
 {
-	glUniformMatrix4fv(_vModel, 1, GL_FALSE, matrix[0]);
+	glUniformMatrix4fv(_model, 1, GL_FALSE, matrix[0]);
 }
 
 void Material::UploadViewMatrix(const Mat4& matrix) const
 {
-	glUniformMatrix4fv(_vView, 1, GL_FALSE, matrix[0]);
+	glUniformMatrix4fv(_view, 1, GL_FALSE, matrix[0]);
 }
 
 void Material::UploadProjectionMatrix(const Mat4& matrix) const
 {
-	glUniformMatrix4fv(_vProjection, 1, GL_FALSE, matrix[0]);
+	glUniformMatrix4fv(_projection, 1, GL_FALSE, matrix[0]);
 }

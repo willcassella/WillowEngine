@@ -1,15 +1,18 @@
 // Render.cpp
 
 #include <Utility/Console.h>
+#include <Utility/Math/Vec3.h>
 #include "glew.h"
 #include "..\include\Render\Render.h"
-using Willow::Console;
+#include "..\include\Render\Shader.h"
+using namespace Willow;
 
 ////////////////
 ///   Data   ///
 
 /** GBuffer and its sub-buffers */
 BufferID gBuffer = NULL;
+BufferID positionBuffer = NULL;
 BufferID depthBuffer = NULL;
 BufferID diffuseBuffer = NULL;
 BufferID normalBuffer = NULL;
@@ -49,8 +52,18 @@ void InitRenderer(uint32 width, uint32 height)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL); // 1 32-bit floating point component for depth
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, width, height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, NULL); // 1 32-bit unsigned integer component for depth
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthBuffer, 0);
+
+	// Create a position buffer for the GBuffer
+	glGenTextures(1, &positionBuffer);
+	glBindTexture(GL_TEXTURE_2D, positionBuffer);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, width, height, 0, GL_RGB, GL_FLOAT, NULL); // 3 32-bit floating point components for position
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, positionBuffer, 0);
 
 	// Create a diffuse buffer for the GBuffer
 	glGenTextures(1, &diffuseBuffer);
@@ -60,7 +73,7 @@ void InitRenderer(uint32 width, uint32 height)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL); // 4 8-bit unsigned integer components for diffuse
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, diffuseBuffer, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, diffuseBuffer, 0);
 
 	// Create a normal buffer for the GBuffer
 	glGenTextures(1, &normalBuffer);
@@ -70,7 +83,7 @@ void InitRenderer(uint32 width, uint32 height)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, width, height, 0, GL_RGB, GL_FLOAT, NULL); // 3 32-bit floating point components for normal
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, normalBuffer, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, normalBuffer, 0);
 
 	// Create a specular buffer for the GBuffer
 	glGenTextures(1, &specularBuffer);
@@ -80,7 +93,7 @@ void InitRenderer(uint32 width, uint32 height)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, width, height, 0, GL_RED, GL_FLOAT, NULL); // 1 32-bit floating point component for specular
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, specularBuffer, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, specularBuffer, 0);
 
 	// Create a metallic buffer for the GBuffer
 	glGenTextures(1, &metallicBuffer);
@@ -90,7 +103,7 @@ void InitRenderer(uint32 width, uint32 height)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, width, height, 0, GL_RED, GL_FLOAT, NULL); // 1 32-bit floating point component for metallic
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, metallicBuffer, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT4, GL_TEXTURE_2D, metallicBuffer, 0);
 
 	// Create a roughness buffer for the GBuffer
 	glGenTextures(1, &roughnessBuffer);
@@ -100,7 +113,7 @@ void InitRenderer(uint32 width, uint32 height)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, width, height, 0, GL_RED, GL_FLOAT, NULL); // 1 32-bit floating point component for roughness
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT4, GL_TEXTURE_2D, roughnessBuffer, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT5, GL_TEXTURE_2D, roughnessBuffer, 0);
 
 	// Make sure the GBuffer was constructed successfully
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
@@ -128,31 +141,11 @@ void InitRenderer(uint32 width, uint32 height)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(screenQuadData), screenQuadData, GL_STATIC_DRAW);
 
 	// Create and upload a shader program for the screen quad
-	GLuint vShader = glCreateShader(GL_VERTEX_SHADER);
-	const char* vSource =
-		"#version 330 core\n"
-		"in vec2 position;\n"
-		"in vec2 vTexCoord;\n"
-		"out vec2 texCoord;\n"
-		"void main() { gl_Position = vec4(position, 0, 1); texCoord = vTexCoord; }";
-	glShaderSource(vShader, 1, &vSource, nullptr);
-	glCompileShader(vShader);
-
-	GLuint fShader = glCreateShader(GL_FRAGMENT_SHADER);
-	const char* fSource =
-		"#version 330 core\n"
-		"uniform sampler2D diffuseBuffer;\n"
-		//"uniform sampler2D normalBuffer;\n"
-		//"uniform sampler2D specularBuffer;\n"
-		"in vec2 texCoord;\n"
-		"layout(location = 0) out vec4 outColor;\n"
-		"void main() { outColor = texture(diffuseBuffer, texCoord); }";
-	glShaderSource(fShader, 1, &fSource, nullptr);
-	glCompileShader(fShader);
-
+	Shader vShader("data/viewport.vert");
+	Shader fShader("data/viewport.frag");
 	screenQuadProgram = glCreateProgram();
-	glAttachShader(screenQuadProgram, vShader);
-	glAttachShader(screenQuadProgram, fShader);
+	glAttachShader(screenQuadProgram, vShader.GetID());
+	glAttachShader(screenQuadProgram, fShader.GetID());
 	glLinkProgram(screenQuadProgram);
 	glUseProgram(screenQuadProgram);
 
@@ -165,7 +158,12 @@ void InitRenderer(uint32 width, uint32 height)
 	glEnableVertexAttribArray(coordinateAttrib);
 	glVertexAttribPointer(coordinateAttrib, 2, GL_FLOAT, false, sizeof(float)*4, (void*)(sizeof(float)*2));
 
-	glUniform1i(glGetUniformLocation(screenQuadProgram, "diffuseBuffer"), 0);
+	float lightPos[] = { 0.f, 1.f, 0.f };
+	glUniform1i(glGetUniformLocation(screenQuadProgram, "positionBuffer"), 0);
+	glUniform1i(glGetUniformLocation(screenQuadProgram, "diffuseBuffer"), 1);
+	glUniform1i(glGetUniformLocation(screenQuadProgram, "normalBuffer"), 2);
+	glUniform1i(glGetUniformLocation(screenQuadProgram, "specularBuffer"), 3);
+	glUniform3fv(glGetUniformLocation(screenQuadProgram, "lightPos"), 1, lightPos);
 }
 
 void CleanUpRenderer()
@@ -184,8 +182,8 @@ void BeginFrame()
 
 	// Bind the GBuffer and its sub-buffers for drawing
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, gBuffer);
-	BufferID drawBuffers[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4 };
-	glDrawBuffers(5, drawBuffers);
+	BufferID drawBuffers[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4, GL_COLOR_ATTACHMENT5 };
+	glDrawBuffers(6, drawBuffers);
 
 	// Clear the GBuffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -207,7 +205,16 @@ void EndFrame()
 
 	// Bind the GBuffer's sub-buffers as textures for reading
 	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, positionBuffer);
+	
+	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, diffuseBuffer);
+	
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, normalBuffer);
+
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, specularBuffer);
 
 	// Draw the screen quad
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);

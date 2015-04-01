@@ -57,9 +57,9 @@ namespace Willow
 	private:
 
 		BufferID _id;
-		BufferID _vModel;
-		BufferID _vView;
-		BufferID _vProjection;
+		BufferID _model;
+		BufferID _view;
+		BufferID _projection;
 	};
 
 	NON_REFLECTABLE(Willow::Material)

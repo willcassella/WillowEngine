@@ -21,6 +21,7 @@ enum class API
 
 extern BufferID gBuffer;
 extern BufferID depthBuffer;
+extern BufferID positionBuffer;
 extern BufferID diffuseBuffer;
 extern BufferID normalBuffer;
 extern BufferID specularBuffer;
