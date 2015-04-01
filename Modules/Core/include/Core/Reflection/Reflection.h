@@ -3,6 +3,7 @@
 * header has forward-declarations for all of them */
 #pragma once
 
+#include <type_traits>
 #include "../config.h"
 
 ////////////////////////////////
