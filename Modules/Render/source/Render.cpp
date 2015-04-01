@@ -1,7 +1,6 @@
 // Render.cpp
 
 #include <Utility/Console.h>
-#include <Utility/Math/Vec3.h>
 #include "glew.h"
 #include "..\include\Render\Render.h"
 #include "..\include\Render\Shader.h"
@@ -189,7 +188,7 @@ void BeginFrame()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void EndFrame()
+void EndFrame(const Vec3& camPos)
 {
 	// Bind the default framebuffer for drawing
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
@@ -202,6 +201,10 @@ void EndFrame()
 	glBindVertexArray(screenQuadVAO);
 	glBindBuffer(GL_ARRAY_BUFFER, screenQuadVBO);
 	glUseProgram(screenQuadProgram);
+
+	// Upload the camera's position
+	float cam[] = { camPos.X, camPos.Y, camPos.Z };
+	glUniform3fv(glGetUniformLocation(screenQuadProgram, "camPos"), 1, cam);
 
 	// Bind the GBuffer's sub-buffers as textures for reading
 	glActiveTexture(GL_TEXTURE0);

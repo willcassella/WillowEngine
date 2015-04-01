@@ -2,6 +2,7 @@
 #pragma once
 
 #include <Utility\config.h>
+#include <Utility\Math\Vec3.h>
 #include "config.h"
 
 /////////////////
@@ -44,4 +45,4 @@ RENDER_API void Resize(uint32 width, uint32 height);
 RENDER_API void BeginFrame();
 
 /** Complete rendering a frame */
-RENDER_API void EndFrame();
+RENDER_API void EndFrame(const Willow::Vec3& camPos);
