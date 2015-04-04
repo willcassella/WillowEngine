@@ -88,12 +88,12 @@ namespace Implementation
 		/** Defined below */
 		static const PointerInfo StaticPointerInfo;
 
-		FORCEINLINE static const TypeInfo& Function()
+		FORCEINLINE static const PointerInfo& Function()
 		{
 			return StaticPointerInfo;
 		}
 
-		FORCEINLINE static const TypeInfo& Function(AnyType* value)
+		FORCEINLINE static const PointerInfo& Function(AnyType* value)
 		{
 			return StaticPointerInfo;
 		}

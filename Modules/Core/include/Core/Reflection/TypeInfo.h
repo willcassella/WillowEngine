@@ -267,7 +267,7 @@ FORCEINLINE AnyType* CopyConstruct(const AnyType& copy)
 	}
 	else
 	{
-		// Get the copy's type and call its implementation through that
+		// Get copy's type and call its implementation through that
 		return TypeOf<copy>()._copyConstructor(&copy);
 	}
 }
@@ -335,7 +335,7 @@ FORCEINLINE String ToString(const AnyType& value)
 	}
 	else
 	{
-		// Get the value's type and call its implementation through that
+		// Get value's type and call its implementation through that
 		return TypeOf(value)._toStringImplementation(&value);
 	}
 }

@@ -69,12 +69,12 @@ namespace Implementation
 		/** Defined in 'PrimitiveInfo.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
 
-		FORCEINLINE static const TypeInfo& Function()
+		FORCEINLINE static const PrimitiveInfo& Function()
 		{
 			return StaticTypeInfo;
 		}
 
-		FORCEINLINE static const TypeInfo& Function(bool value)
+		FORCEINLINE static const PrimitiveInfo& Function(bool value)
 		{
 			return StaticTypeInfo;
 		}
@@ -87,12 +87,12 @@ namespace Implementation
 		/** Defined in 'PrimitiveInfo.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
 
-		FORCEINLINE static const TypeInfo& Function()
+		FORCEINLINE static const PrimitiveInfo& Function()
 		{
 			return StaticTypeInfo;
 		}
 
-		FORCEINLINE static const TypeInfo& Function(char value)
+		FORCEINLINE static const PrimitiveInfo& Function(char value)
 		{
 			return StaticTypeInfo;
 		}
@@ -105,12 +105,12 @@ namespace Implementation
 		/** Defined in 'PrimitiveInfo.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
 
-		FORCEINLINE static const TypeInfo& Function()
+		FORCEINLINE static const PrimitiveInfo& Function()
 		{
 			return StaticTypeInfo;
 		}
 
-		FORCEINLINE static const TypeInfo& Function(byte value)
+		FORCEINLINE static const PrimitiveInfo& Function(byte value)
 		{
 			return StaticTypeInfo;
 		}
@@ -123,12 +123,12 @@ namespace Implementation
 		/** Defined in 'PrimitiveInfo.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
 
-		FORCEINLINE static const TypeInfo& Function()
+		FORCEINLINE static const PrimitiveInfo& Function()
 		{
 			return StaticTypeInfo;
 		}
 
-		FORCEINLINE static const TypeInfo& Function(int16 value)
+		FORCEINLINE static const PrimitiveInfo& Function(int16 value)
 		{
 			return StaticTypeInfo;
 		}
@@ -141,12 +141,12 @@ namespace Implementation
 		/** Defined in 'PrimitiveInfo.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
 
-		FORCEINLINE static const TypeInfo& Function()
+		FORCEINLINE static const PrimitiveInfo& Function()
 		{
 			return StaticTypeInfo;
 		}
 
-		FORCEINLINE static const TypeInfo& Function(int32 value)
+		FORCEINLINE static const PrimitiveInfo& Function(int32 value)
 		{
 			return StaticTypeInfo;
 		}
@@ -159,12 +159,12 @@ namespace Implementation
 		/** Defined in 'PrimitiveInfo.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
 
-		FORCEINLINE static const TypeInfo& Function()
+		FORCEINLINE static const PrimitiveInfo& Function()
 		{
 			return StaticTypeInfo;
 		}
 
-		FORCEINLINE static const TypeInfo& Function(int64 value)
+		FORCEINLINE static const PrimitiveInfo& Function(int64 value)
 		{
 			return StaticTypeInfo;
 		}
@@ -177,12 +177,12 @@ namespace Implementation
 		/** Defined in 'PrimitiveInfo.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
 
-		FORCEINLINE static const TypeInfo& Function()
+		FORCEINLINE static const PrimitiveInfo& Function()
 		{
 			return StaticTypeInfo;
 		}
 
-		FORCEINLINE static const TypeInfo& Function(uint16 value)
+		FORCEINLINE static const PrimitiveInfo& Function(uint16 value)
 		{
 			return StaticTypeInfo;
 		}
@@ -195,12 +195,12 @@ namespace Implementation
 		/** Defined in 'PrimitiveInfo.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
 
-		FORCEINLINE static const TypeInfo& Function()
+		FORCEINLINE static const PrimitiveInfo& Function()
 		{
 			return StaticTypeInfo;
 		}
 
-		FORCEINLINE static const TypeInfo& Function(uint32 value)
+		FORCEINLINE static const PrimitiveInfo& Function(uint32 value)
 		{
 			return StaticTypeInfo;
 		}
@@ -213,12 +213,12 @@ namespace Implementation
 		/** Defined in 'PrimitiveInfo.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
 
-		FORCEINLINE static const TypeInfo& Function()
+		FORCEINLINE static const PrimitiveInfo& Function()
 		{
 			return StaticTypeInfo;
 		}
 
-		FORCEINLINE static const TypeInfo& Function(uint64 value)
+		FORCEINLINE static const PrimitiveInfo& Function(uint64 value)
 		{
 			return StaticTypeInfo;
 		}
@@ -231,12 +231,12 @@ namespace Implementation
 		/** Defined in 'PrimitiveInfo.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
 
-		FORCEINLINE static const TypeInfo& Function()
+		FORCEINLINE static const PrimitiveInfo& Function()
 		{
 			return StaticTypeInfo;
 		}
 
-		FORCEINLINE static const TypeInfo& Function(float value)
+		FORCEINLINE static const PrimitiveInfo& Function(float value)
 		{
 			return StaticTypeInfo;
 		}
@@ -249,12 +249,12 @@ namespace Implementation
 		/** Defined in 'PrimitiveInfo.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
 
-		FORCEINLINE static const TypeInfo& Function()
+		FORCEINLINE static const PrimitiveInfo& Function()
 		{
 			return StaticTypeInfo;
 		}
 
-		FORCEINLINE static const TypeInfo& Function(double value)
+		FORCEINLINE static const PrimitiveInfo& Function(double value)
 		{
 			return StaticTypeInfo;
 		}

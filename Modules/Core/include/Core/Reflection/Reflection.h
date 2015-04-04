@@ -36,13 +36,13 @@ namespace Implementation
 	template <typename AnyType>
 	struct TypeOf
 	{
-		FORCEINLINE static const TypeInfo& Function()
+		FORCEINLINE static const auto& Function()
 		{
 			static_assert(!std::is_same<AnyType, Variant>::value, "'Variant' has no static type information");
 			return AnyType::StaticTypeInfo;
 		}
 
-		FORCEINLINE static const TypeInfo& Function(const AnyType& value)
+		FORCEINLINE static const auto& Function(const AnyType& value)
 		{
 			return value.GetType();
 		}
@@ -63,8 +63,8 @@ const TargetType* Cast(const AnyType& value);
 /** Retrieves the type information for the given type
 * DO NOT OVERLOAD: Specialize struct 'Implementation::TypeOf' */
 template <typename AnyType>
-FORCEINLINE const TypeInfo& TypeOf()
-{
+FORCEINLINE const auto& TypeOf()
+{	
 	return Implementation::TypeOf<AnyType>::Function();
 }
 
