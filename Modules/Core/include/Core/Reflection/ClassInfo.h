@@ -28,9 +28,6 @@ public:
 		AnyClass* dummy = nullptr;
 		return ClassInfo(dummy, name);
 	}
-	
-	ClassInfo(const ClassInfo& copy) = delete;
-	ClassInfo(ClassInfo&& move) = default;
 
 protected:
 
@@ -106,13 +103,6 @@ public:
 	{
 		return Implements(AnyInterface::StaticTypeInfo);
 	}
-
-	/////////////////////
-	///   Operators   ///
-public:
-
-	ClassInfo& operator=(const ClassInfo& copy) = delete;
-	ClassInfo& operator=(ClassInfo&& move) = delete;
 
 	////////////////
 	///   Data   ///

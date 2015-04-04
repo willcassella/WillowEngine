@@ -27,9 +27,6 @@ public:
 		return PrimitiveInfo(dummy, name);
 	}
 
-	PrimitiveInfo(const PrimitiveInfo& copy) = delete;
-	PrimitiveInfo(PrimitiveInfo&& move) = default;
-
 protected:
 
 	template <typename AnyPrimitiveType>
@@ -48,13 +45,6 @@ public:
 
 	/** Returns whether this type is castable (via reinterpret_cast) to the given type */
 	bool IsCastableTo(const TypeInfo& type) const override;
-
-	/////////////////////
-	///   Operators   ///
-public:
-
-	PrimitiveInfo& operator=(const PrimitiveInfo& copy) = delete;
-	PrimitiveInfo& operator=(PrimitiveInfo&& move) = delete;
 };
 
 //////////////////////////

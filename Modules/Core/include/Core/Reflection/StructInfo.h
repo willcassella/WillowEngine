@@ -37,9 +37,6 @@ public:
 		// @TODO: Implement this
 	}
 
-	StructInfo(const StructInfo& copy) = delete;
-	StructInfo(StructInfo&& move) = default;
-
 protected:
 
 	// @TODO: Documentation
@@ -85,13 +82,6 @@ public:
 		_fieldTable.Insert(name, _fields.Add(FieldInfo(field, name)));
 		return std::move(This);
 	}
-
-	/////////////////////
-	///   Operators   ///
-public:
-
-	StructInfo& operator=(const StructInfo& copy) = delete;
-	StructInfo& operator=(StructInfo&& move) = delete;
 
 	////////////////
 	///   Data   ///

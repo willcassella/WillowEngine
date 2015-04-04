@@ -28,9 +28,6 @@ public:
 		return InterfaceInfo(dummy, name);
 	}
 
-	InterfaceInfo(const InterfaceInfo& copy) = delete;
-	InterfaceInfo(InterfaceInfo&& move) = default;
-
 protected:
 
 	// @TODO: Documentation
@@ -47,11 +44,4 @@ protected:
 public:
 	
 	bool IsCastableTo(const TypeInfo& type) const override;
-
-	/////////////////////
-	///   Operators   ///
-public:
-
-	InterfaceInfo& operator=(const InterfaceInfo& copy) = delete;
-	InterfaceInfo& operator=(InterfaceInfo&& move) = delete;
 };

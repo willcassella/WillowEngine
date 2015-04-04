@@ -27,9 +27,6 @@ public:
 		return PointerInfo(dummy);
 	}
 
-	PointerInfo(const PointerInfo& copy) = delete;
-	PointerInfo(PointerInfo&& move) = default;
-
 private:
 
 	template <typename PointedType>
@@ -60,13 +57,6 @@ public:
 	{
 		return *_pointedType;
 	}
-
-	/////////////////////
-	///   Operators   ///
-public:
-
-	PointerInfo& operator=(const PointerInfo& copy) = delete;
-	PointerInfo& operator=(PointerInfo&& move) = delete;
 
 	////////////////
 	///   Data   ///
