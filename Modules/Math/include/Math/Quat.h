@@ -4,7 +4,7 @@
 #include "Vec3.h"
 
 // @TODO: conversion to Euler angles, conversion to axis+angle, and rotation by Euler angles
-struct MATH_API Quat
+struct MATH_API Quat final
 {
 	///////////////////////
 	///   Information   ///
@@ -17,9 +17,9 @@ public:
 public:
 
 	Quat()
-		: X(0), Y(0), Z(0), W(0)
+		: X(0), Y(0), Z(0), W(1)
 	{
-		// All done @TODO: Shouldn't W be initialized to 1?
+		// All done
 	}
 
 	/** Constructs a new Quaternion

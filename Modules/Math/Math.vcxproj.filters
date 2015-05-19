@@ -29,6 +29,9 @@
     <ClInclude Include="include\Math\config.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\Math\Vec4.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Mat4.cpp">
@@ -41,6 +44,9 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="source\Vec3.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Vec4.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

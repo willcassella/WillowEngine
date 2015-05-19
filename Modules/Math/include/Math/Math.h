@@ -6,7 +6,7 @@
 /////////////////////
 ///   Functions   ///
 	
-/** Returns the max of two values, with preference to 'a' */
+/** Returns the greater of two values, with preference to 'a' */
 template <typename T>
 FORCEINLINE const T& Max(const T& a, const T& b)
 {
@@ -34,18 +34,37 @@ FORCEINLINE const T& Min(const T& a, const T& b)
 	}
 }
 
-// @TODO: Documentation
+/** Returns the given value, clamped between the given upper and lower bounds */
 template <typename T>
-bool InRange(const T& value, const T& lower, const T& upper, bool inclusive = true)
+FORCEINLINE T Clamp(const T& value, const T& lowerBound, const T& upperBound)
 {
-	if (inclusive)
+	return Min(Max(value, lowerBound), upperBound);
+}
+
+/** Returns whether the given value is between the given bounds */
+template <typename T>
+bool InRange(const T& value, const T& lowerBound, const T& upperBound, bool lowerInclusive = true, bool upperInclusive = true)
+{
+	bool aboveLower;
+	bool belowUpper;
+
+	if (lowerInclusive)
 	{
-		return value >= lower && value <= upper;
+		aboveLower = value >= lowerBound;
 	}
 	else
 	{
-		return value > lower && value < upper;
+		aboveLower = value > lowerBound;
 	}
-}
 
-// @TODO: sin, cosine, sqrt, tan, etc
+	if (upperInclusive)
+	{
+		belowUpper = value <= upperBound;
+	}
+	else
+	{
+		belowUpper = value < upperBound;
+	}
+
+	return aboveLower && belowUpper;
+}

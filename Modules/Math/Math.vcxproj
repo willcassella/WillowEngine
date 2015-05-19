@@ -176,12 +176,14 @@
     <ClInclude Include="include\Math\Quat.h" />
     <ClInclude Include="include\Math\Vec2.h" />
     <ClInclude Include="include\Math\Vec3.h" />
+    <ClInclude Include="include\Math\Vec4.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Mat4.cpp" />
     <ClCompile Include="source\Quat.cpp" />
     <ClCompile Include="source\Vec2.cpp" />
     <ClCompile Include="source\Vec3.cpp" />
+    <ClCompile Include="source\Vec4.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

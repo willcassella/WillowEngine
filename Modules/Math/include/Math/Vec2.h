@@ -4,7 +4,7 @@
 #include <cmath>
 #include "config.h"
 
-struct MATH_API Vec2
+struct MATH_API Vec2 final
 {
 	///////////////////////
 	///   Information   ///
@@ -16,8 +16,12 @@ public:
 	///   Constructors   ///
 public:
 
-	/** Constructs a new 2-length vector */
-	Vec2(float x = 0.f, float y = 0.f)
+	Vec2()
+		: X(0.f), Y(0.f)
+	{
+		// All done
+	}
+	Vec2(float x, float y)
 		: X(x), Y(y)
 	{
 		// All done
@@ -62,7 +66,7 @@ public:
 	/** Returns the angle between two vectors */
 	FORCEINLINE static float Angle(const Vec2& a, const Vec2& b)
 	{
-		return acos(Vec2::Dot(a.Normalize(), b.Normalize()));
+		return acosf(Vec2::Dot(a.Normalize(), b.Normalize()));
 	}
 
 	////////////////////////////
@@ -81,7 +85,20 @@ public:
 	{
 		return Vec2(lhs.X + rhs.X, lhs.Y + rhs.Y);
 	}
+	friend MATH_API FORCEINLINE Vec2 operator+(const Vec2& lhs, float rhs)
+	{
+		return Vec2(lhs.X + rhs, lhs.Y + rhs);
+	}
+	friend MATH_API FORCEINLINE Vec2 operator+(float lhs, const Vec2& rhs)
+	{
+		return Vec2(lhs + rhs.X, lhs + rhs.Y);
+	}
 	friend MATH_API FORCEINLINE Vec2& operator+=(Vec2& lhs, const Vec2& rhs)
+	{
+		lhs = lhs + rhs;
+		return lhs;
+	}
+	friend MATH_API FORCEINLINE Vec2& operator+=(Vec2& lhs, float rhs)
 	{
 		lhs = lhs + rhs;
 		return lhs;
@@ -90,10 +107,27 @@ public:
 	{
 		return Vec2(lhs.X - rhs.X, lhs.Y - rhs.Y);
 	}
+	friend MATH_API FORCEINLINE Vec2 operator-(const Vec2& lhs, float rhs)
+	{
+		return Vec2(lhs.X - rhs, lhs.Y - rhs);
+	}
+	friend MATH_API FORCEINLINE Vec2 operator-(float lhs, const Vec2& rhs)
+	{
+		return Vec2(lhs - rhs.X, lhs - rhs.Y);
+	}
 	friend MATH_API FORCEINLINE Vec2& operator-=(Vec2& lhs, const Vec2& rhs)
 	{
 		lhs = lhs - rhs;
 		return lhs;
+	}
+	friend MATH_API FORCEINLINE Vec2& operator-=(Vec2& lhs, float rhs)
+	{
+		lhs = lhs - rhs;
+		return lhs;
+	}
+	friend MATH_API FORCEINLINE Vec2 operator*(const Vec2& lhs, const Vec2& rhs)
+	{
+		return Vec2(lhs.X * rhs.X, lhs.Y * rhs.Y);
 	}
 	friend MATH_API FORCEINLINE Vec2 operator*(const Vec2& lhs, float rhs)
 	{
@@ -101,11 +135,38 @@ public:
 	}
 	friend MATH_API FORCEINLINE Vec2 operator*(float lhs, const Vec2& rhs)
 	{
-		return Vec2(rhs.X * lhs, rhs.Y * lhs);
+		return Vec2(lhs * rhs.X, lhs * rhs.Y);
+	}
+	friend MATH_API FORCEINLINE Vec2& operator*=(Vec2& lhs, const Vec2& rhs)
+	{
+		lhs = lhs * rhs;
+		return lhs;
 	}
 	friend MATH_API FORCEINLINE Vec2& operator*=(Vec2& lhs, float rhs)
 	{
 		lhs = lhs * rhs;
+		return lhs;
+	}
+	friend MATH_API FORCEINLINE Vec2 operator/(const Vec2& lhs, const Vec2& rhs)
+	{
+		return Vec2(lhs.X / rhs.X, lhs.Y / rhs.Y);
+	}
+	friend MATH_API FORCEINLINE Vec2 operator/(const Vec2& lhs, float rhs)
+	{
+		return Vec2(lhs.X / rhs, lhs.Y / rhs);
+	}
+	friend MATH_API FORCEINLINE Vec2 operator/(float lhs, const Vec2& rhs)
+	{
+		return Vec2(lhs / rhs.X, lhs / rhs.Y);
+	}
+	friend MATH_API FORCEINLINE Vec2& operator/=(Vec2& lhs, const Vec2& rhs)
+	{
+		lhs = lhs / rhs;
+		return lhs;
+	}
+	friend MATH_API FORCEINLINE Vec2& operator/=(Vec2& lhs, float rhs)
+	{
+		lhs = lhs / rhs;
 		return lhs;
 	}
 	friend MATH_API FORCEINLINE bool operator==(const Vec2& lhs, const Vec2& rhs)
