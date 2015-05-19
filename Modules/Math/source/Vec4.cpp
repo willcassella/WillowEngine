@@ -1,4 +1,4 @@
-// Vec4.cpp
+// Vec4.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
 #include "../include/Math/Vec4.h"
 
