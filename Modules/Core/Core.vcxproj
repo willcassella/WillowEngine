@@ -30,12 +30,12 @@
     <ClInclude Include="include\Core\Containers\Stack.h" />
     <ClInclude Include="include\Core\Containers\Table.h" />
     <ClInclude Include="include\Core\Containers\Tuple.h" />
-    <ClInclude Include="include\Core\Exception.h" />
     <ClInclude Include="include\Core\Interface.h" />
     <ClInclude Include="include\Core\Misc\Signature.h" />
     <ClInclude Include="include\Core\Misc\TimeStamp.h" />
     <ClInclude Include="include\Core\Object.h" />
     <ClInclude Include="include\Core\Operations.h" />
+    <ClInclude Include="include\Core\Operations\FromString.h" />
     <ClInclude Include="include\Core\Reflection\ClassInfo.h" />
     <ClInclude Include="include\Core\Reflection\FieldInfo.h" />
     <ClInclude Include="include\Core\Reflection\InterfaceInfo.h" />
@@ -58,6 +58,8 @@
     <ClCompile Include="source\Interface.cpp" />
     <ClCompile Include="source\Misc\TimeStamp.cpp" />
     <ClCompile Include="source\Object.cpp" />
+    <ClCompile Include="source\Operations\FromString.cpp" />
+    <ClCompile Include="source\Operations\ToString.cpp" />
     <ClCompile Include="source\Reflection\ClassInfo.cpp" />
     <ClCompile Include="source\Reflection\FieldInfo.cpp" />
     <ClCompile Include="source\Reflection\InterfaceInfo.cpp" />
@@ -66,16 +68,19 @@
     <ClCompile Include="source\Reflection\PrimitiveInfo.cpp" />
     <ClCompile Include="source\Reflection\StructInfo.cpp" />
     <ClCompile Include="source\Reflection\TypeInfo.cpp" />
+    <ClCompile Include="source\Reflection\Variant.cpp" />
     <ClCompile Include="source\Reflection\VoidInfo.cpp" />
     <ClCompile Include="source\String.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="include\Core\Operations\ToString.h" />
     <None Include="ProjectPony.vcxproj.filters" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B17B9116-AFA2-4D56-B791-C95F2F75214B}</ProjectGuid>
     <RootNamespace>ProjectPony</RootNamespace>
     <ProjectName>Core</ProjectName>
+    <TargetPlatformVersion>8.1</TargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -149,6 +154,7 @@
       <DisableSpecificWarnings>4251</DisableSpecificWarnings>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <ExceptionHandling>SyncCThrow</ExceptionHandling>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -167,6 +173,7 @@
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <ExceptionHandling>SyncCThrow</ExceptionHandling>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -188,6 +195,7 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <ExceptionHandling>SyncCThrow</ExceptionHandling>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -211,6 +219,7 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <ExceptionHandling>SyncCThrow</ExceptionHandling>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

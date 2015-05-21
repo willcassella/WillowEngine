@@ -1,7 +1,8 @@
 // FieldInfo.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "TypeInfo.h"
+#include <functional>
+#include "Variant.h"
 
 class CORE_API FieldInfo final : public Object
 {
@@ -21,10 +22,9 @@ private:
 	/** Creates a named field */
 	template <class OwnerType, typename FieldType>
 	FieldInfo(FieldType OwnerType::*field, const String& name)
-		: _name(name)
+		: FieldInfo(field, name, "")
 	{
-		_fieldType = &TypeOf<FieldType>();
-		_ownerType = &TypeOf<OwnerType>();
+		// All done
 	}
 
 	/** Creates a named field with a description */
@@ -34,6 +34,15 @@ private:
 	{
 		_fieldType = &TypeOf<FieldType>();
 		_ownerType = &TypeOf<OwnerType>();
+
+		_getter = [field](void* owner)->void*
+		{  
+			return &(static_cast<OwnerType*>(owner)->*field);
+		};
+		_setter = [field](void* owner, const void* value)->void
+		{
+			static_cast<OwnerType*>(owner)->*field = *static_cast<const FieldType*>(value);
+		};
 	}
 
 	///////////////////
@@ -66,11 +75,15 @@ public:
 
 	/** Returns a Variant (with the same mutability as "owner") to the value of this field on the given Variant
 	* NOTE: The value referenced by 'owner' must be of the same or extension of the type referenced by 'GetOwnerType()' */
-	Variant GetValue(Variant owner) const;
+	Variant GetValue(const Variant& owner) const;
+
+	/** Returns a Variant (with the same mutability as "owner") to the value of this field on the given Variant
+	* NOTE: The value referenced by 'owner' must be of the same or extension of the type referenced by 'GetOwnerType()' */
+	Variant GetValue(Variant&& owner) const;
 
 	/** Sets the value of this field on the given Variant to the given Value
 	* NOTE: The value referenced by 'owner' must be of the same or extension of the type referenced by 'GetOwnerType()' */
-	void SetValue(Variant owner, Variant value) const;
+	void SetValue(const Variant& owner, const Variant& value) const;
 
 	////////////////
 	///   Data   ///
@@ -80,6 +93,6 @@ private:
 	String _description;
 	const TypeInfo* _fieldType;
 	const TypeInfo* _ownerType;
-	void(*_setter)(void*);
-	void*(*_getter)();
+	std::function<void* (void*)> _getter;
+	std::function<void (void*, const void*)> _setter;
 };

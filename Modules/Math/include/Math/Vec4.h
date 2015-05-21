@@ -188,12 +188,12 @@ public:
 	{
 		return Vec4(lhs / rhs.X, lhs / rhs.Y, lhs / rhs.Z, lhs / rhs.W);
 	}
-	friend MATH_API FORCEINLINE Vec4& operator/(Vec4& lhs, const Vec4& rhs)
+	friend MATH_API FORCEINLINE Vec4& operator/=(Vec4& lhs, const Vec4& rhs)
 	{
 		lhs = lhs / rhs;
 		return lhs;
 	}
-	friend MATH_API FORCEINLINE Vec4& operator/(Vec4& lhs, float rhs)
+	friend MATH_API FORCEINLINE Vec4& operator/=(Vec4& lhs, float rhs)
 	{
 		lhs = lhs / rhs;
 		return lhs;

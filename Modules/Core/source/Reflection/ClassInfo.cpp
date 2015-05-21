@@ -25,9 +25,11 @@ bool ClassInfo::IsCastableTo(const TypeInfo& type) const
 		// Check if this class implements the given interface
 		return Implements(static_cast<const InterfaceInfo&>(type));
 	}
-
-	// If neither is true, the types are definitely not compatible
-	return false;
+	else
+	{
+		// If neither is true, the types are definitely not compatible
+		return false;
+	}
 }
 
 bool ClassInfo::Extends(const ClassInfo& type) const

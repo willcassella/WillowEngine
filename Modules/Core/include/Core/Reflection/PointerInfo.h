@@ -93,5 +93,10 @@ namespace Implementation
 	template <typename AnyType>
 	const PointerInfo TypeOf<AnyType*>::StaticPointerInfo = PointerInfo::Create<AnyType>();
 
-	// @TODO: Support for nullptr and void*
+	/** TypeInfo for std::nullptr_t */
+	template <>
+	struct TypeOf < std::nullptr_t >
+	{
+		//@TODO: Implement this
+	};
 }

@@ -1,6 +1,11 @@
 // StructInfo.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
+#include "../Containers/List.h"
+#include "../Containers/Queue.h"
+#include "../Containers/Stack.h"
+#include "../Containers/Tuple.h"
+#include "../Containers/Table.h"
 #include "TypeInfo.h"
 #include "FieldInfo.h"
 

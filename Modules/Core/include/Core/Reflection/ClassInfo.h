@@ -1,6 +1,7 @@
 // ClassInfo.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
+#include "../Containers/Table.h"
 #include "TypeInfo.h"
 #include "FieldInfo.h"
 
@@ -13,7 +14,6 @@ public:
 
 	REFLECTABLE_CLASS;
 	EXTENDS(TypeInfo);
-	friend Object;
 
 	////////////////////////
 	///   Constructors   ///
@@ -42,10 +42,10 @@ protected:
 private:
 
 	/** Special constructor used to construct TypeInfo for "Object" class */
-	ClassInfo()
-		: Super(static_cast<Object*>(nullptr), "Object")
+	explicit ClassInfo(Object* dummy, const String& name)
+		: Super(dummy, name), _base(nullptr)
 	{
-		_base = nullptr;
+		// All done
 	}
 
 	///////////////////

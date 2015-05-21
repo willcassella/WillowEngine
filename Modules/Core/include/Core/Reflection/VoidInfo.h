@@ -6,44 +6,39 @@
 /////////////////
 ///   Types   ///
 
-//class CORE_API VoidInfo final : public TypeInfo
-//{
-//	///////////////////////
-//	///   Information   ///
-//public:
-//
-//	REFLECTABLE_CLASS;
-//	EXTENDS(TypeInfo);
-//	friend Implementation::TypeOf<void>;
-//
-//	////////////////////////
-//	///   Constructors   ///
-//public:
-//
-//	VoidInfo(const VoidInfo& copy) = delete;
-//	VoidInfo(VoidInfo&& move);
-//
-//private:
-//
-//	VoidInfo();
-//
-//	///////////////////
-//	///   Methods   ///
-//public:
-//
-//	bool IsAbstract() const override;
-//
-//	bool IsPolymorphic() const override;
-//
-//	bool IsCastableTo(const TypeInfo& type) const override;
-//
-//	/////////////////////
-//	///   Operators   ///
-//public:
-//
-//	TypeInfo& operator=(const TypeInfo& copy) = delete;
-//	TypeInfo& operator=(TypeInfo&& move) = delete;
-//};
+class CORE_API VoidInfo final : public PrimitiveInfo
+{
+	///////////////////////
+	///   Information   ///
+public:
+
+	REFLECTABLE_CLASS;
+	EXTENDS(PrimitiveInfo);
+	friend Implementation::TypeOf<void>;
+
+	////////////////////////
+	///   Constructors   ///
+public:
+
+	VoidInfo(VoidInfo&& move) = default; // @TODO: See if this can be removed
+
+private:
+
+	VoidInfo();
+
+	///////////////////
+	///   Methods   ///
+public:
+
+	bool IsCastableTo(const TypeInfo& type) const override;
+
+	/////////////////////
+	///   Operators   ///
+public:
+
+	TypeInfo& operator=(const TypeInfo& copy) = delete;
+	TypeInfo& operator=(TypeInfo&& move) = delete;
+};
 
 //////////////////////////
 ///   Implementation   ///
@@ -55,13 +50,13 @@ namespace Implementation
 	struct TypeOf < void >
 	{
 		/** Defined in 'VoidInfo.cpp' */
-		//static const VoidInfo StaticTypeInfo;
+		static const VoidInfo StaticTypeInfo;
 
 		FORCEINLINE static const TypeInfo& Function()
 		{
-			return ::TypeOf<int>();
+			return StaticTypeInfo;
 		}
 
-		/** It is not possible to retrieve type data for an instance of 'void' */
+		/** It is not possible to retrieve type data for an instance of 'void', so that Function is not necessary */
 	};
 }

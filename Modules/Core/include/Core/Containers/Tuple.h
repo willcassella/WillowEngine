@@ -17,5 +17,11 @@ struct Tuple <>
 template <typename AnyType, typename ... MoreAnyTypes>
 struct Tuple < AnyType, MoreAnyTypes... > : public Tuple<MoreAnyTypes...>
 {
-	// @TODO: Finish implementing this
+	////////////////
+	///   Data   ///
+private:
+
+	AnyType _value;
 };
+
+// @TODO: Figure out a way to make tuples elements appear in order

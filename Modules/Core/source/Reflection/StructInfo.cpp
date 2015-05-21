@@ -1,5 +1,7 @@
 // StructInfo.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
+#include "../../include/Core/Operations/ToString.h"
+#include "../../include/Core/Operations/FromString.h"
 #include "../../include/Core/Reflection/StructInfo.h"
 #include "../../include/Core/Reflection/ClassInfo.h"
 

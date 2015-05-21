@@ -5,4 +5,4 @@
 //////////////////////
 ///   Reflection   ///
 
-const ClassInfo Object::StaticTypeInfo = ClassInfo();
+CLASS_REFLECTION(Object);

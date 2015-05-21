@@ -38,12 +38,29 @@ namespace Implementation
 	{
 		FORCEINLINE static const auto& Function()
 		{
-			static_assert(!std::is_same<AnyType, Variant>::value, "'Variant' has no static type information");
+				typedef decltype(AnyType::StaticTypeInfo) ReturnType;
+			typedef typename std::remove_const<ReturnType>::type TypeInfoType;
+
+			static_assert(std::is_const<ReturnType>::value && std::is_object<ReturnType>::value,
+				"The 'StaticTypeInfo' static object must be a const value type");
+
+			static_assert(std::is_base_of<TypeInfo, TypeInfoType>::value || std::is_same<TypeInfo, TypeInfoType>::value,
+				"The 'StaticTypeInfo' static object must be a 'TypeInfo' object");
+
 			return AnyType::StaticTypeInfo;
 		}
 
 		FORCEINLINE static const auto& Function(const AnyType& value)
 		{
+			typedef decltype(value.GetType()) ReturnType;
+			typedef typename std::remove_const<typename std::remove_reference<decltype(value.GetType())>::type>::type TypeInfoType;
+
+			static_assert(std::is_reference<ReturnType>::value && std::is_const<typename std::remove_reference<ReturnType>::type>::value,
+				"The 'GetType' member function must return an immutable reference");
+
+			static_assert(std::is_base_of<TypeInfo, TypeInfoType>::value || std::is_same<TypeInfo, TypeInfoType>::value
+				, "The 'GetType()' member function must return a 'TypeInfo' object");
+			
 			return value.GetType();
 		}
 	};
@@ -60,6 +77,10 @@ TargetType* Cast(AnyType& value);
 template <typename TargetType, typename AnyType>
 const TargetType* Cast(const AnyType& value);
 
+/** r-value references cannot be safely casted */
+template <typename TargetType, typename AnyType>
+const TargetType* Cast(AnyType&& value) = delete;
+
 /** Retrieves the type information for the given type
 * DO NOT OVERLOAD: Specialize struct 'Implementation::TypeOf' */
 template <typename AnyType>
@@ -71,7 +92,7 @@ FORCEINLINE const auto& TypeOf()
 /** Retrieves the type information for the given value 
 * DO NOT OVERLOAD: Specialize struct 'Implementation::TypeOf' */
 template <typename AnyType>
-FORCEINLINE const TypeInfo& TypeOf(const AnyType& value)
+FORCEINLINE const auto& TypeOf(const AnyType& value)
 {
 	return Implementation::TypeOf<AnyType>::Function(value);
 }
