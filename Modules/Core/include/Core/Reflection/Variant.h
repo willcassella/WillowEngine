@@ -9,116 +9,141 @@
 /** Basically a smart wrapper over "void*" @TODO: Figure out a safer way of doing this */
 struct CORE_API Variant final
 {
-	///////////////////////
-	///   Information   ///
-public:
-
-	template <typename TargetType> friend TargetType* Cast(const Variant&);
-	friend class FieldInfo; // @TODO: Figure out a way to get ride of this
-
 	////////////////////////
 	///   Constructors   ///
 public:
 
-	/** Constructs an immutable Variant to 'void' */
+	/** Constructs a Variant to 'void' */
 	Variant();
 
-	/** Constructs a mutable Variant to a value of any type with user-defined ownership
+	/** Constructs a Variant to a value of any type
 	* 'value' - The value to reference
-	* 'type' - The type of the value
-	* 'hasOwnership' - Whether this Variant is responsible for deleting the value */
-	Variant(void* value, const TypeInfo& type, bool hasOwnership = false);
-
-	/** Constructs an immutable Variant to a value of any type without ownership
-	* 'value' - The value to reference 
 	* 'type' - The type of the value */
-	Variant(const void* value, const TypeInfo& type);
+	Variant(void* value, const TypeInfo& type)
+		: _value(value), _type(type)
+	{
+		// All done
+	}
 
-	/** Copies an existing variant, copying the value if that Variant has ownership */
-	Variant(const Variant& copy);
-
-	/** Moves an existing variant, taking ownership if necessary */
-	Variant(Variant&& move);
-
-	/** Constructs a mutable Variant without ownership */
+	/** Constructs a Variant to a value of any type */
 	template <typename AnyType>
 	Variant(AnyType& value)
-		: _value(&value), _type(&TypeOf(value)), _isImmutable(false), _hasOwnership(false)
+		: _value(&value), _type(TypeOf(value))
 	{
 		// All done
 	}
-
-	/** Constructs an immutable Variant without ownership */
-	template <typename AnyType>
-	Variant(const AnyType& value)
-		: _value(const_cast<AnyType*>(&value)), _type(&TypeOf(value)), _isImmutable(true), _hasOwnership(false)
-	{
-		// All done
-	}
-
-	/** Construct a mutable Variant with ownership */
-	template <typename AnyType>
-	Variant(AnyType&& value)
-		: _value(nullptr), _type(&TypeOf(value)), _isImmutable(false), _hasOwnership(true)
-	{
-		_value = Copy(std::move(value));
-	}
-
-	/** Destroys this Variant, as well as the value it references if it has ownership */
-	~Variant();
 
 	///////////////////
 	///   Methods   ///
 public:
 
+	/** Returns the referenced value */
+	FORCEINLINE void* GetValue() const
+	{
+		return _value;
+	}
+
 	/** Returns the type of the referenced value */
 	FORCEINLINE const TypeInfo& GetType() const
 	{
-		return *_type;
+		return _type;
 	}
-
-	/** Returns whether this Variant references an immutable value */
-	FORCEINLINE bool IsImmutable() const
-	{
-		return _isImmutable;
-	}
-
-	/** Returns whether this Variant has ownership over the object it references */
-	FORCEINLINE bool HasOwnership() const
-	{
-		return _hasOwnership;
-	}
-
-	/** If this Variant does not currently hold ownership over the value it references, it copies the value and takes ownership
-	* Returns: Whether this variant now has ownership over the value */
-	bool TakeOwnership();
-
-	/** If this variant currently has ownership over the value it references, releases ownership */
-	FORCEINLINE void ReleaseOwnership()
-	{
-		_hasOwnership = false;
-	}
-
-	/** Calls the destructor on the referenced value
-	* Returns: Whether destruction completed successfully
-	* NOTE: Does nothing if the value is immutable or this Variant does not have ownership */
-	bool Destroy();
 
 	/////////////////////
 	///   Operators   ///
 public:
 
-	Variant& operator=(const Variant& copy) = delete;
-	Variant& operator=(Variant&& move) = delete;
+	template <typename AnyType>
+	Variant& operator=(AnyType& value)
+	{
+		_value = &value;
+		_type = TypeOf(value);
+		return This;
+	}
 
 	////////////////
 	///   Data   ///
 private:
 
 	void* _value;
-	const TypeInfo* _type;
-	bool _isImmutable;
-	bool _hasOwnership;
+	TypeIndex _type;
+};
+
+/** Basically a smart wrapper of "const void*" */
+struct CORE_API ImmutableVariant final
+{
+	////////////////////////
+	///   Constructors   ///
+public:
+
+	/** Constructs an ImmutableVariant to 'void' */
+	ImmutableVariant();
+
+	/** Constructs an ImmutableVariant to a value of any type
+	* 'value' - The value to reference
+	* 'type' - The type of the value */
+	ImmutableVariant(const void* value, const TypeInfo& type)
+		: _value(value), _type(type)
+	{
+		// All done
+	}
+
+	/** Constructs an ImmutableVariant to the value referenced by a non-immutable variant */
+	ImmutableVariant(const Variant& var)
+		: _value(var.GetValue()), _type(var.GetType())
+	{
+		// All done
+	}
+
+	/** Constructs an ImmutableVariant to a value of any type */
+	template <typename AnyType>
+	ImmutableVariant(const AnyType& value)
+		: _value(&value), _type(TypeOf(value))
+	{
+		// All done
+	}
+
+	///////////////////
+	///   Methods   ///
+public:
+
+	/** Returns the value referenced by this ImmutableVariant */
+	FORCEINLINE const void* GetValue() const
+	{
+		return _value;
+	}
+
+	/** Returns the type of the value referenced by this ImmutableVariant */
+	FORCEINLINE const TypeInfo& GetType() const
+	{
+		return _type;
+	}
+
+	/////////////////////
+	///   Operators   ///
+public:
+
+	ImmutableVariant& operator=(const Variant& var)
+	{
+		_value = var.GetValue();
+		_type = var.GetType();
+		return This;
+	}
+
+	template <typename AnyType>
+	ImmutableVariant& operator=(const AnyType& value)
+	{
+		_value = &value;
+		_type = TypeOf(value);
+		return This;
+	}
+
+	////////////////
+	///   Data   ///
+private:
+
+	const void* _value;
+	TypeIndex _type;
 };
 
 //////////////////////////

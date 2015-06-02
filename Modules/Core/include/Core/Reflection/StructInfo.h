@@ -94,7 +94,7 @@ private:
 
 	Table<String, uint32> _fieldTable;
 	Array<FieldInfo> _fields;
-	Array<const TypeInfo*> _dependentTypes;
+	Array<TypeIndex> _dependentTypes;
 };
 
 //////////////////////////
@@ -114,7 +114,7 @@ namespace Implementation
 			return StaticTypeInfo;
 		}
 
-		FORCEINLINE static const StructInfo& Function(const String& value)
+		FORCEINLINE static const StructInfo& Function(const String& /*value*/)
 		{
 			return StaticTypeInfo;
 		}
@@ -132,7 +132,7 @@ namespace Implementation
 			return StaticTypeInfo;
 		}
 
-		FORCEINLINE static const StructInfo& Function(const Array<T>& value)
+		FORCEINLINE static const StructInfo& Function(const Array<T>& /*value*/)
 		{
 			return StaticTypeInfo;
 		}

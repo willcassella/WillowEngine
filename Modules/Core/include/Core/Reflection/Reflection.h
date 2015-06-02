@@ -27,6 +27,9 @@ class VoidInfo;
 /** Defined in 'Variant.h' */
 struct Variant;
 
+/** Defined in 'Variant.h' */
+struct ImmutableVariant;
+
 //////////////////////////
 ///   Implementation   ///
 
@@ -38,13 +41,13 @@ namespace Implementation
 	{
 		FORCEINLINE static const auto& Function()
 		{
-				typedef decltype(AnyType::StaticTypeInfo) ReturnType;
-			typedef typename std::remove_const<ReturnType>::type TypeInfoType;
+			using ReturnType = decltype(AnyType::StaticTypeInfo);
+			using TypeInfoType = typename std::remove_const<ReturnType>::type;
 
 			static_assert(std::is_const<ReturnType>::value && std::is_object<ReturnType>::value,
 				"The 'StaticTypeInfo' static object must be a const value type");
 
-			static_assert(std::is_base_of<TypeInfo, TypeInfoType>::value || std::is_same<TypeInfo, TypeInfoType>::value,
+			static_assert(std::is_base_of<TypeInfo, TypeInfoType>::value,
 				"The 'StaticTypeInfo' static object must be a 'TypeInfo' object");
 
 			return AnyType::StaticTypeInfo;
@@ -52,14 +55,14 @@ namespace Implementation
 
 		FORCEINLINE static const auto& Function(const AnyType& value)
 		{
-			typedef decltype(value.GetType()) ReturnType;
-			typedef typename std::remove_const<typename std::remove_reference<decltype(value.GetType())>::type>::type TypeInfoType;
+			using ReturnType = decltype(value.GetType());
+			using TypeInfoType = typename std::decay<ReturnType>::type;
 
 			static_assert(std::is_reference<ReturnType>::value && std::is_const<typename std::remove_reference<ReturnType>::type>::value,
 				"The 'GetType' member function must return an immutable reference");
 
-			static_assert(std::is_base_of<TypeInfo, TypeInfoType>::value || std::is_same<TypeInfo, TypeInfoType>::value
-				, "The 'GetType()' member function must return a 'TypeInfo' object");
+			static_assert(std::is_base_of<TypeInfo, TypeInfoType>::value,
+				"The 'GetType()' member function must return a 'TypeInfo' object");
 			
 			return value.GetType();
 		}
@@ -132,4 +135,4 @@ public:												\
 * T: The class which this class extends */
 #define EXTENDS(T)									\
 public:												\
-	typedef T Super;
+	using Super = T;

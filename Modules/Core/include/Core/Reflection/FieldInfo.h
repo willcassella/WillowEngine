@@ -30,11 +30,11 @@ private:
 	/** Creates a named field with a description */
 	template <class OwnerType, typename FieldType>
 	FieldInfo(FieldType OwnerType::*field, const String& name, const String& description)
-		: _name(name), _description(description)
+		: _name(name),
+		_description(description),
+		_fieldType(TypeOf<FieldType>()),
+		_ownerType(TypeOf<OwnerType>())
 	{
-		_fieldType = &TypeOf<FieldType>();
-		_ownerType = &TypeOf<OwnerType>();
-
 		_getter = [field](void* owner)->void*
 		{  
 			return &(static_cast<OwnerType*>(owner)->*field);
@@ -64,26 +64,27 @@ public:
 	/** Returns the type information for this field */
 	FORCEINLINE const TypeInfo& GetFieldType() const
 	{
-		return *_fieldType;
+		return _fieldType;
 	}
 
 	/** Returns the type information for the owner of this field */
 	FORCEINLINE const TypeInfo& GetOwnerType() const
 	{
-		return *_ownerType;
+		return _ownerType;
 	}
 
-	/** Returns a Variant (with the same mutability as "owner") to the value of this field on the given Variant
+	/** Returns a Variant to the value of this field on the given Variant
 	* NOTE: The value referenced by 'owner' must be of the same or extension of the type referenced by 'GetOwnerType()' */
 	Variant GetValue(const Variant& owner) const;
 
-	/** Returns a Variant (with the same mutability as "owner") to the value of this field on the given Variant
+	/** Returns an ImmutableVariant to the value of this field on the given ImmutableVariant
 	* NOTE: The value referenced by 'owner' must be of the same or extension of the type referenced by 'GetOwnerType()' */
-	Variant GetValue(Variant&& owner) const;
+	ImmutableVariant GetValue(const ImmutableVariant& owner) const;
 
-	/** Sets the value of this field on the given Variant to the given Value
-	* NOTE: The value referenced by 'owner' must be of the same or extension of the type referenced by 'GetOwnerType()' */
-	void SetValue(const Variant& owner, const Variant& value) const;
+	/** Sets the value of this field on the given Variant to the given value
+	* NOTE: The value referenced by 'owner' must be of the same or extension of the type referenced by 'GetOwnerType()' 
+	* NOTE: The value referenced by 'value' must be of the same or extension of the type referenced by 'GetFieldType()' */
+	void SetValue(const Variant& owner, const ImmutableVariant& value) const;
 
 	////////////////
 	///   Data   ///
@@ -91,8 +92,8 @@ private:
 
 	String _name;
 	String _description;
-	const TypeInfo* _fieldType;
-	const TypeInfo* _ownerType;
+	TypeIndex _fieldType;
+	TypeIndex _ownerType;
 	std::function<void* (void*)> _getter;
 	std::function<void (void*, const void*)> _setter;
 };

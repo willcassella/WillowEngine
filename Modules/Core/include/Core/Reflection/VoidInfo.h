@@ -18,10 +18,6 @@ public:
 
 	////////////////////////
 	///   Constructors   ///
-public:
-
-	VoidInfo(VoidInfo&& move) = default; // @TODO: See if this can be removed
-
 private:
 
 	VoidInfo();
@@ -31,13 +27,6 @@ private:
 public:
 
 	bool IsCastableTo(const TypeInfo& type) const override;
-
-	/////////////////////
-	///   Operators   ///
-public:
-
-	TypeInfo& operator=(const TypeInfo& copy) = delete;
-	TypeInfo& operator=(TypeInfo&& move) = delete;
 };
 
 //////////////////////////
@@ -52,7 +41,7 @@ namespace Implementation
 		/** Defined in 'VoidInfo.cpp' */
 		static const VoidInfo StaticTypeInfo;
 
-		FORCEINLINE static const TypeInfo& Function()
+		FORCEINLINE static const VoidInfo& Function()
 		{
 			return StaticTypeInfo;
 		}

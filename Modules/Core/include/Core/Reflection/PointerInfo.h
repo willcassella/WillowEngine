@@ -31,9 +31,8 @@ private:
 
 	template <typename PointedType>
 	PointerInfo(PointedType** dummy)
-		: Super(dummy, "")
+		: Super(dummy, ""), _pointedType(TypeOf<PointedType>())
 	{
-		_pointedType = &TypeOf<PointedType>();
 		_isConst = std::is_const<PointedType>::value;
 	}
 
@@ -55,14 +54,14 @@ public:
 	/** Returns the type pointed to by this pointer */
 	FORCEINLINE const TypeInfo& GetPointedType() const
 	{
-		return *_pointedType;
+		return _pointedType;
 	}
 
 	////////////////
 	///   Data   ///
 private:
 
-	const TypeInfo* _pointedType;
+	TypeIndex _pointedType;
 	bool _isConst;
 };
 

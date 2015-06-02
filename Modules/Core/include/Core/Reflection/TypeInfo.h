@@ -3,6 +3,7 @@
 
 #include "../String.h"
 #include "../Object.h"
+#include "TypeIndex.h"
 
 /////////////////
 ///   Types   ///
@@ -407,7 +408,7 @@ namespace Implementation
 	template <typename AnyType>
 	struct ToString
 	{
-		FORCEINLINE static String Function(const AnyType& value)
+		FORCEINLINE static String Function(const AnyType& /*value*/)
 		{
 			return ""; // @TODO: Implement this
 		}
@@ -417,7 +418,7 @@ namespace Implementation
 	template <typename AnyType>
 	struct FromString
 	{
-		FORCEINLINE static String Function(AnyType& value, const String& string)
+		FORCEINLINE static String Function(AnyType& /*value*/, const String& string)
 		{
 			return string; // @TODO: Implement this
 		}

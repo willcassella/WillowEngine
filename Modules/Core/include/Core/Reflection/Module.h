@@ -40,7 +40,7 @@ public:
 	String GetFileName() const;
 		
 	/** Returns a collection of all the types defined in this Module */
-	Array<const TypeInfo*> GetTypes() const;
+	Array<TypeIndex> GetTypes() const;
 
 	/** Searches for the type with the given name in this module
 	* NOTE: returns a null pointer if the type was not found */
@@ -59,5 +59,5 @@ private:
 
 	String _name;
 	String _authors;
-	Table<String, const TypeInfo*> _types;
+	Table<String, TypeIndex> _types;
 };
