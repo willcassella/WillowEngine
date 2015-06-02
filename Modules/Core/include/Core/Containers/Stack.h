@@ -12,10 +12,10 @@ struct Stack final
 public:
 
 	/** Forward iterator for a mutable Stack */
-	typedef typename Array<T>::ReverseIterator Iterator;
+	using Iterator = typename Array<T>::ReverseIterator;
 
 	/** Forward iterator for an immutable Stack */
-	typedef typename Array<T>::ConstReverseIterator ConstIterator;
+	using ConstIterator = typename Array<T>::ConstReverseIterator;
 
 	////////////////////////
 	///   Constructors   ///

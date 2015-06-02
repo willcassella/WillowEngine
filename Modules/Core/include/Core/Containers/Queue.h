@@ -12,10 +12,10 @@ struct Queue final
 public:
 
 	/** Forward iterator for a mutable Queue */
-	typedef typename Array<T>::Iterator Iterator;
+	using Iterator = typename Array<T>::Iterator;
 
 	/** Forward iterator for an immutable Queue */
-	typedef typename Array<T>::ConstIterator ConstIterator;
+	using ConstIterator = typename Array<T>::ConstIterator;
 
 	////////////////////////
 	///   Constructors   ///

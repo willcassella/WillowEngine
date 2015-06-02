@@ -12,16 +12,16 @@ struct Table final
 	///   Inner Types   ///
 private:
 
-	typedef Pair<KeyType, ValueType> PairType;
-	typedef Array<PairType> StorageType;
+	using PairType = Pair<KeyType, ValueType>;
+	using StorageType = Array<PairType>;
 
 public:
 
 	/** Forward iterator for a mutable Table */
-	typedef typename StorageType::Iterator Iterator;
+	using Iterator = typename StorageType::Iterator;
 
 	/** Forward iterator for an immutable Table */
-	typedef typename StorageType::ConstIterator ConstIterator;
+	using ConstIterator = typename StorageType::ConstIterator;
 
 	////////////////////////
 	///   Constructors   ///

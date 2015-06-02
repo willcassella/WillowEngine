@@ -30,21 +30,21 @@
 
 // bool is still bool
 // char is still char (ONLY used for characters)
-typedef std::uint8_t byte;
-typedef std::int16_t int16;
-typedef std::int32_t int32;
-typedef std::int64_t int64;
-typedef std::uint16_t uint16;
-typedef	std::uint32_t uint32;
-typedef std::uint64_t uint64;
+using byte = std::uint8_t;
+using int16 = std::int16_t;
+using int32 = std::int32_t;
+using int64 = std::int64_t;
+using uint16 = std::uint16_t;
+using uint32 = std::uint32_t;
+using uint64 = std::uint64_t;
 // float is still float
 // double is still double
 
-/** Determine numeric size of pointers */
+/** Determine numeric size of pointers @TODO: Evaluate if this is really necessary */
 #if BITS_32
-	typedef uint32 PointerT;
+	using PointerT = uint32;
 #elif BITS_64
-	typedef uint64 PointerT;
+	using PointerT = uint64;
 #endif
 
 //////////////////
