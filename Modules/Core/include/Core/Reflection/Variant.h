@@ -171,33 +171,26 @@ namespace Implementation
 template <typename TargetType>
 FORCEINLINE TargetType* Cast(const Variant& value)
 {
-	if (!std::is_const<TargetType>::value && value.IsImmutable())
+	if (value.GetType().IsCastableTo<TargetType>())
 	{
-		return nullptr;
+		return static_cast<TargetType*>(value.GetValue());
 	}
 	else
 	{
-		if (value.GetType().IsCastableTo<TargetType>())
-		{
-			return static_cast<TargetType*>(value._value);
-		}
-		else
-		{
-			return nullptr;
-		}
+		return nullptr;
 	}
 }
 
 // @TODO: Documentation
 template <typename TargetType>
-FORCEINLINE TargetType* Cast(Variant&& value)
+FORCEINLINE const TargetType* Cast(const ImmutableVariant& value)
 {
-	if (value.HasOwnership())
+	if (value.GetType().IsCastableTo<TargetType>())
 	{
-		return nullptr; // Since 'value' is about to be deleted, returning a pointer to its owned data is not safe
+		return static_cast<const TargetType*>(value.GetValue());
 	}
 	else
 	{
-		return Cast<TargetType>(value);
+		return nullptr;
 	}
 }
