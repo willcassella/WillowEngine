@@ -65,7 +65,7 @@ TypeInfo::TypeInfo(TypeInfo&& move)
 
 TypeInfo::~TypeInfo()
 {
-	Application::Instance()._types.DeleteAll(this);
+	Application::Instance()._types.DeleteAll(This);
 }
 
 ///////////////////
@@ -78,5 +78,5 @@ String TypeInfo::GetName() const
 
 void TypeInfo::RegisterWithApplication()
 {
-	Application::Instance()._types.Add(this);
+	Application::Instance()._types.Add(This);
 }

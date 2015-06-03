@@ -13,18 +13,10 @@ CLASS_REFLECTION(FieldInfo);
 
 Variant FieldInfo::GetValue(const Variant& owner) const
 {
-	if (owner.GetType().IsCastableTo(*_ownerType)) // Make sure the given owner is of a type that owns this field
+	if (owner.GetType().IsCastableTo(_ownerType)) // Make sure the given owner is of a type that owns this field
 	{
-		if (owner.IsImmutable()) // We must return an immutable Variant
-		{
-			const void* field = _getter(owner._value);
-			return Variant(field, *_fieldType);
-		}
-		else
-		{
-			void* field = _getter(owner._value);
-			return Variant(field, *_fieldType, false);
-		}
+		void* field = _getter(owner.GetValue());
+		return Variant(field, _fieldType);
 	}
 	else
 	{
@@ -32,12 +24,29 @@ Variant FieldInfo::GetValue(const Variant& owner) const
 	}
 }
 
-Variant FieldInfo::GetValue(Variant&& owner) const
+ImmutableVariant FieldInfo::GetValue(const ImmutableVariant& owner) const
 {
-	return Variant(); // @TODO: Implement this
+	if (owner.GetType().IsCastableTo(_ownerType)) // Make sure the given owner is of a type that owns this field
+	{
+		const void* field = _getter(const_cast<void*>(owner.GetValue()));
+		return ImmutableVariant(field, _fieldType);
+	}
+	else
+	{
+		return Variant(); // void Variant
+	}
 }
 
-void FieldInfo::SetValue(const Variant& owner, const Variant& value) const
+void FieldInfo::SetValue(const Variant& owner, const ImmutableVariant& value) const
 {
-	// @TODO: Implement this
+	if (_fieldType->IsCopyAssignable()) // Make sure this field is settable to begin with
+	{
+		if (owner.GetType().IsCastableTo(_ownerType)) // Make sure the given owner is of a type that owns this field
+		{
+			if (value.GetType().IsCastableTo(_fieldType)) // Make sure the given value is of a type that this field can be assigned to
+			{
+				_setter(owner.GetValue(), value.GetValue());
+			}
+		}
+	}
 }

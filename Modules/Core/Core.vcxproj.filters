@@ -31,6 +31,12 @@
     <Filter Include="source\Operations">
       <UniqueIdentifier>{0a2c9be1-f423-44a7-878f-4dd6e8152d9e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\Event">
+      <UniqueIdentifier>{2be437ab-1b41-4fd3-9bd7-ae1f8774ba22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Event">
+      <UniqueIdentifier>{4dff4439-0f05-445b-975d-cef7a5ae6e73}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Core\Containers\Array.h">
@@ -126,6 +132,21 @@
     <ClInclude Include="include\Core\Operations\FromString.h">
       <Filter>include\Operations</Filter>
     </ClInclude>
+    <ClInclude Include="include\Core\Core.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Event\Event.h">
+      <Filter>include\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Event\EventHandler.h">
+      <Filter>include\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Event\EventManager.h">
+      <Filter>include\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Reflection\TypeIndex.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\String.cpp">
@@ -184,6 +205,12 @@
     </ClCompile>
     <ClCompile Include="source\Operations\FromString.cpp">
       <Filter>source\Operations</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Event\Event.cpp">
+      <Filter>source\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\TypeIndex.cpp">
+      <Filter>source\Reflection</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

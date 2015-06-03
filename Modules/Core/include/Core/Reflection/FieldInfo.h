@@ -86,6 +86,22 @@ public:
 	* NOTE: The value referenced by 'value' must be of the same or extension of the type referenced by 'GetFieldType()' */
 	void SetValue(const Variant& owner, const ImmutableVariant& value) const;
 
+	/** Returns a Variant to the value of this field on the given value
+	* NOTE: 'owner' must be of the same or extension of the type referenced by 'GetOwnerType()' */
+	template <class OwnerType>
+	FORCEINLINE Variant GetValue(OwnerType& owner) const
+	{
+		return GetValue(Variant(owner));
+	}
+
+	/** Returns an ImmutableVariant to the value of this field on the given value
+	* NOTE: 'owner' must be of the same or extension of the type referenced by 'GetOwnerType()' */
+	template <class OwnerType>
+	FORCEINLINE ImmutableVariant GetValue(const OwnerType& owner) const
+	{
+		return GetValue(ImmutableVariant(owner));
+	}
+
 	////////////////
 	///   Data   ///
 private:

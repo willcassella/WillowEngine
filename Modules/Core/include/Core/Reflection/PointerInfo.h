@@ -75,22 +75,22 @@ namespace Implementation
 	struct TypeOf < AnyType* >
 	{
 		/** Defined below */
-		static const PointerInfo StaticPointerInfo;
+		static const PointerInfo StaticTypeInfo;
 
 		FORCEINLINE static const PointerInfo& Function()
 		{
-			return StaticPointerInfo;
+			return StaticTypeInfo;
 		}
 
-		FORCEINLINE static const PointerInfo& Function(AnyType* value)
+		FORCEINLINE static const PointerInfo& Function(AnyType* /*value*/)
 		{
-			return StaticPointerInfo;
+			return StaticTypeInfo;
 		}
 	};
 
 	/** Initialize pointer information */
 	template <typename AnyType>
-	const PointerInfo TypeOf<AnyType*>::StaticPointerInfo = PointerInfo::Create<AnyType>();
+	const PointerInfo TypeOf<AnyType*>::StaticTypeInfo = PointerInfo::Create<AnyType>();
 
 	/** TypeInfo for std::nullptr_t */
 	template <>

@@ -92,7 +92,7 @@ namespace Implementation
 	template <typename AnyType>
 	struct FromString < AnyType* >
 	{
-		static String Function(const AnyType*& value, const String& string)
+		static String Function(AnyType*& value, const String& string)
 		{
 			if (string.StartsWith("0x"))
 			{

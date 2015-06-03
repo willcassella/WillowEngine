@@ -89,7 +89,7 @@ const TargetType* Cast(AnyType&& value) = delete;
 template <typename AnyType>
 FORCEINLINE const auto& TypeOf()
 {	
-	return Implementation::TypeOf<AnyType>::Function();
+	return Implementation::TypeOf<typename std::remove_const<AnyType>::type>::Function();
 }
 
 /** Retrieves the type information for the given value 
@@ -105,12 +105,14 @@ FORCEINLINE const auto& TypeOf(const AnyType& value)
 
 /** Put this macro in the Information section of a struct you'd like to reflect
 * NOTE: Any struct that uses this macro must also use the 'STRUCT_REFLECTION' macro in their source file */
-#define REFLECTABLE_STRUCT							\
-public:												\
-	static const ::StructInfo StaticTypeInfo;		\
-	FORCEINLINE const ::StructInfo& GetType() const	\
-	{												\
-		return StaticTypeInfo;						\
+#define REFLECTABLE_STRUCT										\
+public:															\
+	static const ::StructInfo StaticTypeInfo;					\
+																\
+	/** Returns the reflection information for this struct */	\
+	FORCEINLINE const ::StructInfo& GetType() const				\
+	{															\
+		return StaticTypeInfo;									\
 	}
 
 /** Put this macro in the Information section of a class you'd like to reflect

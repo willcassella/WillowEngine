@@ -30,6 +30,10 @@
     <ClInclude Include="include\Core\Containers\Stack.h" />
     <ClInclude Include="include\Core\Containers\Table.h" />
     <ClInclude Include="include\Core\Containers\Tuple.h" />
+    <ClInclude Include="include\Core\Core.h" />
+    <ClInclude Include="include\Core\Event\Event.h" />
+    <ClInclude Include="include\Core\Event\EventHandler.h" />
+    <ClInclude Include="include\Core\Event\EventManager.h" />
     <ClInclude Include="include\Core\Interface.h" />
     <ClInclude Include="include\Core\Misc\Signature.h" />
     <ClInclude Include="include\Core\Misc\TimeStamp.h" />
@@ -42,6 +46,7 @@
     <ClInclude Include="include\Core\Reflection\Module.h" />
     <ClInclude Include="include\Core\Reflection\PointerInfo.h" />
     <ClInclude Include="include\Core\Reflection\PrimitiveInfo.h" />
+    <ClInclude Include="include\Core\Reflection\TypeIndex.h" />
     <ClInclude Include="include\Core\Reflection\Variant.h" />
     <ClInclude Include="include\Core\Reflection\Reflection.h" />
     <ClInclude Include="include\Core\Reflection\StructInfo.h" />
@@ -55,6 +60,7 @@
     <ClCompile Include="source\Application.cpp" />
     <ClCompile Include="source\config.cpp" />
     <ClCompile Include="source\Console.cpp" />
+    <ClCompile Include="source\Event\Event.cpp" />
     <ClCompile Include="source\Interface.cpp" />
     <ClCompile Include="source\Misc\TimeStamp.cpp" />
     <ClCompile Include="source\Object.cpp" />
@@ -67,6 +73,7 @@
     <ClCompile Include="source\Reflection\PointerInfo.cpp" />
     <ClCompile Include="source\Reflection\PrimitiveInfo.cpp" />
     <ClCompile Include="source\Reflection\StructInfo.cpp" />
+    <ClCompile Include="source\Reflection\TypeIndex.cpp" />
     <ClCompile Include="source\Reflection\TypeInfo.cpp" />
     <ClCompile Include="source\Reflection\Variant.cpp" />
     <ClCompile Include="source\Reflection\VoidInfo.cpp" />

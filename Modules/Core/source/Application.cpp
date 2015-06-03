@@ -17,7 +17,7 @@ Application& Application::Instance()
 	return app;
 }
 
-const Array<const TypeInfo*>& Application::Types() const
+const Array<TypeIndex>& Application::Types() const
 {
 	return _types;
 }

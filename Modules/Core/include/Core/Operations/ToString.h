@@ -106,7 +106,7 @@ namespace Implementation
 	template <typename AnyType>
 	struct ToString < AnyType* >
 	{
-		FORCEINLINE static String Function(const AnyType* value)
+		FORCEINLINE static String Function(AnyType* value)
 		{
 			return "0xAddress"; // @TODO: Implement this
 		}

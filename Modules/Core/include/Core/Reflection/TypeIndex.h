@@ -3,6 +3,15 @@
 
 #include "Reflection.h"
 
+////////////////////////////////
+///   Forward-declarations   ///
+
+/** Defined in 'String.h' */
+struct String;
+
+/////////////////
+///   Types   ///
+
 struct CORE_API TypeIndex final
 {
 	///////////////////////
@@ -24,6 +33,13 @@ public:
 	{
 		// All done
 	}
+
+	///////////////////
+	///   Methods   ///
+public:
+
+	/** Formats the state of this TypeInfo as a String */
+	String ToString() const;
 
 	/////////////////////
 	///   Operators   ///

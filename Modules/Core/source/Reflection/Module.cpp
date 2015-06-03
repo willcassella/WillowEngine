@@ -30,9 +30,9 @@ String Module::GetAuthors() const
 	return _authors;
 }
 
-Array<const TypeInfo*> Module::GetTypes() const
+Array<TypeIndex> Module::GetTypes() const
 {
-	Array<const TypeInfo*> types(_types.Size());
+	Array<TypeIndex> types(_types.Size());
 
 	for (const auto& type : _types)
 	{

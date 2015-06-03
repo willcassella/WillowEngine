@@ -37,8 +37,8 @@ public:
 	static String Prompt(const String& message);
 
 	/** Writes a value to the console */
-	template <typename ValueType>
-	FORCEINLINE static void Write(const ValueType& value)
+	template <typename AnyType>
+	FORCEINLINE static void Write(const AnyType& value)
 	{
 		Write(ToString(value));
 	}
@@ -51,8 +51,8 @@ public:
 	}
 
 	/** Writes a value to the console, and returns the caret to the start of the next line */
-	template <typename ValueType>
-	FORCEINLINE static void WriteLine(const ValueType& value)
+	template <typename AnyType>
+	FORCEINLINE static void WriteLine(const AnyType& value)
 	{
 		WriteLine(ToString(value));
 	}
