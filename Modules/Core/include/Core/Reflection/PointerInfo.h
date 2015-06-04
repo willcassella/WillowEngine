@@ -1,6 +1,7 @@
 // PointerInfo.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
+#include "TypeIndex.h"
 #include "PrimitiveInfo.h"
 
 /////////////////
@@ -14,25 +15,27 @@ public:
 
 	REFLECTABLE_CLASS;
 	EXTENDS(PrimitiveInfo);
+	template <typename PointedType> 
+	friend struct Implementation::TypeOf; // @TODO: Figure out more specific way of doing this
 
 	////////////////////////
 	///   Constructors   ///
-public:
+private:
 
 	// @TODO: Documentation
-	template <typename PointedType>
+	template <typename AnyPointerType>
 	static PointerInfo Create()
 	{
-		PointedType** dummy = nullptr;
+		AnyPointerType* dummy = nullptr;
 		return PointerInfo(dummy);
 	}
 
-private:
-
-	template <typename PointedType>
-	PointerInfo(PointedType** dummy)
+	template <typename AnyPointerType, typename PointedType = std::remove_pointer<AnyPointerType>::type>
+	PointerInfo(AnyPointerType* dummy)
 		: Super(dummy, ""), _pointedType(TypeOf<PointedType>())
 	{
+		static_assert(std::is_pointer<AnyPointerType>::value, "PointerTypes must be pointers");
+
 		_isConst = std::is_const<PointedType>::value;
 	}
 
@@ -70,32 +73,7 @@ private:
 
 namespace Implementation
 {
-	/** TypeInfo for pointers */
-	template <typename AnyType>
-	struct TypeOf < AnyType* >
-	{
-		/** Defined below */
-		static const PointerInfo StaticTypeInfo;
-
-		FORCEINLINE static const PointerInfo& Function()
-		{
-			return StaticTypeInfo;
-		}
-
-		FORCEINLINE static const PointerInfo& Function(AnyType* /*value*/)
-		{
-			return StaticTypeInfo;
-		}
-	};
-
-	/** Initialize pointer information */
-	template <typename AnyType>
-	const PointerInfo TypeOf<AnyType*>::StaticTypeInfo = PointerInfo::Create<AnyType>();
-
-	/** TypeInfo for std::nullptr_t */
-	template <>
-	struct TypeOf < std::nullptr_t >
-	{
-		//@TODO: Implement this
-	};
+	/** Register TypeInfo for pointer */
+	template <typename PointedType>
+	const PointerInfo TypeOf<PointedType*>::StaticTypeInfo = PointerInfo::Create<PointedType*>();
 }

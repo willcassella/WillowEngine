@@ -212,6 +212,9 @@
     <ClCompile Include="source\Reflection\TypeIndex.cpp">
       <Filter>source\Reflection</Filter>
     </ClCompile>
+    <ClCompile Include="source\Reflection\Reflection.cpp">
+      <Filter>source\Reflection</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="ProjectPony.vcxproj.filters">

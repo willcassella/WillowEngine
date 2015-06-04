@@ -4,6 +4,7 @@
 #pragma once
 
 #include <type_traits>
+#include <initializer_list> // @TODO: Check if this is necessary
 #include "../config.h"
 
 ////////////////////////////////
@@ -11,6 +12,15 @@
 
 /** Defined in 'TypeInfo.h' */
 class TypeInfo;
+
+/** Defined in 'VoidInfo.h' */
+class VoidInfo;
+
+/** Defined in 'PrimitiveInfo.h' */
+class PrimitiveInfo;
+
+/** Defined in 'PointerInfo.h' */
+class PointerInfo;
 
 /** Defined in 'StructInfo.h' */
 class StructInfo;
@@ -20,9 +30,6 @@ class ClassInfo;
 
 /** Defined in 'InterfaceInfo.h' */
 class InterfaceInfo;
-
-/** Defined in 'VoidInfo.h' */
-class VoidInfo;
 
 /** Defined in 'Variant.h' */
 struct Variant;
@@ -35,6 +42,9 @@ struct ImmutableVariant;
 
 namespace Implementation
 {
+	//////////////////////////////////
+	///   Generic Implementation   ///
+
 	/** Default implementation of 'TypeOf' */
 	template <typename AnyType>
 	struct TypeOf
@@ -65,6 +75,264 @@ namespace Implementation
 				"The 'GetType()' member function must return a 'TypeInfo' object");
 			
 			return value.GetType();
+		}
+	};
+
+	/////////////////////////////
+	///   Fundamental Types   ///
+
+	/** TypeOf for 'void' */
+	template <>
+	struct TypeOf < void >
+	{
+		/** Defined in 'Reflection.cpp' */
+		static const VoidInfo StaticTypeInfo;
+
+		FORCEINLINE static const VoidInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		/** It is not possible to have type data for an instance of 'void', so that Function is not necessary */
+	};
+
+	//////////////////////////
+	///   PrimitiveTypes   ///
+
+	/** TypeInfo for bool */
+	template <>
+	struct CORE_API TypeOf < bool >
+	{
+		/** Defined in 'Reflection.cpp' */
+		static const PrimitiveInfo StaticTypeInfo;
+
+		FORCEINLINE static const PrimitiveInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const PrimitiveInfo& Function(bool /*value*/)
+		{
+			return StaticTypeInfo;
+		}
+	};
+
+	/** TypeInfo for char */
+	template <>
+	struct CORE_API TypeOf < char >
+	{
+		/** Defined in 'Reflection.cpp' */
+		static const PrimitiveInfo StaticTypeInfo;
+
+		FORCEINLINE static const PrimitiveInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const PrimitiveInfo& Function(char /*value*/)
+		{
+			return StaticTypeInfo;
+		}
+	};
+
+	/** TypeInfo for byte */
+	template <>
+	struct CORE_API TypeOf < byte >
+	{
+		/** Defined in 'Reflection.cpp' */
+		static const PrimitiveInfo StaticTypeInfo;
+
+		FORCEINLINE static const PrimitiveInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const PrimitiveInfo& Function(byte /*value*/)
+		{
+			return StaticTypeInfo;
+		}
+	};
+
+	/** TypeInfo for 16-bit integer */
+	template <>
+	struct CORE_API TypeOf < int16 >
+	{
+		/** Defined in 'Reflection.cpp' */
+		static const PrimitiveInfo StaticTypeInfo;
+
+		FORCEINLINE static const PrimitiveInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const PrimitiveInfo& Function(int16 /*value*/)
+		{
+			return StaticTypeInfo;
+		}
+	};
+
+	/** TypeInfo for 32-bit integer */
+	template <>
+	struct CORE_API TypeOf < int32 >
+	{
+		/** Defined in 'Reflection.cpp' */
+		static const PrimitiveInfo StaticTypeInfo;
+
+		FORCEINLINE static const PrimitiveInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const PrimitiveInfo& Function(int32 /*value*/)
+		{
+			return StaticTypeInfo;
+		}
+	};
+
+	/** TypeInfo for 64-bit integer */
+	template <>
+	struct CORE_API TypeOf < int64 >
+	{
+		/** Defined in 'Reflection.cpp' */
+		static const PrimitiveInfo StaticTypeInfo;
+
+		FORCEINLINE static const PrimitiveInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const PrimitiveInfo& Function(int64 /*value*/)
+		{
+			return StaticTypeInfo;
+		}
+	};
+
+	/** TypeInfo for 16-bit unsigned integer */
+	template <>
+	struct CORE_API TypeOf < uint16 >
+	{
+		/** Defined in 'Reflection.cpp' */
+		static const PrimitiveInfo StaticTypeInfo;
+
+		FORCEINLINE static const PrimitiveInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const PrimitiveInfo& Function(uint16 /*value*/)
+		{
+			return StaticTypeInfo;
+		}
+	};
+
+	/** TypeInfo for 32-bit unsigned integer */
+	template <>
+	struct CORE_API TypeOf < uint32 >
+	{
+		/** Defined in 'Reflection.cpp' */
+		static const PrimitiveInfo StaticTypeInfo;
+
+		FORCEINLINE static const PrimitiveInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const PrimitiveInfo& Function(uint32 /*value*/)
+		{
+			return StaticTypeInfo;
+		}
+	};
+
+	/** TypeInfo for a 64-bit unsigned integer */
+	template <>
+	struct CORE_API TypeOf < uint64 >
+	{
+		/** Defined in 'Reflection.cpp' */
+		static const PrimitiveInfo StaticTypeInfo;
+
+		FORCEINLINE static const PrimitiveInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const PrimitiveInfo& Function(uint64 /*value*/)
+		{
+			return StaticTypeInfo;
+		}
+	};
+
+	/** TypeInfo for a float */
+	template <>
+	struct CORE_API TypeOf < float >
+	{
+		/** Defined in 'Reflection.cpp' */
+		static const PrimitiveInfo StaticTypeInfo;
+
+		FORCEINLINE static const PrimitiveInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const PrimitiveInfo& Function(float /*value*/)
+		{
+			return StaticTypeInfo;
+		}
+	};
+
+	/** TypeInfo for a double */
+	template <>
+	struct CORE_API TypeOf < double >
+	{
+		/** Defined in 'Reflection.cpp' */
+		static const PrimitiveInfo StaticTypeInfo;
+
+		FORCEINLINE static const PrimitiveInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const PrimitiveInfo& Function(double /*value*/)
+		{
+			return StaticTypeInfo;
+		}
+	};
+
+	/** TypeInfo for pointers */
+	template <typename PointedType>
+	struct TypeOf < PointedType* >
+	{
+		/** Defined in 'PointerInfo.h' */
+		static const PointerInfo StaticTypeInfo;
+
+		FORCEINLINE static const PointerInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const PointerInfo& Function(PointedType* /*value*/)
+		{
+			return StaticTypeInfo;
+		}
+	};
+
+	////////////////////////
+	///   Struct Types   ///
+
+	/** TypeOf for std::intializer_list */
+	template <typename T>
+	struct TypeOf < std::initializer_list<T> >
+	{
+		/** Defined in 'StructInfo.h' */
+		static const StructInfo StaticTypeInfo;
+
+		FORCEINLINE static const StructInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const StructInfo& Function(const std::initializer_list<T>& /*value*/)
+		{
+			return StaticTypeInfo;
 		}
 	};
 }

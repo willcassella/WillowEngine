@@ -1,6 +1,7 @@
 // StructInfo.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
+// @TODO: Do this some other way
 #include "../Containers/List.h"
 #include "../Containers/Queue.h"
 #include "../Containers/Stack.h"
@@ -119,6 +120,11 @@ namespace Implementation
 			return StaticTypeInfo;
 		}
 	};
+
+	/** Register TypeInfo for std::intializer_list */
+	template <typename T>
+	const StructInfo TypeOf<std::initializer_list<T>>::StaticTypeInfo =
+		StructInfo::CreateTemplate<std::initializer_list, T>("std::initializer_list");
 
 	/** TypeOf for Array */
 	template <typename T>

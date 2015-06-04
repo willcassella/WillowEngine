@@ -24,11 +24,3 @@ bool VoidInfo::IsCastableTo(const TypeInfo& type) const
 {
 	return type == TypeOf<void>();
 }
-
-//////////////////////////
-///   Implementation   ///
-
-namespace Implementation
-{
-	const VoidInfo TypeOf<void>::StaticTypeInfo = VoidInfo();
-}

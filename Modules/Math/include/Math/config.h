@@ -1,7 +1,7 @@
 // config.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <Core/Reflection/Module.h>
+#include <Core/Core.h>
 
 ///////////////////////////////
 ///   Build configuration   ///

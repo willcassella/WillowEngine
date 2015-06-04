@@ -2,7 +2,7 @@
 
 #include "../../include/Core/Reflection/PointerInfo.h"
 #include "../../include/Core/Reflection/ClassInfo.h"
-#include "../../include/Core/Reflection/StructInfo.h" // @TODO: Figure out better way to do this?
+#include "../../include/Core/Reflection/StructInfo.h"
 
 //////////////////////
 ///   Reflection   ///
@@ -16,7 +16,15 @@ String PointerInfo::GetName() const
 {
 	if (_isConst)
 	{
-		return String::Format("const @*", _pointedType->GetName());
+		// If we have a pointer to a pointer
+		if (_pointedType->GetType() == TypeOf<PointerInfo>())
+		{
+			return String::Format("@ const*", _pointedType->GetName());
+		}
+		else
+		{
+			return String::Format("const @*", _pointedType->GetName());
+		}
 	}
 	else
 	{

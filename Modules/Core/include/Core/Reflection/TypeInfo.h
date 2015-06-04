@@ -3,7 +3,6 @@
 
 #include "../String.h"
 #include "../Object.h"
-#include "TypeIndex.h"
 
 /////////////////
 ///   Types   ///
