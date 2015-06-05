@@ -6,13 +6,13 @@
 ///   Reflection   ///
 
 CLASS_REFLECTION(Camera)
-.AddField("CameraComponent", &Camera::CameraComponent);
+.AddField("Lens", &Camera::Lens);
 
 ////////////////////////
 ///   Constructors   ///
 
-Camera::Camera(const String& name)
-	: Super(name), CameraComponent(This)
+Camera::Camera(Scene& scene)
+	: Super(scene), Lens(This)
 {
 	// All done
 }

@@ -6,43 +6,52 @@
 #include "Camera.h"
 
 /* Scene class contains all game objects and scene information */
-class ENGINE_API Scene : public Object
+struct ENGINE_API Scene final
 {
 	///////////////////////
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS;
-	EXTENDS(Object);
-
-	//////////////////
-	///   Fields   ///
-public:
-
-	float TimeDilation = 1.f;
-	float TimeStep = 1.f / 60;
+	REFLECTABLE_STRUCT;
 
 	////////////////////////
 	///   Constructors   ///
 public:
 
-	// @TODO: Rule of 5
+	Scene() = default;
+	Scene(const Scene& copy) = delete;
+	Scene(Scene&& move) = delete;
 	~Scene();
+
+	//////////////////
+	///   Fields   ///
+public:
+
+	EventManager Events;
+	float TimeDilation = 1.f;
+	float TimeStep = 1.f / 60;
 
 	///////////////////
 	///   Methods   ///
 public:
 
 	void Update();
-	void DispatchEvent(const String& eventName, float value);
 
-	template <class GameObjectClass, typename ... ParamTypes>
-	GameObjectClass& AddObject(const String& name, const ParamTypes& ... params)
+	/** Spawns a new GameObject of the given type at the start of the next frame */
+	template <class GameObjectClass, typename ... ArgTypes>
+	GameObjectClass& Spawn(ArgTypes&& ... args)
 	{
-		GameObjectClass* object = new GameObjectClass(name, params);
+		GameObjectClass* object = new GameObjectClass(This, args...);
 		_freshObjects.Push(object);
 		return *object;
 	}
+
+	/////////////////////
+	///   Operators   ///
+public:
+
+	Scene& operator=(const Scene& copy) = delete;
+	Scene& operator=(Scene&& move) = delete;
 
 	////////////////
 	///   Data   ///

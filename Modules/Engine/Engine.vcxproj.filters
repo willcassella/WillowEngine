@@ -22,9 +22,6 @@
     <ClCompile Include="source\Transform.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="source\EventManager.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="source\Game.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -48,22 +45,10 @@
     <ClInclude Include="include\Engine\config.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Engine\EventDispatcher.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engine\EventManager.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="include\Engine\Game.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Engine\GameObject.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engine\IEventDispatcher.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engine\InputDispatcher.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Engine\Pawn.h">

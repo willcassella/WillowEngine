@@ -63,9 +63,10 @@ public:
 	}
 
 	/** Puts a new element on the top of this Stack */
-	FORCEINLINE void Push(const T& item)
+	template <typename RelatedType>
+	FORCEINLINE void Push(RelatedType&& item)
 	{
-		_values.Add(item);
+		_values.Add(std::forward<RelatedType>(item));
 	}
 
 	/** Removes the element on the top of this Stack

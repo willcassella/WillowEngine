@@ -16,13 +16,17 @@ public:
 	{
 		// All done
 	}
-	Pair(const FirstType& first)
-		: First(first), Second()
+
+	template <typename RelatedFirstType>
+	Pair(FirstType&& first)
+		: First(std::forward<RelatedFirstType>(first)), Second()
 	{
 		// All done
 	}
-	Pair(const FirstType& first, const SecondType& second)
-		: First(first), Second(second)
+
+	template <typename RelatedFirstType, typename RelatedSecondType>
+	Pair(RelatedFirstType&& first, RelatedSecondType&& second)
+		: First(std::forward<RelatedFirstType>(first)), Second(std::forward<RelatedSecondType>(second))
 	{
 		// All done
 	}

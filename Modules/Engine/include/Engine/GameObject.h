@@ -1,7 +1,6 @@
 // GameObject.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "EventManager.h"
 #include "Transform.h"
 #include "Component.h"
 
@@ -20,26 +19,42 @@ public:
 	///   Constructors   ///
 public:
 
-	GameObject(const String& name = "");
+	GameObject(Scene& scene);
 	GameObject(const GameObject& copy) = delete;
 	GameObject(GameObject&& move) = delete;
-	~GameObject() override;
 
 	//////////////////
 	///   Fields   ///
 public:
 
 	Transform Transform;
-	EventManager EventManager;
 
 	///////////////////
 	///   Methods   ///
 public:
 
 	/** Returns the name of this GameObject */
-	FORCEINLINE const String& GetName() const
+	FORCEINLINE const String& GetName() const &
 	{
 		return _name;
+	}
+
+	/** Returns the name of this GameObject */
+	FORCEINLINE String GetName() &&
+	{
+		return _name;
+	}
+
+	/** Sets the name of this GameObject */
+	FORCEINLINE void SetName(const String& name)
+	{
+		_name = name;
+	}
+
+	/** Returns whether this GameObject is alive (if not, it is either destroyed or not yet spawned) */
+	FORCEINLINE bool IsAlive() const
+	{
+		return _isAlive;
 	}
 
 	/** Returns whether this GameObject will be destroyed at the end of the scene update */
@@ -98,27 +113,15 @@ public:
 		return matches;
 	}
 
-	/** Adds a Component of the specified type to this GameObject */
-	template <class ComponentType>
-	ComponentType& AddComponent()
-	{
-		ComponentType* component = new ComponentType(This);
-		_managedComponent.Add(component);
-		return *component;
-	}
-
 	/** Initiates the destruction procedure for this GameObject */
 	void Destroy();
 
 protected:
 
-	/** Updates the state of this GameObject (called once per scene update) */
-	virtual void Update(float timeInterval);
-
 	/** Behavior for this GameObject upon spawning */
 	virtual void OnSpawn();
 
-	/** Behavior for this GameObject upon removal from scene */
+	/** Behavior for this GameObject upon destruction */
 	virtual void OnDestroy();
 
 	/////////////////////
@@ -132,8 +135,9 @@ public:
 	///   Data   ///
 private:
 
-	String _name;
-	bool _isDestroyed;
-	Array<Component*> _managedComponent;
 	Array<Component*> _components;
+	String _name;
+	uint32 _id;
+	bool _isAlive;
+	bool _isDestroyed;
 };

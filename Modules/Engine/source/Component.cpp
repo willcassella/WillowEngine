@@ -54,11 +54,6 @@ const GameObject& Component::GetOwner() const
 	return *_owner;
 }
 
-void Component::Update(float timeInterval)
-{
-	// Do nothing
-}
-
 void Component::OnDisabled()
 {
 	// Do nothing

@@ -12,18 +12,9 @@ CLASS_REFLECTION(GameObject)
 ////////////////////////
 ///   Constructors   ///
 
-GameObject::GameObject(const String& name)
-	: _name(name), _isDestroyed(false), _components()
+GameObject::GameObject(Scene& scene)
 {
-	// All done
-}
-
-GameObject::~GameObject()
-{
-	for (Component* component : _managedComponent)
-	{
-		delete component;
-	}
+	_isDestroyed = false;
 }
 
 ///////////////////
@@ -31,13 +22,8 @@ GameObject::~GameObject()
 
 void GameObject::Destroy()
 {
-	this->OnDestroy();
+	OnDestroy();
 	_isDestroyed = true;
-}
-
-void GameObject::Update(float timeInterval)
-{
-	// Do nothing
 }
 
 void GameObject::OnDestroy()

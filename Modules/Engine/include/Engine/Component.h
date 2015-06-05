@@ -10,7 +10,7 @@
 class GameObject;
 
 /** Defined in 'Scene.h' */
-class Scene;
+struct Scene;
 
 /////////////////
 ///   Types   ///
@@ -51,9 +51,6 @@ public:
 	const GameObject& GetOwner() const;
 
 protected:
-
-	/** Update the state of this Component (called once per scene update) */
-	virtual void Update(float timeInterval);
 
 	/** Function called when this component is disabled */
 	virtual void OnDisabled();

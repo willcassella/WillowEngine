@@ -5,7 +5,7 @@
 //////////////////////
 ///   Reflection   ///
 
-CLASS_REFLECTION(Scene)
+STRUCT_REFLECTION(Scene)
 .AddField("TimeDilation", &Scene::TimeDilation)
 .AddField("TimeStep", &Scene::TimeStep);
 
@@ -35,18 +35,6 @@ void Scene::Update()
 			_staleObjects.Push(object);
 			continue;
 		}
-
-		// Update the object
-		object->Update(TimeDilation);
-		
-		// Update its components
-		for (auto& component : object->GetComponents())
-		{
-			if (component->IsEnabled())
-			{
-				component->Update(TimeDilation);
-			}
-		}
 	}
 
 	// Remove stale objects
@@ -72,13 +60,5 @@ void Scene::Update()
 		freshObject->OnSpawn();
 
 		_objects.Add(freshObject);
-	}
-}
-
-void Scene::DispatchEvent(const String& eventName, float value)
-{
-	for (auto& object : _objects)
-	{
-		object->EventManager.DispatchInputEvent(eventName, value);
 	}
 }

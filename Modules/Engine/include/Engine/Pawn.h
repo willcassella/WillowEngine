@@ -17,7 +17,7 @@ public:
 	///   Constructors   ///
 public:
 
-	Pawn(const String& name = "");
+	Pawn(Scene& scene);
 
 	////////////////////
 	////   Methods   ///

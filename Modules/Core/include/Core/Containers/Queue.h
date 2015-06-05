@@ -63,9 +63,10 @@ public:
 	}
 
 	/** Appends a new element to the end of this Queue */
-	FORCEINLINE void Push(const T& item)
+	template <typename RelatedType>
+	FORCEINLINE void Push(RelatedType&& item)
 	{
-		_values.Add(item);
+		_values.Add(std::forward<RelatedType>(item));
 	}
 
 	/** Removes the first element in this Queue

@@ -221,7 +221,8 @@ public:
 	}
 
 	/** Appends a new element to the end of this Array, returning the new element's index */
-	uint32 Add(const T& value)
+	template <typename RelatedType>
+	uint32 Add(RelatedType&& value)
 	{
 		if (Size() >= Capacity())
 		{
@@ -235,19 +236,20 @@ public:
 			}
 		}
 
-		return FastAdd(value);
+		return FastAdd(std::forward<RelatedType>(value));
 	}
 
 	// @TODO: Test this
 	/** Insert the given value at the given index, returning the index of the new element
 	* (which may be different from the given index) */
-	uint32 Insert(const T& value, uint32 index)
+	template <typename RelatedType>
+	uint32 Insert(RelatedType&& value, uint32 index)
 	{
 		// If our insert index is beyond the size of the array
 		if (index > Size())
 		{
 			// Add it to the end
-			return Add(value);
+			return Add(std::forward<RelatedType>(value));
 		}
 
 		// If the array is already full
@@ -266,7 +268,7 @@ public:
 		}
 
 		// Insert the value
-		_values[index] = value;
+		_values[index] = std::forward<RelatedType>(value);
 		++_numElements;
 		return index;
 	}
@@ -514,9 +516,10 @@ private:
 	/** Adds an element to the end of this Array without checking for available space
 	* Returns the index of the new element
 	* WARNING: Only use this if you KNOW (algorithmically) that there is enough space */
-	FORCEINLINE uint32 FastAdd(const T& value)
+	template <typename RelatedType>
+	FORCEINLINE uint32 FastAdd(RelatedType&& value)
 	{
-		new(_values + _numElements) T(value);
+		new(_values + _numElements) T(std::forward<RelatedType>(value));
 		return _numElements++;
 	}
 

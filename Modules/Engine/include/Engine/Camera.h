@@ -17,13 +17,13 @@ public:
 	///   Constructors   ///
 public:
 
-	Camera(const String& name = "");
+	Camera(Scene& scene);
 
 	//////////////////////
 	///   Components   ///
 public:
 
-	CameraComponent CameraComponent;
+	CameraComponent Lens;
 
 	///////////////////
 	///   Methods   ///
@@ -31,6 +31,6 @@ public:
 
 	FORCEINLINE Mat4 GetPerspective() const
 	{
-		return CameraComponent.GetPerspective();
+		return Lens.GetPerspective();
 	}
 };

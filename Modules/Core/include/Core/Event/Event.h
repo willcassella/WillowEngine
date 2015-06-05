@@ -18,7 +18,7 @@ public:
 
 	////////////////////////
 	///   Constructors   ///
-protected:
+public:
 
 	Event(const String& name, const TypeInfo& argType)
 		: _name(name), _argType(&argType)

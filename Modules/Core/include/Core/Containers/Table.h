@@ -114,18 +114,19 @@ public:
 	}
 
 	/** Inserts a new key-value pair, replacing the existing entry if there is a conflict */
-	void Insert(const KeyType& key, const ValueType& value)
+	template <typename RelatedKeyType, typename RelatedValueType>
+	void Insert(RelatedKeyType&& key, RelatedValueType&& value)
 	{
 		for (auto& entry : _values)
 		{
 			if (entry.First == key)
 			{
-				entry.Second = value;
+				entry.Second = std::forward<RelatedValueType>(value);
 				return;
 			}
 		}
 
-		_values.Add(PairType(key, value));
+		_values.Add(PairType(std::forward<RelatedKeyType>(key), std::forward<RelatedValueType>(value)));
 	}
 
 	/** Deletes all key-value pairs from the table */
@@ -165,7 +166,17 @@ public:
 			This[value.First] == value.Second;
 		}
 	}
-	ValueType& operator[](const KeyType& key)
+	friend bool operator==(const Table& lhs, const Table& rhs)
+	{
+		return lhs._values == rhs._values;
+	}
+	friend bool operator!=(const Table& lhs, const Table& rhs)
+	{
+		return lhs._values != rhs._values;
+	}
+	
+	template <typename RelatedKeyType>
+	ValueType& operator[](RelatedKeyType&& key)
 	{
 		// Search for the key
 		for (auto& i : _values)
@@ -177,16 +188,8 @@ public:
 		}
 
 		// The key must not have been found, create new pair
-		_values.Add(PairType(key));
+		_values.Add(PairType(std::forward<RelatedKeyType>(key)));
 		return _values.Last().Second;
-	}
-	friend bool operator==(const Table& lhs, const Table& rhs)
-	{
-		return lhs._values == rhs._values;
-	}
-	friend bool operator!=(const Table& lhs, const Table& rhs)
-	{
-		return lhs._values != rhs._values;
 	}
 
 	////////////////
