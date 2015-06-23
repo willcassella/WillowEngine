@@ -3,19 +3,16 @@
 #include <Core/Core.h>
 #include <Math/Vec3.h>
 
-void Test(const Array<const TypeInfo*>& types)
-{
-	// Fuck if I know
-}
-
 int main()
 {
-	Array<const ClassInfo*> test;
-	test.Add(&TypeOf<Object>());
-	test.Add(&TypeOf<ClassInfo>());
-	test.Add(&TypeOf<Event>());
+	Vec3 test(1, 2, 3);
 
-	Test(test);
+	Console::WriteLine("'test' has type '@', with value '@'", test.GetType(), test);
+	String input = Console::Prompt("Enter a new vector for 'test'");
+	
+	String::Parse(input, "<@, @, @>", test.X, test.Y, test.Z);
+
+	Console::WriteLine("'test' now has value '@'", test);
 	
 	Console::Prompt();
 }
