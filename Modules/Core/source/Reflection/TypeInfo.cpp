@@ -6,7 +6,18 @@
 //////////////////////
 ///   Reflection   ///
 
-CLASS_REFLECTION(TypeInfo);
+CLASS_REFLECTION(TypeInfo)
+.AddProperty("Name", "The name of the type.", &TypeInfo::GetName, nullptr)
+.AddProperty("Size", "The size (in bytes) of an instance of this type.", &TypeInfo::_size, nullptr)
+.AddProperty("Compound", "Whether this type is a compound type.", &TypeInfo::_isCompound, nullptr)
+.AddProperty("Abstract", "Whether this type is an abstract type.", &TypeInfo::_isAbstract, nullptr)
+.AddProperty("Polymorphic", "Whether this type is polymorphic.", &TypeInfo::_isPolymorphic, nullptr)
+.AddProperty("Default-Constructible", "Whether this type is default-constructible", &TypeInfo::_isDefaultConstructible, nullptr)
+.AddProperty("Copy-Constructible", "Whether this type is copy-constructible.", &TypeInfo::_isCopyConstructible, nullptr)
+.AddProperty("Move-Constructible", "Whether this type is move-constructible.", &TypeInfo::_isMoveConstructible, nullptr)
+.AddProperty("Copy-Assignable", "Whether this type is copy-assignable.", &TypeInfo::_isCopyAssignable, nullptr)
+.AddProperty("Move-Assignable", "Whether this type is move-assignable.", &TypeInfo::_isMoveAssignable, nullptr)
+.AddProperty("Destructible", "Whether this type is destructible.", &TypeInfo::_isDestructible, nullptr);
 
 ////////////////////////
 ///   Constructors   ///
@@ -65,7 +76,7 @@ TypeInfo::TypeInfo(TypeInfo&& move)
 
 TypeInfo::~TypeInfo()
 {
-	Application::Instance()._types.DeleteAll(This);
+	Application::Instance()._types.DeleteAll(self);
 }
 
 ///////////////////
@@ -76,7 +87,12 @@ String TypeInfo::GetName() const
 	return _name;
 }
 
+Variant TypeInfo::Construct() const
+{
+	return Variant(_defaultConstructor(), self);
+}
+
 void TypeInfo::RegisterWithApplication()
 {
-	Application::Instance()._types.Add(This);
+	Application::Instance()._types.Add(self);
 }

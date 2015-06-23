@@ -63,5 +63,5 @@ using uint64 = std::uint64_t;
 #endif
 
 /** Shortcut for dereferencing 'this', useful for calling operators on self and returning reference to self in a clean way.
-* Still, you should prefer using 'this' over 'This'. */
-#define This (*this)
+* Still, you should prefer using 'this' over 'self'. */
+#define self (*this)

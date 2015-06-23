@@ -1,7 +1,7 @@
 // Ghost.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <Engine/StaticMeshComponent.h>
+//#include <Engine/StaticMeshComponent.h>
 #include <Engine/GameObject.h>
 #include "SlideComponent.h"
 
@@ -18,14 +18,13 @@ public:
 	///   Constructors   ///
 public:
 
-	Ghost(const String& name = "");
-	~Ghost() override = default;
+	Ghost(Scene& scene);
 
 	//////////////////////
 	///   Components   ///
 public:
 
-	StaticMeshComponent MeshComponent;
+	//StaticMeshComponent MeshComponent;
 	SlideComponent Slider;
 
 	///////////////////

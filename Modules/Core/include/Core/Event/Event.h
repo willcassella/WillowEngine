@@ -2,12 +2,13 @@
 #pragma once
 
 #include "../String.h"
-#include "../Reflection/StructInfo.h"
+#include "../Reflection/TypeIndex.h"
 #include "../Reflection/ClassInfo.h"
+#include "../Reflection/StructInfo.h"
 #include "../Reflection/VoidInfo.h"
 
 /** Abstract base for events */
-class Event : public Object
+class CORE_API Event : public Object
 {
 	///////////////////////
 	///   Information   ///
@@ -21,7 +22,7 @@ public:
 public:
 
 	Event(const String& name, const TypeInfo& argType)
-		: _name(name), _argType(&argType)
+		: _name(name), _argType(argType)
 	{
 		// All done
 	}
@@ -40,7 +41,7 @@ public:
 	}
 
 	/** Gets the name of this Event */
-	FORCEINLINE String GetName() &&
+	FORCEINLINE String GetName() const &&
 	{
 		return _name;
 	}
@@ -48,7 +49,7 @@ public:
 	/** Returns the type of argument that this Event was created with */
 	FORCEINLINE const TypeInfo& GetArgType() const
 	{
-		return *_argType;
+		return _argType;
 	}
 
 	/////////////////////
@@ -63,7 +64,7 @@ public:
 private:
 
 	String _name;
-	const TypeInfo* _argType;
+	TypeIndex _argType;
 };
 
 /** Force 'Event' to be abstract */
@@ -101,7 +102,7 @@ public:
 	/** Returns the value that this event holds */
 	const ArgType& GetValue() const
 	{
-		return _value;
+		return *_value;
 	}
 
 	////////////////
@@ -113,7 +114,7 @@ private:
 
 /** Template for events that have no parameters */
 template <>
-class TEvent < void > final : public Event
+class CORE_API TEvent < void > final : public Event
 {
 	///////////////////////
 	///   Information   ///
@@ -137,5 +138,5 @@ public:
 ///   Reflection   ///
 
 template <typename ArgType>
-CLASS_REFLECTION(TEvent<ArgType>)
-.AddField("Value", &TEvent<ArgType>::_value);
+TEMPLATE_CLASS_REFLECTION(TEvent, ArgType)
+.AddProperty("Value", "", &TEvent::GetValue, nullptr);

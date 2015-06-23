@@ -132,7 +132,7 @@ namespace Implementation
 	{
 		FORCEINLINE static String Function(const char* value)
 		{
-			return '"' + String(value) + '"';
+			return String('"') + String(value) + String('"');
 		}
 	};
 
@@ -153,7 +153,7 @@ namespace Implementation
 	{
 		FORCEINLINE static String Function(const char* value)
 		{
-			return '"' + String(value) + '"';
+			return String('"') + String(value) + String('"');
 		}
 	};
 
@@ -215,7 +215,7 @@ namespace Implementation
 	{
 		FORCEINLINE static String Function(const String& value)
 		{
-			return '"' + value + '"';
+			return String('"') + value + String('"');
 		}
 	};
 

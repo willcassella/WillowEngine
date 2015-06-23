@@ -46,6 +46,12 @@ protected:
 	///   Methods   ///
 public:
 
+	/** Returns this TypeInfo object as a String */
+	FORCEINLINE String ToString() const
+	{
+		return GetName();
+	}
+
 	/** Returns the static size of this type */
 	FORCEINLINE uint32 GetSize() const
 	{
@@ -54,6 +60,13 @@ public:
 
 	/** Returns the name of this type */
 	virtual String GetName() const;
+
+	/** Returns whether this type is a compound type.
+	* i.e - It is composed of smaller types (like a class, struct, or interface). */
+	FORCEINLINE bool IsCompound() const
+	{
+		return _isCompound;
+	}
 
 	/** Returns whether this type is abstract
 	* i.e - It has at least one pure virtual function */
@@ -132,7 +145,7 @@ public:
 	TypeInfo& operator=(TypeInfo&& move) = delete;
 	friend FORCEINLINE CORE_API bool operator==(const TypeInfo& lhs, const TypeInfo& rhs)
 	{
-		return lhs.GetName() == rhs.GetName();
+		return &lhs == &rhs || lhs.GetName() == rhs.GetName();
 	}
 	friend FORCEINLINE CORE_API bool operator!=(const TypeInfo& lhs, const TypeInfo& rhs)
 	{
@@ -153,6 +166,7 @@ private:
 	String(*_toStringImplementation)(const void*);
 	String(*_fromStringImplementation)(void*, const String&);
 	uint32 _size;
+	bool _isCompound;
 	bool _isAbstract;
 	bool _isPolymorphic;
 	bool _isDefaultConstructible;
@@ -365,7 +379,7 @@ namespace Implementation
 
 	/** Default implementation of 'Destroy' */
 	template <typename AnyType>
-	struct Destroy
+	struct Destroy final
 	{
 	private:
 
@@ -405,21 +419,65 @@ namespace Implementation
 
 	/** Default implementation of 'ToString' */
 	template <typename AnyType>
-	struct ToString
+	struct ToString final
 	{
-		FORCEINLINE static String Function(const AnyType& /*value*/)
+	private:
+
+		/** Template function for if the type defines its own "ToString" method. */
+		template <typename SameAnyType>
+		FORCEINLINE static auto ToStringImplementation(const SameAnyType& value, int) -> decltype(value.ToString())
 		{
-			return ""; // @TODO: Implement this
+			return value.ToString();
+		}
+
+		/** Template function for if the type does not define its own "ToString" method. */
+		template <typename SameAnyType>
+		FORCEINLINE static String ToStringImplementation(const SameAnyType& value, long)
+		{
+			return ::TypeOf<AnyType>().GetName();
+		}
+
+	public:
+
+		FORCEINLINE static String Function(const AnyType& value)
+		{
+			using ReturnType = decltype(ToStringImplementation(value, 0));
+			static_assert(std::is_same<String, ReturnType>::value || std::is_same<const String&, ReturnType>::value,
+				"The return type of the 'ToString' method must be either a 'String' or a const reference to one.");
+
+			return ToStringImplementation(value, 0);
 		}
 	};
 
 	/** Default implementation of 'FromString' */
 	template <typename AnyType>
-	struct FromString
+	struct FromString final
 	{
-		FORCEINLINE static String Function(AnyType& /*value*/, const String& string)
+	private:
+
+		/** Template function for if the type defines its own 'FromString' method (preferred). */
+		template <typename SameAnyType>
+		FORCEINLINE static auto FromStringImplementation(SameAnyType& value, const String& string, int) -> decltype(value.FromString(string))
 		{
-			return string; // @TODO: Implement this
+			return value.FromString(string);
+		}
+
+		/** Template function for if the type does not define its own 'FromString' method. */
+		template <typename SameAnyType>
+		FORCEINLINE static const String& FromStringImplementation(SameAnyType& /*value*/, const String& string, long)
+		{
+			return string;
+		}
+
+	public:
+
+		FORCEINLINE static String Function(AnyType& value, const String& string)
+		{
+			using ReturnType = decltype(FromStringImplementation(value, string, 0));
+			static_assert(std::is_same<String, ReturnType>::value || std::is_same<const String&, ReturnType>::value,
+				"The return type of the 'FromString' method must either be a 'String' or a const reference to one.");
+
+			return FromStringImplementation(value, string, 0);
 		}
 	};
 }
@@ -467,6 +525,7 @@ TypeInfo::TypeInfo(AnyType* /*dummy*/, const String& name)
 	};
 
 	_size = sizeof(AnyType);
+	_isCompound = std::is_class<AnyType>::value;
 	_isAbstract = std::is_abstract<AnyType>::value;
 	_isPolymorphic = std::is_polymorphic<AnyType>::value;
 	_isDefaultConstructible = Implementation::Construct<AnyType>::IsConstructible;
@@ -506,7 +565,7 @@ FORCEINLINE const TargetType* Cast(const AnyType& value)
 {
 	static_assert(!std::is_reference<TargetType>::value, "Using 'Cast' to cast to a reference is not allowed");
 	
-	if (::TypeOf(value).template IsCastableTo<TargetType>())
+	if (::TypeOf(value).IsCastableTo(TypeOf<TargetType>()))
 	{
 		return reinterpret_cast<const TargetType*>(&value);
 	}

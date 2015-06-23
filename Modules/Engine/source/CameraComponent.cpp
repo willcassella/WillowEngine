@@ -7,10 +7,10 @@
 ///   Reflection   ///
 
 CLASS_REFLECTION(CameraComponent)
-.AddField("HFOV", &CameraComponent::HFOV)
-.AddField("VFOV", &CameraComponent::VFOV)
-.AddField("ZMin", &CameraComponent::ZMin)
-.AddField("ZMax", &CameraComponent::ZMax);
+.AddProperty("HFOV", "The horizontal field of view of the camera.", &CameraComponent::HFOV)
+.AddProperty("VFOV", "The vertical field of view of the camera.", &CameraComponent::VFOV)
+.AddProperty("ZMin", "The distance to the near clipping plane.", &CameraComponent::ZMin)
+.AddProperty("ZMax", "The distance to the far clipping plane.", &CameraComponent::ZMax);
 
 ////////////////////////
 ///   Constructors   ///

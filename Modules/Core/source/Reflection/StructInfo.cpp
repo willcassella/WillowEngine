@@ -15,7 +15,7 @@ CLASS_REFLECTION(StructInfo);
 bool StructInfo::IsCastableTo(const TypeInfo& type) const
 {
 	// Structs are never castable to anything other than themselves
-	return type == This;
+	return type == self;
 }
 
 //////////////////////////

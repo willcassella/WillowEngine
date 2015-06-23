@@ -23,7 +23,7 @@ TypeIndex::TypeIndex()
 
 String TypeIndex::ToString() const
 {
-	return _type->GetName();
+	return _type->ToString();
 }
 
 /////////////////////

@@ -59,7 +59,7 @@ public:
 	{
 		_value = &value;
 		_type = TypeOf(value);
-		return This;
+		return self;
 	}
 
 	////////////////
@@ -128,7 +128,7 @@ public:
 	{
 		_value = var.GetValue();
 		_type = var.GetType();
-		return This;
+		return self;
 	}
 
 	template <typename AnyType>
@@ -136,7 +136,7 @@ public:
 	{
 		_value = &value;
 		_type = TypeOf(value);
-		return This;
+		return self;
 	}
 
 	////////////////
@@ -159,6 +159,18 @@ namespace Implementation
 		static const TypeInfo& Function() = delete; // "Variant" has no static type information
 
 		FORCEINLINE static const TypeInfo& Function(const Variant& variant)
+		{
+			return variant.GetType();
+		}
+	};
+
+	/** Implementation of "TypeOf" for "ImmutableVariant" */
+	template <>
+	struct TypeOf < ImmutableVariant >
+	{
+		static const TypeInfo& Function() = delete; // "ImmutableVariant" has no static type information
+
+		FORCEINLINE static const TypeInfo& Function(const ImmutableVariant& variant)
 		{
 			return variant.GetType();
 		}

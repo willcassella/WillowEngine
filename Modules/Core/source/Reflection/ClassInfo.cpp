@@ -13,28 +13,62 @@ CLASS_REFLECTION(ClassInfo);
 
 bool ClassInfo::IsCastableTo(const TypeInfo& type) const
 {
+	// If the given type is this type
+	if (type == self)
+	{
+		return true;
+	}
 	// If the given type is a class
-	if (type.GetType().Extends<ClassInfo>())
+	else if (const ClassInfo* pType = Cast<ClassInfo>(type))
 	{
 		// Check if this class is the given class or extends the given class
-		return type == This || Extends(static_cast<const ClassInfo&>(type));
+		return Extends(*pType);
 	}
 	// If the given type is an interface
-	else if (type.GetType().Extends<InterfaceInfo>())
+	else if (const InterfaceInfo* pType = Cast<InterfaceInfo>(type))
 	{
 		// Check if this class implements the given interface
-		return Implements(static_cast<const InterfaceInfo&>(type));
+		return Implements(*pType);
 	}
 	else
 	{
-		// If neither is true, the types are definitely not compatible
+		// If none of the above is true, the types are definitely not compatible
 		return false;
+	}
+}
+
+Array<PropertyInfo> ClassInfo::GetProperties() const
+{
+	if (_base)
+	{
+		return Super::GetProperties() + _base->GetProperties();
+	}
+	else
+	{
+		return Super::GetProperties();
+	}
+}
+
+const PropertyInfo* ClassInfo::FindProperty(const String& name) const
+{
+	const PropertyInfo* property = Super::FindProperty(name);
+
+	if (property)
+	{
+		return property;
+	}
+	else if (_base)
+	{
+		return _base->FindProperty(name);
+	}
+	else
+	{
+		return nullptr;
 	}
 }
 
 bool ClassInfo::Extends(const ClassInfo& type) const
 {
-	// If we have a base class
 	if (_base)
 	{
 		// If the base class is the type we're looking for

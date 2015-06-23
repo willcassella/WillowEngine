@@ -65,12 +65,12 @@ public:
 		if (local)
 		{
 			// Perform a local rotation
-			This = rotation * This;
+			self = rotation * self;
 		}
 		else
 		{
 			// Perform a global rotation
-			This = This * rotation;
+			self = self * rotation;
 		}
 	}
 

@@ -16,7 +16,7 @@ public:
 	REFLECTABLE_CLASS;
 	EXTENDS(PrimitiveInfo);
 	template <typename PointedType> 
-	friend struct Implementation::TypeOf; // @TODO: Figure out more specific way of doing this
+	friend struct Implementation::TypeOf;
 
 	////////////////////////
 	///   Constructors   ///
@@ -30,7 +30,7 @@ private:
 		return PointerInfo(dummy);
 	}
 
-	template <typename AnyPointerType, typename PointedType = std::remove_pointer<AnyPointerType>::type>
+	template <typename AnyPointerType, typename PointedType = std::remove_pointer_t<AnyPointerType>>
 	PointerInfo(AnyPointerType* dummy)
 		: Super(dummy, ""), _pointedType(TypeOf<PointedType>())
 	{

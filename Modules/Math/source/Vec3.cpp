@@ -6,9 +6,9 @@
 ///   Information   ///
 
 STRUCT_REFLECTION(Vec3)
-.AddField("X", &Vec3::X)
-.AddField("Y", &Vec3::Y)
-.AddField("Z", &Vec3::Z);
+.AddProperty("X", "", &Vec3::X)
+.AddProperty("Y", "", &Vec3::Y)
+.AddProperty("Z", "", &Vec3::Z);
 
 ////////////////////////////
 ///   Static Instances   ///

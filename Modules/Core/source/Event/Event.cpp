@@ -6,6 +6,7 @@
 ///   Reflection   ///
 
 CLASS_REFLECTION(Event)
-.AddField("Name", &Event::_name);
+.AddProperty("Name", "", &Event::_name, nullptr)
+.AddProperty("Argument Type", "", &Event::GetArgType, nullptr);
 
 CLASS_REFLECTION(TEvent<void>);

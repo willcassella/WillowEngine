@@ -63,7 +63,7 @@ public:
 	}
 
 	/** Puts a new element on the top of this Stack */
-	template <typename RelatedType>
+	template <typename RelatedType, WHERE(std::is_constructible<T, RelatedType>::value)>
 	FORCEINLINE void Push(RelatedType&& item)
 	{
 		_values.Add(std::forward<RelatedType>(item));
@@ -113,7 +113,7 @@ public:
 			Push(value);
 		}
 
-		return This;
+		return self;
 	}
 	friend FORCEINLINE bool operator==(const Stack& lhs, const Stack& rhs)
 	{

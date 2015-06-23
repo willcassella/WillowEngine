@@ -13,5 +13,5 @@ CLASS_REFLECTION(PrimitiveInfo);
 
 bool PrimitiveInfo::IsCastableTo(const TypeInfo& type) const
 {
-	return type == This; // Primitives are not castable to anything other than themselves
+	return type == self; // Primitives are not castable to anything other than themselves
 }

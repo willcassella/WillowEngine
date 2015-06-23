@@ -1,6 +1,7 @@
 // FPSCamera.cpp
 
-#include "..\include\ExampleGame\FPSCamera.h"
+#include <Engine/Scene.h>
+#include "../include/ExampleGame/FPSCamera.h"
 
 //////////////////////
 ///   Reflection   ///
@@ -10,13 +11,13 @@ CLASS_REFLECTION(FPSCamera);
 ////////////////////////
 ///   Constructors   ///
 
-FPSCamera::FPSCamera(const String& name, float vFOV, float ratio, float zMin, float zMax)
-	: Super(name, vFOV, ratio, zMin, zMax)
+FPSCamera::FPSCamera(Scene& scene)
+	: Super(scene)
 {
-	EventManager.BindAxis("MoveForward", this, &FPSCamera::MoveForward);
-	EventManager.BindAxis("MoveRight", this, &FPSCamera::MoveRight);
-	EventManager.BindAxis("LookUp", this, &FPSCamera::LookUp);
-	EventManager.BindAxis("LookRight", this, &FPSCamera::LookRight);
+	scene.Events.Bind("MoveForward", this, &FPSCamera::MoveForward);
+	scene.Events.Bind("MoveRight", this, &FPSCamera::MoveRight);
+	scene.Events.Bind("LookUp", this, &FPSCamera::LookUp);
+	scene.Events.Bind("LookRight", this, &FPSCamera::LookRight);
 }
 
 ///////////////////

@@ -3,9 +3,9 @@
 * header has forward-declarations for all of them */
 #pragma once
 
-#include <type_traits>
-#include <initializer_list> // @TODO: Check if this is necessary
+#include <initializer_list>
 #include "../config.h"
+#include "../TypeTraits.h"
 
 ////////////////////////////////
 ///   Forward-declarations   ///
@@ -19,8 +19,14 @@ class VoidInfo;
 /** Defined in 'PrimitiveInfo.h' */
 class PrimitiveInfo;
 
+/** Defined in 'EnumInfo.h' */
+class EnumInfo;
+
 /** Defined in 'PointerInfo.h' */
 class PointerInfo;
+
+/** Defined in 'CompoundInfo.h' */
+class CompoundInfo;
 
 /** Defined in 'StructInfo.h' */
 class StructInfo;
@@ -52,7 +58,7 @@ namespace Implementation
 		FORCEINLINE static const auto& Function()
 		{
 			using ReturnType = decltype(AnyType::StaticTypeInfo);
-			using TypeInfoType = typename std::remove_const<ReturnType>::type;
+			using TypeInfoType = std::remove_const_t<ReturnType>;
 
 			static_assert(std::is_const<ReturnType>::value && std::is_object<ReturnType>::value,
 				"The 'StaticTypeInfo' static object must be a const value type");
@@ -66,9 +72,9 @@ namespace Implementation
 		FORCEINLINE static const auto& Function(const AnyType& value)
 		{
 			using ReturnType = decltype(value.GetType());
-			using TypeInfoType = typename std::decay<ReturnType>::type;
+			using TypeInfoType = typename std::decay_t<ReturnType>;
 
-			static_assert(std::is_reference<ReturnType>::value && std::is_const<typename std::remove_reference<ReturnType>::type>::value,
+			static_assert(std::is_reference<ReturnType>::value && std::is_const<std::remove_reference_t<ReturnType>>::value,
 				"The 'GetType' member function must return an immutable reference");
 
 			static_assert(std::is_base_of<TypeInfo, TypeInfoType>::value,
@@ -83,7 +89,7 @@ namespace Implementation
 
 	/** TypeOf for 'void' */
 	template <>
-	struct TypeOf < void >
+	struct CORE_API TypeOf < void >
 	{
 		/** Defined in 'Reflection.cpp' */
 		static const VoidInfo StaticTypeInfo;
@@ -356,8 +362,8 @@ const TargetType* Cast(AnyType&& value) = delete;
 * DO NOT OVERLOAD: Specialize struct 'Implementation::TypeOf' */
 template <typename AnyType>
 FORCEINLINE const auto& TypeOf()
-{	
-	return Implementation::TypeOf<typename std::remove_const<AnyType>::type>::Function();
+{
+	return Implementation::TypeOf<std::decay_t<AnyType>>::Function();
 }
 
 /** Retrieves the type information for the given value 
@@ -371,13 +377,30 @@ FORCEINLINE const auto& TypeOf(const AnyType& value)
 //////////////////
 ///   Macros   ///
 
+// @TODO: Documentation
+#define REFLECTABLE_ENUM(E)									\
+namespace Implementation									\
+{															\
+	template <>												\
+	struct THIS_MODULE TypeOf < E >							\
+	{														\
+		static const ::EnumInfo StaticTypeInfo;				\
+		FORCEINLINE static const ::EnumInfo& Function()		\
+		{													\
+			return StaticTypeInfo;							\
+		}													\
+		FORCEINLINE static const ::EnumInfo& Function(E)	\
+		{													\
+			return StaticTypeInfo;							\
+		}													\
+	};														\
+}
+
 /** Put this macro in the Information section of a struct you'd like to reflect
 * NOTE: Any struct that uses this macro must also use the 'STRUCT_REFLECTION' macro in their source file */
 #define REFLECTABLE_STRUCT										\
 public:															\
 	static const ::StructInfo StaticTypeInfo;					\
-																\
-	/** Returns the reflection information for this struct */	\
 	FORCEINLINE const ::StructInfo& GetType() const				\
 	{															\
 		return StaticTypeInfo;									\
@@ -402,7 +425,7 @@ public:												\
 
 /** Put this macro in the Information section of a class
 * NOTE: All reflectable classes must use this macro 
-* T: The class which this class extends */
+* 'T': The class which this class extends */
 #define EXTENDS(T)									\
 public:												\
 	using Super = T;

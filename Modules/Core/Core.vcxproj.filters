@@ -60,9 +60,6 @@
     <ClInclude Include="include\Core\Reflection\ClassInfo.h">
       <Filter>include\Reflection</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Reflection\FieldInfo.h">
-      <Filter>include\Reflection</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Reflection\InterfaceInfo.h">
       <Filter>include\Reflection</Filter>
     </ClInclude>
@@ -123,9 +120,6 @@
     <ClInclude Include="include\Core\Misc\Signature.h">
       <Filter>include\Misc</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Operations.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Reflection\VoidInfo.h">
       <Filter>include\Reflection</Filter>
     </ClInclude>
@@ -146,6 +140,21 @@
     </ClInclude>
     <ClInclude Include="include\Core\Reflection\TypeIndex.h">
       <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Operations\Operations.h">
+      <Filter>include\Operations</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Reflection\EnumInfo.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Reflection\PropertyInfo.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Reflection\CompoundInfo.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\TypeTraits.h">
+      <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -191,9 +200,6 @@
     <ClCompile Include="source\Misc\TimeStamp.cpp">
       <Filter>source\Misc</Filter>
     </ClCompile>
-    <ClCompile Include="source\Reflection\FieldInfo.cpp">
-      <Filter>source\Reflection</Filter>
-    </ClCompile>
     <ClCompile Include="source\Reflection\VoidInfo.cpp">
       <Filter>source\Reflection</Filter>
     </ClCompile>
@@ -214,6 +220,18 @@
     </ClCompile>
     <ClCompile Include="source\Reflection\Reflection.cpp">
       <Filter>source\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\CompoundInfo.cpp">
+      <Filter>source\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\PropertyInfo.cpp">
+      <Filter>source\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Event\EventHandler.cpp">
+      <Filter>source\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Event\EventManager.cpp">
+      <Filter>source\Event</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

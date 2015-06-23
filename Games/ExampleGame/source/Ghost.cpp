@@ -1,20 +1,22 @@
 // Ghost.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
-#include "..\include\ExampleGame\Ghost.h"
+#include <Engine/Scene.h>
+#include "../include/ExampleGame/Ghost.h"
 
 //////////////////////
 ///   Reflection   ///
 
-CLASS_REFLECTION(Ghost);
+CLASS_REFLECTION(Ghost)
+.AddProperty("Slider", "", &Ghost::Slider);
 
 ////////////////////////
 ///   Constructors   ///
 
-Ghost::Ghost(const String& name)
-	: Super(name), MeshComponent(This), Slider(This)
+Ghost::Ghost(Scene& scene)
+	: Super(scene), Slider(self)
 {
-	EventManager.BindAction("Poof", this, &Ghost::Disappear);
-	EventManager.BindAxis("Spin", this, &Ghost::Spin);
+	scene.Events.Bind("Poof", this, &Ghost::Disappear);
+	scene.Events.Bind("Spin", this, &Ghost::Spin);
 	hasDisappeared = false;
 }
 
@@ -25,12 +27,12 @@ void Ghost::Disappear()
 {
 	if (!hasDisappeared)
 	{
-		MeshComponent.Disable();
+		//MeshComponent.Disable();
 		hasDisappeared = true;
 	}
 	else
 	{
-		MeshComponent.Enable();
+		//MeshComponent.Enable();
 		hasDisappeared = false;
 	}
 }

@@ -1,13 +1,12 @@
 // ResourceHandle.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "../Reflection/Registration.h"
+#include "../Reflection/StructInfo.h"
 
 /////////////////
 ///   Types   ///
 
-/** An opaque pointer to a Resource
-* NOTE: ResourceType must be a subclass of 'Resource' */
+/** An opaque pointer to a Resource */
 template <class ResourceType>
 struct ResourceHandle
 {
@@ -114,7 +113,7 @@ public:
 	{
 		this->DeassignResource();
 		this->AssignResource(path);
-		return This;
+		return self;
 	}
 	ResourceHandle& operator=(const ResourceHandle& copy)
 	{
@@ -128,7 +127,7 @@ public:
 				_resource->_refs++;
 			}
 		}
-		return This;
+		return self;
 	}
 	ResourceHandle& operator=(ResourceHandle&& move)
 	{

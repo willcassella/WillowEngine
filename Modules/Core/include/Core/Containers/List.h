@@ -24,8 +24,9 @@ private:
 		///   Constructors   ///
 	public:
 
-		Node(const T& value)
-			: Value(value), Next(nullptr)
+		template <typename RelatedType>
+		Node(RelatedType&& value)
+			: Value(std::forward<RelatedType>(value)), Next(nullptr)
 		{
 			// All done
 		}
@@ -59,7 +60,7 @@ public:
 		FORCEINLINE Iterator& operator++()
 		{
 			_node = _node->Next;
-			return This;
+			return self;
 		}
 		FORCEINLINE T& operator*()
 		{
@@ -96,7 +97,7 @@ public:
 		FORCEINLINE ConstIterator& operator++()
 		{
 			_node = _node->Next;
-			return This;
+			return self;
 		}
 		FORCEINLINE const T& operator*() const
 		{
@@ -182,7 +183,7 @@ public:
 	/** Returns whether a copy of the given value exists in this List */
 	bool Contains(const T& value) const
 	{
-		for (const auto& element : This)
+		for (const auto& element : self)
 		{
 			if (value == element)
 			{
@@ -194,16 +195,17 @@ public:
 	}
 
 	/** Appends a new element to the end of this List */
-	void Add(const T& value)
+	template <typename RelatedType>
+	void Add(RelatedType&& value)
 	{
 		if (IsEmpty())
 		{
-			_first = new Node(value);
+			_first = new Node(std::forward<RelatedType>(value));
 			_last = _first;
 		}
 		else
 		{
-			_last->Next = new Node(value);
+			_last->Next = new Node(std::forward<RelatedType>(value));
 			_last = _last->Next;
 		}
 
@@ -248,7 +250,7 @@ public:
 		Array<uint32> occurrences;
 
 		uint32 index = 0;
-		for (const auto& element : This)
+		for (const auto& element : self)
 		{
 			if (element == value)
 			{
@@ -279,7 +281,7 @@ public:
 
 		uint32 i = 0;
 
-		for (const auto& element : This)
+		for (const auto& element : self)
 		{
 			if (i >= start)
 			{
@@ -480,7 +482,7 @@ public:
 			Add(value);
 		}
 
-		return This;
+		return self;
 	}
 	List& operator=(const List& copy)
 	{
@@ -494,7 +496,7 @@ public:
 			}
 		}
 
-		return This;
+		return self;
 	}
 	List& operator=(List&& move)
 	{
@@ -511,7 +513,7 @@ public:
 			move._numElements = 0;
 		}
 
-		return This;
+		return self;
 	}
 	T& operator[](uint32 index)
 	{

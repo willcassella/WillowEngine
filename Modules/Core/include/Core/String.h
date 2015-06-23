@@ -2,12 +2,18 @@
 #pragma once
 
 #include "Containers/Array.h"
-#include "Operations.h"
+#include "Operations/Operations.h"
 
 /** A String. Basically just an array of characters, and the
 * operations associated with that. */
 struct CORE_API String final
 {
+	///////////////////////
+	///   Information   ///
+public:
+
+	REFLECTABLE_STRUCT;
+
 	////////////////////////
 	///   Constructors   ///
 public:

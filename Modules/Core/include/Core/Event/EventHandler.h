@@ -21,13 +21,13 @@ public:
 	EventHandler(OwnerType* object, ReturnType (OwnerType::*handler)(ArgType))
 		: _argType(TypeOf<ArgType>())
 	{
-		using DecayedArgType = typename std::decay<ArgType>::type;
-		static_assert(!std::is_same<DecayedArgType, ArgType&>::value, "You cannot create an event handler which accepts a non-const reference");
+		using DecayedArgType = std::decay_t<ArgType>;
+		static_assert(!std::is_same<DecayedArgType&, ArgType>::value, "You cannot create an event handler which accepts a non-const reference");
 
-		_handler = [object, handler](const TEvent& event)-> void
+		_handler = [object, handler](const Event& event)-> void
 		{
 			auto pEvent = static_cast<const TEvent<DecayedArgType>*>(&event);
-			(object->*handler)(pEvent->GetArgType());
+			(object->*handler)(pEvent->GetValue());
 		};
 	}
 
@@ -36,20 +36,20 @@ public:
 	EventHandler(const OwnerType* object, ReturnType(OwnerType::*handler)(ArgType) const)
 		: _argType(TypeOf<ArgType>())
 	{
-		using DecayedArgType = typename std::decay<ArgType>::type;
-		static_assert(!std::is_same<DecayedArgType, ArgType&>::value, "You cannot create an event handler which accepts a non-const reference");
+		using DecayedArgType = typename std::decay_t<ArgType>;
+		static_assert(!std::is_same<DecayedArgType&, ArgType>::value, "You cannot create an event handler which accepts a non-const reference");
 
 		_handler = [object, handler](const Event& event)-> void
 		{
 			auto pEvent = static_cast<const TEvent<DecayedArgType>*>(&event);
-			(object->*handler)(pEvent->GetArgType());
+			(object->*handler)(pEvent->GetValue());
 		};
 	}
 
 	/** Creates an event handler with no arguments, to a mutable object */
 	template <class OwnerType, typename ReturnType>
 	EventHandler(OwnerType* object, ReturnType(OwnerType::*handler)())
-		: _argType(&TypeOf<void>())
+		: _argType(TypeOf<void>())
 	{
 		_handler = [object, handler](const Event& /*event*/)
 			-> void
@@ -87,15 +87,22 @@ public:
 	///   Methods   ///
 public:
 
+	/** Returns the type information for the type of argument this handler accepts. */
 	FORCEINLINE const TypeInfo& GetArgType() const
 	{
 		return _argType;
 	}
 
-	/** Handles the event */
+	/** Returns the type information for the compound that owns this handler. */
+	FORCEINLINE const CompoundInfo& GetOwnerType() const
+	{
+		return *_ownerType;
+	}
+
+	/** Attempts to handle the given event. */
 	void Handle(const Event& event) const
 	{
-		if (event.GetArgType().IsCastableTo(*_argType))
+		if (event.GetArgType().IsCastableTo(_argType))
 		{
 			_handler(event);
 		}
@@ -106,5 +113,6 @@ public:
 private:
 
 	TypeIndex _argType;
+	const CompoundInfo* _ownerType;
 	std::function<void(const Event&)> _handler;
 };

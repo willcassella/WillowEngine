@@ -7,21 +7,20 @@
 #include "../Containers/Stack.h"
 #include "../Containers/Tuple.h"
 #include "../Containers/Table.h"
-#include "TypeInfo.h"
-#include "FieldInfo.h"
+#include "CompoundInfo.h"
 
 /////////////////
 ///   Types   ///
 
 /** Type information for structs */
-class CORE_API StructInfo : public TypeInfo
+class CORE_API StructInfo : public CompoundInfo
 {
 	///////////////////////
 	///   Information   ///
 public:
 
 	REFLECTABLE_CLASS;
-	EXTENDS(TypeInfo);
+	EXTENDS(CompoundInfo);
 
 	////////////////////////
 	///   Constructors   ///
@@ -37,10 +36,12 @@ public:
 		return StructInfo(dummy, name);
 	}
 
+	// @TODO: Documentation
 	template <template <typename ... DependentTypes> class AnyStructTemplateType, typename ... DependentTypes>
 	static StructInfo CreateTemplate(const String& name)
 	{
-		// @TODO: Implement this
+		AnyStructTemplateType<DependentTypes...>* dummy = nullptr;
+		return StructInfo(dummy, name); // @TODO: Do more with this
 	}
 
 protected:
@@ -50,7 +51,6 @@ protected:
 	StructInfo(AnyStructType* dummy, const String& name)
 		: Super(dummy, name)
 	{
-		static_assert(std::is_default_constructible<AnyStructType>::value, "Structs must be default-constructible");
 		static_assert(!std::is_polymorphic<AnyStructType>::value, "Structs may not be polymorphic");
 	}
 
@@ -61,40 +61,10 @@ public:
 	/** Returns whether this type is castable (via 'reinterpret_cast') to the given type */
 	bool IsCastableTo(const TypeInfo& type) const override;
 
-	/** Returns a list of all the fields of this type */
-	FORCEINLINE const Array<FieldInfo>& GetFields() const
-	{
-		return _fields;
-	}
-
-	/** Searches for the field in this type */
-	FORCEINLINE const FieldInfo* FindField(const String& name) const
-	{
-		auto index = _fieldTable.Find(name);
-		if (index)
-		{
-			return &_fields[*index];
-		}
-		else
-		{
-			return nullptr;
-		}
-	}
-
-	/** Register fields with this struct */
-	template <class OwnerType, typename FieldType>
-	StructInfo&& AddField(const String& name, FieldType OwnerType::*field)
-	{	
-		_fieldTable.Insert(name, _fields.Add(FieldInfo(field, name)));
-		return std::move(This);
-	}
-
 	////////////////
 	///   Data   ///
 private:
 
-	Table<String, uint32> _fieldTable;
-	Array<FieldInfo> _fields;
 	Array<TypeIndex> _dependentTypes;
 };
 
@@ -125,29 +95,6 @@ namespace Implementation
 	template <typename T>
 	const StructInfo TypeOf<std::initializer_list<T>>::StaticTypeInfo =
 		StructInfo::CreateTemplate<std::initializer_list, T>("std::initializer_list");
-
-	/** TypeOf for Array */
-	template <typename T>
-	struct TypeOf < Array<T> >
-	{
-		/** Defined below */
-		static const StructInfo StaticTypeInfo;
-
-		FORCEINLINE static const StructInfo& Function()
-		{
-			return StaticTypeInfo;
-		}
-
-		FORCEINLINE static const StructInfo& Function(const Array<T>& /*value*/)
-		{
-			return StaticTypeInfo;
-		}
-	};
-
-	/** Register TypeInfo for Array */
-	template <typename T>
-	const StructInfo TypeOf<Array<T>>::StaticTypeInfo = 
-		StructInfo::CreateTemplate<Array, T>("Array");
 
 	/** TypeOf for List */
 	template <typename T>
@@ -297,4 +244,11 @@ namespace Implementation
 
 /** Put this macro in the header file a struct template you'd like to reflect
 * NOTE: The struct must use the 'REFLECTABLE_STRUCT' flag in its "Information" section */
-#define TEMPLATE_STRUCT_REFLECTION(T, ...) const ::StructInfo T<_VA_ARGS_>::StaticTypeInfo = ::StructInfo::CreateTemplate<T, _VA_ARGS_>(#T)
+#define TEMPLATE_STRUCT_REFLECTION(T, ...) const ::StructInfo T<__VA_ARGS__>::StaticTypeInfo = ::StructInfo::CreateTemplate<::T, __VA_ARGS__>(#T)
+
+//////////////////////
+///   Reflection   ///
+
+/** Register TypeInfo for 'Array' */
+template <typename T>
+TEMPLATE_STRUCT_REFLECTION(Array, T);

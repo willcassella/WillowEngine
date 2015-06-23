@@ -37,7 +37,7 @@ public:
 	{
 		for (const auto& value : init)
 		{
-			This[value.First] = value.Second;
+			self[value.First] = value.Second;
 		}
 	}
 
@@ -163,7 +163,7 @@ public:
 
 		for (const auto& value : init)
 		{
-			This[value.First] == value.Second;
+			self[value.First] == value.Second;
 		}
 	}
 	friend bool operator==(const Table& lhs, const Table& rhs)
@@ -188,7 +188,11 @@ public:
 		}
 
 		// The key must not have been found, create new pair
-		_values.Add(PairType(std::forward<RelatedKeyType>(key)));
+		// I have to use "ValueType()" because MSVC is so fucking stupid, it thinks that 
+		// "PairType(std::forward<RelatedKeyType>(key))" is supposed to be a function-style cast and throws an error.
+		// Joke's on them, because a function-style cast and the constructor ARE THE SAME FUCKING THING
+		_values.Add(PairType(std::forward<RelatedKeyType>(key), ValueType())); 
+		
 		return _values.Last().Second;
 	}
 

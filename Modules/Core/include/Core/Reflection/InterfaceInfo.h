@@ -2,17 +2,17 @@
 #pragma once
 
 #include "../Interface.h"
-#include "TypeInfo.h"
+#include "CompoundInfo.h"
 
 /** Type information for interfaces */
-class CORE_API InterfaceInfo : public TypeInfo
+class CORE_API InterfaceInfo : public CompoundInfo
 {
 	///////////////////////
 	///   Information   ///
 public:
 
 	REFLECTABLE_CLASS;
-	EXTENDS(TypeInfo);
+	EXTENDS(CompoundInfo);
 
 	////////////////////////
 	///   Constructors   ///
@@ -37,6 +37,7 @@ protected:
 	{
 		static_assert(std::is_base_of<Interface, AnyInterfaceType>::value, "Interfaces must extend the 'Interface' class");
 		static_assert(std::is_abstract<AnyInterfaceType>::value, "Interfaces must be abstract");
+		static_assert(sizeof(AnyInterfaceType) == sizeof(Interface), "Interfaces may not contain anything other than virtual members.");
 	}
 
 	///////////////////
@@ -44,4 +45,10 @@ protected:
 public:
 	
 	bool IsCastableTo(const TypeInfo& type) const override;
+
+	////////////////
+	///   Data   ///
+private:
+
+	Array<const InterfaceInfo*> _combinedInterfaces;
 };

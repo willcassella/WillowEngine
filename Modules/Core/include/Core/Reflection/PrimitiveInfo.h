@@ -3,9 +3,6 @@
 
 #include "TypeInfo.h"
 
-/////////////////
-///   Types   ///
-
 /** This is the base of all types that are intrinsic to the language */
 class CORE_API PrimitiveInfo : public TypeInfo
 {

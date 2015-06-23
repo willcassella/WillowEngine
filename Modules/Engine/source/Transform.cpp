@@ -6,9 +6,9 @@
 ///   Reflection   ///
 
 STRUCT_REFLECTION(Transform)
-.AddField("Location", &Transform::Location)
-.AddField("Orientation", &Transform::Orientation)
-.AddField("Scale3D", &Transform::Scale);
+.AddProperty("Location", "The location of this GameObject, in 3D coordinates.", &Transform::Location)
+.AddProperty("Orientation", "The orientation of this GameObject.", &Transform::Orientation)
+.AddProperty("Scale3D", "The scale of this GameObject", &Transform::Scale);
 
 ///////////////////
 ///   Methods   ///

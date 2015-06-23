@@ -34,13 +34,7 @@ public:
 public:
 
 	/** Returns the name of this GameObject */
-	FORCEINLINE const String& GetName() const &
-	{
-		return _name;
-	}
-
-	/** Returns the name of this GameObject */
-	FORCEINLINE String GetName() &&
+	FORCEINLINE const String& GetName() const
 	{
 		return _name;
 	}
@@ -49,6 +43,16 @@ public:
 	FORCEINLINE void SetName(const String& name)
 	{
 		_name = name;
+	}
+
+	FORCEINLINE Scene& GetScene()
+	{
+		return *_scene;
+	}
+
+	FORCEINLINE const Scene& GetScene() const
+	{
+		return *_scene;
 	}
 
 	/** Returns whether this GameObject is alive (if not, it is either destroyed or not yet spawned) */
@@ -72,7 +76,7 @@ public:
 	/** Returns a collection of the Components attached to this GameObject */
 	FORCEINLINE Array<const Component*> GetComponents() const
 	{
-		return Array<const Component*>(_components.CArray(), _components.Size());
+		return _components;
 	}
 
 	/** Returns a collection of Components of the specified type attached to this GameObject */
@@ -83,9 +87,7 @@ public:
 
 		for (Component* component : _components)
 		{
-			ComponentType* castedComponent = Cast<ComponentType>(*component);
-
-			if (castedComponent)
+			if (ComponentType* castedComponent = Cast<ComponentType>(*component))
 			{
 				matches.Add(castedComponent);
 			}
@@ -102,9 +104,7 @@ public:
 
 		for (Component* component : _components)
 		{
-			ComponentType* castedComponent = Cast<ComponentType>(*component);
-
-			if (castedComponent)
+			if (auto castedComponent = Cast<ComponentType>(*component))
 			{
 				matches.Add(castedComponent);
 			}
@@ -136,6 +136,7 @@ public:
 private:
 
 	Array<Component*> _components;
+	Scene* _scene;
 	String _name;
 	uint32 _id;
 	bool _isAlive;

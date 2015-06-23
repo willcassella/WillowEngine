@@ -3,14 +3,19 @@
 #include <Core/Core.h>
 #include <Math/Vec3.h>
 
+void Test(const Array<const TypeInfo*>& types)
+{
+	// Fuck if I know
+}
+
 int main()
 {
-	TypeIndex b = TypeOf<const float* const*>();
+	Array<const ClassInfo*> test;
+	test.Add(&TypeOf<Object>());
+	test.Add(&TypeOf<ClassInfo>());
+	test.Add(&TypeOf<Event>());
 
-	for (TypeIndex type : Application::Instance().Types())
-	{
-		Console::WriteLine(type.ToString());
-	}
-
-	Console::Prompt(String());
+	Test(test);
+	
+	Console::Prompt();
 }

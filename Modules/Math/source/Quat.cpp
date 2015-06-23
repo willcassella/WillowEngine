@@ -6,7 +6,7 @@
 ///   Reflection   ///
 
 STRUCT_REFLECTION(Quat)
-.AddField("X", &Quat::X)
-.AddField("Y", &Quat::Y)
-.AddField("Z", &Quat::Z)
-.AddField("W", &Quat::W);
+.AddProperty("X", "", &Quat::X)
+.AddProperty("Y", "", &Quat::Y)
+.AddProperty("Z", "", &Quat::Z)
+.AddProperty("W", "", &Quat::W);

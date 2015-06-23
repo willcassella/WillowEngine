@@ -4,7 +4,7 @@
 #include <cassert>
 #include <utility>
 #include <new>
-#include "../config.h"
+#include "../Reflection/Reflection.h"
 
 /** A linear, contiguous array. Replacement for 'std::vector'.
 * Pros:
@@ -24,6 +24,8 @@ struct Array final
 	///////////////////////
 	///   Information   ///
 public:
+
+	REFLECTABLE_STRUCT;
 
 	static_assert(std::is_destructible<T>::value,
 		"The given inner type of 'Array' must have a public destructor");
@@ -54,7 +56,7 @@ public:
 		FORCEINLINE Iterator& operator++()
 		{
 			++_value;
-			return This;
+			return self;
 		}
 		FORCEINLINE T& operator*()
 		{
@@ -92,7 +94,7 @@ public:
 		FORCEINLINE ConstIterator& operator++()
 		{
 			++_value;
-			return This;
+			return self;
 		}
 		FORCEINLINE const T& operator*() const
 		{
@@ -130,24 +132,7 @@ public:
 		_allocSize = size;
 	}
 
-	/** Constructs a new Array from a c-style array */
-	Array(const T cArray[], uint32 size)
-		: Array(size)
-	{
-		for (uint32 i = 0; i < size; ++i)
-		{
-			FastAdd(cArray[i]);
-		}
-	}
-
-	Array(const std::initializer_list<T>& init)
-		: Array(static_cast<uint32>(init.size()))
-	{
-		for (const auto& value : init)
-		{ 
-			FastAdd(value);
-		}
-	}
+	/** Constructs a new Array by copying an existing Array */
 	Array(const Array& copy)
 		: Array(copy.Size())
 	{
@@ -156,6 +141,8 @@ public:
 			FastAdd(value);
 		}
 	}
+
+	/** Constructs a new Array by moving an existing Array */
 	Array(Array&& move)
 		: _values(move._values), _allocSize(move._allocSize), _numElements(move._numElements)
 	{
@@ -163,6 +150,52 @@ public:
 		move._allocSize = 0;
 		move._numElements = 0;
 	}
+	
+	/** Constructs a new Array from a c-style array of related types */
+	template <typename RelatedType, WHERE(std::is_constructible<T, const RelatedType&>::value)>
+	Array(const RelatedType cArray[], uint32 size)
+		: Array(size)
+	{
+		for (uint32 i = 0; i < size; ++i)
+		{
+			FastAdd(cArray[i]);
+		}
+	}
+
+	/** Constructs a new Array from an initializer-list of related types */
+	template <typename RelatedType, WHERE(std::is_constructible<T, const RelatedType&>::value)>
+	Array(const std::initializer_list<RelatedType>& init)
+		: Array(static_cast<uint32>(init.size()))
+	{
+		for (const auto& value : init)
+		{
+			FastAdd(value);
+		}
+	}
+
+	/** Constructs a new Array from an Array of related types */
+	template <typename RelatedType, WHERE(std::is_constructible<T, const RelatedType&>::value)>
+	Array(const Array<RelatedType>& copy)
+		: Array(copy.Size())
+	{
+		for (const auto& value : copy)
+		{
+			FastAdd(value);
+		}
+	}
+
+	/** Constructs an array from an existing array of compatible types */
+	template <typename CompatibleType, 
+		WHERE(std::is_convertible<CompatibleType*, T*>::value 
+		&& sizeof(CompatibleType) == sizeof(T))>
+	Array(Array<CompatibleType>&& move)
+		: _values(move._values), _allocSize(move._allocSize), _numElements(move._numElements)
+	{
+		move._values = nullptr;
+		move._allocSize = 0;
+		move._numElements = 0;
+	}
+
 	~Array()
 	{
 		for (uint32 i = 0; i < _numElements; ++i)
@@ -209,7 +242,7 @@ public:
 	/** Returns whether a copy of the given value exists in this Array */
 	bool Contains(const T& value)
 	{
-		for (const auto& element : This)
+		for (const auto& element : self)
 		{
 			if (element == value)
 			{
@@ -221,7 +254,7 @@ public:
 	}
 
 	/** Appends a new element to the end of this Array, returning the new element's index */
-	template <typename RelatedType>
+	template <typename RelatedType, WHERE(std::is_constructible<T, RelatedType>::value)>
 	uint32 Add(RelatedType&& value)
 	{
 		if (Size() >= Capacity())
@@ -242,7 +275,7 @@ public:
 	// @TODO: Test this
 	/** Insert the given value at the given index, returning the index of the new element
 	* (which may be different from the given index) */
-	template <typename RelatedType>
+	template <typename RelatedType, WHERE(std::is_constructible<T, RelatedType>::value)>
 	uint32 Insert(RelatedType&& value, uint32 index)
 	{
 		// If our insert index is beyond the size of the array
@@ -516,7 +549,7 @@ private:
 	/** Adds an element to the end of this Array without checking for available space
 	* Returns the index of the new element
 	* WARNING: Only use this if you KNOW (algorithmically) that there is enough space */
-	template <typename RelatedType>
+	template <typename RelatedType, WHERE(std::is_constructible<T, RelatedType>::value)>
 	FORCEINLINE uint32 FastAdd(RelatedType&& value)
 	{
 		new(_values + _numElements) T(std::forward<RelatedType>(value));
@@ -527,45 +560,6 @@ private:
 	///   Operators   ///
 public:
 
-	Array& operator=(const std::initializer_list<T>& init)
-	{
-		Reset(init.size());
-			
-		for (const auto& value : init)
-		{
-			FastAdd(value);
-		}
-
-		return This;
-	}
-	Array& operator=(const Array& copy)
-	{
-		if (this != &copy)
-		{
-			Reset(copy.Size());
-
-			for (const auto& value : copy)
-			{
-				FastAdd(value);
-			}
-		}
-		return This;
-	}
-	Array& operator=(Array&& move)
-	{
-		if (this != &move)
-		{
-			Reset(0);
-			_allocSize = move._allocSize;
-			_values = move._values;
-			_numElements = move._numElements;
-
-			move._allocSize = 0;
-			move._values = nullptr;
-			move._numElements = 0;
-		}
-		return This;
-	}
 	FORCEINLINE T& operator[](uint32 index)
 	{
 		assert(index < Size());
@@ -576,35 +570,9 @@ public:
 		assert(index < Size());
 		return FastGet(index);
 	}
-	friend Array operator+(const Array& lhs, const Array& rhs)
+	friend FORCEINLINE bool operator!=(const Array& lhs, const Array& rhs)
 	{
-		Array<T> result(lhs.Size() + rhs.Size());
-
-		for (const auto& item : lhs)
-		{
-			result.FastAdd(item);
-		}
-
-		for (const auto& item : rhs)
-		{
-			result.FastAdd(item);
-		}
-
-		return result;
-	}
-	friend Array& operator+=(Array& lhs, const Array& rhs)
-	{
-		if (lhs.Capacity() < lhs.Size() + rhs.Size())
-		{
-			lhs.Resize(lhs.Size() + rhs.Size());
-		}
-
-		for (const auto& item : rhs)
-		{
-			lhs.FastAdd(item);
-		}
-
-		return lhs;
+		return !(lhs == rhs);
 	}
 	friend bool operator==(const Array& lhs, const Array& rhs)
 	{
@@ -623,9 +591,162 @@ public:
 
 		return true;
 	}
-	friend FORCEINLINE bool operator!=(const Array& lhs, const Array& rhs)
+
+	/** Copies an existing Array */
+	Array& operator=(const Array& copy)
 	{
-		return !(lhs == rhs);
+		if (this != &copy)
+		{
+			Reset(copy.Size());
+
+			for (const auto& value : copy)
+			{
+				FastAdd(value);
+			}
+		}
+
+		return self;
+	}
+
+	/** Moves an existing Array */
+	Array& operator=(Array&& move)
+	{
+		if (this != &move)
+		{
+			Reset(0);
+			_values = move._values;
+			_allocSize = move._allocSize;
+			_numElements = move._numElements;
+
+			move._values = nullptr;
+			move._allocSize = 0;
+			move._numElements = 0;
+		}
+
+		return self;
+	}
+
+	/** Copies an initializer-list of related types onto this Array */
+	template <typename RelatedType, WHERE(std::is_constructible<T, const RelatedType&>::value)>
+	Array& operator=(const std::initializer_list<RelatedType>& init)
+	{
+		Reset(init.size());
+
+		for (const auto& value : init)
+		{
+			FastAdd(value);
+		}
+
+		return self;
+	}
+	
+	/** Copies an Array of related types */
+	template <typename RelatedType, WHERE(std::is_constructible<T, const RelatedType&>::value)>
+	Array& operator=(const Array<RelatedType>& copy)
+	{
+		if (this != &copy)
+		{
+			Reset(copy.Size());
+
+			for (const auto& value : copy)
+			{
+				FastAdd(value);
+			}
+		}
+
+		return self;
+	}
+
+	/** Moves an Array of compatible types */
+	template <typename CompatibleType, 
+		WHERE(std::is_convertible<CompatibleType*, T*>::value 
+		&& sizeof(CompatibleType) == sizeof(T))>
+	Array& operator=(Array<CompatibleType>&& move)
+	{
+		if (this != &move)
+		{
+			Reset(0);
+			_allocSize = move._allocSize;
+			_values = move._values;
+			_numElements = move._numElements;
+
+			move._allocSize = 0;
+			move._values = nullptr;
+			move._numElements = 0;
+		}
+
+		return self;
+	}
+
+	/** Produces an Array of the concatenation of an Array and an initializer-list */
+	template <typename RelatedType, WHERE(std::is_constructible<T, const RelatedType&>::value)>
+	friend Array operator+(const Array& lhs, const std::initializer_list<RelatedType>& rhs)
+	{
+		Array result(lhs.Size() + rhs.size());
+
+		for (const auto& item : lhs)
+		{
+			result.FastAdd(item);
+		}
+
+		for (const auto& item : rhs)
+		{
+			result.FastAdd(item);
+		}
+
+		return result;
+	}
+
+	/** Produces an Array of the concatenation of two other Arrays */
+	friend Array operator+(const Array& lhs, const Array& rhs)
+	{
+		Array result(lhs.Size() + rhs.Size());
+
+		for (const auto& item : lhs)
+		{
+			result.FastAdd(item);
+		}
+
+		for (const auto& item : rhs)
+		{
+			result.FastAdd(item);
+		}
+
+		return result;
+	}
+	
+	/** Appends an initializer-list onto an Array */
+	template <typename RelatedType, WHERE(std::is_constructible<T, const RelatedType&>::value)>
+	friend Array& operator+=(Array& lhs, const std::initializer_list<RelatedType>& rhs)
+	{
+		if (lhs.Capacity() < lhs.Size() + rhs.size())
+		{
+			lhs.Resize(lhs.Size() + rhs.size());
+		}
+
+		for (const auto& item : rhs)
+		{
+			lhs.FastAdd(item);
+		}
+
+		return lhs;
+	}
+
+	/** Appends an Array onto another Array */
+	template <typename RelatedType, WHERE(std::is_constructible<T, const RelatedType&>::value)>
+	friend Array& operator+=(Array& lhs, const Array<RelatedType>& rhs)
+	{
+		if (lhs.Capacity() < lhs.Size() + rhs.Size())
+		{
+			lhs.Resize(lhs.Size() + rhs.Size());
+		}
+
+		for (const auto& item : rhs)
+		{
+			lhs.FastAdd(item);
+		}
+
+		return lhs;
 	}
 
 	////////////////

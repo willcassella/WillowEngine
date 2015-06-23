@@ -48,7 +48,7 @@ public:
 	FORCEINLINE TypeIndex& operator=(const TypeInfo& type)
 	{
 		_type = &type;
-		return This;
+		return self;
 	}
 	FORCEINLINE operator const TypeInfo&() const
 	{

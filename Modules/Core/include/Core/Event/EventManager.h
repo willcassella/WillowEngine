@@ -43,5 +43,5 @@ public:
 private:
 
 	Table<String, Array<EventHandler>> _handlers;
-	Queue<std::unique_ptr<Event>> _eventQueue;
+	Queue<Event*> _eventQueue;
 };

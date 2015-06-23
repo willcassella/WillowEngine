@@ -6,8 +6,8 @@
 ///   Reflection   ///
 
 STRUCT_REFLECTION(Vec2)
-.AddField("X", &Vec2::X)
-.AddField("Y", &Vec2::Y);
+.AddProperty("X", "", &Vec2::X)
+.AddProperty("Y", "", &Vec2::Y);
 
 ////////////////////////////
 ///   Static Instances   ///

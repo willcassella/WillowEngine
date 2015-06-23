@@ -3,6 +3,13 @@
 #include <cstring>
 #include <string>
 #include "../include/Core/String.h"
+#include "../include/Core/Reflection/StructInfo.h"
+#include "../include/Core/Operations/FromString.h"
+
+//////////////////////
+///   Reflection   ///
+
+STRUCT_REFLECTION(String);
 
 ///////////////////
 ///   Methods   ///
@@ -23,7 +30,7 @@ String String::ToUpper() const
 
 	for (uint32 i = 0; i < Length(); ++i)
 	{
-		char character = This[i];
+		char character = self[i];
 
 		switch (character)
 		{
@@ -120,7 +127,7 @@ String String::ToLower() const
 
 	for (uint32 i = 0; i < Length(); ++i)
 	{
-		char character = This[i];
+		char character = self[i];
 
 		switch (character)
 		{
@@ -215,7 +222,7 @@ bool String::StartsWith(const String& string) const
 {
 	for (uint32 i = 0; i < string.Length(); ++i)
 	{
-		if (This[i] != string[i])
+		if (self[i] != string[i])
 		{
 			return false;
 		}
@@ -228,7 +235,7 @@ bool String::EndsWith(const String& string) const
 {
 	for (uint32 i = 1; i <= string.Length(); ++i)
 	{
-		if (This[Length() - i] != string[string.Length() - i])
+		if (self[Length() - i] != string[string.Length() - i])
 		{
 			return false;
 		}
@@ -282,7 +289,7 @@ String String::Reverse() const
 
 	for (int32 i = Length(); i > 0; --i)
 	{
-		result.Add(This[i - 1]);
+		result.Add(self[i - 1]);
 	}
 
 	return String(result);
@@ -361,7 +368,7 @@ int32 String::Compare(const String& stringA, const String& stringB, bool caseSen
 String& String::operator=(const char* rhs)
 {
 	_value = Array<char>(rhs, String::Length(rhs) + 1);
-	return This;
+	return self;
 }
 
 String& String::operator=(char rhs)
@@ -369,7 +376,7 @@ String& String::operator=(char rhs)
 	_value.Reset(2);
 	_value.Add(rhs);
 	_value.Add('\0');
-	return This;
+	return self;
 }
 
 bool operator>(const String& lhs, const String& rhs)

@@ -19,9 +19,9 @@ public:
 
 	SlideComponent(GameObject& owner);
 
-	///////////////////
-	///   Methods   ///
-protected:
+	////////////////////
+	///   Handlers   ///
+public:
 
-	void Update(float timeInterval) override;
+	void OnUpdate(float timeInterval);
 };

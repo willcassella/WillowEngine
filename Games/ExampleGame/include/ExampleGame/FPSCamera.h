@@ -17,7 +17,7 @@ public:
 	///   Constructors   ///
 public:
 
-	FPSCamera(const String& name = "", float vFOV = 43.f, float ratio = 1280.f / 720.f, float zMin = 0.1f, float zMax = 90.f);
+	FPSCamera(Scene& scene);
 
 	///////////////////
 	///   Actions   ///

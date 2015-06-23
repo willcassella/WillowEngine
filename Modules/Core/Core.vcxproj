@@ -38,11 +38,13 @@
     <ClInclude Include="include\Core\Misc\Signature.h" />
     <ClInclude Include="include\Core\Misc\TimeStamp.h" />
     <ClInclude Include="include\Core\Object.h" />
-    <ClInclude Include="include\Core\Operations.h" />
     <ClInclude Include="include\Core\Operations\FromString.h" />
+    <ClInclude Include="include\Core\Operations\Operations.h" />
     <ClInclude Include="include\Core\Reflection\ClassInfo.h" />
-    <ClInclude Include="include\Core\Reflection\FieldInfo.h" />
+    <ClInclude Include="include\Core\Reflection\CompoundInfo.h" />
+    <ClInclude Include="include\Core\Reflection\EnumInfo.h" />
     <ClInclude Include="include\Core\Reflection\InterfaceInfo.h" />
+    <ClInclude Include="include\Core\Reflection\PropertyInfo.h" />
     <ClInclude Include="include\Core\Reflection\Module.h" />
     <ClInclude Include="include\Core\Reflection\PointerInfo.h" />
     <ClInclude Include="include\Core\Reflection\PrimitiveInfo.h" />
@@ -55,23 +57,27 @@
     <ClInclude Include="include\Core\Resource\ResourceHandle.h" />
     <ClInclude Include="include\Core\String.h" />
     <ClInclude Include="include\Core\env.h" />
+    <ClInclude Include="include\Core\TypeTraits.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Application.cpp" />
     <ClCompile Include="source\config.cpp" />
     <ClCompile Include="source\Console.cpp" />
     <ClCompile Include="source\Event\Event.cpp" />
+    <ClCompile Include="source\Event\EventHandler.cpp" />
+    <ClCompile Include="source\Event\EventManager.cpp" />
     <ClCompile Include="source\Interface.cpp" />
     <ClCompile Include="source\Misc\TimeStamp.cpp" />
     <ClCompile Include="source\Object.cpp" />
     <ClCompile Include="source\Operations\FromString.cpp" />
     <ClCompile Include="source\Operations\ToString.cpp" />
     <ClCompile Include="source\Reflection\ClassInfo.cpp" />
-    <ClCompile Include="source\Reflection\FieldInfo.cpp" />
+    <ClCompile Include="source\Reflection\CompoundInfo.cpp" />
     <ClCompile Include="source\Reflection\InterfaceInfo.cpp" />
     <ClCompile Include="source\Reflection\Module.cpp" />
     <ClCompile Include="source\Reflection\PointerInfo.cpp" />
     <ClCompile Include="source\Reflection\PrimitiveInfo.cpp" />
+    <ClCompile Include="source\Reflection\PropertyInfo.cpp" />
     <ClCompile Include="source\Reflection\Reflection.cpp" />
     <ClCompile Include="source\Reflection\StructInfo.cpp" />
     <ClCompile Include="source\Reflection\TypeIndex.cpp" />

@@ -63,7 +63,7 @@ public:
 	}
 
 	/** Appends a new element to the end of this Queue */
-	template <typename RelatedType>
+	template <typename RelatedType, WHERE(std::is_constructible<T, RelatedType>::value)>
 	FORCEINLINE void Push(RelatedType&& item)
 	{
 		_values.Add(std::forward<RelatedType>(item));
@@ -113,7 +113,7 @@ public:
 			Push(value);
 		}
 
-		return This;
+		return self;
 	}
 	friend FORCEINLINE bool operator==(const Queue& lhs, const Queue& rhs)
 	{

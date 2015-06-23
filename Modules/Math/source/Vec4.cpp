@@ -6,10 +6,10 @@
 ///   Reflection   ///
 
 STRUCT_REFLECTION(Vec4)
-.AddField("X", &Vec4::X)
-.AddField("Y", &Vec4::Y)
-.AddField("Z", &Vec4::Z)
-.AddField("W", &Vec4::W);
+.AddProperty("X", "", &Vec4::X)
+.AddProperty("Y", "", &Vec4::Y)
+.AddProperty("Z", "", &Vec4::Z)
+.AddProperty("W", "", &Vec4::W);
 
 ////////////////////////////
 ///   Static Instances   ///

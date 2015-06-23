@@ -12,6 +12,11 @@
 #	define CORE_API IMPORT
 #endif
 
+#if defined THIS_MODULE
+#	undef THIS_MODULE
+#endif
+#define THIS_MODULE CORE_API
+
 //////////////////////////////
 ///   Module Information   ///
 

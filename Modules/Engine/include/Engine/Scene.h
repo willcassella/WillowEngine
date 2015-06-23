@@ -41,7 +41,7 @@ public:
 	template <class GameObjectClass, typename ... ArgTypes>
 	GameObjectClass& Spawn(ArgTypes&& ... args)
 	{
-		GameObjectClass* object = new GameObjectClass(This, args...);
+		GameObjectClass* object = new GameObjectClass(self, args...);
 		_freshObjects.Push(object);
 		return *object;
 	}
