@@ -191,7 +191,7 @@ private:
 			auto pOwner = static_cast<OwnerType*>(owner);
 			auto pValue = static_cast<const std::decay_t<PropertyType>*>(value);
 			(pOwner->*setter)(*pValue);
-		}
+		};
 	}
 
 	////////////////
