@@ -42,9 +42,6 @@
     <ClInclude Include="include\Core\Containers\Array.h">
       <Filter>include\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Containers\ArrayList.h">
-      <Filter>include\Containers</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Containers\List.h">
       <Filter>include\Containers</Filter>
     </ClInclude>

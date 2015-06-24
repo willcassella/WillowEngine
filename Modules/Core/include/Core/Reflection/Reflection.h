@@ -374,6 +374,13 @@ FORCEINLINE const auto& TypeOf(const AnyType& value)
 	return Implementation::TypeOf<AnyType>::Function(value);
 }
 
+/////////////////
+///   Types   ///
+
+/** Determines the type of 'TypeInfo' object that this type is associated with. */
+template <typename AnyType>
+using TypeInfoType = std::decay_t<decltype(TypeOf<AnyType>())>;
+
 //////////////////
 ///   Macros   ///
 

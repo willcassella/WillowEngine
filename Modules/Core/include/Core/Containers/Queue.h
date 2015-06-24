@@ -8,6 +8,12 @@ template <typename T>
 struct Queue final
 {
 	///////////////////////
+	///   Information   ///
+public:
+
+	REFLECTABLE_STRUCT;
+
+	///////////////////////
 	///   Inner Types   ///
 public:
 

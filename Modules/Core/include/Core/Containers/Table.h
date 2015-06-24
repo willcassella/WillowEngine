@@ -9,6 +9,12 @@ template <typename KeyType, typename ValueType>
 struct Table final
 {
 	///////////////////////
+	///   Information   ///
+public:
+
+	REFLECTABLE_STRUCT;
+
+	///////////////////////
 	///   Inner Types   ///
 private:
 

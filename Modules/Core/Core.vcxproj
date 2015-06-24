@@ -23,7 +23,6 @@
     <ClInclude Include="include\Core\config.h" />
     <ClInclude Include="include\Core\Console.h" />
     <ClInclude Include="include\Core\Containers\Array.h" />
-    <ClInclude Include="include\Core\Containers\ArrayList.h" />
     <ClInclude Include="include\Core\Containers\List.h" />
     <ClInclude Include="include\Core\Containers\Pair.h" />
     <ClInclude Include="include\Core\Containers\Queue.h" />

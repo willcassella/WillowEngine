@@ -2,6 +2,7 @@
 
 #include "../../include/Core/Reflection/CompoundInfo.h"
 #include "../../include/Core/Reflection/ClassInfo.h"
+#include "../../include/Core/Reflection/StructInfo.h"
 
 //////////////////////
 ///   Reflection   ///

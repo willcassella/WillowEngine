@@ -13,14 +13,6 @@ public:
 	REFLECTABLE_CLASS;
 	EXTENDS(TypeInfo);
 
-	//////////////////////
-	///   InnerTypes   ///
-private:
-
-	// @TODO: Description
-	template <class OwnerType>
-	using TypeInfoType = std::add_rvalue_reference_t<std::decay_t<decltype(TypeOf<OwnerType>())>>;
-
 	////////////////////////
 	///   Constructors   ///
 protected:
@@ -47,7 +39,19 @@ public:
 	template <class OwnerType, typename FieldType>
 	auto AddProperty(const String& name, const String& description, FieldType OwnerType::*field)
 	{
-		return static_cast<TypeInfoType<OwnerType>>(self);
+		PropertyInfo property(name, description);
+		property._propertyType = TypeOf<FieldType>();
+		property._ownerType = &TypeOf<OwnerType>();
+		property._isField = true;
+		property._isPolymorphic = false;
+		property._requiresCopy = false;
+		property.SetMutableGetter(field);
+		property.SetGetter(field);
+		property.SetSetter(field);
+
+		_propertyTable[name] = _properties.Add(std::move(property));
+
+		return static_cast<TypeInfoType<OwnerType>&&>(self);
 	}
 
 	/** Adds a field that is gettable, but not mutably gettable or settable. */
@@ -55,34 +59,74 @@ public:
 	auto AddProperty(const String& name, const String& description, FieldType OwnerType::*field, std::nullptr_t)
 	{
 		PropertyInfo property(name, description);
-		property._ownerType = &TypeOf<OwnerType>(); // Not safe to use 'this', because 'this' will be moved
-		//property._propertyType = TypeOf<FieldType>();
+		property._propertyType = TypeOf<FieldType>();
+		property._ownerType = &TypeOf<OwnerType>();
+		property._isField = true;
+		property._isPolymorphic = false;
+		property._requiresCopy = false;
+		property.SetGetter(field);
 
-		//_propertyTable.Insert(name, _properties.Add(PropertyInfo(name, description, field)));
-		return static_cast<TypeInfoType<OwnerType>>(self);
+		_propertyTable[name] = _properties.Add(std::move(property));
+
+		return static_cast<TypeInfoType<OwnerType>&&>(self);
 	}
 
 	/** Adds a property that is gettable, but not mutably gettable or settable. */
 	template <class OwnerType, typename PropertyType>
 	auto AddProperty(const String& name, const String& description, PropertyType(OwnerType::*getter)() const, std::nullptr_t)
 	{
-		return static_cast<TypeInfoType<OwnerType>>(self);
+		PropertyInfo property(name, description);
+		property._propertyType = TypeOf<PropertyType>();
+		property._ownerType = &TypeOf<OwnerType>();
+		property._isField = false;
+		property._isPolymorphic = std::is_reference<PropertyType>::value && std::is_polymorphic<std::remove_reference_t<PropertyType>>::value;
+		property._requiresCopy = std::is_object<PropertyType>::value;
+		property.SetGetter(getter);
+
+		_propertyTable[name] = _properties.Add(std::move(property));
+
+		return static_cast<TypeInfoType<OwnerType>&&>(self);
 	}
 
 	/** Adds a field that is gettable and settable, but not mutably gettable */
 	template <class OwnerType, typename FieldType, typename SetType,
-		WHERE(std::is_same<FieldType, std::decay_t<SetType>>::value), // Ensure 'FieldType' and 'SetType' are the same type
+		WHERE(!std::is_const<FieldType>::value),
+		WHERE(std::is_same<FieldType, std::decay_t<SetType>>::value),		
 		WHERE(!std::is_reference<SetType>::value || std::is_const<std::remove_reference_t<SetType>>::value)>
 	auto AddProperty(const String& name, const String& description, FieldType OwnerType::*field, void (OwnerType::*setter)(SetType))
 	{
+		PropertyInfo property(name, description);
+		property._propertyType = TypeOf<FieldType>();
+		property._ownerType = &TypeOf<OwnerType>();
+		property._isField = true;
+		property._isPolymorphic = false;
+		property._requiresCopy = false;
+		property.SetGetter(field);
+		property.SetSetter(setter);
 
+		_propertyTable[name] = _properties.Add(std::move(property));
+
+		return static_cast<TypeInfoType<OwnerType>&&>(self);
 	}
 
-	template <class OwnerType, typename PGetType, typename PSetType, 
-		WHERE(std::is_same<std::decay_t<PGetType>, std::decay_t<PSetType>>::value)>
-	auto AddProperty(const String& name, const String& description, PGetType(OwnerType::*getter)() const, void (OwnerType::*setter)(PSetType))
+	/** Adds a property that is gettable and settable, but not mutably gettable */
+	template <class OwnerType, typename GetType, typename SetType, 
+		WHERE(std::is_same<std::decay_t<GetType>, std::decay_t<SetType>>::value),
+		WHERE(!std::is_reference<SetType>::value || std::is_const<std::remove_reference_t<SetType>>::value)>
+	auto AddProperty(const String& name, const String& description, GetType(OwnerType::*getter)() const, void (OwnerType::*setter)(SetType))
 	{
-		return static_cast<TypeInfoType<OwnerType>>(self);
+		PropertyInfo property(name, description);
+		property._propertyType = TypeOf<GetType>();
+		property._ownerType = &TypeOf<OwnerType>();
+		property._isField = false;
+		property._isPolymorphic = std::is_reference<GetType>::value && std::is_polymorphic<std::remove_reference_t<GetType>>::value;
+		property._requiresCopy = std::is_object<GetType>::value;
+		property.SetGetter(getter);
+		property.SetSetter(setter);
+
+		_propertyTable[name] = _properties.Add(std::move(property));
+
+		return static_cast<TypeInfoType<OwnerType>&&>(self);
 	}
 
 	////////////////

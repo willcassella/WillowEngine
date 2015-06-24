@@ -8,6 +8,12 @@ template <typename T>
 struct Stack final
 {
 	///////////////////////
+	///   Information   ///
+public:
+
+	REFLECTABLE_STRUCT;
+
+	///////////////////////
 	///   Inner Types   ///
 public:
 

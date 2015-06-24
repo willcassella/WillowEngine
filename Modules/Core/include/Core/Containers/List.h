@@ -15,6 +15,12 @@ template <typename T>
 struct List final
 {
 	///////////////////////
+	///   Information   ///
+public:
+
+	REFLECTABLE_STRUCT;
+
+	///////////////////////
 	///   Inner Types   ///
 private:
 
