@@ -400,18 +400,20 @@ FORCEINLINE const TargetT* Cast(const T& value)
 * You can override this behavior by implementing a public move constructor,
 * or by specializing the 'Implementation::Copy' struct */
 template <typename T>
-FORCEINLINE T* Copy(T&& copy)
+FORCEINLINE std::decay_t<T>* Copy(T&& copy)
 {
 	if (!std::is_polymorphic<T>::value)
 	{
 		// Call the implementation directly
-		return Implementation::Copy<T>::Function(std::move(move));
+		Implementation::Construct<std::decay_t<T>, T>::Function(std::forward<T>(copy));
 	}
 	else
 	{
 		/** Get move's type and call its implementation through that */
-		return static_cast<T*>(TypeOf(move)._moveConstructor(&move));
+		static_cast<T*>(TypeOf(copy)._moveConstructor(&copy));
 	}
+
+	return nullptr; // TODO
 }
 
 // TODO: Update this
@@ -426,7 +428,7 @@ FORCEINLINE bool Assign(T& value, const T& copy)
 	if (!std::is_polymorphic<T>::value)
 	{
 		// Call the implementation directly
-		return Implementation::Assign<T>::Function(value, copy);
+		return Implementation::Assign<T, const T&>::Function(value, copy);
 	}
 	else
 	{
@@ -436,13 +438,15 @@ FORCEINLINE bool Assign(T& value, const T& copy)
 		if (TypeOf(copy).IsCastableTo(*valueType))
 		{
 			// Call the implementation through reflection
-			return valueType->_copyAssignmentOperator(&value, &copy);
+			//return valueType->_copyAssignmentOperator(&value, &copy);
 		}
 		else
 		{
-			return false;
+			//return false;
 		}
 	}
+
+	return false; // TODO
 }
 
 /** Formats the state of the given value as a String

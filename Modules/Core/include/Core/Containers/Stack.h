@@ -66,7 +66,7 @@ public:
 	template <typename RelatedT, WHERE(std::is_constructible<T, RelatedT>::value)>
 	FORCEINLINE void Push(RelatedT&& item)
 	{
-		_values.Add(std::forward<RelatedType>(item));
+		_values.Add(std::forward<RelatedT>(item));
 	}
 
 	/** Removes the element on the top of this Stack

@@ -313,7 +313,7 @@ namespace Implementation
 					result += ", ";
 				}
 
-				result += String::Format(
+				result += Format(
 					"{@ : @}",
 					ToExplicitString<KeyType>::Function(pair.First),
 					ToExplicitString<ValueType>::Function(pair.Second)
@@ -330,7 +330,7 @@ namespace Implementation
 	{
 		FORCEINLINE static String Function(const Pair<FirstType, SecondType>& value)
 		{
-			return String::Format(
+			return Format(
 				"{@ | @}",
 				ToExplicitString<FirstType>::Function(value.First),
 				ToExplicitString<SecondType>::Function(value.Second)

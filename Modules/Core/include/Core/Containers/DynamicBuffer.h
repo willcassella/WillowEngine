@@ -38,10 +38,10 @@ public:
 	}
 
 	/** Resizes this buffer, copying existing data. */
-	FORCEINLINE void Resize(uint32 newSize);
+	void Resize(uint32 newSize);
 
 	/** Resizes this DynamicBuffer, erasing existing data. */
-	FORCEINLINE void Reset(uint32 newSize);
+	void Reset(uint32 newSize);
 
 	/////////////////////
 	///   Operators   ///
