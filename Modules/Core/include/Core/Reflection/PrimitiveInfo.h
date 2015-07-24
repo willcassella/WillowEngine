@@ -18,22 +18,21 @@ public:
 public:
 
 	// @TODO: Documentation
-	template <typename AnyPrimitiveType>
-	static PrimitiveInfo Create(const String& name)
+	template <typename PrimitiveT>
+	static PrimitiveInfo Create(CString name)
 	{
-		AnyPrimitiveType* dummy = nullptr;
+		PrimitiveT* dummy = nullptr;
 		return PrimitiveInfo(dummy, name);
 	}
 
 protected:
 
-	template <typename AnyPrimitiveType>
-	PrimitiveInfo(AnyPrimitiveType* dummy, const String& name)
+	// @TODO: Documentation
+	template <typename PrimitiveT>
+	PrimitiveInfo(PrimitiveT* dummy, CString name)
 		: Super(dummy, name)
 	{
-		static_assert(std::is_arithmetic<AnyPrimitiveType>::value || 
-			std::is_pointer<AnyPrimitiveType>::value ||
-			std::is_fundamental<AnyPrimitiveType>::value,
+		static_assert(stdEXT::is_primitive<PrimitiveT>::value || std::is_fundamental<PrimitiveT>::value,
 			"Primitives types must be primitive");
 	}
 

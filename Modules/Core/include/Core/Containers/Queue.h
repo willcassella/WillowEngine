@@ -8,12 +8,6 @@ template <typename T>
 struct Queue final
 {
 	///////////////////////
-	///   Information   ///
-public:
-
-	REFLECTABLE_STRUCT;
-
-	///////////////////////
 	///   Inner Types   ///
 public:
 
@@ -69,10 +63,10 @@ public:
 	}
 
 	/** Appends a new element to the end of this Queue */
-	template <typename RelatedType, WHERE(std::is_constructible<T, RelatedType>::value)>
-	FORCEINLINE void Push(RelatedType&& item)
+	template <typename RelatedT, WHERE(std::is_constructible<T, RelatedT>::value)>
+	FORCEINLINE void Push(RelatedT&& item)
 	{
-		_values.Add(std::forward<RelatedType>(item));
+		_values.Add(std::forward<RelatedT>(item));
 	}
 
 	/** Removes the first element in this Queue

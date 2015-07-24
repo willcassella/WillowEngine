@@ -1,24 +1,22 @@
 // Interface.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "Reflection/Reflection.h"
+#include "config.h"
+#include "Forwards/Reflection.h"
 
-/** Base of every interface in the engine */
+/** Base of every interface in the engine. */
 class CORE_API Interface
 {
 	////////////////////////
 	///   Constructors   ///
 public:
 
-	virtual ~Interface() = 0;
+	virtual ~Interface() = default;
 
 	///////////////////
 	///   Methods   ///
 public:
 
-	/** Returns the underlying type of the Object implementing this interface */
-	const ClassInfo& GetType() const;
+	/** Returns the underlying type of the Object implementing this interface. */
+	virtual const ClassInfo& GetType() const = 0;
 };
-
-/** 'Interface' is abstract */
-inline Interface::~Interface() {};

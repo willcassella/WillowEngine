@@ -17,6 +17,11 @@ public:
 
 	////////////////////////
 	///   Constructors   ///
+public:
+
+	Application(const Application& copy) = delete;
+	Application(Application&& move) = delete;
+
 private:
 
 	Application() = default;
@@ -25,14 +30,25 @@ private:
 	///   Methods   ///
 public:
 
-	// @TODO: Documentation
+	static const Array<const TypeInfo*>& GetAllTypes();
+
+	static const TypeInfo* FindType(const String& name);
+
+private:
+
 	static Application& Instance();
 
-	const Array<TypeIndex>& Types() const;
+	/////////////////////
+	///   Operators   ///
+public:
+
+	Application& operator=(const Application& copy) = delete;
+	Application& operator=(Application&& move) = delete;
 
 	////////////////
 	///   Data   ///
 private:
 
-	Array<TypeIndex> _types;
+	// TODO: Make this Array<TypeIndex>?
+	Array<const TypeInfo*> _types;
 };

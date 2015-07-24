@@ -5,18 +5,22 @@
 #include "../Containers/Stack.h"
 #include "../Containers/Queue.h"
 #include "../Containers/Table.h"
-#include "../Reflection/TypeInfo.h"
+#include "../String.h"
 
 //////////////////////////
 ///   Implementation   ///
 
 namespace Implementation
 {
+	/** Default Implementation of 'ToString', defined in 'Reflection/TypeInfo.h' */
+	template <typename T>
+	struct ToString;
+
 	/** Default implementation of ToExplicitString (no quotation marks) */
-	template <typename AnyType>
-	struct ToExplicitString
+	template <typename T>
+	struct ToExplicitString final
 	{
-		FORCEINLINE static String Function(const AnyType& value)
+		FORCEINLINE static String Function(const T& value)
 		{
 			return ::ToString(value);
 		}
@@ -27,86 +31,86 @@ namespace Implementation
 
 	/** Convert a bool to a String */
 	template <>
-	struct CORE_API ToString < bool >
+	struct CORE_API ToString < bool > final
 	{
 		static String Function(bool value);
 	};
 
 	/** Convert a character to a String */
 	template <>
-	struct CORE_API ToString < char >
+	struct CORE_API ToString < char > final
 	{
 		static String Function(char value);
 	};
 
 	/** Convert a byte to a String */
 	template <>
-	struct CORE_API ToString < byte >
+	struct CORE_API ToString < byte > final
 	{
 		static String Function(byte value);
 	};
 
 	/** Convert a 16-bit integer to a String */
 	template <>
-	struct CORE_API ToString < int16 >
+	struct CORE_API ToString < int16 > final
 	{
 		static String Function(int16 value);
 	};
 
 	/** Convert a 32-bit integer to a String */
 	template <>
-	struct CORE_API ToString < int32 >
+	struct CORE_API ToString < int32 > final
 	{
 		static String Function(int32 value);
 	};
 
 	/** Convert a 64-bit integer to a String */
 	template <>
-	struct CORE_API ToString < int64 >
+	struct CORE_API ToString < int64 > final
 	{
 		static String Function(int64 value);
 	};
 
 	/** Convert an unsigned 16-bit integer to a String */
 	template <>
-	struct CORE_API ToString < uint16 >
+	struct CORE_API ToString < uint16 > final
 	{
 		static String Function(uint16 value);
 	};
 
 	/** Convert an unsigned 32-bit integer to a String */
 	template <>
-	struct CORE_API ToString < uint32 >
+	struct CORE_API ToString < uint32 > final
 	{
 		static String Function(uint32 value);
 	};
 
 	/** Convert an unsigned 64-bit integer to a String */
 	template <>
-	struct CORE_API ToString < uint64 >
+	struct CORE_API ToString < uint64 > final
 	{
 		static String Function(uint64 value);
 	};
 
 	/** Convert a float to a String */
 	template <>
-	struct CORE_API ToString < float >
+	struct CORE_API ToString < float > final
 	{
 		static String Function(float value);
 	};
 
 	/** Convert a double to a String */
 	template <>
-	struct CORE_API ToString < double >
+	struct CORE_API ToString < double > final
 	{
 		static String Function(double value);
 	};
 
 	/** Convert a pointer to a String */
-	template <typename AnyType>
-	struct ToString < AnyType* >
+	template <typename T>
+	struct ToString < T* > final
 	{
-		FORCEINLINE static String Function(AnyType* value)
+		FORCEINLINE static String Function(T* value)
 		{
 			return "0xAddress"; // @TODO: Implement this
 		}
@@ -118,7 +122,7 @@ namespace Implementation
 	/** Convert a non-const c-string to a String
 	* NOTE: A non-const c-string cannot be parsed from a String */
 	template <>
-	struct CORE_API ToString < char* >
+	struct ToString < char* > final
 	{
 		FORCEINLINE static String Function(const char* value)
 		{
@@ -128,7 +132,7 @@ namespace Implementation
 
 	/** Convert a non-const c-string to an explicit String */
 	template <>
-	struct CORE_API ToExplicitString < char* >
+	struct ToExplicitString < char* > final
 	{
 		FORCEINLINE static String Function(const char* value)
 		{
@@ -139,7 +143,7 @@ namespace Implementation
 	/** Convert a c-string to a String
 	* NOTE: c-strings cannot be parsed from a String */
 	template <>
-	struct CORE_API ToString < const char* >
+	struct ToString < const char* > final
 	{
 		FORCEINLINE static String Function(const char* value)
 		{
@@ -149,7 +153,7 @@ namespace Implementation
 
 	/** Convert a c-string to an explicit String */
 	template <>
-	struct CORE_API ToExplicitString < const char* >
+	struct ToExplicitString < const char* > final
 	{
 		FORCEINLINE static String Function(const char* value)
 		{
@@ -160,7 +164,7 @@ namespace Implementation
 	/** Convert a clang/gcc c-string literal to a String
 	* NOTE: A clang/gcc c-string literal cannot be parsed from a String */
 	template <std::size_t size>
-	struct ToString < char[size] >
+	struct ToString < char[size] > final
 	{
 		FORCEINLINE static String Function(const char value[size])
 		{
@@ -170,7 +174,7 @@ namespace Implementation
 
 	/** Convert a clang/gcc c-string literal to an Explicit String */
 	template <std::size_t size>
-	struct ToExplicitString < char[size] >
+	struct ToExplicitString < char[size] > final
 	{
 		FORCEINLINE static String Function(const char value[size])
 		{
@@ -181,7 +185,7 @@ namespace Implementation
 	/** Convert a MSVC c-string literal to a String
 	* NOTE: A MSVC c-string literal cannot be parsed from a String */
 	template <std::size_t size>
-	struct ToString < const char[size] >
+	struct ToString < const char[size] > final
 	{
 		FORCEINLINE static String Function(const char value[size])
 		{
@@ -191,7 +195,7 @@ namespace Implementation
 
 	/** Convert a MSVC c-string literal to an explicit String @TODO: Determine if this can be removed */
 	template <std::size_t size>
-	struct ToExplicitString < const char[size] >
+	struct ToExplicitString < const char[size] > final
 	{
 		FORCEINLINE static String Function(const char value[size])
 		{
@@ -201,7 +205,7 @@ namespace Implementation
 
 	/** Convert a String to a String */
 	template <>
-	struct CORE_API ToString < String >
+	struct ToString < String > final
 	{
 		FORCEINLINE static String Function(const String& value)
 		{
@@ -211,7 +215,7 @@ namespace Implementation
 
 	/** Convert a String to an explicit String */
 	template <>
-	struct CORE_API ToExplicitString < String >
+	struct ToExplicitString < String > final
 	{
 		FORCEINLINE static String Function(const String& value)
 		{
@@ -224,7 +228,7 @@ namespace Implementation
 
 	/** Convert a generic container to a String */
 	template <template <typename ElementType> class ContainerType, typename ElementType>
-	struct ContainerToString
+	struct ContainerToString final
 	{
 		static String Function(const ContainerType<ElementType>& value)
 		{
@@ -251,7 +255,7 @@ namespace Implementation
 
 	/** Convert an Array to a String */
 	template <typename T>
-	struct ToString < Array<T> >
+	struct ToString < Array<T> > final
 	{
 		FORCEINLINE static String Function(const Array<T>& value)
 		{
@@ -261,7 +265,7 @@ namespace Implementation
 
 	/** Convert a List to a String */
 	template <typename T>
-	struct ToString < List<T> >
+	struct ToString < List<T> > final
 	{
 		FORCEINLINE static String Function(const List<T>& value)
 		{
@@ -271,7 +275,7 @@ namespace Implementation
 
 	/** Convert a Queue to a String */
 	template <typename T>
-	struct ToString < Queue<T> >
+	struct ToString < Queue<T> > final
 	{
 		FORCEINLINE static String Function(const Queue<T>& value)
 		{
@@ -281,7 +285,7 @@ namespace Implementation
 
 	/** Convert a Stack to a String */
 	template <typename T>
-	struct ToString < Stack<T> >
+	struct ToString < Stack<T> > final
 	{
 		FORCEINLINE static String Function(const Stack<T>& value)
 		{
@@ -291,7 +295,7 @@ namespace Implementation
 
 	/** Convert a Table to a String */
 	template <typename KeyType, typename ValueType>
-	struct ToString < Table<KeyType, ValueType> >
+	struct ToString < Table<KeyType, ValueType> > final
 	{
 		static String Function(const Table<KeyType, ValueType>& value)
 		{
@@ -322,7 +326,7 @@ namespace Implementation
 
 	/** Convert a Pair to a String */
 	template <typename FirstType, typename SecondType>
-	struct ToString < Pair<FirstType, SecondType> >
+	struct ToString < Pair<FirstType, SecondType> > final
 	{
 		FORCEINLINE static String Function(const Pair<FirstType, SecondType>& value)
 		{

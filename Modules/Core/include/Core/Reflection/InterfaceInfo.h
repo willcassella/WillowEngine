@@ -21,23 +21,25 @@ public:
 	/** Creates reflection information for the given interface
 	* NOTE: Do not use this outside of the registration function for a interface
 	* 'name' - The fully-qualified name of the interface */
-	template <class AnyInterfaceType>
+	template <class InterfaceT>
 	static InterfaceInfo Create(const String& name)
 	{
-		AnyInterfaceType* dummy = nullptr;
+		InterfaceT* dummy = nullptr;
 		return InterfaceInfo(dummy, name);
 	}
 
 protected:
 
-	// @TODO: Documentation
-	template <class AnyInterfaceType>
-	InterfaceInfo(AnyInterfaceType* dummy, const String& name)
+	/** Constructs a new instance of 'InterfaceInfo'.
+	* 'dummy' - A pointer to an instance of the interface.
+	* 'name' - The name of the interface. */
+	template <class InterfaceT>
+	InterfaceInfo(InterfaceT* dummy, const String& name)
 		: Super(dummy, name)
 	{
-		static_assert(std::is_base_of<Interface, AnyInterfaceType>::value, "Interfaces must extend the 'Interface' class");
-		static_assert(std::is_abstract<AnyInterfaceType>::value, "Interfaces must be abstract");
-		static_assert(sizeof(AnyInterfaceType) == sizeof(Interface), "Interfaces may not contain anything other than virtual members.");
+		static_assert(std::is_base_of<Interface, InterfaceT>::value, "Interfaces must extend the 'Interface' class");
+		static_assert(std::is_abstract<InterfaceT>::value, "Interfaces must be abstract");
+		static_assert(sizeof(InterfaceT) == sizeof(Interface), "Interfaces may not contain anything other than virtual members.");
 	}
 
 	///////////////////

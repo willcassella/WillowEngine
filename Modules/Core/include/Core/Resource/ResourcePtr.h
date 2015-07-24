@@ -1,4 +1,4 @@
-// ResourceHandle.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
+// ResourcePtr.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
 #include "../Reflection/StructInfo.h"
@@ -8,7 +8,7 @@
 
 /** An opaque pointer to a Resource */
 template <class ResourceType>
-struct ResourceHandle
+struct ResourcePtr final
 {
 	///////////////////////
 	///   Information   ///
@@ -20,17 +20,17 @@ public:
 	///   Constructors   ///
 public:
 
-	ResourceHandle()
+	ResourcePtr()
 		: _resource(nullptr)
 	{
 		// All done
 	}
-	ResourceHandle(const String& path)
+	ResourcePtr(const String& path)
 		: _resource(nullptr)
 	{
 		AssignResource(path);
 	}
-	ResourceHandle(const ResourceHandle& copy)
+	ResourcePtr(const ResourcePtr& copy)
 		: _resource(copy._resource)
 	{
 		if (_resource)
@@ -38,12 +38,12 @@ public:
 			_resource->_refs++;
 		}
 	}
-	ResourceHandle(ResourceHandle&& move)
+	ResourcePtr(ResourcePtr&& move)
 		: _resource(move._resource)
 	{
 		move._resource = nullptr;
 	}
-	~ResourceHandle()
+	~ResourcePtr()
 	{
 		DeassignResource();
 	}
@@ -72,7 +72,7 @@ private:
 		}
 
 		// Check if this resource has been already created
-		SystemResource* res = SystemResource::FindLoadedResource(path);
+		Resource* res = Resource::FindLoadedResource(path);
 		if (!res)
 		{
 			// Create a new resource
@@ -109,13 +109,13 @@ public:
 	{
 		return _resource;
 	}
-	ResourceHandle& operator=(const String& path)
+	ResourcePtr& operator=(const String& path)
 	{
 		this->DeassignResource();
 		this->AssignResource(path);
 		return self;
 	}
-	ResourceHandle& operator=(const ResourceHandle& copy)
+	ResourcePtr& operator=(const ResourcePtr& copy)
 	{
 		if (this != &copy)
 		{
@@ -129,7 +129,7 @@ public:
 		}
 		return self;
 	}
-	ResourceHandle& operator=(ResourceHandle&& move)
+	ResourcePtr& operator=(ResourcePtr&& move)
 	{
 		if (this != &move)
 		{
@@ -140,11 +140,11 @@ public:
 		return *this;
 	}
 
-	friend inline bool operator==(const ResourceHandle& lhs, const ResourceHandle& rhs)
+	friend inline bool operator==(const ResourcePtr& lhs, const ResourcePtr& rhs)
 	{
 		return lhs._resource == rhs._resource;
 	}
-	friend inline bool operator!=(const ResourceHandle& lhs, const ResourceHandle& rhs)
+	friend inline bool operator!=(const ResourcePtr& lhs, const ResourcePtr& rhs)
 	{
 		return lhs._resource != rhs._resource;
 	}
@@ -160,4 +160,4 @@ private:
 ///   Reflection   ///
 
 template <class ResourceType>
-const ClassInfo ResourceHandle<ResourceType>::StaticTypeInfo = ClassInfo::Create<ResourceType>(String::Format("ResourceHandle<@>", TypeOf<ResourceType>().GetName()));
+const StructInfo ResourcePtr<ResourceType>::StaticTypeInfo = StructInfo::Create<ResourceType>("Resource");

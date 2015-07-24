@@ -2,6 +2,7 @@
 #pragma once
 
 #include <functional>
+#include "../Forwards/Memory.h"
 #include "Variant.h"
 
 /** A class representing the information for a Property.
@@ -41,7 +42,7 @@ public:
 	/** Returns the type information for this Property. */
 	FORCEINLINE const TypeInfo& GetPropertyType() const
 	{
-		return _propertyType;
+		return *_propertyType;
 	}
 
 	/** Returns the type information for the owner of this Property. */
@@ -100,7 +101,7 @@ public:
 	/** Copies the value of this Property on the given ImmutableVariant.
 	* NOTE: If the type of this property is not copy-constructible, returns a Variant to 'void' (check 'IsCopyable' first). 
 	* NOTE: The value referenced by 'owner' must be of the same or extension of the type referenced by 'GetOwnerType'. */
-	Variant CopyValue(const ImmutableVariant& owner) const;
+	NewPtr<void> CopyValue(const ImmutableVariant& owner) const;
 
 	/** Sets the value of this Property on the given Variant to the given value.
 	* NOTE: If this Property has no setter, does nothing (check 'HasSetter' first).
@@ -111,85 +112,92 @@ public:
 private:
 
 	/** Sets the mutable getter to return a field */
-	template <class OwnerType, typename FieldType>
-	void SetMutableGetter(FieldType OwnerType::*field)
+	template <class OwnerT, typename FieldT,
+		WHERE(!std::is_function<FieldT>::value)>
+	void SetMutableGetter(FieldT OwnerT::*field)
 	{
 		_mutableGetter = [field](void* owner) -> Variant
 		{
-			auto pOwner = static_cast<OwnerType*>(owner);
-			return Variant(&(pOwner->*field), TypeOf<FieldType>());
+			auto pOwner = static_cast<OwnerT*>(owner);
+			return Variant(&(pOwner->*field), TypeOf<FieldT>());
 		};
 	}
 
 	/** Sets the mutable getter to do nothing */
-	template <class OwnerType, typename FieldType>
-	void SetMutableGetter(const FieldType OwnerType::* /*field*/)
+	template <class OwnerT, typename FieldT,
+		WHERE(!std::is_function<FieldT>::value)>
+	void SetMutableGetter(const FieldT OwnerT::* /*field*/)
 	{
 		// Do nothing (field is const, so can't return mutable variant)
 	}
 
 	/** Sets the getter to return a field */
-	template <class OwnerType, typename FieldType>
-	void SetGetter(FieldType OwnerType::*field)
+	template <class OwnerT, typename FieldT,
+		WHERE(!std::is_function<FieldT>::value)>
+	void SetGetter(FieldT OwnerT::*field)
 	{
 		_getter = [field](const void* owner) -> ImmutableVariant
 		{
-			auto pOwner = static_cast<const OwnerType*>(owner);
-			return ImmutableVariant(&(pOwner->*field), TypeOf<FieldType>());
+			auto pOwner = static_cast<const OwnerT*>(owner);
+			return ImmutableVariant(&(pOwner->*field), TypeOf<FieldT>());
 		};
 	}
 
 	/** Sets the getter to call a getter method that returns by reference */
-	template <class OwnerType, typename PropertyType>
-	void SetGetter(PropertyType& (OwnerType::*getter)() const)
+	template <class OwnerT, typename PropertyT>
+	void SetGetter(PropertyT& (OwnerT::*getter)() const)
 	{
 		_getter = [getter](const void* owner) -> ImmutableVariant
 		{
-			auto pOwner = static_cast<const OwnerType*>(owner);
-			PropertyType& value = (pOwner->*getter)();
+			auto pOwner = static_cast<const OwnerT*>(owner);
+			PropertyT& value = (pOwner->*getter)();
 			return ImmutableVariant(&value, TypeOf(value));
 		};
 	}
 
 	/** Sets the getter to call a getter method that returns by value */
-	template <class OwnerType, typename PropertyType>
-	void SetGetter(PropertyType (OwnerType::*getter)() const)
+	template <class OwnerT, typename PropertyT>
+	void SetGetter(PropertyT (OwnerT::*getter)() const)
 	{
 		_getter = [getter](const void* owner) -> ImmutableVariant
 		{
-			auto pOwner = static_cast<const OwnerType*>(owner);
-			auto pValue = new PropertyType((pOwner->*getter)());
-			return ImmutableVariant(pValue, TypeOf<PropertyType>());
+			auto pOwner = static_cast<const OwnerT*>(owner);
+			auto pValue = new PropertyT((pOwner->*getter)());
+			return ImmutableVariant(pValue, TypeOf<PropertyT>());
 		};
 	}
 
 	/** Sets the setter to set to a field */
-	template <class OwnerType, typename FieldType>
-	void SetSetter(FieldType OwnerType::*field)
+	template <class OwnerT, typename FieldT,
+		WHERE(!std::is_function<FieldT>::value)>
+	std::enable_if_t<std::is_copy_assignable<FieldT>::value>
+	SetSetter(FieldT OwnerT::*field)
 	{
 		_setter = [field](void* owner, const void* value) -> void
 		{
-			auto pOwner = static_cast<OwnerType*>(owner);
-			auto pValue = static_cast<const FieldType*>(value);
+			auto pOwner = static_cast<OwnerT*>(owner);
+			auto pValue = static_cast<const FieldT*>(value);
 			(pOwner->*field) = *pValue;
 		};
 	}
 
-	/** Sets the setter to do nothing */
-	template <class OwnerType, typename FieldType>
-	void SetSetter(const FieldType OwnerType::* /*field*/)
+	/** Sets the setter to NOT set to a field (because it cannot be copy-assigned) */
+	template <class OwnerT, typename FieldT,
+		WHERE(!std::is_function<FieldT>::value)>
+	std::enable_if_t<!std::is_copy_assignable<FieldT>::value>
+	SetSetter(FieldT OwnerT::* /*field*/)
 	{
-		// Do nothing (field is const, so it can't be set)
+		// Do nothing
 	}
 
 	/** Sets the setter to call a setter method */
-	template <class OwnerType, typename PropertyType>
-	void SetSetter(void (OwnerType::*setter)(PropertyType))
+	template <class OwnerT, typename PropertyT>
+	void SetSetter(void (OwnerT::*setter)(PropertyT))
 	{
 		_setter = [setter](void* owner, const void* value) -> void
 		{
-			auto pOwner = static_cast<OwnerType*>(owner);
-			auto pValue = static_cast<const std::decay_t<PropertyType>*>(value);
+			auto pOwner = static_cast<OwnerT*>(owner);
+			auto pValue = static_cast<const std::decay_t<PropertyT>*>(value);
 			(pOwner->*setter)(*pValue);
 		};
 	}
@@ -200,7 +208,7 @@ private:
 
 	String _name;
 	String _description;
-	TypeIndex _propertyType;
+	const TypeInfo* _propertyType;
 	const CompoundInfo* _ownerType;
 	std::function<Variant (void*)> _mutableGetter;
 	std::function<ImmutableVariant (const void*)> _getter;

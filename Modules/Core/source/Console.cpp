@@ -6,9 +6,9 @@
 const uint32 MaxInput = 256; // Max number of characters retrieved from one line of input
 bool EmptyLine = true; // Whether the current line is empty
 bool EmptyLineAbove = true; // Whether the line above is empty
-const String WarningPrefix = "WARNING: "; // String printed before every warning
-const String ErrorPrefix = "ERROR: "; // String printed before every error
-const String PromptPrefix = "> "; // String printed before every input
+CString WarningPrefix = "WARNING: "; // String printed before every warning
+CString ErrorPrefix = "ERROR: "; // String printed before every error
+CString PromptPrefix = "> "; // String printed before every input
 
 ////////////////////
 ///   Functions  ///
@@ -29,36 +29,36 @@ void Console::NewLine()
 	EmptyLine = true;
 }
 
-void Console::Write(const String& message)
+void Console::Write(CString message)
 {
 	static bool firstWrite = true;
 
 	if (firstWrite)
 	{
-		Console::NewLine();
+		NewLine();
 		firstWrite = false;
 	}
 
-	std::cout << message.Cstr();
+	std::cout << message;
 	EmptyLine = false;
 }
 
-void Console::WriteLine(const String& message)
+void Console::WriteLine(CString message)
 {
-	Console::Write(message);
-	Console::NewLine();
+	Write(message);
+	NewLine();
 }
 
-void Console::Warning(const String& warning)
+void Console::Warning(CString warning)
 {
-	Console::Write(String(WarningPrefix));
-	Console::WriteLine(warning);
+	Write(WarningPrefix);
+	WriteLine(warning);
 }
 
-void Console::Error(const String& error)
+void Console::Error(CString error)
 {
-	Console::Write(ErrorPrefix);
-	Console::WriteLine(error);
+	Write(ErrorPrefix);
+	WriteLine(error);
 }
 
 String GetUserInput()
@@ -70,21 +70,21 @@ String GetUserInput()
 
 String Console::Prompt()
 {
-	Console::NewLine();
+	NewLine();
 
 	if (!EmptyLineAbove)
 	{
-		Console::NewLine();
+		NewLine();
 	}
 
-	Console::Write(PromptPrefix);
+	Write(PromptPrefix);
 	String input = GetUserInput();
-	Console::NewLine();
+	NewLine();
 	return input;
 }
 
-String Console::Prompt(const String& message)
+String Console::Prompt(CString message)
 {
-	Console::WriteLine(message);
-	return Console::Prompt();
+	WriteLine(message);
+	return Prompt();
 }

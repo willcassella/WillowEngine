@@ -5,43 +5,10 @@
 
 #include <initializer_list>
 #include "../config.h"
-#include "../TypeTraits.h"
-
-////////////////////////////////
-///   Forward-declarations   ///
-
-/** Defined in 'TypeInfo.h' */
-class TypeInfo;
-
-/** Defined in 'VoidInfo.h' */
-class VoidInfo;
-
-/** Defined in 'PrimitiveInfo.h' */
-class PrimitiveInfo;
-
-/** Defined in 'EnumInfo.h' */
-class EnumInfo;
-
-/** Defined in 'PointerInfo.h' */
-class PointerInfo;
-
-/** Defined in 'CompoundInfo.h' */
-class CompoundInfo;
-
-/** Defined in 'StructInfo.h' */
-class StructInfo;
-
-/** Defined in 'ClassInfo.h' */
-class ClassInfo;
-
-/** Defined in 'InterfaceInfo.h' */
-class InterfaceInfo;
-
-/** Defined in 'Variant.h' */
-struct Variant;
-
-/** Defined in 'Variant.h' */
-struct ImmutableVariant;
+#include "../Forwards/Core.h"
+#include "../Forwards/Containers.h"
+#include "../Forwards/Reflection.h"
+#include "../STDExt/TypeTraits.h"
 
 //////////////////////////
 ///   Implementation   ///
@@ -52,32 +19,32 @@ namespace Implementation
 	///   Generic Implementation   ///
 
 	/** Default implementation of 'TypeOf' */
-	template <typename AnyType>
-	struct TypeOf
+	template <typename T>
+	struct TypeOf final
 	{
 		FORCEINLINE static const auto& Function()
 		{
-			using ReturnType = decltype(AnyType::StaticTypeInfo);
-			using TypeInfoType = std::remove_const_t<ReturnType>;
+			using ReturnT = decltype(T::StaticTypeInfo);
+			using TypeInfoT = std::remove_const_t<ReturnT>;
 
-			static_assert(std::is_const<ReturnType>::value && std::is_object<ReturnType>::value,
+			static_assert(std::is_const<ReturnT>::value && std::is_object<ReturnT>::value,
 				"The 'StaticTypeInfo' static object must be a const value type");
 
-			static_assert(std::is_base_of<TypeInfo, TypeInfoType>::value,
+			static_assert(std::is_base_of<TypeInfo, TypeInfoT>::value,
 				"The 'StaticTypeInfo' static object must be a 'TypeInfo' object");
 
-			return AnyType::StaticTypeInfo;
+			return T::StaticTypeInfo;
 		}
 
-		FORCEINLINE static const auto& Function(const AnyType& value)
+		FORCEINLINE static const auto& Function(const T& value)
 		{
-			using ReturnType = decltype(value.GetType());
-			using TypeInfoType = typename std::decay_t<ReturnType>;
+			using ReturnT = decltype(value.GetType());
+			using TypeInfoT = typename std::decay_t<ReturnT>;
 
-			static_assert(std::is_reference<ReturnType>::value && std::is_const<std::remove_reference_t<ReturnType>>::value,
+			static_assert(std::is_reference<ReturnT>::value && std::is_const<std::remove_reference_t<ReturnT>>::value,
 				"The 'GetType' member function must return an immutable reference");
 
-			static_assert(std::is_base_of<TypeInfo, TypeInfoType>::value,
+			static_assert(std::is_base_of<TypeInfo, TypeInfoT>::value,
 				"The 'GetType()' member function must return a 'TypeInfo' object");
 			
 			return value.GetType();
@@ -89,7 +56,7 @@ namespace Implementation
 
 	/** TypeOf for 'void' */
 	template <>
-	struct CORE_API TypeOf < void >
+	struct CORE_API TypeOf < void > final
 	{
 		/** Defined in 'Reflection.cpp' */
 		static const VoidInfo StaticTypeInfo;
@@ -107,7 +74,7 @@ namespace Implementation
 
 	/** TypeInfo for bool */
 	template <>
-	struct CORE_API TypeOf < bool >
+	struct CORE_API TypeOf < bool > final
 	{
 		/** Defined in 'Reflection.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
@@ -125,7 +92,7 @@ namespace Implementation
 
 	/** TypeInfo for char */
 	template <>
-	struct CORE_API TypeOf < char >
+	struct CORE_API TypeOf < char > final
 	{
 		/** Defined in 'Reflection.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
@@ -143,7 +110,7 @@ namespace Implementation
 
 	/** TypeInfo for byte */
 	template <>
-	struct CORE_API TypeOf < byte >
+	struct CORE_API TypeOf < byte > final
 	{
 		/** Defined in 'Reflection.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
@@ -161,7 +128,7 @@ namespace Implementation
 
 	/** TypeInfo for 16-bit integer */
 	template <>
-	struct CORE_API TypeOf < int16 >
+	struct CORE_API TypeOf < int16 > final
 	{
 		/** Defined in 'Reflection.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
@@ -179,7 +146,7 @@ namespace Implementation
 
 	/** TypeInfo for 32-bit integer */
 	template <>
-	struct CORE_API TypeOf < int32 >
+	struct CORE_API TypeOf < int32 > final
 	{
 		/** Defined in 'Reflection.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
@@ -197,7 +164,7 @@ namespace Implementation
 
 	/** TypeInfo for 64-bit integer */
 	template <>
-	struct CORE_API TypeOf < int64 >
+	struct CORE_API TypeOf < int64 > final
 	{
 		/** Defined in 'Reflection.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
@@ -215,7 +182,7 @@ namespace Implementation
 
 	/** TypeInfo for 16-bit unsigned integer */
 	template <>
-	struct CORE_API TypeOf < uint16 >
+	struct CORE_API TypeOf < uint16 > final
 	{
 		/** Defined in 'Reflection.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
@@ -233,7 +200,7 @@ namespace Implementation
 
 	/** TypeInfo for 32-bit unsigned integer */
 	template <>
-	struct CORE_API TypeOf < uint32 >
+	struct CORE_API TypeOf < uint32 > final
 	{
 		/** Defined in 'Reflection.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
@@ -251,7 +218,7 @@ namespace Implementation
 
 	/** TypeInfo for a 64-bit unsigned integer */
 	template <>
-	struct CORE_API TypeOf < uint64 >
+	struct CORE_API TypeOf < uint64 > final
 	{
 		/** Defined in 'Reflection.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
@@ -269,7 +236,7 @@ namespace Implementation
 
 	/** TypeInfo for a float */
 	template <>
-	struct CORE_API TypeOf < float >
+	struct CORE_API TypeOf < float > final
 	{
 		/** Defined in 'Reflection.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
@@ -287,7 +254,7 @@ namespace Implementation
 
 	/** TypeInfo for a double */
 	template <>
-	struct CORE_API TypeOf < double >
+	struct CORE_API TypeOf < double > final
 	{
 		/** Defined in 'Reflection.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
@@ -304,8 +271,8 @@ namespace Implementation
 	};
 
 	/** TypeInfo for pointers */
-	template <typename PointedType>
-	struct TypeOf < PointedType* >
+	template <typename PointedT>
+	struct TypeOf < PointedT* > final
 	{
 		/** Defined in 'PointerInfo.h' */
 		static const PointerInfo StaticTypeInfo;
@@ -315,18 +282,57 @@ namespace Implementation
 			return StaticTypeInfo;
 		}
 
-		FORCEINLINE static const PointerInfo& Function(PointedType* /*value*/)
+		FORCEINLINE static const PointerInfo& Function(PointedT* /*value*/)
 		{
 			return StaticTypeInfo;
+		}
+	};
+
+	/** TypeInfo for arrays (decayed to pointers) */
+	template <typename T, std::size_t Size>
+	struct TypeOf < T[Size] > final
+	{
+		FORCEINLINE static const PointerInfo& Function()
+		{
+			return TypeOf<T*>::Function();
+		}
+
+		FORCEINLINE static const PointerInfo& Function(T* value)
+		{
+			return TypeOf<T*>::Function(value);
+		}
+
+		// @TODO: Why is this necessary?
+		FORCEINLINE static const PointerInfo& Function(const T* value)
+		{
+			return TypeOf<const T*>::Function(value);
 		}
 	};
 
 	////////////////////////
 	///   Struct Types   ///
 
+	/** TypeOf for 'String' */
+	template <>
+	struct CORE_API TypeOf < String > final
+	{
+		/** Defined in 'Reflection.cpp' */
+		static const StructInfo StaticTypeInfo;
+
+		FORCEINLINE static const StructInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const StructInfo& Function(const String& /*value*/)
+		{
+			return StaticTypeInfo;
+		}
+	};
+
 	/** TypeOf for std::intializer_list */
 	template <typename T>
-	struct TypeOf < std::initializer_list<T> >
+	struct TypeOf < std::initializer_list<T> > final
 	{
 		/** Defined in 'StructInfo.h' */
 		static const StructInfo StaticTypeInfo;
@@ -341,45 +347,53 @@ namespace Implementation
 			return StaticTypeInfo;
 		}
 	};
+
+	template <typename T>
+	struct TypeOf < Array<T> > final
+	{
+		/** Defined in 'StructInfo.h' */
+		static const StructInfo StaticTypeInfo;
+
+		FORCEINLINE static const StructInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const StructInfo& Function(const Array<T>& /*value*/)
+		{
+			return StaticTypeInfo;
+		}
+	};
 }
+
+//TODO: Change "TypeOf" to "GetType" (consistency, and preparing for unified call syntax.
+// Consider: TypeOf<T>() for specific type, GetType(T) for instances?
 
 /////////////////////
 ///   Functions   ///
 
-/** Defined in 'TypeInfo.h' */
-template <typename TargetType, typename AnyType>
-TargetType* Cast(AnyType& value);
-
-/** Defined in 'TypeInfo.h' */
-template <typename TargetType, typename AnyType>
-const TargetType* Cast(const AnyType& value);
-
-/** r-value references cannot be safely casted */
-template <typename TargetType, typename AnyType>
-const TargetType* Cast(AnyType&& value) = delete;
-
 /** Retrieves the type information for the given type
 * DO NOT OVERLOAD: Specialize struct 'Implementation::TypeOf' */
-template <typename AnyType>
+template <typename T>
 FORCEINLINE const auto& TypeOf()
 {
-	return Implementation::TypeOf<std::decay_t<AnyType>>::Function();
+	return Implementation::TypeOf<std::decay_t<T>>::Function();
 }
 
 /** Retrieves the type information for the given value 
 * DO NOT OVERLOAD: Specialize struct 'Implementation::TypeOf' */
-template <typename AnyType>
-FORCEINLINE const auto& TypeOf(const AnyType& value)
+template <typename T>
+FORCEINLINE const auto& TypeOf(const T& value)
 {
-	return Implementation::TypeOf<AnyType>::Function(value);
+	return Implementation::TypeOf<T>::Function(value);
 }
 
 /////////////////
 ///   Types   ///
 
 /** Determines the type of 'TypeInfo' object that this type is associated with. */
-template <typename AnyType>
-using TypeInfoType = std::decay_t<decltype(TypeOf<AnyType>())>;
+template <typename T>
+using TypeInfoType = std::decay_t<decltype(TypeOf<T>())>;
 
 //////////////////
 ///   Macros   ///

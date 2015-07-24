@@ -1,7 +1,6 @@
 // PointerInfo.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "TypeIndex.h"
 #include "PrimitiveInfo.h"
 
 /////////////////
@@ -15,34 +14,38 @@ public:
 
 	REFLECTABLE_CLASS;
 	EXTENDS(PrimitiveInfo);
-	template <typename PointedType> 
+	template <typename PointedT> 
 	friend struct Implementation::TypeOf;
 
 	////////////////////////
 	///   Constructors   ///
 private:
 
-	// @TODO: Documentation
-	template <typename AnyPointerType>
+	/** Creates a new instance of 'PointerInfo'.
+	* 'PointerT' - Any type of pointer. */
+	template <typename PointerT>
 	static PointerInfo Create()
 	{
-		AnyPointerType* dummy = nullptr;
+		PointerT* dummy = nullptr;
 		return PointerInfo(dummy);
 	}
 
-	template <typename AnyPointerType, typename PointedType = std::remove_pointer_t<AnyPointerType>>
-	PointerInfo(AnyPointerType* dummy)
-		: Super(dummy, ""), _pointedType(TypeOf<PointedType>())
+	/** Constructs a new instance of 'PointerInfo'.
+	* 'dummy' - A pointer to the ... pointer. */
+	template <typename PointerT, typename PointedT = std::remove_pointer_t<PointerT>>
+	PointerInfo(PointerT* dummy)
+		: Super(dummy, ""), _pointedType(&TypeOf<PointedT>())
 	{
-		static_assert(std::is_pointer<AnyPointerType>::value, "PointerTypes must be pointers");
+		static_assert(std::is_pointer<PointerT>::value, "PointerTypes must be pointers");
 
-		_isConst = std::is_const<PointedType>::value;
+		_isConst = std::is_const<PointedT>::value;
 	}
 
 	///////////////////
 	///   Methods   ///
 public:
 
+	// @TODO: Documentation
 	String GetName() const override;
 
 	/** Returns whether this type is castable (via reinterpret_cast) to the given type */
@@ -57,14 +60,14 @@ public:
 	/** Returns the type pointed to by this pointer */
 	FORCEINLINE const TypeInfo& GetPointedType() const
 	{
-		return _pointedType;
+		return *_pointedType;
 	}
 
 	////////////////
 	///   Data   ///
 private:
 
-	TypeIndex _pointedType;
+	const TypeInfo* _pointedType;
 	bool _isConst;
 };
 
@@ -74,6 +77,6 @@ private:
 namespace Implementation
 {
 	/** Register TypeInfo for pointer */
-	template <typename PointedType>
-	const PointerInfo TypeOf<PointedType*>::StaticTypeInfo = PointerInfo::Create<PointedType*>();
+	template <typename PointedT>
+	const PointerInfo TypeOf<PointedT*>::StaticTypeInfo = PointerInfo::Create<PointedT*>();
 }

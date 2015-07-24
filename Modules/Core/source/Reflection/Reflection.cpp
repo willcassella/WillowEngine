@@ -1,10 +1,8 @@
 // Reflection.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
-#include "../../include/Core/Operations/ToString.h"
-#include "../../include/Core/Operations/FromString.h"
 #include "../../include/Core/Reflection/VoidInfo.h"
 #include "../../include/Core/Reflection/PrimitiveInfo.h"
-#include "../../include/Core/Reflection/PointerInfo.h"
+#include "../../Include/Core/Reflection/StructInfo.h"
 
 //////////////////////////
 ///   Implementation   ///
@@ -52,4 +50,7 @@ namespace Implementation
 
 	/** Register TypeInfo for double */
 	const PrimitiveInfo TypeOf<double>::StaticTypeInfo = PrimitiveInfo::Create<double>("double");
+
+	/** Register TypeInfo for 'String' */
+	const StructInfo TypeOf<String>::StaticTypeInfo = StructInfo::Create<String>("String");
 }

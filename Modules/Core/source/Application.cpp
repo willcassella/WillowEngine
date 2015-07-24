@@ -2,6 +2,7 @@
 
 #include "../include/Core/Application.h"
 #include "../include/Core/Reflection/ClassInfo.h"
+#include "../include/Core/Reflection/InterfaceInfo.h"
 
 //////////////////////
 ///   Reflection   ///
@@ -17,7 +18,20 @@ Application& Application::Instance()
 	return app;
 }
 
-const Array<TypeIndex>& Application::Types() const
+const Array<const TypeInfo*>& Application::GetAllTypes()
 {
-	return _types;
+	return Instance()._types;
+}
+
+const TypeInfo* Application::FindType(const String& name)
+{
+	for (auto type : GetAllTypes())
+	{
+		if (type->GetName() == name)
+		{
+			return &*type;
+		}
+	}
+
+	return nullptr;
 }

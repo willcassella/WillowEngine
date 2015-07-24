@@ -7,7 +7,7 @@
 #include "TypeIndex.h"
 
 /** Class holding a collection of Type information, associated with a .DLL/.SO */
-class CORE_API Module final : Object
+class CORE_API Module final : public Object
 {
 	///////////////////////
 	///   Information   ///

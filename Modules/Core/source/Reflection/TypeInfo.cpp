@@ -24,20 +24,21 @@ CLASS_REFLECTION(TypeInfo)
 ////////////////////////
 ///   Constructors   ///
 
-TypeInfo::TypeInfo(void* /*dummy*/, const String& name)
+TypeInfo::TypeInfo(void* /*dummy*/, CString name)
 	: _name(name)
 {
-	_defaultConstructor = []()->void* { return nullptr; };
-	_copyConstructor = [](const void* /*copy*/)->void* { return nullptr; };
-	_moveConstructor = [](void* /*move*/)->void* { return nullptr; };
-	_copyAssignmentOperator = [](void* /*value*/, const void* /*copy*/)->bool { return false; };
-	_moveAssigmentOperator = [](void* /*value*/, void* /*move*/)->bool { return false; };
-	_destructor = [](void* value)->bool { return false; };
+	_defaultConstructor = [](byte* /*location*/) { };
+	_copyConstructor = [](byte* /*location*/, const void* /*copy*/) { };
+	_moveConstructor = [](byte* /*location*/, void* /*move*/) { };
+	_copyAssignmentOperator = [](void* /*value*/, const void* /*copy*/) { };
+	_moveAssignmentOperator = [](void* /*value*/, void* /*move*/) { };
+	_destructor = [](void* value) { };
 
 	_toStringImplementation = [](const void* /*value*/)->String { return ""; };
 	_fromStringImplementation = [](void* /*value*/, const String& string)->String { return string; };
 
 	_size = 0;
+	_isCompound = false;
 	_isAbstract = false;
 	_isPolymorphic = false;
 	_isDefaultConstructible = false;
@@ -57,13 +58,14 @@ TypeInfo::TypeInfo(TypeInfo&& move)
 	_copyConstructor = move._copyConstructor;
 	_moveConstructor = move._moveConstructor;
 	_copyAssignmentOperator = move._copyAssignmentOperator;
-	_moveAssigmentOperator = move._moveAssigmentOperator;
+	_moveAssignmentOperator = move._moveAssignmentOperator;
 	_destructor = move._destructor;
 
 	_toStringImplementation = move._toStringImplementation;
 	_fromStringImplementation = move._fromStringImplementation;
 
 	_size = move._size;
+	_isCompound = move._isCompound;
 	_isAbstract = move._isAbstract;
 	_isPolymorphic = move._isPolymorphic;
 	_isDefaultConstructible = move._isDefaultConstructible;
@@ -78,7 +80,7 @@ TypeInfo::TypeInfo(TypeInfo&& move)
 
 TypeInfo::~TypeInfo()
 {
-	Application::Instance()._types.DeleteAll(self);
+	Application::Instance()._types.DeleteFirst(this);
 }
 
 ///////////////////
@@ -89,12 +91,7 @@ String TypeInfo::GetName() const
 	return _name;
 }
 
-Variant TypeInfo::Construct() const
-{
-	return Variant(_defaultConstructor(), self);
-}
-
 void TypeInfo::RegisterWithApplication()
 {
-	Application::Instance()._types.Add(self);
+	Application::Instance()._types.Add(this);
 }

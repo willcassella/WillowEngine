@@ -13,7 +13,13 @@ STRUCT_REFLECTION(TypeIndex);
 ///   Constructors   ///
 
 TypeIndex::TypeIndex()
-	: _type(&TypeOf<void>())
+	: TypeIndex(TypeOf<void>())
+{
+	// All done
+}
+
+TypeIndex::TypeIndex(const TypeInfo& type)
+	: _type(&type)
 {
 	// All done
 }
@@ -28,6 +34,27 @@ String TypeIndex::ToString() const
 
 /////////////////////
 ///   Operators   ///
+
+TypeIndex& TypeIndex::operator=(const TypeInfo& type)
+{
+	_type = &type;
+	return self;
+}
+
+TypeIndex::operator const TypeInfo&() const
+{
+	return *_type;
+}
+
+const TypeInfo& TypeIndex::operator*() const
+{
+	return *_type;
+}
+
+const TypeInfo* TypeIndex::operator->() const
+{
+	return _type;
+}
 
 bool TypeIndex::operator==(const TypeIndex& rhs) const
 {

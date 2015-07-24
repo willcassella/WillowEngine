@@ -5,21 +5,15 @@
 #include "Pair.h"
 
 /** An associative array, replacement for 'std::map' */
-template <typename KeyType, typename ValueType>
+template <typename KeyT, typename ValueT>
 struct Table final
 {
-	///////////////////////
-	///   Information   ///
-public:
-
-	REFLECTABLE_STRUCT;
-
 	///////////////////////
 	///   Inner Types   ///
 private:
 
-	using PairType = Pair<KeyType, ValueType>;
-	using StorageType = Array<PairType>;
+	using PairT = Pair<KeyT, ValueT>;
+	using StorageType = Array<PairT>;
 
 public:
 
@@ -33,12 +27,8 @@ public:
 	///   Constructors   ///
 public:
 
-	Table()
-		: _values()
-	{
-		// All done
-	}
-	Table(const std::initializer_list<PairType>& init)
+	Table() = default;
+	Table(const std::initializer_list<PairT>& init)
 		: _values(static_cast<uint32>(init.size()))
 	{
 		for (const auto& value : init)
@@ -58,7 +48,7 @@ public:
 	}
 
 	/** Searches for the value associated with the given key in this table */
-	ValueType* Find(const KeyType& key)
+	ValueT* Find(const KeyT& key)
 	{
 		for (auto& pair : _values)
 		{
@@ -72,7 +62,7 @@ public:
 	}
 
 	/** Searches for the value associated with the given key in this table */
-	const ValueType* Find(const KeyType& key) const
+	const ValueT* Find(const KeyT& key) const
 	{
 		for (const auto& pair : _values)
 		{
@@ -86,13 +76,13 @@ public:
 	}
 
 	/** Returns whether the given key-value pair exists in this Table */
-	FORCEINLINE bool Contains(const Pair<KeyType, ValueType>& pair)
+	FORCEINLINE bool Contains(const Pair<KeyT, ValueT>& pair)
 	{
 		return _values.Contains(pair);
 	}
 
 	/** Returns whether a value associated with the given key exists in this Table */
-	bool HasKey(const KeyType& key) const
+	bool HasKey(const KeyT& key) const
 	{
 		for (const auto& i : _values)
 		{
@@ -106,7 +96,7 @@ public:
 	}
 
 	/** Returns whether a key associated with the given value exists in this table */
-	bool HasValue(const ValueType& value) const
+	bool HasValue(const ValueT& value) const
 	{
 		for (const auto& pair : _values)
 		{
@@ -120,19 +110,19 @@ public:
 	}
 
 	/** Inserts a new key-value pair, replacing the existing entry if there is a conflict */
-	template <typename RelatedKeyType, typename RelatedValueType>
-	void Insert(RelatedKeyType&& key, RelatedValueType&& value)
+	template <typename RelatedKeyT, typename RelatedValueT>
+	void Insert(RelatedKeyT&& key, RelatedValueT&& value)
 	{
 		for (auto& entry : _values)
 		{
 			if (entry.First == key)
 			{
-				entry.Second = std::forward<RelatedValueType>(value);
+				entry.Second = std::forward<RelatedValueT>(value);
 				return;
 			}
 		}
 
-		_values.Add(PairType(std::forward<RelatedKeyType>(key), std::forward<RelatedValueType>(value)));
+		_values.Add(PairType(std::forward<RelatedKeyT>(key), std::forward<RelatedValueT>(value)));
 	}
 
 	/** Deletes all key-value pairs from the table */
@@ -163,7 +153,7 @@ public:
 	///   Operators   ///
 public:
 
-	Table& operator=(const std::initializer_list<PairType>& init)
+	Table& operator=(const std::initializer_list<PairT>& init)
 	{
 		_values.Reset(init.size());
 
@@ -181,8 +171,8 @@ public:
 		return lhs._values != rhs._values;
 	}
 	
-	template <typename RelatedKeyType>
-	ValueType& operator[](RelatedKeyType&& key)
+	template <typename RelatedKeyT>
+	ValueT& operator[](RelatedKeyT&& key)
 	{
 		// Search for the key
 		for (auto& i : _values)
@@ -193,12 +183,7 @@ public:
 			}
 		}
 
-		// The key must not have been found, create new pair
-		// I have to use "ValueType()" because MSVC is so fucking stupid, it thinks that 
-		// "PairType(std::forward<RelatedKeyType>(key))" is supposed to be a function-style cast and throws an error.
-		// Joke's on them, because a function-style cast and the constructor ARE THE SAME FUCKING THING
-		_values.Add(PairType(std::forward<RelatedKeyType>(key), ValueType())); 
-		
+		_values.Add(PairT{ std::forward<RelatedKeyT>(key) });
 		return _values.Last().Second;
 	}
 

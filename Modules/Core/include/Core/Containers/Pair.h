@@ -1,18 +1,12 @@
 // Pair.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "../Reflection/Reflection.h"
+#include "../config.h"
 
 /** A pair of values */
-template <typename FirstType, typename SecondType>
+template <typename A, typename B>
 struct Pair final
 {
-	///////////////////////
-	///   Information   ///
-public:
-
-	REFLECTABLE_STRUCT;
-
 	////////////////////////
 	///   Constructors   ///
 public:
@@ -23,18 +17,16 @@ public:
 		// All done
 	}
 
-	template <typename RelatedFirstType, WHERE(std::is_constructible<FirstType, RelatedFirstType>::value)>
-	Pair(FirstType&& first)
-		: First(std::forward<RelatedFirstType>(first)), Second()
+	template <typename RelA, WHERE(std::is_constructible<A, RelA>::value)>
+	Pair(RelA&& first)
+		: First(std::forward<RelA>(first)), Second()
 	{
 		// All done
 	}
 
-	template <typename RelatedFirstType, typename RelatedSecondType,
-		WHERE(std::is_constructible<FirstType, RelatedFirstType>::value
-		&& std::is_constructible<SecondType, RelatedSecondType>::value)>
-	Pair(RelatedFirstType&& first, RelatedSecondType&& second)
-		: First(std::forward<RelatedFirstType>(first)), Second(std::forward<RelatedSecondType>(second))
+	template <typename RelA, typename RelB, WHERE(std::is_constructible<A, RelA>::value && std::is_constructible<B, RelB>::value)>
+	Pair(RelA&& first, RelB&& second)
+		: First(std::forward<RelA>(first)), Second(std::forward<RelB>(second))
 	{
 		// All done
 	}
@@ -43,8 +35,8 @@ public:
 	///   Fields   ///
 public:
 
-	FirstType First;
-	SecondType Second;
+	A First;
+	B Second;
 
 	/////////////////////
 	///   Operators   ///

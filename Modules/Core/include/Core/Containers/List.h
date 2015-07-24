@@ -15,12 +15,6 @@ template <typename T>
 struct List final
 {
 	///////////////////////
-	///   Information   ///
-public:
-
-	REFLECTABLE_STRUCT;
-
-	///////////////////////
 	///   Inner Types   ///
 private:
 
@@ -30,9 +24,9 @@ private:
 		///   Constructors   ///
 	public:
 
-		template <typename RelatedType>
-		Node(RelatedType&& value)
-			: Value(std::forward<RelatedType>(value)), Next(nullptr)
+		template <typename RelatedT>
+		Node(RelatedT&& value)
+			: Value(std::forward<RelatedT>(value)), Next(nullptr)
 		{
 			// All done
 		}

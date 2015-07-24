@@ -17,69 +17,81 @@ public:
 public:
 
 	/** Creates an event handler with one argument, to a mutable object */
-	template <class OwnerType, typename ReturnType, typename ArgType>
-	EventHandler(OwnerType* object, ReturnType (OwnerType::*handler)(ArgType))
-		: _argType(TypeOf<ArgType>())
+	template <class OwnerT, typename ReturnT, typename ArgT>
+	EventHandler(OwnerT& object, ReturnT (OwnerT::*handler)(ArgT))
+		: _argType(TypeOf<ArgT>())
 	{
-		using DecayedArgType = std::decay_t<ArgType>;
-		static_assert(!std::is_same<DecayedArgType&, ArgType>::value, "You cannot create an event handler which accepts a non-const reference");
+		static_assert(std::is_base_of<Object, OwnerT>::value || std::is_base_of<Interface, OwnerT>::value,
+			"Only 'Object' or 'Interface' types may have event handlers.");
+		static_assert(!stdEXT::is_non_const_reference<ArgT>::value,
+			"You cannot create an event handler which accepts a non-const reference");
 
-		_handler = [object, handler](const Event& event)-> void
+		_handler = [&object, handler](const Event& event)-> void
 		{
-			auto pEvent = static_cast<const TEvent<DecayedArgType>*>(&event);
-			(object->*handler)(pEvent->GetValue());
+			auto pValue = static_cast<const ArgT*>(event.GetValue().GetValue());
+			(object.*handler)(*pValue);
 		};
 	}
 
 	/** Creates a const event handler with one argument, to an immutable object */
-	template <class OwnerType, typename ReturnType, typename ArgType>
-	EventHandler(const OwnerType* object, ReturnType(OwnerType::*handler)(ArgType) const)
-		: _argType(TypeOf<ArgType>())
+	template <class OwnerT, typename ReturnT, typename ArgT>
+	EventHandler(const OwnerT& object, ReturnT(OwnerT::*handler)(ArgT) const)
+		: _argType(TypeOf<ArgT>())
 	{
-		using DecayedArgType = typename std::decay_t<ArgType>;
-		static_assert(!std::is_same<DecayedArgType&, ArgType>::value, "You cannot create an event handler which accepts a non-const reference");
+		static_assert(std::is_base_of<Object, OwnerT>::value || std::is_base_of<Interface, OwnerT>::value,
+			"Only 'Object' or 'Interface' types may have event handlers.");
+		static_assert(!stdEXT::is_non_const_reference<ArgT>::value,
+			"You cannot create an event handler which accepts a non-const reference");
 
-		_handler = [object, handler](const Event& event)-> void
+		_handler = [&object, handler](const Event& event)-> void
 		{
-			auto pEvent = static_cast<const TEvent<DecayedArgType>*>(&event);
-			(object->*handler)(pEvent->GetValue());
+			auto pValue = static_cast<const ArgT*>(event.GetValue().GetValue());
+			(object.*handler)(*pValue);
 		};
 	}
 
 	/** Creates an event handler with no arguments, to a mutable object */
-	template <class OwnerType, typename ReturnType>
-	EventHandler(OwnerType* object, ReturnType(OwnerType::*handler)())
+	template <class OwnerT, typename ReturnT>
+	EventHandler(OwnerT& object, ReturnT(OwnerT::*handler)())
 		: _argType(TypeOf<void>())
 	{
-		_handler = [object, handler](const Event& /*event*/)
-			-> void
+		static_assert(std::is_base_of<Object, OwnerT>::value || std::is_base_of<Interface, OwnerT>::value,
+			"Only 'Object' or 'Interface' types may have event handlers.");
+
+		_handler = [&object, handler](const Event& /*event*/)-> void
 		{
-			(object->*handler)();
+			(object.*handler)();
 		};
 	}
 
 	/** Creates a const event handler with no arguments, to an immutable object */
-	template <class OwnerType, typename ReturnType>
-	EventHandler(const OwnerType* object, ReturnType(OwnerType::*handler)() const)
+	template <class OwnerT, typename ReturnT>
+	EventHandler(const OwnerT& object, ReturnT(OwnerT::*handler)() const)
 		: _argType(TypeOf<void>())
 	{
-		_handler = [object, handler](const Event& /*event*/)-> void
+		static_assert(std::is_base_of<Object, OwnerT>::value || std::is_base_of<Interface, OwnerT>::value,
+			"Only 'Object' or 'Interface' types may have event handlers.");
+
+		_handler = [&object, handler](const Event& /*event*/)-> void
 		{
-			(object->*handler)();
+			(object.*handler)();
 		};
 	}
 
 	/** Creates an event handler to a field */
-	template <class OwnerType, typename FieldType>
-	EventHandler(OwnerType* object, FieldType OwnerType::*field)
-		: _argType(TypeOf<FieldType>())
+	template <class OwnerT, typename FieldT, WHERE(!std::is_function<FieldT>::value)>
+	EventHandler(OwnerT& object, FieldT OwnerT::*field)
+		: _argType(TypeOf<FieldT>())
 	{
-		static_assert(std::is_copy_assignable<FieldType>::value, "You cannot create a field handler to a non copy-assignable field");
+		static_assert(std::is_base_of<Object, OwnerT>::value || std::is_base_of<Interface, OwnerT>::value,
+			"Only 'Object' or 'Interface' types may have event handlers.");
+		static_assert(std::is_copy_assignable<FieldType>::value, 
+			"You cannot create a field handler to a non copy-assignable field");
 
-		_handler = [object, field](const Event& event)-> void
+		_handler = [&object, field](const Event& event)-> void
 		{
-			auto pEvent = static_cast<const TEvent<FieldType>*>(&event);
-			(object->*field) = pEvent->GetValue();
+			auto pValue = static_cast<const FieldType*>(event.GetValue().GetValue());
+			(object.*field) = *pValue;
 		};
 	}
 
@@ -99,13 +111,17 @@ public:
 		return *_ownerType;
 	}
 
-	/** Attempts to handle the given event. */
-	void Handle(const Event& event) const
+	/** Attempts to handle the given event.
+	* If the given event is not compatible with this handler, does nothing. */
+	void TryHandle(const Event& event) const;
+
+private:
+
+	/** Handles the given event without verifying whether it is compatible first.
+	* WARNING: Make sure you KNOW this handler is compatible with the given event before calling this. */
+	FORCEINLINE void Handle(const Event& event) const
 	{
-		if (event.GetArgType().IsCastableTo(_argType))
-		{
-			_handler(event);
-		}
+		_handler(event);
 	}
 
 	////////////////

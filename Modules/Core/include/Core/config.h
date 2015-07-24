@@ -15,16 +15,9 @@
 #if defined THIS_MODULE
 #	undef THIS_MODULE
 #endif
-#define THIS_MODULE CORE_API
 
-//////////////////////////////
-///   Module Information   ///
+#if defined THIS_MODULE_API
+#	undef THIS_MODULE_API
+#endif
 
-/** Defined in 'Reflection/Module.h' */
-class Module;
-
-namespace Core
-{
-	/** Gets module information for the 'Core' module */
-	CORE_API const Module* GetModuleInfo();
-}
+#define THIS_MODULE_API CORE_API

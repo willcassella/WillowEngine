@@ -19,22 +19,22 @@ public:
 	///   Constructors   ///
 public:
 
-	template <typename AnyEnumType>
+	template <typename EnumT>
 	static EnumInfo Create(const String& name)
 	{
-		AnyEnumType* dummy = nullptr;
+		EnumT* dummy = nullptr;
 		return EnumInfo(dummy, name);
 	}
 
 private:
 
-	template <typename AnyEnumType>
-	EnumInfo(AnyEnumType* dummy, const String& name)
+	template <typename EnumT>
+	EnumInfo(EnumT* dummy, const String& name)
 		: Super(dummy, name)
 	{
-		static_assert(std::is_enum<AnyEnumType>::value, "The type given to 'EnumInfo::Create()' must be an enum type.");
+		static_assert(std::is_enum<EnumT>::value, "The type given to 'EnumInfo::Create()' must be an enum type.");
 
-		_underlyingType = &TypeOf<std::underlying_type_t<AnyEnumType>>();
+		_underlyingType = &TypeOf<std::underlying_type_t<EnumT>>();
 	}
 
 	///////////////////
@@ -46,8 +46,6 @@ public:
 	{
 		return *_underlyingType;
 	}
-
-
 
 	////////////////
 	///   Data   ///

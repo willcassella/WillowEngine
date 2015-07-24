@@ -3,13 +3,6 @@
 #include <cstring>
 #include <string>
 #include "../include/Core/String.h"
-#include "../include/Core/Reflection/StructInfo.h"
-#include "../include/Core/Operations/FromString.h"
-
-//////////////////////
-///   Reflection   ///
-
-STRUCT_REFLECTION(String);
 
 ///////////////////
 ///   Methods   ///
@@ -26,11 +19,11 @@ String String::SubString(uint32 start, uint32 end) const
 
 String String::ToUpper() const
 {
-	Array<char> result(Length());
+	Array<Char> result(Length());
 
 	for (uint32 i = 0; i < Length(); ++i)
 	{
-		char character = self[i];
+		Char character = self[i];
 
 		switch (character)
 		{
@@ -123,11 +116,11 @@ String String::ToUpper() const
 
 String String::ToLower() const
 {
-	Array<char> result(Length());
+	Array<Char> result(Length());
 
 	for (uint32 i = 0; i < Length(); ++i)
 	{
-		char character = self[i];
+		Char character = self[i];
 
 		switch (character)
 		{
@@ -285,7 +278,7 @@ Array<uint32> String::OccurencesOf(const String& string) const
 
 String String::Reverse() const
 {
-	Array<char> result;
+	Array<Char> result;
 
 	for (int32 i = Length(); i > 0; --i)
 	{
@@ -347,7 +340,7 @@ String String::GetFileName(const String& path)
 	return name;
 }
 
-uint32 String::Length(const char* string)
+uint32 String::Length(CString string)
 {
 	return static_cast<uint32>(strlen(string));
 }
@@ -365,13 +358,13 @@ int32 String::Compare(const String& stringA, const String& stringB, bool caseSen
 /////////////////////
 ///   Operators   ///
 
-String& String::operator=(const char* rhs)
+String& String::operator=(CString rhs)
 {
-	_value = Array<char>(rhs, String::Length(rhs) + 1);
+	_value = Array<Char>(rhs, String::Length(rhs) + 1);
 	return self;
 }
 
-String& String::operator=(char rhs)
+String& String::operator=(Char rhs)
 {
 	_value.Reset(2);
 	_value.Add(rhs);
@@ -391,6 +384,6 @@ bool operator<(const String& lhs, const String& rhs)
 
 String operator+(const String& lhs, const String& rhs)
 {
-	Array<char> result = lhs._value.Slice(0, lhs.Length()) + rhs._value.Slice(0, rhs.Length());
+	Array<Char> result = lhs._value.Slice(0, lhs.Length()) + rhs._value.Slice(0, rhs.Length());
 	return String(result);
 }

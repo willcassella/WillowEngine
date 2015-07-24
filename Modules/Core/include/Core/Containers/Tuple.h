@@ -1,17 +1,11 @@
 // Tuple.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "../Reflection/Reflection.h"
+#include "../config.h"
 
 template <typename ... AnyTypes>
 struct Tuple final
 {
-	///////////////////////
-	///   Information   ///
-public:
-
-	REFLECTABLE_STRUCT;
-
 	///////////////////////
 	///   Inner Types   ///
 private:

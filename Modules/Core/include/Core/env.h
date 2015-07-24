@@ -29,7 +29,7 @@
 ///   Primitives   ///
 
 // bool is still bool
-// char is still char (ONLY used for characters)
+// char is still char (ONLY used for characters, prefer 'Char')
 using byte = std::uint8_t;
 using int16 = std::int16_t;
 using int32 = std::int32_t;
@@ -40,12 +40,11 @@ using uint64 = std::uint64_t;
 // float is still float
 // double is still double
 
-/** Determine numeric size of pointers @TODO: Evaluate if this is really necessary */
-#if BITS_32
-	using PointerT = uint32;
-#elif BITS_64
-	using PointerT = uint64;
-#endif
+/** The type of character used for strings. */
+using Char = char;
+
+/** A c-style string of characters. */
+using CString = const Char*;
 
 //////////////////
 ///   Macros   ///

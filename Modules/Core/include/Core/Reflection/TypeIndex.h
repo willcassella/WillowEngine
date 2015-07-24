@@ -1,13 +1,9 @@
 // TypeIndex.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
+#include "../config.h"
+#include "../Forwards/Core.h"
 #include "Reflection.h"
-
-////////////////////////////////
-///   Forward-declarations   ///
-
-/** Defined in 'String.h' */
-struct String;
 
 /////////////////
 ///   Types   ///
@@ -28,11 +24,7 @@ public:
 	TypeIndex();
 
 	/** Constructs a TypeIndex to the given type */
-	TypeIndex(const TypeInfo& type)
-		: _type(&type)
-	{
-		// All done
-	}
+	TypeIndex(const TypeInfo& type);
 
 	///////////////////
 	///   Methods   ///
@@ -45,23 +37,10 @@ public:
 	///   Operators   ///
 public:
 
-	FORCEINLINE TypeIndex& operator=(const TypeInfo& type)
-	{
-		_type = &type;
-		return self;
-	}
-	FORCEINLINE operator const TypeInfo&() const
-	{
-		return *_type;
-	}
-	FORCEINLINE const TypeInfo& operator*() const
-	{
-		return *_type;
-	}
-	FORCEINLINE const TypeInfo* operator->() const
-	{
-		return _type;
-	}
+	TypeIndex& operator=(const TypeInfo& type);
+	operator const TypeInfo&() const;
+	const TypeInfo& operator*() const;
+	const TypeInfo* operator->() const;
 	bool operator==(const TypeIndex& rhs) const;
 	bool operator==(const TypeInfo& rhs) const;
 	bool operator!=(const TypeIndex& rhs) const;

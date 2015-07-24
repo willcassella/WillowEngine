@@ -8,6 +8,15 @@
 
 CLASS_REFLECTION(ClassInfo);
 
+////////////////////////
+///   Constructors   ///
+
+ClassInfo::ClassInfo(Object* dummy, CString name)
+	: Super(dummy, name), _base(nullptr)
+{
+	// All done
+}
+
 ///////////////////
 ///   Methods   ///
 

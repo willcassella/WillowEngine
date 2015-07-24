@@ -2,7 +2,6 @@
 #pragma once
 
 #include "TypeIndex.h"
-#include "TypeInfo.h"
 
 /////////////////
 ///   Types   ///

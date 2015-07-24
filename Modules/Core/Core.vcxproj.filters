@@ -37,6 +37,24 @@
     <Filter Include="source\Event">
       <UniqueIdentifier>{4dff4439-0f05-445b-975d-cef7a5ae6e73}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\Memory">
+      <UniqueIdentifier>{1aebb451-f788-4d3a-9270-95bae9daab9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Forwards">
+      <UniqueIdentifier>{0b780da5-afb7-46cb-8d61-2ee263c9a423}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\STDExt">
+      <UniqueIdentifier>{e16c4a17-428e-47dc-9d14-94d5cce65c36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Memory">
+      <UniqueIdentifier>{f385ed7c-d2b3-4e5f-9e63-205e0a0b6745}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Containers">
+      <UniqueIdentifier>{921bc82c-4041-4277-b69c-de5fb4bb7b9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Resource">
+      <UniqueIdentifier>{61ad9fb2-5ebc-48b9-a516-a15b18e45453}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Core\Containers\Array.h">
@@ -67,9 +85,6 @@
       <Filter>include\Reflection</Filter>
     </ClInclude>
     <ClInclude Include="include\Core\Reflection\PrimitiveInfo.h">
-      <Filter>include\Reflection</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Core\Reflection\Reflection.h">
       <Filter>include\Reflection</Filter>
     </ClInclude>
     <ClInclude Include="include\Core\Reflection\StructInfo.h">
@@ -105,9 +120,6 @@
     <ClInclude Include="include\Core\Containers\Tuple.h">
       <Filter>include\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Resource\ResourceHandle.h">
-      <Filter>include\Resource</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\env.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -138,9 +150,6 @@
     <ClInclude Include="include\Core\Reflection\TypeIndex.h">
       <Filter>include\Reflection</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Operations\Operations.h">
-      <Filter>include\Operations</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Reflection\EnumInfo.h">
       <Filter>include\Reflection</Filter>
     </ClInclude>
@@ -150,8 +159,53 @@
     <ClInclude Include="include\Core\Reflection\CompoundInfo.h">
       <Filter>include\Reflection</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\TypeTraits.h">
-      <Filter>include</Filter>
+    <ClInclude Include="include\Core\Memory\OwnerPtr.h">
+      <Filter>include\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Memory\Ptr.h">
+      <Filter>include\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Resource\ResourcePtr.h">
+      <Filter>include\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Forwards\Operations.h">
+      <Filter>include\Forwards</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\STDExt\TypeTraits.h">
+      <Filter>include\STDExt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Forwards\Memory.h">
+      <Filter>include\Forwards</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Reflection\Reflection.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Forwards\Reflection.h">
+      <Filter>include\Forwards</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Forwards\Core.h">
+      <Filter>include\Forwards</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Memory\SharedPtr.h">
+      <Filter>include\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Memory\New.h">
+      <Filter>include\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Containers\DynamicBuffer.h">
+      <Filter>include\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Containers\StaticBuffer.h">
+      <Filter>include\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Resource\Resource.h">
+      <Filter>include\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Operations\TypeOps.h">
+      <Filter>include\Operations</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Forwards\Containers.h">
+      <Filter>include\Forwards</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -176,9 +230,6 @@
     <ClCompile Include="source\Reflection\PointerInfo.cpp">
       <Filter>source\Reflection</Filter>
     </ClCompile>
-    <ClCompile Include="source\Interface.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="source\Reflection\StructInfo.cpp">
       <Filter>source\Reflection</Filter>
     </ClCompile>
@@ -187,9 +238,6 @@
     </ClCompile>
     <ClCompile Include="source\Reflection\Module.cpp">
       <Filter>source\Reflection</Filter>
-    </ClCompile>
-    <ClCompile Include="source\config.cpp">
-      <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="source\Application.cpp">
       <Filter>source</Filter>
@@ -229,6 +277,15 @@
     </ClCompile>
     <ClCompile Include="source\Event\EventManager.cpp">
       <Filter>source\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Memory\OwnerPtr.cpp">
+      <Filter>source\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Containers\DynamicBuffer.cpp">
+      <Filter>source\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Resource\Resource.cpp">
+      <Filter>source\Resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,19 +1,13 @@
 // String.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
+#include "Forwards/Operations.h"
 #include "Containers/Array.h"
-#include "Operations/Operations.h"
 
 /** A String. Basically just an array of characters, and the
 * operations associated with that. */
 struct CORE_API String final
 {
-	///////////////////////
-	///   Information   ///
-public:
-
-	REFLECTABLE_STRUCT;
-
 	////////////////////////
 	///   Constructors   ///
 public:
@@ -26,14 +20,14 @@ public:
 	}
 
 	/** Create a String from a c-string */
-	String(const char* value)
+	String(CString value)
 		: _value(value, String::Length(value) + 1)
 	{
 		// All done
 	}
 
 	/** Create a String from a single character */
-	String(char value)
+	String(Char value)
 		: _value(2)
 	{
 		_value.Add(value);
@@ -43,7 +37,7 @@ public:
 private:
 
 	/** Create a String from an array of characters */
-	String(const Array<char>& arr)
+	String(const Array<Char>& arr)
 		: _value(arr)
 	{
 		_value.Add('\0');
@@ -66,7 +60,7 @@ public:
 	}
 
 	/** Converts this String to a c style string */
-	FORCEINLINE const char* Cstr() const
+	FORCEINLINE CString Cstr() const
 	{
 		return &_value.First();
 	}
@@ -112,7 +106,7 @@ public:
 	static String GetFileName(const String& path);
 
 	/** Returns the length of a c-style string (not including null character) */
-	static uint32 Length(const char* string);
+	static uint32 Length(CString string);
 
 	/** Compares two Strings
 	* 'caseSensitive' : Whether to consider character case when comparing the given Strings
@@ -122,81 +116,13 @@ public:
 	* >0 - 'stringA' is alphabetically higher than 'stringB' */
 	static int32 Compare(const String&, const String& stringB, bool caseSensitive = true);
 
-	/** Formats the given String with the given value, returning the result
-	* - The first instance of the '@' character in 'format' is replaced with a String representation of 'value' */
-	template <typename AnyType>
-	static String Format(const String& format, const AnyType& value)
-	{
-		for (uint32 i = 0; i < format.Length(); ++i)
-		{
-			if (format[i] == '@')
-			{
-				return format.SubString(0, i) + ToString(value) + format.SubString(i + 1);
-			}
-		}
-
-		// You passed in an empty format String, dumbass
-		return "";
-	}
-
-	/** Formats the given String with the given values, returning the result
-	* - Each instance of the '@' character in 'format' is replaced with a String representation of the respective value  */
-	template <typename AnyType, typename ... MoreAnyTypes>
-	static String Format(const String& format, const AnyType& value, const MoreAnyTypes& ... moreValues)
-	{
-		for (uint32 i = 0; i < format.Length(); ++i)
-		{
-			if (format[i] == '@')
-			{
-				return format.SubString(0, i) + ToString(value) + Format(format.SubString(i + 1), moreValues...);
-			}
-		}
-
-		// You passed in an empty format String, dumbass
-		return "";
-	}
-
-	/** Parses the given value from the given String, following the given format. The remainder of the String is returned.
-	* - The location of the '@' character in the format String denotes the location of the value in the given String */
-	template <typename AnyType>
-	static String Parse(const String& string, const String& format, AnyType& value)
-	{
-		for (uint32 i = 0; i < format.Length(); ++i)
-		{
-			if (format[i] == '@')
-			{
-				return FromString(value, string.SubString(i));
-			}
-		}
-
-		// You passed in an empty format String, dumbass
-		return "";
-	}
-
-	/** Parses the given values from the given String, following the given format. The remainder of the String is returned.
-	* - Each location of the '@' character in the format String denotes the location of the respective value in the given String */
-	template <typename AnyType, typename ... MoreAnyTypes>
-	static String Parse(const String& string, const String& format, AnyType& value, MoreAnyTypes& ... moreValues)
-	{
-		for (uint32 i = 0; i < format.Length(); ++i)
-		{
-			if (format[i] == '@')
-			{
-				return Parse(FromString(value, string.SubString(i)), format.SubString(i + 1), moreValues...);
-			}
-		}
-
-		// You passed in an empty format String, dumbass
-		return "";
-	}
-
 	/////////////////////
 	///   Operators   ///
 public:
 
-	String& operator=(const char* rhs);
-	String& operator=(char rhs);
-	FORCEINLINE char operator[](uint32 index) const
+	String& operator=(CString rhs);
+	String& operator=(Char rhs);
+	FORCEINLINE Char operator[](uint32 index) const
 	{
 		if (index < Length())
 		{
@@ -236,5 +162,73 @@ public:
 	///   Data   ///
 private:
 
-	Array<char> _value;
+	Array<Char> _value;
 };
+
+/** Formats the given String with the given value, returning the result
+* - The first instance of the '@' character in 'format' is replaced with a String representation of 'value' */
+template <typename T>
+String Format(const String& format, const T& value)
+{
+	for (uint32 i = 0; i < format.Length(); ++i)
+	{
+		if (format[i] == '@')
+		{
+			return format.SubString(0, i) + ToString(value) + format.SubString(i + 1);
+		}
+	}
+
+	// You passed in an empty format String, dumbass
+	return "";
+}
+
+/** Formats the given String with the given values, returning the result
+* - Each instance of the '@' character in 'format' is replaced with a String representation of the respective value. */
+template <typename T, typename ... MoreT>
+static String Format(const String& format, const T& value, const MoreT& ... moreValues)
+{
+	for (uint32 i = 0; i < format.Length(); ++i)
+	{
+		if (format[i] == '@')
+		{
+			return format.SubString(0, i) + ToString(value) + Format(format.SubString(i + 1), moreValues...);
+		}
+	}
+
+	// You passed in an empty format String, dumbass
+	return "";
+}
+
+/** Parses the given value from the given String, following the given format. The remainder of the String is returned.
+* - The location of the '@' character in the format String denotes the location of the value in the given String */
+template <typename T>
+static String Parse(const String& string, const String& format, T& value)
+{
+	for (uint32 i = 0; i < format.Length(); ++i)
+	{
+		if (format[i] == '@')
+		{
+			return FromString(value, string.SubString(i));
+		}
+	}
+
+	// You passed in an empty format String, dumbass
+	return "";
+}
+
+/** Parses the given values from the given String, following the given format. The remainder of the String is returned.
+* - Each location of the '@' character in the format String denotes the location of the respective value in the given String */
+template <typename T, typename ... MoreT>
+static String Parse(const String& string, const String& format, T& value, MoreT& ... moreValues)
+{
+	for (uint32 i = 0; i < format.Length(); ++i)
+	{
+		if (format[i] == '@')
+		{
+			return Parse(FromString(value, string.SubString(i)), format.SubString(i + 1), moreValues...);
+		}
+	}
+
+	// You passed in an empty format String, dumbass
+	return "";
+}

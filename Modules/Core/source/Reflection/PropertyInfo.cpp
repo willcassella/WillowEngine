@@ -31,7 +31,7 @@ PropertyInfo::PropertyInfo(const String& name, const String& description)
 
 void PropertyInfo::SetValue(const Variant& owner, const ImmutableVariant& value) const
 {
-	if (owner.GetType().IsCastableTo(*_ownerType) && value.GetType().IsCastableTo(_propertyType))
+	if (owner.GetType().IsCastableTo(*_ownerType) && value.GetType().IsCastableTo(*_propertyType))
 	{
 		_setter(owner.GetValue(), value.GetValue());
 	}
