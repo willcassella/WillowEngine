@@ -2,7 +2,7 @@
 
 #include "../../include/Core/Reflection/VoidInfo.h"
 #include "../../include/Core/Reflection/PrimitiveInfo.h"
-#include "../../Include/Core/Reflection/StructInfo.h"
+#include "../../include/Core/Reflection/StructInfo.h"
 
 //////////////////////////
 ///   Implementation   ///
