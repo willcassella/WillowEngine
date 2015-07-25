@@ -1,9 +1,9 @@
-// WillowConvert.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
+// ResourceConverter.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <Resource/Mesh.h>
+#include <Common/Mesh.h>
 
-namespace WillowConvert
+namespace ResourceConverter
 {
 	/** Enum of supported input types */
 	enum class InputType
@@ -15,7 +15,7 @@ namespace WillowConvert
 	///   Functions   ///
 
 	/** Converts a third-party file type (deduced by extension) into a Willow Engine file type */
-	bool Convert(const String& path, const List<String>& options);
+	bool Convert(const String& path, const Array<String>& options);
 
 	///////////////////////////
 	///   Parse Functions   ///
@@ -24,7 +24,7 @@ namespace WillowConvert
 	InputType ParsePath(const String& path);
 
 	/** Parses a .obj file and fills an array of vertices and elements. 
-	* 'compress' - whether to reduce the size of the produced .wmesh file by reusing vertices where possible. May take a long time to parse. */
+	* 'compress' - Whether to reduce the size of the produced .wmesh file by reusing vertices where possible. May take a long time to parse. */
 	bool ParseOBJFile(const String& path, Array<Mesh::Vertex>& outVertices, Array<uint32>& outElements, bool compress = false);
 
 	///////////////////////////

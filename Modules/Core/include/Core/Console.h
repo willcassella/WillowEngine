@@ -65,9 +65,9 @@ namespace Console
 
 	/** Writes a formatted String to the console. */
 	template <typename ... T>
-	FORCEINLINE void Write(CString format, const T& ... values)
+	FORCEINLINE void Write(const String& format, const T& ... values)
 	{
-		Write(Format(format, values...));
+		Write(ToString(format, values...));
 	}
 
 	/** Writes a value to the console, and returns the caret to the start of the next line. */
@@ -79,29 +79,29 @@ namespace Console
 
 	/** Writes a formatted String to the console, and returns the caret to the start of the next line. */
 	template <typename ... T>
-	FORCEINLINE void WriteLine(CString format, const T& ... values)
+	FORCEINLINE void WriteLine(const String& format, const T& ... values)
 	{
-		WriteLine(Format(format, values...));
+		WriteLine(ToString(format, values...));
 	}
 
 	/** Writes a formatted warning message to the console. */
 	template <typename ... T>
-	FORCEINLINE void Warning(CString format, const T& ... values)
+	FORCEINLINE void Warning(const String& format, const T& ... values)
 	{
-		Warning(Format(format, values...));
+		Warning(ToString(format, values...));
 	}
 	
 	/** Writes a formatted error message to the console. */
 	template <typename ... T>
-	FORCEINLINE void Error(CString format, const T& ... values)
+	FORCEINLINE void Error(const String& format, const T& ... values)
 	{
-		Error(Format(format, values...));
+		Error(ToString(format, values...));
 	}
 
 	/** Writes a formatted prompt to the console, and returns the user's input. */
 	template <typename ... T>
-	FORCEINLINE String Prompt(CString format, const T& ... values)
+	FORCEINLINE String Prompt(const String& format, const T& ... values)
 	{
-		return Prompt(Format(format, values...));
+		return Prompt(ToStringt(format, values...));
 	}
 }

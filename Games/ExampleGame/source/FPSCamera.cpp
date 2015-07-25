@@ -14,10 +14,10 @@ CLASS_REFLECTION(FPSCamera);
 FPSCamera::FPSCamera(Scene& scene)
 	: Super(scene)
 {
-	scene.Events.Bind("MoveForward", this, &FPSCamera::MoveForward);
-	scene.Events.Bind("MoveRight", this, &FPSCamera::MoveRight);
-	scene.Events.Bind("LookUp", this, &FPSCamera::LookUp);
-	scene.Events.Bind("LookRight", this, &FPSCamera::LookRight);
+	scene.Events.Bind("MoveForward", self, &FPSCamera::MoveForward);
+	scene.Events.Bind("MoveRight", self, &FPSCamera::MoveRight);
+	scene.Events.Bind("LookUp", self, &FPSCamera::LookUp);
+	scene.Events.Bind("LookRight", self, &FPSCamera::LookRight);
 }
 
 ///////////////////

@@ -1,15 +1,15 @@
-// WillowConvert.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
+// ResourceConverter.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
 #include <fstream>
 #include <Core/Console.h>
-#include <Resource/TextFile.h>
-#include <Resource/ResourceHandle.h>
-#include "../include/WillowConvert/WillowConvert.h"
+#include <Core/Resource/ResourcePtr.h>
+#include <Common/TextFile.h>
+#include "../include/ResourceConverter/ResourceConverter.h"
 
 ////////////////////////////
 ///   Public Functions   ///
 
-bool WillowConvert::Convert(const String& path, const List<String>& options)
+bool ResourceConverter::Convert(const String& path, const Array<String>& options)
 {
 	InputType input = ParsePath(path);
 
@@ -44,7 +44,7 @@ bool WillowConvert::Convert(const String& path, const List<String>& options)
 ///////////////////////////
 ///   Parse Functions   ///
 
-WillowConvert::InputType WillowConvert::ParsePath(const String& path)
+ResourceConverter::InputType ResourceConverter::ParsePath(const String& path)
 {
 	String extension = String::GetFileExtension(path);
 
@@ -72,17 +72,17 @@ WillowConvert::InputType WillowConvert::ParsePath(const String& path)
 	}
 }
 
-bool WillowConvert::ParseOBJFile(const String& path, Array<Mesh::Vertex>& outVertices, Array<uint32>& outElements, bool compress)
+bool ResourceConverter::ParseOBJFile(const String& path, Array<Mesh::Vertex>& outVertices, Array<uint32>& outElements, bool compress)
 {
-	typedef Tuple<float, float, float> Position;
-	typedef Pair<float, float> UVCoordinate;
-	typedef Tuple<float, float, float> Normal;
+	struct Position { float X; float Y; float Z; };
+	struct UVCoordinate { float U; float V; };
+	struct Normal { float I; float J; float K; };
 
 	Array<Position> positions;
 	Array<UVCoordinate> coordinates;
 	Array<Normal> normals;
 
-	ResourceHandle<TextFile> file(path);
+	ResourcePtr<TextFile> file(path);
 
 	if (!file.IsLoaded())
 	{
@@ -95,7 +95,7 @@ bool WillowConvert::ParseOBJFile(const String& path, Array<Mesh::Vertex>& outVer
 		if (line.StartsWith("v "))
 		{
 			Position position;
-			String::Parse(line, "v @ @ @", position.First, position.Second, position.Third);
+			FromString(line, "v @ @ @", position.X, position.Y, position.Z);
 			positions.Add(position);
 			continue;
 		}
@@ -104,7 +104,7 @@ bool WillowConvert::ParseOBJFile(const String& path, Array<Mesh::Vertex>& outVer
 		if (line.StartsWith("vt "))
 		{
 			UVCoordinate coordinate;
-			String::Parse(line, "vt @ @", coordinate.First, coordinate.Second);
+			FromString(line, "vt @ @", coordinate.U, coordinate.V);
 			coordinates.Add(coordinate);
 			continue;
 		}
@@ -113,7 +113,7 @@ bool WillowConvert::ParseOBJFile(const String& path, Array<Mesh::Vertex>& outVer
 		if (line.StartsWith("vn "))
 		{
 			Normal normal;
-			String::Parse(line, "vn @ @ @", normal.First, normal.Second, normal.Third);
+			FromString(line, "vn @ @ @", normal.I, normal.J, normal.K);
 			normals.Add(normal);
 			continue;
 		}
@@ -122,7 +122,7 @@ bool WillowConvert::ParseOBJFile(const String& path, Array<Mesh::Vertex>& outVer
 		if (line.StartsWith("f "))
 		{
 			uint32 vertexIndex[3], uvIndex[3], normalIndex[3];
-			String::Parse(line, "f @/@/@ @/@/@ @/@/@", vertexIndex[0], uvIndex[0], normalIndex[0], vertexIndex[1], uvIndex[1], normalIndex[1], 
+			FromString(line, "f @/@/@ @/@/@ @/@/@", vertexIndex[0], uvIndex[0], normalIndex[0], vertexIndex[1], uvIndex[1], normalIndex[1], 
 				vertexIndex[2], uvIndex[2], normalIndex[2]);
 
 			// For each vertex in the face (3)
@@ -131,18 +131,18 @@ bool WillowConvert::ParseOBJFile(const String& path, Array<Mesh::Vertex>& outVer
 				// Construct a vertex
 				Mesh::Vertex vertex;
 				Position position = positions[vertexIndex[i] - 1];
-				vertex.X = position.First;
-				vertex.Y = position.Second;
-				vertex.Z = position.Third;
+				vertex.X = position.X;
+				vertex.Y = position.Y;
+				vertex.Z = position.Z;
 
 				UVCoordinate textureCoords = coordinates[uvIndex[i] - 1];
-				vertex.U = textureCoords.First;
-				vertex.V = textureCoords.Second;
+				vertex.U = textureCoords.U;
+				vertex.V = textureCoords.V;
 
 				Normal normal = normals[normalIndex[i] - 1];
-				vertex.I = normal.First;
-				vertex.J = normal.Second;
-				vertex.K = normal.Third;
+				vertex.I = normal.I;
+				vertex.J = normal.J;
+				vertex.K = normal.K;
 
 				if (compress)
 				{
@@ -183,7 +183,7 @@ bool WillowConvert::ParseOBJFile(const String& path, Array<Mesh::Vertex>& outVer
 ///////////////////////////
 ///   Write Functions   ///
 
-bool WillowConvert::WriteStaticMesh(const String& name, const Array<Mesh::Vertex>& vertices, const Array<uint32>& elements)
+bool ResourceConverter::WriteStaticMesh(const String& name, const Array<Mesh::Vertex>& vertices, const Array<uint32>& elements)
 {
 	// Get the size of each array
 	uint32 numVerts = vertices.Size();

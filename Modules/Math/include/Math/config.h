@@ -12,10 +12,8 @@
 #	define MATH_API IMPORT
 #endif
 
-//////////////////////////////
-///   Module Information   ///
+#if defined THIS_MODULE_API
+#	undef THIS_MODULE_API
+#endif
 
-namespace Math
-{
-	MATH_API const Module* GetModuleInfo();
-}
+#define THIS_MODULE_API MATH_API

@@ -41,10 +41,10 @@ public:
 	/** Formats this Mat4 as a String */
 	FORCEINLINE String ToString() const
 	{
-		return String::Format("[ @, @, @, @ ]\n"
-							  "| @, @, @, @ |\n"
-							  "| @, @, @, @ |\n"
-							  "[ @, @, @, @ ]",
+		return ::ToString("[ @, @, @, @ ]\n"
+						  "| @, @, @, @ |\n"
+						  "| @, @, @, @ |\n"
+						  "[ @, @, @, @ ]",
 			_values[0][0], _values[1][0], _values[2][0], _values[3][0],
 			_values[0][1], _values[1][1], _values[2][1], _values[3][1],
 			_values[0][2], _values[1][2], _values[2][2], _values[3][2],

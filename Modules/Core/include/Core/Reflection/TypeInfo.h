@@ -21,14 +21,13 @@ public:
 	REFLECTABLE_CLASS;
 	EXTENDS(Object);
 	template <typename T> friend String ToString(const T&);
-	template <typename T> friend String FromString(T&, const String&);
+	template <typename T> friend String FromString(const String&, T&);
 
 	///////////////////////
 	///   Inner Types   ///
 public:
 
 	/** The function signature for a reflected default constructor */
-	//using DefaultConstructor = void(byte*);
 	typedef void(*DefaultConstructor)(byte*);
 
 	/** The function signature for a reflected copy constructor */
@@ -90,9 +89,9 @@ protected:
 		{
 			return Implementation::ToString<T>::Function(*static_cast<const T*>(value));
 		};
-		_fromStringImplementation = [](void* value, const String& string) -> String
+		_fromStringImplementation = [](const String& string, void* value) -> String
 		{
-			return Implementation::FromString<T>::Function(*static_cast<T*>(value), string);
+			return Implementation::FromString<T>::Function(string, *static_cast<T*>(value));
 		};
 
 		_size = sizeof(T);
@@ -272,7 +271,7 @@ private:
 	MoveAssignmentOperator _moveAssignmentOperator;
 	Destructor _destructor;
 	String(*_toStringImplementation)(const void*);
-	String(*_fromStringImplementation)(void*, const String&);
+	String(*_fromStringImplementation)(const String&, void*);
 	uint32 _size;
 	bool _isCompound;
 	bool _isAbstract;
@@ -331,14 +330,14 @@ namespace Implementation
 
 		/** Implementation for if the type defines its own 'FromString' method (preferred). */
 		template <typename F>
-		FORCEINLINE static auto Impl(Preferred, F& value, const String& string) -> decltype(value.FromString(string))
+		FORCEINLINE static auto Impl(Preferred, const String& string, F& value) -> decltype(value.FromString(string))
 		{
 			return value.FromString(string);
 		}
 
 		/** Implementation for if the type does not define its own 'FromString' method (fallback). */
 		template <typename F>
-		FORCEINLINE static const String& Impl(Fallback, F& /*value*/, const String& string)
+		FORCEINLINE static const String& Impl(Fallback, const String& string, F& /*value*/)
 		{
 			return string;
 		}
@@ -346,13 +345,13 @@ namespace Implementation
 	public:
 
 		/** Entry point for the implementation. */
-		FORCEINLINE static String Function(T& value, const String& string)
+		FORCEINLINE static String Function(const String& string, T& value)
 		{
-			using ReturnType = decltype(Impl(0, value, string));
+			using ReturnType = decltype(Impl(0, string, value));
 			static_assert(std::is_same<String, ReturnType>::value || std::is_same<const String&, ReturnType>::value,
 				"The return type of the 'FromString' method must either be a 'String' or a const reference to one.");
 
-			return Impl(0, value, string);
+			return Impl(0, string, value);
 		}
 	};
 }
@@ -473,16 +472,16 @@ FORCEINLINE String ToString(const T& value)
 * You can override this behavior by implementing the 'String FromString(const String& string)' public member function,
 * or by specializing the 'Implementation::FromString' struct */
 template <typename T>
-FORCEINLINE String FromString(T& value, const String& string)
+FORCEINLINE String FromString(const String& string, T& value)
 {
 	if (!std::is_polymorphic<T>::value)
 	{
 		// Call the implementation directly
-		return Implementation::FromString<T>::Function(value, string);
+		return Implementation::FromString<T>::Function(string, value);
 	}
 	else
 	{
 		// Get the value's type and call its implementation through that
-		return TypeOf(value)._fromStringImplementation(&value, string);
+		return TypeOf(value)._fromStringImplementation(string, &value);
 	}
 }

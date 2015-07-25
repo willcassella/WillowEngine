@@ -1,10 +1,10 @@
-# Resource.makefile
+# Common.makefile
 
 CXX=clang++
 CFLAGS=-std=c++11 -Ofast -Wall -D BITS_64 -I ../Core/include
-LFLAGS=-fPIC -shared -Wl,-soname='Resource.so',-rpath='$$ORIGIN' -l freeimage
+LFLAGS=-fPIC -shared -Wl,-soname='Common.so',-rpath='$$ORIGIN' -l freeimage
 DEPS=../Core/bin/Core.so
-OUT=-o bin/Resource.so
+OUT=-o bin/Common.so
 
 .PHONY: setup
 

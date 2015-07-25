@@ -15,8 +15,8 @@ CLASS_REFLECTION(Ghost)
 Ghost::Ghost(Scene& scene)
 	: Super(scene), Slider(self)
 {
-	scene.Events.Bind("Poof", this, &Ghost::Disappear);
-	scene.Events.Bind("Spin", this, &Ghost::Spin);
+	scene.Events.Bind("Poof", self, &Ghost::Disappear);
+	scene.Events.Bind("Spin", self, &Ghost::Spin);
 	hasDisappeared = false;
 }
 

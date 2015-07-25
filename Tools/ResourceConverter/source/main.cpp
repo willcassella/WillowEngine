@@ -1,19 +1,18 @@
-// Main.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
-/** This program converts text files to .DAT for faster loading by the engine */
+// main.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
 #include <Core/Console.h>
-#include "../include/WillowConvert/WillowConvert.h"
+#include "../include/ResourceConverter/ResourceConverter.h"
 
 int main(int32 argCount, char** args)
 {
-	// If files were passed in
+	// If files were passed in via the command line
 	if (argCount > 1)
 	{
-		WillowConvert::Convert(args[1], List<String>());
+		ResourceConverter::Convert(args[1], Array<String>());
 		return 0;
 	}
 
-	Console::WriteLine("---WillowConvert---");
+	Console::WriteLine("---Resource Converter---");
 	Console::NewLine();
 	Console::WriteLine("Enter the path to a file to convert:");
 
@@ -28,7 +27,7 @@ int main(int32 argCount, char** args)
 		}
 
 		// @TODO: Parse options (setting compression level, renaming output)
-		WillowConvert::Convert(path, List<String>());
+		ResourceConverter::Convert(path, Array<String>());
 	}
 
 	return 0;

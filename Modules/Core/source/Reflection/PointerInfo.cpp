@@ -19,16 +19,16 @@ String PointerInfo::GetName() const
 		// If we have a pointer to a pointer
 		if (_pointedType->GetType() == TypeOf<PointerInfo>())
 		{
-			return Format("@ const*", _pointedType->GetName());
+			return ::ToString("@ const*", _pointedType->GetName());
 		}
 		else
 		{
-			return Format("const @*", _pointedType->GetName());
+			return ::ToString("const @*", _pointedType->GetName());
 		}
 	}
 	else
 	{
-		return Format("@*", _pointedType->GetName());
+		return ::ToString("@*", _pointedType->GetName());
 	}
 }
 

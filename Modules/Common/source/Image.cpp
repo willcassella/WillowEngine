@@ -2,7 +2,7 @@
 
 #include <FreeImage.h>
 #include <Core/Console.h>
-#include "../include/Resource/Image.h"
+#include "../include/Common/Image.h"
 
 //////////////////////
 ///   Reflection   ///

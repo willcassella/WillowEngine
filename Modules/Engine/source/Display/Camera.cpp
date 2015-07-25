@@ -1,6 +1,7 @@
 // Camera.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
-#include "../include/Engine/Camera.h"
+#include "../../include/Engine/Scene.h"
+#include "../../include/Engine/Display/Camera.h"
 
 //////////////////////
 ///   Reflection   ///

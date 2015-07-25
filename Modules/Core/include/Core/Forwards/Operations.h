@@ -39,9 +39,25 @@ bool Destroy(T& value);
 template <typename T>
 String ToString(const T& value);
 
+/** Defined in 'Operations/ToString.h' */
+template <typename T>
+String ToString(const String& format, const T& value);
+
+/** Defined in 'Operations/ToString.h' */
+template <typename T, typename ... MoreT>
+String ToString(const String& format, const T& first, const MoreT& ... values);
+
 /** Defined in 'Reflection/TypeInfo.h' */
 template <typename T>
-String FromString(T& value, const String& string);
+String FromString(const String& string, T& value);
+
+/** Defined in 'Operations/FromString.h' */
+template <typename T>
+String FromString(const String& string, const String& format, T& value);
+
+/** Defined in 'Operations/FromString.h' */
+template <typename T, typename ... MoreT>
+String FromString(const String& string, const String& format, T& first, MoreT& ... values);
 
 //////////////////////////
 ///   Implementation   ///

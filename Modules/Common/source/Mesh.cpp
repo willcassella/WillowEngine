@@ -2,7 +2,7 @@
 
 #include <fstream>
 #include <Core/Console.h>
-#include "../include/Resource/Mesh.h"
+#include "../include/Common/Mesh.h"
 
 /////////////////////
 ///   Functions   ///

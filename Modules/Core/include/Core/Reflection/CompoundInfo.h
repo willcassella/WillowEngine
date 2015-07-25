@@ -94,7 +94,7 @@ public:
 	/** Adds a field that is gettable and settable, but not mutably gettable */
 	template <class OwnerT, typename FieldT, typename SetT,
 		WHERE(!std::is_function<FieldT>::value),
-		WHERE(!std::is_const<FieldT>::value),
+		//WHERE(!std::is_const<FieldT>::value),
 		WHERE(std::is_same<FieldT, std::decay_t<SetT>>::value),		
 		WHERE(!std::is_reference<SetT>::value || std::is_const<std::remove_reference_t<SetT>>::value)>
 	auto&& AddProperty(const String& name, const String& description, FieldT OwnerT::*field, void (OwnerT::*setter)(SetT))

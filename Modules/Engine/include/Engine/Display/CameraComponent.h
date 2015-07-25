@@ -2,7 +2,7 @@
 #pragma once
 
 #include <Math/Mat4.h>
-#include "Component.h"
+#include "../Component.h"
 
 class ENGINE_API CameraComponent : public Component
 {

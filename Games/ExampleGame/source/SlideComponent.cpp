@@ -15,7 +15,7 @@ CLASS_REFLECTION(SlideComponent);
 SlideComponent::SlideComponent(GameObject& owner)
 	: Super(owner)
 {
-	owner.GetScene().Events.Bind("Update", this, &SlideComponent::OnUpdate);
+	owner.GetScene().Events.Bind("Update", self, &SlideComponent::OnUpdate);
 }
 
 ///////////////////

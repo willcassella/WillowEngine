@@ -35,7 +35,7 @@ TypeInfo::TypeInfo(void* /*dummy*/, CString name)
 	_destructor = [](void* value) { };
 
 	_toStringImplementation = [](const void* /*value*/)->String { return ""; };
-	_fromStringImplementation = [](void* /*value*/, const String& string)->String { return string; };
+	_fromStringImplementation = [](const String& string, void* /*value*/)->String { return string; };
 
 	_size = 0;
 	_isCompound = false;

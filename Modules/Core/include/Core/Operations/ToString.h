@@ -338,3 +338,40 @@ namespace Implementation
 		}
 	};
 }
+
+/////////////////////
+///   Functions   ///
+
+/** Formats the given String with the given value, returning the result
+* - The first instance of the '@' character in 'format' is replaced with a String representation of 'value' */
+template <typename T>
+String ToString(const String& format, const T& value)
+{
+	for (uint32 i = 0; i < format.Length(); ++i)
+	{
+		if (format[i] == '@')
+		{
+			return format.SubString(0, i) + ToString(value) + format.SubString(i + 1);
+		}
+	}
+
+	// You passed in an empty format String, dumbass
+	return "";
+}
+
+/** Formats the given String with the given values, returning the result
+* - Each instance of the '@' character in 'format' is replaced with a String representation of the respective value. */
+template <typename T, typename ... MoreT>
+static String ToString(const String& format, const T& value, const MoreT& ... moreValues)
+{
+	for (uint32 i = 0; i < format.Length(); ++i)
+	{
+		if (format[i] == '@')
+		{
+			return format.SubString(0, i) + ToString(value) + ToString(format.SubString(i + 1), moreValues...);
+		}
+	}
+
+	// You passed in an empty format String, dumbass
+	return "";
+}

@@ -136,7 +136,7 @@ public:
 private:
 
 	Array<Component*> _components;
-	Scene* _scene;
+	Ptr<Scene> _scene;
 	String _name;
 	uint32 _id;
 	bool _isAlive;

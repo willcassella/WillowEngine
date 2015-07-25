@@ -1,7 +1,9 @@
 // CameraComponent.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
 #include <Math/Mat4.h>
-#include "../include/Engine/CameraComponent.h"
+#include "../../include/Engine/Scene.h"
+#include "../../include/Engine/GameObject.h"
+#include "../../include/Engine/Display/CameraComponent.h"
 
 //////////////////////
 ///   Reflection   ///

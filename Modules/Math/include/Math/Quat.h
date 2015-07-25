@@ -53,7 +53,7 @@ public:
 	/** Formats this Quat as a String */
 	FORCEINLINE String ToString() const
 	{
-		return String::Format("<@, @, @, @>", X, Y, Z, W);
+		return ::ToString("<@, @, @, @>", X, Y, Z, W);
 	}
 
 	/** Rotate this quaternion around an axis by a certain angle */

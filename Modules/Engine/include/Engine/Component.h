@@ -1,6 +1,7 @@
 // Component.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
+#include <Core/Memory/Ptr.h>
 #include "config.h"
 
 ////////////////////////////////
@@ -10,7 +11,7 @@
 class GameObject;
 
 /** Defined in 'Scene.h' */
-struct Scene;
+class Scene;
 
 /////////////////
 ///   Types   ///
@@ -62,6 +63,6 @@ protected:
 	///   Data   ///
 private:
 
-	GameObject* _owner;
+	Ptr<GameObject> _owner;
 	bool _isEnabled;
 };

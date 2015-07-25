@@ -1,7 +1,7 @@
 // Camera.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "GameObject.h"
+#include "../GameObject.h"
 #include "CameraComponent.h"
 
 class ENGINE_API Camera : public GameObject

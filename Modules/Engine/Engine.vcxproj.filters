@@ -8,11 +8,14 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="include\Display">
+      <UniqueIdentifier>{e0dd2cb4-1d17-48ed-9263-4ea9f43677bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Display">
+      <UniqueIdentifier>{7c9d038b-708a-4959-8c33-d231f737859d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\Camera.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="source\Scene.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -28,17 +31,14 @@
     <ClCompile Include="source\Component.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="source\CameraComponent.cpp">
-      <Filter>source</Filter>
+    <ClCompile Include="source\Display\Camera.cpp">
+      <Filter>source\Display</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Display\CameraComponent.cpp">
+      <Filter>source\Display</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Engine\Camera.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engine\CameraComponent.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="include\Engine\Component.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -59,6 +59,12 @@
     </ClInclude>
     <ClInclude Include="include\Engine\Transform.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Display\Camera.h">
+      <Filter>include\Display</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Display\CameraComponent.h">
+      <Filter>include\Display</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

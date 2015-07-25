@@ -3,7 +3,7 @@
 #include <string>
 #include <fstream>
 #include <Core/Console.h>
-#include "../include/Resource/TextFile.h"
+#include "../include/Common/TextFile.h"
 
 //////////////////////
 ///   Reflection   ///
@@ -48,9 +48,4 @@ String TextFile::DumpLines() const
 	}
 
 	return result;
-}
-
-const Array<String>& TextFile::GetLines() const
-{
-	return _lines;
 }

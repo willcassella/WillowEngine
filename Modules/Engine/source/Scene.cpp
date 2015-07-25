@@ -5,50 +5,39 @@
 //////////////////////
 ///   Reflection   ///
 
-STRUCT_REFLECTION(Scene)
+CLASS_REFLECTION(Scene)
 .AddProperty("TimeDilation", "The time dilation of the scene. Default is 1.", &Scene::TimeDilation)
 .AddProperty("TimeStep", "The amount of time (ms) that each update of the scene represents.", &Scene::TimeStep);
-
-////////////////////////
-///   Constructors   ///
-
-Scene::~Scene()
-{
-	// Delete all objects
-	for (auto& object : _objects)
-	{
-		delete object;
-	}
-}
 
 ///////////////////
 ///   Methods   ///
 
 void Scene::Update()
 {
+	Queue<OwnerPtr<GameObject>*> staleObjects;
+
 	// Update all objects
 	for (auto& object : _objects)
 	{
 		// If the object is stale
 		if (object->IsDestroyed())
 		{
-			_staleObjects.Push(object);
+			staleObjects.Push(&object);
 			continue;
 		}
 	}
 
 	// Remove stale objects
-	while (!_staleObjects.IsEmpty())
+	while (!staleObjects.IsEmpty())
 	{
-		GameObject* object = _staleObjects.Pop();
-		_objects.DeleteAll(object);
-		delete object;
+		OwnerPtr<GameObject>* object = staleObjects.Pop();
+		_objects.DeleteAll(*object);
 	}
 
 	// Add new objects
 	while (!_freshObjects.IsEmpty())
 	{
-		GameObject* freshObject = _freshObjects.Pop();
+		OwnerPtr<GameObject> freshObject = _freshObjects.Pop();
 		
 		// Activate all the object's components
 		for (auto component : freshObject->GetComponents())
@@ -59,6 +48,6 @@ void Scene::Update()
 		// Call the freshObjects OnSpawn() function
 		freshObject->OnSpawn();
 
-		_objects.Add(freshObject);
+		_objects.Add(freshObject.Transfer());
 	}
 }

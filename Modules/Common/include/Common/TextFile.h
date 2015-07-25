@@ -1,24 +1,23 @@
 // TextFile.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "SystemResource.h"
+#include <Core/Resource/Resource.h>
+#include "config.h"
 
-class RESOURCE_API TextFile : public SystemResource
+class COMMON_API TextFile : public Resource
 {
 	///////////////////////
 	///   Information   ///
 public:
 
 	REFLECTABLE_CLASS;
-	EXTENDS(SystemResource);
+	EXTENDS(Resource);
 
 	////////////////////////
 	///   Constructors   ///
 public:
 
 	TextFile(const String& path);
-	TextFile(const TextFile& copy) = delete;
-	TextFile(TextFile&& move) = delete;
 
 	///////////////////
 	///   Methods   ///
@@ -28,14 +27,10 @@ public:
 	String DumpLines() const;
 
 	/** Returns an Array of all the lines in the text file */
-	const Array<String>& GetLines() const;
-
-	/////////////////////
-	///   Operators   ///
-public:
-
-	TextFile& operator=(const TextFile& copy) = delete;
-	TextFile& operator=(TextFile&& move) = delete;
+	FORCEINLINE const Array<String>& GetLines() const
+	{
+		return _lines;
+	}
 
 	////////////////
 	///   Data   ///

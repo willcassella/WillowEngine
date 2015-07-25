@@ -41,7 +41,7 @@ public:
 	/** Formats this Vec2 as a String */
 	FORCEINLINE String ToString() const
 	{
-		return String::Format("<@, @>", X, Y);
+		return ::ToString("<@, @>", X, Y);
 	}
 
 	/** Returns the length of this vector */

@@ -2,6 +2,7 @@
 
 #include "../include/Engine/GameObject.h"
 #include "../include/Engine/Component.h"
+#include "../include/Engine/Scene.h"
 
 //////////////////////
 ///   Reflection   ///

@@ -3,16 +3,16 @@
 
 #include <Core/Containers/Queue.h>
 #include "GameObject.h"
-#include "Camera.h"
 
 /* Scene class contains all game objects and scene information */
-struct ENGINE_API Scene final
+class ENGINE_API Scene final : public Object
 {
 	///////////////////////
 	///   Information   ///
 public:
 
-	REFLECTABLE_STRUCT;
+	REFLECTABLE_CLASS;
+	EXTENDS(Object);
 
 	////////////////////////
 	///   Constructors   ///
@@ -21,7 +21,6 @@ public:
 	Scene() = default;
 	Scene(const Scene& copy) = delete;
 	Scene(Scene&& move) = delete;
-	~Scene();
 
 	//////////////////
 	///   Fields   ///
@@ -38,11 +37,11 @@ public:
 	void Update();
 
 	/** Spawns a new GameObject of the given type at the start of the next frame */
-	template <class GameObjectClass, typename ... ArgTypes>
-	GameObjectClass& Spawn(ArgTypes&& ... args)
+	template <class GameObjectClass, typename ... Args>
+	GameObjectClass& Spawn(Args&& ... args)
 	{
-		GameObjectClass* object = new GameObjectClass(self, args...);
-		_freshObjects.Push(object);
+		OwnerPtr<GameObjectClass> object = New<GameObjectClass>(self, std::forward<Args>(args)...);
+		_freshObjects.Push(object.Transfer());
 		return *object;
 	}
 
@@ -57,7 +56,6 @@ public:
 	///   Data   ///
 private:
 
-	List<GameObject*> _objects;
-	Queue<GameObject*> _freshObjects;
-	Queue<GameObject*> _staleObjects;
+	Array<OwnerPtr<GameObject>> _objects;
+	Queue<OwnerPtr<GameObject>> _freshObjects;
 };

@@ -1,22 +1,23 @@
 // Mesh.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "SystemResource.h"
+#include <Core/Resource/Resource.h>
+#include "config.h"
 
-class RESOURCE_API Mesh : public SystemResource
+class COMMON_API Mesh : public Resource
 {
 	///////////////////////
 	///   Information   ///
 public:
 
 	REFLECTABLE_CLASS;
-	EXTENDS(SystemResource);
+	EXTENDS(Resource);
 
 	///////////////////////
 	///   Inner Types   ///
 public:
 
-	struct RESOURCE_API Vertex final
+	struct COMMON_API Vertex final
 	{
 		//////////////////
 		///   Fields   ///
@@ -30,8 +31,8 @@ public:
 		///   Operators   ///
 	public:
 
-		friend RESOURCE_API bool operator==(const Vertex& lhs, const Vertex& rhs);
-		friend RESOURCE_API bool operator!=(const Vertex& lhs, const Vertex& rhs);
+		friend COMMON_API bool operator==(const Vertex& lhs, const Vertex& rhs);
+		friend COMMON_API bool operator!=(const Vertex& lhs, const Vertex& rhs);
 	};
 
 	////////////////////////
@@ -39,8 +40,6 @@ public:
 public:
 
 	Mesh(const String& path);
-	Mesh(const Mesh& copy) = delete;
-	Mesh(Mesh&& other) = delete;
 
 	//////////////////
 	///   Fields   ///
@@ -48,11 +47,4 @@ public:
 
 	Array<Vertex> Vertices;
 	Array<uint32> Elements;
-
-	/////////////////////
-	///   Operators   ///
-public:
-
-	Mesh& operator=(const Mesh& copy) = delete;
-	Mesh& operator=(Mesh&& other) = delete;
 };
