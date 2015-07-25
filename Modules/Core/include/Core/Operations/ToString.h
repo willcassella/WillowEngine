@@ -110,7 +110,7 @@ namespace Implementation
 	template <typename T>
 	struct ToString < T* > final
 	{
-		FORCEINLINE static String Function(T* value)
+		FORCEINLINE static String Function(T* /*value*/)
 		{
 			return "0xAddress"; // @TODO: Implement this
 		}
