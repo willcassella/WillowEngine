@@ -6,11 +6,6 @@
 
 int main()
 {
-	Console::WriteLine(test);
-
-	test.DeleteAll("Oh");
-
-	Console::WriteLine(test);
-
+	Console::WriteLine(TypeOf<Vec3>());
 	Console::Prompt();
 }
