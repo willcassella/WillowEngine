@@ -362,7 +362,7 @@ String ToString(const String& format, const T& value)
 /** Formats the given String with the given values, returning the result
 * - Each instance of the '@' character in 'format' is replaced with a String representation of the respective value. */
 template <typename T, typename ... MoreT>
-static String ToString(const String& format, const T& value, const MoreT& ... moreValues)
+String ToString(const String& format, const T& value, const MoreT& ... moreValues)
 {
 	for (uint32 i = 0; i < format.Length(); ++i)
 	{

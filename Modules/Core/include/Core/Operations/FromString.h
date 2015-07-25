@@ -128,7 +128,7 @@ namespace Implementation
 /** Parses the given value from the given String, following the given format. The remainder of the String is returned.
 * - The location of the '@' character in the format String denotes the location of the value in the given String */
 template <typename T>
-static String FromString(const String& string, const String& format, T& value)
+String FromString(const String& string, const String& format, T& value)
 {
 	for (uint32 i = 0; i < format.Length(); ++i)
 	{
@@ -145,7 +145,7 @@ static String FromString(const String& string, const String& format, T& value)
 /** Parses the given values from the given String, following the given format. The remainder of the String is returned.
 * - Each location of the '@' character in the format String denotes the location of the respective value in the given String */
 template <typename T, typename ... MoreT>
-static String FromString(const String& string, const String& format, T& value, MoreT& ... moreValues)
+String FromString(const String& string, const String& format, T& value, MoreT& ... moreValues)
 {
 	for (uint32 i = 0; i < format.Length(); ++i)
 	{
