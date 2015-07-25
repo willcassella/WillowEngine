@@ -94,7 +94,7 @@ namespace Implementation
 			return StaticTypeInfo;
 		}
 
-		FORCEINLINE static const StructInfo& Function(const List<T>& value)
+		FORCEINLINE static const StructInfo& Function(const List<T>& /*value*/)
 		{
 			return StaticTypeInfo;
 		}
@@ -117,7 +117,7 @@ namespace Implementation
 			return StaticTypeInfo;
 		}
 
-		FORCEINLINE static const StructInfo& Function(const Queue<T>& value)
+		FORCEINLINE static const StructInfo& Function(const Queue<T>& /*value*/)
 		{
 			return StaticTypeInfo;
 		}
@@ -140,7 +140,7 @@ namespace Implementation
 			return StaticTypeInfo;
 		}
 
-		FORCEINLINE static const StructInfo& Function(const Stack<T>& value)
+		FORCEINLINE static const StructInfo& Function(const Stack<T>& /*value*/)
 		{
 			return StaticTypeInfo;
 		}
@@ -163,7 +163,7 @@ namespace Implementation
 			return StaticTypeInfo;
 		}
 
-		FORCEINLINE static const StructInfo& Function(const Table<KeyT, ValueT>& value)
+		FORCEINLINE static const StructInfo& Function(const Table<KeyT, ValueT>& /*value*/)
 		{
 			return StaticTypeInfo;
 		}
@@ -186,7 +186,7 @@ namespace Implementation
 			return StaticTypeInfo;
 		}
 
-		FORCEINLINE static const StructInfo& Function(const Pair<A, B>& value)
+		FORCEINLINE static const StructInfo& Function(const Pair<A, B>& /*value*/)
 		{
 			return StaticTypeInfo;
 		}
@@ -209,7 +209,7 @@ namespace Implementation
 			return StaticTypeInfo;
 		}
 
-		FORCEINLINE static const StructInfo& Function(const Tuple<T...>& value)
+		FORCEINLINE static const StructInfo& Function(const Tuple<T...>& /*value*/)
 		{
 			return StaticTypeInfo;
 		}
