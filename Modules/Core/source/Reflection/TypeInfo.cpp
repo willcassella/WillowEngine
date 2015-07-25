@@ -32,7 +32,7 @@ TypeInfo::TypeInfo(void* /*dummy*/, CString name)
 	_moveConstructor = [](byte* /*location*/, void* /*move*/) { };
 	_copyAssignmentOperator = [](void* /*value*/, const void* /*copy*/) { };
 	_moveAssignmentOperator = [](void* /*value*/, void* /*move*/) { };
-	_destructor = [](void* value) { };
+	_destructor = [](void* /*value*/) { };
 
 	_toStringImplementation = [](const void* /*value*/)->String { return ""; };
 	_fromStringImplementation = [](const String& string, void* /*value*/)->String { return string; };

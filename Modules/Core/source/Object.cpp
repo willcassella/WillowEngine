@@ -25,7 +25,7 @@ Object::Object()
 	GetPointerTable()[this];
 }
 
-Object::Object(const Object& copy)
+Object::Object(const Object& /*copy*/)
 {
 	GetPointerTable()[this];
 }
