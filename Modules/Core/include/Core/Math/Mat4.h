@@ -8,13 +8,13 @@
 const float Deg2Rad = 0.0174532925f;
 const float Rad2Deg = 57.2957795f;
 
-struct MATH_API Mat4 final
+struct CORE_API Mat4 final
 {
 	///////////////////////
 	///   Information   ///
 public:
 
-	REFLECTABLE_STRUCT;
+	REFLECTABLE_STRUCT
 
 	////////////////////////
 	///   Constructors   ///
@@ -176,7 +176,7 @@ public:
 		assert(index < 16);
 		return _values[index];
 	}
-	friend MATH_API FORCEINLINE Mat4 operator*(const Mat4& lhs, const Mat4& rhs)
+	friend FORCEINLINE Mat4 operator*(const Mat4& lhs, const Mat4& rhs)
 	{
 		Mat4 total;
 
@@ -203,12 +203,12 @@ public:
 		// Return the product of the two matrices
 		return total;
 	}
-	friend MATH_API FORCEINLINE Mat4& operator*=(Mat4& lhs, const Mat4& rhs)
+	friend FORCEINLINE Mat4& operator*=(Mat4& lhs, const Mat4& rhs)
 	{
 		lhs = lhs * rhs;
 		return lhs;
 	}
-	friend MATH_API FORCEINLINE Vec3 operator*(const Mat4& lhs, const Vec3& rhs)
+	friend FORCEINLINE Vec3 operator*(const Mat4& lhs, const Vec3& rhs)
 	{
 		Vec3 result;
 		result.X = lhs.Get(0, 0) * rhs.X + lhs.Get(1, 0) * rhs.Y + lhs.Get(2, 0) * rhs.Z + lhs.Get(3, 0);
@@ -217,7 +217,7 @@ public:
 
 		return result;
 	}
-	friend MATH_API FORCEINLINE bool operator==(const Mat4& lhs, const Mat4& rhs)
+	friend FORCEINLINE bool operator==(const Mat4& lhs, const Mat4& rhs)
 	{
 		for (uint32 i = 0; i < 16; ++i)
 		{
@@ -229,7 +229,7 @@ public:
 
 		return true;
 	}
-	friend MATH_API FORCEINLINE bool operator!=(const Mat4& lhs, const Mat4& rhs)
+	friend FORCEINLINE bool operator!=(const Mat4& lhs, const Mat4& rhs)
 	{
 		return !(lhs == rhs);
 	}

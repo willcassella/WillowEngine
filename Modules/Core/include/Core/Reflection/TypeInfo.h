@@ -18,8 +18,8 @@ class CORE_API TypeInfo : public Object
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS;
-	EXTENDS(Object);
+	REFLECTABLE_CLASS
+	EXTENDS(Object)
 	template <typename T> friend String ToString(const T&);
 	template <typename T> friend String FromString(const String&, T&);
 

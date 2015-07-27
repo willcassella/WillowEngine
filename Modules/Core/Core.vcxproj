@@ -40,7 +40,14 @@
     <ClInclude Include="include\Core\Forwards\Reflection.h" />
     <ClInclude Include="include\Core\Forwards\Memory.h" />
     <ClInclude Include="include\Core\Forwards\Operations.h" />
+    <ClInclude Include="include\Core\Forwards\Resource.h" />
     <ClInclude Include="include\Core\Interface.h" />
+    <ClInclude Include="include\Core\Math\Mat4.h" />
+    <ClInclude Include="include\Core\Math\Math.h" />
+    <ClInclude Include="include\Core\Math\Quat.h" />
+    <ClInclude Include="include\Core\Math\Vec2.h" />
+    <ClInclude Include="include\Core\Math\Vec3.h" />
+    <ClInclude Include="include\Core\Math\Vec4.h" />
     <ClInclude Include="include\Core\Memory\OwnerPtr.h" />
     <ClInclude Include="include\Core\Memory\Ptr.h" />
     <ClInclude Include="include\Core\Memory\SharedPtr.h" />
@@ -64,8 +71,6 @@
     <ClInclude Include="include\Core\Reflection\StructInfo.h" />
     <ClInclude Include="include\Core\Reflection\TypeInfo.h" />
     <ClInclude Include="include\Core\Reflection\VoidInfo.h" />
-    <ClInclude Include="include\Core\Resource\Resource.h" />
-    <ClInclude Include="include\Core\Resource\ResourcePtr.h" />
     <ClInclude Include="include\Core\STDExt\TypeTraits.h" />
     <ClInclude Include="include\Core\String.h" />
     <ClInclude Include="include\Core\env.h" />
@@ -77,6 +82,11 @@
     <ClCompile Include="source\Event\Event.cpp" />
     <ClCompile Include="source\Event\EventHandler.cpp" />
     <ClCompile Include="source\Event\EventManager.cpp" />
+    <ClCompile Include="source\Math\Mat4.cpp" />
+    <ClCompile Include="source\Math\Quat.cpp" />
+    <ClCompile Include="source\Math\Vec2.cpp" />
+    <ClCompile Include="source\Math\Vec3.cpp" />
+    <ClCompile Include="source\Math\Vec4.cpp" />
     <ClCompile Include="source\Memory\OwnerPtr.cpp" />
     <ClCompile Include="source\Misc\TimeStamp.cpp" />
     <ClCompile Include="source\Object.cpp" />
@@ -84,6 +94,7 @@
     <ClCompile Include="source\Operations\ToString.cpp" />
     <ClCompile Include="source\Reflection\ClassInfo.cpp" />
     <ClCompile Include="source\Reflection\CompoundInfo.cpp" />
+    <ClCompile Include="source\Reflection\EnumInfo.cpp" />
     <ClCompile Include="source\Reflection\InterfaceInfo.cpp" />
     <ClCompile Include="source\Reflection\Module.cpp" />
     <ClCompile Include="source\Reflection\PointerInfo.cpp" />
@@ -95,7 +106,6 @@
     <ClCompile Include="source\Reflection\TypeInfo.cpp" />
     <ClCompile Include="source\Reflection\Variant.cpp" />
     <ClCompile Include="source\Reflection\VoidInfo.cpp" />
-    <ClCompile Include="source\Resource\Resource.cpp" />
     <ClCompile Include="source\String.cpp" />
   </ItemGroup>
   <ItemGroup>

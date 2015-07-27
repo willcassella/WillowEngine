@@ -12,7 +12,7 @@ struct CORE_API Event final
 	///   Information   ///
 public:
 
-	REFLECTABLE_STRUCT;
+	REFLECTABLE_STRUCT
 
 	////////////////////////
 	///   Constructors   ///

@@ -14,9 +14,9 @@ struct OwnerPtr final
 	///   Information   ///
 public:
 
+	REFLECTABLE_STRUCT
 	friend OwnerPtr<void>;
 	static_assert(!std::is_const<T>::value, "An 'OwnerPtr' may not point to const.");
-	REFLECTABLE_STRUCT;
 
 	////////////////////////
 	///   Constructors   ///
@@ -172,7 +172,7 @@ struct CORE_API OwnerPtr < void > final
 	///   Information   ///
 public:
 
-	REFLECTABLE_STRUCT;
+	REFLECTABLE_STRUCT
 
 	////////////////////////
 	///   Constructors   ///

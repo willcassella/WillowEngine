@@ -10,8 +10,8 @@ class CORE_API ClassInfo : public CompoundInfo
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS;
-	EXTENDS(CompoundInfo);
+	REFLECTABLE_CLASS
+	EXTENDS(CompoundInfo)
 
 	////////////////////////
 	///   Constructors   ///

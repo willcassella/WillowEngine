@@ -12,8 +12,8 @@ class CORE_API VoidInfo final : public TypeInfo
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS;
-	EXTENDS(TypeInfo);
+	REFLECTABLE_CLASS
+	EXTENDS(TypeInfo)
 	friend Implementation::TypeOf<void>;
 
 	////////////////////////

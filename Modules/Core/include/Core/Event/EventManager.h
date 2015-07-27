@@ -11,7 +11,7 @@ struct CORE_API EventManager final
 	///   Information   ///
 public:
 
-	REFLECTABLE_STRUCT;
+	REFLECTABLE_STRUCT
 
 	////////////////////////
 	///   Constructors   ///

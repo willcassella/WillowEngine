@@ -14,7 +14,7 @@ struct CORE_API PropertyInfo final
 	///   Information   ///
 public:
 
-	REFLECTABLE_STRUCT;
+	REFLECTABLE_STRUCT
 	friend CompoundInfo;
 
 	////////////////////////

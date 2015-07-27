@@ -66,7 +66,7 @@ namespace Implementation
 			return StaticTypeInfo;
 		}
 
-		/** It is not possible to have type data for an instance of 'void', so that Function is not necessary */
+		/** It is not possible to an instance of 'void', so that Function is not necessary. */
 	};
 
 	//////////////////////////
@@ -366,7 +366,7 @@ namespace Implementation
 	};
 }
 
-//TODO: Change "TypeOf" to "GetType" (consistency, and preparing for unified call syntax.
+//TODO: Change "TypeOf" to "GetType" (consistency, and preparing for unified call syntax.)
 // Consider: TypeOf<T>() for specific type, GetType(T) for instances?
 
 /////////////////////
@@ -403,7 +403,7 @@ using TypeInfoType = std::decay_t<decltype(TypeOf<T>())>;
 namespace Implementation									\
 {															\
 	template <>												\
-	struct THIS_MODULE TypeOf < E >							\
+	struct THIS_MODULE_API TypeOf < E >	final				\
 	{														\
 		static const ::EnumInfo StaticTypeInfo;				\
 		FORCEINLINE static const ::EnumInfo& Function()		\

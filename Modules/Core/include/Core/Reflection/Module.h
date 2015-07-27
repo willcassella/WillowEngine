@@ -13,8 +13,8 @@ class CORE_API Module final : public Object
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS;
-	EXTENDS(Object);
+	REFLECTABLE_CLASS
+	EXTENDS(Object)
 
 	////////////////////////
 	///   Constructors   ///

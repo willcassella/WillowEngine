@@ -10,8 +10,8 @@ class CORE_API PrimitiveInfo : public TypeInfo
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS;
-	EXTENDS(TypeInfo);
+	REFLECTABLE_CLASS
+	EXTENDS(TypeInfo)
 
 	////////////////////////
 	///   Constructors   ///
@@ -32,7 +32,7 @@ protected:
 	PrimitiveInfo(PrimitiveT* dummy, CString name)
 		: Super(dummy, name)
 	{
-		static_assert(stdEXT::is_primitive<PrimitiveT>::value || std::is_fundamental<PrimitiveT>::value,
+		static_assert(stdEXT::is_primitive<PrimitiveT>::value || std::is_fundamental<PrimitiveT>::value || std::is_enum<PrimitiveT>::value,
 			"Primitives types must be primitive");
 	}
 

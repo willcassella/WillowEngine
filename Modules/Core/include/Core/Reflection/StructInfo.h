@@ -18,8 +18,8 @@ class CORE_API StructInfo : public CompoundInfo
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS;
-	EXTENDS(CompoundInfo);
+	REFLECTABLE_CLASS
+	EXTENDS(CompoundInfo)
 
 	////////////////////////
 	///   Constructors   ///

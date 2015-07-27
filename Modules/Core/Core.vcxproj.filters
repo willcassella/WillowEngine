@@ -22,9 +22,6 @@
     <Filter Include="source\Misc">
       <UniqueIdentifier>{4a8a20ac-15f9-4ad5-a0ea-c39892ad9393}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\Resource">
-      <UniqueIdentifier>{fb140647-8278-4c28-84c3-89fe9203547a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\Operations">
       <UniqueIdentifier>{614a4998-7fdd-4b88-8871-d12a845b6750}</UniqueIdentifier>
     </Filter>
@@ -52,8 +49,11 @@
     <Filter Include="source\Containers">
       <UniqueIdentifier>{921bc82c-4041-4277-b69c-de5fb4bb7b9b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\Resource">
-      <UniqueIdentifier>{61ad9fb2-5ebc-48b9-a516-a15b18e45453}</UniqueIdentifier>
+    <Filter Include="include\Math">
+      <UniqueIdentifier>{2cd78ca9-d9bf-4126-9b7a-ca1724317a00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Math">
+      <UniqueIdentifier>{2d940d36-c5e3-4814-8cec-2f815e9143f4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -165,9 +165,6 @@
     <ClInclude Include="include\Core\Memory\Ptr.h">
       <Filter>include\Memory</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Resource\ResourcePtr.h">
-      <Filter>include\Resource</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Forwards\Operations.h">
       <Filter>include\Forwards</Filter>
     </ClInclude>
@@ -198,14 +195,32 @@
     <ClInclude Include="include\Core\Containers\StaticBuffer.h">
       <Filter>include\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Resource\Resource.h">
-      <Filter>include\Resource</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Operations\TypeOps.h">
       <Filter>include\Operations</Filter>
     </ClInclude>
     <ClInclude Include="include\Core\Forwards\Containers.h">
       <Filter>include\Forwards</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Forwards\Resource.h">
+      <Filter>include\Forwards</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Math\Mat4.h">
+      <Filter>include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Math\Math.h">
+      <Filter>include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Math\Quat.h">
+      <Filter>include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Math\Vec2.h">
+      <Filter>include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Math\Vec3.h">
+      <Filter>include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Math\Vec4.h">
+      <Filter>include\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -284,8 +299,23 @@
     <ClCompile Include="source\Containers\DynamicBuffer.cpp">
       <Filter>source\Containers</Filter>
     </ClCompile>
-    <ClCompile Include="source\Resource\Resource.cpp">
-      <Filter>source\Resource</Filter>
+    <ClCompile Include="source\Math\Mat4.cpp">
+      <Filter>source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Math\Quat.cpp">
+      <Filter>source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Math\Vec2.cpp">
+      <Filter>source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Math\Vec3.cpp">
+      <Filter>source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Math\Vec4.cpp">
+      <Filter>source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\EnumInfo.cpp">
+      <Filter>source\Reflection</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

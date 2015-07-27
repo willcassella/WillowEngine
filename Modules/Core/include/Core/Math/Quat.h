@@ -4,13 +4,13 @@
 #include "Vec3.h"
 
 // @TODO: conversion to Euler angles, conversion to axis+angle, and rotation by Euler angles
-struct MATH_API Quat final
+struct CORE_API Quat final
 {
 	///////////////////////
 	///   Information   ///
 public:
 
-	REFLECTABLE_STRUCT;
+	REFLECTABLE_STRUCT
 
 	////////////////////////
 	///   Constructors   ///
@@ -78,7 +78,7 @@ public:
 	///   Operators   ///
 public:
 
-	friend MATH_API FORCEINLINE Quat operator*(const Quat& lhs, const Quat& rhs)
+	friend FORCEINLINE Quat operator*(const Quat& lhs, const Quat& rhs)
 	{
 		Quat total;
 		total.W = lhs.W * rhs.W - lhs.X * rhs.X - lhs.Y * rhs.Y - lhs.Z * rhs.Z;
@@ -88,16 +88,16 @@ public:
 
 		return total;
 	}
-	friend MATH_API FORCEINLINE Quat& operator*=(Quat& lhs, const Quat& rhs)
+	friend FORCEINLINE Quat& operator*=(Quat& lhs, const Quat& rhs)
 	{
 		lhs = lhs * rhs;
 		return lhs;
 	}
-	friend MATH_API FORCEINLINE bool operator==(const Quat& lhs, const Quat& rhs)
+	friend FORCEINLINE bool operator==(const Quat& lhs, const Quat& rhs)
 	{
 		return lhs.X == rhs.X && lhs.Y == rhs.Y && lhs.Z == rhs.Z;
 	}
-	friend MATH_API FORCEINLINE bool operator!=(const Quat& lhs, const Quat& rhs)
+	friend FORCEINLINE bool operator!=(const Quat& lhs, const Quat& rhs)
 	{
 		return lhs.X != rhs.X || lhs.Y != rhs.Y || lhs.Z != rhs.Z;
 	}

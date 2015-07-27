@@ -12,15 +12,15 @@ class CORE_API EnumInfo final : public PrimitiveInfo
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS;
-	EXTENDS(PrimitiveInfo);
+	REFLECTABLE_CLASS
+	EXTENDS(PrimitiveInfo)
 
 	////////////////////////
 	///   Constructors   ///
 public:
 
 	template <typename EnumT>
-	static EnumInfo Create(const String& name)
+	static EnumInfo Create(CString name)
 	{
 		EnumT* dummy = nullptr;
 		return EnumInfo(dummy, name);
@@ -29,7 +29,7 @@ public:
 private:
 
 	template <typename EnumT>
-	EnumInfo(EnumT* dummy, const String& name)
+	EnumInfo(EnumT* dummy, CString name)
 		: Super(dummy, name)
 	{
 		static_assert(std::is_enum<EnumT>::value, "The type given to 'EnumInfo::Create()' must be an enum type.");
@@ -40,6 +40,8 @@ private:
 	///////////////////
 	///   Methods   ///
 public:
+
+	bool IsCastableTo(const TypeInfo& type) const override;
 
 	/** Returns the underlying type of this enum */
 	FORCEINLINE const PrimitiveInfo& GetUnderlyingType() const
@@ -56,3 +58,6 @@ private:
 
 //////////////////
 ///   Macros   ///
+
+// TODO: Documentation
+#define ENUM_REFLECTION(E) const ::EnumInfo Implementation::TypeOf<E>::StaticTypeInfo = ::EnumInfo::Create<E>(#E) 

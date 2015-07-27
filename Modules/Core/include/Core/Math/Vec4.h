@@ -3,13 +3,13 @@
 
 #include "Vec3.h"
 
-struct MATH_API Vec4 final
+struct CORE_API Vec4 final
 {
 	///////////////////////
 	///   Information   ///
 public:
 
-	REFLECTABLE_STRUCT;
+	REFLECTABLE_STRUCT
 
 	////////////////////////
 	///   Constructors   ///
@@ -110,99 +110,99 @@ public:
 	///   Operators   ///
 public:
 
-	friend MATH_API FORCEINLINE Vec4 operator+(const Vec4& lhs, const Vec4& rhs)
+	friend FORCEINLINE Vec4 operator+(const Vec4& lhs, const Vec4& rhs)
 	{
 		return Vec4(lhs.X + rhs.X, lhs.Y + rhs.Y, lhs.Z + rhs.Z, lhs.W + rhs.W);
 	}
-	friend MATH_API FORCEINLINE Vec4 operator+(const Vec4& lhs, float rhs)
+	friend FORCEINLINE Vec4 operator+(const Vec4& lhs, float rhs)
 	{
 		return Vec4(lhs.X + rhs, lhs.Y + rhs, lhs.Z + rhs, lhs.W + rhs);
 	}
-	friend MATH_API FORCEINLINE Vec4 operator+(float lhs, const Vec4& rhs)
+	friend FORCEINLINE Vec4 operator+(float lhs, const Vec4& rhs)
 	{
 		return Vec4(lhs + rhs.X, lhs + rhs.Y, lhs + rhs.Z, lhs + rhs.W);
 	}
-	friend MATH_API FORCEINLINE Vec4& operator+=(Vec4& lhs, const Vec4& rhs)
+	friend FORCEINLINE Vec4& operator+=(Vec4& lhs, const Vec4& rhs)
 	{
 		lhs = lhs + rhs;
 		return lhs;
 	}
-	friend MATH_API FORCEINLINE Vec4& operator+=(Vec4& lhs, float rhs)
+	friend FORCEINLINE Vec4& operator+=(Vec4& lhs, float rhs)
 	{
 		lhs = lhs + rhs;
 		return lhs;
 	}
-	friend MATH_API FORCEINLINE Vec4 operator-(const Vec4& lhs, const Vec4& rhs)
+	friend FORCEINLINE Vec4 operator-(const Vec4& lhs, const Vec4& rhs)
 	{
 		return Vec4(lhs.X - rhs.X, lhs.Y - rhs.Y, lhs.Z - rhs.Z, lhs.W - rhs.W);
 	}
-	friend MATH_API FORCEINLINE Vec4 operator-(const Vec4& lhs, float rhs)
+	friend FORCEINLINE Vec4 operator-(const Vec4& lhs, float rhs)
 	{
 		return Vec4(lhs.X - rhs, lhs.Y - rhs, lhs.Z - rhs, lhs.W - rhs);
 	}
-	friend MATH_API FORCEINLINE Vec4 operator-(float lhs, const Vec4& rhs)
+	friend FORCEINLINE Vec4 operator-(float lhs, const Vec4& rhs)
 	{
 		return Vec4(lhs - rhs.X, lhs - rhs.Y, lhs - rhs.Z, lhs - rhs.W);
 	}
-	friend MATH_API FORCEINLINE Vec4& operator-=(Vec4& lhs, const Vec4& rhs)
+	friend FORCEINLINE Vec4& operator-=(Vec4& lhs, const Vec4& rhs)
 	{
 		lhs = lhs - rhs;
 		return lhs;
 	}
-	friend MATH_API FORCEINLINE Vec4& operator-=(Vec4& lhs, float rhs)
+	friend FORCEINLINE Vec4& operator-=(Vec4& lhs, float rhs)
 	{
 		lhs = lhs - rhs;
 		return lhs;
 	}
-	friend MATH_API FORCEINLINE Vec4 operator*(const Vec4& lhs, const Vec4& rhs)
+	friend FORCEINLINE Vec4 operator*(const Vec4& lhs, const Vec4& rhs)
 	{
 		return Vec4(lhs.X * rhs.X, lhs.Y * rhs.Y, lhs.Z * rhs.Z, lhs.W * rhs.W);
 	}
-	friend MATH_API FORCEINLINE Vec4 operator*(const Vec4& lhs, float rhs)
+	friend FORCEINLINE Vec4 operator*(const Vec4& lhs, float rhs)
 	{
 		return Vec4(lhs.X * rhs, lhs.Y * rhs, lhs.Z * rhs, lhs.W * rhs);
 	}
-	friend MATH_API FORCEINLINE Vec4 operator*(float lhs, const Vec4& rhs)
+	friend FORCEINLINE Vec4 operator*(float lhs, const Vec4& rhs)
 	{
 		return Vec4(lhs * rhs.X, lhs * rhs.Y, lhs * rhs.Z, lhs * rhs.W);
 	}
-	friend MATH_API FORCEINLINE Vec4& operator*=(Vec4& lhs, const Vec4& rhs)
+	friend FORCEINLINE Vec4& operator*=(Vec4& lhs, const Vec4& rhs)
 	{
 		lhs = lhs * rhs;
 		return lhs;
 	}
-	friend MATH_API FORCEINLINE Vec4& operator*=(Vec4& lhs, float rhs)
+	friend FORCEINLINE Vec4& operator*=(Vec4& lhs, float rhs)
 	{
 		lhs = lhs * rhs;
 		return lhs;
 	}
-	friend MATH_API FORCEINLINE Vec4 operator/(const Vec4& lhs, const Vec4& rhs)
+	friend FORCEINLINE Vec4 operator/(const Vec4& lhs, const Vec4& rhs)
 	{
 		return Vec4(lhs.X * rhs.X, lhs.Y * rhs.Y, lhs.Z * rhs.Z, lhs.W * rhs.W);
 	}
-	friend MATH_API FORCEINLINE Vec4 operator/(const Vec4& lhs, float rhs)
+	friend FORCEINLINE Vec4 operator/(const Vec4& lhs, float rhs)
 	{
 		return Vec4(lhs.X * rhs, lhs.Y * rhs, lhs.Z * rhs, lhs.W * rhs);
 	}
-	friend MATH_API FORCEINLINE Vec4 operator/(float lhs, const Vec4& rhs)
+	friend FORCEINLINE Vec4 operator/(float lhs, const Vec4& rhs)
 	{
 		return Vec4(lhs / rhs.X, lhs / rhs.Y, lhs / rhs.Z, lhs / rhs.W);
 	}
-	friend MATH_API FORCEINLINE Vec4& operator/=(Vec4& lhs, const Vec4& rhs)
+	friend FORCEINLINE Vec4& operator/=(Vec4& lhs, const Vec4& rhs)
 	{
 		lhs = lhs / rhs;
 		return lhs;
 	}
-	friend MATH_API FORCEINLINE Vec4& operator/=(Vec4& lhs, float rhs)
+	friend FORCEINLINE Vec4& operator/=(Vec4& lhs, float rhs)
 	{
 		lhs = lhs / rhs;
 		return lhs;
 	}
-	friend MATH_API FORCEINLINE bool operator==(const Vec4& lhs, const Vec4& rhs)
+	friend FORCEINLINE bool operator==(const Vec4& lhs, const Vec4& rhs)
 	{
 		return lhs.X == rhs.X && lhs.Y == rhs.Y && lhs.Z == rhs.Z && lhs.W == rhs.W;
 	}
-	friend MATH_API FORCEINLINE bool operator!=(const Vec4& lhs, const Vec4& rhs)
+	friend FORCEINLINE bool operator!=(const Vec4& lhs, const Vec4& rhs)
 	{
 		return lhs.X != rhs.X || lhs.Y != rhs.Y || lhs.Z != rhs.Z || lhs.W != rhs.W;
 	}

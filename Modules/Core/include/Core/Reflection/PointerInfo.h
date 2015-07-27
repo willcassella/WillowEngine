@@ -12,8 +12,8 @@ class CORE_API PointerInfo final : public PrimitiveInfo
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS;
-	EXTENDS(PrimitiveInfo);
+	REFLECTABLE_CLASS
+	EXTENDS(PrimitiveInfo)
 	template <typename PointedT> 
 	friend struct Implementation::TypeOf;
 

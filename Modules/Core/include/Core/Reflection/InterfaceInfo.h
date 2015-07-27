@@ -11,8 +11,8 @@ class CORE_API InterfaceInfo : public CompoundInfo
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS;
-	EXTENDS(CompoundInfo);
+	REFLECTABLE_CLASS
+	EXTENDS(CompoundInfo)
 
 	////////////////////////
 	///   Constructors   ///

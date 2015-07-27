@@ -32,6 +32,7 @@
 ///   Reflection   ///
 
 #include "Reflection/PointerInfo.h"
+#include "Reflection/EnumInfo.h"
 #include "Reflection/StructInfo.h"
 #include "Reflection/ClassInfo.h"
 #include "Reflection/InterfaceInfo.h"
