@@ -2,6 +2,7 @@
 #pragma once
 
 #include <functional>
+#include "Reflection/VoidInfo.h"
 #include "Event.h"
 
 struct EventHandler final
@@ -85,12 +86,12 @@ public:
 	{
 		static_assert(std::is_base_of<Object, OwnerT>::value || std::is_base_of<Interface, OwnerT>::value,
 			"Only 'Object' or 'Interface' types may have event handlers.");
-		static_assert(std::is_copy_assignable<FieldType>::value, 
+		static_assert(std::is_copy_assignable<FieldT>::value, 
 			"You cannot create a field handler to a non copy-assignable field");
 
 		_handler = [&object, field](const Event& event)-> void
 		{
-			auto pValue = static_cast<const FieldType*>(event.GetValue().GetValue());
+			auto pValue = static_cast<const FieldT*>(event.GetValue().GetValue());
 			(object.*field) = *pValue;
 		};
 	}

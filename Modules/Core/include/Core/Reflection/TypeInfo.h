@@ -366,7 +366,7 @@ FORCEINLINE TargetT* Cast(T& value)
 {
 	static_assert(!std::is_reference<TargetT>::value, "Using 'Cast' to cast to a reference type is not allowed");
 
-	if (::TypeOf(value).template IsCastableTo<TargetT>())
+	if (TypeOf(value).template IsCastableTo<TargetT>())
 	{
 		return reinterpret_cast<TargetT*>(&value);
 	}

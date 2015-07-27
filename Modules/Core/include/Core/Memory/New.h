@@ -2,6 +2,7 @@
 #pragma once
 
 #include <cassert>
+#include <type_traits>
 #include "../config.h"
 
 /////////////////
@@ -16,7 +17,7 @@ struct NewPtr final
 	///   Information   ///
 public:
 
-	template <typename T, typename ... Args> friend NewPtr<T> New(Args&&... args);
+	template <typename F, typename ... Args> friend NewPtr<F> New(Args&&... args);
 
 	////////////////////////
 	///   Constructors   ///

@@ -1,6 +1,7 @@
 // Pointers.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
+#include <utility>
 #include "New.h"
 #include "../Reflection/Reflection.h"
 
