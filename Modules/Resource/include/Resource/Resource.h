@@ -19,7 +19,7 @@ public:
 public:
 
 	static const ClassInfo StaticTypeInfo;
-	virtual const ResourceInfo& GetType() const = 0;
+	const ResourceInfo& GetType() const override = 0;
 
 	////////////////////////
 	///   Constructors   ///
