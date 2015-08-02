@@ -12,11 +12,11 @@ Core: setup
 	make -C Modules/Core/ -f Core.makefile
 	cp Modules/Core/bin/Core.so bin/Core.so
 
-Common: Core setup
-	make -C Modules/Common/ -f Common.makefile
-	cp Modules/Common/bin/Common.so bin/Common.so
+Resource: Core setup
+	make -C Modules/Resource/ -f Resource.makefile
+	cp Modules/Resource/bin/Resource.so bin/Resource.so
 	
-ResourceConverter: Core Common setup
+ResourceConverter: Core Resource setup
 	make -C Tools/ResourceConverter/ -f ResourceConverter.makefile
 	cp Tools/ResourceConverter/bin/ResourceConverter.out bin/ResourceConverter.out
 
