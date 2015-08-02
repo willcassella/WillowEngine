@@ -11,7 +11,7 @@ BUILD_REFLECTION(VoidInfo);
 ////////////////////////
 ///   Constructors   ///
 
-VoidInfo::VoidInfo(TypeInfoBuilder<void, VoidInfo>& builder)
+VoidInfo::VoidInfo(const TypeInfoBuilder<void, VoidInfo>& builder)
 	: Base(builder)
 {
 	// All done

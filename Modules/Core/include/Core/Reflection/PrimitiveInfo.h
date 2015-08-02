@@ -22,7 +22,7 @@ public:
 
 	// @TODO: Documentation
 	template <typename PrimitiveT>
-	PrimitiveInfo(TypeInfoBuilder<PrimitiveT, PrimitiveInfo>& builder)
+	PrimitiveInfo(const TypeInfoBuilder<PrimitiveT, PrimitiveInfo>& builder)
 		: Base(builder)
 	{
 		// All done

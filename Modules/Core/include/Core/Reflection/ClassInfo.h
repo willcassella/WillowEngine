@@ -25,7 +25,7 @@ public:
 
 	// @TODO: Documentation
 	template <class ClassT>
-	ClassInfo(TypeInfoBuilder<ClassT, ClassInfo>& builder)
+	ClassInfo(const TypeInfoBuilder<ClassT, ClassInfo>& builder)
 		: Base(builder), _data(std::move(builder._data))
 	{
 		// All done
@@ -133,7 +133,7 @@ private:
 	///   Data   ///
 private:
 
-	ClassInfo::Data _data;
+	mutable ClassInfo::Data _data;
 };
 
 // TODO: Documentation

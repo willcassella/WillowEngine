@@ -27,7 +27,7 @@ public:
 
 	// TODO: Documentation
 	template <class CompoundT>
-	CompoundInfo(TypeInfoBuilder<CompoundT, CompoundInfo>& builder)
+	CompoundInfo(const TypeInfoBuilder<CompoundT, CompoundInfo>& builder)
 		: Base(builder), _data(std::move(builder._data))
 	{
 		// All done
@@ -177,5 +177,5 @@ public:
 	///   Data   ///
 private:
 
-	CompoundInfo::Data _data;
+	mutable CompoundInfo::Data _data;
 };

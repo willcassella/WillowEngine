@@ -25,7 +25,7 @@ public:
 
 	// TODO: Documentation
 	template <typename PointerT>
-	PointerInfo(TypeInfoBuilder<PointerT, PointerInfo>& builder)
+	PointerInfo(const TypeInfoBuilder<PointerT, PointerInfo>& builder)
 		: Base(builder), _data(std::move(builder._data))
 	{
 		// All done
@@ -95,7 +95,7 @@ public:
 	///   Data   ///
 private:
 
-	PointerInfo::Data _data;
+	mutable PointerInfo::Data _data;
 };
 
 // TODO: Documentation
@@ -119,7 +119,7 @@ public:
 	///   Data   ///
 private:
 
-	PointerInfo::Data _data;
+	mutable PointerInfo::Data _data;
 };
 
 //////////////////////////

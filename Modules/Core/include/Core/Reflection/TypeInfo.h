@@ -61,7 +61,7 @@ public:
 
 	// TODO: Documentation
 	template <typename T>
-	TypeInfo(TypeInfoBuilder<T, TypeInfo>& builder)
+	TypeInfo(const TypeInfoBuilder<T, TypeInfo>& builder)
 		: _data(std::move(builder._data))
 	{
 		RegisterWithApplication();
@@ -302,7 +302,7 @@ public:
 	///   Data   ///
 private:
 
-	TypeInfo::Data _data;
+	mutable TypeInfo::Data _data;
 };
 
 //////////////////////////

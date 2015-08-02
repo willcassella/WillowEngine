@@ -14,7 +14,7 @@ namespace Implementation
 	///   Fundamental Types   ///
 
 	/** Register TypeInfo for void */
-	const VoidInfo TypeOf<void>::StaticTypeInfo = TypeInfoBuilder<void, VoidInfo>();
+	const VoidInfo TypeOf<void>::StaticTypeInfo = TypeInfoBuilder<void>();
 
 	/** Register TypeInfo for std::nullptr_t */
 	const PointerInfo TypeOf<std::nullptr_t>::StaticTypeInfo = TypeInfoBuilder<std::nullptr_t>();

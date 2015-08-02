@@ -28,7 +28,7 @@ public:
 
 	// @TODO: Documentation
 	template <class StructT>
-	StructInfo(TypeInfoBuilder<StructT, StructInfo>& builder)
+	StructInfo(const TypeInfoBuilder<StructT, StructInfo>& builder)
 		: Base(builder)
 	{
 		// All done

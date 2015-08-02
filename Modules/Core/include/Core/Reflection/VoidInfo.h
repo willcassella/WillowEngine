@@ -21,7 +21,7 @@ public:
 public:
 
 	// TODO: Documentation
-	VoidInfo(TypeInfoBuilder<void, VoidInfo>& builder);
+	VoidInfo(const TypeInfoBuilder<void, VoidInfo>& builder);
 
 	///////////////////
 	///   Methods   ///
@@ -51,7 +51,7 @@ public:
 	///   Data   ///
 private:
 
-	TypeInfo::Data _data;
+	mutable TypeInfo::Data _data;
 };
 
 // TODO: Documentation
