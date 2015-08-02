@@ -88,7 +88,7 @@ public:
 
 		_data.PointedType = &TypeOf<PointedT>();
 		_data.IsConst = std::is_const<PointedT>::value;
-		_data.IsNullPtr = false;
+		_data.IsNullptr = false;
 	}
 
 	////////////////
