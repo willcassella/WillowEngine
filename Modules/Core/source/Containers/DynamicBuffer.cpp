@@ -74,6 +74,8 @@ DynamicBuffer& DynamicBuffer::operator=(DynamicBuffer&& move)
 {
 	if (this != &move)
 	{
+		free(_value);
+
 		_size = move._size;
 		_value = move._value;
 

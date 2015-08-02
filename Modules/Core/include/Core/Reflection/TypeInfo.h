@@ -67,9 +67,6 @@ public:
 		RegisterWithApplication();
 	}
 
-	/** TypeInfo objects are not copyable. */
-	TypeInfo(const TypeInfo& copy) = delete;
-
 	/** Stupid move-constructor that will never get called. See notes in source. */
 	TypeInfo(TypeInfo&& move);
 

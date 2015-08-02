@@ -26,8 +26,6 @@ public:
 public:
 
 	Resource(const String& path);
-	Resource(const Resource& copy) = delete;
-	Resource(Resource&& move) = delete;
 	~Resource() override;
 
 	///////////////////
@@ -44,13 +42,6 @@ public:
 	{
 		return _size;
 	}
-
-	/////////////////////
-	///   Operators   ///
-public:
-
-	Resource& operator=(const Resource& copy) = delete;
-	Resource& operator=(Resource&& move) = delete;
 
 	////////////////
 	///   Data   ///

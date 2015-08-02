@@ -24,8 +24,6 @@ public:
 public:
 
 	Asset(const Resource& resource);
-	Asset(const Asset& copy) = delete;
-	Asset(Asset&& move) = delete;
 	~Asset();
 
 	///////////////////
@@ -40,13 +38,6 @@ public:
 
 	/** Called when the Resource is reloaded. */
 	virtual void OnReload() = 0;
-
-	/////////////////////
-	///   Operators   ///
-public:
-
-	Asset& operator=(const Asset& copy) = delete;
-	Asset& operator=(Asset&& move) = delete;
 
 	////////////////
 	///   Data   ///
