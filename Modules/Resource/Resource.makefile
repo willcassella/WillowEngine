@@ -1,9 +1,9 @@
 # Resource.makefile
 
 CXX=clang++
-CFLAGS=-std=c++11 -Ofast -Wall -Wextra -D BITS_64 -I ../Core/include
+CFLAGS=-std=c++14 -Ofast -Wall -Wextra -D BITS_64 -I ../Core/include
 LFLAGS=-fPIC -shared -Wl,-soname='Resource.so',-rpath='$$ORIGIN' -l freeimage
-DEPS=../Resource/bin/Resource.so
+DEPS=../Core/bin/Core.so
 OUT=-o bin/Resource.so
 
 .PHONY: setup
