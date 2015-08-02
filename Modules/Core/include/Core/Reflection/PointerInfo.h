@@ -86,9 +86,9 @@ public:
 		static_assert(std::is_pointer<PointerT>::value, "PointerTypes must be pointers");
 		using PointedT = std::remove_pointer_t<PointerT>;
 
-		_pointedType = &TypeOf<PointedT>();
-		_isConst = std::is_const<PointedT>::value;
-		_isNullPtr = false;
+		_data.PointedType = &TypeOf<PointedT>();
+		_data.IsConst = std::is_const<PointedT>::value;
+		_data.IsNullPtr = false;
 	}
 
 	////////////////
