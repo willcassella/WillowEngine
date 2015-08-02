@@ -162,7 +162,7 @@ namespace Implementation
 template <typename T>
 FORCEINLINE String FromString(T& value, const String& string)
 {
-	return Implementation::FromString<T>::Function(value);
+	return Implementation::FromString<T>::Function(value, string);
 }
 
 /** Parses the given value from the given String, following the given format. The remainder of the String is returned.

@@ -18,18 +18,7 @@ public:
 	///   Constructors   ///
 public:
 
-	/** Creates reflection information for the given interface
-	* NOTE: Do not use this outside of the registration function for a interface
-	* 'name' - The fully-qualified name of the interface */
-	template <class InterfaceT>
-	static InterfaceInfo Create(const String& name)
-	{
-		InterfaceT* dummy = nullptr;
-		return InterfaceInfo(dummy, name);
-	}
-
-protected:
-
+	// TODO: Update this to builder pattern
 	/** Constructs a new instance of 'InterfaceInfo'.
 	* 'dummy' - A pointer to an instance of the interface.
 	* 'name' - The name of the interface. */

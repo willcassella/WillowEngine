@@ -123,9 +123,9 @@ private:
 	void AddInterfaces(stdEXT::type_sequence<InterfaceT, MoreInterfaceT...>)
 	{
 		static_assert(std::is_base_of<InterfaceT, ClassT>::value, "You must actually implement the interface.");
-		static_assert(stdEXT::is_interface<InterfaceT>::value, "The type given to 'AddInterface' must be an interface.");
+		static_assert(std::is_same<TypeInfoType<InterfaceT>, InterfaceInfo>::value, "The type given to 'AddInterface' must be an interface.");
 
-		_interfaces.Add(&TypeOf<InterfaceT>());
+		_data.Interfaces.Add(&TypeOf<InterfaceT>());
 		AddInterface(stdEXT::type_sequence<MoreInterfaceT...>{});
 	}
 

@@ -27,16 +27,6 @@ namespace stdEXT
 		: std::is_same<std::decay_t<T>&, T>
 	{};
 
-	/** Evaluates to 'true' if the given type is an interface. */
-	template <typename T>
-	struct is_interface final
-		: std::integral_constant<bool,
-		std::is_base_of<Interface, T>::value &&
-		!std::is_base_of<Object, T>::value &&
-		std::is_abstract<T>::value &&
-		sizeof(Interface) == sizeof(T)>
-	{};
-
 	/** Type holding a sequence of other types. */
 	template <typename ... T>
 	struct type_sequence final
