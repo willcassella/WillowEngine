@@ -31,7 +31,7 @@ TypeInfo::~TypeInfo()
 
 String TypeInfo::GetName() const
 {
-	return _data.Name;
+	return _data.name;
 }
 
 void TypeInfo::RegisterWithApplication()

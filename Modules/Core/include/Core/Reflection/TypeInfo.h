@@ -83,7 +83,7 @@ public:
 	/** Returns the static size of this type */
 	FORCEINLINE uint32 GetSize() const
 	{
-		return _data.Size;
+		return _data.size;
 	}
 
 	/** Returns the name of this type */
@@ -93,99 +93,99 @@ public:
 	* i.e - It is composed of smaller types (like a class, struct, or interface). */
 	FORCEINLINE bool IsCompound() const
 	{
-		return _data.IsCompound;
+		return _data.isCompound;
 	}
 
 	/** Returns whether this type is abstract
 	* i.e - It has at least one pure virtual function */
 	FORCEINLINE bool IsAbstract() const
 	{
-		return _data.IsAbstract;
+		return _data.isAbstract;
 	}
 
 	/** Returns whether this type is polymorphic
 	* i.e - It has at least one virtual function */
 	FORCEINLINE bool IsPolymorphic() const
 	{
-		return _data.IsPolymorphic;
+		return _data.isPolymorphic;
 	}
 
 	/** Returns whether this type is default-constructible. */
 	FORCEINLINE bool IsDefaultConstructible() const
 	{
-		return _data.IsDefaultConstructible;
+		return _data.isDefaultConstructible;
 	}
 
 	/** Returns whether this type is copy-constructible. */
 	FORCEINLINE bool IsCopyConstructible() const
 	{
-		return _data.IsCopyConstructible;
+		return _data.isCopyConstructible;
 	}
 
 	/** Returns whether this type is move-constructible. */
 	FORCEINLINE bool IsMoveConstructible() const
 	{
-		return _data.IsMoveConstructible;
+		return _data.isMoveConstructible;
 	}
 
 	/** Returns whether this type is copy-assignable. */
 	FORCEINLINE bool IsCopyAssignable() const
 	{
-		return _data.IsCopyAssignable;
+		return _data.isCopyAssignable;
 	}
 
 	/** Returns whether this type is move-assignable. */
 	FORCEINLINE bool IsMoveAssignable() const
 	{
-		return _data.IsMoveAssignable;
+		return _data.isMoveAssignable;
 	}
 
 	/** Returns whether this type is destructible. */
 	FORCEINLINE bool IsDestructible() const
 	{
-		return _data.IsDestructible;
+		return _data.isDestructible;
 	}
 
 	/** Returns the default constructor for this type.
 	* Returns an empty implementation if this type is not copy-constructible. */
 	FORCEINLINE DefaultConstructor GetDefaultConstructor() const
 	{
-		return _data.DefaultConstructor;
+		return _data.defaultConstructor;
 	}
 
 	/** Returns the copy-constructor for this type. 
 	* Returns an empty implementation if this type is not copy-constructible. */
 	FORCEINLINE CopyConstructor GetCopyConstructor() const
 	{
-		return _data.CopyConstructor;
+		return _data.copyConstructor;
 	}
 
 	/** Returns the move-constructor for this type. 
 	* Returns an empty implementation if this type is not move-constructible. */
 	FORCEINLINE MoveConstructor GetMoveConstructor() const
 	{
-		return _data.MoveConstructor;
+		return _data.moveConstructor;
 	}
 
 	/** Returns the copy-assignment operator for this type.
 	* Returns an empty implementation if this type is not copy-assignable. */
 	FORCEINLINE CopyAssignmentOperator GetCopyAssignmentOperator() const
 	{
-		return _data.CopyAssignmentOperator;
+		return _data.copyAssignmentOperator;
 	}
 
 	/** Returns the move-assignment operator for this type.
 	* Returns an empty implementation if this type is not move-assignable. */
 	FORCEINLINE MoveAssignmentOperator GetMoveAssignmentOperator() const
 	{
-		return _data.MoveAssignmentOperator;
+		return _data.moveAssignmentOperator;
 	}
 
 	/** Returns the destructor for this type.
 	* Returns an empty implementation if this type is not destructible. */
 	FORCEINLINE Destructor GetDestructor() const
 	{
-		return _data.Destructor;
+		return _data.destructor;
 	}
 
 	/** Returns whether this type is bitwise castable to the given type */
@@ -215,25 +215,25 @@ private:
 
 	struct Data
 	{
-		CString Name;
-		DefaultConstructor DefaultConstructor;
-		CopyConstructor CopyConstructor;
-		MoveConstructor MoveConstructor;
-		CopyAssignmentOperator CopyAssignmentOperator;
-		MoveAssignmentOperator MoveAssignmentOperator;
-		Destructor Destructor;
-		String(*ToStringImplementation)(const void*);
-		String(*FromStringImplementation)(void*, const String&);
-		uint32 Size;
-		bool IsCompound;
-		bool IsAbstract;
-		bool IsPolymorphic;
-		bool IsDefaultConstructible;
-		bool IsCopyConstructible;
-		bool IsMoveConstructible;
-		bool IsCopyAssignable;
-		bool IsMoveAssignable;
-		bool IsDestructible;
+		CString name;
+		DefaultConstructor defaultConstructor;
+		CopyConstructor copyConstructor;
+		MoveConstructor moveConstructor;
+		CopyAssignmentOperator copyAssignmentOperator;
+		MoveAssignmentOperator moveAssignmentOperator;
+		Destructor destructor;
+		String(*toStringImplementation)(const void*);
+		String(*fromStringImplementation)(void*, const String&);
+		uint32 size;
+		bool isCompound;
+		bool isAbstract;
+		bool isPolymorphic;
+		bool isDefaultConstructible;
+		bool isCopyConstructible;
+		bool isMoveConstructible;
+		bool isCopyAssignable;
+		bool isMoveAssignable;
+		bool isDestructible;
 	} _data;
 };
 
@@ -253,49 +253,49 @@ public:
 
 	TypeInfoBuilder(CString name)
 	{
-		_data.Name = name;
+		_data.name = name;
 
-		_data.DefaultConstructor= Implementation::Construct<T>::Function;
-		_data.CopyConstructor = [](byte* location, const void* copy)
+		_data.defaultConstructor= Implementation::Construct<T>::Function;
+		_data.copyConstructor = [](byte* location, const void* copy)
 		{
 			Implementation::Construct<T, const T&>::Function(location, *static_cast<const T*>(copy));
 		};
-		_data.MoveConstructor = [](byte* location, void* move)
+		_data.moveConstructor = [](byte* location, void* move)
 		{
 			Implementation::Construct<T, T&&>::Function(location, std::move(*static_cast<T*>(move)));
 		};
-		_data.CopyAssignmentOperator = [](void* value, const void* copy)
+		_data.copyAssignmentOperator = [](void* value, const void* copy)
 		{
 			Implementation::Assign<T, const T&>::Function(*static_cast<T*>(value), *static_cast<const T*>(copy));
 		};
-		_data.MoveAssignmentOperator = [](void* value, void* move)
+		_data.moveAssignmentOperator = [](void* value, void* move)
 		{
 			Implementation::Assign<T, T&&>::Function(*static_cast<T*>(value), std::move(*static_cast<T*>(move)));
 		};
-		_data.Destructor = [](void* value)
+		_data.destructor = [](void* value)
 		{
 			Implementation::Destroy<T>::Function(*static_cast<T*>(value));
 		};
 
-		_data.ToStringImplementation = [](const void* value) -> String
+		_data.toStringImplementation = [](const void* value) -> String
 		{
 			return Implementation::ToString<T>::Function(*static_cast<const T*>(value));
 		};
-		_data.FromStringImplementation = [](void* value, const String& string) -> String
+		_data.fromStringImplementation = [](void* value, const String& string) -> String
 		{
 			return Implementation::FromString<T>::Function(*static_cast<T*>(value), string);
 		};
 
-		_data.Size = sizeof(T);
-		_data.IsCompound = std::is_class<T>::value;
-		_data.IsAbstract = std::is_abstract<T>::value;
-		_data.IsPolymorphic = std::is_polymorphic<T>::value;
-		_data.IsDefaultConstructible = std::is_default_constructible<T>::value;
-		_data.IsCopyConstructible = std::is_copy_constructible<T>::value;
-		_data.IsMoveConstructible = std::is_move_constructible<T>::value;
-		_data.IsCopyAssignable = std::is_copy_assignable<T>::value;
-		_data.IsMoveAssignable = std::is_move_assignable<T>::value;
-		_data.IsDestructible = std::is_destructible<T>::value;
+		_data.size = sizeof(T);
+		_data.isCompound = std::is_class<T>::value;
+		_data.isAbstract = std::is_abstract<T>::value;
+		_data.isPolymorphic = std::is_polymorphic<T>::value;
+		_data.isDefaultConstructible = std::is_default_constructible<T>::value;
+		_data.isCopyConstructible = std::is_copy_constructible<T>::value;
+		_data.isMoveConstructible = std::is_move_constructible<T>::value;
+		_data.isCopyAssignable = std::is_copy_assignable<T>::value;
+		_data.isMoveAssignable = std::is_move_assignable<T>::value;
+		_data.isDestructible = std::is_destructible<T>::value;
 	}
 
 	////////////////

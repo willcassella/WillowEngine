@@ -54,7 +54,7 @@ public:
 	{
 		if (_value)
 		{
-			return _type->_data.ToStringImplementation(_value);
+			return _type->_data.toStringImplementation(_value);
 		}
 		else
 		{
@@ -67,7 +67,7 @@ public:
 	{
 		if (_value)
 		{
-			return _type->_data.FromStringImplementation(_value, string);
+			return _type->_data.fromStringImplementation(_value, string);
 		}
 		else
 		{
