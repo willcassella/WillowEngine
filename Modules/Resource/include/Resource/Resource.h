@@ -1,25 +1,31 @@
 // Resource.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "../Reflection/Reflection.h"
-#include "../Object.h"
-#include "../String.h"
+#include "config.h"
+#include "Forwards/Resource.h"
+#include "Reflection/ResourceInfo.h"
 
-class CORE_API Resource : public Object
+class RESOURCE_API Resource : public Object
 {
 	///////////////////////
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS;
-	EXTENDS(Object);
-	template <class T> friend struct ResourcePtr;
+	EXTENDS(Object)
+	friend Asset;
+
+	//////////////////////
+	///   Reflection   ///
+public:
+
+	static const ClassInfo StaticTypeInfo;
+	virtual const ResourceInfo& GetType() const = 0;
 
 	////////////////////////
 	///   Constructors   ///
 public:
 
-	Resource(const String& uri);
+	Resource(const String& path);
 	Resource(const Resource& copy) = delete;
 	Resource(Resource&& move) = delete;
 	~Resource() override;
@@ -28,13 +34,16 @@ public:
 	///   Methods   ///
 public:
 
-	/** Returns the Unique Resource Identifier for this Resource. */
-	FORCEINLINE const String& GetURI() const
+	/** Returns the path to this this Resource. */
+	FORCEINLINE const String& GetPath() const
 	{
-		return _uri;
+		return _path;
 	}
 
-	static Resource* FindLoadedResource(const String& uri);
+	FORCEINLINE uint32 GetSize()
+	{
+		return _size;
+	}
 
 	/////////////////////
 	///   Operators   ///
@@ -47,6 +56,7 @@ public:
 	///   Data   ///
 private:
 
-	String _uri;
-	uint32 _refs;
+	mutable Array<Asset*> _assets;
+	String _path;
+	uint32 _size;
 };

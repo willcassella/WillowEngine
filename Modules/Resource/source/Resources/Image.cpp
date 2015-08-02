@@ -2,18 +2,18 @@
 
 #include <FreeImage.h>
 #include <Core/Console.h>
-#include "../include/Common/Image.h"
+#include "../../include/Resource/Resources/Image.h"
 
 //////////////////////
 ///   Reflection   ///
 
-CLASS_REFLECTION(Image);
+BUILD_REFLECTION(Image);
 
 ////////////////////////
 ///   Constructors   ///
 
 Image::Image(const String& path)
-	: Super(path)
+	: Base(path)
 {
 	// Open the file
 	FREE_IMAGE_FORMAT format = FreeImage_GetFileType(path.Cstr());
@@ -26,7 +26,7 @@ Image::Image(const String& path)
 	}
 
 	FIBITMAP* temp = image;
-	_bitmap = FreeImage_ConvertTo32Bits(image);
+	_bitmap = (uint32*)FreeImage_ConvertTo32Bits(image);
 	FreeImage_Unload(temp);
 
 	_width = FreeImage_GetWidth(image);
@@ -53,7 +53,7 @@ uint32 Image::GetHeight() const
 	return _height;
 }
 
-void* Image::GetBitmap() const
+const uint32* Image::GetBitmap() const
 {
 	return _bitmap;
 }

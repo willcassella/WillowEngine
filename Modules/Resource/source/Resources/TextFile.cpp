@@ -3,18 +3,18 @@
 #include <string>
 #include <fstream>
 #include <Core/Console.h>
-#include "../include/Common/TextFile.h"
+#include "../../include/Resource/Resources/TextFile.h"
 
 //////////////////////
 ///   Reflection   ///
 
-CLASS_REFLECTION(TextFile);
+BUILD_REFLECTION(TextFile);
 
 ////////////////////////
 ///   Constructors   ///
 
 TextFile::TextFile(const String& path)
-	: Super(path)
+	: Base(path)
 {
 	std::ifstream file(path.Cstr(), std::ios::in);
 	std::string line;

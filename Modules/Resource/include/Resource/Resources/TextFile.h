@@ -1,17 +1,17 @@
 // TextFile.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <Core/Resource/Resource.h>
-#include "config.h"
+#include "../Resource.h"
+#include "../Reflection/ResourceInfo.h"
 
-class COMMON_API TextFile : public Resource
+class RESOURCE_API TextFile final : public Resource
 {
 	///////////////////////
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS;
-	EXTENDS(Resource);
+	REFLECTABLE_RESOURCE
+	EXTENDS(Resource)
 
 	////////////////////////
 	///   Constructors   ///

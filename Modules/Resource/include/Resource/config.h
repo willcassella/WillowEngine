@@ -6,14 +6,14 @@
 ///////////////////////////////
 ///   Build Configuration   ///
 
-#ifdef COMMON_BUILD
-#	define COMMON_API EXPORT
+#ifdef RESOURCE_BUILD
+#	define RESOURCE_API EXPORT
 #else
-#	define COMMON_API IMPORT
+#	define RESOURCE_API IMPORT
 #endif
 
 #if defined THIS_MODULE_API
 #	undef THIS_MODULE_API
 #endif
 
-#define THIS_MODULE_API COMMON_API
+#define THIS_MODULE_API RESOURCE_API
