@@ -11,17 +11,27 @@
 /////////////////
 ///   Types   ///
 
+/** Declaration of 'TypeInfoBuilder', specialized here and in other reflection class headers. */
+template <typename T, class TypeInfoT = TypeInfoType<T>>
+struct TypeInfoBuilder;
+
+// TODO: Documentation
+template <typename T, class TypeInfoT>
+using TypeInfoBuilderBase = TypeInfoBuilder<T, BaseOf<TypeInfoT>>;
+
 /** Base of every reflection meta-class in the engine */
 class CORE_API TypeInfo : public Object
 {
 	///////////////////////
 	///   Information   ///
 public:
-
+	
 	REFLECTABLE_CLASS
 	EXTENDS(Object)
-	template <typename T> friend String ToString(const T&);
-	template <typename T> friend String FromString(const String&, T&);
+
+	friend Variant;
+	template <typename T, class TypeInfoT>
+	friend struct TypeInfoBuilder;
 
 	///////////////////////
 	///   Inner Types   ///
@@ -49,82 +59,31 @@ public:
 	///   Constructors   ///
 public:
 
-	TypeInfo(const TypeInfo& copy) = delete;
-	TypeInfo(TypeInfo&& move);
-	~TypeInfo() override;
-
-protected:
-
-	/** @TODO: Documentation */
+	// TODO: Documentation
 	template <typename T>
-	TypeInfo(T* /*dummy*/, CString name)
-		: _name(name)
+	TypeInfo(TypeInfoBuilder<T, TypeInfo>& builder)
+		: _data(std::move(builder._data))
 	{
-		_defaultConstructor = [](byte* location)
-		{
-			Implementation::Construct<T>::Function(location);
-		};
-		_copyConstructor = [](byte* location, const void* copy)
-		{
-			Implementation::Construct<T, const T&>::Function(location, *static_cast<const T*>(copy));
-		};
-		_moveConstructor = [](byte* location, void* move)
-		{
-			Implementation::Construct<T, T&&>::Function(location, std::move(*static_cast<T*>(move)));
-		};
-		_copyAssignmentOperator = [](void* value, const void* copy) 
-		{
-			Implementation::Assign<T, const T&>::Function(*static_cast<T*>(value), *static_cast<const T*>(copy));
-		};
-		_moveAssignmentOperator = [](void* value, void* move)
-		{
-			Implementation::Assign<T, T&&>::Function(*static_cast<T*>(value), std::move(*static_cast<T*>(move)));
-		};
-		_destructor = [](void* value)
-		{
-			Implementation::Destroy<T>::Function(*static_cast<T*>(value));
-		};
-
-		_toStringImplementation = [](const void* value) -> String
-		{
-			return Implementation::ToString<T>::Function(*static_cast<const T*>(value));
-		};
-		_fromStringImplementation = [](const String& string, void* value) -> String
-		{
-			return Implementation::FromString<T>::Function(string, *static_cast<T*>(value));
-		};
-
-		_size = sizeof(T);
-		_isCompound = std::is_class<T>::value;
-		_isAbstract = std::is_abstract<T>::value;
-		_isPolymorphic = std::is_polymorphic<T>::value;
-		_isDefaultConstructible = std::is_default_constructible<T>::value;
-		_isCopyConstructible = std::is_copy_constructible<T>::value;
-		_isMoveConstructible = std::is_move_constructible<T>::value;
-		_isCopyAssignable = std::is_copy_assignable<T>::value;
-		_isMoveAssignable = std::is_move_assignable<T>::value;
-		_isDestructible = std::is_destructible<T>::value;
-
 		RegisterWithApplication();
 	}
-	
-	/** Overload for when creating type info for "void" */
-	TypeInfo(void* dummy, CString name);
+
+	/** Unregisters this TypeInfo object with the Application. */
+	~TypeInfo() override;
 
 	///////////////////
 	///   Methods   ///
 public:
 
 	/** Returns this TypeInfo object as a String */
-	FORCEINLINE String ToString() const
+	FORCEINLINE String ToString() const final override
 	{
-		return _name;
+		return GetName();
 	}
 
 	/** Returns the static size of this type */
 	FORCEINLINE uint32 GetSize() const
 	{
-		return _size;
+		return _data.Size;
 	}
 
 	/** Returns the name of this type */
@@ -134,110 +93,103 @@ public:
 	* i.e - It is composed of smaller types (like a class, struct, or interface). */
 	FORCEINLINE bool IsCompound() const
 	{
-		return _isCompound;
+		return _data.IsCompound;
 	}
 
 	/** Returns whether this type is abstract
 	* i.e - It has at least one pure virtual function */
 	FORCEINLINE bool IsAbstract() const
 	{
-		return _isAbstract;
+		return _data.IsAbstract;
 	}
 
 	/** Returns whether this type is polymorphic
 	* i.e - It has at least one virtual function */
 	FORCEINLINE bool IsPolymorphic() const
 	{
-		return _isPolymorphic;
+		return _data.IsPolymorphic;
 	}
 
 	/** Returns whether this type is default-constructible. */
 	FORCEINLINE bool IsDefaultConstructible() const
 	{
-		return _isDefaultConstructible;
+		return _data.IsDefaultConstructible;
 	}
 
 	/** Returns whether this type is copy-constructible. */
 	FORCEINLINE bool IsCopyConstructible() const
 	{
-		return _isCopyConstructible;
+		return _data.IsCopyConstructible;
 	}
 
 	/** Returns whether this type is move-constructible. */
 	FORCEINLINE bool IsMoveConstructible() const
 	{
-		return _isMoveConstructible;
+		return _data.IsMoveConstructible;
 	}
 
 	/** Returns whether this type is copy-assignable. */
 	FORCEINLINE bool IsCopyAssignable() const
 	{
-		return _isCopyAssignable;
+		return _data.IsCopyAssignable;
 	}
 
 	/** Returns whether this type is move-assignable. */
 	FORCEINLINE bool IsMoveAssignable() const
 	{
-		return _isMoveAssignable;
+		return _data.IsMoveAssignable;
 	}
 
 	/** Returns whether this type is destructible. */
 	FORCEINLINE bool IsDestructible() const
 	{
-		return _isDestructible;
+		return _data.IsDestructible;
 	}
 
 	/** Returns the default constructor for this type.
 	* Returns an empty implementation if this type is not copy-constructible. */
 	FORCEINLINE DefaultConstructor GetDefaultConstructor() const
 	{
-		return _defaultConstructor;
+		return _data.DefaultConstructor;
 	}
 
 	/** Returns the copy-constructor for this type. 
 	* Returns an empty implementation if this type is not copy-constructible. */
 	FORCEINLINE CopyConstructor GetCopyConstructor() const
 	{
-		return _copyConstructor;
+		return _data.CopyConstructor;
 	}
 
 	/** Returns the move-constructor for this type. 
 	* Returns an empty implementation if this type is not move-constructible. */
 	FORCEINLINE MoveConstructor GetMoveConstructor() const
 	{
-		return _moveConstructor;
+		return _data.MoveConstructor;
 	}
 
 	/** Returns the copy-assignment operator for this type.
 	* Returns an empty implementation if this type is not copy-assignable. */
 	FORCEINLINE CopyAssignmentOperator GetCopyAssignmentOperator() const
 	{
-		return _copyAssignmentOperator;
+		return _data.CopyAssignmentOperator;
 	}
 
 	/** Returns the move-assignment operator for this type.
 	* Returns an empty implementation if this type is not move-assignable. */
 	FORCEINLINE MoveAssignmentOperator GetMoveAssignmentOperator() const
 	{
-		return _moveAssignmentOperator;
+		return _data.MoveAssignmentOperator;
 	}
 
 	/** Returns the destructor for this type.
 	* Returns an empty implementation if this type is not destructible. */
 	FORCEINLINE Destructor GetDestructor() const
 	{
-		return _destructor;
+		return _data.Destructor;
 	}
 
 	/** Returns whether this type is bitwise castable to the given type */
 	virtual bool IsCastableTo(const TypeInfo& type) const = 0;
-	
-	/** Returns whether this type is bitwise castable to the given type */
-	template <typename T>
-	FORCEINLINE bool IsCastableTo() const
-	{
-		return IsCastableTo(TypeOf<T>());
-	}
 
 private:
 
@@ -248,13 +200,11 @@ private:
 	///   Operators   ///
 public:
 
-	TypeInfo& operator=(const TypeInfo& copy) = delete;
-	TypeInfo& operator=(TypeInfo&& move) = delete;
-	friend FORCEINLINE CORE_API bool operator==(const TypeInfo& lhs, const TypeInfo& rhs)
+	friend FORCEINLINE bool operator==(const TypeInfo& lhs, const TypeInfo& rhs)
 	{
 		return &lhs == &rhs || lhs.GetName() == rhs.GetName();
 	}
-	friend FORCEINLINE CORE_API bool operator!=(const TypeInfo& lhs, const TypeInfo& rhs)
+	friend FORCEINLINE bool operator!=(const TypeInfo& lhs, const TypeInfo& rhs)
 	{
 		return !(lhs == rhs);
 	}
@@ -263,25 +213,96 @@ public:
 	///   Data   ///
 private:
 
-	CString _name;
-	DefaultConstructor _defaultConstructor;
-	CopyConstructor _copyConstructor;
-	MoveConstructor _moveConstructor;
-	CopyAssignmentOperator _copyAssignmentOperator;
-	MoveAssignmentOperator _moveAssignmentOperator;
-	Destructor _destructor;
-	String(*_toStringImplementation)(const void*);
-	String(*_fromStringImplementation)(const String&, void*);
-	uint32 _size;
-	bool _isCompound;
-	bool _isAbstract;
-	bool _isPolymorphic;
-	bool _isDefaultConstructible;
-	bool _isCopyConstructible;
-	bool _isMoveConstructible;
-	bool _isCopyAssignable;
-	bool _isMoveAssignable;
-	bool _isDestructible;
+	struct Data
+	{
+		CString Name;
+		DefaultConstructor DefaultConstructor;
+		CopyConstructor CopyConstructor;
+		MoveConstructor MoveConstructor;
+		CopyAssignmentOperator CopyAssignmentOperator;
+		MoveAssignmentOperator MoveAssignmentOperator;
+		Destructor Destructor;
+		String(*ToStringImplementation)(const void*);
+		String(*FromStringImplementation)(void*, const String&);
+		uint32 Size;
+		bool IsCompound;
+		bool IsAbstract;
+		bool IsPolymorphic;
+		bool IsDefaultConstructible;
+		bool IsCopyConstructible;
+		bool IsMoveConstructible;
+		bool IsCopyAssignable;
+		bool IsMoveAssignable;
+		bool IsDestructible;
+	} _data;
+};
+
+/** Generic TypeInfoBuilder for TypeInfo */
+template <typename T>
+struct TypeInfoBuilder < T, TypeInfo >
+{
+	///////////////////////
+	///   Information   ///
+public:
+
+	friend TypeInfo;
+
+	////////////////////////
+	///   Constructors   ///
+public:
+
+	TypeInfoBuilder(CString name)
+	{
+		_data.Name = name;
+
+		_data.DefaultConstructor= Implementation::Construct<T>::Function;
+		_data.CopyConstructor = [](byte* location, const void* copy)
+		{
+			Implementation::Construct<T, const T&>::Function(location, *static_cast<const T*>(copy));
+		};
+		_data.MoveConstructor = [](byte* location, void* move)
+		{
+			Implementation::Construct<T, T&&>::Function(location, std::move(*static_cast<T*>(move)));
+		};
+		_data.CopyAssignmentOperator = [](void* value, const void* copy)
+		{
+			Implementation::Assign<T, const T&>::Function(*static_cast<T*>(value), *static_cast<const T*>(copy));
+		};
+		_data.MoveAssignmentOperator = [](void* value, void* move)
+		{
+			Implementation::Assign<T, T&&>::Function(*static_cast<T*>(value), std::move(*static_cast<T*>(move)));
+		};
+		_data.Destructor = [](void* value)
+		{
+			Implementation::Destroy<T>::Function(*static_cast<T*>(value));
+		};
+
+		_data.ToStringImplementation = [](const void* value) -> String
+		{
+			return Implementation::ToString<T>::Function(*static_cast<const T*>(value));
+		};
+		_data.FromStringImplementation = [](void* value, const String& string) -> String
+		{
+			return Implementation::FromString<T>::Function(*static_cast<T*>(value), string);
+		};
+
+		_data.Size = sizeof(T);
+		_data.IsCompound = std::is_class<T>::value;
+		_data.IsAbstract = std::is_abstract<T>::value;
+		_data.IsPolymorphic = std::is_polymorphic<T>::value;
+		_data.IsDefaultConstructible = std::is_default_constructible<T>::value;
+		_data.IsCopyConstructible = std::is_copy_constructible<T>::value;
+		_data.IsMoveConstructible = std::is_move_constructible<T>::value;
+		_data.IsCopyAssignable = std::is_copy_assignable<T>::value;
+		_data.IsMoveAssignable = std::is_move_assignable<T>::value;
+		_data.IsDestructible = std::is_destructible<T>::value;
+	}
+
+	////////////////
+	///   Data   ///
+private:
+
+	TypeInfo::Data _data;
 };
 
 //////////////////////////
@@ -289,71 +310,22 @@ private:
 
 namespace Implementation
 {
-	/** Default implementation of 'ToString' */
-	template <typename T>
-	struct ToString final
+	namespace Default
 	{
-	private:
-
-		/** Implementation for if the type defines its own "ToString" method (preferred). */
-		template <typename F>
-		FORCEINLINE static auto Impl(Preferred, const F& value) -> decltype(value.ToString())
+		/** Default implementation of 'ToString', returns value's type name. */
+		template <typename T>
+		FORCEINLINE String ToString(const T& value)
 		{
-			return value.ToString();
+			return ::TypeOf(value).GetName();
 		}
 
-		/** Implementation for if the type does not define its own "ToString" method (fallback). */
-		template <typename F>
-		FORCEINLINE static String Impl(Fallback, const F& /*value*/)
-		{
-			return ::TypeOf<F>().GetName();
-		}
-
-	public:
-
-		/** Entry point for the implementation. */
-		FORCEINLINE static String Function(const T& value)
-		{
-			using ReturnType = decltype(Impl(0, value));
-			static_assert(std::is_same<String, ReturnType>::value || std::is_same<const String&, ReturnType>::value,
-				"The return type of the 'ToString' method must be either a 'String' or a const reference to one.");
-
-			return Impl(0, value);
-		}
-	};
-
-	/** Default implementation of 'FromString' */
-	template <typename T>
-	struct FromString final
-	{
-	private:
-
-		/** Implementation for if the type defines its own 'FromString' method (preferred). */
-		template <typename F>
-		FORCEINLINE static auto Impl(Preferred, const String& string, F& value) -> decltype(value.FromString(string))
-		{
-			return value.FromString(string);
-		}
-
-		/** Implementation for if the type does not define its own 'FromString' method (fallback). */
-		template <typename F>
-		FORCEINLINE static const String& Impl(Fallback, const String& string, F& /*value*/)
+		/** Default implementation of 'FromString', does nothing. */
+		template <typename T>
+		FORCEINLINE String FromString(T& /*value*/, const String& string)
 		{
 			return string;
 		}
-
-	public:
-
-		/** Entry point for the implementation. */
-		FORCEINLINE static String Function(const String& string, T& value)
-		{
-			using ReturnType = decltype(Impl(0, string, value));
-			static_assert(std::is_same<String, ReturnType>::value || std::is_same<const String&, ReturnType>::value,
-				"The return type of the 'FromString' method must either be a 'String' or a const reference to one.");
-
-			return Impl(0, string, value);
-		}
-	};
+	}
 }
 
 /////////////////////
@@ -366,7 +338,7 @@ FORCEINLINE TargetT* Cast(T& value)
 {
 	static_assert(!std::is_reference<TargetT>::value, "Using 'Cast' to cast to a reference type is not allowed");
 
-	if (TypeOf(value).template IsCastableTo<TargetT>())
+	if (TypeOf(value).IsCastableTo(TypeOf<TargetT>()))
 	{
 		return reinterpret_cast<TargetT*>(&value);
 	}
@@ -394,94 +366,10 @@ FORCEINLINE const TargetT* Cast(const T& value)
 	}
 }
 
-/** Returns a pointer to a new instance of the given type, moved from the given value (if it is move-constructible)
-* NOTE: If the type is not move-constructible, returns a null pointer
-* You can override this behavior by implementing a public move constructor,
-* or by specializing the 'Implementation::Copy' struct */
-template <typename T>
-FORCEINLINE std::decay_t<T>* Copy(T&& copy)
-{
-	if (!std::is_polymorphic<T>::value)
-	{
-		// Call the implementation directly
-		Implementation::Construct<std::decay_t<T>, T>::Function(std::forward<T>(copy));
-	}
-	else
-	{
-		/** Get move's type and call its implementation through that */
-		static_cast<T*>(TypeOf(copy)._moveConstructor(&copy));
-	}
+//////////////////
+///   Macros   ///
 
-	return nullptr; // TODO
-}
-
-// TODO: Update this
-/** Assigns the given instance to the value of another given instance of the same type (if it is copy-assignable)
-* NOTE: If the type is not copy-assignable, returns 'false'
-* NOTE: If the given values are not of the same type, returns 'false'
-* You can override this behavior by implementing a public copy-assignment operator,
-* or by specializing the 'Implementation::Assign' struct */
-template <typename T>
-FORCEINLINE bool Assign(T& value, const T& copy)
-{
-	if (!std::is_polymorphic<T>::value)
-	{
-		// Call the implementation directly
-		return Implementation::Assign<T, const T&>::Function(value, copy);
-	}
-	else
-	{
-		const TypeInfo* valueType = &TypeOf(value);
-
-		// Make sure the types are compatible
-		if (TypeOf(copy).IsCastableTo(*valueType))
-		{
-			// Call the implementation through reflection
-			//return valueType->_copyAssignmentOperator(&value, &copy);
-		}
-		else
-		{
-			//return false;
-		}
-	}
-
-	return false; // TODO
-}
-
-/** Formats the state of the given value as a String
-* NOTE: The default behavior is to return the value's type name
-* You can override this behavior by implementing the 'String ToString() const' public member function,
-* or by specializing the 'Implementation::ToString' struct */
-template <typename T>
-FORCEINLINE String ToString(const T& value)
-{
-	if (!std::is_polymorphic<T>::value)
-	{
-		// Call the implementation directly
-		return Implementation::ToString<T>::Function(value);
-	}
-	else
-	{
-		// Get value's type and call its implementation through that
-		return TypeOf(value)._toStringImplementation(&value);
-	}
-}
-
-/** Sets the state of the given value by parsing a String, returning the remainder of the String
-* NOTE: The default behavior is to not modify the value and return the String as is
-* You can override this behavior by implementing the 'String FromString(const String& string)' public member function,
-* or by specializing the 'Implementation::FromString' struct */
-template <typename T>
-FORCEINLINE String FromString(const String& string, T& value)
-{
-	if (!std::is_polymorphic<T>::value)
-	{
-		// Call the implementation directly
-		return Implementation::FromString<T>::Function(string, value);
-	}
-	else
-	{
-		// Get the value's type and call its implementation through that
-		return TypeOf(value)._fromStringImplementation(string, &value);
-	}
-}
+/** Put this macro into the source file of a type you'd like to reflect.
+* NOTE: The type muse use the corresponding 'REFLECTABLE_X' flag in its header.
+* NOTE: If you get the error "Incomplete type is not allowed", then the TypeInfoBuilder for this reflection type has not been defined. */
+#define BUILD_REFLECTION(T) const ::TypeInfoType<T> T::StaticTypeInfo = ::TypeInfoBuilder<T>(#T)

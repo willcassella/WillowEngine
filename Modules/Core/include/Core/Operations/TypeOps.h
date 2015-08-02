@@ -105,27 +105,3 @@ namespace Implementation
 		static constexpr bool Result = std::is_destructible<T>::value;
 	};
 }
-
-// TODO: Documentation
-template <typename T, typename ... Args>
-FORCEINLINE bool Construct(byte* location, Args&& ... args)
-{
-	using ImplT = Implementation::Construct<T, Args...>;
-
-	ImplT::Function(location, std::forward<Args>(args)...);
-	return ImplT::Result;
-}
-
-/** Calls the destructor on the given object.
-* NOTE: Does NOT free memory occupied by the object.
-* NOTE: If the type is not destructible, returns 'false'.
-* You can override this behavior by implementing a public destructor,
-* or by specializing the 'Implementation::Destroy' struct. */
-template <typename T>
-FORCEINLINE bool Destroy(T& value)
-{
-	using ImplT = Implementation::Destroy<T>;
-
-	ImplT::Function(value);
-	return ImplT::Result;
-}

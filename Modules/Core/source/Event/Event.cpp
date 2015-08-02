@@ -3,11 +3,12 @@
 #include "../../include/Core/Event/Event.h"
 #include "../../include/Core/Reflection/StructInfo.h"
 #include "../../include/Core/Reflection/ClassInfo.h"
+#include "../../include/Core/Reflection/VoidInfo.h"
 
 //////////////////////
 ///   Reflection   ///
 
-STRUCT_REFLECTION(Event)
+BUILD_REFLECTION(Event)
 .AddProperty("Name", "", &Event::_name, nullptr)
 .AddProperty("Argument Type", "", &Event::GetArgType, nullptr);
 
@@ -15,7 +16,7 @@ STRUCT_REFLECTION(Event)
 ///   Constructors   ///
 
 Event::Event(const String& name)
-	: _name(name)
+	: _name(name), _argType(TypeOf<void>())
 {
 	// All done
 }

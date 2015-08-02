@@ -382,7 +382,7 @@ public:
 	* NOTE: This may offset the index of every proceeding element by -1. */
 	void DeleteAt(uint32 index)
 	{
-		for (uint32 i = index; i < Size(); ++i)
+		for (uint32 i = index; i < Size() - 1; ++i)
 		{
 			FastGet(i) = std::move(FastGet(i + 1));
 		}

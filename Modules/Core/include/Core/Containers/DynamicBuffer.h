@@ -37,7 +37,7 @@ public:
 		return _value;
 	}
 
-	/** Resizes this buffer, copying existing data. */
+	/** Resizes this DynamicBuffer, copying existing data. */
 	void Resize(uint32 newSize);
 
 	/** Resizes this DynamicBuffer, erasing existing data. */

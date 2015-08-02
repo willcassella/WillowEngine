@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include "../String.h"
+#include "../Operations/ToString.h"
 #include "../Reflection/Reflection.h"
 
 struct CORE_API Vec2 final
@@ -42,7 +43,7 @@ public:
 	/** Formats this Vec2 as a String */
 	FORCEINLINE String ToString() const
 	{
-		return ::ToString("<@, @>", X, Y);
+		return Format("<@, @>", X, Y);
 	}
 
 	/** Returns the length of this vector */

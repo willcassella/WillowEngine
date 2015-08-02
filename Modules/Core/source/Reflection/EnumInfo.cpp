@@ -6,7 +6,7 @@
 //////////////////////
 ///   Reflection   ///
 
-CLASS_REFLECTION(EnumInfo);
+BUILD_REFLECTION(EnumInfo);
 
 ///////////////////
 ///   Methods   ///

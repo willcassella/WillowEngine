@@ -4,7 +4,6 @@
 #include "../Containers/Table.h"
 #include "../String.h"
 #include "../Object.h"
-#include "TypeIndex.h"
 
 /** Class holding a collection of Type information, associated with a .DLL/.SO */
 class CORE_API Module final : public Object
@@ -39,9 +38,6 @@ public:
 
 	/** Returns the file name of this module */
 	String GetFileName() const;
-		
-	/** Returns a collection of all the types defined in this Module */
-	Array<TypeIndex> GetTypes() const;
 
 	/** Searches for the type with the given name in this module
 	* NOTE: returns a null pointer if the type was not found */
@@ -60,5 +56,4 @@ private:
 
 	String _name;
 	String _authors;
-	Table<String, TypeIndex> _types;
 };

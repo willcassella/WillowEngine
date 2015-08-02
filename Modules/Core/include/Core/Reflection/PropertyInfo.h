@@ -15,7 +15,9 @@ struct CORE_API PropertyInfo final
 public:
 
 	REFLECTABLE_STRUCT
-	friend CompoundInfo;
+
+	template <typename T, class TypeInfoT>
+	friend struct TypeInfoBuilder;
 
 	////////////////////////
 	///   Constructors   ///
@@ -26,6 +28,12 @@ private:
 	///////////////////
 	///   Methods   ///
 public:
+
+	/** Formats the state of this PropertyInfo as a String. */
+	FORCEINLINE String ToString() const
+	{
+		return GetName();
+	}
 
 	/** Returns the name of this Property. */
 	FORCEINLINE const String& GetName() const
@@ -81,38 +89,38 @@ public:
 	/** Returns whether this property may be polymorphic.
 	* If this property is retrieved via a getter method that returns a reference to a polymorphic type (class or interface),
 	* then this property is considered polymorphic. That means that the type returned by "PropertyType" may not be the most specific type
-	* of the actual value that is returned by this getter, you must check the returned value to decided that. 
+	* of the actual value that is returned by this getter, you must check the returned value to determine that. 
 	* NOTE: If "IsField" is true, then this is always false. */
 	FORCEINLINE bool IsPolymorphic() const
 	{
 		return _isPolymorphic;
 	}
 
-	/** Returns a Variant to the value of this Property on the given Variant.
+	/** Returns a Variant to the value of this Property on the given value.
 	* NOTE: If this Property has no mutable getter, returns a Variant to 'void' (check 'HasMutableGetter' first).
 	* NOTE: The value referenced by 'owner' must be of the same or extension of the type referenced by 'GetOwnerType'. */
-	Variant GetMutableValue(const Variant& owner) const;
+	Variant GetMutableValue(Variant owner) const;
 
 	/** Returns an ImmutableVariant to the value of this Property on the given ImmutableVariant.
 	* NOTE: If this Property has no getter, returns an ImmutableVariant to 'void' (check 'HasGetter' first).
 	* NOTE: The value referenced by 'owner' must be of the same or extension of the type referenced by 'GetOwnerType'. */
-	ImmutableVariant GetValue(const ImmutableVariant& owner) const;
+	ImmutableVariant GetValue(ImmutableVariant owner) const;
 
 	/** Copies the value of this Property on the given ImmutableVariant.
 	* NOTE: If the type of this property is not copy-constructible, returns a Variant to 'void' (check 'IsCopyable' first). 
 	* NOTE: The value referenced by 'owner' must be of the same or extension of the type referenced by 'GetOwnerType'. */
-	NewPtr<void> CopyValue(const ImmutableVariant& owner) const;
+	NewPtr<void> CopyValue(ImmutableVariant owner) const;
 
 	/** Sets the value of this Property on the given Variant to the given value.
 	* NOTE: If this Property has no setter, does nothing (check 'HasSetter' first).
 	* NOTE: The value referenced by 'owner' must be of the same or extension of the type referenced by 'GetOwnerType'.
 	* NOTE: The value referenced by 'value' must be of the same or extension of the type referenced by 'GetFieldType'. */
-	void SetValue(const Variant& owner, const ImmutableVariant& value) const;
+	void SetValue(Variant owner, ImmutableVariant value) const;
 
 private:
 
 	/** Sets the mutable getter to return a field */
-	template <class OwnerT, typename FieldT,
+	template <class OwnerT, typename FieldT, 
 		WHERE(!std::is_function<FieldT>::value)>
 	void SetMutableGetter(FieldT OwnerT::*field)
 	{
@@ -169,7 +177,7 @@ private:
 
 	/** Sets the setter to set to a field */
 	template <class OwnerT, typename FieldT,
-		WHERE(!std::is_function<FieldT>::value)>
+		WHERE(!std::is_function<FieldT>::value && !std::is_const<FieldT>::value)>
 	std::enable_if_t<std::is_copy_assignable<FieldT>::value>
 	SetSetter(FieldT OwnerT::*field)
 	{

@@ -1,7 +1,6 @@
 // String.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "Forwards/Operations.h"
 #include "Containers/Array.h"
 
 /** A String. Basically just an array of characters, and the
@@ -98,12 +97,6 @@ public:
 
 	/** Returns the characters of the String in opposite order */
 	String Reverse() const;
-
-	/** If the given String represents a path to a file, this parses and returns the file extension */
-	static String GetFileExtension(const String& path);
-
-	/** If the given String represents a path to a file, this parses and returns the name of the file */
-	static String GetFileName(const String& path);
 
 	/** Returns the length of a c-style string (not including null character) */
 	static uint32 Length(CString string);

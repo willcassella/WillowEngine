@@ -7,7 +7,7 @@
 //////////////////////
 ///   Reflection   ///
 
-STRUCT_REFLECTION(Mat4);
+BUILD_REFLECTION(Mat4);
 
 ///////////////////
 ///   Methods   ///

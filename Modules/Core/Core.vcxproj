@@ -40,7 +40,6 @@
     <ClInclude Include="include\Core\Forwards\Reflection.h" />
     <ClInclude Include="include\Core\Forwards\Memory.h" />
     <ClInclude Include="include\Core\Forwards\Operations.h" />
-    <ClInclude Include="include\Core\Forwards\Resource.h" />
     <ClInclude Include="include\Core\Interface.h" />
     <ClInclude Include="include\Core\Math\Mat4.h" />
     <ClInclude Include="include\Core\Math\Math.h" />
@@ -66,7 +65,7 @@
     <ClInclude Include="include\Core\Reflection\PointerInfo.h" />
     <ClInclude Include="include\Core\Reflection\PrimitiveInfo.h" />
     <ClInclude Include="include\Core\Reflection\Reflection.h" />
-    <ClInclude Include="include\Core\Reflection\TypeIndex.h" />
+    <ClInclude Include="include\Core\Reflection\TypePtr.h" />
     <ClInclude Include="include\Core\Reflection\Variant.h" />
     <ClInclude Include="include\Core\Reflection\StructInfo.h" />
     <ClInclude Include="include\Core\Reflection\TypeInfo.h" />
@@ -102,7 +101,6 @@
     <ClCompile Include="source\Reflection\PropertyInfo.cpp" />
     <ClCompile Include="source\Reflection\Reflection.cpp" />
     <ClCompile Include="source\Reflection\StructInfo.cpp" />
-    <ClCompile Include="source\Reflection\TypeIndex.cpp" />
     <ClCompile Include="source\Reflection\TypeInfo.cpp" />
     <ClCompile Include="source\Reflection\Variant.cpp" />
     <ClCompile Include="source\Reflection\VoidInfo.cpp" />

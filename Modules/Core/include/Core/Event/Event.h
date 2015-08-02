@@ -1,9 +1,10 @@
 // Event.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "../Memory/OwnerPtr.h"
 #include "../String.h"
+#include "../Memory/OwnerPtr.h"
 #include "../Reflection/Variant.h"
+#include "../Reflection/TypePtr.h"
 
 /** Abstract base for events */
 struct CORE_API Event final
@@ -65,6 +66,6 @@ public:
 private:
 
 	String _name;
-	TypeIndex _argType;
+	TypePtr<TypeInfo> _argType;
 	OwnerPtr<void> _value;
 };

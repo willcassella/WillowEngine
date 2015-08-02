@@ -7,7 +7,7 @@
 //////////////////////
 ///   Reflection   ///
 
-CLASS_REFLECTION(Application);
+BUILD_REFLECTION(Application);
 
 ///////////////////
 ///   Methods   ///
@@ -18,7 +18,7 @@ Application& Application::Instance()
 	return app;
 }
 
-const Array<const TypeInfo*>& Application::GetAllTypes()
+const Array<TypePtr<TypeInfo>>& Application::GetAllTypes()
 {
 	return Instance()._types;
 }

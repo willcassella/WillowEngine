@@ -41,7 +41,7 @@ public:
 	/** Formats this Mat4 as a String */
 	FORCEINLINE String ToString() const
 	{
-		return ::ToString("[ @, @, @, @ ]\n"
+		return Format("[ @, @, @, @ ]\n"
 						  "| @, @, @, @ |\n"
 						  "| @, @, @, @ |\n"
 						  "[ @, @, @, @ ]",

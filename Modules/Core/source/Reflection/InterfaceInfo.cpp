@@ -6,7 +6,7 @@
 //////////////////////
 ///   Reflection   ///
 
-CLASS_REFLECTION(InterfaceInfo);
+BUILD_REFLECTION(InterfaceInfo);
 
 ///////////////////
 ///   Methods   ///

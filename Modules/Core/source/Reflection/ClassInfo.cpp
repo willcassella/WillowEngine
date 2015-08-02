@@ -6,15 +6,15 @@
 ///////////////////////
 ///   Information   ///
 
-CLASS_REFLECTION(ClassInfo);
+BUILD_REFLECTION(ClassInfo);
 
 ////////////////////////
 ///   Constructors   ///
 
-ClassInfo::ClassInfo(Object* dummy, CString name)
-	: Super(dummy, name), _base(nullptr)
+TypeInfoBuilder<Object, ClassInfo>::TypeInfoBuilder()
+	: TypeInfoBuilderBase<Object, ClassInfo>("Object")
 {
-	// All done
+	_data.Base = nullptr;
 }
 
 ///////////////////
@@ -48,27 +48,27 @@ bool ClassInfo::IsCastableTo(const TypeInfo& type) const
 
 Array<PropertyInfo> ClassInfo::GetProperties() const
 {
-	if (_base)
+	if (GetBase())
 	{
-		return Super::GetProperties() + _base->GetProperties();
+		return Base::GetProperties() + GetBase()->GetProperties();
 	}
 	else
 	{
-		return Super::GetProperties();
+		return Base::GetProperties();
 	}
 }
 
 const PropertyInfo* ClassInfo::FindProperty(const String& name) const
 {
-	const PropertyInfo* property = Super::FindProperty(name);
+	const PropertyInfo* property = Base::FindProperty(name);
 
 	if (property)
 	{
 		return property;
 	}
-	else if (_base)
+	else if (GetBase())
 	{
-		return _base->FindProperty(name);
+		return GetBase()->FindProperty(name);
 	}
 	else
 	{
@@ -78,10 +78,10 @@ const PropertyInfo* ClassInfo::FindProperty(const String& name) const
 
 bool ClassInfo::Extends(const ClassInfo& type) const
 {
-	if (_base)
+	if (GetBase())
 	{
 		// If the base class is the type we're looking for
-		if (*_base == type)
+		if (*GetBase() == type)
 		{
 			// We extend that class
 			return true;
@@ -89,7 +89,7 @@ bool ClassInfo::Extends(const ClassInfo& type) const
 		else
 		{
 			// The base class might extend that class
-			return _base->Extends(type);
+			return GetBase()->Extends(type);
 		}
 	}
 	else
@@ -102,7 +102,7 @@ bool ClassInfo::Extends(const ClassInfo& type) const
 bool ClassInfo::Implements(const InterfaceInfo& interf) const
 {
 	// Check if the interface is implemented at this level
-	for (auto implementedInterf : _interfaces)
+	for (auto implementedInterf : _data.Interfaces)
 	{
 		if (*implementedInterf == interf)
 		{
@@ -111,9 +111,9 @@ bool ClassInfo::Implements(const InterfaceInfo& interf) const
 	}
 
 	// Check if the base class implements this interface
-	if (_base)
+	if (GetBase())
 	{
-		return _base->Implements(interf);
+		return GetBase()->Implements(interf);
 	}
 	else
 	{

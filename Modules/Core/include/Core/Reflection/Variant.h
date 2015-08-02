@@ -1,7 +1,6 @@
 // Variant.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "TypeIndex.h"
 #include "TypeInfo.h"
 
 /////////////////
@@ -21,14 +20,14 @@ public:
 	* 'value' - The value to reference
 	* 'type' - The type of the value */
 	Variant(void* value, const TypeInfo& type)
-		: _value(value), _type(type)
+		: _value(value), _type(&type)
 	{
 		// All done
 	}
 
-	/** Constructs a Variant to a value of any type */
-	template <typename AnyType>
-	Variant(AnyType& value)
+	/** Constructs a Variant to a value of any type (except Variant types). */
+	template <typename T, WHERE(!std::is_same<T, Variant>::value && !std::is_same<T, ImmutableVariant>::value)>
+	Variant(T& value)
 		: _value(&value), _type(TypeOf(value))
 	{
 		// All done
@@ -47,15 +46,41 @@ public:
 	/** Returns the type of the referenced value */
 	FORCEINLINE const TypeInfo& GetType() const
 	{
-		return _type;
+		return *_type;
+	}
+
+	// TODO: Documentation
+	FORCEINLINE String ToString() const
+	{
+		if (_value)
+		{
+			return _type->_data.ToStringImplementation(_value);
+		}
+		else
+		{
+			return "null";
+		}
+	}
+
+	// TODO: Documentation
+	FORCEINLINE String FromString(const String& string) const
+	{
+		if (_value)
+		{
+			return _type->_data.FromStringImplementation(_value, string);
+		}
+		else
+		{
+			return string;
+		}
 	}
 
 	/////////////////////
 	///   Operators   ///
 public:
 
-	template <typename AnyType>
-	Variant& operator=(AnyType& value)
+	template <typename T, WHERE(!std::is_same<T, Variant>::value && !std::is_same<T, ImmutableVariant>::value)>
+	Variant& operator=(T& value)
 	{
 		_value = &value;
 		_type = TypeOf(value);
@@ -67,7 +92,7 @@ public:
 private:
 
 	void* _value;
-	TypeIndex _type;
+	const TypeInfo* _type;
 };
 
 /** Basically a smart wrapper of "const void*" */
@@ -80,25 +105,25 @@ public:
 	/** Constructs an ImmutableVariant to 'void' */
 	ImmutableVariant();
 
+	/** Constructs an ImmutableVariant to the value referenced by a non-immutable variant */
+	ImmutableVariant(Variant value)
+		: _value(value.GetValue()), _type(&value.GetType())
+	{
+		// All done
+	}
+
 	/** Constructs an ImmutableVariant to a value of any type
 	* 'value' - The value to reference
 	* 'type' - The type of the value */
 	ImmutableVariant(const void* value, const TypeInfo& type)
-		: _value(value), _type(type)
+		: _value(value), _type(&type)
 	{
 		// All done
 	}
 
-	/** Constructs an ImmutableVariant to the value referenced by a non-immutable variant */
-	ImmutableVariant(const Variant& var)
-		: _value(var.GetValue()), _type(var.GetType())
-	{
-		// All done
-	}
-
-	/** Constructs an ImmutableVariant to a value of any type */
-	template <typename AnyType>
-	ImmutableVariant(const AnyType& value)
+	/** Constructs an ImmutableVariant to a value of any type (except Variant types) */
+	template <typename T, WHERE(!std::is_same<T, Variant>::value && !std::is_same<T, ImmutableVariant>::value)>
+	ImmutableVariant(const T& value)
 		: _value(&value), _type(TypeOf(value))
 	{
 		// All done
@@ -117,22 +142,22 @@ public:
 	/** Returns the type of the value referenced by this ImmutableVariant */
 	FORCEINLINE const TypeInfo& GetType() const
 	{
-		return _type;
+		return *_type;
 	}
 
 	/////////////////////
 	///   Operators   ///
 public:
 
-	ImmutableVariant& operator=(const Variant& var)
+	ImmutableVariant& operator=(Variant value)
 	{
-		_value = var.GetValue();
-		_type = var.GetType();
+		_value = value.GetValue();
+		_type = &value.GetType();
 		return self;
 	}
 
-	template <typename AnyType>
-	ImmutableVariant& operator=(const AnyType& value)
+	template <typename T, WHERE(!std::is_same<T, Variant>::value && !std::is_same<T, ImmutableVariant>::value)>
+	ImmutableVariant& operator=(const T& value)
 	{
 		_value = &value;
 		_type = TypeOf(value);
@@ -144,49 +169,19 @@ public:
 private:
 
 	const void* _value;
-	TypeIndex _type;
+	const TypeInfo* _type;
 };
-
-//////////////////////////
-///   Implementation   ///
-
-namespace Implementation
-{
-	/** Implementation of "TypeOf" for "Variant" */
-	template <>
-	struct TypeOf < Variant >
-	{
-		static const TypeInfo& Function() = delete; // "Variant" has no static type information
-
-		FORCEINLINE static const TypeInfo& Function(const Variant& variant)
-		{
-			return variant.GetType();
-		}
-	};
-
-	/** Implementation of "TypeOf" for "ImmutableVariant" */
-	template <>
-	struct TypeOf < ImmutableVariant >
-	{
-		static const TypeInfo& Function() = delete; // "ImmutableVariant" has no static type information
-
-		FORCEINLINE static const TypeInfo& Function(const ImmutableVariant& variant)
-		{
-			return variant.GetType();
-		}
-	};
-}
 
 /////////////////////
 ///   Functions   ///
 
 // @TODO: Documentation
-template <typename TargetType>
-FORCEINLINE TargetType* Cast(const Variant& value)
+template <typename TargetT>
+FORCEINLINE TargetT* Cast(Variant value)
 {
-	if (value.GetType().IsCastableTo<TargetType>())
+	if (value.GetType().IsCastableTo(TypeOf<TargetT>()))
 	{
-		return static_cast<TargetType*>(value.GetValue());
+		return static_cast<TargetT*>(value.GetValue());
 	}
 	else
 	{
@@ -195,12 +190,12 @@ FORCEINLINE TargetType* Cast(const Variant& value)
 }
 
 // @TODO: Documentation
-template <typename TargetType>
-FORCEINLINE const TargetType* Cast(const ImmutableVariant& value)
+template <typename TargetT>
+FORCEINLINE const TargetT* Cast(ImmutableVariant value)
 {
-	if (value.GetType().IsCastableTo<TargetType>())
+	if (value.GetType().IsCastableTo(TypeOf<TargetT>()))
 	{
-		return static_cast<const TargetType*>(value.GetValue());
+		return static_cast<const TargetT*>(value.GetValue());
 	}
 	else
 	{

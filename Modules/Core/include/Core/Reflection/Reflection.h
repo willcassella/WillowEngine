@@ -1,6 +1,4 @@
 // Reflection.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
-/** Many types in the reflection system are highly inter-dependent, so this
-* header has forward-declarations for all of them */
 #pragma once
 
 #include <initializer_list>
@@ -18,7 +16,7 @@ namespace Implementation
 	//////////////////////////////////
 	///   Generic Implementation   ///
 
-	/** Default implementation of 'TypeOf' */
+	/** Generic implementation of 'TypeOf' */
 	template <typename T>
 	struct TypeOf final
 	{
@@ -42,7 +40,7 @@ namespace Implementation
 			using TypeInfoT = typename std::decay_t<ReturnT>;
 
 			static_assert(std::is_reference<ReturnT>::value && std::is_const<std::remove_reference_t<ReturnT>>::value,
-				"The 'GetType' member function must return an immutable reference");
+				"The 'GetType()' member function must return an immutable reference");
 
 			static_assert(std::is_base_of<TypeInfo, TypeInfoT>::value,
 				"The 'GetType()' member function must return a 'TypeInfo' object");
@@ -54,11 +52,11 @@ namespace Implementation
 	/////////////////////////////
 	///   Fundamental Types   ///
 
-	/** TypeOf for 'void' */
+	/** Implementation of 'TypeOf' for void */
 	template <>
 	struct CORE_API TypeOf < void > final
 	{
-		/** Defined in 'Reflection.cpp' */
+		/** Defined in 'Reflection/Reflection.cpp' */
 		static const VoidInfo StaticTypeInfo;
 
 		FORCEINLINE static const VoidInfo& Function()
@@ -69,14 +67,32 @@ namespace Implementation
 		/** It is not possible to an instance of 'void', so that Function is not necessary. */
 	};
 
+	/** Implementation of 'TypeOf' for std::nullptr_t */
+	template <>
+	struct CORE_API TypeOf < std::nullptr_t > final
+	{
+		/** Defined in 'Reflection/Reflection.cpp' */
+		static const PointerInfo StaticTypeInfo;
+
+		FORCEINLINE static const PointerInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const PointerInfo& Function(std::nullptr_t /*value*/)
+		{
+			return StaticTypeInfo;
+		}
+	};
+
 	//////////////////////////
 	///   PrimitiveTypes   ///
 
-	/** TypeInfo for bool */
+	/** Implementation of 'TypeOf' for bool */
 	template <>
 	struct CORE_API TypeOf < bool > final
 	{
-		/** Defined in 'Reflection.cpp' */
+		/** Defined in 'Reflection/Reflection.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
 
 		FORCEINLINE static const PrimitiveInfo& Function()
@@ -90,11 +106,11 @@ namespace Implementation
 		}
 	};
 
-	/** TypeInfo for char */
+	/** Implementation of 'TypeOf' for char */
 	template <>
 	struct CORE_API TypeOf < char > final
 	{
-		/** Defined in 'Reflection.cpp' */
+		/** Defined in 'Reflection/Reflection.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
 
 		FORCEINLINE static const PrimitiveInfo& Function()
@@ -108,11 +124,11 @@ namespace Implementation
 		}
 	};
 
-	/** TypeInfo for byte */
+	/** Implementation of 'TypeOf' for byte */
 	template <>
 	struct CORE_API TypeOf < byte > final
 	{
-		/** Defined in 'Reflection.cpp' */
+		/** Defined in 'Reflection/Reflection.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
 
 		FORCEINLINE static const PrimitiveInfo& Function()
@@ -126,11 +142,11 @@ namespace Implementation
 		}
 	};
 
-	/** TypeInfo for 16-bit integer */
+	/** Implementation of 'TypeOf' for int16 */
 	template <>
 	struct CORE_API TypeOf < int16 > final
 	{
-		/** Defined in 'Reflection.cpp' */
+		/** Defined in 'Reflection/Reflection.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
 
 		FORCEINLINE static const PrimitiveInfo& Function()
@@ -144,11 +160,11 @@ namespace Implementation
 		}
 	};
 
-	/** TypeInfo for 32-bit integer */
+	/** Implementation of 'TypeOf' for int32 */
 	template <>
 	struct CORE_API TypeOf < int32 > final
 	{
-		/** Defined in 'Reflection.cpp' */
+		/** Defined in 'Reflection/Reflection.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
 
 		FORCEINLINE static const PrimitiveInfo& Function()
@@ -162,11 +178,11 @@ namespace Implementation
 		}
 	};
 
-	/** TypeInfo for 64-bit integer */
+	/** Implementation of 'TypeOf' for int64 */
 	template <>
 	struct CORE_API TypeOf < int64 > final
 	{
-		/** Defined in 'Reflection.cpp' */
+		/** Defined in 'Reflection/Reflection.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
 
 		FORCEINLINE static const PrimitiveInfo& Function()
@@ -180,11 +196,11 @@ namespace Implementation
 		}
 	};
 
-	/** TypeInfo for 16-bit unsigned integer */
+	/** Implementation of 'TypeOf' for uint16 */
 	template <>
 	struct CORE_API TypeOf < uint16 > final
 	{
-		/** Defined in 'Reflection.cpp' */
+		/** Defined in 'Reflection/Reflection.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
 
 		FORCEINLINE static const PrimitiveInfo& Function()
@@ -198,11 +214,11 @@ namespace Implementation
 		}
 	};
 
-	/** TypeInfo for 32-bit unsigned integer */
+	/** Implementation of 'TypeOf' for uint32 */
 	template <>
 	struct CORE_API TypeOf < uint32 > final
 	{
-		/** Defined in 'Reflection.cpp' */
+		/** Defined in 'Reflection/Reflection.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
 
 		FORCEINLINE static const PrimitiveInfo& Function()
@@ -216,11 +232,11 @@ namespace Implementation
 		}
 	};
 
-	/** TypeInfo for a 64-bit unsigned integer */
+	/** Implementation of 'TypeOf' for uint64 */
 	template <>
 	struct CORE_API TypeOf < uint64 > final
 	{
-		/** Defined in 'Reflection.cpp' */
+		/** Defined in 'Reflection/Reflection.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
 
 		FORCEINLINE static const PrimitiveInfo& Function()
@@ -234,11 +250,11 @@ namespace Implementation
 		}
 	};
 
-	/** TypeInfo for a float */
+	/** Implementation of 'TypeOf' for float */
 	template <>
 	struct CORE_API TypeOf < float > final
 	{
-		/** Defined in 'Reflection.cpp' */
+		/** Defined in 'Reflection/Reflection.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
 
 		FORCEINLINE static const PrimitiveInfo& Function()
@@ -252,11 +268,11 @@ namespace Implementation
 		}
 	};
 
-	/** TypeInfo for a double */
+	/** Implementation of 'TypeOf' for double */
 	template <>
 	struct CORE_API TypeOf < double > final
 	{
-		/** Defined in 'Reflection.cpp' */
+		/** Defined in 'Reflection/Reflection.cpp' */
 		static const PrimitiveInfo StaticTypeInfo;
 
 		FORCEINLINE static const PrimitiveInfo& Function()
@@ -270,11 +286,11 @@ namespace Implementation
 		}
 	};
 
-	/** TypeInfo for pointers */
+	/** Implementation of 'TypeOf' for pointers */
 	template <typename PointedT>
 	struct TypeOf < PointedT* > final
 	{
-		/** Defined in 'PointerInfo.h' */
+		/** Defined in 'Reflection/PointerInfo.h' */
 		static const PointerInfo StaticTypeInfo;
 
 		FORCEINLINE static const PointerInfo& Function()
@@ -288,7 +304,7 @@ namespace Implementation
 		}
 	};
 
-	/** TypeInfo for arrays (decayed to pointers) */
+	/** Implementation of 'TypeOf' for arrays (decayed to pointers) */
 	template <typename T, std::size_t Size>
 	struct TypeOf < T[Size] > final
 	{
@@ -312,11 +328,11 @@ namespace Implementation
 	////////////////////////
 	///   Struct Types   ///
 
-	/** TypeOf for 'String' */
+	/** Implementation of 'TypeOf' for String */
 	template <>
 	struct CORE_API TypeOf < String > final
 	{
-		/** Defined in 'Reflection.cpp' */
+		/** Defined in 'Reflection/Reflection.cpp' */
 		static const StructInfo StaticTypeInfo;
 
 		FORCEINLINE static const StructInfo& Function()
@@ -330,11 +346,11 @@ namespace Implementation
 		}
 	};
 
-	/** TypeOf for std::intializer_list */
+	/** Implementation of 'TypeOf' for std::intializer_list */
 	template <typename T>
 	struct TypeOf < std::initializer_list<T> > final
 	{
-		/** Defined in 'StructInfo.h' */
+		/** Defined in 'Reflection/StructInfo.h' */
 		static const StructInfo StaticTypeInfo;
 
 		FORCEINLINE static const StructInfo& Function()
@@ -348,10 +364,11 @@ namespace Implementation
 		}
 	};
 
+	/** Implementation of 'TypeOf' for Array */
 	template <typename T>
 	struct TypeOf < Array<T> > final
 	{
-		/** Defined in 'StructInfo.h' */
+		/** Defined in 'Reflection/StructInfo.h' */
 		static const StructInfo StaticTypeInfo;
 
 		FORCEINLINE static const StructInfo& Function()
@@ -364,24 +381,111 @@ namespace Implementation
 			return StaticTypeInfo;
 		}
 	};
-}
 
-//TODO: Change "TypeOf" to "GetType" (consistency, and preparing for unified call syntax.)
-// Consider: TypeOf<T>() for specific type, GetType(T) for instances?
+	/** Implementation of 'TypeOf' for List */
+	template <typename T>
+	struct TypeOf < List<T> > final
+	{
+		/** Defined in 'Reflection/StructInfo.h' */
+		static const StructInfo StaticTypeInfo;
+
+		FORCEINLINE static const StructInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const StructInfo& Function(const List<T>& /*value*/)
+		{
+			return StaticTypeInfo;
+		}
+	};
+
+	/** Implementation of 'TypeOf' for Queue */
+	template <typename T>
+	struct TypeOf < Queue<T> > final
+	{
+		/** Defined in 'Reflection/StructInfo.h' */
+		static const StructInfo StaticTypeInfo;
+
+		FORCEINLINE static const StructInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const StructInfo& Function(const Queue<T>& /*value*/)
+		{
+			return StaticTypeInfo;
+		}
+	};
+
+	/** Implementation of 'TypeOf' for Stack */
+	template <typename T>
+	struct TypeOf < Stack<T> > final
+	{
+		/** Defined in 'Reflection/StructInfo.h' */
+		static const StructInfo StaticTypeInfo;
+
+		FORCEINLINE static const StructInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const StructInfo& Function(const Stack<T>& /*value*/)
+		{
+			return StaticTypeInfo;
+		}
+	};
+
+	/** Implementation of 'TypeOf' for Table */
+	template <typename KeyT, typename ValueT>
+	struct TypeOf < Table<KeyT, ValueT> > final
+	{
+		/** Defined in 'Reflection/StructInfo.h' */
+		static const StructInfo StaticTypeInfo;
+
+		FORCEINLINE static const StructInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const StructInfo& Function(const Table<KeyT, ValueT>& /*value*/)
+		{
+			return StaticTypeInfo;
+		}
+	};
+
+	/** Implementation of 'TypeOf' for Pair */
+	template <typename A, typename B>
+	struct TypeOf < Pair<A, B> > final
+	{
+		/** Defined in 'Reflection/StructInfo.h' */
+		static const StructInfo StaticTypeInfo;
+
+		FORCEINLINE static const StructInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const StructInfo& Function(const Pair<A, B>& /*value*/)
+		{
+			return StaticTypeInfo;
+		}
+	};
+}
 
 /////////////////////
 ///   Functions   ///
 
-/** Retrieves the type information for the given type
-* DO NOT OVERLOAD: Specialize struct 'Implementation::TypeOf' */
+/** Retrieves the type information for the given type.
+* DO NOT OVERLOAD: Specialize struct 'Implementation::TypeOf'. */
 template <typename T>
 FORCEINLINE const auto& TypeOf()
 {
 	return Implementation::TypeOf<std::decay_t<T>>::Function();
 }
 
-/** Retrieves the type information for the given value 
-* DO NOT OVERLOAD: Specialize struct 'Implementation::TypeOf' */
+/** Retrieves the type information for the given value.
+* DO NOT OVERLOAD: Specialize struct 'Implementation::GetType'. */
 template <typename T>
 FORCEINLINE const auto& TypeOf(const T& value)
 {
@@ -390,6 +494,14 @@ FORCEINLINE const auto& TypeOf(const T& value)
 
 /////////////////
 ///   Types   ///
+
+// TODO: Documentation
+template <class T>
+using BaseOf = typename T::Base;
+
+// TODO: Documentation
+template <class T>
+using InterfacesOf = typename T::Interfaces;
 
 /** Determines the type of 'TypeInfo' object that this type is associated with. */
 template <typename T>
@@ -417,8 +529,8 @@ namespace Implementation									\
 	};														\
 }
 
-/** Put this macro in the Information section of a struct you'd like to reflect
-* NOTE: Any struct that uses this macro must also use the 'STRUCT_REFLECTION' macro in their source file */
+/** Put this macro in the Information section of a struct you'd like to reflect.
+* NOTE: Any struct that uses this macro must also use the 'BUILD_REFLECTION' macro in their source file. */
 #define REFLECTABLE_STRUCT										\
 public:															\
 	static const ::StructInfo StaticTypeInfo;					\
@@ -427,9 +539,9 @@ public:															\
 		return StaticTypeInfo;									\
 	}
 
-/** Put this macro in the Information section of a class you'd like to reflect
+/** Put this macro in the Information section of a class you'd like to reflect.
 * NOTE: Any class that uses this macro must also use the 'EXTENDS' macro in the Information section of their
-* header, as well as the 'CLASS_REFLECTION' macro in their source file */
+* header, as well as the 'BUILD_REFLECTION' macro in their source file. */
 #define REFLECTABLE_CLASS							\
 public:												\
 	static const ::ClassInfo StaticTypeInfo;		\
@@ -438,15 +550,20 @@ public:												\
 		return StaticTypeInfo;						\
 	}
 
-/** Put this macro in the Information section of an interface you'd like to reflect
+/** Put this macro in the Information section of an interface you'd like to reflect.
 * NOTE: Any interface that uses this macro @TODO: Finish documentation here */
 #define REFLECTABLE_INTERFACE						\
 public:												\
 	static const ::InterfaceInfo StaticTypeInfo;
 
-/** Put this macro in the Information section of a class
-* NOTE: All reflectable classes must use this macro 
-* 'T': The class which this class extends */
+/** Put this macro in the Information section of a class you'd like to reflect.
+* NOTE: All reflectable classes must use this macro.
+* 'T': The class which this class extends. */
 #define EXTENDS(T)									\
 public:												\
-	using Super = T;
+	using Base = T;
+
+/** Put this macro in the Information section of every reflectable class that implements interfaces. */
+#define IMPLEMENTS(...)										\
+public:														\
+	using Interfaces = stdEXT::type_sequence<__VA_ARGS__>;

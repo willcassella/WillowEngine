@@ -1,10 +1,13 @@
 // ToString.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
+#include "../Forwards/Operations.h"
+#include "../Containers/Array.h"
 #include "../Containers/List.h"
-#include "../Containers/Stack.h"
 #include "../Containers/Queue.h"
+#include "../Containers/Stack.h"
 #include "../Containers/Table.h"
+#include "../Containers/Pair.h"
 #include "../String.h"
 
 //////////////////////////
@@ -12,11 +15,40 @@
 
 namespace Implementation
 {
-	/** Default Implementation of 'ToString', defined in 'Reflection/TypeInfo.h' */
+	/** Generic implementation of 'ToString' */
 	template <typename T>
-	struct ToString;
+	struct ToString final
+	{
+	private:
 
-	/** Default implementation of ToExplicitString (no quotation marks) */
+		/** Implementation for if the type defines its own "ToString" method (preferred). */
+		template <typename F>
+		FORCEINLINE static auto Impl(Preferred, const F& value) -> decltype(value.ToString())
+		{
+			return value.ToString();
+		}
+
+		/** Implementation for if the type does not define its own "ToString" method (fallback). */
+		template <typename F>
+		FORCEINLINE static auto Impl(Fallback, const F& value) -> String
+		{
+			return Default::ToString(value);
+		}
+
+	public:
+
+		/** Entry point for the implementation. */
+		FORCEINLINE static String Function(const T& value)
+		{
+			using ReturnType = decltype(Impl(0, value));
+			static_assert(std::is_same<String, ReturnType>::value || std::is_same<const String&, ReturnType>::value,
+				"The return type of the 'ToString' method must be either a 'String' or a const reference to one.");
+
+			return Impl(0, value);
+		}
+	};
+
+	/** Generic implementation of 'ToExplicitString' (no quotation marks) */
 	template <typename T>
 	struct ToExplicitString final
 	{
@@ -29,84 +61,84 @@ namespace Implementation
 	///////////////////////////
 	///   Primitive Types   ///
 
-	/** Convert a bool to a String */
+	/** Implementation of 'ToString' for bool */
 	template <>
 	struct CORE_API ToString < bool > final
 	{
 		static String Function(bool value);
 	};
 
-	/** Convert a character to a String */
+	/** Implementation of 'ToString' for char */
 	template <>
 	struct CORE_API ToString < char > final
 	{
 		static String Function(char value);
 	};
 
-	/** Convert a byte to a String */
+	/** Implementation of 'ToString' for byte */
 	template <>
 	struct CORE_API ToString < byte > final
 	{
 		static String Function(byte value);
 	};
 
-	/** Convert a 16-bit integer to a String */
+	/** Implementation of 'ToString' for int16 */
 	template <>
 	struct CORE_API ToString < int16 > final
 	{
 		static String Function(int16 value);
 	};
 
-	/** Convert a 32-bit integer to a String */
+	/** Implementation of 'ToString' for int32 */
 	template <>
 	struct CORE_API ToString < int32 > final
 	{
 		static String Function(int32 value);
 	};
 
-	/** Convert a 64-bit integer to a String */
+	/** Implementation of 'ToString' for int64 */
 	template <>
 	struct CORE_API ToString < int64 > final
 	{
 		static String Function(int64 value);
 	};
 
-	/** Convert an unsigned 16-bit integer to a String */
+	/** Implementation of 'ToString' for uint16 */
 	template <>
 	struct CORE_API ToString < uint16 > final
 	{
 		static String Function(uint16 value);
 	};
 
-	/** Convert an unsigned 32-bit integer to a String */
+	/** Implementation of 'ToString' for uint32 */
 	template <>
 	struct CORE_API ToString < uint32 > final
 	{
 		static String Function(uint32 value);
 	};
 
-	/** Convert an unsigned 64-bit integer to a String */
+	/** Implementation of 'ToString' for uint64 */
 	template <>
 	struct CORE_API ToString < uint64 > final
 	{
 		static String Function(uint64 value);
 	};
 
-	/** Convert a float to a String */
+	/** Implementation of 'ToString' for float */
 	template <>
 	struct CORE_API ToString < float > final
 	{
 		static String Function(float value);
 	};
 
-	/** Convert a double to a String */
+	/** Implementation of 'ToString' for double */
 	template <>
 	struct CORE_API ToString < double > final
 	{
 		static String Function(double value);
 	};
 
-	/** Convert a pointer to a String */
+	/** Implementation of 'ToString' for pointers */
 	template <typename T>
 	struct ToString < T* > final
 	{
@@ -119,8 +151,7 @@ namespace Implementation
 	////////////////////////
 	///   String Types   ///
 
-	/** Convert a non-const c-string to a String
-	* NOTE: A non-const c-string cannot be parsed from a String */
+	/** Implementation of 'ToString' for non-const c-strings */
 	template <>
 	struct ToString < char* > final
 	{
@@ -130,7 +161,7 @@ namespace Implementation
 		}
 	};
 
-	/** Convert a non-const c-string to an explicit String */
+	/** Implementation of 'ToExplicitString' for c-strings  */
 	template <>
 	struct ToExplicitString < char* > final
 	{
@@ -140,8 +171,7 @@ namespace Implementation
 		}
 	};
 
-	/** Convert a c-string to a String
-	* NOTE: c-strings cannot be parsed from a String */
+	/** Implementation of 'ToString' for const c-strings */
 	template <>
 	struct ToString < const char* > final
 	{
@@ -151,7 +181,7 @@ namespace Implementation
 		}
 	};
 
-	/** Convert a c-string to an explicit String */
+	/** Implementation of 'ToExplicitString' for const c-strings */
 	template <>
 	struct ToExplicitString < const char* > final
 	{
@@ -161,8 +191,7 @@ namespace Implementation
 		}
 	};
 
-	/** Convert a clang/gcc c-string literal to a String
-	* NOTE: A clang/gcc c-string literal cannot be parsed from a String */
+	/** Implementation of 'ToString' for clang/gcc c-string literals */
 	template <std::size_t size>
 	struct ToString < char[size] > final
 	{
@@ -172,7 +201,7 @@ namespace Implementation
 		}
 	};
 
-	/** Convert a clang/gcc c-string literal to an Explicit String */
+	/** Implementation of 'ToExplicitString' for clang/gcc c-string literals */
 	template <std::size_t size>
 	struct ToExplicitString < char[size] > final
 	{
@@ -182,8 +211,7 @@ namespace Implementation
 		}
 	};
 
-	/** Convert a MSVC c-string literal to a String
-	* NOTE: A MSVC c-string literal cannot be parsed from a String */
+	/** Implementation of 'ToString' for MSVC c-string literals */
 	template <std::size_t size>
 	struct ToString < const char[size] > final
 	{
@@ -193,7 +221,7 @@ namespace Implementation
 		}
 	};
 
-	/** Convert a MSVC c-string literal to an explicit String @TODO: Determine if this can be removed */
+	/** Implementation of 'ToExplicitString' for MSVC c-string literals @TODO: Determine if this can be removed */
 	template <std::size_t size>
 	struct ToExplicitString < const char[size] > final
 	{
@@ -203,7 +231,7 @@ namespace Implementation
 		}
 	};
 
-	/** Convert a String to a String */
+	/** Implementation of 'ToString' for String */
 	template <>
 	struct ToString < String > final
 	{
@@ -213,7 +241,7 @@ namespace Implementation
 		}
 	};
 
-	/** Convert a String to an explicit String */
+	/** Implementation of 'ToExplicitString' for 'String' */
 	template <>
 	struct ToExplicitString < String > final
 	{
@@ -253,7 +281,7 @@ namespace Implementation
 		}
 	};
 
-	/** Convert an Array to a String */
+	/** Implementation of 'ToString' for Array */
 	template <typename T>
 	struct ToString < Array<T> > final
 	{
@@ -263,7 +291,7 @@ namespace Implementation
 		}
 	};
 
-	/** Convert a List to a String */
+	/** Implementation of 'ToString' for List */
 	template <typename T>
 	struct ToString < List<T> > final
 	{
@@ -273,7 +301,7 @@ namespace Implementation
 		}
 	};
 
-	/** Convert a Queue to a String */
+	/** Implementation of 'ToString' for Queue */
 	template <typename T>
 	struct ToString < Queue<T> > final
 	{
@@ -283,7 +311,7 @@ namespace Implementation
 		}
 	};
 
-	/** Convert a Stack to a String */
+	/** Implementation of 'ToString' for Stack */
 	template <typename T>
 	struct ToString < Stack<T> > final
 	{
@@ -293,11 +321,11 @@ namespace Implementation
 		}
 	};
 
-	/** Convert a Table to a String */
-	template <typename KeyType, typename ValueType>
-	struct ToString < Table<KeyType, ValueType> > final
+	/** Implementation of 'ToString' for Table */
+	template <typename KeyT, typename ValueT>
+	struct ToString < Table<KeyT, ValueT> > final
 	{
-		static String Function(const Table<KeyType, ValueType>& value)
+		static String Function(const Table<KeyT, ValueT>& value)
 		{
 			String result = '{';
 
@@ -315,26 +343,24 @@ namespace Implementation
 
 				result += Format(
 					"{@ : @}",
-					ToExplicitString<KeyType>::Function(pair.First),
-					ToExplicitString<ValueType>::Function(pair.Second)
-					);
+					ToExplicitString<KeyT>::Function(pair.First),
+					ToExplicitString<ValueT>::Function(pair.Second));
 			}
 
 			return result + '}';
 		}
 	};
 
-	/** Convert a Pair to a String */
-	template <typename FirstType, typename SecondType>
-	struct ToString < Pair<FirstType, SecondType> > final
+	/** Implementation of 'ToString' for Pair */
+	template <typename A, typename B>
+	struct ToString < Pair<A, B> > final
 	{
-		FORCEINLINE static String Function(const Pair<FirstType, SecondType>& value)
+		FORCEINLINE static String Function(const Pair<A, B>& value)
 		{
 			return Format(
 				"{@ | @}",
-				ToExplicitString<FirstType>::Function(value.First),
-				ToExplicitString<SecondType>::Function(value.Second)
-				);
+				ToExplicitString<A>::Function(value.First),
+				ToExplicitString<B>::Function(value.Second));
 		}
 	};
 }
@@ -342,10 +368,20 @@ namespace Implementation
 /////////////////////
 ///   Functions   ///
 
+/** Formats the state of the given value as a String.
+* NOTE: The default behavior is to return the value's type name.
+* You can override this behavior by implementing the 'String ToString() const' public member function,
+* or by specializing the 'Implementation::ToString' struct. */
+template <typename T>
+FORCEINLINE String ToString(const T& value)
+{
+	return Implementation::ToString<T>::Function(value);
+}
+
 /** Formats the given String with the given value, returning the result
 * - The first instance of the '@' character in 'format' is replaced with a String representation of 'value' */
 template <typename T>
-String ToString(const String& format, const T& value)
+String Format(const String& format, const T& value)
 {
 	for (uint32 i = 0; i < format.Length(); ++i)
 	{
@@ -362,13 +398,13 @@ String ToString(const String& format, const T& value)
 /** Formats the given String with the given values, returning the result
 * - Each instance of the '@' character in 'format' is replaced with a String representation of the respective value. */
 template <typename T, typename ... MoreT>
-String ToString(const String& format, const T& value, const MoreT& ... moreValues)
+String Format(const String& format, const T& value, const MoreT& ... more)
 {
 	for (uint32 i = 0; i < format.Length(); ++i)
 	{
 		if (format[i] == '@')
 		{
-			return format.SubString(0, i) + ToString(value) + ToString(format.SubString(i + 1), moreValues...);
+			return format.SubString(0, i) + ToString(value) + Format(format.SubString(i + 1), more...);
 		}
 	}
 

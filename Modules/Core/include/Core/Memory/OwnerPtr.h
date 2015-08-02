@@ -16,7 +16,10 @@ struct OwnerPtr final
 public:
 
 	REFLECTABLE_STRUCT
+
 	friend OwnerPtr<void>;
+	template <typename F> 
+	friend struct OwnerPtr;
 	static_assert(!std::is_const<T>::value, "An 'OwnerPtr' may not point to const.");
 
 	////////////////////////

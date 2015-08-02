@@ -3,7 +3,7 @@
 
 #include "config.h"
 #include "Forwards/Core.h"
-#include "Forwards/Reflection.h"
+#include "Reflection/Reflection.h"
 
 /////////////////
 ///   Types   ///
@@ -15,8 +15,8 @@ class CORE_API Object
 	///   Information   ///
 public:
 
-	template <class ObjecT>
-	friend struct Ptr;
+	/** 'Object' does not implement any interfaces. */
+	IMPLEMENTS()
 
 	/** Type information for 'Object' */
 	static const ClassInfo StaticTypeInfo;
@@ -25,49 +25,25 @@ public:
 	///   Constructors   ///
 public:
 
-	Object();
-	Object(const Object& copy);
-	Object(Object&& move);
-	virtual ~Object();
+	Object() = default;
+	Object(const Object& copy) = delete;
+	Object(Object&& move) = delete;
+	virtual ~Object() = default;
 
 	///////////////////
 	///   Methods   ///
 public:
 
-	/** Returns the type information for this Object */
+	/** Returns the type information for this Object. */
 	virtual const ClassInfo& GetType() const = 0;
 
-private:
-
-	/** Registers a reference to the given Object. */
-	static void AddReference(const Object*& reference);
-
-	/** Unregisters a reference to the given Object. */
-	template <class T>
-	FORCEINLINE static void AddReference(T*& reference)
-	{
-		static_assert(std::is_base_of<Object, T>::value || std::is_base_of<Interface, T>::value,
-			"The pointed type must extend either 'Object' or 'Interface'");
-
-		AddReference((const Object*&)reference);
-	}
-
-	/** Unregisters a reference to the given Object. */
-	static void RemoveReference(const Object*& reference);
-
-	/** Unregisters a reference to the given Object. */
-	template <class T>
-	FORCEINLINE static void RemoveReference(T*& reference)
-	{
-		static_assert(std::is_base_of<Object, T>::value || std::is_base_of<Interface, T>::value,
-			"The pointed type must extend either 'Object' or 'Interface'");
-
-		RemoveReference((const Object*&)reference);
-	}
+	/** Formats the state of this Object as a String. */
+	virtual String ToString() const;
 
 	/////////////////////
 	///   Operators   ///
+public:
 
-	Object& operator=(const Object& copy) = default;
-	Object& operator=(Object&& move);
+	Object& operator=(const Object& copy) = delete;
+	Object& operator=(Object&& move) = delete;
 };

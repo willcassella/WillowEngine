@@ -2,7 +2,7 @@
 #pragma once
 
 #include <functional>
-#include "Reflection/VoidInfo.h"
+#include "../Reflection/VoidInfo.h"
 #include "Event.h"
 
 struct EventHandler final
@@ -129,7 +129,7 @@ private:
 	///   Data   ///
 private:
 
-	TypeIndex _argType;
+	TypePtr<TypeInfo> _argType;
 	const CompoundInfo* _ownerType;
 	std::function<void(const Event&)> _handler;
 };

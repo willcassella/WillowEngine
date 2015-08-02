@@ -147,9 +147,6 @@
     <ClInclude Include="include\Core\Event\EventManager.h">
       <Filter>include\Event</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Reflection\TypeIndex.h">
-      <Filter>include\Reflection</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Reflection\EnumInfo.h">
       <Filter>include\Reflection</Filter>
     </ClInclude>
@@ -201,9 +198,6 @@
     <ClInclude Include="include\Core\Forwards\Containers.h">
       <Filter>include\Forwards</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Forwards\Resource.h">
-      <Filter>include\Forwards</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Math\Mat4.h">
       <Filter>include\Math</Filter>
     </ClInclude>
@@ -221,6 +215,9 @@
     </ClInclude>
     <ClInclude Include="include\Core\Math\Vec4.h">
       <Filter>include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Reflection\TypePtr.h">
+      <Filter>include\Reflection</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -274,9 +271,6 @@
     </ClCompile>
     <ClCompile Include="source\Event\Event.cpp">
       <Filter>source\Event</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Reflection\TypeIndex.cpp">
-      <Filter>source\Reflection</Filter>
     </ClCompile>
     <ClCompile Include="source\Reflection\Reflection.cpp">
       <Filter>source\Reflection</Filter>

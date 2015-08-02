@@ -1,7 +1,10 @@
 // ClassInfo.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "CompoundInfo.h"
+#include "InterfaceInfo.h"
+
+/////////////////
+///   Types   ///
 
 /** Type information for classes */
 class CORE_API ClassInfo : public CompoundInfo
@@ -13,34 +16,20 @@ public:
 	REFLECTABLE_CLASS
 	EXTENDS(CompoundInfo)
 
+	template <typename T, class TypeInfoT>
+	friend struct TypeInfoBuilder;
+
 	////////////////////////
 	///   Constructors   ///
 public:
 
-	/** Creates reflection information for the given class
-	* NOTE: Do not use this outside of the registration function for a class
-	* 'name' - The fully-qualified name of the class */
-	template <class ClassT>
-	static ClassInfo Create(CString name)
-	{
-		ClassT* dummy = nullptr;
-		return ClassInfo(dummy, name);
-	}
-
-protected:
-
 	// @TODO: Documentation
 	template <class ClassT>
-	ClassInfo(ClassT* dummy, CString name)
-		: Super(dummy, name), _base(&ClassT::Super::StaticTypeInfo)
+	ClassInfo(TypeInfoBuilder<ClassT, ClassInfo>& builder)
+		: Base(builder), _data(std::move(builder._data))
 	{
-		static_assert(std::is_base_of<Object, ClassT>::value, "Classes must be extend 'Object'");
+		// All done
 	}
-
-private:
-
-	/** Special constructor used to construct TypeInfo for "Object" class */
-	explicit ClassInfo(Object* dummy, CString name);
 
 	///////////////////
 	///   Methods   ///
@@ -58,7 +47,7 @@ public:
 	/** Returns a pointer to the base class of this class. */
 	FORCEINLINE const ClassInfo* GetBase() const
 	{
-		return _base;
+		return _data.Base;
 	}
 
 	/** Returns whether this class extends the given class */
@@ -85,13 +74,88 @@ public:
 	///   Data   ///
 protected:
 
-	Array<const InterfaceInfo*> _interfaces;
-	const ClassInfo* _base;
+	struct Data
+	{
+		Array<const InterfaceInfo*> Interfaces;
+		const ClassInfo* Base;
+	} _data;
 };
 
-//////////////////
-///   Macros   ///
+/** Generic TypeInfoBuilder for ClassInfo */
+template <class ClassT>
+struct TypeInfoBuilder < ClassT, ClassInfo > : TypeInfoBuilderBase<ClassT, ClassInfo>
+{
+	///////////////////////
+	///   Information   ///
+public:
 
-/** Put this macro into the source file of a class you'd like to reflect
-* NOTE: The class muse use the 'REFLECTABLE_CLASS' flag in its header */
-#define CLASS_REFLECTION(T) const ::ClassInfo T::StaticTypeInfo = ::ClassInfo::Create<T>(#T)
+	friend ClassInfo;
+
+	////////////////////////
+	///   Constructors   ///
+public:
+
+	// TODO: Documentation
+	TypeInfoBuilder(CString name)
+		: TypeInfoBuilderBase<ClassT, ClassInfo>(name)
+	{
+		static_assert(std::is_base_of<Object, ClassT>::value, "Classes must be extend 'Object'");
+
+		// If this class adds new implemented interfaces
+		if (!std::is_same<InterfacesOf<BaseOf<ClassT>>, InterfacesOf<ClassT>>::value)
+		{
+			AddInterfaces(InterfacesOf<ClassT>{});
+		}
+	}
+
+	///////////////////
+	///   Methods   ///
+private:
+
+	/** Adds all the interfaces within "type_sequence<...>" to this class's collection of implemented interfaces. */
+	void AddInterfaces(stdEXT::type_sequence<>)
+	{
+		// Do nothing
+	}
+
+	/** Adds all the interfaces within "type_sequence<...>" to this class's collection of implemented interfaces. */
+	template <class InterfaceT, class ... MoreInterfaceT>
+	void AddInterfaces(stdEXT::type_sequence<InterfaceT, MoreInterfaceT...>)
+	{
+		static_assert(std::is_base_of<InterfaceT, ClassT>::value, "You must actually implement the interface.");
+		static_assert(stdEXT::is_interface<InterfaceT>::value, "The type given to 'AddInterface' must be an interface.");
+
+		_interfaces.Add(&TypeOf<InterfaceT>());
+		AddInterface(stdEXT::type_sequence<MoreInterfaceT...>{});
+	}
+
+	////////////////
+	///   Data   ///
+private:
+
+	ClassInfo::Data _data;
+};
+
+// TODO: Documentation
+template <>
+struct CORE_API TypeInfoBuilder < Object, ClassInfo > final : TypeInfoBuilderBase<Object, ClassInfo>
+{
+	///////////////////////
+	///   Information   ///
+public:
+
+	friend ClassInfo;
+
+	////////////////////////
+	///   Constructors   ///
+public:
+
+	// TODO: Documentation
+	TypeInfoBuilder();
+
+	////////////////
+	///   Data   ///
+private:
+
+	ClassInfo::Data _data;
+};

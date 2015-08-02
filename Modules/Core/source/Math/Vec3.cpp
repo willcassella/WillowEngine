@@ -7,7 +7,7 @@
 ///////////////////////
 ///   Information   ///
 
-STRUCT_REFLECTION(Vec3)
+BUILD_REFLECTION(Vec3)
 .AddProperty("X", "", &Vec3::X)
 .AddProperty("Y", "", &Vec3::Y)
 .AddProperty("Z", "", &Vec3::Z);

@@ -11,8 +11,8 @@ namespace Implementation
 	///////////////////////////
 	///   Primitive Types   ///
 
-	template <typename IntType>
-	FORCEINLINE String IntFromString(const String& string, IntType& value)
+	template <typename IntT>
+	FORCEINLINE String IntFromString(IntT& value, const String& string)
 	{
 		value = 0;
 
@@ -67,7 +67,7 @@ namespace Implementation
 		return "";
 	}
 
-	String FromString<bool>::Function(const String& string, bool& value)
+	String FromString<bool>::Function(bool& value, const String& string)
 	{
 		String head = string.SubString(0, 6).ToLower();
 
@@ -87,55 +87,55 @@ namespace Implementation
 		}
 	}
 
-	String FromString<char>::Function(const String& string, char& value)
+	String FromString<char>::Function(char& value, const String& string)
 	{
 		value = string[1];
 		return string.SubString(1);
 	}
 
-	String FromString<byte>::Function(const String& string, byte& value)
+	String FromString<byte>::Function(byte& value, const String& string)
 	{
-		return IntFromString(string, value);
+		return IntFromString(value, string);
 	}
 
-	String FromString<int16>::Function(const String& string, int16& value)
+	String FromString<int16>::Function(int16& value, const String& string)
 	{
-		return IntFromString(string, value);
+		return IntFromString(value, string);
 	}
 
-	String FromString<int32>::Function(const String& string, int32& value)
+	String FromString<int32>::Function(int32& value, const String& string)
 	{
-		return IntFromString(string, value);
+		return IntFromString(value, string);
 	}
 
-	String FromString<int64>::Function(const String& string, int64& value)
+	String FromString<int64>::Function(int64& value, const String& string)
 	{
-		return IntFromString(string, value);
+		return IntFromString(value, string);
 	}
 
-	String FromString<uint16>::Function(const String& string, uint16& value)
+	String FromString<uint16>::Function(uint16& value, const String& string)
 	{
-		return IntFromString(string, value);
+		return IntFromString(value, string);
 	}
 
-	String FromString<uint32>::Function(const String& string, uint32& value)
+	String FromString<uint32>::Function(uint32& value, const String& string)
 	{
-		return IntFromString(string, value);
+		return IntFromString(value, string);
 	}
 
-	String FromString<uint64>::Function(const String& string, uint64& value)
+	String FromString<uint64>::Function(uint64& value, const String& string)
 	{
-		return IntFromString(string, value);
+		return IntFromString(value, string);
 	}
 
-	String FromString<float>::Function(const String& string, float& value)
+	String FromString<float>::Function(float& value, const String& string)
 	{
 		size_t remainder;
 		value = std::stof(string.Cstr(), &remainder);
 		return string.SubString(static_cast<uint32>(remainder));
 	}
 
-	String FromString<double>::Function(const String& string, double& value)
+	String FromString<double>::Function(double& value, const String& string)
 	{
 		size_t remainder;
 		value = std::stod(string.Cstr(), &remainder);
@@ -145,7 +145,7 @@ namespace Implementation
 	////////////////////////
 	///   String Types   ///
 
-	String FromString<String>::Function(const String& string, String& value)
+	String FromString<String>::Function(String& value, const String& string)
 	{
 		if (string.StartsWith('"'))
 		{

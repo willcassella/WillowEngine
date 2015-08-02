@@ -6,7 +6,7 @@
 //////////////////////
 ///   Reflection   ///
 
-CLASS_REFLECTION(PrimitiveInfo);
+BUILD_REFLECTION(PrimitiveInfo);
 
 ///////////////////
 ///   Methods   ///

@@ -288,58 +288,6 @@ String String::Reverse() const
 	return String(result);
 }
 
-String String::GetFileExtension(const String& path)
-{
-	auto occurences = path.OccurencesOf('.');
-	if (!occurences.IsEmpty())
-	{
-		return path.SubString(occurences.Last() + 1);
-	}
-	else
-	{
-		return "";
-	}
-}
-
-String String::GetFileName(const String& path)
-{
-	String name = path;
-
-	auto forwardSlashes = name.OccurencesOf("/");
-	auto backSlashes = name.OccurencesOf("\\");
-
-	if (!forwardSlashes.IsEmpty())
-	{
-		if (!backSlashes.IsEmpty())
-		{
-			if (forwardSlashes.Last() >= backSlashes.Last())
-			{
-				name = name.SubString(forwardSlashes.Last());
-			}
-			else
-			{
-				name = name.SubString(backSlashes.Last());
-			}
-		}
-		else
-		{
-			name = name.SubString(forwardSlashes.Last());
-		}
-	}
-	else if (!backSlashes.IsEmpty())
-	{
-		name = name.SubString(backSlashes.Last());
-	}
-
-	auto dots = name.OccurencesOf(".");
-	if (!dots.IsEmpty())
-	{
-		return name.SubString(0, dots.Last());
-	}
-
-	return name;
-}
-
 uint32 String::Length(CString string)
 {
 	return static_cast<uint32>(strlen(string));

@@ -41,21 +41,21 @@ struct ImmutableVariant;
 ///   Functions   ///
 
 /** Defined in 'Reflection/Reflection.h' */
-template <typename AnyType>
-const auto& TypeOf(const AnyType& value);
-
-/** Defined in 'Reflection/Reflection.h' */
-template <typename AnyType>
+template <typename T>
 const auto& TypeOf();
 
-/** Defined in 'TypeInfo.h' */
-template <typename TargetType, typename AnyType>
-TargetType* Cast(AnyType& value);
+/** Defined in 'Reflection/Reflection.h' */
+template <typename T>
+const auto& TypeOf(const T& value);
 
 /** Defined in 'TypeInfo.h' */
-template <typename TargetType, typename AnyType>
-const TargetType* Cast(const AnyType& value);
+template <typename TargetT, typename T>
+TargetT* Cast(T& value);
+
+/** Defined in 'TypeInfo.h' */
+template <typename TargetT, typename T>
+const TargetT* Cast(const T& value);
 
 /** r-value references cannot be safely casted */
-template <typename TargetType, typename AnyType>
-auto Cast(AnyType&& value) = delete;
+template <typename TargetT, typename T>
+TargetT* Cast(T&& value) = delete;

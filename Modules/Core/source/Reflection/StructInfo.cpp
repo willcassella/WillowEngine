@@ -6,7 +6,7 @@
 //////////////////////
 ///   Reflection   ///
 
-CLASS_REFLECTION(StructInfo);
+BUILD_REFLECTION(StructInfo);
 
 ///////////////////
 ///   Methods   ///

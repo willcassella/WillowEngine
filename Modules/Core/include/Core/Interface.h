@@ -11,6 +11,8 @@ class CORE_API Interface
 	///   Constructors   ///
 public:
 
+	Interface(const Interface& copy) = delete;
+	Interface(Interface&& move) = delete;
 	virtual ~Interface() = default;
 
 	///////////////////
@@ -19,4 +21,11 @@ public:
 
 	/** Returns the underlying type of the Object implementing this interface. */
 	virtual const ClassInfo& GetType() const = 0;
+
+	/////////////////////
+	///   Operators   ///
+public:
+
+	Interface& operator=(const Interface& copy) = delete;
+	Interface& operator=(Interface&& move) = delete;
 };

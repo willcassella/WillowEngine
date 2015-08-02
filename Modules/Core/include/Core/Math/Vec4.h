@@ -72,7 +72,7 @@ public:
 	/** Formats this Vec4 as a String */
 	FORCEINLINE String ToString() const
 	{
-		return ::ToString("<@, @, @, @>", X, Y, Z, W);
+		return Format("<@, @, @, @>", X, Y, Z, W);
 	}
 
 	/** Returns the length of this vector */

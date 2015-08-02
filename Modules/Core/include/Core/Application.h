@@ -3,7 +3,7 @@
 
 #include "Containers/Array.h"
 #include "Object.h"
-#include "Reflection/TypeIndex.h"
+#include "Reflection/TypePtr.h"
 
 class CORE_API Application final : public Object
 {
@@ -14,14 +14,7 @@ public:
 	REFLECTABLE_CLASS
 	EXTENDS(Object)
 	friend TypeInfo;
-
-	////////////////////////
-	///   Constructors   ///
-public:
-
-	Application(const Application& copy) = delete;
-	Application(Application&& move) = delete;
-
+	
 private:
 
 	Application() = default;
@@ -30,7 +23,7 @@ private:
 	///   Methods   ///
 public:
 
-	static const Array<const TypeInfo*>& GetAllTypes();
+	static const Array<TypePtr<TypeInfo>>& GetAllTypes();
 
 	static const TypeInfo* FindType(const String& name);
 
@@ -38,17 +31,9 @@ private:
 
 	static Application& Instance();
 
-	/////////////////////
-	///   Operators   ///
-public:
-
-	Application& operator=(const Application& copy) = delete;
-	Application& operator=(Application&& move) = delete;
-
 	////////////////
 	///   Data   ///
 private:
 
-	// TODO: Make this Array<TypeIndex>?
-	Array<const TypeInfo*> _types;
+	Array<TypePtr<TypeInfo>> _types;
 };

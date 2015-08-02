@@ -7,7 +7,7 @@
 //////////////////////
 ///   Reflection   ///
 
-CLASS_REFLECTION(CompoundInfo)
+BUILD_REFLECTION(CompoundInfo)
 .AddProperty("Properties", "The collection of properties of this type.", &CompoundInfo::GetProperties, nullptr);
 
 ///////////////////
@@ -15,15 +15,15 @@ CLASS_REFLECTION(CompoundInfo)
 
 Array<PropertyInfo> CompoundInfo::GetProperties() const
 {
-	return _properties;
+	return _data.Properties;
 }
 
 const PropertyInfo* CompoundInfo::FindProperty(const String& name) const
 {
-	auto index = _propertyTable.Find(name);
+	auto index = _data.PropertyTable.Find(name);
 	if (index)
 	{
-		return &_properties[*index];
+		return &_data.Properties[*index];
 	}
 	else
 	{

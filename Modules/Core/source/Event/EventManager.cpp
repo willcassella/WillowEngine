@@ -6,7 +6,7 @@
 //////////////////////
 ///   Reflection   ///
 
-STRUCT_REFLECTION(EventManager);
+BUILD_REFLECTION(EventManager);
 
 ///////////////////
 ///   Methods   ///

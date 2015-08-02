@@ -6,6 +6,7 @@
 /////////////////
 ///   Types   ///
 
+// TODO: Documentation
 class CORE_API PointerInfo final : public PrimitiveInfo
 {
 	///////////////////////
@@ -14,38 +15,27 @@ public:
 
 	REFLECTABLE_CLASS
 	EXTENDS(PrimitiveInfo)
-	template <typename PointedT> 
-	friend struct Implementation::TypeOf;
+
+	template <typename T, class TypeInfoT>
+	friend struct TypeInfoBuilder;
 
 	////////////////////////
 	///   Constructors   ///
-private:
+public:
 
-	/** Creates a new instance of 'PointerInfo'.
-	* 'PointerT' - Any type of pointer. */
+	// TODO: Documentation
 	template <typename PointerT>
-	static PointerInfo Create()
+	PointerInfo(TypeInfoBuilder<PointerT, PointerInfo>& builder)
+		: Base(builder), _data(std::move(builder._data))
 	{
-		PointerT* dummy = nullptr;
-		return PointerInfo(dummy);
-	}
-
-	/** Constructs a new instance of 'PointerInfo'.
-	* 'dummy' - A pointer to the ... pointer. */
-	template <typename PointerT, typename PointedT = std::remove_pointer_t<PointerT>>
-	PointerInfo(PointerT* dummy)
-		: Super(dummy, ""), _pointedType(&TypeOf<PointedT>())
-	{
-		static_assert(std::is_pointer<PointerT>::value, "PointerTypes must be pointers");
-
-		_isConst = std::is_const<PointedT>::value;
+		// All done
 	}
 
 	///////////////////
 	///   Methods   ///
 public:
 
-	// @TODO: Documentation
+	// TODO: Documentation
 	String GetName() const override;
 
 	/** Returns whether this type is castable (via reinterpret_cast) to the given type */
@@ -54,21 +44,82 @@ public:
 	/** Returns whether this pointer points to an immutable value (e.g 'const int*' vs 'int*') */
 	FORCEINLINE bool IsConst() const
 	{
-		return _isConst;
+		return _data.IsConst;
 	}
 
 	/** Returns the type pointed to by this pointer */
 	FORCEINLINE const TypeInfo& GetPointedType() const
 	{
-		return *_pointedType;
+		return *_data.PointedType;
 	}
 
 	////////////////
 	///   Data   ///
 private:
 
-	const TypeInfo* _pointedType;
-	bool _isConst;
+	struct Data
+	{
+		const TypeInfo* PointedType;
+		bool IsConst;
+		bool IsNullptr;
+	} _data;
+};
+
+/** Generic TypeInfoBuilder for PointerInfo */
+template <typename PointerT>
+struct TypeInfoBuilder < PointerT, PointerInfo > final : TypeInfoBuilderBase<PointerT, PointerInfo>
+{
+	///////////////////////
+	///   Information   ///
+public:
+
+	friend PointerInfo;
+
+	////////////////////////
+	///   Constructors   ///
+public:
+
+	// TODO: Documentation
+	TypeInfoBuilder()
+		: TypeInfoBuilderBase<PointerT, PointerInfo>("")
+	{
+		static_assert(std::is_pointer<PointerT>::value, "PointerTypes must be pointers");
+		using PointedT = std::remove_pointer_t<PointerT>;
+
+		_pointedType = &TypeOf<PointedT>();
+		_isConst = std::is_const<PointedT>::value;
+		_isNullPtr = false;
+	}
+
+	////////////////
+	///   Data   ///
+private:
+
+	PointerInfo::Data _data;
+};
+
+// TODO: Documentation
+template <>
+struct TypeInfoBuilder < std::nullptr_t, PointerInfo > final : TypeInfoBuilderBase<std::nullptr_t, PointerInfo>
+{
+	///////////////////////
+	///   Information   ///
+public:
+
+	friend PointerInfo;
+
+	////////////////////////
+	///   Constructors   ///
+public:
+
+	// TODO: Documentation
+	TypeInfoBuilder();
+
+	////////////////
+	///   Data   ///
+private:
+
+	PointerInfo::Data _data;
 };
 
 //////////////////////////
@@ -78,5 +129,5 @@ namespace Implementation
 {
 	/** Register TypeInfo for pointer */
 	template <typename PointedT>
-	const PointerInfo TypeOf<PointedT*>::StaticTypeInfo = PointerInfo::Create<PointedT*>();
+	const PointerInfo TypeOf<PointedT*>::StaticTypeInfo = TypeInfoBuilder<PointedT*>();
 }

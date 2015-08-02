@@ -7,7 +7,7 @@
 //////////////////////
 ///   Reflection   ///
 
-STRUCT_REFLECTION(Quat)
+BUILD_REFLECTION(Quat)
 .AddProperty("X", "", &Quat::X)
 .AddProperty("Y", "", &Quat::Y)
 .AddProperty("Z", "", &Quat::Z)

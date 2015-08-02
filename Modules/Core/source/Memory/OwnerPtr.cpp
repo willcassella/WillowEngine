@@ -8,7 +8,7 @@
 //////////////////////
 ///   Reflection   ///
 
-STRUCT_REFLECTION(OwnerPtr<void>);
+BUILD_REFLECTION(OwnerPtr<void>);
 
 ////////////////////////
 ///   Constructors   ///

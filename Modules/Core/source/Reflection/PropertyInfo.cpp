@@ -7,7 +7,7 @@
 //////////////////////
 ///   Reflection   ///
 
-STRUCT_REFLECTION(PropertyInfo)
+BUILD_REFLECTION(PropertyInfo)
 .AddProperty("Name", "The name of this property", &PropertyInfo::_name, nullptr)
 .AddProperty("Description", "A description of this property.", &PropertyInfo::_description, nullptr)
 .AddProperty("Owner Type", "The type that owns this property.", &PropertyInfo::GetOwnerType, nullptr)
@@ -29,10 +29,19 @@ PropertyInfo::PropertyInfo(const String& name, const String& description)
 ///////////////////
 ///   Methods   ///
 
-void PropertyInfo::SetValue(const Variant& owner, const ImmutableVariant& value) const
+Variant PropertyInfo::GetMutableValue(Variant owner) const
 {
-	if (owner.GetType().IsCastableTo(*_ownerType) && value.GetType().IsCastableTo(*_propertyType))
-	{
-		_setter(owner.GetValue(), value.GetValue());
-	}
+	assert(owner.GetType().IsCastableTo(*_ownerType));
+	assert(HasMutableGetter());
+
+	return _mutableGetter(owner.GetValue());
+}
+
+void PropertyInfo::SetValue(Variant owner, ImmutableVariant value) const
+{
+	assert(owner.GetType().IsCastableTo(*_ownerType));
+	assert(value.GetType().IsCastableTo(*_propertyType));
+	assert(HasSetter());
+
+	return _setter(owner.GetValue(), value.GetValue());
 }

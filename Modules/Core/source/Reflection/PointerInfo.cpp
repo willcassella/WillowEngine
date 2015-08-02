@@ -3,32 +3,44 @@
 #include "../../include/Core/Reflection/PointerInfo.h"
 #include "../../include/Core/Reflection/ClassInfo.h"
 #include "../../include/Core/Reflection/StructInfo.h"
+#include "../../include/Core/Reflection/VoidInfo.h"
 
 //////////////////////
 ///   Reflection   ///
 
-CLASS_REFLECTION(PointerInfo);
+BUILD_REFLECTION(PointerInfo);
+
+////////////////////////
+///   Constructors   ///
+
+TypeInfoBuilder<std::nullptr_t, PointerInfo>::TypeInfoBuilder()
+	: TypeInfoBuilderBase<std::nullptr_t, PointerInfo>("nullptr")
+{
+	_data.PointedType = &TypeOf<void>();
+	_data.IsConst = false;
+	_data.IsNullptr = true;
+}
 
 ///////////////////
 ///   Methods   ///
 
 String PointerInfo::GetName() const
 {
-	if (_isConst)
+	if (_data.IsConst)
 	{
 		// If we have a pointer to a pointer
-		if (_pointedType->GetType() == TypeOf<PointerInfo>())
+		if (_data.PointedType->GetType() == TypeOf<PointerInfo>())
 		{
-			return ::ToString("@ const*", _pointedType->GetName());
+			return Format("@ const*", _data.PointedType->GetName());
 		}
 		else
 		{
-			return ::ToString("const @*", _pointedType->GetName());
+			return Format("const @*", _data.PointedType->GetName());
 		}
 	}
 	else
 	{
-		return ::ToString("@*", _pointedType->GetName());
+		return Format("@*", _data.PointedType->GetName());
 	}
 }
 

@@ -30,7 +30,7 @@ private:
 
 	template <typename EnumT>
 	EnumInfo(EnumT* dummy, CString name)
-		: Super(dummy, name)
+		: Base(dummy, name)
 	{
 		static_assert(std::is_enum<EnumT>::value, "The type given to 'EnumInfo::Create()' must be an enum type.");
 

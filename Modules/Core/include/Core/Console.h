@@ -1,6 +1,7 @@
 // Console.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
+#include "Forwards/Operations.h"
 #include "String.h"
 
 namespace Console
@@ -67,7 +68,7 @@ namespace Console
 	template <typename ... T>
 	FORCEINLINE void Write(const String& format, const T& ... values)
 	{
-		Write(ToString(format, values...));
+		Write(Format(format, values...));
 	}
 
 	/** Writes a value to the console, and returns the caret to the start of the next line. */
@@ -81,27 +82,27 @@ namespace Console
 	template <typename ... T>
 	FORCEINLINE void WriteLine(const String& format, const T& ... values)
 	{
-		WriteLine(ToString(format, values...));
+		WriteLine(Format(format, values...));
 	}
 
 	/** Writes a formatted warning message to the console. */
 	template <typename ... T>
 	FORCEINLINE void Warning(const String& format, const T& ... values)
 	{
-		Warning(ToString(format, values...));
+		Warning(Format(format, values...));
 	}
 	
 	/** Writes a formatted error message to the console. */
 	template <typename ... T>
 	FORCEINLINE void Error(const String& format, const T& ... values)
 	{
-		Error(ToString(format, values...));
+		Error(Format(format, values...));
 	}
 
 	/** Writes a formatted prompt to the console, and returns the user's input. */
 	template <typename ... T>
 	FORCEINLINE String Prompt(const String& format, const T& ... values)
 	{
-		return Prompt(ToStringt(format, values...));
+		return Prompt(Format(format, values...));
 	}
 }

@@ -2,6 +2,7 @@
 
 #include "../../include/Core/Reflection/VoidInfo.h"
 #include "../../include/Core/Reflection/PrimitiveInfo.h"
+#include "../../include/Core/Reflection/PointerInfo.h"
 #include "../../include/Core/Reflection/StructInfo.h"
 
 //////////////////////////
@@ -13,44 +14,47 @@ namespace Implementation
 	///   Fundamental Types   ///
 
 	/** Register TypeInfo for void */
-	const VoidInfo TypeOf<void>::StaticTypeInfo = VoidInfo();
+	const VoidInfo TypeOf<void>::StaticTypeInfo = TypeInfoBuilder<void>();
+
+	/** Register TypeInfo for std::nullptr_t */
+	const PointerInfo TypeOf<std::nullptr_t>::StaticTypeInfo = TypeInfoBuilder<std::nullptr_t>();
 
 	///////////////////////////
 	///   Primitive Types   ///
 
 	/** Register TypeInfo for bool */
-	const PrimitiveInfo TypeOf<bool>::StaticTypeInfo = PrimitiveInfo::Create<bool>("bool");
+	const PrimitiveInfo TypeOf<bool>::StaticTypeInfo = TypeInfoBuilder<bool>("bool");
 
 	/** Register TypeInfo for char */
-	const PrimitiveInfo TypeOf<char>::StaticTypeInfo = PrimitiveInfo::Create<char>("char");
+	const PrimitiveInfo TypeOf<char>::StaticTypeInfo = TypeInfoBuilder<char>("char");
 
 	/** Register TypeInfo for byte */
-	const PrimitiveInfo TypeOf<byte>::StaticTypeInfo = PrimitiveInfo::Create<byte>("byte");
+	const PrimitiveInfo TypeOf<byte>::StaticTypeInfo = TypeInfoBuilder<byte>("byte");
 
 	/** Register TypeInfo for int16 */
-	const PrimitiveInfo TypeOf<int16>::StaticTypeInfo = PrimitiveInfo::Create<int16>("int16");
+	const PrimitiveInfo TypeOf<int16>::StaticTypeInfo = TypeInfoBuilder<int16>("int16");
 
 	/** Register TypeInfo for int32 */
-	const PrimitiveInfo TypeOf<int32>::StaticTypeInfo = PrimitiveInfo::Create<int32>("int32");
+	const PrimitiveInfo TypeOf<int32>::StaticTypeInfo = TypeInfoBuilder<int32>("int32");
 
 	/** Register TypeInfo for int64 */
-	const PrimitiveInfo TypeOf<int64>::StaticTypeInfo = PrimitiveInfo::Create<int64>("int64");
+	const PrimitiveInfo TypeOf<int64>::StaticTypeInfo = TypeInfoBuilder<int64>("int64");
 
 	/** Register TypeInfo for uint16 */
-	const PrimitiveInfo TypeOf<uint16>::StaticTypeInfo = PrimitiveInfo::Create<uint16>("uint16");
+	const PrimitiveInfo TypeOf<uint16>::StaticTypeInfo = TypeInfoBuilder<uint16>("uint16");
 
 	/** Register TypeInfo for uint32 */
-	const PrimitiveInfo TypeOf<uint32>::StaticTypeInfo = PrimitiveInfo::Create<uint32>("uint32");
+	const PrimitiveInfo TypeOf<uint32>::StaticTypeInfo = TypeInfoBuilder<uint32>("uint32");
 
 	/** Register TypeInfo for uint64 */
-	const PrimitiveInfo TypeOf<uint64>::StaticTypeInfo = PrimitiveInfo::Create<uint64>("uint64");
+	const PrimitiveInfo TypeOf<uint64>::StaticTypeInfo = TypeInfoBuilder<uint64>("uint64");
 
 	/** Register TypeInfo for float */
-	const PrimitiveInfo TypeOf<float>::StaticTypeInfo = PrimitiveInfo::Create<float>("float");
+	const PrimitiveInfo TypeOf<float>::StaticTypeInfo = TypeInfoBuilder<float>("float");
 
 	/** Register TypeInfo for double */
-	const PrimitiveInfo TypeOf<double>::StaticTypeInfo = PrimitiveInfo::Create<double>("double");
+	const PrimitiveInfo TypeOf<double>::StaticTypeInfo = TypeInfoBuilder<double>("double");
 
 	/** Register TypeInfo for 'String' */
-	const StructInfo TypeOf<String>::StaticTypeInfo = StructInfo::Create<String>("String");
+	const StructInfo TypeOf<String>::StaticTypeInfo = TypeInfoBuilder<String>("String");
 }

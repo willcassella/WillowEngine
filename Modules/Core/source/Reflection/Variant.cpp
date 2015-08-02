@@ -7,13 +7,13 @@
 ///   Constructors   ///
 
 Variant::Variant()
-	: _value(nullptr), _type(TypeOf<void>())
+	: _value(nullptr), _type(&TypeOf<void>())
 {
 	// All done
 }
 
 ImmutableVariant::ImmutableVariant()
-	: _value(nullptr), _type(TypeOf<void>())
+	: _value(nullptr), _type(&TypeOf<void>())
 {
 	// All done
 }

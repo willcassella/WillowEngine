@@ -6,7 +6,7 @@
 //////////////////////
 ///   Reflection   ///
 
-CLASS_REFLECTION(Module);
+BUILD_REFLECTION(Module);
 
 ////////////////////////
 ///   Constructors   ///
@@ -28,16 +28,4 @@ String Module::GetName() const
 String Module::GetAuthors() const
 {
 	return _authors;
-}
-
-Array<TypeIndex> Module::GetTypes() const
-{
-	Array<TypeIndex> types(_types.Size());
-
-	for (const auto& type : _types)
-	{
-		types.Add(type.Second);
-	}
-
-	return types;
 }
