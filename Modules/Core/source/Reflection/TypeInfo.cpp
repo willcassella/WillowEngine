@@ -21,6 +21,19 @@ BUILD_REFLECTION(TypeInfo)
 .AddProperty("Move-Assignable", "Whether this type is move-assignable.", &TypeInfo::IsMoveAssignable, nullptr)
 .AddProperty("Destructible", "Whether this type is destructible.", &TypeInfo::IsDestructible, nullptr);
 
+////////////////////////
+///   Constructors   ///
+
+TypeInfo::TypeInfo(TypeInfo&& move)
+	: _data(std::move(move._data))
+{
+	RegisterWithApplication();
+	// So basically with this, the compiler only has to THINK that TypeInfo objects are move-constructible (which I guess they are, but whatever).
+	// When you initialize an object with "T blah = arg", the standard says that the type HAS to be move-constructible, even though the compiler implementor is free to not call it.
+	// Honestly, I think this is one of the dumbest fucking things I've ever seen, and an example of the language failing to support the intention of the programmer. If you're initializing
+	// something, it should just be initialization, not initialization and then copying.
+}
+
 TypeInfo::~TypeInfo()
 {
 	Application::Instance()._types.DeleteFirst(self);

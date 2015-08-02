@@ -25,7 +25,7 @@ class CORE_API TypeInfo : public Object
 	///////////////////////
 	///   Information   ///
 public:
-	
+
 	REFLECTABLE_CLASS
 	EXTENDS(Object)
 
@@ -66,6 +66,12 @@ public:
 	{
 		RegisterWithApplication();
 	}
+
+	/** TypeInfo objects are not copyable. */
+	TypeInfo(const TypeInfo& copy) = delete;
+
+	/** Stupid move-constructor that will never get called. See notes in source. */
+	TypeInfo(TypeInfo&& move);
 
 	/** Unregisters this TypeInfo object with the Application. */
 	~TypeInfo() override;

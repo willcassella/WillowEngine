@@ -4,6 +4,10 @@
 
 int main()
 {
+	for (auto type : Application::GetAllTypes())
+	{
+		Console::WriteLine(type);
+	}
 	Console::WriteLine("Hello");
 	Console::Prompt();
 }

@@ -1,9 +1,9 @@
 # CoreTest.makefile
 
 CXX=clang++
-CFLAGS=-std=c++14 -Ofast -Wall -D BITS_64 -I ../../Modules/Core/include -I ../../Modules/Math/include
+CFLAGS=-std=c++14 -Ofast -Wall -D BITS_64 -I ../../Modules/Core/include
 LFLAGS=-Wl,-rpath='$$ORIGIN'
-DEPS=../../Modules/Core/bin/Core.so ../../Modules/Math/bin/Math.so
+DEPS=../../Modules/Core/bin/Core.so
 OUT=-o bin/CoreTest.out
 
 .PHONY: setup
