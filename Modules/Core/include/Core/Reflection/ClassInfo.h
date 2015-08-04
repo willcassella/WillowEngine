@@ -28,7 +28,12 @@ public:
 	ClassInfo(const TypeInfoBuilder<ClassT, ClassInfo>& builder)
 		: Base(builder), _data(std::move(builder._data))
 	{
-		// All done
+		static_assert(std::is_base_of<Object, ClassT>::value, "Classes must be extend 'Object'");
+		static_assert(!std::is_copy_constructible<ClassT>::value, "Class types may not be copy-constructible.");
+		static_assert(!std::is_copy_assignable<ClassT>::value, "Class types may not be copy-assignable.");
+		static_assert(!std::is_move_assignable<ClassT>::value, "Class types may not be move-assignable.");
+		static_assert(!std::is_move_constructible<ClassT>::value || std::is_base_of<TypeInfo, ClassT>::value,
+			"Class types may not be move-constructible."); // Except for 'TypeInfo' types
 	}
 
 	///////////////////
@@ -99,13 +104,6 @@ public:
 	TypeInfoBuilder(CString name)
 		: TypeInfoBuilderBase<ClassT, ClassInfo>(name)
 	{
-		static_assert(std::is_base_of<Object, ClassT>::value, "Classes must be extend 'Object'");
-		static_assert(!std::is_copy_constructible<ClassT>::value, "Class types may not be copy-constructible.");
-		static_assert(!std::is_copy_assignable<ClassT>::value, "Class types may not be copy-assignable.");
-		static_assert(!std::is_move_assignable<ClassT>::value, "Class types may not be move-assignable.");
-		static_assert(!std::is_move_constructible<ClassT>::value || std::is_base_of<TypeInfo, ClassT>::value,
-			"Class types may not be move-constructible."); // Except for 'TypeInfo' types
-
 		// If this class adds new implemented interfaces
 		if (!std::is_same<InterfacesOf<BaseOf<ClassT>>, InterfacesOf<ClassT>>::value)
 		{

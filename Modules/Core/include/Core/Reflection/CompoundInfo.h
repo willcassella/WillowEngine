@@ -30,7 +30,7 @@ public:
 	CompoundInfo(const TypeInfoBuilder<CompoundT, CompoundInfo>& builder)
 		: Base(builder), _data(std::move(builder._data))
 	{
-		// All done
+		static_assert(std::is_class<CompoundT>::value, "A 'Compound' type is either a class, struct, or interface.");
 	}
 
 	///////////////////
@@ -72,7 +72,7 @@ public:
 	TypeInfoBuilder(CString name)
 		: TypeInfoBuilderBase<CompoundT, CompoundInfo>(name)
 	{
-		static_assert(std::is_class<CompoundT>::value, "A 'Compound' type is either a class, struct, or interface.");
+		// All done
 	}
 
 	///////////////////

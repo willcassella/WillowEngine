@@ -1,7 +1,7 @@
 // ResourceConverter.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <Common/Mesh.h>
+#include <Engine/Resource/Mesh.h>
 
 namespace ResourceConverter
 {

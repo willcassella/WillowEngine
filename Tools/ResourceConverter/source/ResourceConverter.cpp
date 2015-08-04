@@ -2,8 +2,7 @@
 
 #include <fstream>
 #include <Core/Console.h>
-#include <Core/Resource/ResourcePtr.h>
-#include <Common/TextFile.h>
+#include <Resource/TextFile.h>
 #include "../include/ResourceConverter/ResourceConverter.h"
 
 ////////////////////////////
@@ -74,27 +73,18 @@ ResourceConverter::InputType ResourceConverter::ParsePath(const String& path)
 
 bool ResourceConverter::ParseOBJFile(const String& path, Array<Mesh::Vertex>& outVertices, Array<uint32>& outElements, bool compress)
 {
-	struct Position { float X; float Y; float Z; };
-	struct UVCoordinate { float U; float V; };
-	struct Normal { float I; float J; float K; };
+	Array<Vec3> positions;
+	Array<Vec2> coordinates;
+	Array<Vec3> normals;
 
-	Array<Position> positions;
-	Array<UVCoordinate> coordinates;
-	Array<Normal> normals;
+	TextFile file(path);
 
-	ResourcePtr<TextFile> file(path);
-
-	if (!file.IsLoaded())
-	{
-		return false;
-	}
-
-	for (const String& line : file->GetLines())
+	for (const String& line : file.GetLines())
 	{
 		// Parse vertices
 		if (line.StartsWith("v "))
 		{
-			Position position;
+			Vec3 position;
 			FromString(line, "v @ @ @", position.X, position.Y, position.Z);
 			positions.Add(position);
 			continue;
@@ -103,8 +93,8 @@ bool ResourceConverter::ParseOBJFile(const String& path, Array<Mesh::Vertex>& ou
 		// Parse texture coordinates
 		if (line.StartsWith("vt "))
 		{
-			UVCoordinate coordinate;
-			FromString(line, "vt @ @", coordinate.U, coordinate.V);
+			Vec2 coordinate;
+			FromString(line, "vt @ @", coordinate.X, coordinate.Y);
 			coordinates.Add(coordinate);
 			continue;
 		}
@@ -112,8 +102,8 @@ bool ResourceConverter::ParseOBJFile(const String& path, Array<Mesh::Vertex>& ou
 		// Parse vertex normals
 		if (line.StartsWith("vn "))
 		{
-			Normal normal;
-			FromString(line, "vn @ @ @", normal.I, normal.J, normal.K);
+			Vec3 normal;
+			FromString(line, "vn @ @ @", normal.X, normal.Y, normal.Z);
 			normals.Add(normal);
 			continue;
 		}
@@ -130,19 +120,14 @@ bool ResourceConverter::ParseOBJFile(const String& path, Array<Mesh::Vertex>& ou
 			{
 				// Construct a vertex
 				Mesh::Vertex vertex;
-				Position position = positions[vertexIndex[i] - 1];
-				vertex.X = position.X;
-				vertex.Y = position.Y;
-				vertex.Z = position.Z;
+				Vec3 position = positions[vertexIndex[i] - 1];
+				vertex.Position = position;
 
-				UVCoordinate textureCoords = coordinates[uvIndex[i] - 1];
-				vertex.U = textureCoords.U;
-				vertex.V = textureCoords.V;
+				Vec2 textureCoords = coordinates[uvIndex[i] - 1];
+				vertex.UV = textureCoords;
 
-				Normal normal = normals[normalIndex[i] - 1];
-				vertex.I = normal.I;
-				vertex.J = normal.J;
-				vertex.K = normal.K;
+				Vec3 normal = normals[normalIndex[i] - 1];
+				vertex.Normal = normal;
 
 				if (compress)
 				{
@@ -190,13 +175,13 @@ bool ResourceConverter::WriteStaticMesh(const String& name, const Array<Mesh::Ve
 	uint32 numElements = elements.Size();
 
 	// Write it to a file
-	std::ofstream output;
+	std::basic_fstream<byte> output;
 	output.open((name + ".wmesh").Cstr(), std::ios::binary | std::ios::out);
 
-	output.write((char*)&numVerts, sizeof(uint32));
-	output.write((char*)&vertices[0], sizeof(Mesh::Vertex) * numVerts);
-	output.write((char*)&numElements, sizeof(uint32));
-	output.write((char*)&elements[0], sizeof(uint32) * numElements);
+	output.write((byte*)&numVerts, sizeof(uint32));
+	output.write((byte*)&vertices[0], sizeof(Mesh::Vertex) * numVerts);
+	output.write((byte*)&numElements, sizeof(uint32));
+	output.write((byte*)&elements[0], sizeof(uint32) * numElements);
 
 	output.close();
 

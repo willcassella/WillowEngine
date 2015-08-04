@@ -6,7 +6,7 @@
 //////////////////////
 ///   Reflection   ///
 
-CLASS_REFLECTION(GameObject)
+BUILD_REFLECTION(GameObject)
 .AddProperty("Name", "", &GameObject::GetName, &GameObject::SetName)
 .AddProperty("Scene", "", &GameObject::GetScene, nullptr)
 .AddProperty("Transform", "", &GameObject::Transform)

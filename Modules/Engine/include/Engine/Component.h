@@ -22,8 +22,8 @@ class ENGINE_API Component : public Object
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS;
-	EXTENDS(Object);
+	REFLECTABLE_CLASS
+	EXTENDS(Object)
 	friend Scene;
 
 	////////////////////////
@@ -36,27 +36,30 @@ public:
 	///   Methods   ///
 public:
 
-	/** Returns whether this component is enabled on the GameObject that owns it */
-	bool IsEnabled() const;
+	/** Returns whether this component is enabled on the GameObject that owns it. */
+	FORCEINLINE bool IsEnabled() const
+	{
+		return _isEnabled;
+	}
 
-	/** Enables this component, if it is currently disabled */
+	/** Enables this component, if it is currently disabled. */
 	void Enable();
 
-	/** Disable the component, if it is currently enabled */
+	/** Disable the component, if it is currently enabled. */
 	void Disable();
 
-	/** Returns the GameObject that this component is attached to */
+	/** Returns the GameObject that this component is attached to. */
 	GameObject& GetOwner();
 
-	/** Returns the GameObject that this component is attached to */
+	/** Returns the GameObject that this component is attached to. */
 	const GameObject& GetOwner() const;
 
 protected:
 
-	/** Function called when this component is disabled */
+	/** Function called when this component is disabled. */
 	virtual void OnDisabled();
 
-	/** Function called when this component is enabled */
+	/** Function called when this component is enabled. */
 	virtual void OnEnabled();
 
 	////////////////

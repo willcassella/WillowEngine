@@ -31,7 +31,7 @@ public:
 	StructInfo(const TypeInfoBuilder<StructT, StructInfo>& builder)
 		: Base(builder)
 	{
-		// All done
+		static_assert(!std::is_polymorphic<StructT>::value, "Structs may not be polymorphic");
 	}
 
 	///////////////////
@@ -59,7 +59,7 @@ public:
 	TypeInfoBuilder(CString name)
 		: TypeInfoBuilderBase<StructT, StructInfo>(name)
 	{
-		static_assert(!std::is_polymorphic<StructT>::value, "Structs may not be polymorphic");
+		// All done
 	}
 };
 

@@ -1,8 +1,8 @@
 // Object.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "config.h"
 #include "Forwards/Core.h"
+#include "Containers/Array.h"
 #include "Reflection/Reflection.h"
 
 /////////////////
@@ -20,6 +20,9 @@ public:
 
 	/** Type information for 'Object' */
 	static const ClassInfo StaticTypeInfo;
+
+	template <class ObjectT>
+	friend struct Ptr;
 
 	////////////////////////
 	///   Constructors   ///
@@ -46,4 +49,10 @@ public:
 
 	Object& operator=(const Object& copy) = delete;
 	Object& operator=(Object&& move) = delete;
+
+	////////////////
+	///   Data   ///
+private:
+
+	Array<void*> _pointers;
 };

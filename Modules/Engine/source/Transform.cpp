@@ -5,7 +5,7 @@
 //////////////////////
 ///   Reflection   ///
 
-STRUCT_REFLECTION(Transform)
+BUILD_REFLECTION(Transform)
 .AddProperty("Location", "The location of this GameObject, in 3D coordinates.", &Transform::Location)
 .AddProperty("Orientation", "The orientation of this GameObject.", &Transform::Orientation)
 .AddProperty("Scale3D", "The scale of this GameObject", &Transform::Scale);

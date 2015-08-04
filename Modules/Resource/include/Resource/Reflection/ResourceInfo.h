@@ -35,7 +35,7 @@ public:
 	ResourceInfo(const TypeInfoBuilder<ResourceT, ResourceInfo>& builder)
 		: Base(builder), _data(std::move(builder._data))
 	{
-		// All done
+		static_assert(std::is_base_of<Resource, ResourceT>::value, "The given type must be a Resource type.");
 	}
 
 	////////////////

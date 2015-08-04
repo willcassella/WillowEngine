@@ -7,7 +7,7 @@
 //////////////////////
 ///   Reflection   ///
 
-CLASS_REFLECTION(Component);
+BUILD_REFLECTION(Component);
 
 ////////////////////////
 ///   Constructors   ///
@@ -21,11 +21,6 @@ Component::Component(GameObject& owner)
 
 ///////////////////
 ///   Methods   ///
-
-bool Component::IsEnabled() const
-{
-	return _isEnabled;
-}
 
 void Component::Enable()
 {

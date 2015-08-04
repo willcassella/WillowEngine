@@ -25,7 +25,8 @@ public:
 	PrimitiveInfo(const TypeInfoBuilder<PrimitiveT, PrimitiveInfo>& builder)
 		: Base(builder)
 	{
-		// All done
+		static_assert(stdEXT::is_primitive<PrimitiveT>::value || std::is_fundamental<PrimitiveT>::value || std::is_enum<PrimitiveT>::value,
+			"Primitives types must be primitive");
 	}
 
 	///////////////////
@@ -48,7 +49,6 @@ public:
 	TypeInfoBuilder(CString name)
 		: TypeInfoBuilderBase<PrimitiveT, PrimitiveInfo>(name)
 	{
-		static_assert(stdEXT::is_primitive<PrimitiveT>::value || std::is_fundamental<PrimitiveT>::value || std::is_enum<PrimitiveT>::value,
-			"Primitives types must be primitive");
+		// All done
 	}
 };

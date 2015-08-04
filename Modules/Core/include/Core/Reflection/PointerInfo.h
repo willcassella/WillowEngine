@@ -28,7 +28,7 @@ public:
 	PointerInfo(const TypeInfoBuilder<PointerT, PointerInfo>& builder)
 		: Base(builder), _data(std::move(builder._data))
 	{
-		// All done
+		static_assert(std::is_pointer<PointerT>::value || std::is_same<PointerT, std::nullptr_t>::value, "PointerTypes must be pointers");
 	}
 
 	///////////////////
@@ -83,7 +83,6 @@ public:
 	TypeInfoBuilder()
 		: TypeInfoBuilderBase<PointerT, PointerInfo>("")
 	{
-		static_assert(std::is_pointer<PointerT>::value, "PointerTypes must be pointers");
 		using PointedT = std::remove_pointer_t<PointerT>;
 
 		_data.PointedType = &TypeOf<PointedT>();

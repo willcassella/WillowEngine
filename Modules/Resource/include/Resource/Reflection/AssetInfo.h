@@ -30,9 +30,9 @@ public:
 	// TODO: Documentation
 	template <class AssetT>
 	AssetInfo(const TypeInfoBuilder<AssetT, AssetInfo>& builder)
-		: Base(builder)
+		: Base(builder), _data(std::move(builder._data))
 	{
-		// TODO
+		static_assert(std::is_base_of<Asset, AssetT>::value, "The given type must be an Asset type.");
 	}
 
 	////////////////
