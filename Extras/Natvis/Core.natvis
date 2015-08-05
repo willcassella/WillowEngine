@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  
+  <!-- Core -->
+  
+  <Type Name="String">
+    <DisplayString Condition="_value._value._value == 0xcccccccccccccccc">uninitialized</DisplayString>
+    <DisplayString>{(const char*)_value._value._value,s}</DisplayString>
+    <StringView>(const char*)_value._value._value,s</StringView>
+  </Type>
+  
+  <!-- Memory -->
+  
+  <Type Name="OwnerPtr&lt;*&gt;">
+    <DisplayString Condition="_value == 0">null</DisplayString>
+    <DisplayString Condition="_value == 0xcccccccccccccccc">uninitialized</DisplayString>
+    <DisplayString>{*_value}</DisplayString>
+    <Expand>
+      <ExpandedItem Condition="_value != 0">_value</ExpandedItem>
+    </Expand>
+  </Type>
+  
+  <Type Name="OwnerPtr&lt;void&gt;">
+    <DisplayString Condition="_value == 0">OwnerPtr {{null}}</DisplayString>
+    <DisplayString Condition="_value == 0xcccccccccccccccc">OwnerPtr {{uninitialized}}</DisplayString>
+    <DisplayString>OwnerPtr {*_value}</DisplayString>
+    <Expand>
+      <ExpandedItem>_value</ExpandedItem>
+    </Expand>
+  </Type>
+  
+  <Type Name="Ptr&lt;*&gt;">
+    <DisplayString Condition="_value == 0">null</DisplayString>
+    <DisplayString Condition="_value == 0xcccccccccccccccc">uninitialized</DisplayString>
+    <Expand>
+      <ExpandedItem>_value</ExpandedItem>
+    </Expand>
+  </Type>
+  
+  <!-- Containers -->
+  
+  <Type Name="StaticBuffer&lt;*&gt;">
+    <Expand>
+      <Item Name="Size">sizeof(_value)</Item>
+      <ArrayItems>
+        <Size>sizeof(_value)</Size>
+        <ValuePointer>_value</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  
+  <Type Name="DynamicBuffer">
+    <DisplayString Condition="_value == 0xcccccccccccccccc">uninitialized</DisplayString>
+    <DisplayString Condition="_value == 0">empty</DisplayString>
+    <DisplayString>Size={_size}</DisplayString>
+    <Expand>
+      <Item Name="Size">_size</Item>
+      <ArrayItems>
+        <Size>_size</Size>
+        <ValuePointer>_value</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <Type Name="Array&lt;*&gt;">
+    <DisplayString Condition="_value._value == 0xcccccccccccccccc">uninitialized</DisplayString>
+    <DisplayString Condition="_numElements == 0">empty</DisplayString>
+      <Expand>
+        <Item Name="Size">_numElements</Item>
+        <Item Name="Capacity">_value._size/sizeof($T1)</Item>
+        <ArrayItems>
+          <Size>_numElements</Size>
+          <ValuePointer>($T1*)_value._value</ValuePointer>
+        </ArrayItems>
+      </Expand>
+  </Type>
+  
+  <Type Name="Pair&lt;*,*&gt;">
+    <DisplayString>{First} : {Second}</DisplayString>
+  </Type>
+  
+  <Type Name="Table&lt;*,*&gt;">
+    <DisplayString Condition="_values._value._value == 0xcccccccccccccccc">uninitialized</DisplayString>
+    <DisplayString Condition="_values._numElements == 0">empty</DisplayString>
+    <Expand>
+      <ExpandedItem>_values</ExpandedItem>
+    </Expand>
+  </Type>
+  
+  <!-- Reflection -->
+  
+  <Type Name="TypeIndex">
+    <DisplayString Condition="_type == 0xcccccccccccccccc">uninitialized</DisplayString>
+    <DisplayString>Type={_type->_data.name,s}</DisplayString>
+    <Expand>
+      <ExpandedItem>_type</ExpandedItem>
+    </Expand>
+  </Type>
+  
+  <Type Name="TypeInfo">
+    <DisplayString>{_data.name,s}</DisplayString>
+    <Expand>
+      <Item Name="Name">_data.name,s</Item>
+      <Item Name="Size">_data.size</Item>
+      <Item Name="Compound">_data.isCompound</Item>
+      <Item Name="Abstract">_data.isAbstract</Item>
+      <Item Name="Polymorphic">_data.isPolymorphic</Item>
+      <Item Name="Default Constructible">_data.isDefaultConstructible</Item>
+      <Item Name="Copy Constructible">_data.isCopyConstructible</Item>
+      <Item Name="Move Constructible">_data.isMoveConstructible</Item>
+      <Item Name="Copy Assignable">_data.isCopyAssignable</Item>
+      <Item Name="Move Assignable">_data.isMoveAssignable</Item>
+      <Item Name="Destructible">_data.isDestructible</Item>
+    </Expand>
+  </Type>
+  
+  <Type Name="CompoundInfo">
+    <DisplayString>{_data.name}</DisplayString>
+    <Expand>
+      <ExpandedItem>*(TypeInfo*)this,nd</ExpandedItem>
+      <Item Name="Properties">_data.properties</Item>
+    </Expand>
+  </Type>
+  
+  <Type Name="PropertyInfo">
+    <DisplayString>{_name}</DisplayString>
+    <Expand>
+      <Item Name="Name">_name,s</Item>
+      <Item Name="Description">_description</Item>
+      <Item Name="Owner Type">*_ownerType</Item>
+      <Item Name="Property Type">*_propertyType</Item>
+      <Item Name="Field">_isField</Item>
+      <Item Name="Polymorphic">_isPolymorphic</Item>
+      <Item Name="RequiresCopy">_requiresCopy</Item>
+    </Expand>
+  </Type>
+
+</AutoVisualizer>
