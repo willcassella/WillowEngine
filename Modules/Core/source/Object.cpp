@@ -7,6 +7,18 @@
 
 const ClassInfo Object::StaticTypeInfo = TypeInfoBuilder<Object>();
 
+////////////////////////
+///   Constructors   ///
+
+Object::~Object()
+{
+	for (auto& ref : _references)
+	{
+		*reinterpret_cast<void**>(ref) = nullptr;
+	}
+}
+
+
 ///////////////////
 ///   Methods   ///
 

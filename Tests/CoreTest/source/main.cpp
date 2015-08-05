@@ -2,12 +2,27 @@
 
 #include <Core/Core.h>
 
+class Test : public Object
+{
+	REFLECTABLE_CLASS
+	EXTENDS(Object)
+
+public:
+	String Name;
+};
+
+BUILD_REFLECTION(Test);
+
 int main()
 {
-	for (auto type : Application::GetAllTypes())
+
+	Ptr<Test> ptr;
+	
 	{
-		Console::WriteLine(type);
+		OwnerPtr<Test> value = New<Test>();
+		value->Name = "Test";
+		ptr = value.Get();
 	}
-	Console::WriteLine("Hello");
-	Console::Prompt();
+
+	ptr = nullptr;
 }

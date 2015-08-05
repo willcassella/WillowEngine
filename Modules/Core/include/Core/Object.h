@@ -31,7 +31,7 @@ public:
 	Object() = default;
 	Object(const Object& copy) = delete;
 	Object(Object&& move) = delete;
-	virtual ~Object() = default;
+	virtual ~Object();
 
 	///////////////////
 	///   Methods   ///
@@ -54,5 +54,5 @@ public:
 	///   Data   ///
 private:
 
-	Array<void*> _pointers;
+	mutable Array<void*> _references;
 };

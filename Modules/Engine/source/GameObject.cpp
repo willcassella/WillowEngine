@@ -6,9 +6,11 @@
 //////////////////////
 ///   Reflection   ///
 
+using SceneGetter_t = const Scene& (GameObject::*)() const;
+
 BUILD_REFLECTION(GameObject)
 .AddProperty("Name", "", &GameObject::GetName, &GameObject::SetName)
-.AddProperty("Scene", "", &GameObject::GetScene, nullptr)
+.AddProperty("Scene", "", static_cast<SceneGetter_t>(&GameObject::GetScene), nullptr)
 .AddProperty("Transform", "", &GameObject::Transform)
 .AddProperty("ID", "", &GameObject::_id, nullptr)
 .AddProperty("Alive", "", &GameObject::_isAlive, nullptr)

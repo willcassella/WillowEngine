@@ -25,37 +25,37 @@ public:
 	Ptr(T* value)
 		: _value(value)
 	{
-		AddToReferenceTable();
+		RegisterReference();
 	}
 	Ptr(const Ptr& copy)
 		: _value(copy._value)
 	{
-		AddToReferenceTable();
+		RegisterReference();
 	}
 	~Ptr()
 	{
-		RemoveFromReferenceTable();
+		UnregisterReference();
 	}
 
 	template <class CopyType>
 	Ptr(const Ptr<CopyType>& copy)
 		: _value(copy._value)
 	{
-		AddToReferenceTable();
+		RegisterReference();
 	}
 
 	template <class OwnerType>
 	Ptr(OwnerPtr<OwnerType>& owner)
 		: _value(owner.Get())
 	{
-		AddToReferenceTable();
+		RegisterReference();
 	}
 
 	template <class OwnerType>
 	Ptr(const OwnerPtr<OwnerType>& owner)
 		: _value(owner.Get())
 	{
-		AddToReferenceTable();
+		RegisterReference();
 	}
 
 	template <class OwnerType>
@@ -72,21 +72,21 @@ public:
 
 private:
 
-	FORCEINLINE void AddToReferenceTable()
+	FORCEINLINE void RegisterReference()
 	{
 		static_assert(std::is_base_of<Object, T>::value || std::is_base_of<Interface, T>::value, 
 			"The template parameter for 'Ptr' must extend either 'Object' or 'Interface'.");
 
 		if (_value)
 		{
-			Object::AddReference(_value);
+			_value->_references.Add(reinterpret_cast<void*>(&_value));
 		}
 	}
-	FORCEINLINE void RemoveFromReferenceTable()
+	FORCEINLINE void UnregisterReference()
 	{
 		if (_value)
 		{
-			Object::RemoveReference(_value);
+			_value->_references.DeleteFirst(reinterpret_cast<void*>(&_value));
 			_value = nullptr;
 		}
 	}
@@ -97,16 +97,17 @@ public:
 
 	Ptr& operator=(std::nullptr_t)
 	{
-		RemoveFromReferenceTable();
+		UnregisterReference();
 		_value = nullptr;
+		return self;
 	}
 	Ptr& operator=(T* value)
 	{
 		if (_value != value)
 		{
-			RemoveFromReferenceTable();
+			UnregisterReference();
 			_value = value;
-			AddToReferenceTable();
+			RegisterReference();
 		}
 
 		return self;
@@ -115,9 +116,9 @@ public:
 	{
 		if (_value != copy._value)
 		{
-			RemoveFromReferenceTable();
+			UnregisterReference();
 			_value = copy._value;
-			AddToReferenceTable();
+			RegisterReference();
 		}
 
 		return self;
@@ -140,9 +141,9 @@ public:
 	{
 		if (_value != copy._value)
 		{
-			RemoveFromReferenceTable();
+			UnregisterReference();
 			_value = copy._value;
-			AddToReferenceTable();
+			RegisterReference();
 		}
 
 		return self;
@@ -153,9 +154,9 @@ public:
 	{
 		if (_value != owner.Get())
 		{
-			RemoveFromReferenceTable();
+			UnregisterReference();
 			_value = owner.Get();
-			AddToReferenceTable();
+			RegisterReference();
 		}
 
 		return self;
@@ -166,9 +167,9 @@ public:
 	{
 		if (_value != owner.Get())
 		{
-			RemoveFromReferenceTable();
+			UnregisterReference();
 			_value = owner.Get();
-			AddToReferenceTable();
+			RegisterReference();
 		}
 
 		return self;
@@ -182,16 +183,4 @@ public:
 private:
 
 	T* _value;
-};
-
-template <>
-struct Ptr < void > final
-{
-
-};
-
-template <>
-struct Ptr < const void > final
-{
-
 };

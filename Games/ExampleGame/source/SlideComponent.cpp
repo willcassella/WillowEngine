@@ -7,13 +7,13 @@
 //////////////////////
 ///   Reflection   ///
 
-CLASS_REFLECTION(SlideComponent);
+BUILD_REFLECTION(SlideComponent);
 
 ////////////////////////
 ///   Constructors   ///
 
 SlideComponent::SlideComponent(GameObject& owner)
-	: Super(owner)
+	: Base(owner)
 {
 	owner.GetScene().Events.Bind("Update", self, &SlideComponent::OnUpdate);
 }

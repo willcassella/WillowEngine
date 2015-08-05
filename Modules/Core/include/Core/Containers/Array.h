@@ -217,13 +217,13 @@ public:
 	/** Returns a pointer to the start of this Array. */
 	FORCEINLINE T* CArray()
 	{
-		return (T*)_value.GetValue();
+		return reinterpret_cast<T*>(_value.GetValue());
 	}
 
 	/** Returns a pointer to the start of this Array. */
 	FORCEINLINE const T* CArray() const
 	{
-		return (const T*)_value.GetValue();
+		return reinterpret_cast<const T*>(_value.GetValue());
 	}
 
 	/** Returns whether a copy of the given value exists in this Array. */

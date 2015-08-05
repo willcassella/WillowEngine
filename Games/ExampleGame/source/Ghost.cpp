@@ -6,14 +6,14 @@
 //////////////////////
 ///   Reflection   ///
 
-CLASS_REFLECTION(Ghost)
+BUILD_REFLECTION(Ghost)
 .AddProperty("Slider", "", &Ghost::Slider);
 
 ////////////////////////
 ///   Constructors   ///
 
 Ghost::Ghost(Scene& scene)
-	: Super(scene), Slider(self)
+	: Base(scene), Slider(self)
 {
 	scene.Events.Bind("Poof", self, &Ghost::Disappear);
 	scene.Events.Bind("Spin", self, &Ghost::Spin);

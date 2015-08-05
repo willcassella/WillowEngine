@@ -6,13 +6,13 @@
 //////////////////////
 ///   Reflection   ///
 
-CLASS_REFLECTION(FPSCamera);
+BUILD_REFLECTION(FPSCamera);
 
 ////////////////////////
 ///   Constructors   ///
 
 FPSCamera::FPSCamera(Scene& scene)
-	: Super(scene)
+	: Base(scene)
 {
 	scene.Events.Bind("Move", self, &FPSCamera::Move);
 	scene.Events.Bind("Look", self, &FPSCamera::Look);

@@ -21,6 +21,14 @@
 #include "Containers/Table.h"
 #include "Containers/Tuple.h"
 
+//////////////////
+///   Memory   ///
+
+#include "Memory/New.h"
+#include "Memory/OwnerPtr.h"
+#include "Memory/SharedPtr.h"
+#include "Memory/Ptr.h"
+
 /////////////////
 ///   Event   ///
 
