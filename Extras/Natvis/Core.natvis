@@ -89,9 +89,9 @@
   
   <!-- Reflection -->
   
-  <Type Name="TypeIndex">
+  <Type Name="TypePtr&lt;*&gt;">
     <DisplayString Condition="_type == 0xcccccccccccccccc">uninitialized</DisplayString>
-    <DisplayString>Type={_type->_data.name,s}</DisplayString>
+    <DisplayString>{_type->_data.name,s}</DisplayString>
     <Expand>
       <ExpandedItem>_type</ExpandedItem>
     </Expand>
@@ -105,11 +105,7 @@
       <Item Name="Compound">_data.isCompound</Item>
       <Item Name="Abstract">_data.isAbstract</Item>
       <Item Name="Polymorphic">_data.isPolymorphic</Item>
-      <Item Name="Default Constructible">_data.isDefaultConstructible</Item>
-      <Item Name="Copy Constructible">_data.isCopyConstructible</Item>
-      <Item Name="Move Constructible">_data.isMoveConstructible</Item>
-      <Item Name="Copy Assignable">_data.isCopyAssignable</Item>
-      <Item Name="Move Assignable">_data.isMoveAssignable</Item>
+      <Item Name="Constructible">_data.isConstructible</Item>
       <Item Name="Destructible">_data.isDestructible</Item>
     </Expand>
   </Type>

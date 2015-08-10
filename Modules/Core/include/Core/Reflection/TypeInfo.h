@@ -169,12 +169,12 @@ private:
 	} _data;
 };
 
-/** This type soley exists for types that arent' default-constructible, but still wish to be serializeable.
+/** This type soley exists for types that aren't default-constructible, but still wish to be serializeable.
 * Just implement a constructor that accepts an object of this type, and it may be serialized.
 * Think of it like this:
 * - A constructor configures and initializes the object all at once.
 * - A constructor accepting 'DynamicInitializer' indicates that the object will be configured and initialized post-construction.
-* Note that this means that you shouldn't call the 'DynamicInitializer' constructor directly, unless you know what you're doing. */
+* Note that this means that you shouldn't invoke the 'DynamicInitializer' constructor directly, unless you know what you're doing. */
 struct DynamicInitializer final
 {
 	// Nothing here
