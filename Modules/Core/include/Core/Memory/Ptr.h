@@ -79,14 +79,15 @@ private:
 
 		if (_value)
 		{
-			_value->_references.Add(reinterpret_cast<void*>(&_value));
+			_value->_references.Add(&_value);
 		}
 	}
+
 	FORCEINLINE void UnregisterReference()
 	{
 		if (_value)
 		{
-			_value->_references.DeleteFirst(reinterpret_cast<void*>(&_value));
+			_value->_references.DeleteFirst(&_value);
 			_value = nullptr;
 		}
 	}

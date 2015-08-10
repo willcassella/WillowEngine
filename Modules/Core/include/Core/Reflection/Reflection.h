@@ -37,7 +37,7 @@ namespace Implementation
 		FORCEINLINE static const auto& Function(const T& value)
 		{
 			using ReturnT = decltype(value.GetType());
-			using TypeInfoT = typename std::decay_t<ReturnT>;
+			using TypeInfoT = std::decay_t<ReturnT>;
 
 			static_assert(std::is_reference<ReturnT>::value && std::is_const<std::remove_reference_t<ReturnT>>::value,
 				"The 'GetType()' member function must return an immutable reference");
@@ -495,17 +495,17 @@ FORCEINLINE const auto& TypeOf(const T& value)
 /////////////////
 ///   Types   ///
 
-// TODO: Documentation
-template <class T>
-using BaseOf = typename T::Base;
+/** Aliases the base type of the given class. */
+template <class ClassT>
+using BaseTypeOf = typename ClassT::Base;
 
-// TODO: Documentation
-template <class T>
-using InterfacesOf = typename T::Interfaces;
+/** Aliases the Interface sequence of the given class. */
+template <class ClassT>
+using InterfaceTypesOf = typename ClassT::Interfaces;
 
-/** Determines the type of 'TypeInfo' object that this type is associated with. */
+/** Aliases the type of TypeInfo class that the given type uses. */
 template <typename T>
-using TypeInfoType = std::decay_t<decltype(TypeOf<T>())>;
+using TypeInfoTypeOf = std::decay_t<decltype(TypeOf<T>())>;
 
 //////////////////
 ///   Macros   ///

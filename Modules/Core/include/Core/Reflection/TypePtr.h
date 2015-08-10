@@ -1,7 +1,8 @@
 // TypePtr.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "TypeInfo.h"
+#include "../String.h"
+#include "Reflection.h"
 
 /////////////////
 ///   Types   ///
@@ -13,7 +14,7 @@ struct TypePtr final
 	///   Information   ///
 public:
 
-	//REFLECTABLE_STRUCT
+	REFLECTABLE_STRUCT;
 
 	////////////////////////
 	///   Constructors   ///

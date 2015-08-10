@@ -105,9 +105,9 @@ public:
 		: TypeInfoBuilderBase<ClassT, ClassInfo>(name)
 	{
 		// If this class adds new implemented interfaces
-		if (!std::is_same<InterfacesOf<BaseOf<ClassT>>, InterfacesOf<ClassT>>::value)
+		if (!std::is_same<InterfaceTypesOf<BaseTypeOf<ClassT>>, InterfaceTypesOf<ClassT>>::value)
 		{
-			AddInterfaces(InterfacesOf<ClassT>{});
+			AddInterfaces(InterfaceTypesOf<ClassT>{});
 		}
 	}
 
@@ -118,7 +118,7 @@ private:
 	/** Adds all the interfaces within "type_sequence<...>" to this class's collection of implemented interfaces. */
 	void AddInterfaces(stdEXT::type_sequence<>)
 	{
-		// Do nothing
+		// Do nothing, no interfaces exist
 	}
 
 	/** Adds all the interfaces within "type_sequence<...>" to this class's collection of implemented interfaces. */
@@ -126,7 +126,7 @@ private:
 	void AddInterfaces(stdEXT::type_sequence<InterfaceT, MoreInterfaceT...>)
 	{
 		static_assert(std::is_base_of<InterfaceT, ClassT>::value, "You must actually implement the interface.");
-		static_assert(std::is_same<TypeInfoType<InterfaceT>, InterfaceInfo>::value, "The type given to 'AddInterface' must be an interface.");
+		static_assert(std::is_same<TypeInfoTypeOf<InterfaceT>, InterfaceInfo>::value, "The type given to 'AddInterface' must be an interface.");
 
 		_data.Interfaces.Add(&TypeOf<InterfaceT>());
 		AddInterface(stdEXT::type_sequence<MoreInterfaceT...>{});

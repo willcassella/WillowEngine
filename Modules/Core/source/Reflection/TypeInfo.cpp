@@ -14,11 +14,7 @@ BUILD_REFLECTION(TypeInfo)
 .AddProperty("Compound", "Whether this type is a compound type.", &TypeInfo::IsCompound, nullptr)
 .AddProperty("Abstract", "Whether this type is an abstract type.", &TypeInfo::IsAbstract, nullptr)
 .AddProperty("Polymorphic", "Whether this type is polymorphic.", &TypeInfo::IsPolymorphic, nullptr)
-.AddProperty("Default-Constructible", "Whether this type is default-constructible", &TypeInfo::IsDefaultConstructible, nullptr)
-.AddProperty("Copy-Constructible", "Whether this type is copy-constructible.", &TypeInfo::IsCopyConstructible, nullptr)
-.AddProperty("Move-Constructible", "Whether this type is move-constructible.", &TypeInfo::IsMoveConstructible, nullptr)
-.AddProperty("Copy-Assignable", "Whether this type is copy-assignable.", &TypeInfo::IsCopyAssignable, nullptr)
-.AddProperty("Move-Assignable", "Whether this type is move-assignable.", &TypeInfo::IsMoveAssignable, nullptr)
+.AddProperty("Constructible", "Whether this type may be constructed.", &TypeInfo::IsConstructible, nullptr)
 .AddProperty("Destructible", "Whether this type is destructible.", &TypeInfo::IsDestructible, nullptr);
 
 ////////////////////////

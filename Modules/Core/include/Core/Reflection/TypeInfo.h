@@ -12,12 +12,12 @@
 ///   Types   ///
 
 /** Declaration of 'TypeInfoBuilder', specialized here and in other reflection class headers. */
-template <typename T, class TypeInfoT = TypeInfoType<T>>
+template <typename T, class TypeInfoT = TypeInfoTypeOf<T>>
 struct TypeInfoBuilder;
 
-// TODO: Documentation
+/** Aliases what the base type for a TypeInfoBuilder with the given types should be.  */
 template <typename T, class TypeInfoT>
-using TypeInfoBuilderBase = TypeInfoBuilder<T, BaseOf<TypeInfoT>>;
+using TypeInfoBuilderBase = TypeInfoBuilder<T, BaseTypeOf<TypeInfoT>>;
 
 /** Base of every reflection meta-class in the engine */
 class CORE_API TypeInfo : public Object
@@ -26,8 +26,8 @@ class CORE_API TypeInfo : public Object
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS
-	EXTENDS(Object)
+	REFLECTABLE_CLASS;
+	EXTENDS(Object);
 
 	friend Variant;
 	template <typename T, class TypeInfoT>
@@ -37,22 +37,10 @@ public:
 	///   Inner Types   ///
 public:
 
-	/** The function signature for a reflected default constructor */
-	typedef void(*DefaultConstructor)(byte*);
+	/** The function signature for a reflected constructor. */
+	typedef void(*Constructor)(byte*);
 
-	/** The function signature for a reflected copy constructor */
-	typedef void(*CopyConstructor)(byte*, const void*);
-
-	/** The function signature for a reflected move constructor */
-	typedef void(*MoveConstructor)(byte*, void*);
-
-	/** The function signature for a reflected copy-assignment operator */
-	typedef void(*CopyAssignmentOperator)(void*, const void*);
-
-	/** The function signature for a reflected move-assignment operator */
-	typedef void(*MoveAssignmentOperator)(void*, void*);
-
-	/** The function signature for a reflected destructor */
+	/** The function signature for a reflected destructor. */
 	typedef void(*Destructor)(void*);
 
 	////////////////////////
@@ -113,34 +101,11 @@ public:
 		return _data.isPolymorphic;
 	}
 
-	/** Returns whether this type is default-constructible. */
-	FORCEINLINE bool IsDefaultConstructible() const
+	/** Returns whether this type is constructible,
+	* Either with a default-constructor, or a DynamicInitializer. */
+	FORCEINLINE bool IsConstructible() const
 	{
-		return _data.isDefaultConstructible;
-	}
-
-	/** Returns whether this type is copy-constructible. */
-	FORCEINLINE bool IsCopyConstructible() const
-	{
-		return _data.isCopyConstructible;
-	}
-
-	/** Returns whether this type is move-constructible. */
-	FORCEINLINE bool IsMoveConstructible() const
-	{
-		return _data.isMoveConstructible;
-	}
-
-	/** Returns whether this type is copy-assignable. */
-	FORCEINLINE bool IsCopyAssignable() const
-	{
-		return _data.isCopyAssignable;
-	}
-
-	/** Returns whether this type is move-assignable. */
-	FORCEINLINE bool IsMoveAssignable() const
-	{
-		return _data.isMoveAssignable;
+		return _data.isConstructible;
 	}
 
 	/** Returns whether this type is destructible. */
@@ -149,39 +114,11 @@ public:
 		return _data.isDestructible;
 	}
 
-	/** Returns the default constructor for this type.
-	* Returns an empty implementation if this type is not copy-constructible. */
-	FORCEINLINE DefaultConstructor GetDefaultConstructor() const
+	/** Returns the constructor for this type.
+	* Returns an empty implementation if this type is not constructible. */
+	FORCEINLINE Constructor GetConstructor() const
 	{
-		return _data.defaultConstructor;
-	}
-
-	/** Returns the copy-constructor for this type. 
-	* Returns an empty implementation if this type is not copy-constructible. */
-	FORCEINLINE CopyConstructor GetCopyConstructor() const
-	{
-		return _data.copyConstructor;
-	}
-
-	/** Returns the move-constructor for this type. 
-	* Returns an empty implementation if this type is not move-constructible. */
-	FORCEINLINE MoveConstructor GetMoveConstructor() const
-	{
-		return _data.moveConstructor;
-	}
-
-	/** Returns the copy-assignment operator for this type.
-	* Returns an empty implementation if this type is not copy-assignable. */
-	FORCEINLINE CopyAssignmentOperator GetCopyAssignmentOperator() const
-	{
-		return _data.copyAssignmentOperator;
-	}
-
-	/** Returns the move-assignment operator for this type.
-	* Returns an empty implementation if this type is not move-assignable. */
-	FORCEINLINE MoveAssignmentOperator GetMoveAssignmentOperator() const
-	{
-		return _data.moveAssignmentOperator;
+		return _data.constructor;
 	}
 
 	/** Returns the destructor for this type.
@@ -219,11 +156,7 @@ private:
 	struct Data
 	{
 		CString name;
-		DefaultConstructor defaultConstructor;
-		CopyConstructor copyConstructor;
-		MoveConstructor moveConstructor;
-		CopyAssignmentOperator copyAssignmentOperator;
-		MoveAssignmentOperator moveAssignmentOperator;
+		Constructor constructor;
 		Destructor destructor;
 		String(*toStringImplementation)(const void*);
 		String(*fromStringImplementation)(void*, const String&);
@@ -231,13 +164,20 @@ private:
 		bool isCompound;
 		bool isAbstract;
 		bool isPolymorphic;
-		bool isDefaultConstructible;
-		bool isCopyConstructible;
-		bool isMoveConstructible;
-		bool isCopyAssignable;
-		bool isMoveAssignable;
+		bool isConstructible;
 		bool isDestructible;
 	} _data;
+};
+
+/** This type soley exists for types that arent' default-constructible, but still wish to be serializeable.
+* Just implement a constructor that accepts an object of this type, and it may be serialized.
+* Think of it like this:
+* - A constructor configures and initializes the object all at once.
+* - A constructor accepting 'DynamicInitializer' indicates that the object will be configured and initialized post-construction.
+* Note that this means that you shouldn't call the 'DynamicInitializer' constructor directly, unless you know what you're doing. */
+struct DynamicInitializer final
+{
+	// Nothing here
 };
 
 /** Generic TypeInfoBuilder for TypeInfo */
@@ -258,23 +198,19 @@ public:
 	{
 		_data.name = name;
 
-		_data.defaultConstructor= Implementation::Construct<T>::Function;
-		_data.copyConstructor = [](byte* location, const void* copy)
+		if (std::is_constructible<T, DynamicInitializer>::value)
 		{
-			Implementation::Construct<T, const T&>::Function(location, *static_cast<const T*>(copy));
-		};
-		_data.moveConstructor = [](byte* location, void* move)
+			_data.constructor = 
+				[](byte* location)
+				{
+					Implementation::Construct<T, DynamicInitializer>::Function(location, DynamicInitializer{});
+				};
+		}
+		else
 		{
-			Implementation::Construct<T, T&&>::Function(location, std::move(*static_cast<T*>(move)));
-		};
-		_data.copyAssignmentOperator = [](void* value, const void* copy)
-		{
-			Implementation::Assign<T, const T&>::Function(*static_cast<T*>(value), *static_cast<const T*>(copy));
-		};
-		_data.moveAssignmentOperator = [](void* value, void* move)
-		{
-			Implementation::Assign<T, T&&>::Function(*static_cast<T*>(value), std::move(*static_cast<T*>(move)));
-		};
+			_data.constructor = Implementation::Construct<T>::Function;
+		}
+
 		_data.destructor = [](void* value)
 		{
 			Implementation::Destroy<T>::Function(*static_cast<T*>(value));
@@ -293,11 +229,7 @@ public:
 		_data.isCompound = std::is_class<T>::value;
 		_data.isAbstract = std::is_abstract<T>::value;
 		_data.isPolymorphic = std::is_polymorphic<T>::value;
-		_data.isDefaultConstructible = std::is_default_constructible<T>::value;
-		_data.isCopyConstructible = std::is_copy_constructible<T>::value;
-		_data.isMoveConstructible = std::is_move_constructible<T>::value;
-		_data.isCopyAssignable = std::is_copy_assignable<T>::value;
-		_data.isMoveAssignable = std::is_move_assignable<T>::value;
+		_data.isConstructible = std::is_constructible<T, DynamicInitializer>::value || std::is_default_constructible<T>::value;
 		_data.isDestructible = std::is_destructible<T>::value;
 	}
 
@@ -334,8 +266,8 @@ namespace Implementation
 /////////////////////
 ///   Functions   ///
 
-/** Safely casts from a reference of one type to the target class/interface/type
-* WARNING: Returns a null pointer if the cast is invalid (value does not legally translate to the given type) */
+/** Safely casts from a reference of one type to the target class/interface/type.
+* NOTE: Returns a null pointer if the cast is invalid (value does not legally translate to the given type). */
 template <typename TargetT, typename T>
 FORCEINLINE TargetT* Cast(T& value)
 {
@@ -351,8 +283,8 @@ FORCEINLINE TargetT* Cast(T& value)
 	}
 }
 
-/** Safely casts from an immutable reference of one type to the target class/interface/type
-* WARNING: Returns a null pointer if the cast is invalid (value does not legally translate to the given type) */
+/** Safely casts from an immutable reference of one type to the target class/interface/type.
+* NOTE: Returns a null pointer if the cast is invalid (value does not legally translate to the given type). */
 template <typename TargetT, typename T>
 FORCEINLINE const TargetT* Cast(const T& value)
 {
@@ -375,4 +307,4 @@ FORCEINLINE const TargetT* Cast(const T& value)
 /** Put this macro into the source file of a type you'd like to reflect.
 * NOTE: The type muse use the corresponding 'REFLECTABLE_X' flag in its header.
 * NOTE: If you get the error "Incomplete type is not allowed", then the TypeInfoBuilder for this reflection type has not been defined. */
-#define BUILD_REFLECTION(T) const ::TypeInfoType<T> T::StaticTypeInfo = ::TypeInfoBuilder<T>(#T)
+#define BUILD_REFLECTION(T) const ::TypeInfoTypeOf<T> T::StaticTypeInfo = ::TypeInfoBuilder<T>(#T)

@@ -16,11 +16,12 @@ class CORE_API Object
 public:
 
 	/** 'Object' does not implement any interfaces. */
-	IMPLEMENTS()
+	IMPLEMENTS();
 
 	/** Type information for 'Object' */
 	static const ClassInfo StaticTypeInfo;
 
+	/** Ptr needs to be able to add and remove itself from the "_references" Array. */
 	template <class ObjectT>
 	friend struct Ptr;
 

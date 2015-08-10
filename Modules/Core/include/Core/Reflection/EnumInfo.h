@@ -19,6 +19,7 @@ public:
 	///   Constructors   ///
 public:
 
+	// TODO: Documentation
 	template <typename EnumT>
 	static EnumInfo Create(CString name)
 	{
@@ -28,6 +29,7 @@ public:
 
 private:
 
+	// TODO: Documentation
 	template <typename EnumT>
 	EnumInfo(EnumT* dummy, CString name)
 		: Base(dummy, name)

@@ -176,8 +176,7 @@ private:
 	}
 
 	/** Sets the setter to set to a field */
-	template <class OwnerT, typename FieldT,
-		WHERE(!std::is_function<FieldT>::value && !std::is_const<FieldT>::value)>
+	template <class OwnerT, typename FieldT, WHERE(!std::is_function<FieldT>::value && !std::is_const<FieldT>::value)>
 	std::enable_if_t<std::is_copy_assignable<FieldT>::value>
 	SetSetter(FieldT OwnerT::*field)
 	{
@@ -190,8 +189,7 @@ private:
 	}
 
 	/** Sets the setter to NOT set to a field (because it cannot be copy-assigned) */
-	template <class OwnerT, typename FieldT,
-		WHERE(!std::is_function<FieldT>::value)>
+	template <class OwnerT, typename FieldT, WHERE(!std::is_function<FieldT>::value)>
 	std::enable_if_t<!std::is_copy_assignable<FieldT>::value>
 	SetSetter(FieldT OwnerT::* /*field*/)
 	{

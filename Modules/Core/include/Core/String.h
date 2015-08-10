@@ -126,26 +126,26 @@ public:
 			return '\0';
 		}
 	}
-	friend CORE_API FORCEINLINE bool operator==(const String& lhs, const String& rhs)
+	friend FORCEINLINE bool operator==(const String& lhs, const String& rhs)
 	{
 		return lhs._value == rhs._value;
 	}
-	friend CORE_API FORCEINLINE bool operator!=(const String& lhs, const String& rhs)
+	friend FORCEINLINE bool operator!=(const String& lhs, const String& rhs)
 	{
 		return lhs._value != rhs._value;
 	}
 	friend CORE_API bool operator>(const String& lhs, const String& rhs);
-	friend CORE_API FORCEINLINE bool operator>=(const String& lhs, const String& rhs)
+	friend FORCEINLINE bool operator>=(const String& lhs, const String& rhs)
 	{
 		return lhs > rhs || lhs == rhs;
 	}
 	friend CORE_API bool operator<(const String& lhs, const String& rhs);
-	friend CORE_API FORCEINLINE bool operator<=(const String& lhs, const String& rhs)
+	friend FORCEINLINE bool operator<=(const String& lhs, const String& rhs)
 	{
 		return lhs < rhs || lhs == rhs;
 	}
 	friend CORE_API String operator+(const String& lhs, const String& rhs);
-	friend CORE_API FORCEINLINE String& operator+=(String& lhs, const String& rhs)
+	friend FORCEINLINE String& operator+=(String& lhs, const String& rhs)
 	{
 		lhs = lhs + rhs;
 		return lhs;
