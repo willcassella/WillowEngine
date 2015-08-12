@@ -1,18 +1,18 @@
 // main.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
 #include <Core/Console.h>
-#include "../include/ResourceConverter/ResourceConverter.h"
+#include "../include/AssetConverter/AssetConverter.h"
 
 int main(int32 argCount, char** args)
 {
 	// If files were passed in via the command line
 	if (argCount > 1)
 	{
-		ResourceConverter::Convert(args[1], Array<String>());
+		AssetConverter::Convert(args[1], Array<String>());
 		return 0;
 	}
 
-	Console::WriteLine("---Resource Converter---");
+	Console::WriteLine("---Asset Converter---");
 	Console::NewLine();
 	Console::WriteLine("Enter the path to a file to convert:");
 
@@ -27,7 +27,7 @@ int main(int32 argCount, char** args)
 		}
 
 		// @TODO: Parse options (setting compression level, renaming output)
-		ResourceConverter::Convert(path, Array<String>());
+		AssetConverter::Convert(path, Array<String>());
 	}
 
 	return 0;

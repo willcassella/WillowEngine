@@ -191,7 +191,7 @@ String Parse(const String& string, const String& format, T& value, MoreT& ... mo
 	{
 		if (format[i] == '@')
 		{
-			return FromString(FromString(value, string.SubString(i)), format.SubString(i + 1), moreValues...);
+			return Parse(FromString(value, string.SubString(i)), format.SubString(i + 1), moreValues...);
 		}
 	}
 

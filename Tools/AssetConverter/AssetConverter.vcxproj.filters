@@ -4,7 +4,7 @@
     <ClCompile Include="source\main.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="source\ResourceConverter.cpp">
+    <ClCompile Include="source\AssetConverter.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -17,7 +17,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\ResourceConverter\ResourceConverter.h">
+    <ClInclude Include="include\AssetConverter\AssetConverter.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

@@ -15,8 +15,15 @@ Path::Path()
 	// All done
 }
 
-Path::Path(String path)
-	: _path(std::move(path))
+Path::Path(CString path)
+	: _path(path)
+{
+	Sanitize();
+}
+
+
+Path::Path(const String& path)
+	: _path(path)
 {
 	Sanitize();
 }
@@ -84,9 +91,17 @@ void Path::Sanitize()
 /////////////////////
 ///   Operators   ///
 
-Path& Path::operator=(String path)
+Path& Path::operator=(CString path)
 {
-	_path = std::move(path);
+	_path = path;
+	Sanitize();
+
+	return self;
+}
+
+Path& Path::operator=(const String& path)
+{
+	_path = path;
 	Sanitize();
 
 	return self;

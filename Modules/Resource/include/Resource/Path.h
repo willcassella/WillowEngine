@@ -16,7 +16,8 @@ public:
 public:
 
 	Path();
-	Path(String path);
+	Path(CString path);
+	Path(const String& path);
 
 	///////////////////
 	///   Methods   ///
@@ -43,7 +44,8 @@ private:
 	///   Operators   ///
 public:
 
-	Path& operator=(String path);
+	Path& operator=(CString path);
+	Path& operator=(const String& path);
 	operator const String&() const
 	{
 		return _path;

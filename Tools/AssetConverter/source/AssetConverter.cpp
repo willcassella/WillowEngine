@@ -1,14 +1,14 @@
-// ResourceConverter.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
+// AssetConverter.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
 #include <fstream>
 #include <Core/Console.h>
-#include <Resource/TextFile.h>
-#include "../include/ResourceConverter/ResourceConverter.h"
+#include <Resource/Resources/TextFile.h>
+#include "../include/AssetConverter/AssetConverter.h"
 
 ////////////////////////////
 ///   Public Functions   ///
 
-bool ResourceConverter::Convert(const String& path, const Array<String>& options)
+bool AssetConverter::Convert(const Path& path, const Array<String>& options)
 {
 	InputType input = ParsePath(path);
 
@@ -21,14 +21,14 @@ bool ResourceConverter::Convert(const String& path, const Array<String>& options
 	// If we're parsing an OBJ file
 	if (input == InputType::OBJ)
 	{
-		Array<Mesh::Vertex> vertices;
+		Array<StaticMesh::Vertex> vertices;
 		Array<uint32> elements;
 
 		if (!ParseOBJFile(path, vertices, elements, 0))
 		{
 			return false;
 		}
-		if (!WriteStaticMesh(String::GetFileName(path), vertices, elements))
+		if (!WriteStaticMesh(path.GetFileName(), vertices, elements))
 		{
 			return false;
 		}
@@ -43,9 +43,9 @@ bool ResourceConverter::Convert(const String& path, const Array<String>& options
 ///////////////////////////
 ///   Parse Functions   ///
 
-ResourceConverter::InputType ResourceConverter::ParsePath(const String& path)
+AssetConverter::InputType AssetConverter::ParsePath(const Path& path)
 {
-	String extension = String::GetFileExtension(path);
+	String extension = path.GetFileExtension();
 
 	// Make sure the filename is valid
 	if (extension.IsEmpty())
@@ -71,7 +71,7 @@ ResourceConverter::InputType ResourceConverter::ParsePath(const String& path)
 	}
 }
 
-bool ResourceConverter::ParseOBJFile(const String& path, Array<Mesh::Vertex>& outVertices, Array<uint32>& outElements, bool compress)
+bool AssetConverter::ParseOBJFile(const Path& path, Array<StaticMesh::Vertex>& outVertices, Array<uint32>& outElements, bool compress)
 {
 	Array<Vec3> positions;
 	Array<Vec2> coordinates;
@@ -85,7 +85,7 @@ bool ResourceConverter::ParseOBJFile(const String& path, Array<Mesh::Vertex>& ou
 		if (line.StartsWith("v "))
 		{
 			Vec3 position;
-			FromString(line, "v @ @ @", position.X, position.Y, position.Z);
+			Parse(line, "v @ @ @", position.X, position.Y, position.Z);
 			positions.Add(position);
 			continue;
 		}
@@ -94,7 +94,7 @@ bool ResourceConverter::ParseOBJFile(const String& path, Array<Mesh::Vertex>& ou
 		if (line.StartsWith("vt "))
 		{
 			Vec2 coordinate;
-			FromString(line, "vt @ @", coordinate.X, coordinate.Y);
+			Parse(line, "vt @ @", coordinate.X, coordinate.Y);
 			coordinates.Add(coordinate);
 			continue;
 		}
@@ -103,7 +103,7 @@ bool ResourceConverter::ParseOBJFile(const String& path, Array<Mesh::Vertex>& ou
 		if (line.StartsWith("vn "))
 		{
 			Vec3 normal;
-			FromString(line, "vn @ @ @", normal.X, normal.Y, normal.Z);
+			Parse(line, "vn @ @ @", normal.X, normal.Y, normal.Z);
 			normals.Add(normal);
 			continue;
 		}
@@ -112,14 +112,14 @@ bool ResourceConverter::ParseOBJFile(const String& path, Array<Mesh::Vertex>& ou
 		if (line.StartsWith("f "))
 		{
 			uint32 vertexIndex[3], uvIndex[3], normalIndex[3];
-			FromString(line, "f @/@/@ @/@/@ @/@/@", vertexIndex[0], uvIndex[0], normalIndex[0], vertexIndex[1], uvIndex[1], normalIndex[1], 
+			Parse(line, "f @/@/@ @/@/@ @/@/@", vertexIndex[0], uvIndex[0], normalIndex[0], vertexIndex[1], uvIndex[1], normalIndex[1], 
 				vertexIndex[2], uvIndex[2], normalIndex[2]);
 
 			// For each vertex in the face (3)
 			for (uint32 i = 0; i < 3; ++i)
 			{
 				// Construct a vertex
-				Mesh::Vertex vertex;
+				StaticMesh::Vertex vertex;
 				Vec3 position = positions[vertexIndex[i] - 1];
 				vertex.Position = position;
 
@@ -168,7 +168,7 @@ bool ResourceConverter::ParseOBJFile(const String& path, Array<Mesh::Vertex>& ou
 ///////////////////////////
 ///   Write Functions   ///
 
-bool ResourceConverter::WriteStaticMesh(const String& name, const Array<Mesh::Vertex>& vertices, const Array<uint32>& elements)
+bool AssetConverter::WriteStaticMesh(const Path& name, const Array<StaticMesh::Vertex>& vertices, const Array<uint32>& elements)
 {
 	// Get the size of each array
 	uint32 numVerts = vertices.Size();
@@ -179,7 +179,7 @@ bool ResourceConverter::WriteStaticMesh(const String& name, const Array<Mesh::Ve
 	output.open((name + ".wmesh").Cstr(), std::ios::binary | std::ios::out);
 
 	output.write((byte*)&numVerts, sizeof(uint32));
-	output.write((byte*)&vertices[0], sizeof(Mesh::Vertex) * numVerts);
+	output.write((byte*)&vertices[0], sizeof(StaticMesh::Vertex) * numVerts);
 	output.write((byte*)&numElements, sizeof(uint32));
 	output.write((byte*)&elements[0], sizeof(uint32) * numElements);
 

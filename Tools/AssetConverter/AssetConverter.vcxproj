@@ -19,16 +19,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\AssetConverter.cpp" />
     <ClCompile Include="source\main.cpp" />
-    <ClCompile Include="source\ResourceConverter.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\ResourceConverter\ResourceConverter.h" />
+    <ClInclude Include="include\AssetConverter\AssetConverter.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{4700682C-35A0-4338-9860-7330D1341505}</ProjectGuid>
     <RootNamespace>OBJConvert</RootNamespace>
-    <ProjectName>ResourceConverter</ProjectName>
+    <ProjectName>AssetConverter</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
