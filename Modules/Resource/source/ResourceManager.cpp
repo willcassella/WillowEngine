@@ -2,11 +2,6 @@
 
 #include "../include/Resource/ResourceManager.h"
 
-//////////////////////
-///   Reflection   ///
-
-BUILD_REFLECTION(ResourceManager);
-
 ///////////////////
 ///   Methods   ///
 

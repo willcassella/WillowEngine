@@ -17,7 +17,7 @@ public:
 	///   Constructors   ///
 public:
 
-	Image(const String& path);
+	Image(const Path& path);
 	~Image() override;
 
 	///////////////////

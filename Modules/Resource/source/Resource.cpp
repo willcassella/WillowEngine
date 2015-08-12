@@ -19,20 +19,20 @@ BUILD_REFLECTION(Resource)
 ////////////////////////
 ///   Constructors   ///
 
-Resource::Resource(const String& path)
+Resource::Resource(const Path& path)
 	: _path(path)
 {
 	resourceTable[path] = this;
 
 	struct stat fileStats;
 
-	if (stat(path.Cstr(), &fileStats) == -1)
+	if (stat(path.ToString().Cstr(), &fileStats) == -1)
 	{
 		Console::Warning("Resource '@' could not be found.", path);
 		return;
 	}
 
-	_size = (uint32)fileStats.st_size;
+	_size = uint32(fileStats.st_size);
 }
 
 Resource::~Resource()

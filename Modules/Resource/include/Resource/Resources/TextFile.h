@@ -17,7 +17,7 @@ public:
 	///   Constructors   ///
 public:
 
-	TextFile(const String& path);
+	TextFile(const Path& path);
 
 	///////////////////
 	///   Methods   ///

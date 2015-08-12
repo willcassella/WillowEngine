@@ -13,10 +13,10 @@ BUILD_REFLECTION(TextFile);
 ////////////////////////
 ///   Constructors   ///
 
-TextFile::TextFile(const String& path)
+TextFile::TextFile(const Path& path)
 	: Base(path)
 {
-	std::ifstream file(path.Cstr(), std::ios::in);
+	std::ifstream file(path.ToString().Cstr(), std::ios::in);
 	std::string line;
 
 	if (!file.is_open())

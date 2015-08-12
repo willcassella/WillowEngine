@@ -11,7 +11,7 @@ BUILD_REFLECTION(BinaryFile);
 ////////////////////////
 ///   Constructors   ///
 
-BinaryFile::BinaryFile(const String& path)
+BinaryFile::BinaryFile(const Path& path)
 	: Base(path)
 {
 	// Get the size of the file
@@ -19,7 +19,7 @@ BinaryFile::BinaryFile(const String& path)
 
 	// Open a file reader
 	std::basic_ifstream<byte> file;
-	file.open(path.Cstr(), std::ios::binary | std::ios::in);
+	file.open(path.ToString().Cstr(), std::ios::binary | std::ios::in);
 
 	// Read the data from the file
 	file.read(_data.GetValue(), _data.GetSize());

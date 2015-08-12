@@ -3,6 +3,7 @@
 
 #include "../config.h"
 #include "../Forwards/Resource.h"
+#include "../Path.h"
 
 /////////////////
 ///   Types   ///
@@ -24,7 +25,7 @@ public:
 public:
 
 	/** Function signature for constructing resources. */
-	typedef void(*ResourceConstructor)(byte*, const String&);
+	typedef void(*ResourceConstructor)(byte*, const Path&);
 
 	////////////////////////
 	///   Constructors   ///
@@ -36,6 +37,7 @@ public:
 		: Base(builder), _data(std::move(builder._data))
 	{
 		static_assert(std::is_base_of<Resource, ResourceT>::value, "The given type must be a Resource type.");
+		static_assert(std::is_constructible<ResourceT, const Path&>::value, "Resources must be constructible with paths.");
 	}
 
 	////////////////
@@ -44,7 +46,7 @@ private:
 
 	struct Data
 	{
-		ResourceConstructor Constructor;
+		ResourceConstructor constructor;
 	} _data;
 };
 
@@ -66,10 +68,7 @@ public:
 	TypeInfoBuilder(CString name)
 		: TypeInfoBuilderBase<ResourceT, ResourceInfo>(name)
 	{
-		static_assert(std::is_base_of<Resource, ResourceT>::value, "Resource types must extend 'Resource'");
-		static_assert(std::is_constructible<ResourceT, const String&>::value, "Resources must be constructible with a path");
-
-		_data.Constructor = Implementation::Construct<ResourceT, const String&>::Function;
+		_data.constructor = Implementation::Construct<ResourceT, const Path&>::Function;
 	}
 
 	////////////////

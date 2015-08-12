@@ -2,7 +2,7 @@
 #pragma once
 
 #include "Asset.h"
-#include "Resource.h"
+#include "AssetManager.h"
 
 template <class AssetT>
 struct AssetPtr final
@@ -11,7 +11,7 @@ struct AssetPtr final
 	///   Information   ///
 public:
 
-	REFLECTABLE_STRUCT
+	REFLECTABLE_STRUCT;
 
 	////////////////////////
 	///   Constructors   ///
@@ -22,16 +22,46 @@ public:
 	{
 		// All done
 	}
-	//ResourcePtr(const String& path)
-	//{
-	//	_resource = Resource
-	//}
+	AssetPtr(const Path& path)
+	{
+		_asset = AssetManager::FindAsset<AssetT>(path);
+	}
+
+	/////////////////////
+	///   Operators   ///
+public:
+
+	const AssetT& operator*() const
+	{
+		return *_asset;
+	}
+	const AssetT* operator->() const
+	{
+		return _asset;
+	}
+	bool operator==(std::nullptr_t)
+	{
+		return _asset == nullptr;
+	}
+	bool operator!=(std::nullptr_t)
+	{
+		return _asset != nullptr;
+	}
+	operator bool() const
+	{
+		return _asset != nullptr;
+	}
+	AssetPtr& operator=(const Path& path)
+	{
+		_asset = AssetManager::FindAsset<AssetT>(path);
+		return self;
+	}
 
 	////////////////
 	///   Data   ///
 private:
 
-	AssetT* _asset;
+	const AssetT* _asset;
 };
 
 //////////////////////

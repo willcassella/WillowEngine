@@ -12,12 +12,12 @@ BUILD_REFLECTION(Image);
 ////////////////////////
 ///   Constructors   ///
 
-Image::Image(const String& path)
+Image::Image(const Path& path)
 	: Base(path)
 {
 	// Open the file
-	FREE_IMAGE_FORMAT format = FreeImage_GetFileType(path.Cstr());
-	FIBITMAP* image = FreeImage_Load(format, path.Cstr(), 0);
+	FREE_IMAGE_FORMAT format = FreeImage_GetFileType(path.ToString().Cstr());
+	FIBITMAP* image = FreeImage_Load(format, path.ToString().Cstr(), 0);
 
 	if (!image)
 	{
@@ -37,7 +37,7 @@ Image::Image(const String& path)
 
 Image::~Image()
 {
-	FreeImage_Unload((FIBITMAP*)_bitmap);
+	FreeImage_Unload(reinterpret_cast<FIBITMAP*>(_bitmap));
 }
 
 ///////////////////

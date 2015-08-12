@@ -6,12 +6,6 @@
 
 struct RESOURCE_API ResourceManager final
 {
-	///////////////////////
-	///   Information   ///
-public:
-
-	REFLECTABLE_STRUCT
-
 	////////////////////////
 	///   Constructors   ///
 private:
@@ -26,7 +20,7 @@ public:
 
 	// TODO: Documentation
 	template <class ResourceT>
-	static const ResourceT* FindResource(const String& path)
+	static const ResourceT* FindResource(const Path& path)
 	{
 		// Search for the resource
 		if (auto ppReource = Instance()._resourceTable.Find(path))
@@ -62,5 +56,5 @@ public:
 	///   Data   ///
 private:
 
-	Table<String, OwnerPtr<Resource>> _resourceTable;
+	Table<String, UniquePtr<Resource>> _resourceTable;
 };

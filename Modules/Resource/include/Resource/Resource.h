@@ -4,6 +4,7 @@
 #include "config.h"
 #include "Forwards/Resource.h"
 #include "Reflection/ResourceInfo.h"
+#include "Path.h"
 
 class RESOURCE_API Resource : public Object
 {
@@ -11,7 +12,7 @@ class RESOURCE_API Resource : public Object
 	///   Information   ///
 public:
 
-	EXTENDS(Object)
+	EXTENDS(Object);
 	friend Asset;
 
 	//////////////////////
@@ -25,7 +26,7 @@ public:
 	///   Constructors   ///
 public:
 
-	Resource(const String& path);
+	Resource(const Path& path);
 	~Resource() override;
 
 	///////////////////
@@ -33,7 +34,7 @@ public:
 public:
 
 	/** Returns the path to this this Resource. */
-	FORCEINLINE const String& GetPath() const
+	FORCEINLINE const Path& GetPath() const
 	{
 		return _path;
 	}
@@ -47,7 +48,6 @@ public:
 	///   Data   ///
 private:
 
-	mutable Array<Asset*> _assets;
-	String _path;
+	Path _path;
 	uint32 _size;
 };

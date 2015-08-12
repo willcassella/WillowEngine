@@ -4,13 +4,16 @@
 #include "config.h"
 #include "Reflection/AssetInfo.h"
 
+/////////////////
+///   Types   ///
+
 class RESOURCE_API Asset : public Object
 {
 	///////////////////////
 	///   Information   ///
 public:
 
-	EXTENDS(Object)
+	EXTENDS(Object);
 
 	//////////////////////
 	///   Reflection   ///
@@ -18,31 +21,4 @@ public:
 
 	static const ClassInfo StaticTypeInfo;
 	const AssetInfo& GetType() const override = 0;
-
-	////////////////////////
-	///   Constructors   ///
-public:
-
-	Asset(const Resource& resource);
-	~Asset();
-
-	///////////////////
-	///   Methods   ///
-public:
-
-	/** Returns a reference to the Resource that this Asset uses. */
-	FORCEINLINE const Resource& GetResource() const
-	{
-		return *_resource;
-	}
-
-	/** Called when the Resource is reloaded. */
-	virtual void OnReload() = 0;
-
-	////////////////
-	///   Data   ///
-private:
-
-	const Resource* _resource;
-	mutable uint32 _refs;
 };

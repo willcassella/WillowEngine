@@ -2,6 +2,28 @@
 
 #include "../include/Resource/Path.h"
 
+//////////////////////
+///   Reflection   ///
+
+BUILD_REFLECTION(Path);
+
+////////////////////////
+///   Constructors   ///
+
+Path::Path()
+{
+	// All done
+}
+
+Path::Path(String path)
+	: _path(std::move(path))
+{
+	Sanitize();
+}
+
+///////////////////
+///   Methods   ///
+
 String Path::GetFileExtension() const
 {
 	auto occurences = _path.OccurencesOf('.');
@@ -52,4 +74,20 @@ String Path::GetFileName() const
 	}
 
 	return name;
+}
+
+void Path::Sanitize()
+{
+	// TODO: This
+}
+
+/////////////////////
+///   Operators   ///
+
+Path& Path::operator=(String path)
+{
+	_path = std::move(path);
+	Sanitize();
+
+	return self;
 }
