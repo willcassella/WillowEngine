@@ -7,7 +7,9 @@
 /////////////////
 ///   Types   ///
 
-template <class TypeInfoT>
+/** TypePtr replaces using "const TypeInfo*" everywhere, with the additional
+* benefit of being indexable (TODO). */
+template <class TypeInfoT = TypeInfo>
 struct TypePtr final
 {
 	///////////////////////

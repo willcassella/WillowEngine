@@ -1,6 +1,6 @@
-// OwnerPtr.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
+// UniquePtr.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
-#include "../../include/Core/Memory/OwnerPtr.h"
+#include "../../include/Core/Memory/UniquePtr.h"
 #include "../../include/Core/Reflection/VoidInfo.h"
 #include "../../include/Core/Reflection/Variant.h"
 #include "../../include/Core/Reflection/StructInfo.h"
@@ -8,25 +8,25 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(OwnerPtr<void>);
+BUILD_REFLECTION(UniquePtr<void>);
 
 ////////////////////////
 ///   Constructors   ///
 
-OwnerPtr<void>::OwnerPtr()
+UniquePtr<void>::UniquePtr()
 	: _value(nullptr), _type(&TypeOf<void>())
 {
 	// All done
 }
 
-OwnerPtr<void>::OwnerPtr(OwnerPtr&& move)
+UniquePtr<void>::UniquePtr(UniquePtr&& move)
 	: _value(move._value), _type(move._type)
 {
 	move._value = nullptr;
 	move._type = &TypeOf<void>();
 }
 
-OwnerPtr<void>::~OwnerPtr()
+UniquePtr<void>::~UniquePtr()
 {
 	_type->GetDestructor()(_value);
 }
@@ -34,7 +34,7 @@ OwnerPtr<void>::~OwnerPtr()
 /////////////////////
 ///   Operators   ///
 
-OwnerPtr<void>& OwnerPtr<void>::operator=(std::nullptr_t)
+UniquePtr<void>& UniquePtr<void>::operator=(std::nullptr_t)
 {
 	_type->GetDestructor()(_value);
 
@@ -44,7 +44,7 @@ OwnerPtr<void>& OwnerPtr<void>::operator=(std::nullptr_t)
 	return self;
 }
 
-OwnerPtr<void>& OwnerPtr<void>::operator=(OwnerPtr&& move)
+UniquePtr<void>& UniquePtr<void>::operator=(UniquePtr&& move)
 {
 	if (this != &move)
 	{
@@ -60,12 +60,12 @@ OwnerPtr<void>& OwnerPtr<void>::operator=(OwnerPtr&& move)
 	return self;
 }
 
-Variant OwnerPtr<void>::operator*()
+Variant UniquePtr<void>::operator*()
 {
 	return Variant(_value, *_type);
 }
 
-ImmutableVariant OwnerPtr<void>::operator*() const
+ImmutableVariant UniquePtr<void>::operator*() const
 {
 	return ImmutableVariant(_value, *_type);
 }

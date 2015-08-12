@@ -47,7 +47,7 @@
     <ClInclude Include="include\Core\Math\Vec2.h" />
     <ClInclude Include="include\Core\Math\Vec3.h" />
     <ClInclude Include="include\Core\Math\Vec4.h" />
-    <ClInclude Include="include\Core\Memory\OwnerPtr.h" />
+    <ClInclude Include="include\Core\Memory\UniquePtr.h" />
     <ClInclude Include="include\Core\Memory\Ptr.h" />
     <ClInclude Include="include\Core\Memory\SharedPtr.h" />
     <ClInclude Include="include\Core\Memory\New.h" />

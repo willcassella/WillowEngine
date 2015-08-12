@@ -2,7 +2,7 @@
 #pragma once
 
 #include "../String.h"
-#include "../Memory/OwnerPtr.h"
+#include "../Memory/UniquePtr.h"
 #include "../Reflection/Variant.h"
 #include "../Reflection/TypePtr.h"
 
@@ -66,6 +66,6 @@ public:
 private:
 
 	String _name;
-	TypePtr<TypeInfo> _argType;
-	OwnerPtr<void> _value;
+	TypePtr<> _argType;
+	UniquePtr<void> _value;
 };

@@ -129,7 +129,7 @@ private:
 	///   Data   ///
 private:
 
-	TypePtr<TypeInfo> _argType;
+	TypePtr<> _argType;
 	const CompoundInfo* _ownerType;
 	std::function<void(const Event&)> _handler;
 };

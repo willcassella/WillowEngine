@@ -1,4 +1,4 @@
-// Pointers.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
+// UniquePtr.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
 #include <utility>
@@ -8,8 +8,10 @@
 /////////////////
 ///   Types   ///
 
+/** "UniquePtr" is a pointer that may be moved but not copied, as the lifetime of what it
+* points to is bound to the lifetime of the pointer itself. */
 template <typename T>
-struct OwnerPtr final
+struct UniquePtr final
 {
 	///////////////////////
 	///   Information   ///
@@ -17,53 +19,53 @@ public:
 
 	REFLECTABLE_STRUCT
 
-	friend OwnerPtr<void>;
+	friend UniquePtr<void>;
 	template <typename F> 
-	friend struct OwnerPtr;
-	static_assert(!std::is_const<T>::value, "An 'OwnerPtr' may not point to const.");
+	friend struct UniquePtr;
+	static_assert(!std::is_const<T>::value, "An 'UniquePtr' may not point to const.");
 
 	////////////////////////
 	///   Constructors   ///
 public:
 
-	OwnerPtr()
+	UniquePtr()
 		: _value(nullptr)
 	{
 		// All done
 	}
-	OwnerPtr(std::nullptr_t)
-		: OwnerPtr()
+	UniquePtr(std::nullptr_t)
+		: UniquePtr()
 	{
 		// All done
 	}
-	OwnerPtr(NewPtr<T>&& value)
+	UniquePtr(NewPtr<T>&& value)
 		: _value(value.TakeValue())
 	{
 		// All done
 	}
-	OwnerPtr(const OwnerPtr& copy) = delete;
-	OwnerPtr(OwnerPtr&& move)
+	UniquePtr(const UniquePtr& copy) = delete;
+	UniquePtr(UniquePtr&& move)
 		: _value(move._value)
 	{
 		move._value = nullptr;
 	}
-	~OwnerPtr()
+	~UniquePtr()
 	{
 		delete _value;
 	}
 
 	template <typename CopyType>
-	OwnerPtr(const OwnerPtr<CopyType>& copy) = delete;
+	UniquePtr(const UniquePtr<CopyType>& copy) = delete;
 
 	template <typename MoveType, WHERE(std::is_convertible<MoveType*, T*>::value)>
-	OwnerPtr(OwnerPtr<MoveType>&& move)
+	UniquePtr(UniquePtr<MoveType>&& move)
 		: _value(move._value)
 	{
 		move._value = nullptr;
 	}
 
 	template <typename ValueType, WHERE(std::is_convertible<ValueType*, T*>::value)>
-	OwnerPtr(NewPtr<ValueType>&& value)
+	UniquePtr(NewPtr<ValueType>&& value)
 		: _value(value.TakeValue())
 	{
 		// All done
@@ -83,7 +85,7 @@ public:
 		return _value;
 	}
 
-	FORCEINLINE OwnerPtr<T>&& Transfer()
+	FORCEINLINE UniquePtr<T>&& Transfer()
 	{
 		return std::move(self);
 	}
@@ -92,22 +94,22 @@ public:
 	///   Operators   ///
 public:
 	
-	OwnerPtr& operator=(std::nullptr_t)
+	UniquePtr& operator=(std::nullptr_t)
 	{
 		delete _value;
 		_value = nullptr;
 
 		return self;
 	}
-	OwnerPtr& operator=(NewPtr<T>&& value)
+	UniquePtr& operator=(NewPtr<T>&& value)
 	{
 		delete _value;
 		_value = value.TakeValue();
 
 		return self;
 	}
-	OwnerPtr& operator=(const OwnerPtr& copy) = delete;
-	OwnerPtr& operator=(OwnerPtr&& move)
+	UniquePtr& operator=(const UniquePtr& copy) = delete;
+	UniquePtr& operator=(UniquePtr&& move)
 	{
 		if (this != &move)
 		{
@@ -139,10 +141,10 @@ public:
 	}
 
 	template <typename CopyType>
-	OwnerPtr& operator=(const OwnerPtr<CopyType>& copy) = delete;
+	UniquePtr& operator=(const UniquePtr<CopyType>& copy) = delete;
 
 	template <typename MoveType, WHERE(std::is_convertible<MoveType*, T*>::value)>
-	OwnerPtr& operator=(OwnerPtr<MoveType>&& move)
+	UniquePtr& operator=(UniquePtr<MoveType>&& move)
 	{
 		if (this != &move)
 		{
@@ -154,7 +156,7 @@ public:
 	}
 
 	template <typename ValueType, WHERE(std::is_convertible<ValueType*, T*>::value)>
-	OwnerPtr& operator=(NewPtr<ValueType>&& value)
+	UniquePtr& operator=(NewPtr<ValueType>&& value)
 	{
 		delete _value;
 		_value = value.TakeValue();
@@ -170,7 +172,7 @@ private:
 };
 
 template <>
-struct CORE_API OwnerPtr < void > final
+struct CORE_API UniquePtr < void > final
 {
 	///////////////////////
 	///   Information   ///
@@ -182,28 +184,28 @@ public:
 	///   Constructors   ///
 public:
 
-	OwnerPtr();
-	OwnerPtr(std::nullptr_t)
-		: OwnerPtr()
+	UniquePtr();
+	UniquePtr(std::nullptr_t)
+		: UniquePtr()
 	{
 		// All done
 	}
-	OwnerPtr(const OwnerPtr& copy) = delete;
-	OwnerPtr(OwnerPtr&& move);
-	~OwnerPtr();
+	UniquePtr(const UniquePtr& copy) = delete;
+	UniquePtr(UniquePtr&& move);
+	~UniquePtr();
 
 	template <typename ValueType>
-	OwnerPtr(NewPtr<ValueType>&& value)
+	UniquePtr(NewPtr<ValueType>&& value)
 		: _value(value.TakeValue()), _type(&TypeOf<ValueType>())
 	{
 		// All done
 	}
 
 	template <typename CopyType>
-	OwnerPtr(const OwnerPtr<CopyType>& copy) = delete;
+	UniquePtr(const UniquePtr<CopyType>& copy) = delete;
 
 	template <typename MoveType>
-	OwnerPtr(OwnerPtr<MoveType>&& move)
+	UniquePtr(UniquePtr<MoveType>&& move)
 		: _value(move._value), _type(&TypeOf(*move))
 	{
 		move._value = nullptr;
@@ -229,7 +231,7 @@ public:
 		return *_type;
 	}
 
-	FORCEINLINE OwnerPtr&& Transfer()
+	FORCEINLINE UniquePtr&& Transfer()
 	{
 		return std::move(self);
 	}
@@ -238,9 +240,9 @@ public:
 	///   Operators   ///
 public:
 
-	OwnerPtr& operator=(std::nullptr_t);
-	OwnerPtr& operator=(const OwnerPtr& copy) = delete;
-	OwnerPtr& operator=(OwnerPtr&& move);
+	UniquePtr& operator=(std::nullptr_t);
+	UniquePtr& operator=(const UniquePtr& copy) = delete;
+	UniquePtr& operator=(UniquePtr&& move);
 	Variant operator*();
 	ImmutableVariant operator*() const;
 	operator bool() const
@@ -249,7 +251,7 @@ public:
 	}
 
 	template <typename ValueType>
-	OwnerPtr& operator=(NewPtr<ValueType>&& value)
+	UniquePtr& operator=(NewPtr<ValueType>&& value)
 	{
 		self = nullptr;
 
@@ -260,10 +262,10 @@ public:
 	}
 
 	template <typename CopyType>
-	OwnerPtr& operator=(const OwnerPtr<CopyType>& copy) = delete;
+	UniquePtr& operator=(const UniquePtr<CopyType>& copy) = delete;
 
 	template <typename MoveType>
-	OwnerPtr& operator=(OwnerPtr<MoveType>&& move)
+	UniquePtr& operator=(UniquePtr<MoveType>&& move)
 	{
 		if (this != &move)
 		{

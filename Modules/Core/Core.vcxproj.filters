@@ -156,9 +156,6 @@
     <ClInclude Include="include\Core\Reflection\CompoundInfo.h">
       <Filter>include\Reflection</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Memory\OwnerPtr.h">
-      <Filter>include\Memory</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Memory\Ptr.h">
       <Filter>include\Memory</Filter>
     </ClInclude>
@@ -218,6 +215,9 @@
     </ClInclude>
     <ClInclude Include="include\Core\Reflection\TypePtr.h">
       <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Memory\UniquePtr.h">
+      <Filter>include\Memory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

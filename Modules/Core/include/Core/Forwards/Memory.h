@@ -4,9 +4,9 @@
 /////////////////
 ///   Types   ///
 
-/** Defined in 'Memory/OwnerPtr.h' */
+/** Defined in 'Memory/UniquePtr.h' */
 template <typename T>
-struct OwnerPtr;
+struct UniquePtr;
 
 /** Defined in 'Memory/SharedPtr.h' */
 template <typename T>

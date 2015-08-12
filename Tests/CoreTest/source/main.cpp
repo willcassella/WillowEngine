@@ -64,7 +64,7 @@ void PrintProperties(Variant v)
 
 int main()
 {
-	TypePtr<TypeInfo> type = *Application::FindType("Test");
+	TypePtr<> type = *Application::FindType("Test");
 
 	DynamicBuffer testContainer(type->GetSize());
 	type->GetConstructor()(testContainer.GetValue());

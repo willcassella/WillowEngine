@@ -5,14 +5,12 @@
 #include "Object.h"
 #include "Reflection/TypePtr.h"
 
-class CORE_API Application final : public Object
+struct CORE_API Application final
 {
 	///////////////////////
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS
-	EXTENDS(Object)
 	friend TypeInfo;
 	
 private:
@@ -23,7 +21,7 @@ private:
 	///   Methods   ///
 public:
 
-	static const Array<TypePtr<TypeInfo>>& GetAllTypes();
+	static const Array<TypePtr<>>& GetAllTypes();
 
 	static const TypeInfo* FindType(const String& name);
 
@@ -35,5 +33,5 @@ private:
 	///   Data   ///
 private:
 
-	Array<TypePtr<TypeInfo>> _types;
+	Array<TypePtr<>> _types;
 };

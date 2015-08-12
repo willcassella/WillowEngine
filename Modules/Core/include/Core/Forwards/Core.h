@@ -14,4 +14,4 @@ class Object;
 class Interface;
 
 /** Defined in 'Application.h' */
-class Application;
+struct Application;

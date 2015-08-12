@@ -2,7 +2,7 @@
 #pragma once
 
 #include "../Object.h"
-#include "OwnerPtr.h"
+#include "UniquePtr.h"
 
 template <class T>
 struct Ptr final
@@ -45,21 +45,21 @@ public:
 	}
 
 	template <class OwnerType>
-	Ptr(OwnerPtr<OwnerType>& owner)
+	Ptr(UniquePtr<OwnerType>& owner)
 		: _value(owner.Get())
 	{
 		RegisterReference();
 	}
 
 	template <class OwnerType>
-	Ptr(const OwnerPtr<OwnerType>& owner)
+	Ptr(const UniquePtr<OwnerType>& owner)
 		: _value(owner.Get())
 	{
 		RegisterReference();
 	}
 
 	template <class OwnerType>
-	Ptr(OwnerPtr<OwnerType>&& owner) = delete;
+	Ptr(UniquePtr<OwnerType>&& owner) = delete;
 
 	///////////////////
 	///   Methods   ///
@@ -151,7 +151,7 @@ public:
 	}
 
 	template <class OwnerType>//, WHERE(std::is_base_of<ObjectType, OwnerType>::value)>
-	Ptr& operator=(OwnerPtr<OwnerType>& owner)
+	Ptr& operator=(UniquePtr<OwnerType>& owner)
 	{
 		if (_value != owner.Get())
 		{
@@ -164,7 +164,7 @@ public:
 	}
 
 	template <class OwnerType>//, WHERE(std::is_base_of<ObjectType, OwnerType>::value && std::is_const<ObjectType>::value)>
-	Ptr& operator=(const OwnerPtr<OwnerType>& owner)
+	Ptr& operator=(const UniquePtr<OwnerType>& owner)
 	{
 		if (_value != owner.Get())
 		{
@@ -177,7 +177,7 @@ public:
 	}
 
 	template <class OwnerType>
-	Ptr& operator=(OwnerPtr<OwnerType>&& owner) = delete;
+	Ptr& operator=(UniquePtr<OwnerType>&& owner) = delete;
 
 	////////////////
 	///   Data   ///

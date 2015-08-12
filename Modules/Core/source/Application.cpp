@@ -4,11 +4,6 @@
 #include "../include/Core/Reflection/ClassInfo.h"
 #include "../include/Core/Reflection/InterfaceInfo.h"
 
-//////////////////////
-///   Reflection   ///
-
-BUILD_REFLECTION(Application);
-
 ///////////////////
 ///   Methods   ///
 
@@ -18,7 +13,7 @@ Application& Application::Instance()
 	return app;
 }
 
-const Array<TypePtr<TypeInfo>>& Application::GetAllTypes()
+const Array<TypePtr<>>& Application::GetAllTypes()
 {
 	return Instance()._types;
 }
