@@ -22,9 +22,13 @@ Engine: setup Core
 	make -C Modules/Engine/ -f Engine.makefile
 	cp Modules/Engine/bin/Engine.so bin/Engine.so
 	
+# Tools
+	
 AssetConverter: setup Core Resource Engine
 	make -C Tools/AssetConverter/ -f AssetConverter.makefile
 	cp Tools/AssetConverter/bin/AssetConverter.out bin/AssetConverter.out
+
+# Tests
 
 CoreTest : setup Core
 	make -C Tests/CoreTest/ -f CoreTest.makefile
