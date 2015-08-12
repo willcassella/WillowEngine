@@ -12,8 +12,8 @@ class ENGINE_API StaticMesh final : public Asset
 	///   Information   ///
 public:
 
-	REFLECTABLE_ASSET
-	EXTENDS(Asset)
+	REFLECTABLE_ASSET;
+	EXTENDS(Asset);
 
 	///////////////////////
 	///   Inner Types   ///
@@ -47,13 +47,7 @@ public:
 	///   Constructors   ///
 public:
 
-	StaticMesh(const BinaryFile& file);
-
-	///////////////////
-	///   Methods   ///
-public:
-
-	void OnReload() override;
+	StaticMesh(const Path& path);
 
 	//////////////////
 	///   Fields   ///

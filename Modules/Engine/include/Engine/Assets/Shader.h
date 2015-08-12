@@ -11,18 +11,28 @@ class ENGINE_API Shader final : public Asset
 	///   Information   ///
 public:
 
-	REFLECTABLE_ASSET
-	EXTENDS(Asset)
+	REFLECTABLE_ASSET;
+	EXTENDS(Asset);
 
 	////////////////////////
 	///   Constructors   ///
 public:
 
-	Shader(const TextFile& file);
+	Shader(const Path& path);
 
 	///////////////////
 	///   Methods   ///
 public:
 
-	void OnReload() override;
+	/** Returns the source code for this Shader. */
+	FORCEINLINE const String& GetSource() const
+	{
+		return _source;
+	}
+
+	////////////////
+	///   Data   ///
+private:
+
+	String _source;
 };

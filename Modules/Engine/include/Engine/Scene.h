@@ -11,16 +11,8 @@ class ENGINE_API Scene final : public Object
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS
-	EXTENDS(Object)
-
-	////////////////////////
-	///   Constructors   ///
-public:
-
-	Scene() = default;
-	Scene(const Scene& copy) = delete;
-	Scene(Scene&& move) = delete;
+	REFLECTABLE_CLASS;
+	EXTENDS(Object);
 
 	//////////////////
 	///   Fields   ///
@@ -40,22 +32,15 @@ public:
 	template <class GameObjectClass, typename ... Args>
 	GameObjectClass& Spawn(Args&& ... args)
 	{
-		OwnerPtr<GameObjectClass> object = New<GameObjectClass>(self, std::forward<Args>(args)...);
+		UniquePtr<GameObjectClass> object = New<GameObjectClass>(self, std::forward<Args>(args)...);
 		_freshObjects.Push(object.Transfer());
 		return *object;
 	}
-
-	/////////////////////
-	///   Operators   ///
-public:
-
-	Scene& operator=(const Scene& copy) = delete;
-	Scene& operator=(Scene&& move) = delete;
 
 	////////////////
 	///   Data   ///
 private:
 
-	Array<OwnerPtr<GameObject>> _objects;
-	Queue<OwnerPtr<GameObject>> _freshObjects;
+	Array<UniquePtr<GameObject>> _objects;
+	Queue<UniquePtr<GameObject>> _freshObjects;
 };

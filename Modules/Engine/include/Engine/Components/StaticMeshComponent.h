@@ -3,7 +3,7 @@
 
 #include <Resource/AssetPtr.h>
 #include "../Component.h"
-#include "../Assets/Mesh.h"
+#include "../Assets/StaticMesh.h"
 
 class ENGINE_API StaticMeshComponent final : public Component
 {
@@ -24,5 +24,5 @@ public:
 	///   Fields   ///
 public:
 
-	AssetPtr<Mesh> Mesh;
+	AssetPtr<StaticMesh> Mesh;
 };

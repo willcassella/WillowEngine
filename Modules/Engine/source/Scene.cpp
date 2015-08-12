@@ -14,7 +14,7 @@ BUILD_REFLECTION(Scene)
 
 void Scene::Update()
 {
-	Queue<OwnerPtr<GameObject>*> staleObjects;
+	Queue<UniquePtr<GameObject>*> staleObjects;
 
 	// Update all objects
 	for (auto& object : _objects)
@@ -30,14 +30,14 @@ void Scene::Update()
 	// Remove stale objects
 	while (!staleObjects.IsEmpty())
 	{
-		OwnerPtr<GameObject>* object = staleObjects.Pop();
+		UniquePtr<GameObject>* object = staleObjects.Pop();
 		_objects.DeleteAll(*object);
 	}
 
 	// Add new objects
 	while (!_freshObjects.IsEmpty())
 	{
-		OwnerPtr<GameObject> freshObject = _freshObjects.Pop();
+		UniquePtr<GameObject> freshObject = _freshObjects.Pop();
 		
 		// Activate all the object's components
 		for (auto component : freshObject->GetComponents())

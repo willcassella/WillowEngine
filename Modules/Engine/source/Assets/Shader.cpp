@@ -1,5 +1,6 @@
 // Shader.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
+#include <Resource/Resources/TextFile.h>
 #include "../../include/Engine/Assets/Shader.h"
 
 //////////////////////
@@ -10,16 +11,7 @@ BUILD_REFLECTION(Shader);
 ////////////////////////
 ///   Constructors   ///
 
-Shader::Shader(const TextFile& file)
-	: Base(file)
+Shader::Shader(const Path& path)
 {
-	// All done
-}
-
-///////////////////
-///   Methods   ///
-
-void Shader::OnReload()
-{
-	// Do nothing
+	_source = TextFile(path).DumpLines();
 }

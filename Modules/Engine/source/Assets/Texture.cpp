@@ -10,16 +10,8 @@ BUILD_REFLECTION(Texture);
 ////////////////////////
 ///   Constructors   ///
 
-Texture::Texture(const Image& image)
-	: Base(image)
+Texture::Texture(const Path& path)
 {
-	// All done
-}
-
-///////////////////
-///   Methods   ///
-
-void Texture::OnReload()
-{
-	// Do nothing
+	Image image(path);
+	_bitmap.Reset(image.GetWidth() * image.GetHeight());
 }

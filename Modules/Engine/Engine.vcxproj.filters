@@ -61,6 +61,9 @@
     <ClCompile Include="source\Assets\StaticMesh.cpp">
       <Filter>source\Assets</Filter>
     </ClCompile>
+    <ClCompile Include="source\Components\StaticMeshComponent.cpp">
+      <Filter>source\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Engine\Component.h">
@@ -73,9 +76,6 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Engine\GameObject.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engine\Pawn.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Engine\Scene.h">

@@ -11,18 +11,39 @@ class ENGINE_API Texture final : public Asset
 	///   Information   ///
 public:
 
-	REFLECTABLE_ASSET
-	EXTENDS(Asset)
+	REFLECTABLE_ASSET;
+	EXTENDS(Asset);
 
 	////////////////////////
 	///   Constructors   ///
 public:
 
-	Texture(const Image& image);
+	Texture(const Path& path);
 
 	///////////////////
 	///   Methods   ///
 public:
 
-	void OnReload() override;
+	FORCEINLINE uint32 GetWidth() const
+	{
+		return _width;
+	}
+
+	FORCEINLINE uint32 GetHeight() const
+	{
+		return _height;
+	}
+
+	FORCEINLINE const byte* GetBitmap() const
+	{
+		return _bitmap.GetValue();
+	}
+
+	////////////////
+	///   Data   ///
+private:
+
+	DynamicBuffer _bitmap;
+	uint32 _width;
+	uint32 _height;
 };

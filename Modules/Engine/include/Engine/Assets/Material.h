@@ -12,14 +12,14 @@ class ENGINE_API Material final : public Asset
 	///   Information   ///
 public:
 
-	REFLECTABLE_ASSET
-	EXTENDS(Asset)
+	REFLECTABLE_ASSET;
+	EXTENDS(Asset);
 
 	////////////////////////
 	///   Constructors   ///
 public:
 
-	Material(const TextFile& file);
+	Material(const Path& path);
 	
 	//////////////////
 	///   Fields   ///
@@ -30,10 +30,4 @@ public:
 	AssetPtr<Shader> FragmentShader;
 
 	Table<String, AssetPtr<Texture>> Textures;
-
-	///////////////////
-	///   Methods   ///
-public:
-
-	void OnReload() override;
 };

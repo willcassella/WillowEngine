@@ -11,34 +11,26 @@ BUILD_REFLECTION(StaticMesh);
 ////////////////////////
 ///   Constructors   ///
 
-StaticMesh::StaticMesh(const BinaryFile& file)
-	: Base(file)
+StaticMesh::StaticMesh(const Path& path)
 {
-	OnReload();
-}
-
-///////////////////
-///   Methods   ///
-
-void StaticMesh::OnReload()
-{
-	const byte* cursor = static_cast<const BinaryFile&>(GetResource()).GetData();
+	BinaryFile file(path);
+	const byte* cursor = file.GetData();
 
 	// Get the number of vertices
-	uint32 numVerts = *(const uint32*)cursor;
+	uint32 numVerts = *reinterpret_cast<const uint32*>(cursor);
 
 	cursor += sizeof(uint32);
 
 	// Load in vertices
-	Vertices = Array<Vertex>((const Vertex*)cursor, numVerts);
+	Vertices = Array<Vertex>(reinterpret_cast<const Vertex*>(cursor), numVerts);
 
 	cursor += sizeof(Vertex) * numVerts;
 
 	// Get the number of elements
-	uint32 numElems = *(uint32*)cursor;
+	uint32 numElems = *reinterpret_cast<const uint32*>(cursor);
 
 	cursor += sizeof(uint32);
 
 	// Load in elements
-	Elements = Array<uint32>((const uint32*)cursor, numElems);
+	Elements = Array<uint32>(reinterpret_cast<const uint32*>(cursor), numElems);
 }

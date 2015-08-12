@@ -17,14 +17,14 @@ public:
 	///   Constructors   ///
 public:
 
-	CameraComponent(GameObject& owner);
+	using Component::Component;
 
 	//////////////////
 	///   Fields   ///
 public:
 
-	float HFOV = 90.f;
-	float VFOV = 59.f;
+	float HFov = 90.f;
+	float VFov = 59.f;
 	float ZMin = 0.1f;
 	float ZMax = 100.f;
 
@@ -35,7 +35,7 @@ public:
 	/** Generate a perspective projection matrix for this CameraComponent */
 	FORCEINLINE Mat4 GetPerspective() const
 	{
-		return Mat4::Perspective(HFOV, VFOV, ZMin, ZMax);
+		return Mat4::Perspective(HFov, VFov, ZMin, ZMax);
 	}
 
 	/** Sets the horizontal field of view with respect to the given vertical field of view and aspect ratio */

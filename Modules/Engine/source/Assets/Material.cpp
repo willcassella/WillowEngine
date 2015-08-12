@@ -10,16 +10,7 @@ BUILD_REFLECTION(Material);
 ////////////////////////
 ///   Constructors   ///
 
-Material::Material(const TextFile& file)
-	: Base(file)
-{
-	// TODO: this
-}
-
-///////////////////
-///   Methods   ///
-
-void Material::OnReload()
+Material::Material(const Path& path)
 {
 	// TODO: this
 }

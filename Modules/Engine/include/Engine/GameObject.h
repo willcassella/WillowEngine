@@ -40,9 +40,9 @@ public:
 	}
 
 	/** Sets the name of this GameObject */
-	FORCEINLINE void SetName(const String& name)
+	FORCEINLINE void SetName(String name)
 	{
-		_name = name;
+		_name = std::move(name);
 	}
 
 	FORCEINLINE Scene& GetScene()
