@@ -1,7 +1,7 @@
 // Asset.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "config.h"
+#include "Path.h"
 #include "Reflection/AssetInfo.h"
 
 /////////////////
@@ -21,4 +21,25 @@ public:
 
 	static const ClassInfo StaticTypeInfo;
 	const AssetInfo& GetType() const override = 0;
+
+	////////////////////////
+	///   Constructors   ///
+public:
+
+	Asset(const Path& path);
+
+	///////////////////
+	///   Methods   ///
+public:
+
+	FORCEINLINE const Path& GetPath() const
+	{
+		return _path;
+	}
+
+	////////////////
+	///   Data   ///
+private:
+
+	Path _path;
 };

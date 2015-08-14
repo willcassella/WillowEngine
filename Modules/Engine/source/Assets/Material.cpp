@@ -11,6 +11,7 @@ BUILD_REFLECTION(Material);
 ///   Constructors   ///
 
 Material::Material(const Path& path)
+	: Base(path)
 {
 	// TODO: this
 }

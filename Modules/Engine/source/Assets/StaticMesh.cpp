@@ -12,6 +12,7 @@ BUILD_REFLECTION(StaticMesh);
 ///   Constructors   ///
 
 StaticMesh::StaticMesh(const Path& path)
+	: Base(path)
 {
 	BinaryFile file(path);
 	const byte* cursor = file.GetData();

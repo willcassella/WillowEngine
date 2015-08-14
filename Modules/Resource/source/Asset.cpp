@@ -7,3 +7,12 @@
 ///   Reflection   ///
 
 BUILD_REFLECTION(Asset);
+
+////////////////////////
+///   Constructors   ///
+
+Asset::Asset(const Path& path)
+	: _path(path)
+{
+	// All done
+}

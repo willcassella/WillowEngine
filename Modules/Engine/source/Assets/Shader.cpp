@@ -12,6 +12,7 @@ BUILD_REFLECTION(Shader);
 ///   Constructors   ///
 
 Shader::Shader(const Path& path)
+	: Base(path)
 {
 	_source = TextFile(path).DumpLines();
 }
