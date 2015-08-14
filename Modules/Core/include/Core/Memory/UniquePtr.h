@@ -115,6 +115,7 @@ public:
 		{
 			delete _value;
 			_value = move._value;
+			move._value = nullptr;
 		}
 
 		return self;

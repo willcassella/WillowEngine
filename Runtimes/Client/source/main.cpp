@@ -6,6 +6,7 @@
 #include <Core/Math/Vec2.h>
 #include <Engine/Game.h>
 #include <ExampleGame/FPSCamera.h>
+#include <ExampleGame/Ghost.h>
 
 //Define context parameters
 int32 window_width = 1280;
@@ -73,7 +74,7 @@ int main(int32 argc, char* argv[])
 	//sponza.MeshComponent.Mesh = "data/sponza.dat";
 	//sponza.MeshComponent.Mesh->SetMaterial(String("data/Sponza.mat"));
 
-	//auto& gun = test.AddObject<Ghost>("gun");
+	auto& gun = test.Spawn<Ghost>();
 	//gun.MeshComponent.Mesh = "data/battle_rifle.dat";
 	//gun.MeshComponent.Mesh->SetMaterial(String("data/Gun.mat"));
 

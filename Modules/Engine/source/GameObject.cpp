@@ -20,6 +20,7 @@ BUILD_REFLECTION(GameObject)
 ///   Constructors   ///
 
 GameObject::GameObject(Scene& scene)
+	: _scene(&scene)
 {
 	_isDestroyed = false;
 }
