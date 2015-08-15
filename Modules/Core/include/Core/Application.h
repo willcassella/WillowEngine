@@ -21,7 +21,7 @@ private:
 	///   Methods   ///
 public:
 
-	static const Array<TypePtr<>>& GetAllTypes();
+	static const Array<const TypeInfo*>& GetAllTypes();
 
 	static const TypeInfo* FindType(const String& name);
 
@@ -33,5 +33,5 @@ private:
 	///   Data   ///
 private:
 
-	Array<TypePtr<>> _types;
+	Array<const TypeInfo*> _types;
 };

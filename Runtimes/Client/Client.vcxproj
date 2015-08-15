@@ -120,7 +120,7 @@ xcopy "$(ProjectDir)thirdParty\glfw3\$(Platform)\glfw3.dll" "$(SolutionDir)bin\"
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLFW_DLL;WINDOWS;BITS_64;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4251;</DisableSpecificWarnings>
-      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExceptionHandling>SyncCThrow</ExceptionHandling>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -178,7 +178,7 @@ xcopy "$(ProjectDir)thirdParty\glfw3\$(Platform)\glfw3.dll" "$(SolutionDir)bin\"
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLFW_DLL;WINDOWS;BITS_64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4251;</DisableSpecificWarnings>
-      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExceptionHandling>SyncCThrow</ExceptionHandling>
       <StringPooling>true</StringPooling>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>

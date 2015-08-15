@@ -1,8 +1,7 @@
 // Application.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
 #include "../include/Core/Application.h"
-#include "../include/Core/Reflection/ClassInfo.h"
-#include "../include/Core/Reflection/InterfaceInfo.h"
+#include "../include/Core/Reflection/TypeInfo.h"
 
 ///////////////////
 ///   Methods   ///
@@ -13,7 +12,7 @@ Application& Application::Instance()
 	return app;
 }
 
-const Array<TypePtr<>>& Application::GetAllTypes()
+const Array<const TypeInfo*>& Application::GetAllTypes()
 {
 	return Instance()._types;
 }

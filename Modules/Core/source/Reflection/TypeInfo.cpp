@@ -32,7 +32,7 @@ TypeInfo::TypeInfo(TypeInfo&& move)
 
 TypeInfo::~TypeInfo()
 {
-	Application::Instance()._types.DeleteFirst(self);
+	Application::Instance()._types.DeleteFirst(this);
 }
 
 ///////////////////
@@ -45,5 +45,5 @@ String TypeInfo::GetName() const
 
 void TypeInfo::RegisterWithApplication()
 {
-	Application::Instance()._types.Add(self);
+	Application::Instance()._types.Add(this);
 }

@@ -4,6 +4,17 @@
 #include <functional>
 #include "../Forwards/Memory.h"
 #include "Variant.h"
+#include "TypePtr.h"
+
+/////////////////
+///   Types   ///
+
+enum PropertyFlags : uint32
+{
+	PF_None = 0,
+	PF_NoSerialize = 1 << 0,
+	PF_Set_SerializeOnly = 1 << 1
+};
 
 /** A class representing the information for a Property.
 * This unfortunately does not model all the const/reference overload
@@ -23,7 +34,7 @@ public:
 	///   Constructors   ///
 private:
 
-	PropertyInfo(const String& name, const String& description);
+	PropertyInfo(CString name, CString description, PropertyFlags flags);
 	
 	///////////////////
 	///   Methods   ///
@@ -36,15 +47,21 @@ public:
 	}
 
 	/** Returns the name of this Property. */
-	FORCEINLINE const String& GetName() const
+	FORCEINLINE CString GetName() const
 	{
 		return _name;
 	}
 
 	/** Returns a description of this Property. */
-	FORCEINLINE const String& GetDescription() const
+	FORCEINLINE CString GetDescription() const
 	{
 		return _description;
+	}
+
+	/** Returns the flags on this property. */
+	FORCEINLINE PropertyFlags GetFlags() const
+	{
+		return _flags;
 	}
 
 	/** Returns the type information for this Property. */
@@ -120,8 +137,7 @@ public:
 private:
 
 	/** Sets the mutable getter to return a field */
-	template <class OwnerT, typename FieldT, 
-		WHERE(!std::is_function<FieldT>::value)>
+	template <class OwnerT, typename FieldT, WHERE(!std::is_function<FieldT>::value)>
 	void SetMutableGetter(FieldT OwnerT::*field)
 	{
 		_mutableGetter = [field](void* owner) -> Variant
@@ -132,16 +148,14 @@ private:
 	}
 
 	/** Sets the mutable getter to do nothing */
-	template <class OwnerT, typename FieldT,
-		WHERE(!std::is_function<FieldT>::value)>
+	template <class OwnerT, typename FieldT, WHERE(!std::is_function<FieldT>::value)>
 	void SetMutableGetter(const FieldT OwnerT::* /*field*/)
 	{
 		// Do nothing (field is const, so can't return mutable variant)
 	}
 
 	/** Sets the getter to return a field */
-	template <class OwnerT, typename FieldT,
-		WHERE(!std::is_function<FieldT>::value)>
+	template <class OwnerT, typename FieldT, WHERE(!std::is_function<FieldT>::value)>
 	void SetGetter(FieldT OwnerT::*field)
 	{
 		_getter = [field](const void* owner) -> ImmutableVariant
@@ -212,13 +226,14 @@ private:
 	///   Data   ///
 private:
 
-	String _name;
-	String _description;
+	CString _name;
+	CString _description;
 	const TypeInfo* _propertyType;
 	const CompoundInfo* _ownerType;
 	std::function<Variant (void*)> _mutableGetter;
 	std::function<ImmutableVariant (const void*)> _getter;
 	std::function<void (void*, const void*)> _setter;
+	PropertyFlags _flags;
 	bool _isField;
 	bool _isPolymorphic;
 	bool _requiresCopy;

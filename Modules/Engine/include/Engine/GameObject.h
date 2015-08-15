@@ -20,8 +20,6 @@ public:
 public:
 
 	GameObject(Scene& scene);
-	GameObject(const GameObject& copy) = delete;
-	GameObject(GameObject&& move) = delete;
 
 	//////////////////
 	///   Fields   ///
@@ -124,19 +122,16 @@ protected:
 	/** Behavior for this GameObject upon destruction */
 	virtual void OnDestroy();
 
-	/////////////////////
-	///   Operators   ///
-public:
+private:
 
-	GameObject& operator=(const GameObject& copy) = delete;
-	GameObject& operator=(GameObject&& move) = delete;
+	void SetScene(Scene* scene);
 
 	////////////////
 	///   Data   ///
 private:
 
 	Array<Component*> _components;
-	Ptr<Scene> _scene;
+	Scene* _scene;
 	String _name;
 	uint32 _id;
 	bool _isAlive;

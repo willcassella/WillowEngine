@@ -81,9 +81,13 @@ public:
 
 	/** Adds a field that is gettable, mutably gettable, and settable. */
 	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
-	auto& AddProperty(CString name, CString description, FieldT CompoundT::*field)
+	auto& AddProperty(
+		CString name, 
+		CString description, 
+		FieldT CompoundT::*field, 
+		PropertyFlags flags = PF_None)
 	{
-		PropertyInfo property(name, description);
+		PropertyInfo property(name, description, flags);
 		property._propertyType = &TypeOf<FieldT>();
 		property._ownerType = &TypeOf<CompoundT>();
 		property._isField = true;
@@ -100,9 +104,14 @@ public:
 
 	/** Adds a field that is gettable, but not mutably gettable or settable. */
 	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
-	auto& AddProperty(const String& name, const String& description, FieldT CompoundT::*field, std::nullptr_t)
+	auto& AddProperty(
+		CString name, 
+		CString description, 
+		FieldT CompoundT::*field, 
+		std::nullptr_t, 
+		PropertyFlags flags = PF_None)
 	{
-		PropertyInfo property(name, description);
+		PropertyInfo property(name, description, flags);
 		property._propertyType = &TypeOf<FieldT>();
 		property._ownerType = &TypeOf<CompoundT>();
 		property._isField = true;
@@ -117,9 +126,14 @@ public:
 
 	/** Adds a property that is gettable, but not mutably gettable or settable. */
 	template <typename PropertyT>
-	auto& AddProperty(const String& name, const String& description, PropertyT(CompoundT::*getter)() const, std::nullptr_t)
+	auto& AddProperty(
+		CString name, 
+		CString description, 
+		PropertyT(CompoundT::*getter)() const, 
+		std::nullptr_t, 
+		PropertyFlags flags = PF_None)
 	{
-		PropertyInfo property(name, description);
+		PropertyInfo property(name, description, flags);
 		property._propertyType = &TypeOf<PropertyT>();
 		property._ownerType = &TypeOf<CompoundT>();
 		property._isField = false;
@@ -134,12 +148,17 @@ public:
 
 	/** Adds a field that is gettable and settable, but not mutably gettable. */
 	template <typename FieldT, typename SetT, WHERE(!std::is_function<FieldT>::value)>
-	auto& AddProperty(const String& name, const String& description, FieldT CompoundT::*field, void (CompoundT::*setter)(SetT))
+	auto& AddProperty(
+		CString name, 
+		CString description, 
+		FieldT CompoundT::*field, 
+		void (CompoundT::*setter)(SetT), 
+		PropertyFlags flags = PF_None)
 	{
 		static_assert(std::is_same<FieldT, std::decay_t<SetT>>::value, "The setter must accept the same type as the field.");
 		static_assert(!std::is_reference<SetT>::value || std::is_const<std::remove_reference_t<SetT>>::value, "The setter must either accept by value or const-reference.");
 
-		PropertyInfo property(name, description);
+		PropertyInfo property(name, description, flags);
 		property._propertyType = &TypeOf<FieldT>();
 		property._ownerType = &TypeOf<CompoundT>();
 		property._isField = true;
@@ -155,12 +174,17 @@ public:
 
 	/** Adds a property that is gettable and settable, but not mutably gettable. */
 	template <typename GetT, typename SetT>
-	auto& AddProperty(const String& name, const String& description, GetT(CompoundT::*getter)() const, void (CompoundT::*setter)(SetT))
+	auto& AddProperty(
+		CString name,
+		CString description,
+		GetT(CompoundT::*getter)() const,
+		void (CompoundT::*setter)(SetT),
+		PropertyFlags flags = PF_None)
 	{
 		static_assert(std::is_same<std::decay_t<GetT>, std::decay_t<SetT>>::value, "The getter and setter must return the same type.");
 		static_assert(!std::is_reference<SetT>::value || std::is_const<std::remove_reference_t<SetT>>::value, "The setter must either accept by value or const-reference.");
 
-		PropertyInfo property(name, description);
+		PropertyInfo property(name, description, flags);
 		property._propertyType = &TypeOf<GetT>();
 		property._ownerType = &TypeOf<CompoundT>();
 		property._isField = false;

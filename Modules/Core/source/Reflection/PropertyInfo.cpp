@@ -3,6 +3,7 @@
 #include "../../include/Core/Reflection/ClassInfo.h"
 #include "../../include/Core/Reflection/StructInfo.h"
 #include "../../include/Core/Reflection/PrimitiveInfo.h"
+#include "../../include/Core/Reflection/PointerInfo.h"
 
 //////////////////////
 ///   Reflection   ///
@@ -20,10 +21,10 @@ BUILD_REFLECTION(PropertyInfo)
 ////////////////////////
 ///   Constructors   ///
 
-PropertyInfo::PropertyInfo(const String& name, const String& description)
-	: _name(name), _description(description)
+PropertyInfo::PropertyInfo(CString name, CString description, PropertyFlags flags)
+	: _name(name), _description(description), _flags(flags)
 {
-	
+	// All done
 }
 
 ///////////////////

@@ -6,15 +6,13 @@
 //////////////////////
 ///   Reflection   ///
 
-using SceneGetter_t = const Scene& (GameObject::*)() const;
-
 BUILD_REFLECTION(GameObject)
 .AddProperty("Name", "", &GameObject::GetName, &GameObject::SetName)
-.AddProperty("Scene", "", static_cast<SceneGetter_t>(&GameObject::GetScene), nullptr)
+.AddProperty("Scene", "", &GameObject::_scene, &GameObject::SetScene, PF_Set_SerializeOnly)
 .AddProperty("Transform", "", &GameObject::Transform)
-.AddProperty("ID", "", &GameObject::_id, nullptr)
-.AddProperty("Alive", "", &GameObject::_isAlive, nullptr)
-.AddProperty("Destroyed", "", &GameObject::_isDestroyed, nullptr);
+.AddProperty("ID", "", &GameObject::_id)
+.AddProperty("Alive", "", &GameObject::_isAlive)
+.AddProperty("Destroyed", "", &GameObject::_isDestroyed);
 
 ////////////////////////
 ///   Constructors   ///
@@ -42,4 +40,10 @@ void GameObject::OnDestroy()
 void GameObject::OnSpawn()
 {
 	// Do nothing
+}
+
+void GameObject::SetScene(Scene* scene)
+{
+	// TODO: This needs work
+	_scene = scene;
 }
