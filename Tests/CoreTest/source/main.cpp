@@ -2,74 +2,26 @@
 
 #include <Core/Core.h>
 
-class Test : public Object
+void PrintProperties(ImmutableVariant v)
 {
-	///////////////////////
-	///   Information   ///
-public:
+	Console::Write("@: ", v.GetType());
 
-	REFLECTABLE_CLASS;
-	EXTENDS(Object);
-
-	////////////////////////
-	///   Constructors   ///
-public:
-
-	Test(Object& owner)
-		: _owner(&owner)
+	if (auto pType = Cast<CompoundInfo>(v.GetType()))
 	{
-		// All done	
+		Console::NewLine();
+		for (const auto& propInfo : pType->GetProperties())
+		{
+			Console::WriteLine("@ : @", propInfo.GetName(), propInfo.Get(v));
+		}
 	}
-	Test(DynamicInitializer)
+	else
 	{
-		_owner = nullptr;
-		Name = "Fred";
+		Console::Write(v);
 	}
-
-	///////////////////
-	///    Fields   ///
-public:
-
-	String Name;
-
-	///////////////////
-	///   Methods   ///
-public:
-
-	FORCEINLINE Object& GetOwner()
-	{
-		return *_owner;
-	}
-
-	FORCEINLINE const Object& GetOwner() const
-	{
-		return *_owner;
-	}
-
-	////////////////
-	///   Data   ///
-private:
-
-	Object* _owner;
-};
-
-BUILD_REFLECTION(Test)
-.AddProperty("Name", "The name of this object.", &Test::Name)
-.AddProperty("Owner", "The owner of this object", &Test::_owner);
-
-void PrintProperties(Variant v)
-{
-	Console::WriteLine(v);
 }
 
 int main()
 {
-	TypePtr<> type = *Application::FindType("Test");
-
-	DynamicBuffer testContainer(type->GetSize());
-	type->GetConstructor()(testContainer.GetValue());
-	Variant test(testContainer.GetValue(), type);
-
-	PrintProperties(test);
+	PrintProperties(TypeOf<ClassInfo>());
 	Console::Prompt();
 }

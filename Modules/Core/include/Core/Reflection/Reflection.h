@@ -8,6 +8,14 @@
 #include "../Forwards/Reflection.h"
 #include "../STDExt/TypeTraits.h"
 
+/////////////////
+///   Types   ///
+
+/** Types extending 'Proxy' should be though of as proxy types, and not used in any contexts other than
+* interaction with reflection data. 
+* In particular, they should not be used as fields or have any sort of long-term storage. */
+struct Proxy {};
+
 //////////////////////////
 ///   Implementation   ///
 

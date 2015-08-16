@@ -2,9 +2,7 @@
 #pragma once
 
 #include <functional>
-#include "../Forwards/Memory.h"
 #include "Variant.h"
-#include "TypePtr.h"
 
 /////////////////
 ///   Types   ///
@@ -16,6 +14,15 @@ enum PropertyFlags : uint32
 	PF_Set_SerializeOnly = 1 << 1
 };
 
+/** Enumeration of the different access types for properties. Each is mutually exclusive. */
+enum class PropertyAccess : byte
+{
+	Field,				// Fields are properties that are gauranteed to live within the object that owns them. They may be gotten or set directly.
+	NoSetField,			// NoSetFields are fields that may not be set directly because they are not copy-assignable. You may still perform mutable operations on them, however.
+	Property,			// Properties may be set directly and have mutable operations performed on them, but may not be gotten directly.
+	ReadOnlyProperty	// ReadOnlyProperties may only have immutable operations performed on them.
+};
+
 /** A class representing the information for a Property.
 * This unfortunately does not model all the const/reference overload
 * possibilities for getters and setters, */
@@ -25,7 +32,10 @@ struct CORE_API PropertyInfo final
 	///   Information   ///
 public:
 
-	REFLECTABLE_STRUCT
+	REFLECTABLE_STRUCT;
+
+	friend Property;
+	friend ImmutableProperty;
 
 	template <typename T, class TypeInfoT>
 	friend struct TypeInfoBuilder;
@@ -64,6 +74,12 @@ public:
 		return _flags;
 	}
 
+	/** Returns the acess level for this property. */
+	FORCEINLINE PropertyAccess GetAccess() const
+	{
+		return _access;
+	}
+
 	/** Returns the type information for this Property. */
 	FORCEINLINE const TypeInfo& GetPropertyType() const
 	{
@@ -76,151 +92,27 @@ public:
 		return *_ownerType;
 	}
 
-	/** Returns whether this Property has an immutable getter. */
-	FORCEINLINE bool HasMutableGetter() const
-	{
-		return _mutableGetter != nullptr;
-	}
+	/** Gets this Property on the given owner.
+	* WARNING: 'owner' must be castable to the type that owns this property. */
+	Property Get(Variant owner) const;
 
-	/** Returns whether this Property has a getter. */
-	FORCEINLINE bool HasGetter() const
-	{
-		return _getter != nullptr;
-	}
+	/** Gets this Property on the given owner. 
+	* WARNING: 'owner' must be castable to the type that owns this property. */
+	ImmutableProperty Get(ImmutableVariant owner) const;
 
-	/** Returns whether this Property has a setter. */
-	FORCEINLINE bool HasSetter() const
-	{
-		return _setter != nullptr;
-	}
+	/** Gets this Property on the given owner.
+	* WARNING: 'owner' must be castable to the type that owns this property. */
+	template <typename T>
+	Property Get(T& owner);
 
-	/** Returns whether this property is a field.
-	* If a property is a field, then it lives within the owner object and can be serialized recursively without creating cycles.
-	* NOTE: If this is false, that does not imply that the above is not true, but you should not rely on it.
-	* NOTE: Just because a property is a field does not imply that it is mutably gettable. It may be a const field, or a field with a custom setter. */
-	FORCEINLINE bool IsField() const
-	{
-		return _isField;
-	}
+	/** Gets this Property on the given owner.
+	* WARNING: 'owner' must be castable to the type that owns this property. */
+	template <typename T>
+	ImmutableProperty Get(const T& owner);
 
-	/** Returns whether this property may be polymorphic.
-	* If this property is retrieved via a getter method that returns a reference to a polymorphic type (class or interface),
-	* then this property is considered polymorphic. That means that the type returned by "PropertyType" may not be the most specific type
-	* of the actual value that is returned by this getter, you must check the returned value to determine that. 
-	* NOTE: If "IsField" is true, then this is always false. */
-	FORCEINLINE bool IsPolymorphic() const
-	{
-		return _isPolymorphic;
-	}
-
-	/** Returns a Variant to the value of this Property on the given value.
-	* NOTE: If this Property has no mutable getter, returns a Variant to 'void' (check 'HasMutableGetter' first).
-	* NOTE: The value referenced by 'owner' must be of the same or extension of the type referenced by 'GetOwnerType'. */
-	Variant GetMutableValue(Variant owner) const;
-
-	/** Returns an ImmutableVariant to the value of this Property on the given ImmutableVariant.
-	* NOTE: If this Property has no getter, returns an ImmutableVariant to 'void' (check 'HasGetter' first).
-	* NOTE: The value referenced by 'owner' must be of the same or extension of the type referenced by 'GetOwnerType'. */
-	ImmutableVariant GetValue(ImmutableVariant owner) const;
-
-	/** Copies the value of this Property on the given ImmutableVariant.
-	* NOTE: If the type of this property is not copy-constructible, returns a Variant to 'void' (check 'IsCopyable' first). 
-	* NOTE: The value referenced by 'owner' must be of the same or extension of the type referenced by 'GetOwnerType'. */
-	NewPtr<void> CopyValue(ImmutableVariant owner) const;
-
-	/** Sets the value of this Property on the given Variant to the given value.
-	* NOTE: If this Property has no setter, does nothing (check 'HasSetter' first).
-	* NOTE: The value referenced by 'owner' must be of the same or extension of the type referenced by 'GetOwnerType'.
-	* NOTE: The value referenced by 'value' must be of the same or extension of the type referenced by 'GetFieldType'. */
-	void SetValue(Variant owner, ImmutableVariant value) const;
-
-private:
-
-	/** Sets the mutable getter to return a field */
-	template <class OwnerT, typename FieldT, WHERE(!std::is_function<FieldT>::value)>
-	void SetMutableGetter(FieldT OwnerT::*field)
-	{
-		_mutableGetter = [field](void* owner) -> Variant
-		{
-			auto pOwner = static_cast<OwnerT*>(owner);
-			return Variant(&(pOwner->*field), TypeOf<FieldT>());
-		};
-	}
-
-	/** Sets the mutable getter to do nothing */
-	template <class OwnerT, typename FieldT, WHERE(!std::is_function<FieldT>::value)>
-	void SetMutableGetter(const FieldT OwnerT::* /*field*/)
-	{
-		// Do nothing (field is const, so can't return mutable variant)
-	}
-
-	/** Sets the getter to return a field */
-	template <class OwnerT, typename FieldT, WHERE(!std::is_function<FieldT>::value)>
-	void SetGetter(FieldT OwnerT::*field)
-	{
-		_getter = [field](const void* owner) -> ImmutableVariant
-		{
-			auto pOwner = static_cast<const OwnerT*>(owner);
-			return ImmutableVariant(&(pOwner->*field), TypeOf<FieldT>());
-		};
-	}
-
-	/** Sets the getter to call a getter method that returns by reference */
-	template <class OwnerT, typename PropertyT>
-	void SetGetter(PropertyT& (OwnerT::*getter)() const)
-	{
-		_getter = [getter](const void* owner) -> ImmutableVariant
-		{
-			auto pOwner = static_cast<const OwnerT*>(owner);
-			PropertyT& value = (pOwner->*getter)();
-			return ImmutableVariant(&value, TypeOf(value));
-		};
-	}
-
-	/** Sets the getter to call a getter method that returns by value */
-	template <class OwnerT, typename PropertyT>
-	void SetGetter(PropertyT (OwnerT::*getter)() const)
-	{
-		_getter = [getter](const void* owner) -> ImmutableVariant
-		{
-			auto pOwner = static_cast<const OwnerT*>(owner);
-			auto pValue = new PropertyT((pOwner->*getter)());
-			return ImmutableVariant(pValue, TypeOf<PropertyT>());
-		};
-	}
-
-	/** Sets the setter to set to a field */
-	template <class OwnerT, typename FieldT, WHERE(!std::is_function<FieldT>::value && !std::is_const<FieldT>::value)>
-	std::enable_if_t<std::is_copy_assignable<FieldT>::value>
-	SetSetter(FieldT OwnerT::*field)
-	{
-		_setter = [field](void* owner, const void* value) -> void
-		{
-			auto pOwner = static_cast<OwnerT*>(owner);
-			auto pValue = static_cast<const FieldT*>(value);
-			(pOwner->*field) = *pValue;
-		};
-	}
-
-	/** Sets the setter to NOT set to a field (because it cannot be copy-assigned) */
-	template <class OwnerT, typename FieldT, WHERE(!std::is_function<FieldT>::value)>
-	std::enable_if_t<!std::is_copy_assignable<FieldT>::value>
-	SetSetter(FieldT OwnerT::* /*field*/)
-	{
-		// Do nothing
-	}
-
-	/** Sets the setter to call a setter method */
-	template <class OwnerT, typename PropertyT>
-	void SetSetter(void (OwnerT::*setter)(PropertyT))
-	{
-		_setter = [setter](void* owner, const void* value) -> void
-		{
-			auto pOwner = static_cast<OwnerT*>(owner);
-			auto pValue = static_cast<const std::decay_t<PropertyT>*>(value);
-			(pOwner->*setter)(*pValue);
-		};
-	}
+	/** It's not safe to get properties on rvalue references. */
+	template <typename T>
+	auto Get(T&& owner) = delete;
 
 	////////////////
 	///   Data   ///
@@ -230,11 +122,124 @@ private:
 	CString _description;
 	const TypeInfo* _propertyType;
 	const CompoundInfo* _ownerType;
-	std::function<Variant (void*)> _mutableGetter;
-	std::function<ImmutableVariant (const void*)> _getter;
+	std::function<const void* (const void*)> _fieldGetter;
 	std::function<void (void*, const void*)> _setter;
+	std::function<String (const void*)> _toString;
+	std::function<String (void*, const String&)> _fromString;
 	PropertyFlags _flags;
-	bool _isField;
-	bool _isPolymorphic;
-	bool _requiresCopy;
+	PropertyAccess _access;
 };
+
+/** Type encapsulating access to a mutable (though possible read-only) Property. */
+struct CORE_API Property final : Proxy
+{
+	///////////////////////
+	///   Information   ///
+public:
+
+	friend PropertyInfo;
+	friend ImmutableProperty;
+
+	////////////////////////
+	///   Constructors   ///
+private:
+
+	Property(const PropertyInfo& info, void* owner);
+
+	///////////////////
+	///   Methods   ///
+public:
+
+	/** Returns the information for this Property. */
+	FORCEINLINE const PropertyInfo& GetInfo() const
+	{
+		return *_info;
+	}
+
+	/** Formats the state of this Property as a String. */
+	String ToString() const;
+
+	/** Parses this Property from a String, a returns the remainder of the string. */
+	String FromString(const String& string) const;
+
+	/** Sets the value of this property.
+	* WARNING: If the access level of this property is 'ReadOnlyProperty', this function will fail. */
+	void SetValue(ImmutableVariant value) const;
+
+	/** Accesses this property as a field.
+	* WARNING: If the access level of this property is not 'Field', this function will fail. */
+	Variant GetField() const;
+
+	////////////////
+	///   Data   ///
+private:
+
+	const PropertyInfo* _info;
+	void* _owner;
+};
+
+/** Type encapsulating access to an immutable property. */
+struct CORE_API ImmutableProperty final : Proxy
+{
+	///////////////////////
+	///   Information   ///
+public:
+
+	friend PropertyInfo;
+
+	////////////////////////
+	///   Constructors   ///
+public:
+
+	/** Encapsulates a mutable property as an immutable property. */
+	ImmutableProperty(const Property& prop);
+
+private:
+
+	ImmutableProperty(const PropertyInfo& info, const void* owner);
+
+	///////////////////
+	///   Methods   ///
+public:
+
+	/** Formats the state of this property as a String. */
+	String ToString() const;
+
+	/** Accesses this property as a field.
+	* WARNING: If the access level of this property is not 'Field', this function will fail. */
+	ImmutableVariant GetField() const;
+
+	////////////////
+	///   Data   ///
+private:
+
+	const PropertyInfo* _info;
+	const void* _owner;
+};
+
+///////////////////
+///   Methods   ///
+
+template <typename T>
+Property PropertyInfo::Get(T& owner)
+{
+	return Property(self, &owner);
+}
+
+template <typename T>
+ImmutableProperty PropertyInfo::Get(const T& owner)
+{
+	return ImmutableProperty(self, &owner);
+}
+
+/////////////////////
+///   Functions   ///
+
+/** You can't call 'FromString' on an ImmutableProperty. */
+String FromString(ImmutableProperty) = delete;
+
+//////////////////////
+///   Reflection   ///
+
+REFLECTABLE_ENUM(PropertyFlags);
+REFLECTABLE_ENUM(PropertyAccess);

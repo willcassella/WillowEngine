@@ -50,11 +50,11 @@ Array<PropertyInfo> ClassInfo::GetProperties() const
 {
 	if (GetBase())
 	{
-		return Base::GetProperties() + GetBase()->GetProperties();
+		return GetBase()->GetProperties() + CompoundInfo::GetProperties();
 	}
 	else
 	{
-		return Base::GetProperties();
+		return CompoundInfo::GetProperties();
 	}
 }
 

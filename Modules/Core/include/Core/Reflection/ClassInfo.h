@@ -104,6 +104,9 @@ public:
 	TypeInfoBuilder(CString name)
 		: TypeInfoBuilderBase<ClassT, ClassInfo>(name)
 	{
+		// Get the base type
+		_data.Base = &TypeOf<BaseTypeOf<ClassT>>();
+
 		// If this class adds new implemented interfaces
 		if (!std::is_same<InterfaceTypesOf<BaseTypeOf<ClassT>>, InterfaceTypesOf<ClassT>>::value)
 		{

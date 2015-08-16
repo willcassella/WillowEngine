@@ -9,8 +9,8 @@
 ///   Reflection   ///
 
 BUILD_REFLECTION(Event)
-.AddProperty("Name", "", &Event::_name, nullptr)
-.AddProperty("Argument Type", "", &Event::GetArgType, nullptr);
+.AddProperty("Name", "", &Event::_name)
+.AddProperty("Value", "", &Event::_value);
 
 ////////////////////////
 ///   Constructors   ///

@@ -37,6 +37,15 @@ struct Variant;
 /** Defined in 'Reflection/Variant.h' */
 struct ImmutableVariant;
 
+/** Defined in 'Reflection/PropertyInfo.h' */
+struct PropertyInfo;
+
+/** Defined in 'Reflection/PropertyInfo.h' */
+struct Property;
+
+/** Defined in 'Reflection/PropertyInfo.h' */
+struct ImmutableProperty;
+
 /////////////////////
 ///   Functions   ///
 

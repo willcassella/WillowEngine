@@ -23,7 +23,7 @@ public:
 	///   Components   ///
 public:
 
-	CameraComponent Lens;
+	UniquePtr<CameraComponent> Lens;
 
 	///////////////////
 	///   Methods   ///
@@ -31,6 +31,6 @@ public:
 
 	FORCEINLINE Mat4 GetPerspective() const
 	{
-		return Lens.GetPerspective();
+		return Lens->GetPerspective();
 	}
 };

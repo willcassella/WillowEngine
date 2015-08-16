@@ -25,7 +25,7 @@ public:
 public:
 
 	//StaticMeshComponent MeshComponent;
-	SlideComponent Slider;
+	UniquePtr<SlideComponent> Slider;
 
 	///////////////////
 	///   Actions   ///

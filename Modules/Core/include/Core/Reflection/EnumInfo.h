@@ -12,8 +12,11 @@ class CORE_API EnumInfo final : public PrimitiveInfo
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS
-	EXTENDS(PrimitiveInfo)
+	REFLECTABLE_CLASS;
+	EXTENDS(PrimitiveInfo);
+
+	template <typename T, class TypeInfoT>
+	friend struct TypeInfoBuilder;
 
 	////////////////////////
 	///   Constructors   ///
@@ -21,22 +24,10 @@ public:
 
 	// TODO: Documentation
 	template <typename EnumT>
-	static EnumInfo Create(CString name)
-	{
-		EnumT* dummy = nullptr;
-		return EnumInfo(dummy, name);
-	}
-
-private:
-
-	// TODO: Documentation
-	template <typename EnumT>
-	EnumInfo(EnumT* dummy, CString name)
-		: Base(dummy, name)
+	EnumInfo(const TypeInfoBuilder<EnumT, EnumInfo>& builder)
+		: Base(builder), _data(std::move(builder._data))
 	{
 		static_assert(std::is_enum<EnumT>::value, "The type given to 'EnumInfo::Create()' must be an enum type.");
-
-		_underlyingType = &TypeOf<std::underlying_type_t<EnumT>>();
 	}
 
 	///////////////////
@@ -48,18 +39,49 @@ public:
 	/** Returns the underlying type of this enum */
 	FORCEINLINE const PrimitiveInfo& GetUnderlyingType() const
 	{
-		return *_underlyingType;
+		return *_data.underlyingType;
 	}
 
 	////////////////
 	///   Data   ///
 private:
 
-	const PrimitiveInfo* _underlyingType;
+	struct Data
+	{
+		const PrimitiveInfo* underlyingType;
+	} _data;
+};
+
+// TODO: Documentation
+template <typename EnumT>
+struct TypeInfoBuilder< EnumT, EnumInfo > final : TypeInfoBuilderBase<EnumT, EnumInfo>
+{
+	///////////////////////
+	///   Information   ///
+public:
+
+	friend EnumInfo;
+
+	////////////////////////
+	///   Constructors   ///
+public:
+
+	// TODO: Documentatnion
+	TypeInfoBuilder(CString name)
+		: TypeInfoBuilderBase<EnumT, EnumInfo>(name)
+	{
+		_data.underlyingType = &TypeOf<std::underlying_type_t<EnumT>>();
+	}
+
+	////////////////
+	///   Data   ///
+private:
+
+	mutable EnumInfo::Data _data;
 };
 
 //////////////////
 ///   Macros   ///
 
 // TODO: Documentation
-#define ENUM_REFLECTION(E) const ::EnumInfo Implementation::TypeOf<E>::StaticTypeInfo = ::EnumInfo::Create<E>(#E) 
+#define ENUM_REFLECTION(E) const ::EnumInfo Implementation::TypeOf<E>::StaticTypeInfo = ::TypeInfoBuilder<E>(#E) 

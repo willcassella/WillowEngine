@@ -70,7 +70,7 @@ namespace Implementation
 		}
 
 		/** Whether the implementation succeeds in assigning to the object. */
-		static constexpr bool Result = std::is_assignable<T, Arg>::value;
+		static constexpr bool Result = std::is_assignable<std::add_lvalue_reference_t<T>, Arg>::value;
 	};
 
 	// TODO: Documentation

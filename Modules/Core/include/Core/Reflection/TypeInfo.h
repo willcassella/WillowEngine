@@ -30,6 +30,7 @@ public:
 	EXTENDS(Object);
 
 	friend Variant;
+	friend ImmutableVariant;
 	template <typename T, class TypeInfoT>
 	friend struct TypeInfoBuilder;
 

@@ -7,7 +7,7 @@
 ///   Types   ///
 
 /** Basically a smart wrapper over "void*" @TODO: Figure out a safer way of doing this */
-struct CORE_API Variant final
+struct CORE_API Variant final : Proxy
 {
 	////////////////////////
 	///   Constructors   ///
@@ -28,7 +28,7 @@ public:
 	/** Constructs a Variant to a value of any type (except Variant types). */
 	template <typename T, WHERE(!std::is_same<T, Variant>::value && !std::is_same<T, ImmutableVariant>::value)>
 	Variant(T& value)
-		: _value(&value), _type(TypeOf(value))
+		: _value(&value), _type(&TypeOf(value))
 	{
 		// All done
 	}
@@ -96,7 +96,7 @@ private:
 };
 
 /** Basically a smart wrapper of "const void*" */
-struct CORE_API ImmutableVariant final
+struct CORE_API ImmutableVariant final : Proxy
 {
 	////////////////////////
 	///   Constructors   ///
@@ -124,7 +124,7 @@ public:
 	/** Constructs an ImmutableVariant to a value of any type (except Variant types) */
 	template <typename T, WHERE(!std::is_same<T, Variant>::value && !std::is_same<T, ImmutableVariant>::value)>
 	ImmutableVariant(const T& value)
-		: _value(&value), _type(TypeOf(value))
+		: _value(&value), _type(&TypeOf(value))
 	{
 		// All done
 	}
@@ -133,7 +133,7 @@ public:
 	///   Methods   ///
 public:
 
-	/** Returns the value referenced by this ImmutableVariant */
+	/** Returns the value referenced by this ImmutableVariant. */
 	FORCEINLINE const void* GetValue() const
 	{
 		return _value;
@@ -143,6 +143,12 @@ public:
 	FORCEINLINE const TypeInfo& GetType() const
 	{
 		return *_type;
+	}
+
+	/** Formats the state of this ImmutableVariant as a String. */
+	String ToString() const
+	{
+		return _type->_data.toStringImplementation(_value);
 	}
 
 	/////////////////////

@@ -3,7 +3,7 @@
 
 #include <utility>
 #include "New.h"
-#include "../Reflection/Reflection.h"
+#include "../Reflection/StructInfo.h"
 
 /////////////////
 ///   Types   ///
@@ -288,3 +288,9 @@ private:
 	void* _value;
 	const TypeInfo* _type;
 };
+
+//////////////////////
+///   Reflection   ///
+
+template <typename T>
+BUILD_REFLECTION(UniquePtr<T>);

@@ -13,8 +13,10 @@ BUILD_REFLECTION(Ghost)
 ///   Constructors   ///
 
 Ghost::Ghost(Scene& scene)
-	: Base(scene), Slider(self)
+	: Base(scene)
 {
+	Slider = New<SlideComponent>(self);
+
 	scene.Events.Bind("Poof", self, &Ghost::Disappear);
 	scene.Events.Bind("Spin", self, &Ghost::Spin);
 	hasDisappeared = false;

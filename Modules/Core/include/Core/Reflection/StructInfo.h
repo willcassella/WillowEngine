@@ -8,6 +8,7 @@
 #include "../Containers/Table.h"
 #include "../Containers/Pair.h"
 #include "CompoundInfo.h"
+#include "TypePtr.h"
 
 /////////////////
 ///   Types   ///
@@ -103,3 +104,9 @@ namespace Implementation
 	//const StructInfo TypeOf<Pair<A, B>>::StaticTypeInfo = 
 	//	StructInfo::CreateTemplate<Pair, A, B>("Pair");
 }
+
+//////////////////////
+///   Reflection   ///
+
+template <class TypeInfoT>
+BUILD_REFLECTION(TypePtr<TypeInfoT>);
