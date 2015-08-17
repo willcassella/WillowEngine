@@ -33,6 +33,9 @@ namespace Implementation
 			using ReturnT = decltype(T::StaticTypeInfo);
 			using TypeInfoT = std::remove_const_t<ReturnT>;
 
+			static_assert(!std::is_base_of<Proxy, T>::value,
+				"Proxy types do not have any static reflection data.");
+
 			static_assert(std::is_const<ReturnT>::value && std::is_object<ReturnT>::value,
 				"The 'StaticTypeInfo' static object must be a const value type");
 
@@ -518,6 +521,37 @@ using TypeInfoTypeOf = std::decay_t<decltype(TypeOf<T>())>;
 //////////////////
 ///   Macros   ///
 
+/** Base reflection declarations for reflectable types.
+* NOTE: In most cases you shouldn't use this directly, instead use one of the REFLECTABLE_X macros defined below. */
+#define REFLECTION_DECL(T)									\
+public:														\
+	using TypeInfoType = T;									\
+	static const TypeInfoType StaticTypeInfo;
+
+/** Put this macro in the Information section of a struct you'd like to reflect.
+* NOTE: Any struct that uses this macro must also use the 'BUILD_REFLECTION' macro in their source file. */
+#define REFLECTABLE_STRUCT									\
+	REFLECTION_DECL(::StructInfo)							\
+	FORCEINLINE const ::StructInfo& GetType() const			\
+	{														\
+		return StaticTypeInfo;								\
+	}
+
+/** Put this macro in the Information section of a class you'd like to reflect.
+* NOTE: Any class that uses this macro must also use the 'EXTENDS' macro in the Information section of their
+* header, as well as the 'BUILD_REFLECTION' macro in their source file. */
+#define REFLECTABLE_CLASS							\
+	REFLECTION_DECL(::ClassInfo)					\
+	const ::ClassInfo& GetType() const override		\
+	{												\
+		return StaticTypeInfo;						\
+	}
+
+/** Put this macro in the Information section of an interface you'd like to reflect.
+* NOTE: Any interface that uses this macro @TODO: Finish documentation here */
+#define REFLECTABLE_INTERFACE						\
+	REFLECTION_DECL(::InterfaceInfo)
+
 // @TODO: Documentation
 #define REFLECTABLE_ENUM(E)									\
 namespace Implementation									\
@@ -537,32 +571,6 @@ namespace Implementation									\
 	};														\
 }
 
-/** Put this macro in the Information section of a struct you'd like to reflect.
-* NOTE: Any struct that uses this macro must also use the 'BUILD_REFLECTION' macro in their source file. */
-#define REFLECTABLE_STRUCT										\
-public:															\
-	static const ::StructInfo StaticTypeInfo;					\
-	FORCEINLINE const ::StructInfo& GetType() const				\
-	{															\
-		return StaticTypeInfo;									\
-	}
-
-/** Put this macro in the Information section of a class you'd like to reflect.
-* NOTE: Any class that uses this macro must also use the 'EXTENDS' macro in the Information section of their
-* header, as well as the 'BUILD_REFLECTION' macro in their source file. */
-#define REFLECTABLE_CLASS							\
-public:												\
-	static const ::ClassInfo StaticTypeInfo;		\
-	const ::ClassInfo& GetType() const override		\
-	{												\
-		return StaticTypeInfo;						\
-	}
-
-/** Put this macro in the Information section of an interface you'd like to reflect.
-* NOTE: Any interface that uses this macro @TODO: Finish documentation here */
-#define REFLECTABLE_INTERFACE						\
-public:												\
-	static const ::InterfaceInfo StaticTypeInfo;
 
 /** Put this macro in the Information section of a class you'd like to reflect.
 * NOTE: All reflectable classes must use this macro.

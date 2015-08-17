@@ -19,7 +19,7 @@ public:
 	///   Reflection   ///
 public:
 
-	static const ClassInfo StaticTypeInfo;
+	REFLECTION_DECL(ClassInfo);
 	const AssetInfo& GetType() const override = 0;
 
 	////////////////////////

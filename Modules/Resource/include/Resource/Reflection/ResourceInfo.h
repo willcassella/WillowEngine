@@ -83,8 +83,7 @@ private:
 
 // TODO: Documentation
 #define REFLECTABLE_RESOURCE						\
-public:												\
-	static const ::ResourceInfo StaticTypeInfo;		\
+	REFLECTION_DECL(::ResourceInfo)					\
 	const ::ResourceInfo& GetType() const override	\
 	{												\
 		return StaticTypeInfo;						\

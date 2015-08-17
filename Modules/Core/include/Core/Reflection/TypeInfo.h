@@ -308,4 +308,7 @@ FORCEINLINE const TargetT* Cast(const T& value)
 /** Put this macro into the source file of a type you'd like to reflect.
 * NOTE: The type muse use the corresponding 'REFLECTABLE_X' flag in its header.
 * NOTE: If you get the error "Incomplete type is not allowed", then the TypeInfoBuilder for this reflection type has not been defined. */
-#define BUILD_REFLECTION(T) const ::TypeInfoTypeOf<T> T::StaticTypeInfo = ::TypeInfoBuilder<T>(#T)
+#define BUILD_REFLECTION(T) const T::TypeInfoType T::StaticTypeInfo = ::TypeInfoBuilder<T>(#T)
+
+// TODO: Documentation
+#define BUILD_TEMPLATE_REFLECTION(T, ...) const typename T<__VA_ARGS__>::TypeInfoType T<__VA_ARGS__>::StaticTypeInfo = ::TypeInfoBuilder<T<__VA_ARGS__>>(#T) 

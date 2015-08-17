@@ -11,8 +11,8 @@ class RESOURCE_API AssetInfo final : public ClassInfo
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS
-	EXTENDS(ClassInfo)
+	REFLECTABLE_CLASS;
+	EXTENDS(ClassInfo);
 
 	template <typename T, class TypeInfoT>
 	friend struct TypeInfoBuilder;
@@ -78,8 +78,7 @@ private:
 
 // TODO: Documentation
 #define REFLECTABLE_ASSET							\
-public:												\
-	static const ::AssetInfo StaticTypeInfo;		\
+	REFLECTION_DECL(::AssetInfo)					\
 	const ::AssetInfo& GetType() const override		\
 	{												\
 		return StaticTypeInfo;						\

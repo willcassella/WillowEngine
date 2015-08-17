@@ -68,4 +68,4 @@ private:
 ///   Reflection   ///
 
 template <class AssetT>
-BUILD_REFLECTION(AssetPtr<AssetT>);
+BUILD_TEMPLATE_REFLECTION(AssetPtr, AssetT);

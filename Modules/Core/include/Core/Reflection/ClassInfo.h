@@ -13,8 +13,8 @@ class CORE_API ClassInfo : public CompoundInfo
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS
-	EXTENDS(CompoundInfo)
+	REFLECTABLE_CLASS;
+	EXTENDS(CompoundInfo);
 
 	template <typename T, class TypeInfoT>
 	friend struct TypeInfoBuilder;

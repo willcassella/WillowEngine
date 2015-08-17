@@ -15,11 +15,8 @@ class CORE_API Object
 	///   Information   ///
 public:
 
-	/** 'Object' does not implement any interfaces. */
+	REFLECTION_DECL(ClassInfo);
 	IMPLEMENTS();
-
-	/** Type information for 'Object' */
-	static const ClassInfo StaticTypeInfo;
 
 	/** Ptr needs to be able to add and remove itself from the "_references" Array. */
 	template <class ObjectT>

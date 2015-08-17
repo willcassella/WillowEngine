@@ -109,4 +109,4 @@ namespace Implementation
 ///   Reflection   ///
 
 template <class TypeInfoT>
-BUILD_REFLECTION(TypePtr<TypeInfoT>);
+BUILD_TEMPLATE_REFLECTION(TypePtr, TypeInfoT);

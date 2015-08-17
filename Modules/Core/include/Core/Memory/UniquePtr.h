@@ -293,4 +293,4 @@ private:
 ///   Reflection   ///
 
 template <typename T>
-BUILD_REFLECTION(UniquePtr<T>);
+BUILD_TEMPLATE_REFLECTION(UniquePtr, T);
