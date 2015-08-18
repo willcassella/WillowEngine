@@ -8,7 +8,7 @@
 ////////////////////////////
 ///   Public Functions   ///
 
-bool AssetConverter::Convert(const Path& path, const Array<String>& options)
+bool AssetConverter::Convert(const Path& path, const Array<String>& /*options*/)
 {
 	InputType input = ParsePath(path);
 
@@ -176,7 +176,7 @@ bool AssetConverter::WriteStaticMesh(const Path& name, const Array<StaticMesh::V
 
 	// Write it to a file
 	std::basic_fstream<byte> output;
-	output.open((name + ".wmesh").Cstr(), std::ios::binary | std::ios::out);
+	output.open((name + ".wmesh"_s).Cstr(), std::ios::binary | std::ios::out);
 
 	output.write((byte*)&numVerts, sizeof(uint32));
 	output.write((byte*)&vertices[0], sizeof(StaticMesh::Vertex) * numVerts);
