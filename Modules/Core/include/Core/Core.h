@@ -24,7 +24,6 @@
 //////////////////
 ///   Memory   ///
 
-#include "Memory/New.h"
 #include "Memory/UniquePtr.h"
 #include "Memory/SharedPtr.h"
 #include "Memory/Ptr.h"

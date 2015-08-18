@@ -16,13 +16,9 @@ struct SharedPtr;
 template <class T>
 struct Ptr;
 
-/** Defined in 'Memory/New.h' */
-template <typename T>
-struct NewPtr;
-
 /////////////////////
 ///   Functions   ///
 
-/** Defined in 'Memory/New.h' */
+/** Defined in 'Memory/UniquePtr.h' */
 template <typename T, typename ... Arg>
-NewPtr<T> New(Arg&& ... args);
+UniquePtr<T> New(Arg&& ... args);

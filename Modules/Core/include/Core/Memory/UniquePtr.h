@@ -2,7 +2,6 @@
 #pragma once
 
 #include <utility>
-#include "New.h"
 #include "../Reflection/StructInfo.h"
 
 /////////////////
@@ -20,8 +19,13 @@ public:
 	REFLECTABLE_STRUCT
 
 	friend UniquePtr<void>;
+
 	template <typename F> 
 	friend struct UniquePtr;
+
+	template <typename T, typename ... Args>
+	friend UniquePtr<T> New(Args&& ...);
+
 	static_assert(!std::is_const<T>::value, "An 'UniquePtr' may not point to const.");
 
 	////////////////////////
@@ -38,11 +42,6 @@ public:
 	{
 		// All done
 	}
-	UniquePtr(NewPtr<T>&& value)
-		: _value(value.TakeValue())
-	{
-		// All done
-	}
 	UniquePtr(const UniquePtr& copy) = delete;
 	UniquePtr(UniquePtr&& move)
 		: _value(move._value)
@@ -54,19 +53,21 @@ public:
 		delete _value;
 	}
 
-	template <typename CopyType>
-	UniquePtr(const UniquePtr<CopyType>& copy) = delete;
+	template <typename F>
+	UniquePtr(const UniquePtr<F>& copy) = delete;
 
-	template <typename MoveType, WHERE(std::is_convertible<MoveType*, T*>::value)>
-	UniquePtr(UniquePtr<MoveType>&& move)
+	template <typename F, WHERE(std::is_convertible<F*, T*>::value)>
+	UniquePtr(UniquePtr<F>&& move)
 		: _value(move._value)
 	{
 		move._value = nullptr;
 	}
 
-	template <typename ValueType, WHERE(std::is_convertible<ValueType*, T*>::value)>
-	UniquePtr(NewPtr<ValueType>&& value)
-		: _value(value.TakeValue())
+private:
+
+	template <typename NewT>
+	UniquePtr(NewT* value)
+		: _value(value)
 	{
 		// All done
 	}
@@ -98,13 +99,6 @@ public:
 	{
 		delete _value;
 		_value = nullptr;
-
-		return self;
-	}
-	UniquePtr& operator=(NewPtr<T>&& value)
-	{
-		delete _value;
-		_value = value.TakeValue();
 
 		return self;
 	}
@@ -141,26 +135,17 @@ public:
 		return _value != nullptr;
 	}
 
-	template <typename CopyType>
-	UniquePtr& operator=(const UniquePtr<CopyType>& copy) = delete;
+	template <typename F>
+	UniquePtr& operator=(const UniquePtr<F>& copy) = delete;
 
-	template <typename MoveType, WHERE(std::is_convertible<MoveType*, T*>::value)>
-	UniquePtr& operator=(UniquePtr<MoveType>&& move)
+	template <typename F, WHERE(std::is_convertible<F*, T*>::value)>
+	UniquePtr& operator=(UniquePtr<F>&& move)
 	{
 		if (this != &move)
 		{
 			delete _value;
 			_value = move._value;
 		}
-
-		return self;
-	}
-
-	template <typename ValueType, WHERE(std::is_convertible<ValueType*, T*>::value)>
-	UniquePtr& operator=(NewPtr<ValueType>&& value)
-	{
-		delete _value;
-		_value = value.TakeValue();
 
 		return self;
 	}
@@ -195,18 +180,13 @@ public:
 	UniquePtr(UniquePtr&& move);
 	~UniquePtr();
 
-	template <typename ValueType>
-	UniquePtr(NewPtr<ValueType>&& value)
-		: _value(value.TakeValue()), _type(&TypeOf<ValueType>())
-	{
-		// All done
-	}
+	/** UniquePtr cannot be copied. */
+	template <typename T>
+	UniquePtr(const UniquePtr<T>& copy) = delete;
 
-	template <typename CopyType>
-	UniquePtr(const UniquePtr<CopyType>& copy) = delete;
-
-	template <typename MoveType>
-	UniquePtr(UniquePtr<MoveType>&& move)
+	/** But it may be moved! */
+	template <typename T>
+	UniquePtr(UniquePtr<T>&& move)
 		: _value(move._value), _type(&TypeOf(*move))
 	{
 		move._value = nullptr;
@@ -251,32 +231,17 @@ public:
 		return _value != nullptr;
 	}
 
-	template <typename ValueType>
-	UniquePtr& operator=(NewPtr<ValueType>&& value)
+	template <typename T>
+	UniquePtr& operator=(const UniquePtr<T>& copy) = delete;
+
+	template <typename F>
+	UniquePtr& operator=(UniquePtr<F>&& move)
 	{
+		// UniquePtr<void> can never be viewed as another type of UniquePtr, so identity check is not necessary
 		self = nullptr;
-
-		_value = value.TakeValue();
-		_type = &TypeOf<ValueType>();
-
-		return self;
-	}
-
-	template <typename CopyType>
-	UniquePtr& operator=(const UniquePtr<CopyType>& copy) = delete;
-
-	template <typename MoveType>
-	UniquePtr& operator=(UniquePtr<MoveType>&& move)
-	{
-		if (this != &move)
-		{
-			self = nullptr;
-
-			_value = move._value;
-			_type = &TypeOf(*move);
-
-			move._value = nullptr;
-		}
+		_value = move._value;
+		_type = &TypeOf(*move);
+		move._value = nullptr;
 
 		return self;
 	}
@@ -288,6 +253,16 @@ private:
 	void* _value;
 	const TypeInfo* _type;
 };
+
+/////////////////////
+///   Functions   ///
+
+/** Constructs a new instance of 'T'. */
+template <typename T, typename ... Args>
+UniquePtr<T> New(Args&& ... args)
+{
+	return new T(std::forward<Args>(args)...);
+}
 
 //////////////////////
 ///   Reflection   ///
