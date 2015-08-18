@@ -23,8 +23,8 @@ public:
 	template <typename F> 
 	friend struct UniquePtr;
 
-	template <typename T, typename ... Args>
-	friend UniquePtr<T> New(Args&& ...);
+	template <typename F, typename ... Args>
+	friend UniquePtr<F> New(Args&& ...);
 
 	static_assert(!std::is_const<T>::value, "An 'UniquePtr' may not point to const.");
 
