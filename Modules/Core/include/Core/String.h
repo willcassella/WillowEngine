@@ -162,7 +162,7 @@ private:
 ///   Functions   ///
 
 /** Custom operator for String literals. */
-FORCEINLINE String operator"" _s(CString string, std::size_t size)
+FORCEINLINE String operator"" _s(CString string, std::size_t /*size*/)
 {
 	return String(string);
 }

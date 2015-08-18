@@ -81,11 +81,6 @@ int main(int32 argc, char* argv[])
 	auto& cam = test.Spawn<FPSCamera>();
 	//test.Cameras.Add(&cam);
 
-	for (auto type : Application::GetAllTypes())
-	{
-		Console::WriteLine(*type);
-	}
-
 	//Execute the main event loop
 	eventLoop(window);
 	

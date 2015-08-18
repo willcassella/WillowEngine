@@ -11,7 +11,7 @@ void PrintProperties(ImmutableVariant v)
 		Console::NewLine();
 		for (const auto& propInfo : pType->GetProperties())
 		{
-			Console::WriteLine("@ : @", propInfo.GetName(), propInfo.Get(v));
+			Console::WriteLine("@ (@) : @", propInfo.GetName(), propInfo.GetPropertyType(), propInfo.Get(v));
 		}
 	}
 	else

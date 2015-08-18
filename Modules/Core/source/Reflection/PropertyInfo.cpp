@@ -10,11 +10,11 @@
 ///   Reflection   ///
 
 BUILD_REFLECTION(PropertyInfo)
-.AddProperty("Name", "The name of this property", &PropertyInfo::_name, PF_NoSerialize)
-.AddProperty("Description", "A description of this property.", &PropertyInfo::_description, PF_NoSerialize)
-.AddProperty("Flags", "The flags on this property.", &PropertyInfo::_flags, PF_NoSerialize)
-.AddProperty("Owner Type", "The type that owns this property.", &PropertyInfo::_ownerType, PF_NoSerialize)
-.AddProperty("Property Type", "What type this property is.", &PropertyInfo::_propertyType, PF_NoSerialize);
+.AddProperty("Name", "The name of this property", &PropertyInfo::_name, nullptr)
+.AddProperty("Description", "A description of this property.", &PropertyInfo::_description, nullptr)
+.AddProperty("Flags", "The flags on this property.", &PropertyInfo::_flags, nullptr)
+.AddProperty("Owner Type", "The type that owns this property.", &PropertyInfo::_ownerType, nullptr)
+.AddProperty("Property Type", "What type this property is.", &PropertyInfo::_propertyType, nullptr);
 
 ENUM_REFLECTION(PropertyFlags);
 
