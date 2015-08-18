@@ -11,8 +11,8 @@ class EXAMPLEGAME_API Ghost : public GameObject
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS;
-	EXTENDS(GameObject);
+	REFLECTABLE_CLASS
+	EXTENDS(GameObject)
 
 	/////////////////////////
 	///   Constructors   ///

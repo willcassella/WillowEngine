@@ -11,8 +11,8 @@ class ENGINE_API Scene final : public Object
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS;
-	EXTENDS(Object);
+	REFLECTABLE_CLASS
+	EXTENDS(Object)
 
 	//////////////////
 	///   Fields   ///

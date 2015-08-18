@@ -10,8 +10,8 @@ class ENGINE_API GameObject : public Object
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS;
-	EXTENDS(Object);
+	REFLECTABLE_CLASS
+	EXTENDS(Object)
 	friend Scene;
 	friend Component;
 

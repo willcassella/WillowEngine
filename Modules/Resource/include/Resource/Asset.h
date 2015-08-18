@@ -13,7 +13,7 @@ class RESOURCE_API Asset : public Object
 	///   Information   ///
 public:
 
-	EXTENDS(Object);
+	EXTENDS(Object)
 
 	//////////////////////
 	///   Reflection   ///

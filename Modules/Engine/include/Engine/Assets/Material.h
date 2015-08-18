@@ -12,8 +12,8 @@ class ENGINE_API Material final : public Asset
 	///   Information   ///
 public:
 
-	REFLECTABLE_ASSET;
-	EXTENDS(Asset);
+	REFLECTABLE_ASSET
+	EXTENDS(Asset)
 
 	////////////////////////
 	///   Constructors   ///

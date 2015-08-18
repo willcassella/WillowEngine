@@ -10,8 +10,8 @@ class EXAMPLEGAME_API SlideComponent : public Component
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS;
-	EXTENDS(Component);
+	REFLECTABLE_CLASS
+	EXTENDS(Component)
 
 	////////////////////////
 	///   Constructors   ///

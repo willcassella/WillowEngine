@@ -12,7 +12,7 @@ class RESOURCE_API Resource : public Object
 	///   Information   ///
 public:
 
-	EXTENDS(Object);
+	EXTENDS(Object)
 	friend Asset;
 
 	//////////////////////

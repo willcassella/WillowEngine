@@ -10,8 +10,8 @@ class RESOURCE_API BinaryFile final : public Resource
 	///   Information   ///
 public:
 
-	REFLECTABLE_RESOURCE;
-	EXTENDS(Resource);
+	REFLECTABLE_RESOURCE
+	EXTENDS(Resource)
 
 	////////////////////////
 	///   Constructors   ///

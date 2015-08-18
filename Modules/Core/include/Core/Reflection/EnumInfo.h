@@ -12,8 +12,8 @@ class CORE_API EnumInfo final : public PrimitiveInfo
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS;
-	EXTENDS(PrimitiveInfo);
+	REFLECTABLE_CLASS
+	EXTENDS(PrimitiveInfo)
 
 	template <typename T, class TypeInfoT>
 	friend struct TypeInfoBuilder;

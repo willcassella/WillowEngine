@@ -26,8 +26,8 @@ class CORE_API TypeInfo : public Object
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS;
-	EXTENDS(Object);
+	REFLECTABLE_CLASS
+	EXTENDS(Object)
 
 	friend Variant;
 	friend ImmutableVariant;

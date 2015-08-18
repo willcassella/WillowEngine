@@ -11,8 +11,8 @@ class ENGINE_API Texture final : public Asset
 	///   Information   ///
 public:
 
-	REFLECTABLE_ASSET;
-	EXTENDS(Asset);
+	REFLECTABLE_ASSET
+	EXTENDS(Asset)
 
 	////////////////////////
 	///   Constructors   ///
