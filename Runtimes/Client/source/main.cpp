@@ -53,6 +53,8 @@ int main(int32 /*argc*/, char** /*argv*/)
 
 	// Initialize GLFW and get a window
 	GLFWwindow* window = InitGLFW();
+	
+	Console::WriteLine("GLFW Initialized");
 
 	// Make an openGL context in window
 	glfwMakeContextCurrent(window);
@@ -88,20 +90,22 @@ GLFWwindow* InitGLFW()
 	//Initialize GLFW
 	if (!glfwInit())
 	{
+		Console::WriteLine("GLFW Initialization failure");
 		exit(EXIT_FAILURE);
 	}
 
 	// Make the window invisible
 	glfwWindowHint(GLFW_VISIBLE, false);
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
 	GLFWwindow* window = glfwCreateWindow(window_width, window_height, "Willow Engine", NULL, NULL);
 
 	//make sure the window was initialized properly
 	if (!window)
 	{
+		Console::WriteLine("Window failed to initialize properly");
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
