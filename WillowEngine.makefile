@@ -44,4 +44,4 @@ AssetConverter: setup
 
 CoreTest : setup
 	make -C Tests/CoreTest/ -f CoreTest.makefile
-	cp Tests/CoreTest/bin/CoreTest bin/CoreTest.out
+	cp Tests/CoreTest/bin/CoreTest bin/CoreTest
