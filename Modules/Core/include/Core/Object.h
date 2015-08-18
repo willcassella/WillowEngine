@@ -15,8 +15,8 @@ class CORE_API Object
 	///   Information   ///
 public:
 
-	REFLECTION_DECL(ClassInfo);
-	IMPLEMENTS();
+	REFLECTION_DECL(ClassInfo)
+	IMPLEMENTS()
 
 	/** Ptr needs to be able to add and remove itself from the "_references" Array. */
 	template <class ObjectT>
