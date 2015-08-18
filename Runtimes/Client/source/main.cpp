@@ -47,19 +47,13 @@ public:
 
 } Cursor;
 
-void windowSizeCallback(GLFWwindow* window, int32 x, int32 y)
+int main(int32 /*argc*/, char** /*argv*/)
 {
-	//Resize the viewport
-	glViewport(0, 0, x, y);
-}
-
-int main(int32 argc, char* argv[])
-{	
 	Console::WriteLine("Initializing subsystems...");
 
 	// Initialize GLFW and get a window
 	GLFWwindow* window = InitGLFW();
-  
+
 	// Make an openGL context in window
 	glfwMakeContextCurrent(window);
 
@@ -73,16 +67,16 @@ int main(int32 argc, char* argv[])
 	//sponza.MeshComponent.Mesh = "data/sponza.dat";
 	//sponza.MeshComponent.Mesh->SetMaterial(String("data/Sponza.mat"));
 
-	auto& gun = test.Spawn<Ghost>();
+	test.Spawn<Ghost>();
 	//gun.MeshComponent.Mesh = "data/battle_rifle.dat";
 	//gun.MeshComponent.Mesh->SetMaterial(String("data/Gun.mat"));
 
-	auto& cam = test.Spawn<FPSCamera>();
+	test.Spawn<FPSCamera>();
 	//test.Cameras.Add(&cam);
 
 	//Execute the main event loop
 	eventLoop(window);
-	
+
 	//Cleanup the engine
 	cleanUp(window);
 
@@ -96,7 +90,7 @@ GLFWwindow* InitGLFW()
 	{
 		exit(EXIT_FAILURE);
 	}
-	
+
 	// Make the window invisible
 	glfwWindowHint(GLFW_VISIBLE, false);
 
@@ -130,12 +124,8 @@ GLFWwindow* InitGLFW()
 	// Move the cursor to the center of the screen
 	glfwSetCursorPos(window, window_width/2, window_height/2);
 
-	//Set the window callbacks
-	glfwSetWindowSizeCallback(window, windowSizeCallback);
-
 	// Create the frame buffer and viewport
 	glfwGetFramebufferSize(window, &window_width, &window_height);
-	glViewport(0, 0, window_width, window_height);
 
 	return window;
 }
@@ -153,7 +143,7 @@ void eventLoop(GLFWwindow* window)
 
 	// Begin the event loop
 	while (!glfwWindowShouldClose(window) && !exit)
-	{	 
+	{
 		Scene& scene = Game::Instance().GetCurrentScene();
 
 		double currentTime = glfwGetTime();
@@ -230,10 +220,10 @@ void eventLoop(GLFWwindow* window)
 void cleanUp(GLFWwindow* window)
 {
 	Console::WriteLine("Shutting down...");
-	
+
 	//Delete the window (along with the context)
 	glfwDestroyWindow(window);
-	
+
 	//Quit GLFW
 	glfwTerminate();
 }
