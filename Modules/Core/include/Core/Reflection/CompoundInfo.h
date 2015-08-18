@@ -255,7 +255,7 @@ public:
 		{
 			auto pOwner = static_cast<CompoundT*>(owner);
 			auto pValue = static_cast<const PropertyT*>(value);
-			(pOwner->*setter)(*value);
+			(pOwner->*setter)(*pValue);
 		};
 		property._toString = [getter](const void* owner) -> String
 		{
