@@ -241,5 +241,5 @@ String FromString(ImmutableProperty) = delete;
 //////////////////////
 ///   Reflection   ///
 
-REFLECTABLE_ENUM(PropertyFlags);
-REFLECTABLE_ENUM(PropertyAccess);
+REFLECTABLE_ENUM(PropertyFlags)
+REFLECTABLE_ENUM(PropertyAccess)
