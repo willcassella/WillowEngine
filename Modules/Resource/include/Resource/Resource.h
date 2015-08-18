@@ -19,7 +19,7 @@ public:
 	///   Reflection   ///
 public:
 
-	REFLECTION_DECL(ClassInfo);
+	REFLECTION_DECL(ClassInfo)
 	const ResourceInfo& GetType() const override = 0;
 
 	////////////////////////
