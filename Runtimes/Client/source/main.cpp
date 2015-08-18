@@ -1,6 +1,5 @@
 // main.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
-#include <Windows.h>
 #include <GLFW/glfw3.h>
 #include <Core/Console.h>
 #include <Core/Math/Vec2.h>

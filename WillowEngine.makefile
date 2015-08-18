@@ -22,6 +22,12 @@ Engine: setup
 	make -C Modules/Engine/ -f Engine.makefile
 	cp Modules/Engine/bin/Engine.so bin/Engine.so
 	
+# Runtimes
+
+Client : setup
+	make -C Runtimes/Client/ -f Client.makefile
+	cp Runtimes/Client/bin/Client bin/Client
+	
 # Games
 
 ExampleGame: setup
@@ -32,10 +38,10 @@ ExampleGame: setup
 	
 AssetConverter: setup
 	make -C Tools/AssetConverter/ -f AssetConverter.makefile
-	cp Tools/AssetConverter/bin/AssetConverter.out bin/AssetConverter.out
+	cp Tools/AssetConverter/bin/AssetConverter bin/AssetConverter
 
 # Tests
 
 CoreTest : setup
 	make -C Tests/CoreTest/ -f CoreTest.makefile
-	cp Tests/CoreTest/bin/CoreTest.out bin/CoreTest.out
+	cp Tests/CoreTest/bin/CoreTest bin/CoreTest.out

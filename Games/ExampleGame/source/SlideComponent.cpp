@@ -21,7 +21,7 @@ SlideComponent::SlideComponent(GameObject& owner)
 ///////////////////
 ///   Methods   ///
 
-void SlideComponent::OnUpdate(float timeInterval)
+void SlideComponent::OnUpdate(float /*timeInterval*/)
 {
 	GetOwner().Transform.Translate(Vec3(0.008f, 0, 0));
 }

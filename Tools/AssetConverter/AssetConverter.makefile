@@ -4,7 +4,7 @@ CXX=clang++
 CFLAGS=-std=c++14 -Ofast -Wall -Wextra -D BITS_64 -I ../../Modules/Core/include -I ../../Modules/Resource/include -I ../../Modules/Engine/include
 LFLAGS=-Wl,-rpath='$$ORIGIN'
 DEPS=../../Modules/Core/bin/Core.so ../../Modules/Resource/bin/Resource.so ../../Modules/Engine/bin/Engine.so
-OUT=-o bin/AssetConverter.out
+OUT=-o bin/AssetConverter
 
 .PHONY: setup
 

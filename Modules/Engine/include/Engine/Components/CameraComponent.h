@@ -39,13 +39,13 @@ public:
 	}
 
 	/** Sets the horizontal field of view with respect to the given vertical field of view and aspect ratio */
-	FORCEINLINE void SetHFOV(float vFOV, float aspectRatio)
+	FORCEINLINE void SetHFOV(float /*vFOV*/, float /*aspectRatio*/)
 	{
 		// @TODO: Implement this
 	}
 
 	/** Sets the vertical field of view with respect to the given horizontal field of view and aspect ratio */
-	FORCEINLINE void SetVFOV(float hFOV, float aspectRatio)
+	FORCEINLINE void SetVFOV(float /*hFOV*/, float /*aspectRatio*/)
 	{
 		// @TODO: Implement this
 	}
