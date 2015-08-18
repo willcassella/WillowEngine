@@ -9,7 +9,7 @@ OUT=-o bin/AssetConverter.out
 .PHONY: setup
 
 all: setup
-	$(CXX) $(CFLAGS) Source/*.cpp $(LFLAGS) $(DEPS) $(OUT)
+	$(CXX) $(CFLAGS) `find source/ -name "*.cpp"` $(LFLAGS) $(DEPS) $(OUT)
 
 setup:
 	mkdir -p bin

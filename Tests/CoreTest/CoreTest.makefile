@@ -9,7 +9,7 @@ OUT=-o bin/CoreTest.out
 .PHONY: setup
 
 all: setup
-	$(CXX) $(CFLAGS) source/*.cpp $(LFLAGS) $(DEPS) $(OUT)
+	$(CXX) $(CFLAGS) `find source/ -name "*.cpp"` $(LFLAGS) $(DEPS) $(OUT)
 
 setup:
 	mkdir -p bin

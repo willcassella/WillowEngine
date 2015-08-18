@@ -9,7 +9,7 @@ OUT=-o bin/Resource.so
 .PHONY: setup
 
 all: setup
-	$(CXX) $(CFLAGS) source/*.cpp source/Reflection/*.cpp source/Resources/*.cpp $(LFLAGS) $(DEPS) $(OUT)
+	$(CXX) $(CFLAGS) `find source/ -name "*.cpp"` $(LFLAGS) $(DEPS) $(OUT)
 
 setup:
 	mkdir -p bin
