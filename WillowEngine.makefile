@@ -22,6 +22,12 @@ Engine: setup
 	make -C Modules/Engine/ -f Engine.makefile
 	cp Modules/Engine/bin/Engine.so bin/Engine.so
 	
+# Games
+
+ExampleGame: setup
+	make -C Games/ExampleGame/ -f ExampleGame.makefile
+	cp Games/ExampleGame/bin/ExampleGame.so bin/ExampleGame.so
+	
 # Tools
 	
 AssetConverter: setup
