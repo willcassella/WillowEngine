@@ -39,7 +39,7 @@ public:
 	TypePtr<AssetInfo> Type;
 
 	/** The requested asset (null until loaded). */
-	UniquePtr<struct Asset> Asset;
+	UniquePtr<class Asset> Asset;
 
 	/** The maximum requested urgency of loading the asset.  */
 	AssetLoadMode LoadMode = AssetLoadMode::None;
