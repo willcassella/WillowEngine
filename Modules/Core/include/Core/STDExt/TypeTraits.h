@@ -26,6 +26,18 @@ namespace stdEXT
 	struct is_non_const_reference
 		: std::is_same<std::decay_t<T>&, T>
 	{};
+	
+	/** Evaluates to 'true' if the given type is a const object. */
+	template <typename T>
+	struct is_const_object
+		: std::integral_constant<bool, std::is_object<T>::value && std::is_const<T>::value>
+	{};
+	
+	/** Evaluates to 'true' if the given type is a non-const object. */
+	template <typename T>
+	struct is_non_const_object
+		: std::integral_constant<bool, std::is_object<T>::value && !std::is_const<T>::value>
+	{};
 
 	/** Type holding a sequence of other types. */
 	template <typename ... T>

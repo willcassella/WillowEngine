@@ -14,7 +14,11 @@
 /** Types extending 'Proxy' should be though of as proxy types, and not used in any contexts other than
 * interaction with reflection data. 
 * In particular, they should not be used as fields or have any sort of long-term storage. */
-struct Proxy {};
+struct Proxy 
+{
+	/** Override (hide) in actual proxy type, if necessary. */
+	using TypeInfoType = TypeInfo;
+};
 
 //////////////////////////
 ///   Implementation   ///
@@ -28,33 +32,30 @@ namespace Implementation
 	template <typename T>
 	struct TypeOf final
 	{
-		FORCEINLINE static const auto& Function()
+		using TypeInfoT = typename T::TypeInfoType;
+		
+		static_assert(std::is_base_of<TypeInfo, TypeInfoT>::value,
+				"The 'StaticTypeInfo' static object must be a 'TypeInfo' object.");
+		
+		FORCEINLINE static const TypeInfoT& Function()
 		{
-			using ReturnT = decltype(T::StaticTypeInfo);
-			using TypeInfoT = std::remove_const_t<ReturnT>;
-
+			using StorageT = decltype(T::StaticTypeInfo);
+			
 			static_assert(!std::is_base_of<Proxy, T>::value,
 				"Proxy types do not have any static reflection data.");
-
-			static_assert(std::is_const<ReturnT>::value && std::is_object<ReturnT>::value,
-				"The 'StaticTypeInfo' static object must be a const value type");
-
-			static_assert(std::is_base_of<TypeInfo, TypeInfoT>::value,
-				"The 'StaticTypeInfo' static object must be a 'TypeInfo' object");
+				
+			static_assert(stdEXT::is_const_object<StorageT>::value,
+				"The 'StaticTypeInfo' static object must be a const value type.");
 
 			return T::StaticTypeInfo;
 		}
 
-		FORCEINLINE static const auto& Function(const T& value)
+		FORCEINLINE static const TypeInfoT& Function(const T& value)
 		{
 			using ReturnT = decltype(value.GetType());
-			using TypeInfoT = std::decay_t<ReturnT>;
 
-			static_assert(std::is_reference<ReturnT>::value && std::is_const<std::remove_reference_t<ReturnT>>::value,
+			static_assert(stdEXT::is_const_reference<ReturnT>::value,
 				"The 'GetType()' member function must return an immutable reference");
-
-			static_assert(std::is_base_of<TypeInfo, TypeInfoT>::value,
-				"The 'GetType()' member function must return a 'TypeInfo' object");
 			
 			return value.GetType();
 		}
