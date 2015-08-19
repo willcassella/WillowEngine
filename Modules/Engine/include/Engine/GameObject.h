@@ -25,7 +25,8 @@ public:
 	///   Fields   ///
 public:
 
-	Transform Transform;
+	/** World transformation of this GameObject. */
+	struct Transform Transform;
 
 	///////////////////
 	///   Methods   ///
