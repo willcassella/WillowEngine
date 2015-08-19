@@ -32,4 +32,4 @@ namespace AssetConverter
 
 	/** Writes a mesh (defined by an array of vertices and elements) to a file that can be loaded by the engine */
 	bool WriteStaticMesh(const Path& path, const Array<StaticMesh::Vertex>& vertices, const Array<uint32>& elements);
-};
+}
