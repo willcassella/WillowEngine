@@ -39,6 +39,12 @@ namespace stdEXT
 		: std::integral_constant<bool, std::is_object<T>::value && !std::is_const<T>::value>
 	{};
 
+	/** Evaluates to 'true' if the given type (T) implements the given contract (ContractT). */
+	template <class T, template <class F> class ContractT>
+	struct has_contract
+		: std::is_base_of<ContractT<T>, T>
+	{};
+
 	/** Type holding a sequence of other types. */
 	template <typename ... T>
 	struct type_sequence final

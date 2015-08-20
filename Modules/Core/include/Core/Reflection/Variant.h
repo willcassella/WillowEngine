@@ -7,7 +7,7 @@
 ///   Types   ///
 
 /** Basically a smart wrapper over "void*" @TODO: Figure out a safer way of doing this */
-struct CORE_API Variant final : Proxy
+struct CORE_API Variant final : Contract::Proxy<Variant>
 {
 	////////////////////////
 	///   Constructors   ///
@@ -96,7 +96,7 @@ private:
 };
 
 /** Basically a smart wrapper of "const void*" */
-struct CORE_API ImmutableVariant final : Proxy
+struct CORE_API ImmutableVariant final : Contract::Proxy<ImmutableVariant>
 {
 	////////////////////////
 	///   Constructors   ///

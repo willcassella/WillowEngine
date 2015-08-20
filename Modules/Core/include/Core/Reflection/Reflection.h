@@ -11,14 +11,18 @@
 /////////////////
 ///   Types   ///
 
-/** Types extending 'Proxy' should be though of as proxy types, and not used in any contexts other than
-* interaction with reflection data. 
-* In particular, they should not be used as fields or have any sort of long-term storage. */
-struct Proxy 
+namespace Contract
 {
-	/** Override (hide) in actual proxy type, if necessary. */
-	using TypeInfoType = TypeInfo;
-};
+	/** Proxy contract. Proxies represent runtime access to values of unknown type. */
+	template <class T>
+	struct Proxy
+	{
+		Proxy()
+		{
+			// No contract assertions
+		}
+	};
+}
 
 //////////////////////////
 ///   Implementation   ///
@@ -31,17 +35,15 @@ namespace Implementation
 	/** Generic implementation of 'TypeOf' */
 	template <typename T>
 	struct TypeOf final
-	{
-		using TypeInfoT = typename T::TypeInfoType;
-		
-		static_assert(std::is_base_of<TypeInfo, TypeInfoT>::value,
-				"The 'StaticTypeInfo' static object must be a 'TypeInfo' object.");
-		
-		FORCEINLINE static const TypeInfoT& Function()
+	{	
+		FORCEINLINE static auto Function() -> decltype((T::StaticTypeInfo))
 		{
 			using StorageT = decltype(T::StaticTypeInfo);
+			using TypeInfoT = std::decay_t<StorageT>;
+
+			CommonAsserts<TypeInfoT>();
 			
-			static_assert(!std::is_base_of<Proxy, T>::value,
+			static_assert(!stdEXT::has_contract<T, Contract::Proxy>::value,
 				"Proxy types do not have any static reflection data.");
 				
 			static_assert(stdEXT::is_const_object<StorageT>::value,
@@ -50,14 +52,26 @@ namespace Implementation
 			return T::StaticTypeInfo;
 		}
 
-		FORCEINLINE static const TypeInfoT& Function(const T& value)
+		FORCEINLINE static auto Function(const T& value) -> decltype(value.GetType())
 		{
 			using ReturnT = decltype(value.GetType());
+			using TypeInfoT = std::decay_t<ReturnT>;
+
+			CommonAsserts<TypeInfoT>();
 
 			static_assert(stdEXT::is_const_reference<ReturnT>::value,
 				"The 'GetType()' member function must return an immutable reference");
 			
 			return value.GetType();
+		}
+
+	private:
+
+		template <typename TypeInfoT>
+		FORCEINLINE static void CommonAsserts()
+		{
+			static_assert(std::is_base_of<TypeInfo, TypeInfoT>::value,
+				"The 'StaticTypeInfo' static object must be a 'TypeInfo' object.");
 		}
 	};
 

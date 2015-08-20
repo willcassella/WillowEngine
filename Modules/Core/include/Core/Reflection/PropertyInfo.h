@@ -131,7 +131,7 @@ private:
 };
 
 /** Type encapsulating access to a mutable (though possible read-only) Property. */
-struct CORE_API Property final : Proxy
+struct CORE_API Property final : Contract::Proxy<Property>
 {
 	///////////////////////
 	///   Information   ///
@@ -179,7 +179,7 @@ private:
 };
 
 /** Type encapsulating access to an immutable property. */
-struct CORE_API ImmutableProperty final : Proxy
+struct CORE_API ImmutableProperty final : Contract::Proxy<ImmutableProperty>
 {
 	///////////////////////
 	///   Information   ///
