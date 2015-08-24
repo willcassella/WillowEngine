@@ -114,11 +114,8 @@ public:
 			property._access = PropertyAccess::NoSetField;
 			property._setter = nullptr;
 		}
-		property._toString = [field](const void* owner) -> String
-		{
-			auto pOwner = static_cast<const CompoundT*>(owner);
-			return ToString(pOwner->*field);
-		};
+
+		ImplementToString(property, field);
 		property._fromString = [field](void* owner, const String& string) -> String
 		{
 			auto pOwner = static_cast<CompoundT*>(owner);
@@ -148,12 +145,8 @@ public:
 
 		property._fieldGetter = nullptr;
 		property._setter = nullptr;
+		ImplementToString(property, field);
 		property._fromString = nullptr;
-		property._toString = [field](const void* owner) -> String
-		{
-			auto pOwner = static_cast<const CompoundT*>(owner);
-			return ToString(pOwner->*field);
-		};
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(property));
 		return static_cast<TypeInfoBuilder<CompoundT>&>(self);
@@ -179,25 +172,9 @@ public:
 		property._access = PropertyAccess::Property;
 
 		property._fieldGetter = nullptr;
-		property._setter = [setter](void* owner, const void* value) -> void
-		{
-			auto pOwner = static_cast<CompoundT*>(owner);
-			auto pValue = static_cast<const PropertyT*>(value);
-			(pOwner->*setter)(*pValue);
-		};
-		property._toString = [field](const void* owner) -> String
-		{
-			auto pOwner = static_cast<const CompoundT*>(owner);
-			return ToString(pOwner->*field);
-		};
-		property._fromString = [field, setter](void* owner, const String& string) -> String
-		{
-			auto pOwner = static_cast<CompoundT*>(owner);
-			PropertyT val = pOwner->*field;
-			String remainder = FromString(val, string);
-			(pOwner->*setter)(std::move(val));
-			return std::move(remainder);
-		};
+		ImplementSetter(property, setter);
+		ImplementToString(property, field);
+		ImplementFromString(property, field, setter);
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(property));
 		return static_cast<TypeInfoBuilder<CompoundT>&>(self);
@@ -221,11 +198,7 @@ public:
 
 		property._fieldGetter = nullptr;
 		property._setter = nullptr;
-		property._toString = [getter](const void* owner) -> String
-		{
-			auto pOwner = static_cast<const CompoundT*>(owner);
-			return ToString((pOwner->*getter)());
-		};
+		ImplementToString(property, getter);
 		property._fromString = nullptr;
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(property));
@@ -251,25 +224,9 @@ public:
 		property._access = PropertyAccess::Property;
 
 		property._fieldGetter = nullptr;
-		property._setter = [setter](void* owner, const void* value) -> void
-		{
-			auto pOwner = static_cast<CompoundT*>(owner);
-			auto pValue = static_cast<const PropertyT*>(value);
-			(pOwner->*setter)(*pValue);
-		};
-		property._toString = [getter](const void* owner) -> String
-		{
-			auto pOwner = static_cast<const CompoundT*>(owner);
-			return ToString((pOwner->*getter)());
-		};
-		property._fromString = [getter, setter](void* owner, const String& string) -> String
-		{
-			auto pOwner = static_cast<CompoundT*>(owner);
-			PropertyT val = (pOwner->*getter)();
-			String remainder = FromString(val, string);
-			(pOwner->*setter)(std::move(val));
-			return std::move(remainder);
-		};
+		ImplementSetter(property, setter);
+		ImplementToString(property, getter);
+		ImplementFromString(property, getter, setter);
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(property));
 		return static_cast<TypeInfoBuilder<CompoundT>&>(self);
@@ -277,23 +234,85 @@ public:
 
 private:
 
+	/** Implements the setter wrapper for a setter method. */
+	template <typename RetT, typename SetT>
+	void ImplementSetter(PropertyInfo& property, RetT (CompoundT::*setter)(SetT))
+	{
+		property._setter = [setter](void* owner, const void* value) -> void
+		{
+			auto pOwner = static_cast<CompoundT*>(owner);
+			auto pValue = static_cast<const SetT*>(value);
+			(pOwner->*setter)(*pValue);
+		};
+	}
+
+	/** Impelements the 'ToString' function on a field getter. */
+	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
+	void ImplementToString(PropertyInfo& property, FieldT CompoundT::*field)
+	{
+		property._toString = [field](const void* owner) -> String
+		{
+			auto pOwner = static_cast<const CompoundT*>(owner);
+			return ToString(pOwner->*field);
+		};
+	}
+
+	/** Implements the 'ToString' function on a method getter. */
+	template <typename GetT>
+	void ImplementToString(PropertyInfo& property, GetT (CompoundT::*getter)() const)
+	{
+		property._toString = [getter](const void* owner) -> String
+		{
+			auto pOwner = static_cast<const CompoundT*>(owner);
+			return ToString((pOwner->*getter)());
+		};
+	}
+
+	/** Implements the 'FromString' function with a field getter, and method setter. */
+	template <typename FieldT, typename RetT, typename SetT, WHERE(!std::is_function<FieldT>::value)>
+	void ImplementFromString(PropertyInfo& property, FieldT CompoundT::*field, RetT (CompoundT::*setter)(SetT))
+	{
+		property._fromString = [field, setter](void* owner, const String& string) -> String
+		{
+			auto pOwner = static_cast<CompoundT*>(owner);
+			auto val = pOwner->*field;
+			String remainder = FromString(val, string);
+			(pOwner->*setter)(std::move(val));
+			return std::move(remainder);
+		};
+	}
+
+	/** Implements the 'FromString' function with a method getter, and method setter. */
+	template <typename GetT, typename RetT, typename SetT>
+	void ImplementFromString(PropertyInfo& property, GetT (CompoundT::*getter)() const, RetT (CompoundT::*setter)(SetT))
+	{
+		property._fromString = [getter, setter](void* owner, const String& string) -> String
+		{
+			auto pOwner = static_cast<CompoundT*>(owner);
+			auto val = (pOwner->*getter)();
+			String remainder = FromString(val, string);
+			(pOwner->*setter)(std::move(val));
+			return std::move(remainder);
+		};
+	}
+
 	/** Assertions common to all types of properties. */
 	template <typename PropertyT>
-	void CommonAsserts()
+	void CommonAsserts() const
 	{
 		static_assert(!std::is_polymorphic<std::decay_t<PropertyT>>::value, "Compounds may not contain polymorphic types.");
 	}
 
 	/** Assertsion common to field properties */
 	template <typename PropertyT>
-	void FieldAsserts()
+	void FieldAsserts() const
 	{
 		static_assert(!std::is_reference<PropertyT>::value, "You may not have references as fields.");
 	}
 
 	/** Assertions common to all getter/setter functions */
 	template <typename GetT, typename SetT>
-	void GetterSetterAsserts()
+	void GetterSetterAsserts() const
 	{
 		static_assert(std::is_same<std::decay_t<GetT>, std::decay_t<SetT>>::value, "The setter must accept the same type as the getter.");
 		static_assert(std::is_object<SetT>::value || stdEXT::is_const_reference<SetT>::value, "The setter must either accept by value or const-reference.");

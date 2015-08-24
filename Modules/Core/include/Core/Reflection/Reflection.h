@@ -3,7 +3,6 @@
 
 #include <initializer_list>
 #include "../config.h"
-#include "../Forwards/Core.h"
 #include "../Forwards/Containers.h"
 #include "../Forwards/Reflection.h"
 #include "../STDExt/TypeTraits.h"
