@@ -1,12 +1,15 @@
 # WillowEngine.makefile
 
-.PHONY: Core Resource ResourceConverter
+.PHONY: setup clean all
 
 setup:
 	mkdir -p bin
 	
 clean:
 	rm -rf bin
+	
+all: Core Resource Engine ExampleGame CoreTest AssetConverter Client
+	echo "Build complete"
 
 # Modules
 
