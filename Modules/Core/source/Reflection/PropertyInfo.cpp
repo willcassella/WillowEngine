@@ -16,9 +16,17 @@ BUILD_REFLECTION(PropertyInfo)
 .AddProperty("Owner Type", "The type that owns this property.", &PropertyInfo::_ownerType, nullptr)
 .AddProperty("Property Type", "What type this property is.", &PropertyInfo::_propertyType, nullptr);
 
-ENUM_REFLECTION(PropertyFlags);
+ENUM_REFLECTION(PropertyFlags)
+.IsBitFlag()
+.AddValue<PF_None>("None")
+.AddValue<PF_NoSerialize>("No Serialize")
+.AddValue<PF_Set_SerializeOnly>("Set Serialize-Only");
 
-ENUM_REFLECTION(PropertyAccess);
+ENUM_REFLECTION(PropertyAccess)
+.AddValue<PropertyAccess::Field>("Field")
+.AddValue<PropertyAccess::NoSetField>("No-Set Field")
+.AddValue<PropertyAccess::Property>("Property")
+.AddValue<PropertyAccess::ReadOnlyProperty>("Read-Only Property");
 
 ////////////////////////
 ///   Constructors   ///
@@ -105,5 +113,3 @@ ImmutableVariant ImmutableProperty::GetField() const
 	auto value = _info->_fieldGetter(_owner);
 	return ImmutableVariant(value, _info->GetPropertyType());
 }
-
-

@@ -20,8 +20,17 @@ void PrintProperties(ImmutableVariant v)
 	}
 }
 
+void PrintValues(const EnumInfo& info)
+{
+	Console::WriteLine(info.GetValues());
+}
+
 int main()
 {
 	PrintProperties(TypeOf<ClassInfo>());
+	Console::NewLine();
+	PrintValues(TypeOf<PropertyAccess>());
+	Console::NewLine();
+	PrintValues(TypeOf<PropertyFlags>());
 	Console::Prompt();
 }

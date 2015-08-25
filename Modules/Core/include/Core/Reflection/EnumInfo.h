@@ -36,10 +36,22 @@ public:
 
 	bool IsCastableTo(const TypeInfo& type) const override;
 
+	/** Returns whether this enum represents a bit flag. */
+	FORCEINLINE bool IsBitFlag() const
+	{
+		return _data.isBitFlag;
+	}
+
 	/** Returns the underlying type of this enum */
 	FORCEINLINE const PrimitiveInfo& GetUnderlyingType() const
 	{
 		return *_data.underlyingType;
+	}
+
+	/** Returns all the values for this enum. */
+	FORCEINLINE const Table<String, int64>& GetValues() const
+	{
+		return _data.values;
 	}
 
 	////////////////
@@ -49,6 +61,8 @@ private:
 	struct Data
 	{
 		const PrimitiveInfo* underlyingType;
+		Table<String, int64> values;
+		bool isBitFlag = false;
 	} _data;
 };
 
@@ -71,6 +85,25 @@ public:
 		: TypeInfoBuilderBase<EnumT, EnumInfo>(name)
 	{
 		_data.underlyingType = &TypeOf<std::underlying_type_t<EnumT>>();
+	}
+
+	///////////////////
+	///   Methods   ///
+public:
+
+	/** Indicates that this enum represents a bit flag. */
+	auto& IsBitFlag()
+	{
+		_data.isBitFlag = true;
+		return static_cast<TypeInfoBuilder<EnumT>&>(self);
+	}
+
+	/** Adds a value for this enum. */
+	template <EnumT Value>
+	auto& AddValue(String name)
+	{
+		_data.values[std::move(name)] = static_cast<int64>(Value);
+		return static_cast<TypeInfoBuilder<EnumT>&>(self);
 	}
 
 	////////////////
