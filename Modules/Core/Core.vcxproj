@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Core\Application.h" />
+    <ClInclude Include="include\Core\ArchNode.h" />
     <ClInclude Include="include\Core\config.h" />
     <ClInclude Include="include\Core\Console.h" />
     <ClInclude Include="include\Core\Containers\Array.h" />
@@ -53,6 +54,7 @@
     <ClInclude Include="include\Core\Misc\Signature.h" />
     <ClInclude Include="include\Core\Misc\TimeStamp.h" />
     <ClInclude Include="include\Core\Object.h" />
+    <ClInclude Include="include\Core\Operations\ToArchive.h" />
     <ClInclude Include="include\Core\Operations\TypeOps.h" />
     <ClInclude Include="include\Core\Operations\FromString.h" />
     <ClInclude Include="include\Core\Reflection\ClassInfo.h" />
@@ -75,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Application.cpp" />
+    <ClCompile Include="source\ArchNode.cpp" />
     <ClCompile Include="source\Console.cpp" />
     <ClCompile Include="source\Containers\DynamicBuffer.cpp" />
     <ClCompile Include="source\Event\Event.cpp" />

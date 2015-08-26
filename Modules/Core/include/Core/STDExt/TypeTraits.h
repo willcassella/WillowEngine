@@ -2,7 +2,7 @@
 #pragma once
 
 #include <type_traits>
-#include "../Forwards/Core.h"
+#include "../Forwards/Reflection.h"
 
 /////////////////
 ///   Types   ///

@@ -52,27 +52,22 @@ public:
 	// TODO: Documentation
 	FORCEINLINE String ToString() const
 	{
-		if (_value)
-		{
-			return _type->_data.toStringImplementation(_value);
-		}
-		else
-		{
-			return "null";
-		}
+		assert(_value != nullptr);
+		return _type->_data.toStringImplementation(_value);
 	}
 
 	// TODO: Documentation
 	FORCEINLINE String FromString(const String& string) const
 	{
-		if (_value)
-		{
-			return _type->_data.fromStringImplementation(_value, string);
-		}
-		else
-		{
-			return string;
-		}
+		assert(_value != nullptr);
+		return _type->_data.fromStringImplementation(_value, string);
+	}
+
+	// TODO: Documentation
+	FORCEINLINE void ToArchive(ArchNode& node) const
+	{
+		assert(_value != nullptr);
+		_type->_data.toArchiveImplementation(_value, node);
 	}
 
 	/////////////////////
@@ -146,9 +141,17 @@ public:
 	}
 
 	/** Formats the state of this ImmutableVariant as a String. */
-	String ToString() const
+	FORCEINLINE String ToString() const
 	{
+		assert(_value != nullptr);
 		return _type->_data.toStringImplementation(_value);
+	}
+
+	// TODO: Documentation
+	FORCEINLINE void ToArchive(ArchNode& node) const
+	{
+		assert(_value != nullptr);
+		_type->_data.toArchiveImplementation(_value, node);
 	}
 
 	/////////////////////
@@ -208,3 +211,6 @@ FORCEINLINE const TargetT* Cast(ImmutableVariant value)
 		return nullptr;
 	}
 }
+
+/** You cannot call 'FromString' on an ImmutableVariant. */
+String FromString(ImmutableVariant v) = delete;

@@ -80,7 +80,7 @@ DynamicBuffer& DynamicBuffer::operator=(DynamicBuffer&& move)
 		_value = move._value;
 
 		move._size = 0;
-		move._value = 0;
+		move._value = nullptr;
 	}
 
 	return self;

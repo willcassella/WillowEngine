@@ -25,3 +25,13 @@ String Object::ToString() const
 {
 	return Implementation::Default::ToString(self);
 }
+
+String Object::FromString(const String& string)
+{
+	return Implementation::Default::FromString(self, string);
+}
+
+void Object::ToArchive(ArchNode& node) const
+{
+	Implementation::Default::ToArchive(self, node);
+}

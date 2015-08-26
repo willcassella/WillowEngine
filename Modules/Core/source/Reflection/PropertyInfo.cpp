@@ -85,6 +85,12 @@ String Property::FromString(const String& string) const
 	return _info->_fromString(_owner, string);
 }
 
+void Property::ToArchive(ArchNode& node) const
+{
+	_info->_toArchive(_owner, node);
+}
+
+
 void Property::SetValue(ImmutableVariant value) const
 {
 	assert(value.GetType().IsCastableTo(_info->GetPropertyType()));
@@ -105,6 +111,12 @@ String ImmutableProperty::ToString() const
 {
 	return _info->_toString(_owner);
 }
+
+void ImmutableProperty::ToArchive(ArchNode& node) const
+{
+	_info->_toArchive(_owner, node);
+}
+
 
 ImmutableVariant ImmutableProperty::GetField() const
 {

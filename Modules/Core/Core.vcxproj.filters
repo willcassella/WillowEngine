@@ -216,6 +216,12 @@
     <ClInclude Include="include\Core\Memory\UniquePtr.h">
       <Filter>include\Memory</Filter>
     </ClInclude>
+    <ClInclude Include="include\Core\Operations\ToArchive.h">
+      <Filter>include\Operations</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\ArchNode.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\String.cpp">
@@ -307,6 +313,9 @@
     </ClCompile>
     <ClCompile Include="source\Reflection\EnumInfo.cpp">
       <Filter>source\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ArchNode.cpp">
+      <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

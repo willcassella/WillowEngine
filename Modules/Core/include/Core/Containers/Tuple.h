@@ -1,8 +1,6 @@
 // Tuple.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "../config.h"
-
 template <typename ... AnyTypes>
 struct Tuple final
 {
@@ -11,7 +9,7 @@ struct Tuple final
 private:
 
 	template <typename T, typename ... Types>
-	struct TupleStorage : public TupleStorage<Types...>
+	struct TupleStorage : TupleStorage<Types...>
 	{
 		T Value;
 	};

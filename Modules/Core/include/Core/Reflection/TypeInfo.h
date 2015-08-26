@@ -6,6 +6,7 @@
 #include "../Operations/TypeOps.h"
 #include "../Operations/ToString.h"
 #include "../Operations/FromString.h"
+#include "../Operations/ToArchive.h"
 #include "Reflection.h"
 
 /////////////////
@@ -161,6 +162,7 @@ private:
 		Destructor destructor;
 		String(*toStringImplementation)(const void*);
 		String(*fromStringImplementation)(void*, const String&);
+		void(*toArchiveImplementation)(const void*, ArchNode&);
 		uint32 size;
 		bool isCompound;
 		bool isAbstract;
@@ -224,6 +226,10 @@ public:
 		_data.fromStringImplementation = [](void* value, const String& string) -> String
 		{
 			return Implementation::FromString<T>::Function(*static_cast<T*>(value), string);
+		};
+		_data.toArchiveImplementation = [](const void* value, ArchNode& node) -> void
+		{
+			Implementation::ToArchive<T>::Function(*static_cast<const T*>(value), node);
 		};
 
 		_data.size = sizeof(T);
@@ -291,7 +297,6 @@ FORCEINLINE const TargetT* Cast(const T& value)
 {
 	static_assert(!std::is_reference<TargetT>::value, "Using 'Cast' to cast to a reference is not allowed");
 	
-	// TODO: Change this to ".template IsCastableTo<TargetT>()" if that works on clang (doesn't work on MSVC for some reason
 	if (TypeOf(value).IsCastableTo(TypeOf<TargetT>()))
 	{
 		return reinterpret_cast<const TargetT*>(&value);

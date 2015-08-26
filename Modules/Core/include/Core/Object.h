@@ -41,6 +41,12 @@ public:
 	/** Formats the state of this Object as a String. */
 	virtual String ToString() const;
 
+	/** Sets the state of this Object from the given String. */
+	virtual String FromString(const String& string);
+
+	/** Serializes the state of this Object to the given archive node. */
+	virtual void ToArchive(ArchNode& node) const;
+
 	/////////////////////
 	///   Operators   ///
 public:

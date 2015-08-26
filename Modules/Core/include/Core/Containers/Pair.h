@@ -2,6 +2,7 @@
 #pragma once
 
 #include "../config.h"
+#include "../STDExt/TypeTraits.h"
 
 /** A pair of values */
 template <typename A, typename B>

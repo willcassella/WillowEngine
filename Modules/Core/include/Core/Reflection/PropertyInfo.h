@@ -126,6 +126,7 @@ private:
 	std::function<void (void*, const void*)> _setter;
 	std::function<String (const void*)> _toString;
 	std::function<String (void*, const String&)> _fromString;
+	std::function<void (const void*, ArchNode&)> _toArchive;
 	PropertyFlags _flags;
 	PropertyAccess _access;
 };
@@ -161,6 +162,9 @@ public:
 
 	/** Parses this Property from a String, a returns the remainder of the string. */
 	String FromString(const String& string) const;
+
+	/** Serializes this property to the given archive node. */
+	void ToArchive(ArchNode& node) const;
 
 	/** Sets the value of this property.
 	* WARNING: If the access level of this property is 'ReadOnlyProperty', this function will fail. */
@@ -204,6 +208,9 @@ public:
 
 	/** Formats the state of this property as a String. */
 	String ToString() const;
+
+	/** Serializes this property to the given archive node. */
+	void ToArchive(ArchNode& node) const;
 
 	/** Accesses this property as a field.
 	* WARNING: If the access level of this property is not 'Field', this function will fail. */

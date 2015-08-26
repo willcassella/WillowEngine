@@ -121,6 +121,7 @@ public:
 			auto pOwner = static_cast<CompoundT*>(owner);
 			return FromString(pOwner->*field, string);
 		};
+		ImplementToArchive(property, field);
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(property));
 		return static_cast<TypeInfoBuilder<CompoundT>&>(self);
@@ -147,6 +148,7 @@ public:
 		property._setter = nullptr;
 		ImplementToString(property, field);
 		property._fromString = nullptr;
+		ImplementToArchive(property, field);
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(property));
 		return static_cast<TypeInfoBuilder<CompoundT>&>(self);
@@ -175,6 +177,7 @@ public:
 		ImplementSetter(property, setter);
 		ImplementToString(property, field);
 		ImplementFromString(property, field, setter);
+		ImplementToArchive(property, field);
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(property));
 		return static_cast<TypeInfoBuilder<CompoundT>&>(self);
@@ -200,6 +203,7 @@ public:
 		property._setter = nullptr;
 		ImplementToString(property, getter);
 		property._fromString = nullptr;
+		ImplementToArchive(property, getter);
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(property));
 		return static_cast<TypeInfoBuilder<CompoundT>&>(self);
@@ -227,6 +231,7 @@ public:
 		ImplementSetter(property, setter);
 		ImplementToString(property, getter);
 		ImplementFromString(property, getter, setter);
+		ImplementToString(property, getter);
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(property));
 		return static_cast<TypeInfoBuilder<CompoundT>&>(self);
@@ -296,6 +301,28 @@ private:
 		};
 	}
 
+	/** Implements the 'ToArchive' function with a field getter. */
+	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
+	void ImplementToArchive(PropertyInfo& property, FieldT CompoundT::*field)
+	{
+		property._toArchive = [field](const void* owner, ArchNode& node) -> void
+		{
+			auto pOwner = static_cast<const CompoundT*>(owner);
+			ToArchive(pOwner->*field, node);
+		};
+	}
+
+	/** Implements the 'ToArchive' function with a method getter. */
+	template <typename GetT>
+	void ImplementToArchive(PropertyInfo& property, GetT (CompoundT::*getter)() const)
+	{
+		property._toArchive = [getter](const void* owner, ArchNode& node) -> void
+		{
+			auto pOwner = static_cast<const CompoundT*>(owner);
+			ToArchive((pOwner->*getter)(), node);
+		};
+	}
+
 	/** Assertions common to all types of properties. */
 	template <typename PropertyT>
 	void CommonAsserts() const
@@ -324,3 +351,42 @@ private:
 
 	mutable CompoundInfo::Data _data;
 };
+
+//////////////////////////
+///   Implementation   ///
+
+namespace Implementation
+{
+	namespace Default
+	{
+		/** Default implementation of 'ToArchive', prints out properties or 'ToString'. */
+		template <typename T>
+		void ToArchive(const T& value, ArchNode& node)
+		{
+			if(std::is_class<T>::value)
+			{
+				// Type is compound, serialize its properties
+				const auto& pType = reinterpret_cast<const CompoundInfo&>(::TypeOf(value));
+				{
+					for (const auto& propInfo : pType.GetProperties())
+					{
+						// If we can serialize this property
+						if (propInfo.GetAccess() != PropertyAccess::ReadOnlyProperty && !(propInfo.GetFlags() & PF_NoSerialize))
+						{
+							// Add a node for the property, naming it after the property
+							auto& propNode = node.AddNode(propInfo.GetName());
+
+							// Serialize the property to the node TODO: Figure out why I need to explicitly initialize "ImmutableVariant" here
+							propInfo.Get(ImmutableVariant{ value }).ToArchive(propNode);
+						}
+					}
+				}
+			}
+			else
+			{
+				// Type is primitive, just serialize it to a string
+				node.SetValue(::ToString(value));
+			}
+		}
+	}
+}

@@ -33,6 +33,10 @@ String Parse(const String& string, const String& format, T& value);
 template <typename T, typename ... MoreT>
 String Parse(const String& string, const String& format, T& value, MoreT& ... more);
 
+/** Defined in 'Operations/ToArchive.h' */
+template <typename T>
+void ToArchive(const T& value, ArchNode& node);
+
 //////////////////////////
 ///   Implementation   ///
 
@@ -51,5 +55,9 @@ namespace Implementation
 		/** Defined in 'Reflection/TypeInfo.h' */
 		template <typename T>
 		String FromString(T& value, const String& string);
+
+		/** Defined in 'Reflection/CompoundInfo.h' */
+		template <typename T>
+		void ToArchive(const T& value, ArchNode& node);
 	}
 }

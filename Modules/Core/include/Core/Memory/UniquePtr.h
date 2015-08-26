@@ -91,6 +91,19 @@ public:
 		return std::move(self);
 	}
 
+	void ToArchive(ArchNode& node) const
+	{
+		if (_value)
+		{
+			auto& child = node.AddNode(TypeOf(*_value).GetName());
+			::ToArchive(*_value, child);
+		}
+		else
+		{
+			node.SetValue("null");
+		}
+	}
+
 	/////////////////////
 	///   Operators   ///
 public:
@@ -215,6 +228,19 @@ public:
 	FORCEINLINE UniquePtr&& Transfer()
 	{
 		return std::move(self);
+	}
+
+	void ToArchive(ArchNode& node) const
+	{
+		if (_value)
+		{
+			auto& child = node.AddNode(_type->GetName());
+			::ToArchive(*self, child);
+		}
+		else
+		{
+			node.SetValue("null");
+		}
 	}
 
 	/////////////////////
