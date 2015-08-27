@@ -537,63 +537,63 @@ using TypeInfoTypeOf = std::decay_t<decltype(TypeOf<T>())>;
 
 /** Base reflection declarations for reflectable types.
 * NOTE: In most cases you shouldn't use this directly, instead use one of the REFLECTABLE_X macros defined below. */
-#define REFLECTION_DECL(T)                                  \
-public:                                                     \
-	using TypeInfoType = T;                                 \
+#define REFLECTION_DECL(T)									\
+public:														\
+	using TypeInfoType = T;									\
 	static const TypeInfoType StaticTypeInfo;
 
 /** Put this macro in the Information section of a struct you'd like to reflect.
 * NOTE: Any struct that uses this macro must also use the 'BUILD_REFLECTION' macro in their source file. */
-#define REFLECTABLE_STRUCT                                  \
-	REFLECTION_DECL(::StructInfo)                           \
-	FORCEINLINE const ::StructInfo& GetType() const         \
-	{                                                       \
-		return StaticTypeInfo;                              \
+#define REFLECTABLE_STRUCT									\
+	REFLECTION_DECL(::StructInfo)							\
+	FORCEINLINE const ::StructInfo& GetType() const			\
+	{														\
+		return StaticTypeInfo;								\
 	}
 
 /** Put this macro in the Information section of a class you'd like to reflect.
 * NOTE: Any class that uses this macro must also use the 'EXTENDS' macro in the Information section of their
 * header, as well as the 'BUILD_REFLECTION' macro in their source file. */
-#define REFLECTABLE_CLASS                           \
-	REFLECTION_DECL(::ClassInfo)                    \
-	const ::ClassInfo& GetType() const override     \
-	{                                               \
-		return StaticTypeInfo;                      \
+#define REFLECTABLE_CLASS							\
+	REFLECTION_DECL(::ClassInfo)					\
+	const ::ClassInfo& GetType() const override		\
+	{												\
+		return StaticTypeInfo;						\
 	}
 
 /** Put this macro in the Information section of an interface you'd like to reflect.
 * NOTE: Any interface that uses this macro @TODO: Finish documentation here */
-#define REFLECTABLE_INTERFACE                               \
+#define REFLECTABLE_INTERFACE								\
 	REFLECTION_DECL(::InterfaceInfo)
 
 // @TODO: Documentation
-#define REFLECTABLE_ENUM(E)                                 \
-namespace Implementation                                    \
-{                                                           \
-	template <>                                             \
-	struct THIS_MODULE_API TypeOf < E >	final               \
-	{                                                       \
-		static const ::EnumInfo StaticTypeInfo;             \
-		FORCEINLINE static const ::EnumInfo& Function()     \
-		{                                                   \
-			return StaticTypeInfo;                          \
-		}                                                   \
-		FORCEINLINE static const ::EnumInfo& Function(E)    \
-		{                                                   \
-			return StaticTypeInfo;                          \
-		}                                                   \
-	};                                                      \
+#define REFLECTABLE_ENUM(E)									\
+namespace Implementation									\
+{															\
+	template <>												\
+	struct THIS_MODULE_API TypeOf < E >	final				\
+	{														\
+		static const ::EnumInfo StaticTypeInfo;				\
+		FORCEINLINE static const ::EnumInfo& Function()		\
+		{													\
+			return StaticTypeInfo;							\
+		}													\
+		FORCEINLINE static const ::EnumInfo& Function(E)	\
+		{													\
+			return StaticTypeInfo;							\
+		}													\
+	};														\
 }
 
 
 /** Put this macro in the Information section of a class you'd like to reflect.
 * NOTE: All reflectable classes must use this macro.
 * 'T': The class which this class extends. */
-#define EXTENDS(T)                                  \
-public:                                             \
+#define EXTENDS(T)									\
+public:												\
 	using Base = T;
 
 /** Put this macro in the Information section of every reflectable class that implements interfaces. */
-#define IMPLEMENTS(...)                                     \
-public:                                                     \
+#define IMPLEMENTS(...)										\
+public:														\
 	using Interfaces = stdEXT::type_sequence<__VA_ARGS__>;
