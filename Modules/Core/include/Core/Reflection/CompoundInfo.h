@@ -354,7 +354,7 @@ private:
 		property._fromArchive = [field, setter](void* owner, const ArchNode& node) -> void
 		{
 			auto pOwner = static_cast<CompoundT*>(owner);
-			auto value = owner->*field;
+			auto value = pOwner->*field;
 			FromArchive(value, node);
 			(pOwner->*setter)(value);
 		};
