@@ -35,3 +35,8 @@ void Object::ToArchive(ArchNode& node) const
 {
 	Implementation::Default::ToArchive(self, node);
 }
+
+void Object::FromArchive(const ArchNode& node)
+{
+	Implementation::Default::FromArchive(self, node);
+}

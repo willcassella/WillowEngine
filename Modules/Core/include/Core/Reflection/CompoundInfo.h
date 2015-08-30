@@ -2,6 +2,7 @@
 #pragma once
 
 #include "../Containers/Table.h"
+#include "../Console.h"
 #include "TypeInfo.h"
 #include "PropertyInfo.h"
 
@@ -83,7 +84,7 @@ public:
 	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
 	auto& AddProperty(
 		CString name, 
-		CString description, 
+		CString description,
 		FieldT CompoundT::*field,
 		PropertyFlags flags = PF_None)
 	{
@@ -115,13 +116,10 @@ public:
 			property._setter = nullptr;
 		}
 
-		ImplementToString(property, field);
-		property._fromString = [field](void* owner, const String& string) -> String
-		{
-			auto pOwner = static_cast<CompoundT*>(owner);
-			return FromString(pOwner->*field, string);
-		};
-		ImplementToArchive(property, field);
+		ImplementToString(property, field);		// Field properties may be formatted as a String
+		ImplementFromString(property, field);	// Field properties may be set from a String
+		ImplementToArchive(property, field);	// Field properties may be serialized to an Archive
+		ImplementFromArchive(property, field);	// Field properties may be serialized from an Archive
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(property));
 		return static_cast<TypeInfoBuilder<CompoundT>&>(self);
@@ -144,11 +142,12 @@ public:
 		property._ownerType = &TypeOf<CompoundT>();
 		property._access = PropertyAccess::ReadOnlyProperty;
 
-		property._fieldGetter = nullptr;
-		property._setter = nullptr;
-		ImplementToString(property, field);
-		property._fromString = nullptr;
-		ImplementToArchive(property, field);
+		property._fieldGetter = nullptr;	// ReadOnly properties are not fields, so no field getter
+		property._setter = nullptr;			// ReadOnly properties cannot be set
+		ImplementToString(property, field);	// ReadOnly properties may be formatted as a String
+		property._fromString = nullptr;		// Readonly properties may not be set from a String
+		ImplementToArchive(property, field);// ReadOnly properties may be serialized to an archive (though not much point...)
+		property._fromArchive = nullptr;	// ReadOnly properties may not be deserialized from an archive
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(property));
 		return static_cast<TypeInfoBuilder<CompoundT>&>(self);
@@ -173,11 +172,12 @@ public:
 		property._ownerType = &TypeOf<CompoundT>();
 		property._access = PropertyAccess::Property;
 
-		property._fieldGetter = nullptr;
-		ImplementSetter(property, setter);
-		ImplementToString(property, field);
-		ImplementFromString(property, field, setter);
-		ImplementToArchive(property, field);
+		property._fieldGetter = nullptr;				// Properties are not fields, so no field getter
+		ImplementSetter(property, setter);				// Properties are settable
+		ImplementToString(property, field);				// Properties may be formatted as a String
+		ImplementFromString(property, field, setter);	// Properties may be set from a String
+		ImplementToArchive(property, field);			// Properties may be serialized to an Archive
+		ImplementFromArchive(property, field, setter);	// Properties may be deserialized from an Archive
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(property));
 		return static_cast<TypeInfoBuilder<CompoundT>&>(self);
@@ -199,11 +199,12 @@ public:
 		property._ownerType = &TypeOf<CompoundT>();
 		property._access = PropertyAccess::ReadOnlyProperty;
 
-		property._fieldGetter = nullptr;
-		property._setter = nullptr;
-		ImplementToString(property, getter);
-		property._fromString = nullptr;
-		ImplementToArchive(property, getter);
+		property._fieldGetter = nullptr;		// ReadOnly properties are not fields, so no field getter
+		property._setter = nullptr;				// ReadOnly properties cannot be set
+		ImplementToString(property, getter);	// ReadOnly properties may be formatted as a String
+		property._fromString = nullptr;			// ReadOnly properties may not be set from a String
+		ImplementToArchive(property, getter);	// ReadOnly properties may be serialized to an Archive (though not much point...)
+		property._fromArchive = nullptr;		// ReadOnly properties may not be deserialized from an Archive
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(property));
 		return static_cast<TypeInfoBuilder<CompoundT>&>(self);
@@ -227,11 +228,12 @@ public:
 		property._ownerType = &TypeOf<CompoundT>();
 		property._access = PropertyAccess::Property;
 
-		property._fieldGetter = nullptr;
-		ImplementSetter(property, setter);
-		ImplementToString(property, getter);
-		ImplementFromString(property, getter, setter);
-		ImplementToString(property, getter);
+		property._fieldGetter = nullptr;				// Properties are not fields, so no field getter
+		ImplementSetter(property, setter);				// Properties may be set
+		ImplementToString(property, getter);			// Properties may be formatted as a String
+		ImplementFromString(property, getter, setter);	// Properties may be set from a String
+		ImplementToArchive(property, getter);			// Properties may be serialized to an Archive
+		ImplementFromArchive(property, getter, setter);	// Properties may be deserialized from an Archive
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(property));
 		return static_cast<TypeInfoBuilder<CompoundT>&>(self);
@@ -270,6 +272,17 @@ private:
 		{
 			auto pOwner = static_cast<const CompoundT*>(owner);
 			return ToString((pOwner->*getter)());
+		};
+	}
+
+	/** Implements the 'FromString' function with a field. */
+	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
+	void ImplementFromString(PropertyInfo& property, FieldT CompoundT::*field)
+	{
+		property._fromString = [field](void* owner, const String& string) -> String
+		{
+			auto pOwner = static_cast<CompoundT*>(owner);
+			return FromString(pOwner->*field, string);
 		};
 	}
 
@@ -323,6 +336,43 @@ private:
 		};
 	}
 
+	/** Implements the 'FromArchive' function with a field. */
+	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
+	void ImplementFromArchive(PropertyInfo& property, FieldT CompoundT::*field)
+	{
+		property._fromArchive = [field](void* owner, const ArchNode& node) -> void
+		{
+			auto pOwner = static_cast<CompoundT*>(owner);
+			FromArchive(pOwner->*field, node);
+		};
+	}
+
+	/** Implements the 'FromArchive' function with a field getter and method setter. */
+	template <typename FieldT, typename RetT, typename SetT, WHERE(!std::is_function<FieldT>::value)>
+	void ImplementFromArchive(PropertyInfo& property, FieldT CompoundT::*field, RetT (CompoundT::*setter)(SetT))
+	{
+		property._fromArchive = [field, setter](void* owner, const ArchNode& node) -> void
+		{
+			auto pOwner = static_cast<CompoundT*>(owner);
+			auto value = owner->*field;
+			FromArchive(value, node);
+			(pOwner->*setter)(value);
+		};
+	}
+
+	/** Implements the 'FromArchive' function with a method getter and method setter. */
+	template <typename GetT, typename RetT, typename SetT>
+	void ImplementFromArchive(PropertyInfo& property, GetT (CompoundT::*getter)() const, RetT (CompoundT::*setter)(SetT))
+	{
+		property._fromArchive = [getter, setter](void* owner, const ArchNode& node) -> void
+		{
+			auto pOwner = static_cast<CompoundT*>(owner);
+			auto value = (pOwner->*getter)();
+			FromArchive(value, node);
+			(pOwner->*setter)(value);
+		};
+	}
+
 	/** Assertions common to all types of properties. */
 	template <typename PropertyT>
 	void CommonAsserts() const
@@ -366,19 +416,19 @@ namespace Implementation
 			if(std::is_class<T>::value)
 			{
 				// Type is compound, serialize its properties
-				const auto& pType = reinterpret_cast<const CompoundInfo&>(::TypeOf(value));
+				const auto& type = reinterpret_cast<const CompoundInfo&>(::TypeOf(value));
+				
+				// Iterate through all properties
+				for (const auto& propInfo : type.GetProperties())
 				{
-					for (const auto& propInfo : pType.GetProperties())
+					// If we can serialize this property
+					if (propInfo.GetAccess() != PropertyAccess::ReadOnlyProperty && !(propInfo.GetFlags() & PF_NoSerialize))
 					{
-						// If we can serialize this property
-						if (propInfo.GetAccess() != PropertyAccess::ReadOnlyProperty && !(propInfo.GetFlags() & PF_NoSerialize))
-						{
-							// Add a node for the property, naming it after the property
-							auto& propNode = node.AddNode(propInfo.GetName());
+						// Add a node for the property, naming it after the property
+						auto& propNode = node.AddNode(propInfo.GetName());
 
-							// Serialize the property to the node TODO: Figure out why I need to explicitly initialize "ImmutableVariant" here
-							propInfo.Get(ImmutableVariant{ value }).ToArchive(propNode);
-						}
+						// Serialize the property to the node TODO: Figure out why I need to explicitly initialize "ImmutableVariant" here
+						propInfo.Get(ImmutableVariant{ value }).ToArchive(propNode);
 					}
 				}
 			}
@@ -386,6 +436,37 @@ namespace Implementation
 			{
 				// Type is primitive, just serialize it to a string
 				node.SetValue(::ToString(value));
+			}
+		}
+
+		/** Default implementation of 'FromArchive' */
+		template <typename T>
+		void FromArchive(T& value, const ArchNode& node)
+		{
+			if (std::is_class<T>::value)
+			{
+				const auto& type = reinterpret_cast<const CompoundInfo&>(::TypeOf(value));
+
+				// Iterate through all child nodes
+				for (auto pChild : node.GetSubNodes())
+				{
+					// Try to find the property that this node references
+					if (auto prop = type.FindProperty(pChild->GetName()))
+					{
+						// Deserialize the property
+						prop->Get(Variant{ value }).FromArchive(*pChild);
+					}
+					else
+					{
+						// This property does not exist, give a warning
+						Console::Warning("The property '@' does not exist on the type '@'.", pChild->GetName(), type);
+					}
+				}
+			}
+			else
+			{
+				// This node must hold a value, get the value from this node
+				::FromString(value, node.GetValue());
 			}
 		}
 	}

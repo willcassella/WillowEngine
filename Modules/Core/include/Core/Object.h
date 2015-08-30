@@ -47,6 +47,9 @@ public:
 	/** Serializes the state of this Object to the given archive node. */
 	virtual void ToArchive(ArchNode& node) const;
 
+	/** Deserializes the state of this Object from the given archive node. */
+	virtual void FromArchive(const ArchNode& node);
+
 	/////////////////////
 	///   Operators   ///
 public:

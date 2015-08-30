@@ -40,8 +40,14 @@ public:
 	/** Adds a subnode to this node. */
 	virtual ArchNode& AddNode(String name) = 0;
 
+	/** Returns an array to all subnodes of this node */
+	virtual Array<const ArchNode*> GetSubNodes() const = 0;
+
 	/** Sets the value of this node. Once the value has been set, you may not add subnodes to this node. */
 	virtual void SetValue(String value) = 0;
+
+	/** Gets the value of this node. Nodes that have children may not have values. */
+	virtual String GetValue() const = 0;
 
 	////////////////
 	///   Data   ///

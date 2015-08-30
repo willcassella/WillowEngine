@@ -7,6 +7,7 @@
 #include "../Operations/ToString.h"
 #include "../Operations/FromString.h"
 #include "../Operations/ToArchive.h"
+#include "../Operations/FromArchive.h"
 #include "Reflection.h"
 
 /////////////////
@@ -163,6 +164,7 @@ private:
 		String(*toStringImplementation)(const void*);
 		String(*fromStringImplementation)(void*, const String&);
 		void(*toArchiveImplementation)(const void*, ArchNode&);
+		void(*fromArchiveImplementation)(void*, const ArchNode&);
 		uint32 size;
 		bool isCompound;
 		bool isAbstract;
@@ -230,6 +232,10 @@ public:
 		_data.toArchiveImplementation = [](const void* value, ArchNode& node) -> void
 		{
 			Implementation::ToArchive<T>::Function(*static_cast<const T*>(value), node);
+		};
+		_data.fromArchiveImplementation = [](void* value, const ArchNode& node) -> void
+		{
+			Implementation::FromArchive<T>::Function(*static_cast<T*>(value), node);
 		};
 
 		_data.size = sizeof(T);

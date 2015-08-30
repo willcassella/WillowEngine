@@ -77,7 +77,7 @@ String Property::ToString() const
 	return _info->_toString(_owner);
 }
 
-String Property::FromString(const String& string) const
+String Property::FromString(const String& string)
 {
 	// Read only properties may not have mutable operation performed on them.
 	assert(_info->GetAccess() != PropertyAccess::ReadOnlyProperty);
@@ -90,8 +90,14 @@ void Property::ToArchive(ArchNode& node) const
 	_info->_toArchive(_owner, node);
 }
 
+void Property::FromArchive(const ArchNode& node)
+{
+	assert(_info->GetAccess() != PropertyAccess::ReadOnlyProperty);
 
-void Property::SetValue(ImmutableVariant value) const
+	_info->_fromArchive(_owner, node);
+}
+
+void Property::SetValue(ImmutableVariant value)
 {
 	assert(value.GetType().IsCastableTo(_info->GetPropertyType()));
 	assert(_info->GetAccess() != PropertyAccess::ReadOnlyProperty && _info->GetAccess() != PropertyAccess::NoSetField);
@@ -99,12 +105,20 @@ void Property::SetValue(ImmutableVariant value) const
 	_info->_setter(_owner, value.GetValue());
 }
 
-Variant Property::GetField() const
+Variant Property::GetField()
 {
 	assert(_info->GetAccess() == PropertyAccess::Field || _info->GetAccess() == PropertyAccess::NoSetField);
 
 	auto value = const_cast<void*>(_info->_fieldGetter(_owner));
 	return Variant(value, _info->GetPropertyType());
+}
+
+ImmutableVariant Property::GetField() const
+{
+	assert(_info->GetAccess() == PropertyAccess::Field || _info->GetAccess() == PropertyAccess::NoSetField);
+
+	auto value = _info->_fieldGetter(_owner);
+	return ImmutableVariant(value, _info->GetPropertyType());
 }
 
 String ImmutableProperty::ToString() const
@@ -116,7 +130,6 @@ void ImmutableProperty::ToArchive(ArchNode& node) const
 {
 	_info->_toArchive(_owner, node);
 }
-
 
 ImmutableVariant ImmutableProperty::GetField() const
 {

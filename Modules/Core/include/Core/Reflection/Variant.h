@@ -37,8 +37,14 @@ public:
 	///   Methods   ///
 public:
 
-	/** Returns the referenced value */
-	FORCEINLINE void* GetValue() const
+	/** Returns the referenced value. */
+	FORCEINLINE void* GetValue()
+	{
+		return _value;
+	}
+
+	/** Returns the referenced value. */
+	FORCEINLINE const void* GetValue() const
 	{
 		return _value;
 	}
@@ -57,7 +63,7 @@ public:
 	}
 
 	// TODO: Documentation
-	FORCEINLINE String FromString(const String& string) const
+	FORCEINLINE String FromString(const String& string)
 	{
 		assert(_value != nullptr);
 		return _type->_data.fromStringImplementation(_value, string);
@@ -68,6 +74,13 @@ public:
 	{
 		assert(_value != nullptr);
 		_type->_data.toArchiveImplementation(_value, node);
+	}
+
+	// TODO: Documentation
+	FORCEINLINE void FromArchive(const ArchNode& node)
+	{
+		assert(_value != nullptr);
+		_type->_data.fromArchiveImplementation(_value, node);
 	}
 
 	/////////////////////
@@ -213,4 +226,7 @@ FORCEINLINE const TargetT* Cast(ImmutableVariant value)
 }
 
 /** You cannot call 'FromString' on an ImmutableVariant. */
-String FromString(ImmutableVariant v) = delete;
+String FromString(ImmutableVariant) = delete;
+
+/** You cannot call 'FromArchive' on an ImmutableVariant. */
+void FromArchive(ImmutableVariant) = delete;

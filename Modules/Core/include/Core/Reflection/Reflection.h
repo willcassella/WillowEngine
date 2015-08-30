@@ -585,7 +585,6 @@ namespace Implementation									\
 	};														\
 }
 
-
 /** Put this macro in the Information section of a class you'd like to reflect.
 * NOTE: All reflectable classes must use this macro.
 * 'T': The class which this class extends. */

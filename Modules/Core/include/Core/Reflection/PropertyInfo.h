@@ -127,6 +127,7 @@ private:
 	std::function<String (const void*)> _toString;
 	std::function<String (void*, const String&)> _fromString;
 	std::function<void (const void*, ArchNode&)> _toArchive;
+	std::function<void (void*, const ArchNode&)> _fromArchive;
 	PropertyFlags _flags;
 	PropertyAccess _access;
 };
@@ -161,18 +162,25 @@ public:
 	String ToString() const;
 
 	/** Parses this Property from a String, a returns the remainder of the string. */
-	String FromString(const String& string) const;
+	String FromString(const String& string);
 
 	/** Serializes this property to the given archive node. */
 	void ToArchive(ArchNode& node) const;
 
+	/** Deserializes this property from the given archive node. */
+	void FromArchive(const ArchNode& node);
+
 	/** Sets the value of this property.
 	* WARNING: If the access level of this property is 'ReadOnlyProperty', this function will fail. */
-	void SetValue(ImmutableVariant value) const;
+	void SetValue(ImmutableVariant value);
 
 	/** Accesses this property as a field.
 	* WARNING: If the access level of this property is not 'Field', this function will fail. */
-	Variant GetField() const;
+	Variant GetField();
+
+	/** Accesses this property as a field.
+	* WARNING: If the access level of this property is not 'Field', this function will fail. */
+	ImmutableVariant GetField() const;
 
 	////////////////
 	///   Data   ///
@@ -244,6 +252,9 @@ ImmutableProperty PropertyInfo::Get(const T& owner)
 
 /** You can't call 'FromString' on an ImmutableProperty. */
 String FromString(ImmutableProperty) = delete;
+
+/** You can't call 'FromArchive' on an ImmutableProperty. */
+void FromArchive(ImmutableProperty) = delete;
 
 //////////////////////
 ///   Reflection   ///

@@ -222,6 +222,9 @@
     <ClInclude Include="include\Core\ArchNode.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\Core\Operations\FromArchive.h">
+      <Filter>include\Operations</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\String.cpp">
