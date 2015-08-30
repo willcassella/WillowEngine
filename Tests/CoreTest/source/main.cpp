@@ -35,10 +35,27 @@ public:
 		return rChild;
 	}
 
+	Array<const ArchNode*> GetSubNodes() const override
+	{
+		Array<const ArchNode*> result(_children.Size());
+
+		for (const auto& node : _children)
+		{
+			result.Add(node.Get());
+		}
+
+		return result;
+	}
+
 	void SetValue(String value) override
 	{
 		assert(_children.IsEmpty()); // Value nodes may not have children
 		_value = std::move(value);
+	}
+
+	String GetValue() const override
+	{
+		return _value;
 	}
 
 	////////////////
