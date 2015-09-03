@@ -2,7 +2,7 @@ The engine is currently divided into several major bits: "Modules", "Services", 
 
 ## Modules and Services
 
-The distinction between Modules and Services are mostly semantic. Modules are key parts of the engine that basically nothing could function without, while Services are external ... services that provide features that are considered extraneous to the core behavior of the engine. Basically any engine feature that isn't actually needed to successfully simulate the game world is broken off as a Service. At the moment that only includes "GLRender", as rendering is not considered something necessary to successfully simulate the game. In the future services will include Audio, debugging and profiling tools, and other extensions to the engine.
+The distinction between Modules and Services is mostly semantic. Modules are key parts of the engine that basically nothing could function without, while Services are external ... services that provide features that are considered extraneous to the core behavior of the engine. Basically any engine feature that isn't actually needed to successfully simulate the game world is broken off as a Service. At the moment that only includes "GLRender", as rendering is not considered something necessary to successfully simulate the game. In the future services will include Audio, debugging and profiling tools, and other extensions to the engine.
 
 ## Runtimes
 
