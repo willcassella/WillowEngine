@@ -10,8 +10,7 @@
 enum PropertyFlags : uint32
 {
 	PF_None = 0,
-	PF_NoSerialize = 1 << 0,
-	PF_Set_SerializeOnly = 1 << 1
+	PF_Transient = 1 << 0,
 };
 
 /** Enumeration of the different access types for properties. Each is mutually exclusive. */
@@ -126,8 +125,8 @@ private:
 	std::function<void (void*, const void*)> _setter;
 	std::function<String (const void*)> _toString;
 	std::function<String (void*, const String&)> _fromString;
-	std::function<void (const void*, ArchNode&)> _toArchive;
-	std::function<void (void*, const ArchNode&)> _fromArchive;
+	std::function<void (const void*, ArchiveNode&)> _toArchive;
+	std::function<void (void*, const ArchiveNode&)> _fromArchive;
 	PropertyFlags _flags;
 	PropertyAccess _access;
 };
@@ -165,10 +164,10 @@ public:
 	String FromString(const String& string);
 
 	/** Serializes this property to the given archive node. */
-	void ToArchive(ArchNode& node) const;
+	void ToArchive(ArchiveNode& node) const;
 
 	/** Deserializes this property from the given archive node. */
-	void FromArchive(const ArchNode& node);
+	void FromArchive(const ArchiveNode& node);
 
 	/** Sets the value of this property.
 	* WARNING: If the access level of this property is 'ReadOnlyProperty', this function will fail. */
@@ -218,7 +217,7 @@ public:
 	String ToString() const;
 
 	/** Serializes this property to the given archive node. */
-	void ToArchive(ArchNode& node) const;
+	void ToArchive(ArchiveNode& node) const;
 
 	/** Accesses this property as a field.
 	* WARNING: If the access level of this property is not 'Field', this function will fail. */

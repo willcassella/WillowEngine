@@ -11,7 +11,8 @@ BUILD_REFLECTION(Vec4)
 .AddProperty("X", "", &Vec4::X)
 .AddProperty("Y", "", &Vec4::Y)
 .AddProperty("Z", "", &Vec4::Z)
-.AddProperty("W", "", &Vec4::W);
+.AddProperty("W", "", &Vec4::W)
+.IsStable();
 
 ////////////////////////////
 ///   Static Instances   ///

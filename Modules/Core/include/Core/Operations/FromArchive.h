@@ -2,7 +2,7 @@
 #pragma once
 
 #include "../Forwards/Operations.h"
-#include "../ArchNode.h"
+#include "../ArchiveNode.h"
 
 //////////////////////////
 ///   Implementation   ///
@@ -17,14 +17,14 @@ namespace Implementation
 
 		/** Implementation for if the type defines its own 'FromArchive' function (preferred). */
 		template <typename F>
-		FORCEINLINE static auto Impl(Preferred, F& value, const ArchNode& node) -> decltype(value.FromArchive(node))
+		FORCEINLINE static auto Impl(Preferred, F& value, const ArchiveNode& node) -> decltype(value.FromArchive(node))
 		{
 			return value.FromArchive(node);
 		}
 
 		/** Implementation for if the type does not define its own 'FromArchive' function (fallback). */
 		template <typename F>
-		FORCEINLINE static auto Impl(Fallback, F& value, const ArchNode& node) -> void
+		FORCEINLINE static auto Impl(Fallback, F& value, const ArchiveNode& node) -> void
 		{
 			Default::FromArchive(value, node);
 		}
@@ -32,7 +32,7 @@ namespace Implementation
 	public:
 
 		/** Entry point for the implementation. */
-		FORCEINLINE static void Function(T& value, const ArchNode& node)
+		FORCEINLINE static void Function(T& value, const ArchiveNode& node)
 		{
 			Impl(0, value, node);
 		}
@@ -44,7 +44,7 @@ namespace Implementation
 
 /** TODO: Documentation */
 template <typename T>
-FORCEINLINE void FromArchive(T& value, const ArchNode& node)
+FORCEINLINE void FromArchive(T& value, const ArchiveNode& node)
 {
 	Implementation::FromArchive<T>::Function(value, node);
 }

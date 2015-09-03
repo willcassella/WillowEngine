@@ -59,7 +59,7 @@ public:
 public:
 
 	Event& operator=(const Event& copy) = delete;
-	Event& operator=(Event&& move) = delete;
+	Event& operator=(Event&& move) = default;
 
 	////////////////
 	///   Data   ///

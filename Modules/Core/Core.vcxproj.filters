@@ -219,11 +219,11 @@
     <ClInclude Include="include\Core\Operations\ToArchive.h">
       <Filter>include\Operations</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\ArchNode.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Operations\FromArchive.h">
       <Filter>include\Operations</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\ArchiveNode.h">
+      <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -316,9 +316,6 @@
     </ClCompile>
     <ClCompile Include="source\Reflection\EnumInfo.cpp">
       <Filter>source\Reflection</Filter>
-    </ClCompile>
-    <ClCompile Include="source\ArchNode.cpp">
-      <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

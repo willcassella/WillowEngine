@@ -35,11 +35,11 @@ String Parse(const String& string, const String& format, T& value, MoreT& ... mo
 
 /** Defined in 'Operations/ToArchive.h' */
 template <typename T>
-void ToArchive(const T& value, ArchNode& node);
+void ToArchive(const T& value, ArchiveNode& node);
 
 /** Defined in 'Operations/FromArchive.h' */
 template <typename T>
-void FromArchive(T& value, const ArchNode& node);
+void FromArchive(T& value, const ArchiveNode& node);
 
 //////////////////////////
 ///   Implementation   ///
@@ -62,10 +62,10 @@ namespace Implementation
 
 		/** Defined in 'Reflection/CompoundInfo.h' */
 		template <typename T>
-		void ToArchive(const T& value, ArchNode& node);
+		void ToArchive(const T& value, ArchiveNode& node);
 
 		/** Defined in 'Reflection/CompoundInfo.h' */
 		template <typename T>
-		void FromArchive(T& value, const ArchNode& node);
+		void FromArchive(T& value, const ArchiveNode& node);
 	}
 }

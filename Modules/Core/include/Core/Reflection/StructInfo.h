@@ -23,6 +23,9 @@ public:
 	REFLECTABLE_CLASS
 	EXTENDS(CompoundInfo)
 
+	template <typename T, class TypeInfoT>
+	friend struct TypeInfoBuilder;
+
 	////////////////////////
 	///   Constructors   ///
 public:
@@ -30,7 +33,7 @@ public:
 	// @TODO: Documentation
 	template <class StructT>
 	StructInfo(const TypeInfoBuilder<StructT, StructInfo>& builder)
-		: Base(builder)
+		: Base(builder), _data(std::move(builder._data))
 	{
 		static_assert(!std::is_polymorphic<StructT>::value, "Structs may not be polymorphic");
 	}
@@ -41,6 +44,18 @@ public:
 
 	/** Returns whether this type is castable (via 'reinterpret_cast') to the given type */
 	bool IsCastableTo(const TypeInfo& type) const override;
+
+	/** Returns whether this struct is stable (its memory layout is unlikely to ever change). */
+	bool IsStable() const final override;
+
+	////////////////
+	///   Data   ///
+private:
+
+	struct Data
+	{
+		bool isStable = false;
+	} _data;
 };
 
 /** Generic TypeInfoBuilder for StructInfo */
@@ -62,6 +77,23 @@ public:
 	{
 		// All done
 	}
+
+	///////////////////
+	///   Methods   ///
+public:
+
+	// TODO: Documentation
+	const auto& IsStable()
+	{
+		_data.isStable = true;
+		return this->SelfAsMostSpecificTypeInfoBuilder();
+	}
+
+	////////////////
+	///   Data   ///
+private:
+
+	mutable StructInfo::Data _data;
 };
 
 //////////////////////////

@@ -10,23 +10,22 @@
 ///   Reflection   ///
 
 BUILD_REFLECTION(PropertyInfo)
-.AddProperty("Name", "The name of this property", &PropertyInfo::_name, nullptr)
+.AddProperty("Name", "The name of this property.", &PropertyInfo::_name, nullptr)
 .AddProperty("Description", "A description of this property.", &PropertyInfo::_description, nullptr)
 .AddProperty("Flags", "The flags on this property.", &PropertyInfo::_flags, nullptr)
 .AddProperty("Owner Type", "The type that owns this property.", &PropertyInfo::_ownerType, nullptr)
 .AddProperty("Property Type", "What type this property is.", &PropertyInfo::_propertyType, nullptr);
 
-ENUM_REFLECTION(PropertyFlags)
+BUILD_ENUM_REFLECTION(PropertyFlags)
 .IsBitFlag()
-.AddValue<PF_None>("None")
-.AddValue<PF_NoSerialize>("No Serialize")
-.AddValue<PF_Set_SerializeOnly>("Set Serialize-Only");
+.AddValue("None", "This property has no flags.", PF_None)
+.AddValue("Transient", "This property's value is unimportant, and should not be stored.", PF_Transient);
 
-ENUM_REFLECTION(PropertyAccess)
-.AddValue<PropertyAccess::Field>("Field")
-.AddValue<PropertyAccess::NoSetField>("No-Set Field")
-.AddValue<PropertyAccess::Property>("Property")
-.AddValue<PropertyAccess::ReadOnlyProperty>("Read-Only Property");
+BUILD_ENUM_REFLECTION(PropertyAccess)
+.AddValue("Field", "This property is a field.", PropertyAccess::Field)
+.AddValue("No-Set Field", "This property is a field, with a disabled copy-assignment operator.", PropertyAccess::NoSetField)
+.AddValue("Property", "This property is a property with a custom getter and/or setter.", PropertyAccess::Property)
+.AddValue("Read-Only Property", "This property is read-only, and may not be set.", PropertyAccess::ReadOnlyProperty);
 
 ////////////////////////
 ///   Constructors   ///
@@ -85,12 +84,12 @@ String Property::FromString(const String& string)
 	return _info->_fromString(_owner, string);
 }
 
-void Property::ToArchive(ArchNode& node) const
+void Property::ToArchive(ArchiveNode& node) const
 {
 	_info->_toArchive(_owner, node);
 }
 
-void Property::FromArchive(const ArchNode& node)
+void Property::FromArchive(const ArchiveNode& node)
 {
 	assert(_info->GetAccess() != PropertyAccess::ReadOnlyProperty);
 
@@ -126,7 +125,7 @@ String ImmutableProperty::ToString() const
 	return _info->_toString(_owner);
 }
 
-void ImmutableProperty::ToArchive(ArchNode& node) const
+void ImmutableProperty::ToArchive(ArchiveNode& node) const
 {
 	_info->_toArchive(_owner, node);
 }

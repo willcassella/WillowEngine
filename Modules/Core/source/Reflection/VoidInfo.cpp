@@ -23,8 +23,10 @@ TypeInfoBuilder<void, TypeInfo>::TypeInfoBuilder()
 	_data.constructor = [](byte* /*location*/) -> void {};
 	_data.destructor = [](void* /*value*/) -> void {};
 
-	_data.toStringImplementation = [](const void* /*value*/) -> String { return "void"; };
-	_data.fromStringImplementation = [](void* /*value*/, const String& string) -> String { return string; };
+	_data.toStringImplementation = nullptr;
+	_data.fromStringImplementation = nullptr;
+	_data.toArchiveImplementation = nullptr;
+	_data.fromArchiveImplementation = nullptr;
 
 	_data.size = 0;
 	_data.isCompound = false;
@@ -32,6 +34,7 @@ TypeInfoBuilder<void, TypeInfo>::TypeInfoBuilder()
 	_data.isPolymorphic = false;
 	_data.isConstructible = false;
 	_data.isDestructible = false;
+	_data.isTrivial = false;
 }
 
 ///////////////////
@@ -40,4 +43,9 @@ TypeInfoBuilder<void, TypeInfo>::TypeInfoBuilder()
 bool VoidInfo::IsCastableTo(const TypeInfo& type) const
 {
 	return type == self;
+}
+
+bool VoidInfo::IsStable() const
+{
+	return true;
 }

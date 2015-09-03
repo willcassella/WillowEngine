@@ -35,6 +35,9 @@ public:
 
 	/** Returns whether this type is castable (via reinterpret_cast) to the given type */
 	bool IsCastableTo(const TypeInfo& type) const override;
+
+	// TODO: Docuentation
+	bool IsStable() const final override;
 };
 
 /** Generic TypeInfoBuilder for PrimitiveInfo */

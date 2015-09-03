@@ -29,6 +29,9 @@ public:
 
 	// TODO: Documentation
 	bool IsCastableTo(const TypeInfo& type) const override;
+
+	// TODO: Documentation
+	bool IsStable() const override;
 };
 
 // TODO: Documentation

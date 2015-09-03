@@ -46,6 +46,11 @@ bool ClassInfo::IsCastableTo(const TypeInfo& type) const
 	}
 }
 
+bool ClassInfo::IsStable() const
+{
+	return false;
+}
+
 Array<PropertyInfo> ClassInfo::GetProperties() const
 {
 	if (GetBase())

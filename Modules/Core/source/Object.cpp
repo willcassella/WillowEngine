@@ -31,12 +31,12 @@ String Object::FromString(const String& string)
 	return Implementation::Default::FromString(self, string);
 }
 
-void Object::ToArchive(ArchNode& node) const
+void Object::ToArchive(ArchiveNode& node) const
 {
 	Implementation::Default::ToArchive(self, node);
 }
 
-void Object::FromArchive(const ArchNode& node)
+void Object::FromArchive(const ArchiveNode& node)
 {
 	Implementation::Default::FromArchive(self, node);
 }

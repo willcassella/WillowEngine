@@ -54,8 +54,6 @@ int main(int32 /*argc*/, char** /*argv*/)
 	// Initialize GLFW and get a window
 	GLFWwindow* window = InitGLFW();
 	
-	Console::WriteLine("GLFW Initialized");
-
 	// Make an openGL context in window
 	glfwMakeContextCurrent(window);
 
@@ -171,27 +169,29 @@ void eventLoop(GLFWwindow* window)
 
 		while (lag >= scene.TimeStep)
 		{
+			Vec2 moveAccum;
+			Vec2 lookAccum;
+
 			// Dispatch events
-			float speed = 0.05f;
 			if (glfwGetKey(window, GLFW_KEY_W))
 			{
-				scene.Events.DispatchEvent("MoveForward", speed);
+				moveAccum.Y += 1;
 			}
 			if (glfwGetKey(window, GLFW_KEY_S))
 			{
-				scene.Events.DispatchEvent("MoveForward", -speed);
+				moveAccum.Y -= 1;
 			}
 			if (glfwGetKey(window, GLFW_KEY_D))
 			{
-				scene.Events.DispatchEvent("MoveRight", speed);
+				moveAccum.X += 1;
 			}
 			if (glfwGetKey(window, GLFW_KEY_A))
 			{
-				scene.Events.DispatchEvent("MoveRight", -speed);
+				moveAccum.X -= 1;
 			}
 			if (glfwGetKey(window, GLFW_KEY_SPACE))
 			{
-				scene.Events.DispatchEvent("Poof", 0);
+				scene.Events.DispatchEvent("Poof");
 			}
 			if (glfwGetKey(window, GLFW_KEY_ESCAPE))
 			{
@@ -199,11 +199,15 @@ void eventLoop(GLFWwindow* window)
 			}
 			if (glfwGetKey(window, GLFW_KEY_Q))
 			{
-				scene.Events.DispatchEvent("Spin", speed);
+				scene.Events.DispatchEvent("Spin", 0.5f);
 			}
 
-			scene.Events.DispatchEvent("LookUp", Cursor.Position.Y / 100);
-			scene.Events.DispatchEvent("LookRight", Cursor.Position.X / 100);
+			if (moveAccum != Vec2(0, 0))
+			{
+				scene.Events.DispatchEvent("Move", moveAccum.Normalize());
+			}
+
+			scene.Events.DispatchEvent("Look", Vec2(Cursor.Position.X / 100, Cursor.Position.Y / 100));
 			Cursor.SetPosition(window, 0, 0);
 
 			// Update the scene

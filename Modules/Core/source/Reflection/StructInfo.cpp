@@ -16,3 +16,8 @@ bool StructInfo::IsCastableTo(const TypeInfo& type) const
 	// Structs are never castable to anything other than themselves
 	return type == self;
 }
+
+bool StructInfo::IsStable() const
+{
+	return _data.isStable;
+}

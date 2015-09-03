@@ -3,7 +3,6 @@
 
 #include <Core/Math/Vec3.h>
 #include <Resource/Asset.h>
-#include <Resource/Resources/BinaryFile.h>
 #include "../config.h"
 
 class ENGINE_API StaticMesh final : public Asset

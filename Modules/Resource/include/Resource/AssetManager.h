@@ -2,7 +2,6 @@
 #pragma once
 
 #include <Core/Containers/Table.h>
-#include "Forwards/Reflection.h"
 #include "Path.h"
 #include "Asset.h"
 

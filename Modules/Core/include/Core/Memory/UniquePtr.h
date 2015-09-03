@@ -2,6 +2,7 @@
 #pragma once
 
 #include "../Reflection/StructInfo.h"
+#include "../Application.h"
 
 /////////////////
 ///   Types   ///
@@ -90,16 +91,36 @@ public:
 		return std::move(self);
 	}
 
-	void ToArchive(ArchNode& node) const
+	void ToArchive(ArchiveNode& node) const
 	{
 		if (_value)
 		{
-			auto& child = node.AddNode(TypeOf(*_value).GetName());
-			::ToArchive(*_value, child);
+			if (std::is_polymorphic<T>::value)
+			{
+				// Since T is polymorphic, we need to document value's type
+				auto child = node.AddChild(TypeOf(*_value).GetName().Cstr());
+				::ToArchive(*_value, *child);
+			}
+			else
+			{
+				::ToArchive(*_value, node);
+			}
 		}
 		else
 		{
 			node.SetValue("null");
+		}
+	}
+
+	void FromArchive(const ArchiveNode& node)
+	{
+		if (node.GetValue() != "null")
+		{
+			// TODO: Implement this
+		}
+		else
+		{
+			self = nullptr;
 		}
 	}
 
@@ -229,16 +250,25 @@ public:
 		return std::move(self);
 	}
 
-	void ToArchive(ArchNode& node) const
+	void ToArchive(ArchiveNode& node) const
 	{
 		if (_value)
 		{
-			auto& child = node.AddNode(_type->GetName());
-			::ToArchive(*self, child);
+			auto child = node.AddChild(_type->GetName());
+			::ToArchive(*self, *child);
 		}
 		else
 		{
 			node.SetValue("null");
+		}
+	}
+
+	void FromArchive(const ArchiveNode& node)
+	{
+		// If we can find the type
+		if (auto type = Application::FindType(node.GetName()))
+		{
+			
 		}
 	}
 

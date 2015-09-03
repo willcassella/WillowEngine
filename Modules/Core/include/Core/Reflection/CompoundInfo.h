@@ -69,7 +69,6 @@ public:
 	///   Constructors   ///
 public:
 
-	// TODO: Documentation
 	TypeInfoBuilder(CString name)
 		: TypeInfoBuilderBase<CompoundT, CompoundInfo>(name)
 	{
@@ -122,7 +121,7 @@ public:
 		ImplementFromArchive(property, field);	// Field properties may be serialized from an Archive
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(property));
-		return static_cast<TypeInfoBuilder<CompoundT>&>(self);
+		return this->SelfAsMostSpecificTypeInfoBuilder();
 	}
 
 	/** Adds a readonly property with a field getter. */
@@ -150,7 +149,7 @@ public:
 		property._fromArchive = nullptr;	// ReadOnly properties may not be deserialized from an archive
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(property));
-		return static_cast<TypeInfoBuilder<CompoundT>&>(self);
+		return this->SelfAsMostSpecificTypeInfoBuilder();
 	}
 
 	/** Adds a property with a custom setter. */
@@ -180,7 +179,7 @@ public:
 		ImplementFromArchive(property, field, setter);	// Properties may be deserialized from an Archive
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(property));
-		return static_cast<TypeInfoBuilder<CompoundT>&>(self);
+		return this->SelfAsMostSpecificTypeInfoBuilder();
 	}
 
 	/** Adds a readonly property with a custom getter. */
@@ -207,7 +206,7 @@ public:
 		property._fromArchive = nullptr;		// ReadOnly properties may not be deserialized from an Archive
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(property));
-		return static_cast<TypeInfoBuilder<CompoundT>&>(self);
+		return this->SelfAsMostSpecificTypeInfoBuilder();
 	}
 
 	/** Adds a property with a custom getter and setter. */
@@ -236,7 +235,7 @@ public:
 		ImplementFromArchive(property, getter, setter);	// Properties may be deserialized from an Archive
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(property));
-		return static_cast<TypeInfoBuilder<CompoundT>&>(self);
+		return this->SelfAsMostSpecificTypeInfoBuilder();
 	}
 
 private:
@@ -318,7 +317,7 @@ private:
 	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
 	void ImplementToArchive(PropertyInfo& property, FieldT CompoundT::*field)
 	{
-		property._toArchive = [field](const void* owner, ArchNode& node) -> void
+		property._toArchive = [field](const void* owner, ArchiveNode& node) -> void
 		{
 			auto pOwner = static_cast<const CompoundT*>(owner);
 			ToArchive(pOwner->*field, node);
@@ -329,7 +328,7 @@ private:
 	template <typename GetT>
 	void ImplementToArchive(PropertyInfo& property, GetT (CompoundT::*getter)() const)
 	{
-		property._toArchive = [getter](const void* owner, ArchNode& node) -> void
+		property._toArchive = [getter](const void* owner, ArchiveNode& node) -> void
 		{
 			auto pOwner = static_cast<const CompoundT*>(owner);
 			ToArchive((pOwner->*getter)(), node);
@@ -340,7 +339,7 @@ private:
 	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
 	void ImplementFromArchive(PropertyInfo& property, FieldT CompoundT::*field)
 	{
-		property._fromArchive = [field](void* owner, const ArchNode& node) -> void
+		property._fromArchive = [field](void* owner, const ArchiveNode& node) -> void
 		{
 			auto pOwner = static_cast<CompoundT*>(owner);
 			FromArchive(pOwner->*field, node);
@@ -351,7 +350,7 @@ private:
 	template <typename FieldT, typename RetT, typename SetT, WHERE(!std::is_function<FieldT>::value)>
 	void ImplementFromArchive(PropertyInfo& property, FieldT CompoundT::*field, RetT (CompoundT::*setter)(SetT))
 	{
-		property._fromArchive = [field, setter](void* owner, const ArchNode& node) -> void
+		property._fromArchive = [field, setter](void* owner, const ArchiveNode& node) -> void
 		{
 			auto pOwner = static_cast<CompoundT*>(owner);
 			auto value = pOwner->*field;
@@ -364,7 +363,7 @@ private:
 	template <typename GetT, typename RetT, typename SetT>
 	void ImplementFromArchive(PropertyInfo& property, GetT (CompoundT::*getter)() const, RetT (CompoundT::*setter)(SetT))
 	{
-		property._fromArchive = [getter, setter](void* owner, const ArchNode& node) -> void
+		property._fromArchive = [getter, setter](void* owner, const ArchiveNode& node) -> void
 		{
 			auto pOwner = static_cast<CompoundT*>(owner);
 			auto value = (pOwner->*getter)();
@@ -380,7 +379,7 @@ private:
 		static_assert(!std::is_polymorphic<std::decay_t<PropertyT>>::value, "Compounds may not contain polymorphic types.");
 	}
 
-	/** Assertsion common to field properties */
+	/** Assertions common to field properties */
 	template <typename PropertyT>
 	void FieldAsserts() const
 	{
@@ -411,7 +410,7 @@ namespace Implementation
 	{
 		/** Default implementation of 'ToArchive', prints out properties or 'ToString'. */
 		template <typename T>
-		void ToArchive(const T& value, ArchNode& node)
+		void ToArchive(const T& value, ArchiveNode& node)
 		{
 			if(std::is_class<T>::value)
 			{
@@ -422,33 +421,33 @@ namespace Implementation
 				for (const auto& propInfo : type.GetProperties())
 				{
 					// If we can serialize this property
-					if (propInfo.GetAccess() != PropertyAccess::ReadOnlyProperty && !(propInfo.GetFlags() & PF_NoSerialize))
+					if (propInfo.GetAccess() != PropertyAccess::ReadOnlyProperty && !(propInfo.GetFlags() & PF_Transient))
 					{
 						// Add a node for the property, naming it after the property
-						auto& propNode = node.AddNode(propInfo.GetName());
+						auto propNode = node.AddChild(propInfo.GetName());
 
 						// Serialize the property to the node TODO: Figure out why I need to explicitly initialize "ImmutableVariant" here
-						propInfo.Get(ImmutableVariant{ value }).ToArchive(propNode);
+						propInfo.Get(ImmutableVariant{ value }).ToArchive(*propNode);
 					}
 				}
 			}
 			else
 			{
 				// Type is primitive, just serialize it to a string
-				node.SetValue(::ToString(value));
+				node.SetValue(::ToString(value).Cstr());
 			}
 		}
 
-		/** Default implementation of 'FromArchive' */
+		/** Default implementation of 'FromArchive'. */
 		template <typename T>
-		void FromArchive(T& value, const ArchNode& node)
+		void FromArchive(T& value, const ArchiveNode& node)
 		{
 			if (std::is_class<T>::value)
 			{
 				const auto& type = reinterpret_cast<const CompoundInfo&>(::TypeOf(value));
 
 				// Iterate through all child nodes
-				for (auto pChild : node.GetSubNodes())
+				for (auto pChild : node.GetChildren())
 				{
 					// Try to find the property that this node references
 					if (auto prop = type.FindProperty(pChild->GetName()))

@@ -26,7 +26,7 @@ public:
 public:
 
 	/** World transformation of this GameObject. */
-	struct Transform Transform;
+	::Transform Transform;
 
 	///////////////////
 	///   Methods   ///
@@ -36,12 +36,6 @@ public:
 	FORCEINLINE const String& GetName() const
 	{
 		return _name;
-	}
-
-	/** Sets the name of this GameObject */
-	FORCEINLINE void SetName(String name)
-	{
-		_name = std::move(name);
 	}
 
 	FORCEINLINE Scene& GetScene()

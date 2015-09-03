@@ -2,7 +2,6 @@
 #pragma once
 
 #include "Containers/Array.h"
-#include "Object.h"
 #include "Reflection/TypePtr.h"
 
 struct CORE_API Application final

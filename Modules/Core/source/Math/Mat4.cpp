@@ -7,7 +7,8 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Mat4);
+BUILD_REFLECTION(Mat4)
+.IsStable();
 
 ///////////////////
 ///   Methods   ///

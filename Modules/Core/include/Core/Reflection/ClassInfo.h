@@ -43,13 +43,17 @@ public:
 	/** Returns whether this type castable (via reinterpret_cast) to the given type. */
 	bool IsCastableTo(const TypeInfo& type) const override;
 
+	// TODO: Documentation
+	bool IsStable() const final override;
+
 	/** Returns all properties on this type (including base type properties). */
 	Array<PropertyInfo> GetProperties() const override;
 
 	/** Searches for a property on this type by name (including base type properties). */
 	const PropertyInfo* FindProperty(const String& name) const override;
 
-	/** Returns a pointer to the base class of this class. */
+	/** Returns a pointer to the base class of this class. 
+	* NOTE: In the case of 'Object', this return null. */
 	FORCEINLINE const ClassInfo* GetBase() const
 	{
 		return _data.Base;

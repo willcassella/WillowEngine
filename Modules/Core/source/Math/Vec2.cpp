@@ -9,7 +9,8 @@
 
 BUILD_REFLECTION(Vec2)
 .AddProperty("X", "", &Vec2::X)
-.AddProperty("Y", "", &Vec2::Y);
+.AddProperty("Y", "", &Vec2::Y)
+.IsStable();
 
 ////////////////////////////
 ///   Static Instances   ///

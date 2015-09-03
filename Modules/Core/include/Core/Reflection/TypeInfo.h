@@ -117,15 +117,21 @@ public:
 		return _data.isDestructible;
 	}
 
+	/** Returns whether this type is trivial (it can be safely memcopy'd). */
+	FORCEINLINE bool IsTrivial() const
+	{
+		return _data.isTrivial;
+	}
+
 	/** Returns the constructor for this type.
-	* Returns an empty implementation if this type is not constructible. */
+	* NOTE: Returns an empty implementation if this type is not constructible. */
 	FORCEINLINE Constructor GetConstructor() const
 	{
 		return _data.constructor;
 	}
 
 	/** Returns the destructor for this type.
-	* Returns an empty implementation if this type is not destructible. */
+	* NOTE: Returns an empty implementation if this type is not destructible. */
 	FORCEINLINE Destructor GetDestructor() const
 	{
 		return _data.destructor;
@@ -133,6 +139,9 @@ public:
 
 	/** Returns whether this type is bitwise castable to the given type */
 	virtual bool IsCastableTo(const TypeInfo& type) const = 0;
+
+	/** Returns whether this type is stable (its memory layout is unlikely to ever change). */
+	virtual bool IsStable() const = 0;
 
 private:
 
@@ -163,18 +172,19 @@ private:
 		Destructor destructor;
 		String(*toStringImplementation)(const void*);
 		String(*fromStringImplementation)(void*, const String&);
-		void(*toArchiveImplementation)(const void*, ArchNode&);
-		void(*fromArchiveImplementation)(void*, const ArchNode&);
+		void(*toArchiveImplementation)(const void*, ArchiveNode&);
+		void(*fromArchiveImplementation)(void*, const ArchiveNode&);
 		uint32 size;
 		bool isCompound;
 		bool isAbstract;
 		bool isPolymorphic;
 		bool isConstructible;
 		bool isDestructible;
+		bool isTrivial;
 	} _data;
 };
 
-/** This type soley exists for types that aren't default-constructible, but still wish to be serializeable.
+/** This type soley exists for types that aren't default-constructible, but still wish to be constructible via reflection.
 * Just implement a constructor that accepts an object of this type, and it may be serialized.
 * Think of it like this:
 * - A constructor configures and initializes the object all at once.
@@ -205,18 +215,17 @@ public:
 
 		if (std::is_constructible<T, DynamicInitializer>::value)
 		{
-			_data.constructor = 
-				[](byte* location)
-				{
-					Implementation::Construct<T, DynamicInitializer>::Function(location, DynamicInitializer{});
-				};
+			_data.constructor = [](byte* location) -> void
+			{
+				Implementation::Construct<T, DynamicInitializer>::Function(location, DynamicInitializer{});
+			};
 		}
 		else
 		{
 			_data.constructor = Implementation::Construct<T>::Function;
 		}
 
-		_data.destructor = [](void* value)
+		_data.destructor = [](void* value) -> void
 		{
 			Implementation::Destroy<T>::Function(*static_cast<T*>(value));
 		};
@@ -229,11 +238,11 @@ public:
 		{
 			return Implementation::FromString<T>::Function(*static_cast<T*>(value), string);
 		};
-		_data.toArchiveImplementation = [](const void* value, ArchNode& node) -> void
+		_data.toArchiveImplementation = [](const void* value, ArchiveNode& node) -> void
 		{
 			Implementation::ToArchive<T>::Function(*static_cast<const T*>(value), node);
 		};
-		_data.fromArchiveImplementation = [](void* value, const ArchNode& node) -> void
+		_data.fromArchiveImplementation = [](void* value, const ArchiveNode& node) -> void
 		{
 			Implementation::FromArchive<T>::Function(*static_cast<T*>(value), node);
 		};
@@ -244,6 +253,18 @@ public:
 		_data.isPolymorphic = std::is_polymorphic<T>::value;
 		_data.isConstructible = std::is_constructible<T, DynamicInitializer>::value || std::is_default_constructible<T>::value;
 		_data.isDestructible = std::is_destructible<T>::value;
+		_data.isTrivial = std::is_trivial<T>::value;
+	}
+
+	///////////////////
+	///   Methods   ///
+protected:
+
+	/** Since TypeInfoBuilders use the builder pattern, you can use this to return yourself after each build method, 
+	* without losing compmile-time info. */
+	auto& SelfAsMostSpecificTypeInfoBuilder()
+	{
+		return static_cast<TypeInfoBuilder<T>&>(self);
 	}
 
 	////////////////

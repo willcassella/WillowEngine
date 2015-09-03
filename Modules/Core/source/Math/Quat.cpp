@@ -11,4 +11,5 @@ BUILD_REFLECTION(Quat)
 .AddProperty("X", "", &Quat::X)
 .AddProperty("Y", "", &Quat::Y)
 .AddProperty("Z", "", &Quat::Z)
-.AddProperty("W", "", &Quat::W);
+.AddProperty("W", "", &Quat::W)
+.IsStable();

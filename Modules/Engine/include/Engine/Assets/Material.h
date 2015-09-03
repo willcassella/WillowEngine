@@ -2,7 +2,6 @@
 #pragma once
 
 #include <Resource/AssetPtr.h>
-#include <Resource/Resources/TextFile.h>
 #include "Texture.h"
 #include "Shader.h"
 

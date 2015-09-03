@@ -95,15 +95,14 @@ public:
 	auto& IsBitFlag()
 	{
 		_data.isBitFlag = true;
-		return static_cast<TypeInfoBuilder<EnumT>&>(self);
+		return this->SelfAsMostSpecificTypeInfoBuilder();
 	}
 
 	/** Adds a value for this enum. */
-	template <EnumT Value>
-	auto& AddValue(String name)
+	auto& AddValue(CString name, CString /*description*/, EnumT value)
 	{
-		_data.values[std::move(name)] = static_cast<int64>(Value);
-		return static_cast<TypeInfoBuilder<EnumT>&>(self);
+		_data.values[name] = static_cast<int64>(value);
+		return this->SelfAsMostSpecificTypeInfoBuilder();
 	}
 
 	////////////////
@@ -117,4 +116,4 @@ private:
 ///   Macros   ///
 
 // TODO: Documentation
-#define ENUM_REFLECTION(E) const ::EnumInfo Implementation::TypeOf<E>::StaticTypeInfo = ::TypeInfoBuilder<E>(#E) 
+#define BUILD_ENUM_REFLECTION(E) const ::EnumInfo Implementation::TypeOf<E>::StaticTypeInfo = ::TypeInfoBuilder<E>(#E) 

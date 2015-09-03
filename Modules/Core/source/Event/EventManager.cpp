@@ -18,5 +18,17 @@ void EventManager::DispatchEvent(Event&& event)
 
 void EventManager::Flush()
 {
-	_eventQueue.Clear();
+	while (!_eventQueue.IsEmpty())
+	{
+		auto event = _eventQueue.Pop();
+		
+		// If we have a handler for this event
+		if (auto handlers = _handlers.Find(event.GetName()))
+		{
+			for (const auto& handler : *handlers)
+			{
+				handler.TryHandle(event);
+			}
+		}
+	}
 }

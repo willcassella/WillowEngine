@@ -70,14 +70,14 @@ public:
 	}
 
 	// TODO: Documentation
-	FORCEINLINE void ToArchive(ArchNode& node) const
+	FORCEINLINE void ToArchive(ArchiveNode& node) const
 	{
 		assert(_value != nullptr);
 		_type->_data.toArchiveImplementation(_value, node);
 	}
 
 	// TODO: Documentation
-	FORCEINLINE void FromArchive(const ArchNode& node)
+	FORCEINLINE void FromArchive(const ArchiveNode& node)
 	{
 		assert(_value != nullptr);
 		_type->_data.fromArchiveImplementation(_value, node);
@@ -161,7 +161,7 @@ public:
 	}
 
 	// TODO: Documentation
-	FORCEINLINE void ToArchive(ArchNode& node) const
+	FORCEINLINE void ToArchive(ArchiveNode& node) const
 	{
 		assert(_value != nullptr);
 		_type->_data.toArchiveImplementation(_value, node);

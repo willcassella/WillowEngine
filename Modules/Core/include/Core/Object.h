@@ -45,10 +45,10 @@ public:
 	virtual String FromString(const String& string);
 
 	/** Serializes the state of this Object to the given archive node. */
-	virtual void ToArchive(ArchNode& node) const;
+	virtual void ToArchive(ArchiveNode& node) const;
 
 	/** Deserializes the state of this Object from the given archive node. */
-	virtual void FromArchive(const ArchNode& node);
+	virtual void FromArchive(const ArchiveNode& node);
 
 	/////////////////////
 	///   Operators   ///

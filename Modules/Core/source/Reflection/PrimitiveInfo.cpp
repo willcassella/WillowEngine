@@ -15,3 +15,8 @@ bool PrimitiveInfo::IsCastableTo(const TypeInfo& type) const
 {
 	return type == self; // Primitives are not castable to anything other than themselves
 }
+
+bool PrimitiveInfo::IsStable() const
+{
+	return true;
+}

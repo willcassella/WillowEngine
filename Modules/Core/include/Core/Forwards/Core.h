@@ -16,5 +16,5 @@ class Interface;
 /** Defined in 'Application.h' */
 struct Application;
 
-/** Defined in 'ArchNode.h' */
-class ArchNode;
+/** Defined in 'ArchiveNode.h' */
+class ArchiveNode;
