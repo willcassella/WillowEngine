@@ -9,8 +9,10 @@ Note: While most of the engine is compilable and functional, some parts do not c
 
 ### Windows
 
-Currently the engine requires Visual Studio 2015 to compile on Windows.
-Before building for the first time, you must run the 'packages.py' script in the root directory. This pulls all required Windows binaries into the directory.
+The engine requires Visual Studio 2015 to compile on Windows, older versions of VS will not work.
+Before building for the first time, you must run the 'packages.py' script in the root directory; this downloads and extracts all required Windows binaries.
+
+Additionally, there are natvis files for various types in the engine in the "extras" directory, so you can use those to assist debugging on Visual Studio.
 
 ### Linux
 
@@ -18,6 +20,10 @@ The engine compiles cleanly on Clang and GCC, however you do need to install the
 + libglfw3-dev
 + libfreeimage-dev
 + libglew-dev
+
+You also need the following packages, since for some reason GLFW doesn't actually download all of its dependencies:
++ xorg-dev
++ libglu1-mesa-dev
 
 ### Mac
 
