@@ -4,7 +4,7 @@ The engine is currently divided into several major bits: "Modules", "Services", 
 
 The distinction between Modules and Services is mostly semantic. Modules are key parts of the engine that other systems are highly dependant on, while Services are external ... services that provide features that are considered extraneous to the core behavior of the engine. Essentially, any discreet engine feature that isn't actually needed to successfully simulate the game world is broken off as a Service.
 
-## Core module
+### Core module
 
 This module contains low-level types and features of the engine that everything else is built upon. It is written in such a way that it could easily be extracted and used in other applications that are not related to game engines. It's basically a replacement/extension of the C++ standard library. At the moment this module contains the vast majority of code in the engine.
 
