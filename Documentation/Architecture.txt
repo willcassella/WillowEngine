@@ -14,9 +14,7 @@ At the moment that only includes "Client", but in the future it will include "Se
 is "ExampleGame", which is pretty minimal.
 
 "Tools" are similar to runtimes in that they are executable programs that are built on top of the engine, but they
-are generally just minimal tools for doing non engine-specific things. Currently the only instance of this is
-"AssetConverter", which is responsible for converting various asset formats into formats that are consumable by the
-engine. While it is an executable program, it is written in such a way that it would be trivial to turn it into a library.
+are generally just minimal tools for tasks that shouldn't be a part of the main engine. Currently the only instance of this is "AssetConverter", which is responsible for converting various asset formats into formats that are consumable by the engine. While it is an executable program, it is written in such a way that it would be trivial to turn it into a library.
 
 "Test" are tests, and they generally don't do a whole lot. They're basically just scratch programs for testing various
-features when I want to, but they don't have any code-coverage.
+features when I want to, but they don't have any real code-coverage.
