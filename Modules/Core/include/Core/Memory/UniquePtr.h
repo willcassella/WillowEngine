@@ -263,15 +263,6 @@ public:
 		}
 	}
 
-	void FromArchive(const ArchiveNode& node)
-	{
-		// If we can find the type
-		if (auto type = Application::FindType(node.GetName()))
-		{
-			
-		}
-	}
-
 	/////////////////////
 	///   Operators   ///
 public:

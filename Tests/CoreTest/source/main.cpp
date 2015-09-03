@@ -3,20 +3,20 @@
 #include <Core/Core.h>
 #include <Core/Math/Vec4.h>
 
-class TestArchNode : public ArchNode
+class TestArchNode : public ArchiveNode
 {
 	///////////////////////
 	///   Information   ///
 public:
 
-	EXTENDS(ArchNode)
+	EXTENDS(ArchiveNode)
 
 	////////////////////////
 	///   Constructors   ///
 public:
 
 	TestArchNode(String name)
-		: Base(std::move(name))
+		: _name(std::move(name))
 	{
 		// All done
 	}
@@ -25,19 +25,29 @@ public:
 	///   Methods   ///
 public:
 
-	TestArchNode& AddNode(String name) override
+	String GetName() const override
+	{
+		return _name;
+	}
+
+	bool IsValueNode() const override
+	{
+		return _value.IsEmpty();
+	}
+
+	TestArchNode* AddChild(const String& name) override
 	{
 		assert(_value.IsEmpty()); // Tree nodes may not have values
 		auto child = New<TestArchNode>(std::move(name));
-		auto& rChild = *child; // Save this reference to return
+		auto pChild = child.Get(); // Save this reference to return
 		_children.Add(child.Transfer());
 
-		return rChild;
+		return pChild;
 	}
 
-	Array<const ArchNode*> GetSubNodes() const override
+	Array<const ArchiveNode*> GetChildren() const override
 	{
-		Array<const ArchNode*> result(_children.Size());
+		Array<const ArchiveNode*> result(_children.Size());
 
 		for (const auto& node : _children)
 		{
@@ -47,7 +57,7 @@ public:
 		return result;
 	}
 
-	void SetValue(String value) override
+	void SetValue(const String& value) override
 	{
 		assert(_children.IsEmpty()); // Value nodes may not have children
 		_value = std::move(value);
@@ -62,6 +72,7 @@ public:
 	///   Data   ///
 private:
 
+	String _name;
 	String _value;
 	Array<UniquePtr<TestArchNode>> _children;
 };
