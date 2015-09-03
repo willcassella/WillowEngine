@@ -5,6 +5,10 @@ For a summary of the layout of the engine, please see "Architecture.txt" in the 
 
 Note: While most of the engine is compilable and functional, some parts do not compile on any platforms; particularily the "GLRender" service. The rest of the engine is undergoing refactoring, and that module has not been updated to match new API.
 
+## What works
+
+Currently, not a whole lot. The "Client" runtime can start up and show a black screen, and while it's actually running the game behind the scenes, you can't see anything. Once the "GLRender" service is back up and running, you'll get a nice pretty picture of your game!
+
 ## Compiling the engine
 
 ### Windows
