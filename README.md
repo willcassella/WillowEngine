@@ -25,10 +25,11 @@ You also need the following packages, since for some reason GLFW doesn't actuall
 + libglu1-mesa-dev
 
 Once you have all packages, compiling the engine is as simple as:
-  make -f WillowEngine.makefile all
+
+`make -f WillowEngine.makefile all`
 
 ### Mac
 
-I honestly haven't tried Mac, but it works on Linux and since all the packages are portable, I don't see why it wouldn't work on mac as well.
+I honestly haven't tried Mac, but it works on Linux and since all the packages are portable, I don't see why it wouldn't work on Mac as well.
 
 Copyright 2013-2015 Will Cassella, All Rights Reserved
