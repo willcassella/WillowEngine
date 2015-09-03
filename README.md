@@ -1,7 +1,6 @@
 # Willow Engine
 
 Willow Engine is a game engine in development by Will Cassella.
-For a summary of the layout of the engine, please see "Architecture" document in the Documentation directory.
 
 Note: While most of the engine is compilable and functional, some parts do not compile on any platforms; particularily the "GLRender" service. The rest of the engine is undergoing refactoring, and that module has not been updated to match new API.
 
@@ -35,5 +34,9 @@ Once you have all packages installed, compiling the engine is as simple as:
 ### Mac
 
 I honestly haven't tried Mac, but it works on Linux and since all the packages are portable, I don't see why it wouldn't work on Mac as well.
+
+## Further documentation
+
+[Engine Architecture](Documentation/Architecture.md)
 
 Copyright 2013-2015 Will Cassella, All Rights Reserved
