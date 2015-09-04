@@ -30,7 +30,7 @@ void InitRenderer(uint32 /*width*/, uint32 /*height*/)
 {
 	// Initialize GLEW
 	glewExperimental = GL_TRUE;
-	auto result = glewInit();
+	glewInit();
 
 	// Initialize OpenGL
 	glClearColor(0, 0, 0, 1);
