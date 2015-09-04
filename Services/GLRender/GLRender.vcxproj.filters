@@ -33,19 +33,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\GLMaterial.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="source\GLRender.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\GLShader.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\GLStaticMesh.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\GLTexture.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

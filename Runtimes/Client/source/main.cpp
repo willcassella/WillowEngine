@@ -4,6 +4,7 @@
 #include <Core/Console.h>
 #include <Core/Math/Vec2.h>
 #include <Engine/Game.h>
+#include <GLRender/GLRender.h>
 #include <ExampleGame/FPSCamera.h>
 #include <ExampleGame/Ghost.h>
 
@@ -53,9 +54,10 @@ int main(int32 /*argc*/, char** /*argv*/)
 
 	// Initialize GLFW and get a window
 	GLFWwindow* window = InitGLFW();
-	
+
 	// Make an openGL context in window
 	glfwMakeContextCurrent(window);
+	InitRenderer(window_width, window_height);
 
 	///////////////////////////////
 	///   Setting up a simple   ///
@@ -95,8 +97,8 @@ GLFWwindow* InitGLFW()
 	// Make the window invisible
 	glfwWindowHint(GLFW_VISIBLE, false);
 
-	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
 	GLFWwindow* window = glfwCreateWindow(window_width, window_height, "Willow Engine", NULL, NULL);
 
@@ -128,6 +130,7 @@ GLFWwindow* InitGLFW()
 
 	// Create the frame buffer and viewport
 	glfwGetFramebufferSize(window, &window_width, &window_height);
+	glViewport(0, 0, window_width, window_height);
 
 	return window;
 }
@@ -211,7 +214,6 @@ void eventLoop(GLFWwindow* window)
 			Cursor.SetPosition(window, 0, 0);
 
 			// Update the scene
-			scene.Events.Flush();
 			scene.Update();
 
 			lag -= scene.TimeStep;
@@ -219,6 +221,7 @@ void eventLoop(GLFWwindow* window)
 		}
 
 		//render the frame
+		RenderScene(scene);
 		glfwSwapBuffers(window);
 	}
 

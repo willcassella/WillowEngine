@@ -141,7 +141,7 @@
       <AdditionalDependencies>Core.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(TargetDir)*.dll" "$(SolutionDir)bin\" /d /y
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y
 xcopy "$(SolutionDir)packages\FreeImage\$(Platform)\*.dll" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -161,7 +161,7 @@ xcopy "$(SolutionDir)packages\FreeImage\$(Platform)\*.dll" "$(SolutionDir)bin\" 
       <AdditionalDependencies>Core.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(TargetDir)*.dll" "$(SolutionDir)bin\" /d /y
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y
 xcopy "$(SolutionDir)packages\FreeImage\$(Platform)\*.dll" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -187,7 +187,7 @@ xcopy "$(SolutionDir)packages\FreeImage\$(Platform)\*.dll" "$(SolutionDir)bin\" 
       <AdditionalDependencies>Core.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(TargetDir)*.dll" "$(SolutionDir)bin\" /d /y
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y
 xcopy "$(SolutionDir)packages\FreeImage\$(Platform)\*.dll" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -213,7 +213,7 @@ xcopy "$(SolutionDir)packages\FreeImage\$(Platform)\*.dll" "$(SolutionDir)bin\" 
       <AdditionalDependencies>Core.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(TargetDir)*.dll" "$(SolutionDir)bin\" /d /y
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y
 xcopy "$(SolutionDir)packages\FreeImage\$(Platform)\*.dll" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

@@ -2,6 +2,7 @@
 #pragma once
 
 #include <Core/Math/Vec3.h>
+#include <Engine/Scene.h>
 #include "config.h"
 
 /////////////////
@@ -28,14 +29,16 @@ extern BufferID roughnessBuffer;
 /** Sets up the defaults for the renderer with the given height and width */
 GLRENDER_API void InitRenderer(uint32 width, uint32 height);
 
-/** Cleans up renderer buffers */
-GLRENDER_API void CleanUpRenderer();
+GLRENDER_API void RenderScene(const Scene& scene);
 
-/** Resize the renderer drawing area */
-GLRENDER_API void Resize(uint32 width, uint32 height);
-
-/** Prepare to render a new frame */
-GLRENDER_API void BeginFrame();
-
-/** Complete rendering a frame */
-GLRENDER_API void EndFrame(const Vec3& camPos);
+///** Cleans up renderer buffers */
+//GLRENDER_API void CleanUpRenderer();
+//
+///** Resize the renderer drawing area */
+//GLRENDER_API void Resize(uint32 width, uint32 height);
+//
+///** Prepare to render a new frame */
+//GLRENDER_API void BeginFrame();
+//
+///** Complete rendering a frame */
+//GLRENDER_API void EndFrame(const Vec3& camPos);

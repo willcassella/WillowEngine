@@ -11,7 +11,8 @@ struct GLRENDER_API GLShader final
 public:
 
 	GLShader(const Shader& shader);
-	GLShader(const GLShader& copy) = delete;
+	GLShader(const Path& path);
+
 	GLShader(GLShader&& move);
 	~GLShader();
 

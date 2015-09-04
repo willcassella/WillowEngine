@@ -2,16 +2,15 @@
 
 #include "glew.h"
 #include "../include/GLRender/GLShader.h"
+#include <Resource/Path.h>
 
 ////////////////////////
 ///   Constructors   ///
 
-GLShader::GLShader(const TextFile& sourceFile)
+GLShader::GLShader(const Shader& shader)
 {
-	String source = sourceFile.DumpLines();
-
 	// Identify the shader type and construct the shader
-	String type = String::GetFileExtension(sourceFile.GetPath());
+	String type = shader.GetPath().GetFileExtension();
 	if (type == "vert")
 	{
 		this->_id = glCreateShader(GL_VERTEX_SHADER);
@@ -26,7 +25,7 @@ GLShader::GLShader(const TextFile& sourceFile)
 	}
 
 	// Compile the shader
-	const char* tempSource = source.Cstr();
+	CString tempSource = shader.GetSource().Cstr();
 	glShaderSource(_id, 1, &tempSource, nullptr);
 	glCompileShader(_id);
 
@@ -45,7 +44,18 @@ GLShader::GLShader(const TextFile& sourceFile)
 	}
 }
 
-Shader::~Shader()
+GLShader::GLShader(const Path& path)
+{
+	
+}
+
+GLShader::GLShader(GLShader&& move)
+{
+	_id = move._id;
+	move._id = 0;
+}
+
+GLShader::~GLShader()
 {
 	glDeleteShader(this->_id);
 }

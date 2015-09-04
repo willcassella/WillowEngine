@@ -1,17 +1,16 @@
 // GLTexture.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
 #include "glew.h"
-#include "..\include\Render\Texture.h"
+#include "..\include\GLRender\GLTexture.h"
 
 ////////////////////////
 ///   Constructors   ///
 
-Texture::Texture(const Image& image)
-	: Super(image)
+GLTexture::GLTexture(const Texture& image)
 {
 	// Create and bind the buffer
-	glGenTextures(1, &this->_id);
-	glBindTexture(GL_TEXTURE_2D, this->_id);
+	glGenTextures(1, &_id);
+	glBindTexture(GL_TEXTURE_2D, _id);
 
 	// Set wrapping parameters to repeat
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -21,23 +20,16 @@ Texture::Texture(const Image& image)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	OnReload();
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.GetWidth(), image.GetHeight(), 0, GL_BGRA, GL_UNSIGNED_BYTE, image.GetBitmap());
 }
 
-Texture::~Texture()
+GLTexture::GLTexture(GLTexture&& move)
 {
-	OnUnload();
+	_id = move._id;
+	move._id = 0;
 }
 
-///////////////////
-///   Methods   ///
-
-void Texture::OnUnload()
+GLTexture::~GLTexture()
 {
-	glDeleteTextures(1, &this->_id);
-}
-
-void Texture::OnReload()
-{
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, GetResource().GetWidth(), GetResource().GetHeight(), 0, GL_BGRA, GL_UNSIGNED_BYTE, GetResource().GetBitmap());
+	glDeleteTextures(1, &_id);
 }

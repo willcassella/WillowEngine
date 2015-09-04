@@ -37,6 +37,19 @@ public:
 		return *object;
 	}
 
+	template <typename ComponentT>
+	Array<const ComponentT*> GetComponentsOfType() const
+	{
+		Array<const ComponentT*> result;
+
+		for (const auto& object : _objects)
+		{
+			result += object->GetComponentsOfType<ComponentT>();
+		}
+
+		return result;
+	}
+
 	////////////////
 	///   Data   ///
 private:

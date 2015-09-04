@@ -11,9 +11,8 @@ struct GLRENDER_API GLTexture final
 public:
 
 	GLTexture(const Texture& texture);
-	GLTexture(const GLTexture& copy) = delete;
 	GLTexture(GLTexture&& move);
-	~GLTexture() override;
+	~GLTexture();
 
 	///////////////////
 	///   Methods   ///

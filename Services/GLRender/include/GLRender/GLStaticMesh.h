@@ -4,28 +4,21 @@
 #include <Engine/Assets/StaticMesh.h>
 #include "GLMaterial.h"
 
-class RENDER_API StaticMesh : public ResourceConsumer
+struct GLRENDER_API GLStaticMesh final
 {
-	///////////////////////
-	///   Information   ///
-public:
-
-	REFLECTABLE_CLASS
-	EXTENDS(ResourceConsumer)
-
 	////////////////////////
 	///   Constructors   ///
 public:
 
-	StaticMesh(const Mesh& mesh);
-	~StaticMesh() override;
+	GLStaticMesh(const StaticMesh& mesh);
+	GLStaticMesh(GLStaticMesh&& move);
+	~GLStaticMesh();
 
 	///////////////////
 	///   Methods   ///
 public:
 
 	/** Render the mesh at a specific orientation, view, and perspective */
-	void Render(const Mat4& orientation, const Mat4& view, const Mat4& perspective) const;
 	const Material& GetMaterial() const;
 	void SetMaterial(const Material& material);
 

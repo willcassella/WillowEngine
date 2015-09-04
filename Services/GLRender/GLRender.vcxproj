@@ -28,11 +28,7 @@
     <ClInclude Include="source\glew.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\GLMaterial.cpp" />
     <ClCompile Include="source\GLRender.cpp" />
-    <ClCompile Include="source\GLShader.cpp" />
-    <ClCompile Include="source\GLStaticMesh.cpp" />
-    <ClCompile Include="source\GLTexture.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D3DE9FCC-C429-4E36-A88E-DAC1004F1944}</ProjectGuid>
@@ -87,7 +83,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
-    <TargetName>($ProjectName)</TargetName>
+    <TargetName>$(ProjectName)</TargetName>
     <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Engine\bin;$(SolutionDir)packages\glew-1.11.0\$(Platform);C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
     <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)packages\glew-1.11.0\include;$(IncludePath)</IncludePath>
     <TargetExt>.dll</TargetExt>
@@ -99,13 +95,13 @@
     <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Engine\bin;$(SolutionDir)packages\glew-1.11.0\$(Platform);C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
     <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)packages\glew-1.11.0\include;$(IncludePath)</IncludePath>
     <TargetExt>.dll</TargetExt>
-    <TargetName>($ProjectName)</TargetName>
+    <TargetName>$(ProjectName)</TargetName>
     <Linkage-glew>static</Linkage-glew>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
-    <TargetName>($ProjectName)</TargetName>
+    <TargetName>$(ProjectName)</TargetName>
     <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Engine\bin;$(SolutionDir)packages\glew-1.11.0\$(Platform);$(LibraryPath)</LibraryPath>
     <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)packages\glew-1.11.0\include;$(IncludePath)</IncludePath>
     <TargetExt>.dll</TargetExt>
@@ -114,7 +110,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
-    <TargetName>($ProjectName)</TargetName>
+    <TargetName>$(ProjectName)</TargetName>
     <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Engine\bin;$(SolutionDir)packages\glew-1.11.0\$(Platform);$(LibraryPath)</LibraryPath>
     <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)packages\glew-1.11.0\include;$(IncludePath)</IncludePath>
     <TargetExt>.dll</TargetExt>
@@ -138,7 +134,7 @@
       <AdditionalDependencies>glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(TargetDir)" "$(SolutionDir)bin\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -159,7 +155,7 @@
       <AdditionalDependencies>glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(TargetDir)" "$(SolutionDir)bin\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -187,7 +183,7 @@
       <AdditionalDependencies>glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(TargetDir)" "$(SolutionDir)bin\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -215,7 +211,7 @@
       <AdditionalDependencies>glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(TargetDir)" "$(SolutionDir)bin\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

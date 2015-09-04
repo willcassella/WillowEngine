@@ -1,17 +1,14 @@
 // GLStaticMesh.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
 #include <fstream>
-#include <Utility\Array.h>
-#include <Utility\Console.h>
+#include <Core/Containers/Array.h>
 #include "glew.h"
-#include "..\include\Render\Vertex.h"
-#include "..\include\Render\StaticMesh.h"
+#include "..\include\GLRender\GLStaticMesh.h"
 
 ////////////////////////
 ///   Constructors   ///
 
-StaticMesh::StaticMesh(const Mesh& mesh)
-	: Super(mesh.GetResource())
+GLStaticMesh::GLStaticMesh(const StaticMesh& mesh)
 {
 	this->_numElements = elements.Size();
 

@@ -725,7 +725,7 @@ public:
 	}
 
 	/** Appends an Array onto another Array. */
-	template <typename RelatedT, WHERE(std::is_constructible<T, const RelatedT&>::value)>
+	template <typename RelatedT>//, WHERE(std::is_constructible<T, const RelatedT&>::value)>
 	friend Array& operator+=(Array& lhs, const Array<RelatedT>& rhs)
 	{
 		lhs.ReserveAdditional(rhs.Size());

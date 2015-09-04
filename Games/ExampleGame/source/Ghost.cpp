@@ -16,6 +16,7 @@ Ghost::Ghost(Scene& scene)
 	: Base(scene)
 {
 	Slider = New<SlideComponent>(self);
+	MeshComponent = New<StaticMeshComponent>(self);
 
 	scene.Events.Bind("Poof", self, &Ghost::Disappear);
 	scene.Events.Bind("Spin", self, &Ghost::Spin);

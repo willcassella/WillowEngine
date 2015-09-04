@@ -16,6 +16,9 @@ void Scene::Update()
 {
 	Queue<UniquePtr<GameObject>*> staleObjects;
 
+	Events.DispatchEvent("Update", 1.f);
+	Events.Flush();
+
 	// Update all objects
 	for (auto& object : _objects)
 	{

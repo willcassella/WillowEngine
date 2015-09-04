@@ -3,6 +3,7 @@
 
 //#include <Engine/StaticMeshComponent.h>
 #include <Engine/GameObject.h>
+#include <Engine/Components/StaticMeshComponent.h>
 #include "SlideComponent.h"
 
 class EXAMPLEGAME_API Ghost : public GameObject
@@ -24,7 +25,7 @@ public:
 	///   Components   ///
 public:
 
-	//StaticMeshComponent MeshComponent;
+	UniquePtr<StaticMeshComponent> MeshComponent;
 	UniquePtr<SlideComponent> Slider;
 
 	///////////////////
