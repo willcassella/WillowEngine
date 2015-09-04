@@ -119,7 +119,7 @@ Classes, Interfaces, and Structs are all considered "Compounds" (in the sense th
 - `.AddProperty("Name", "Description", &T::Getter, nullptr, [optional]Flags)` - Creates a read-only property that gets via a method.
 - `.AddProperty("Name", "Description", &T::Getter, &T::Setter, [optional]Flags)` - Creates a property that gets via a method, and sets via a method.
 
-In the case of structs you may also use `.IsStable()` to indicate that layout of this struct will never change. This is used to optmize some part of serialization, but should be used *very cautiously*.
+In the case of structs you may also use `.IsStable()` to indicate that layout of this struct will never change. This is used to optimize some part of serialization, but should be used *very cautiously*, as it makes your archives no longer future-proof.
 
 The reflection system will pick up on the default constructor for a type - if one exists - and will use it for serialization. If your type is not default-constructible but you still wish for it to be serializable, you may implement a constructor that accepts a 'DynamicInitializer` object.
 
