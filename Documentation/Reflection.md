@@ -9,11 +9,13 @@ Reflection in the engine serves several purposes:
 
 ## Basic usage
 
-To get the reflection data for a class, use `TypeOf<T>()`, which will return a reference to the exact reflection class (listed below) for the given type.  
-To get the reflection data for an instance, use `TypeOf(x)`, which will return a reference to the most specific reflection class that can be deduced at compile time.
+To get the reflection data for a type, use `TypeOf<T>()`, which will return a reference to the exact type of reflection class (listed below) for `T`. So if you call `TypeOf<int*>()`, it will return a `const PointerInfo&`.  
+
+To get the reflection data for an instance, use `TypeOf(x)`, which will return a reference to the most specific type of reflection class that can be deduced at compile time for `x`.
+
 Additionally, you may use `.GetType()` on an instance if you are sure that the type directly supports reflection (as is the case for Object types, and most structs).
 
-To safely attempt to cast a value, use `Cast<TargetT>(x)`, which will return a pointer to `TargetT` with the same const qualification as `x`. If the type is not castable, this returns a null pointer. Not that this only works for types that are bitwise compatible with one-another, so attempting to cast an `int` to a `float` will not work.
+To safely attempt to cast a value, use `Cast<TargetT>(x)`, which will return a pointer to `TargetT` with the same const qualification as `x`. If the type is not castable, this returns a null pointer. Note that this only works for types that are bitwise compatible with one another, so attempting to cast an `int` to a `float` will not work.
 
 ## Reflection Classes
 
