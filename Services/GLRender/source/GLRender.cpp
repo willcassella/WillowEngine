@@ -8,25 +8,25 @@
 ////////////////
 ///   Data   ///
 
-/** GBuffer and its sub-buffers */
-BufferID gBuffer = NULL;
-BufferID positionBuffer = NULL;
-BufferID depthBuffer = NULL;
-BufferID diffuseBuffer = NULL;
-BufferID normalBuffer = NULL;
-BufferID specularBuffer = NULL;
-BufferID metallicBuffer = NULL;
-BufferID roughnessBuffer = NULL;
-
-/** VAO, VBO, and material for screen-sized quad */
-BufferID screenQuadVAO = NULL;
-BufferID screenQuadVBO = NULL;
-BufferID screenQuadProgram = NULL;
+///** GBuffer and its sub-buffers */
+//BufferID gBuffer = NULL;
+//BufferID positionBuffer = NULL;
+//BufferID depthBuffer = NULL;
+//BufferID diffuseBuffer = NULL;
+//BufferID normalBuffer = NULL;
+//BufferID specularBuffer = NULL;
+//BufferID metallicBuffer = NULL;
+//BufferID roughnessBuffer = NULL;
+//
+///** VAO, VBO, and material for screen-sized quad */
+//BufferID screenQuadVAO = NULL;
+//BufferID screenQuadVBO = NULL;
+//BufferID screenQuadProgram = NULL;
 
 /////////////////////
 ///   Functions   ///
 
-void InitRenderer(uint32 width, uint32 height)
+void InitRenderer(uint32 /*width*/, uint32 /*height*/)
 {
 	// Initialize GLEW
 	glewExperimental = GL_TRUE;
