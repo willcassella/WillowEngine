@@ -128,10 +128,6 @@ GLFWwindow* InitGLFW()
 	// Move the cursor to the center of the screen
 	glfwSetCursorPos(window, window_width/2, window_height/2);
 
-	// Create the frame buffer and viewport
-	glfwGetFramebufferSize(window, &window_width, &window_height);
-	glViewport(0, 0, window_width, window_height);
-
 	return window;
 }
 
