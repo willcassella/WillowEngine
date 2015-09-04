@@ -8,43 +8,49 @@ setup:
 clean:
 	rm -rf bin
 	
-all: Core Resource Engine ExampleGame CoreTest AssetConverter Client
+all: Core Resource Engine GLRender ExampleGame CoreTest AssetConverter Client
 	echo "Build complete"
 
 # Modules
 
 Core: setup
 	make -C Modules/Core/ -f Core.makefile
-	cp Modules/Core/bin/Core.so bin/Core.so
+	cp Modules/Core/bin/Core.so bin/
 
 Resource: setup
 	make -C Modules/Resource/ -f Resource.makefile
-	cp Modules/Resource/bin/Resource.so bin/Resource.so
+	cp Modules/Resource/bin/Resource.so bin/
 	
 Engine: setup
 	make -C Modules/Engine/ -f Engine.makefile
-	cp Modules/Engine/bin/Engine.so bin/Engine.so
+	cp Modules/Engine/bin/Engine.so bin/
+	
+# Services
+
+GLRender: setup
+	make -C Services/GLRender/ -f GLRender.makefile
+	cp Services/GLRender/bin/GLRender.so bin/
 	
 # Runtimes
 
 Client : setup
 	make -C Runtimes/Client/ -f Client.makefile
-	cp Runtimes/Client/bin/Client bin/Client
+	cp Runtimes/Client/bin/Client bin/
 	
 # Games
 
 ExampleGame: setup
 	make -C Games/ExampleGame/ -f ExampleGame.makefile
-	cp Games/ExampleGame/bin/ExampleGame.so bin/ExampleGame.so
+	cp Games/ExampleGame/bin/ExampleGame.so bin/
 	
 # Tools
 	
 AssetConverter: setup
 	make -C Tools/AssetConverter/ -f AssetConverter.makefile
-	cp Tools/AssetConverter/bin/AssetConverter bin/AssetConverter
+	cp Tools/AssetConverter/bin/AssetConverter bin/
 
 # Tests
 
 CoreTest : setup
 	make -C Tests/CoreTest/ -f CoreTest.makefile
-	cp Tests/CoreTest/bin/CoreTest bin/CoreTest
+	cp Tests/CoreTest/bin/CoreTest bin/
