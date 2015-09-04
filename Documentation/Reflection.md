@@ -9,9 +9,9 @@ Reflection in the engine serves several purposes:
 
 ## Basic usage
 
-To get the reflection data for a type, use `TypeOf<T>()`, which will return a reference to the exact type of reflection class (listed below) for `T`. So if you call `TypeOf<int*>()`, it will return a `const PointerInfo&`.  
+To get the reflection data for a type, use `TypeOf<T>()`. The returned reference will be of the exact type of reflection class (listed below) for `T`. So if you call `TypeOf<int*>()`, it will return a `const PointerInfo&`.  
 
-To get the reflection data for an instance, use `TypeOf(x)`, which will return a reference to the most specific type of reflection class that can be deduced at compile time for `x`.
+To get the reflection data for an instance, use `TypeOf(x)`. The returned reference will be of the most specific type of reflection class that can be deduced at compile time for `x`.
 
 Additionally, you may use `.GetType()` on an instance if you are sure that the type directly supports reflection (as is the case for Object types, and most structs).
 
@@ -19,12 +19,12 @@ To safely attempt to cast a value, use `Cast<TargetT>(x)`, which will return a p
 
 ## Reflection Classes
 
-The engine defines several classes that contain reflection information, all defined in the Core module.
-- TypeInfo (abstract base for all following classes)
-- VoidInfo (describes 'void')
-- PrimitiveInfo (describes primitives, and base for 'PointerInfo' and 'EnumInfo')
-- PointerInfo (describes pointers. References are not recognized by the reflection system)
-- EnumInfo (describes enums, providing a map associating a name to a value)
+The Core module defines several types of reflection data:
+- TypeInfo (abstract base for all reflection classes)
+- VoidInfo
+- PrimitiveInfo
+- PointerInfo (extends 'PrimitiveInfo')
+- EnumInfo (extends 'PrimitiveInfo')
 - CompoundInfo (abstract base for ClassInfo/StructInfo/InterfaceInfo)
 - StructInfo (describes non-polymorphic types in the engine)
 - ClassInfo (describes polymorphic types in the engine)
@@ -120,5 +120,7 @@ Classes, Interfaces, and Structs are all considered "Compounds" (in the sense th
 - `.AddProperty("Name", "Description", &T::Getter, &T::Setter, [optional]Flags)` - Creates a property that gets via a method, and sets via a method.
 
 In the case of structs you may also use `.IsStable()` to indicate that layout of this struct will never change. This is used to optmize some part of serialization, but should be used *very cautiously*.
+
+The reflection system will pick up on the default constructor for a type - if one exists - and will use it for serialization. If your type is not default-constructible but you still wish for it to be serializable, you may implement a constructor that accepts a 'DynamicInitializer` object.
 
 That's pretty much it. There's a few more intricacies to how all this works, but for the most part you don't really need to deal with those, and you'd be better off looking at the source anyway.
