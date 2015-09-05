@@ -2,11 +2,9 @@
 
 Willow Engine is a game engine in development by Will Cassella.
 
-Note: While most of the engine is compilable and functional, some parts do not compile on any platforms; particularily the "GLRender" service. The rest of the engine is undergoing refactoring, and that module has not been updated to match new API.
-
 ## What works
 
-Currently, not a whole lot. The "Client" runtime can start up and show a black screen, and while it's actually running the game behind the scenes, you can't see anything. Once the "GLRender" service is back up and running, you'll get a nice pretty picture of your game!
+Right now the most glaring issue with the engine is the renderer. It worked previously (I actually implemented a deferred renderer with phong shading), but unfortunately all it does at the moment is draw a little green square wherever a StaticMesh is. While most of the actual rendering code is still there, it needs to undergo some work before it's functional. Right now the biggest hurdle to reaching that is finishing the resource management system; that's my biggest priority with the engine at the moment. Once that's complete, I'll move on to finishing the implementation of the renderer.
 
 ## Compiling the engine
 
@@ -22,6 +20,7 @@ Additionally, there are natvis files for various types in the engine in the "ext
 The engine compiles cleanly on Clang and GCC, however you do need to install the following aptitude packages:
 + libglfw3-dev
 + libfreeimage-dev
++ libglew-dev
 
 You also need the following packages, since for some reason GLFW doesn't actually download all of its dependencies:
 + xorg-dev
