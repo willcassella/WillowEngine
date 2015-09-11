@@ -79,11 +79,8 @@ private:
 
 int main()
 {
-	Vec3 vec{ 1, 2, 3 };
+	Vec3 test(1, 2, 3);
 
-	TestArchNode test("Test");
-
-	ToArchive(vec, test);
-
-	Console::Prompt();
+	auto y = test.GetType().FindData("Y")->Get(Variant{ test }).ToString();
+	Console::Prompt(y);
 }

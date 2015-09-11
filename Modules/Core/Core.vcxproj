@@ -50,7 +50,6 @@
     <ClInclude Include="include\Core\Math\Vec4.h" />
     <ClInclude Include="include\Core\Memory\UniquePtr.h" />
     <ClInclude Include="include\Core\Memory\Ptr.h" />
-    <ClInclude Include="include\Core\Memory\SharedPtr.h" />
     <ClInclude Include="include\Core\Misc\Signature.h" />
     <ClInclude Include="include\Core\Misc\TimeStamp.h" />
     <ClInclude Include="include\Core\Object.h" />
@@ -60,6 +59,7 @@
     <ClInclude Include="include\Core\Operations\FromString.h" />
     <ClInclude Include="include\Core\Reflection\ClassInfo.h" />
     <ClInclude Include="include\Core\Reflection\CompoundInfo.h" />
+    <ClInclude Include="include\Core\Reflection\DataInfo.h" />
     <ClInclude Include="include\Core\Reflection\EnumInfo.h" />
     <ClInclude Include="include\Core\Reflection\InterfaceInfo.h" />
     <ClInclude Include="include\Core\Reflection\PropertyInfo.h" />
@@ -95,6 +95,7 @@
     <ClCompile Include="source\Operations\ToString.cpp" />
     <ClCompile Include="source\Reflection\ClassInfo.cpp" />
     <ClCompile Include="source\Reflection\CompoundInfo.cpp" />
+    <ClCompile Include="source\Reflection\DataInfo.cpp" />
     <ClCompile Include="source\Reflection\EnumInfo.cpp" />
     <ClCompile Include="source\Reflection\InterfaceInfo.cpp" />
     <ClCompile Include="source\Reflection\Module.cpp" />

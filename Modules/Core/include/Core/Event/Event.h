@@ -4,7 +4,6 @@
 #include "../String.h"
 #include "../Memory/UniquePtr.h"
 #include "../Reflection/Variant.h"
-#include "../Reflection/TypePtr.h"
 
 /** Abstract base for events */
 struct CORE_API Event final
@@ -20,14 +19,15 @@ public:
 public:
 
 	/** Constructs an Event that has no value. */
-	Event(const String& name);
+	Event(String name);
 
 	Event(const Event& copy) = delete;
 	Event(Event&& move) = default;
 
+	/** Constructs an Event that has the given value. */
 	template <typename T>
-	Event(const String& name, T&& value)
-		: _name(name), _argType(TypeOf<T>())
+	Event(String name, T&& value)
+		: _name(std::move(name))
 	{
 		_value = New<std::decay_t<T>>(std::forward<T>(value));
 	}
@@ -45,7 +45,7 @@ public:
 	/** Returns the type of argument that this Event was created with. */
 	FORCEINLINE const TypeInfo& GetArgType() const
 	{
-		return _argType;
+		return (*_value).GetType();
 	}
 
 	/** Returns the value of this event. */
@@ -66,6 +66,5 @@ public:
 private:
 
 	String _name;
-	TypePtr<> _argType;
 	UniquePtr<void> _value;
 };

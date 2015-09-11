@@ -8,8 +8,8 @@
 ///   Reflection   ///
 
 BUILD_REFLECTION(Quat)
-.AddProperty("X", "", &Quat::X)
-.AddProperty("Y", "", &Quat::Y)
-.AddProperty("Z", "", &Quat::Z)
-.AddProperty("W", "", &Quat::W)
+.Field("X", &Quat::X, "")
+.Field("Y", &Quat::Y, "")
+.Field("Z", &Quat::Z, "")
+.Field("W", &Quat::W, "")
 .IsStable();

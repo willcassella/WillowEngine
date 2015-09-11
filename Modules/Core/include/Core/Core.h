@@ -25,7 +25,6 @@
 ///   Memory   ///
 
 #include "Memory/UniquePtr.h"
-#include "Memory/SharedPtr.h"
 #include "Memory/Ptr.h"
 
 /////////////////

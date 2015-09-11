@@ -9,8 +9,8 @@
 ///   Reflection   ///
 
 BUILD_REFLECTION(EventHandler)
-.AddProperty("Owner", "The type that owns this handler.", &EventHandler::_ownerType)
-.AddProperty("Argument Type", "The type of argument that this handler accepts.", &EventHandler::_argType);
+.Property("Owner", &EventHandler::_ownerType, nullptr, "The type that owns this handler.")
+.Property("Argument Type", &EventHandler::_argType, nullptr, "The type of argument that this handler accepts.");
 
 ///////////////////
 ///   Methods   ///

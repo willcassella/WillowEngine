@@ -13,8 +13,8 @@ Table<String, Resource*> resourceTable;
 ///   Reflection   ///
 
 BUILD_REFLECTION(Resource)
-.AddProperty("Path", "The path to the Resource.", &Resource::_path, nullptr)
-.AddProperty("Size", "The size of the Resource.", &Resource::_size, nullptr);
+.Property("Path", &Resource::_path, nullptr, "The path to the Resource.")
+.Property("Size", &Resource::_size, nullptr, "The size of the Resource.");
 
 ////////////////////////
 ///   Constructors   ///

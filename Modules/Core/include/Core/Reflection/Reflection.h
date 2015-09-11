@@ -89,7 +89,7 @@ namespace Implementation
 			return StaticTypeInfo;
 		}
 
-		/** It is not possible to an instance of 'void', so that Function is not necessary. */
+		/** It is not possible to have an instance of 'void', so that Function is not necessary. */
 	};
 
 	/** Implementation of 'TypeOf' for std::nullptr_t */
@@ -566,14 +566,18 @@ public:														\
 #define REFLECTABLE_INTERFACE								\
 	REFLECTION_DECL(::InterfaceInfo)
 
-// @TODO: Documentation
+/** Put this macro in the global namespace, ideally in the same file that declares the enum.
+* NOTE: This macro MUST be put in the global namespace. 
+* NOTE: Any use of this macro must have a corresponding 'BUILD_ENUM_REFLECTION(e)' macro in an source file
+* somewhere in the same module. */
 #define REFLECTABLE_ENUM(E)									\
 namespace Implementation									\
 {															\
 	template <>												\
 	struct THIS_MODULE_API TypeOf < E >	final				\
 	{														\
-		static const ::EnumInfo StaticTypeInfo;				\
+		REFLECTION_DECL(::EnumInfo)							\
+															\
 		FORCEINLINE static const ::EnumInfo& Function()		\
 		{													\
 			return StaticTypeInfo;							\

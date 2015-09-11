@@ -7,7 +7,7 @@
 ///   Reflection   ///
 
 BUILD_REFLECTION(Camera)
-.AddProperty("Lens", "", &Camera::Lens);
+.Field("Lens", &Camera::Lens, "");
 
 ////////////////////////
 ///   Constructors   ///

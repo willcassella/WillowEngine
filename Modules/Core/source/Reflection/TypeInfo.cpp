@@ -9,13 +9,13 @@
 ///   Reflection   ///
 
 BUILD_REFLECTION(TypeInfo)
-.AddProperty("Name", "The name of the type.", &TypeInfo::GetName, nullptr)
-.AddProperty("Size", "The size (in bytes) of an instance of this type.", &TypeInfo::GetSize, nullptr)
-.AddProperty("Compound", "Whether this type is a compound type.", &TypeInfo::IsCompound, nullptr)
-.AddProperty("Abstract", "Whether this type is an abstract type.", &TypeInfo::IsAbstract, nullptr)
-.AddProperty("Polymorphic", "Whether this type is polymorphic.", &TypeInfo::IsPolymorphic, nullptr)
-.AddProperty("Constructible", "Whether this type may be constructed.", &TypeInfo::IsConstructible, nullptr)
-.AddProperty("Destructible", "Whether this type is destructible.", &TypeInfo::IsDestructible, nullptr);
+.Property("Name", &TypeInfo::GetName, nullptr, "The name of the type.")
+.Property("Size", &TypeInfo::GetSize, nullptr, "The size (in bytes) of an instance of this type.")
+.Property("Compound", &TypeInfo::IsCompound, nullptr, "Whether this type is a compound type.")
+.Property("Abstract", &TypeInfo::IsAbstract, nullptr, "Whether this type is an abstract type.")
+.Property("Polymorphic", &TypeInfo::IsPolymorphic, nullptr, "Whether this type is polymorphic.")
+.Property("Constructible", &TypeInfo::IsConstructible, nullptr, "Whether this type may be constructed.")
+.Property("Destructible", &TypeInfo::IsDestructible, nullptr, "Whether this type is destructible.");
 
 ////////////////////////
 ///   Constructors   ///

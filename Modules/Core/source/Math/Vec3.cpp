@@ -8,9 +8,9 @@
 ///   Information   ///
 
 BUILD_REFLECTION(Vec3)
-.AddProperty("X", "", &Vec3::X)
-.AddProperty("Y", "", &Vec3::Y)
-.AddProperty("Z", "", &Vec3::Z)
+.Field("X", &Vec3::X, "")
+.Field("Y", &Vec3::Y, "")
+.Field("Z", &Vec3::Z, "")
 .IsStable();
 
 ////////////////////////////

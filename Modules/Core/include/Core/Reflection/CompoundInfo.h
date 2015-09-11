@@ -4,10 +4,17 @@
 #include "../Containers/Table.h"
 #include "../Console.h"
 #include "TypeInfo.h"
+#include "DataInfo.h"
 #include "PropertyInfo.h"
 
 /////////////////
 ///   Types   ///
+
+enum FieldFlags : byte
+{
+	FF_None = 0,
+	FF_Transient = (1 << 0)
+};
 
 // TODO: Documentation
 class CORE_API CompoundInfo : public TypeInfo
@@ -26,7 +33,6 @@ public:
 	///   Constructors   ///
 public:
 
-	// TODO: Documentation
 	template <class CompoundT>
 	CompoundInfo(const TypeInfoBuilder<CompoundT, CompoundInfo>& builder)
 		: Base(builder), _data(std::move(builder._data))
@@ -44,6 +50,12 @@ public:
 	/** Searches for the given property in this type by name. */
 	virtual const PropertyInfo* FindProperty(const String& name) const;
 
+	/** Returns an Array of all data members of this type. */
+	virtual Array<DataInfo> GetData() const;
+
+	/** Searches for the given data member in this type by name. */
+	virtual const DataInfo* FindData(const String& name) const;
+
 	////////////////
 	///   Data   ///
 private:
@@ -52,6 +64,8 @@ private:
 	{
 		Table<String, uint32> PropertyTable;
 		Array<PropertyInfo> Properties;
+		Table<String, uint32> DataTable;
+		Array<DataInfo> DataMembers;
 	} _data;
 };
 
@@ -64,6 +78,13 @@ struct TypeInfoBuilder < CompoundT, CompoundInfo > : TypeInfoBuilderBase<Compoun
 public:
 
 	friend CompoundInfo;
+
+	/////////////////////
+	///   Constants   ///
+private:
+
+	/** The default category that properties are sorted into. */
+	constexpr static const char* DefaultCategory = "General";
 
 	////////////////////////
 	///   Constructors   ///
@@ -79,86 +100,125 @@ public:
 	///   Methods   ///
 public:
 
-	/** Adds a field property. */
-	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
-	auto& AddProperty(
-		CString name, 
-		CString description,
+	/** Registers the given field as a data member. */
+	template <typename FieldT>
+	auto& Data(
+		CString name,
 		FieldT CompoundT::*field,
-		PropertyFlags flags = PF_None)
+		DataFlags flags = DF_None)
 	{
 		CommonAsserts<FieldT>();
 		FieldAsserts<FieldT>();
 
-		PropertyInfo property(name, description, flags);
-		property._propertyType = &TypeOf<FieldT>();
-		property._ownerType = &TypeOf<CompoundT>();
+		DataInfo dataInfo(name, flags);
+		dataInfo._ownerType = &TypeOf<CompoundT>();
+		dataInfo._dataType = &TypeOf<FieldT>();
+		dataInfo._offset = GetFieldOffset(field);
 
-		property._fieldGetter = [field](const void* owner) -> const void*
-		{
-			auto pOwner = static_cast<const CompoundT*>(owner);
-			return &(pOwner->*field);
-		};
-		if (std::is_copy_assignable<FieldT>::value)
-		{
-			property._access = PropertyAccess::Field;
-			property._setter = [field](void* owner, const void* value) -> void
-			{
-				auto pOwner = static_cast<CompoundT*>(owner);
-				auto pValue = static_cast<const FieldT*>(value);
-				Implementation::Assign<FieldT, const FieldT&>::Function(pOwner->*field, *pValue);
-			};
-		}
-		else
-		{
-			property._access = PropertyAccess::NoSetField;
-			property._setter = nullptr;
-		}
-
-		ImplementToString(property, field);		// Field properties may be formatted as a String
-		ImplementFromString(property, field);	// Field properties may be set from a String
-		ImplementToArchive(property, field);	// Field properties may be serialized to an Archive
-		ImplementFromArchive(property, field);	// Field properties may be serialized from an Archive
-
-		_data.PropertyTable[name] = _data.Properties.Add(std::move(property));
+		_data.DataTable[name] = _data.DataMembers.Add(std::move(dataInfo));
 		return this->SelfAsMostSpecificTypeInfoBuilder();
 	}
 
-	/** Adds a readonly property with a field getter. */
-	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
-	auto& AddProperty(
+	/** Registers a field member in the default category. */
+	template <typename FieldT>
+	auto& Field(
 		CString name,
+		FieldT CompoundT::*field,
 		CString description,
+		FieldFlags flags = FF_None)
+	{
+		return Field(name, field, description, DefaultCategory, flags);
+	}
+
+	/** Registers a field member in the specified category. */
+	template <typename FieldT>
+	auto& Field(
+		CString name,
+		FieldT CompoundT::*field,
+		CString description,
+		CString category,
+		FieldFlags flags = FF_None)
+	{
+		CommonAsserts<FieldT>();
+		FieldAsserts<FieldT>();
+
+		// Add the data portion of this field
+		this->Data(name, field, FieldFlagsToDataFlags(flags));
+
+		// Add the property portion of this field
+		PropertyInfo propInfo(name, description, category, FieldFlagsToPropertyFlags(flags));
+		propInfo._propertyType = &TypeOf<FieldT>();
+		propInfo._ownerType = &TypeOf<CompoundT>();
+		propInfo._isReadOnly = false;
+
+		ImplementPropertyToString(propInfo, field);
+		ImplementPropertyFromString(propInfo, field);
+		ImplementPropertyToArchive(propInfo, field);
+		ImplementPropertyFromArchive(propInfo, field);
+
+		_data.PropertyTable[name] = _data.Properties.Add(std::move(propInfo));
+		return this->SelfAsMostSpecificTypeInfoBuilder();
+	}
+
+	/** Adds a readonly property with a field getter, in the default category. */
+	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
+	auto& Property(
+		CString name,
 		FieldT CompoundT::*field,
 		std::nullptr_t /*setter*/,
+		CString description,
+		PropertyFlags flags = PF_None)
+	{
+		return Property(name, field, nullptr, description, DefaultCategory, flags);
+	}
+
+	/** Adds a readonly property with a field getter, in the specified category. */
+	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
+	auto& Property(
+		CString name,
+		FieldT CompoundT::*field,
+		std::nullptr_t /*setter*/,
+		CString description,
+		CString category,
 		PropertyFlags flags = PF_None)
 	{
 		CommonAsserts<FieldT>();
 		FieldAsserts<FieldT>();
-		
-		PropertyInfo property(name, description, flags);
-		property._propertyType = &TypeOf<FieldT>();
-		property._ownerType = &TypeOf<CompoundT>();
-		property._access = PropertyAccess::ReadOnlyProperty;
 
-		property._fieldGetter = nullptr;	// ReadOnly properties are not fields, so no field getter
-		property._setter = nullptr;			// ReadOnly properties cannot be set
-		ImplementToString(property, field);	// ReadOnly properties may be formatted as a String
-		property._fromString = nullptr;		// Readonly properties may not be set from a String
-		ImplementToArchive(property, field);// ReadOnly properties may be serialized to an archive (though not much point...)
-		property._fromArchive = nullptr;	// ReadOnly properties may not be deserialized from an archive
+		PropertyInfo propInfo(name, description, category, flags);
+		propInfo._propertyType = &TypeOf<FieldT>();
+		propInfo._ownerType = &TypeOf<CompoundT>();
+		propInfo._isReadOnly = true;
 
-		_data.PropertyTable[name] = _data.Properties.Add(std::move(property));
+		ImplementPropertyToString(propInfo, field);
+		propInfo._fromString = nullptr;
+		ImplementPropertyToArchive(propInfo, field);
+		propInfo._fromArchive = nullptr;
+
+		_data.PropertyTable[name] = _data.Properties.Add(std::move(propInfo));
 		return this->SelfAsMostSpecificTypeInfoBuilder();
+	}
+
+	/** Adds a field property with a custom setter, in the default category. */
+	template <typename FieldT, typename SetT, typename SetRetT, WHERE(!std::is_function<FieldT>::value)>
+	auto& Property(
+		CString name,
+		FieldT CompoundT::*field,
+		SetRetT (CompoundT::*setter)(SetT),
+		CString description,
+		PropertyFlags flags = PF_None)
+	{
+		return Property(name, field, setter, description, DefaultCategory, flags);
 	}
 
 	/** Adds a property with a custom setter. */
 	template <typename FieldT, typename SetT, typename SetRetT, WHERE(!std::is_function<FieldT>::value)>
-	auto& AddProperty(
+	auto& Property(
 		CString name,
-		CString description,
 		FieldT CompoundT::*field,
-		SetRetT (CompoundT::*setter)(SetT),
+		SetRetT(CompoundT::*setter)(SetT),
+		CString description,
+		CString category,
 		PropertyFlags flags = PF_None)
 	{
 		using PropertyT = FieldT;
@@ -166,97 +226,106 @@ public:
 		FieldAsserts<FieldT>();
 		GetterSetterAsserts<FieldT, SetT>();
 
-		PropertyInfo property(name, description, flags);
-		property._propertyType = &TypeOf<PropertyT>();
-		property._ownerType = &TypeOf<CompoundT>();
-		property._access = PropertyAccess::Property;
+		PropertyInfo propInfo(name, description, category, flags);
+		propInfo._propertyType = &TypeOf<FieldT>();
+		propInfo._ownerType = &TypeOf<CompoundT>();
+		propInfo._isReadOnly = false;
 
-		property._fieldGetter = nullptr;				// Properties are not fields, so no field getter
-		ImplementSetter(property, setter);				// Properties are settable
-		ImplementToString(property, field);				// Properties may be formatted as a String
-		ImplementFromString(property, field, setter);	// Properties may be set from a String
-		ImplementToArchive(property, field);			// Properties may be serialized to an Archive
-		ImplementFromArchive(property, field, setter);	// Properties may be deserialized from an Archive
+		ImplementPropertyToString(propInfo, field);
+		ImplementPropertyFromString(propInfo, field, setter);
+		ImplementPropertyToArchive(propInfo, field);
+		ImplementPropertyFromArchive(propInfo, field, setter);
 
-		_data.PropertyTable[name] = _data.Properties.Add(std::move(property));
+		_data.PropertyTable[name] = _data.Properties.Add(std::move(propInfo));
 		return this->SelfAsMostSpecificTypeInfoBuilder();
 	}
 
-	/** Adds a readonly property with a custom getter. */
-	template <typename PropertyT>
-	auto& AddProperty(
+	/** Adds a read-only property with a custom getter, in the default category. */
+	template <typename GetT>
+	auto& Property(
 		CString name,
-		CString description,
-		PropertyT (CompoundT::*getter)() const,
+		GetT (CompoundT::*getter)() const,
 		std::nullptr_t /*setter*/,
+		CString description,
 		PropertyFlags flags = PF_None)
 	{
+		return Property(name, getter, nullptr, description, DefaultCategory, flags);
+	}
+
+	/** Adds a read-only property with a custom getter, in the specified category. */
+	template <typename GetT>
+	auto& Property(
+		CString name,
+		GetT (CompoundT::*getter)() const,
+		std::nullptr_t /*setter*/,
+		CString description,
+		CString category,
+		PropertyFlags flags = PF_None)
+	{
+		using PropertyT = std::decay_t<GetT>;
 		CommonAsserts<PropertyT>();
 
-		PropertyInfo property(name, description, flags);
-		property._propertyType = &TypeOf<PropertyT>();
-		property._ownerType = &TypeOf<CompoundT>();
-		property._access = PropertyAccess::ReadOnlyProperty;
+		PropertyInfo propInfo(name, description, category, flags);
+		propInfo._propertyType = &TypeOf<PropertyT>();
+		propInfo._ownerType = &TypeOf<CompoundT>();
+		propInfo._isReadOnly = true;
 
-		property._fieldGetter = nullptr;		// ReadOnly properties are not fields, so no field getter
-		property._setter = nullptr;				// ReadOnly properties cannot be set
-		ImplementToString(property, getter);	// ReadOnly properties may be formatted as a String
-		property._fromString = nullptr;			// ReadOnly properties may not be set from a String
-		ImplementToArchive(property, getter);	// ReadOnly properties may be serialized to an Archive (though not much point...)
-		property._fromArchive = nullptr;		// ReadOnly properties may not be deserialized from an Archive
+		ImplementPropertyToString(propInfo, getter);
+		propInfo._fromString = nullptr;
+		ImplementPropertyToArchive(propInfo, getter);
+		propInfo._fromArchive = nullptr;
 
-		_data.PropertyTable[name] = _data.Properties.Add(std::move(property));
+		_data.PropertyTable[name] = _data.Properties.Add(std::move(propInfo));
 		return this->SelfAsMostSpecificTypeInfoBuilder();
+	}
+
+	/** Adds a property with a custom getter and setter, in the default category. */
+	template <typename GetT, typename SetRetT, typename SetT>
+	auto& Property(
+		CString name,
+		GetT (CompoundT::*getter)() const,
+		SetRetT (CompoundT::*setter)(SetT),
+		CString description,
+		PropertyFlags flags = PF_None)
+	{
+		return Property(name, getter, setter, description, DefaultCategory, flags);
 	}
 
 	/** Adds a property with a custom getter and setter. */
 	template <typename GetT, typename SetRetT, typename SetT>
-	auto& AddProperty(
+	auto& Property(
 		CString name,
+		GetT(CompoundT::*getter)() const,
+		SetRetT(CompoundT::*setter)(SetT),
 		CString description,
-		GetT (CompoundT::*getter)() const,
-		SetRetT (CompoundT::*setter)(SetT),
+		CString category,
 		PropertyFlags flags = PF_None)
 	{
 		using PropertyT = std::decay_t<GetT>;
 		CommonAsserts<PropertyT>();
 		GetterSetterAsserts<GetT, SetT>();
 
-		PropertyInfo property(name, description, flags);
-		property._propertyType = &TypeOf<PropertyT>();
-		property._ownerType = &TypeOf<CompoundT>();
-		property._access = PropertyAccess::Property;
+		PropertyInfo propInfo(name, description, category, flags);
+		propInfo._propertyType = &TypeOf<PropertyT>();
+		propInfo._ownerType = &TypeOf<CompoundT>();
+		propInfo._isReadOnly = false;
 
-		property._fieldGetter = nullptr;				// Properties are not fields, so no field getter
-		ImplementSetter(property, setter);				// Properties may be set
-		ImplementToString(property, getter);			// Properties may be formatted as a String
-		ImplementFromString(property, getter, setter);	// Properties may be set from a String
-		ImplementToArchive(property, getter);			// Properties may be serialized to an Archive
-		ImplementFromArchive(property, getter, setter);	// Properties may be deserialized from an Archive
+		ImplementToString(propInfo, getter);
+		ImplementFromString(propInfo, getter, setter);
+		ImplementToArchive(propInfo, getter);
+		ImplementFromArchive(propInfo, getter, setter);
 
-		_data.PropertyTable[name] = _data.Properties.Add(std::move(property));
+		_data.PropertyTable[name] = _data.Properties.Add(std::move(propInfo));
 		return this->SelfAsMostSpecificTypeInfoBuilder();
 	}
 
 private:
 
-	/** Implements the setter wrapper for a setter method. */
-	template <typename RetT, typename SetT>
-	void ImplementSetter(PropertyInfo& property, RetT (CompoundT::*setter)(SetT))
-	{
-		property._setter = [setter](void* owner, const void* value) -> void
-		{
-			auto pOwner = static_cast<CompoundT*>(owner);
-			auto pValue = static_cast<const SetT*>(value);
-			(pOwner->*setter)(*pValue);
-		};
-	}
-
 	/** Impelements the 'ToString' function on a field getter. */
 	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
-	void ImplementToString(PropertyInfo& property, FieldT CompoundT::*field)
+	void ImplementPropertyToString(PropertyInfo& propInfo, FieldT CompoundT::*field)
 	{
-		property._toString = [field](const void* owner) -> String
+		propInfo._toString = [field](const void* owner) -> String
 		{
 			auto pOwner = static_cast<const CompoundT*>(owner);
 			return ToString(pOwner->*field);
@@ -265,9 +334,9 @@ private:
 
 	/** Implements the 'ToString' function on a method getter. */
 	template <typename GetT>
-	void ImplementToString(PropertyInfo& property, GetT (CompoundT::*getter)() const)
+	void ImplementPropertyToString(PropertyInfo& propInfo, GetT (CompoundT::*getter)() const)
 	{
-		property._toString = [getter](const void* owner) -> String
+		propInfo._toString = [getter](const void* owner) -> String
 		{
 			auto pOwner = static_cast<const CompoundT*>(owner);
 			return ToString((pOwner->*getter)());
@@ -276,9 +345,9 @@ private:
 
 	/** Implements the 'FromString' function with a field. */
 	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
-	void ImplementFromString(PropertyInfo& property, FieldT CompoundT::*field)
+	void ImplementPropertyFromString(PropertyInfo& propInfo, FieldT CompoundT::*field)
 	{
-		property._fromString = [field](void* owner, const String& string) -> String
+		propInfo._fromString = [field](void* owner, const String& string) -> String
 		{
 			auto pOwner = static_cast<CompoundT*>(owner);
 			return FromString(pOwner->*field, string);
@@ -287,9 +356,9 @@ private:
 
 	/** Implements the 'FromString' function with a field getter, and method setter. */
 	template <typename FieldT, typename RetT, typename SetT, WHERE(!std::is_function<FieldT>::value)>
-	void ImplementFromString(PropertyInfo& property, FieldT CompoundT::*field, RetT (CompoundT::*setter)(SetT))
+	void ImplementPropertyFromString(PropertyInfo& propInfo, FieldT CompoundT::*field, RetT (CompoundT::*setter)(SetT))
 	{
-		property._fromString = [field, setter](void* owner, const String& string) -> String
+		propInfo._fromString = [field, setter](void* owner, const String& string) -> String
 		{
 			auto pOwner = static_cast<CompoundT*>(owner);
 			auto val = pOwner->*field;
@@ -301,9 +370,9 @@ private:
 
 	/** Implements the 'FromString' function with a method getter, and method setter. */
 	template <typename GetT, typename RetT, typename SetT>
-	void ImplementFromString(PropertyInfo& property, GetT (CompoundT::*getter)() const, RetT (CompoundT::*setter)(SetT))
+	void ImplementPropertyFromString(PropertyInfo& propInfo, GetT (CompoundT::*getter)() const, RetT (CompoundT::*setter)(SetT))
 	{
-		property._fromString = [getter, setter](void* owner, const String& string) -> String
+		propInfo._fromString = [getter, setter](void* owner, const String& string) -> String
 		{
 			auto pOwner = static_cast<CompoundT*>(owner);
 			auto val = (pOwner->*getter)();
@@ -315,9 +384,9 @@ private:
 
 	/** Implements the 'ToArchive' function with a field getter. */
 	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
-	void ImplementToArchive(PropertyInfo& property, FieldT CompoundT::*field)
+	void ImplementPropertyToArchive(PropertyInfo& propInfo, FieldT CompoundT::*field)
 	{
-		property._toArchive = [field](const void* owner, ArchiveNode& node) -> void
+		propInfo._toArchive = [field](const void* owner, ArchiveNode& node) -> void
 		{
 			auto pOwner = static_cast<const CompoundT*>(owner);
 			ToArchive(pOwner->*field, node);
@@ -326,9 +395,9 @@ private:
 
 	/** Implements the 'ToArchive' function with a method getter. */
 	template <typename GetT>
-	void ImplementToArchive(PropertyInfo& property, GetT (CompoundT::*getter)() const)
+	void ImplementPropertyToArchive(PropertyInfo& propInfo, GetT (CompoundT::*getter)() const)
 	{
-		property._toArchive = [getter](const void* owner, ArchiveNode& node) -> void
+		propInfo._toArchive = [getter](const void* owner, ArchiveNode& node) -> void
 		{
 			auto pOwner = static_cast<const CompoundT*>(owner);
 			ToArchive((pOwner->*getter)(), node);
@@ -337,9 +406,9 @@ private:
 
 	/** Implements the 'FromArchive' function with a field. */
 	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
-	void ImplementFromArchive(PropertyInfo& property, FieldT CompoundT::*field)
+	void ImplementPropertyFromArchive(PropertyInfo& propInfo, FieldT CompoundT::*field)
 	{
-		property._fromArchive = [field](void* owner, const ArchiveNode& node) -> void
+		propInfo._fromArchive = [field](void* owner, const ArchiveNode& node) -> void
 		{
 			auto pOwner = static_cast<CompoundT*>(owner);
 			FromArchive(pOwner->*field, node);
@@ -348,9 +417,9 @@ private:
 
 	/** Implements the 'FromArchive' function with a field getter and method setter. */
 	template <typename FieldT, typename RetT, typename SetT, WHERE(!std::is_function<FieldT>::value)>
-	void ImplementFromArchive(PropertyInfo& property, FieldT CompoundT::*field, RetT (CompoundT::*setter)(SetT))
+	void ImplementPropertyFromArchive(PropertyInfo& propInfo, FieldT CompoundT::*field, RetT (CompoundT::*setter)(SetT))
 	{
-		property._fromArchive = [field, setter](void* owner, const ArchiveNode& node) -> void
+		propInfo._fromArchive = [field, setter](void* owner, const ArchiveNode& node) -> void
 		{
 			auto pOwner = static_cast<CompoundT*>(owner);
 			auto value = pOwner->*field;
@@ -361,9 +430,9 @@ private:
 
 	/** Implements the 'FromArchive' function with a method getter and method setter. */
 	template <typename GetT, typename RetT, typename SetT>
-	void ImplementFromArchive(PropertyInfo& property, GetT (CompoundT::*getter)() const, RetT (CompoundT::*setter)(SetT))
+	void ImplementPropertyFromArchive(PropertyInfo& propInfo, GetT (CompoundT::*getter)() const, RetT (CompoundT::*setter)(SetT))
 	{
-		property._fromArchive = [getter, setter](void* owner, const ArchiveNode& node) -> void
+		propInfo._fromArchive = [getter, setter](void* owner, const ArchiveNode& node) -> void
 		{
 			auto pOwner = static_cast<CompoundT*>(owner);
 			auto value = (pOwner->*getter)();
@@ -372,18 +441,61 @@ private:
 		};
 	}
 
-	/** Assertions common to all types of properties. */
+	/** Returns the offset of the given field within the compound. */
+	template <typename FieldT>
+	uint32 GetFieldOffset(FieldT CompoundT::*field) const
+	{
+		static_assert(!std::is_function<FieldT>::value, "You cannot get the offset of a non-field.");
+		static_assert(sizeof(field) >= sizeof(uint32), "Due to platform limitations, this technique is not valid.");
+		static_assert(sizeof(CompoundT) < UINT32_MAX, "Due to limitations of the type, this technique is not valid.");
+
+		// Bit of a hack, but necessary. If this becomes problematic, I can replace the field offset with a getter/setter std::function pair or something.
+		// Though that would be much less performant.
+		// There are a few interesting things to note about this technique:
+		// - On MSVC (as opposed to all other tested compilers), the size of a pointer-to-member is 4 bytes, as opposed to 8 on 64 bit systems.
+		//	 I guess they're assuming that you'll never make a single structure that takes up more than 4 gigabytes (which I guess is most likely true)
+		//   but it's still a little bothersome. Anyway, that's the reason for returning a 'uint32' as opposed to the more logical 'std::size_t'.
+		// - There are other techniques I can investigate to get the offset of this member (dereferencing from null/arbitrary address, etc),
+		//   but for now I'm sticking with this one.
+		return *reinterpret_cast<uint32*>(&field);
+	}
+
+	/** Translates the given FieldFlags into the relevant DataFlags. */
+	DataFlags FieldFlagsToDataFlags(FieldFlags flags) const
+	{
+		DataFlags dFlags = DF_None;
+
+		if (flags & FF_Transient)
+		{
+			dFlags = DataFlags(dFlags | DF_Transient);
+		}
+
+		return dFlags;
+	}
+
+	/** Translates the given FieldFlags to the relevant PropertyFlags. */
+	PropertyFlags FieldFlagsToPropertyFlags(FieldFlags /*flags*/) const
+	{
+		PropertyFlags pFlags = PF_None;
+
+		// There aren't any property flags at the moment, so this isn't necessary.
+
+		return pFlags;
+	}
+
+	/** Assertions common to all types of members. */
 	template <typename PropertyT>
 	void CommonAsserts() const
 	{
 		static_assert(!std::is_polymorphic<std::decay_t<PropertyT>>::value, "Compounds may not contain polymorphic types.");
 	}
 
-	/** Assertions common to field properties */
-	template <typename PropertyT>
+	/** Assertions common to field members. */
+	template <typename DataT>
 	void FieldAsserts() const
 	{
-		static_assert(!std::is_reference<PropertyT>::value, "You may not have references as fields.");
+		static_assert(!std::is_reference<DataT>::value, "You may not have references as data.");
+		static_assert(!std::is_function<DataT>::value, "You can't register a member function as data.");
 	}
 
 	/** Assertions common to all getter/setter functions */
@@ -408,26 +520,26 @@ namespace Implementation
 {
 	namespace Default
 	{
-		/** Default implementation of 'ToArchive', prints out properties or 'ToString'. */
+		/** Default implementation of 'ToArchive', prints out data members or 'ToString'. */
 		template <typename T>
 		void ToArchive(const T& value, ArchiveNode& node)
 		{
 			if(std::is_class<T>::value)
 			{
-				// Type is compound, serialize its properties
+				// Type is compound, serialize its data
 				const auto& type = reinterpret_cast<const CompoundInfo&>(::TypeOf(value));
 				
-				// Iterate through all properties
-				for (const auto& propInfo : type.GetProperties())
+				// Iterate through all data members
+				for (const auto& dataInfo : type.GetData())
 				{
-					// If we can serialize this property
-					if (propInfo.GetAccess() != PropertyAccess::ReadOnlyProperty && !(propInfo.GetFlags() & PF_Transient))
+					// If this data is not marked as transient
+					if (!(dataInfo.GetFlags() & DF_Transient))
 					{
-						// Add a node for the property, naming it after the property
-						auto propNode = node.AddChild(propInfo.GetName());
+						// Add a node for the data, naming it after the data
+						auto dataNode = node.AddChild(dataInfo.GetName());
 
 						// Serialize the property to the node TODO: Figure out why I need to explicitly initialize "ImmutableVariant" here
-						propInfo.Get(ImmutableVariant{ value }).ToArchive(*propNode);
+						dataInfo.Get(ImmutableVariant{ value }).ToArchive(*dataNode);
 					}
 				}
 			}
@@ -449,16 +561,16 @@ namespace Implementation
 				// Iterate through all child nodes
 				for (auto pChild : node.GetChildren())
 				{
-					// Try to find the property that this node references
-					if (auto prop = type.FindProperty(pChild->GetName()))
+					// Try to find the data that this node references
+					if (auto data = type.FindData(pChild->GetName()))
 					{
-						// Deserialize the property
-						prop->Get(Variant{ value }).FromArchive(*pChild);
+						// Deserialize the data
+						data->Get(Variant{ value }).FromArchive(*pChild);
 					}
 					else
 					{
 						// This property does not exist, give a warning
-						Console::Warning("The property '@' does not exist on the type '@'.", pChild->GetName(), type);
+						Console::Warning("The data member '@' does not exist on the type '@'.", pChild->GetName(), type);
 					}
 				}
 			}

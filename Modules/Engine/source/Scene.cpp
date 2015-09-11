@@ -6,8 +6,8 @@
 ///   Reflection   ///
 
 BUILD_REFLECTION(Scene)
-.AddProperty("TimeDilation", "The time dilation of the scene. Default is 1.", &Scene::TimeDilation)
-.AddProperty("TimeStep", "The amount of time (ms) that each update of the scene represents.", &Scene::TimeStep);
+.Field("TimeDilation", &Scene::TimeDilation, "The time dilation of the scene. Default is 1.")
+.Field("TimeStep", &Scene::TimeStep, "The amount of time (ms) that each update of the scene represents.");
 
 ///////////////////
 ///   Methods   ///

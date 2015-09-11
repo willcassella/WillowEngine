@@ -22,7 +22,6 @@ public:
 	///   Constructors   ///
 public:
 
-	// TODO: Documentation
 	template <typename EnumT>
 	EnumInfo(const TypeInfoBuilder<EnumT, EnumInfo>& builder)
 		: Base(builder), _data(std::move(builder._data))
@@ -80,7 +79,6 @@ public:
 	///   Constructors   ///
 public:
 
-	// TODO: Documentatnion
 	TypeInfoBuilder(CString name)
 		: TypeInfoBuilderBase<EnumT, EnumInfo>(name)
 	{
@@ -99,7 +97,7 @@ public:
 	}
 
 	/** Adds a value for this enum. */
-	auto& AddValue(CString name, CString /*description*/, EnumT value)
+	auto& Value(CString name, EnumT value, CString /*description*/ = "")
 	{
 		_data.values[name] = static_cast<int64>(value);
 		return this->SelfAsMostSpecificTypeInfoBuilder();

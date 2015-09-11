@@ -8,7 +8,8 @@
 ///   Reflection   ///
 
 BUILD_REFLECTION(CompoundInfo)
-.AddProperty("Properties", "The collection of properties of this type.", &CompoundInfo::GetProperties, nullptr);
+.Property("Properties", &CompoundInfo::GetProperties, nullptr, "The collection of properties of this type.")
+.Property("Data", &CompoundInfo::GetData, nullptr, "The collection of data on this type.");
 
 ///////////////////
 ///   Methods   ///
@@ -24,6 +25,24 @@ const PropertyInfo* CompoundInfo::FindProperty(const String& name) const
 	if (index)
 	{
 		return &_data.Properties[*index];
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+Array<DataInfo> CompoundInfo::GetData() const
+{
+	return _data.DataMembers;
+}
+
+const DataInfo* CompoundInfo::FindData(const String& name) const
+{
+	auto index = _data.DataTable.Find(name);
+	if (index)
+	{
+		return &_data.DataMembers[*index];
 	}
 	else
 	{

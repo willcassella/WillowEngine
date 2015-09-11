@@ -7,24 +7,12 @@
 /////////////////
 ///   Types   ///
 
-enum PropertyFlags : uint32
+enum PropertyFlags : byte
 {
 	PF_None = 0,
-	PF_Transient = 1 << 0,
 };
 
-/** Enumeration of the different access types for properties. Each is mutually exclusive. */
-enum class PropertyAccess : byte
-{
-	Field,				// Fields are properties that are gauranteed to live within the object that owns them. They may be gotten or set directly.
-	NoSetField,			// NoSetFields are fields that may not be set directly because they are not copy-assignable. You may still perform mutable operations on them, however.
-	Property,			// Properties may be set directly and have mutable operations performed on them, but may not be gotten directly.
-	ReadOnlyProperty	// ReadOnlyProperties may only have immutable operations performed on them.
-};
-
-/** A class representing the information for a Property.
-* This unfortunately does not model all the const/reference overload
-* possibilities for getters and setters, */
+/** A class representing information for a Property (part of the public API for a compound). */
 struct CORE_API PropertyInfo final
 {
 	///////////////////////
@@ -43,7 +31,7 @@ public:
 	///   Constructors   ///
 private:
 
-	PropertyInfo(CString name, CString description, PropertyFlags flags);
+	PropertyInfo(CString name, CString description, CString category, PropertyFlags flags);
 	
 	///////////////////
 	///   Methods   ///
@@ -67,16 +55,22 @@ public:
 		return _description;
 	}
 
+	/** Returns the category this Property belongs to. */
+	FORCEINLINE CString GetCategory() const
+	{
+		return _category;
+	}
+
 	/** Returns the flags on this property. */
 	FORCEINLINE PropertyFlags GetFlags() const
 	{
 		return _flags;
 	}
 
-	/** Returns the acess level for this property. */
-	FORCEINLINE PropertyAccess GetAccess() const
+	/** Returns whether this property is read-only. */
+	FORCEINLINE bool IsReadOnly() const
 	{
-		return _access;
+		return _isReadOnly;
 	}
 
 	/** Returns the type information for this Property. */
@@ -99,36 +93,21 @@ public:
 	* WARNING: 'owner' must be castable to the type that owns this property. */
 	ImmutableProperty Get(ImmutableVariant owner) const;
 
-	/** Gets this Property on the given owner.
-	* WARNING: 'owner' must be castable to the type that owns this property. */
-	template <typename T>
-	Property Get(T& owner);
-
-	/** Gets this Property on the given owner.
-	* WARNING: 'owner' must be castable to the type that owns this property. */
-	template <typename T>
-	ImmutableProperty Get(const T& owner);
-
-	/** It's not safe to get properties on rvalue references. */
-	template <typename T>
-	auto Get(T&& owner) = delete;
-
 	////////////////
 	///   Data   ///
 private:
 
 	CString _name;
 	CString _description;
+	CString _category;
 	const TypeInfo* _propertyType;
 	const CompoundInfo* _ownerType;
-	std::function<const void* (const void*)> _fieldGetter;
-	std::function<void (void*, const void*)> _setter;
 	std::function<String (const void*)> _toString;
 	std::function<String (void*, const String&)> _fromString;
 	std::function<void (const void*, ArchiveNode&)> _toArchive;
 	std::function<void (void*, const ArchiveNode&)> _fromArchive;
 	PropertyFlags _flags;
-	PropertyAccess _access;
+	bool _isReadOnly;
 };
 
 /** Type encapsulating access to a mutable (though possible read-only) Property. */
@@ -157,29 +136,25 @@ public:
 		return *_info;
 	}
 
+	/** Returns this property's type. */
+	FORCEINLINE const TypeInfo& GetType() const
+	{
+		return _info->GetPropertyType();
+	}
+
 	/** Formats the state of this Property as a String. */
 	String ToString() const;
 
-	/** Parses this Property from a String, a returns the remainder of the string. */
+	/** Parses this Property from a String, a returns the remainder of the string. 
+	* WARNING: This function will fail if this is a read-only property. */
 	String FromString(const String& string);
 
 	/** Serializes this property to the given archive node. */
 	void ToArchive(ArchiveNode& node) const;
 
-	/** Deserializes this property from the given archive node. */
+	/** Deserializes this property from the given archive node.
+	* WARNING: This will fail if this is a read-only property. */
 	void FromArchive(const ArchiveNode& node);
-
-	/** Sets the value of this property.
-	* WARNING: If the access level of this property is 'ReadOnlyProperty', this function will fail. */
-	void SetValue(ImmutableVariant value);
-
-	/** Accesses this property as a field.
-	* WARNING: If the access level of this property is not 'Field', this function will fail. */
-	Variant GetField();
-
-	/** Accesses this property as a field.
-	* WARNING: If the access level of this property is not 'Field', this function will fail. */
-	ImmutableVariant GetField() const;
 
 	////////////////
 	///   Data   ///
@@ -213,15 +188,23 @@ private:
 	///   Methods   ///
 public:
 
+	/** Returns the information for this property. */
+	FORCEINLINE const PropertyInfo& GetInfo() const
+	{
+		return *_info;
+	}
+
+	/** Returns the type of this property. */
+	FORCEINLINE const TypeInfo& GetType() const
+	{
+		return _info->GetPropertyType();
+	}
+
 	/** Formats the state of this property as a String. */
 	String ToString() const;
 
 	/** Serializes this property to the given archive node. */
 	void ToArchive(ArchiveNode& node) const;
-
-	/** Accesses this property as a field.
-	* WARNING: If the access level of this property is not 'Field', this function will fail. */
-	ImmutableVariant GetField() const;
 
 	////////////////
 	///   Data   ///
@@ -230,21 +213,6 @@ private:
 	const PropertyInfo* _info;
 	const void* _owner;
 };
-
-///////////////////
-///   Methods   ///
-
-template <typename T>
-Property PropertyInfo::Get(T& owner)
-{
-	return Property(self, &owner);
-}
-
-template <typename T>
-ImmutableProperty PropertyInfo::Get(const T& owner)
-{
-	return ImmutableProperty(self, &owner);
-}
 
 /////////////////////
 ///   Functions   ///
@@ -259,4 +227,3 @@ void FromArchive(ImmutableProperty) = delete;
 ///   Reflection   ///
 
 REFLECTABLE_ENUM(PropertyFlags)
-REFLECTABLE_ENUM(PropertyAccess)

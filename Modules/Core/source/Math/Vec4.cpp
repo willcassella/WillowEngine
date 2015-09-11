@@ -8,10 +8,10 @@
 ///   Reflection   ///
 
 BUILD_REFLECTION(Vec4)
-.AddProperty("X", "", &Vec4::X)
-.AddProperty("Y", "", &Vec4::Y)
-.AddProperty("Z", "", &Vec4::Z)
-.AddProperty("W", "", &Vec4::W)
+.Field("X", &Vec4::X, "")
+.Field("Y", &Vec4::Y, "")
+.Field("Z", &Vec4::Z, "")
+.Field("W", &Vec4::W, "")
 .IsStable();
 
 ////////////////////////////

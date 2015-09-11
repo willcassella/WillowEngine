@@ -8,10 +8,6 @@
 template <typename T>
 struct UniquePtr;
 
-/** Defined in 'Memory/SharedPtr.h' */
-template <typename T>
-struct SharedPtr;
-
 /** Defined in 'Memory/Ptr.h' */
 template <class T>
 struct Ptr;

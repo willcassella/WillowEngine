@@ -7,12 +7,13 @@
 ///   Reflection   ///
 
 BUILD_REFLECTION(GameObject)
-.AddProperty("Name", "The name of this GameObject.", &GameObject::_name)
-.AddProperty("Scene", "The scene this GameObject belongs to.", &GameObject::_scene, &GameObject::SetScene)
-.AddProperty("Transform", "The world transformation of this GameObject.", &GameObject::Transform)
-.AddProperty("ID", "The unique ID of this GameObject.", &GameObject::_id)
-.AddProperty("Alive", "Whether this GameObject is alive.", &GameObject::_isAlive)
-.AddProperty("Destroyed", "Whether this GameObject is destroyed.", &GameObject::_isDestroyed);
+.Data("ID", &GameObject::_id)
+.Data("Scene", &GameObject::_scene)
+.Data("Alive", &GameObject::_isAlive)
+.Data("Destroyed", &GameObject::_isDestroyed)
+.Field("Name", &GameObject::_name, "The name of this GameObject.")
+.Field("Transform", &GameObject::Transform, "The world transformation of this GameObject.")
+.Property("Destroyed", &GameObject::_isDestroyed, nullptr, "Whether this GameObject has been destroyed.");
 
 ////////////////////////
 ///   Constructors   ///

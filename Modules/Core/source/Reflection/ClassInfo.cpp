@@ -65,7 +65,7 @@ Array<PropertyInfo> ClassInfo::GetProperties() const
 
 const PropertyInfo* ClassInfo::FindProperty(const String& name) const
 {
-	const PropertyInfo* property = Base::FindProperty(name);
+	const PropertyInfo* property = CompoundInfo::FindProperty(name);
 
 	if (property)
 	{
@@ -74,6 +74,36 @@ const PropertyInfo* ClassInfo::FindProperty(const String& name) const
 	else if (GetBase())
 	{
 		return GetBase()->FindProperty(name);
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+Array<DataInfo> ClassInfo::GetData() const
+{
+	if (GetBase())
+	{
+		return GetBase()->GetData() + CompoundInfo::GetData();
+	}
+	else
+	{
+		return CompoundInfo::GetData();
+	}
+}
+
+const DataInfo* ClassInfo::FindData(const String& name) const
+{
+	const DataInfo* data = CompoundInfo::FindData(name);
+
+	if (data)
+	{
+		return data;
+	}
+	else if (GetBase())
+	{
+		return GetBase()->FindData(name);
 	}
 	else
 	{

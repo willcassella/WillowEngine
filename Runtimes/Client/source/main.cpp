@@ -169,7 +169,6 @@ void eventLoop(GLFWwindow* window)
 		while (lag >= scene.TimeStep)
 		{
 			Vec2 moveAccum;
-			Vec2 lookAccum;
 
 			// Dispatch events
 			if (glfwGetKey(window, GLFW_KEY_W))

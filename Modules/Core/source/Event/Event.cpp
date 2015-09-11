@@ -9,14 +9,16 @@
 ///   Reflection   ///
 
 BUILD_REFLECTION(Event)
-.AddProperty("Name", "", &Event::_name)
-.AddProperty("Value", "", &Event::_value);
+.Data("Name", &Event::_name)
+.Data("Value", &Event::_value)
+.Property("Name", &Event::GetName, nullptr, "The name of this event.")
+;//.Property("Value", &Event::GetValue, nullptr, "The value associated with this event.");
 
 ////////////////////////
 ///   Constructors   ///
 
-Event::Event(const String& name)
-	: _name(name), _argType(TypeOf<void>())
+Event::Event(String name)
+	: _name(std::move(name))
 {
 	// All done
 }

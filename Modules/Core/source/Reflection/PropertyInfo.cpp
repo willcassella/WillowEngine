@@ -10,28 +10,22 @@
 ///   Reflection   ///
 
 BUILD_REFLECTION(PropertyInfo)
-.AddProperty("Name", "The name of this property.", &PropertyInfo::_name, nullptr)
-.AddProperty("Description", "A description of this property.", &PropertyInfo::_description, nullptr)
-.AddProperty("Flags", "The flags on this property.", &PropertyInfo::_flags, nullptr)
-.AddProperty("Owner Type", "The type that owns this property.", &PropertyInfo::_ownerType, nullptr)
-.AddProperty("Property Type", "What type this property is.", &PropertyInfo::_propertyType, nullptr);
+.Property("Name", &PropertyInfo::_name, nullptr, "The name of this property.")
+.Property("Description", &PropertyInfo::_description, nullptr, "A description of this property.")
+.Property("Category", &PropertyInfo::_category, nullptr, "The category this property belongs to.")
+.Property("Flags", &PropertyInfo::_flags, nullptr, "The flags on this property.")
+.Property("Owner Type", &PropertyInfo::_ownerType, nullptr, "The type that owns this property.")
+.Property("Property Type", &PropertyInfo::_propertyType, nullptr, "What type this property is.");
 
 BUILD_ENUM_REFLECTION(PropertyFlags)
 .IsBitFlag()
-.AddValue("None", "This property has no flags.", PF_None)
-.AddValue("Transient", "This property's value is unimportant, and should not be stored.", PF_Transient);
-
-BUILD_ENUM_REFLECTION(PropertyAccess)
-.AddValue("Field", "This property is a field.", PropertyAccess::Field)
-.AddValue("No-Set Field", "This property is a field, with a disabled copy-assignment operator.", PropertyAccess::NoSetField)
-.AddValue("Property", "This property is a property with a custom getter and/or setter.", PropertyAccess::Property)
-.AddValue("Read-Only Property", "This property is read-only, and may not be set.", PropertyAccess::ReadOnlyProperty);
+.Value("None", PF_None, "This property has no flags.");
 
 ////////////////////////
 ///   Constructors   ///
 
-PropertyInfo::PropertyInfo(CString name, CString description, PropertyFlags flags)
-	: _name(name), _description(description), _flags(flags)
+PropertyInfo::PropertyInfo(CString name, CString description, CString category, PropertyFlags flags)
+	: _name(name), _description(description), _category(category), _flags(flags)
 {
 	// All done
 }
@@ -60,14 +54,12 @@ ImmutableProperty::ImmutableProperty(const PropertyInfo& info, const void* owner
 Property PropertyInfo::Get(Variant owner) const
 {
 	assert(owner.GetType().IsCastableTo(*_ownerType));
-
 	return Property(self, owner.GetValue());
 }
 
 ImmutableProperty PropertyInfo::Get(ImmutableVariant owner) const
 {
 	assert(owner.GetType().IsCastableTo(*_ownerType));
-
 	return ImmutableProperty(self, owner.GetValue());
 }
 
@@ -79,8 +71,7 @@ String Property::ToString() const
 String Property::FromString(const String& string)
 {
 	// Read only properties may not have mutable operation performed on them.
-	assert(_info->GetAccess() != PropertyAccess::ReadOnlyProperty);
-
+	assert(_info->IsReadOnly());
 	return _info->_fromString(_owner, string);
 }
 
@@ -91,33 +82,9 @@ void Property::ToArchive(ArchiveNode& node) const
 
 void Property::FromArchive(const ArchiveNode& node)
 {
-	assert(_info->GetAccess() != PropertyAccess::ReadOnlyProperty);
-
+	// Read only properties may not have mutable operation performed on them.
+	assert(_info->IsReadOnly());
 	_info->_fromArchive(_owner, node);
-}
-
-void Property::SetValue(ImmutableVariant value)
-{
-	assert(value.GetType().IsCastableTo(_info->GetPropertyType()));
-	assert(_info->GetAccess() != PropertyAccess::ReadOnlyProperty && _info->GetAccess() != PropertyAccess::NoSetField);
-
-	_info->_setter(_owner, value.GetValue());
-}
-
-Variant Property::GetField()
-{
-	assert(_info->GetAccess() == PropertyAccess::Field || _info->GetAccess() == PropertyAccess::NoSetField);
-
-	auto value = const_cast<void*>(_info->_fieldGetter(_owner));
-	return Variant(value, _info->GetPropertyType());
-}
-
-ImmutableVariant Property::GetField() const
-{
-	assert(_info->GetAccess() == PropertyAccess::Field || _info->GetAccess() == PropertyAccess::NoSetField);
-
-	auto value = _info->_fieldGetter(_owner);
-	return ImmutableVariant(value, _info->GetPropertyType());
 }
 
 String ImmutableProperty::ToString() const
@@ -128,12 +95,4 @@ String ImmutableProperty::ToString() const
 void ImmutableProperty::ToArchive(ArchiveNode& node) const
 {
 	_info->_toArchive(_owner, node);
-}
-
-ImmutableVariant ImmutableProperty::GetField() const
-{
-	assert(_info->GetAccess() == PropertyAccess::Field || _info->GetAccess() == PropertyAccess::NoSetField);
-
-	auto value = _info->_fieldGetter(_owner);
-	return ImmutableVariant(value, _info->GetPropertyType());
 }

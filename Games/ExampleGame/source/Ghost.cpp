@@ -7,7 +7,7 @@
 ///   Reflection   ///
 
 BUILD_REFLECTION(Ghost)
-.AddProperty("Slider", "", &Ghost::Slider);
+.Field("Slider", &Ghost::Slider, "");
 
 ////////////////////////
 ///   Constructors   ///

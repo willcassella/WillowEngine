@@ -177,9 +177,6 @@
     <ClInclude Include="include\Core\Forwards\Core.h">
       <Filter>include\Forwards</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Memory\SharedPtr.h">
-      <Filter>include\Memory</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Containers\DynamicBuffer.h">
       <Filter>include\Containers</Filter>
     </ClInclude>
@@ -224,6 +221,9 @@
     </ClInclude>
     <ClInclude Include="include\Core\ArchiveNode.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Reflection\DataInfo.h">
+      <Filter>include\Reflection</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -315,6 +315,9 @@
       <Filter>source\Math</Filter>
     </ClCompile>
     <ClCompile Include="source\Reflection\EnumInfo.cpp">
+      <Filter>source\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Reflection\DataInfo.cpp">
       <Filter>source\Reflection</Filter>
     </ClCompile>
   </ItemGroup>

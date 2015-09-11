@@ -8,7 +8,7 @@
 ///   Reflection   ///
 
 BUILD_REFLECTION(CameraComponent)
-.AddProperty("HFov", "The horizontal field of view of the camera.", &CameraComponent::HFov)
-.AddProperty("VFov", "The vertical field of view of the camera.", &CameraComponent::VFov)
-.AddProperty("ZMin", "The distance to the near clipping plane.", &CameraComponent::ZMin)
-.AddProperty("ZMax", "The distance to the far clipping plane.", &CameraComponent::ZMax);
+.Field("HFov", &CameraComponent::HFov, "The horizontal field of view of the camera.")
+.Field("VFov", &CameraComponent::VFov, "The vertical field of view of the camera.")
+.Field("ZMin", &CameraComponent::ZMin, "The distance to the near clipping plane.")
+.Field("ZMax", &CameraComponent::ZMax, "The distance to the far clipping plane.");
