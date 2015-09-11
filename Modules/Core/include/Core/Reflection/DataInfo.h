@@ -86,4 +86,4 @@ private:
 //////////////////////
 ///   Reflection   ///
 
-REFLECTABLE_ENUM(DataFlags);
+REFLECTABLE_ENUM(DataFlags)
