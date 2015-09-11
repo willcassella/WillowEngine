@@ -79,7 +79,7 @@ private:
 	CString _name;
 	const TypeInfo* _dataType;
 	const CompoundInfo* _ownerType;
-	uint32 _offset;
+	std::size_t _offset;
 	DataFlags _flags;
 };
 

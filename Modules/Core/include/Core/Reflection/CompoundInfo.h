@@ -443,21 +443,19 @@ private:
 
 	/** Returns the offset of the given field within the compound. */
 	template <typename FieldT>
-	uint32 GetFieldOffset(FieldT CompoundT::*field) const
+	std::size_t GetFieldOffset(FieldT CompoundT::*field) const
 	{
 		static_assert(!std::is_function<FieldT>::value, "You cannot get the offset of a non-field.");
-		static_assert(sizeof(field) >= sizeof(uint32), "Due to platform limitations, this technique is not valid.");
-		static_assert(sizeof(CompoundT) < UINT32_MAX, "Due to limitations of the type, this technique is not valid.");
 
 		// Bit of a hack, but necessary. If this becomes problematic, I can replace the field offset with a getter/setter std::function pair or something.
 		// Though that would be much less performant.
-		// There are a few interesting things to note about this technique:
-		// - On MSVC (as opposed to all other tested compilers), the size of a pointer-to-member is 4 bytes, as opposed to 8 on 64 bit systems.
-		//	 I guess they're assuming that you'll never make a single structure that takes up more than 4 gigabytes (which I guess is most likely true)
-		//   but it's still a little bothersome. Anyway, that's the reason for returning a 'uint32' as opposed to the more logical 'std::size_t'.
-		// - There are other techniques I can investigate to get the offset of this member (dereferencing from null/arbitrary address, etc),
-		//   but for now I'm sticking with this one.
-		return *reinterpret_cast<uint32*>(&field);
+		
+		byte base[sizeof(CompoundT)]; // Create a fake object to dereference this field from
+		
+		CompoundT* fake = (CompoundT*)base;
+		FieldT* member = &(fake->*field);
+		
+		return (byte*)member - base; // Calculate the offset of the field from the base
 	}
 
 	/** Translates the given FieldFlags into the relevant DataFlags. */
