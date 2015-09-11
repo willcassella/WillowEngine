@@ -36,7 +36,7 @@ I honestly haven't tried Mac, but it works on Linux and since all the packages a
 
 ## Further documentation
 
-[Engine Architecture](Documentation/Architecture.md)  
-[Reflection System](Documentation/Reflection.md)
+- [Engine Architecture](Documentation/Architecture.md)  
+- [Reflection System](Documentation/Reflection.md)
 
 Copyright 2013-2015 Will Cassella, All Rights Reserved
