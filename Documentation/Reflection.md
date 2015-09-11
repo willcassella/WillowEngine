@@ -34,15 +34,11 @@ Some of these types can be extended to define additional runtime type informatio
 
 ## Reflecting your own types
 
-Registering reflection data is very straighforward, provided your type follows the rhyme:
-
-- If it is a Struct, it's `final` and has no bases, other than a Contract in some special cases.
-- If it's a Class, it extends the "Object" class, as well as Interfaces (which add no mass*).
-- If it's an Interface, it extends "Interface" and only contains a pointer to its vtable (otherwise inheritance would be unstable).
-
-*Interfaces do add an additional vtable pointer, but whatever. It took me a while to come up with that.
+Reflecting your own types is very easy, as long as your type fits one of categories below.
 
 ### Classes
+
+"Classes" are defined as any polymorphic type that extends "Object" (directly, or indirectly). They are single-inheritance only.
 
 Use the following macros in the "Information" section of the class's definition:
 ```
@@ -64,6 +60,8 @@ Describing classes is detailed below.
 
 ### Structs
 
+Structs are non-polymorphic types. They should be marked as "final" and not inherit from any classes, though there are some exceptions.
+
 Use the following macro in the "Information" section of the struct's definition:
 ```
 REFLECTABLE_STRUCT
@@ -79,6 +77,8 @@ BUILD_REFLECTION(struct)
 Describing structs is detailed below.
 
 ### Interfaces
+
+Interfaces are purely-polymorphic types that extend "Interface". They may not have any members. Interfaces are *always* implemented by classes, so the `GetType` method returns a `ClassInfo` reference.
 
 Use the following macro in the "Information section of the interface's definition:
 ```
