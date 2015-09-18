@@ -28,7 +28,11 @@ UniquePtr<void>::UniquePtr(UniquePtr&& move)
 
 UniquePtr<void>::~UniquePtr()
 {
-	_type->GetDestructor()(_value);
+	if (_value)
+	{
+		_type->GetDestructor()(_value);
+		delete _value;
+	}
 }
 
 /////////////////////
