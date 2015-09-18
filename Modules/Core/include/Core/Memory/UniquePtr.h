@@ -18,15 +18,11 @@ public:
 
 	REFLECTABLE_STRUCT
 
-	friend UniquePtr<void>;
-
 	template <typename F> 
 	friend struct UniquePtr;
 
 	template <typename F, typename ... Args>
 	friend UniquePtr<F> New(Args&& ...);
-
-	static_assert(!std::is_const<T>::value, "An 'UniquePtr' may not point to const.");
 
 	////////////////////////
 	///   Constructors   ///
@@ -178,6 +174,7 @@ public:
 		{
 			delete _value;
 			_value = move._value;
+			move._value = nullptr;
 		}
 
 		return self;
