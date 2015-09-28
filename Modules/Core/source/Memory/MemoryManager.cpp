@@ -54,12 +54,12 @@ void MemoryManager::Sweep()
 	_blocks.DeleteAll(nullptr);
 }
 
-void MemoryManager::ClearReferences(const void* addr)
+void MemoryManager::ClearReferences(const void* /*addr*/)
 {
 	// Do nothing, this needs to be implemented
 }
 
-void MemoryManager::ClearReferences(const Array<const void*>& addrs)
+void MemoryManager::ClearReferences(const Array<const void*>& /*addrs*/)
 {
 	// Do nothing, this needs to be implemented
 }
