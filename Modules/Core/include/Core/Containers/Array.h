@@ -3,7 +3,6 @@
 
 #include <new>
 #include <cassert>
-#include <utility>
 #include "../STDExt/TypeTraits.h"
 #include "DynamicBuffer.h"
 

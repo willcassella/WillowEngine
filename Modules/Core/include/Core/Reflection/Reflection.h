@@ -563,7 +563,7 @@ public:														\
 
 /** Put this macro in the Information section of an interface you'd like to reflect.
 * NOTE: Any interface that uses this macro @TODO: Finish documentation here */
-#define REFLECTABLE_INTERFACE								\
+#define REFLECTABLE_INTERFACE						\
 	REFLECTION_DECL(::InterfaceInfo)
 
 /** Put this macro in the global namespace, ideally in the same file that declares the enum.

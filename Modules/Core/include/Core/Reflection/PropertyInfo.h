@@ -11,6 +11,7 @@ enum PropertyFlags : byte
 {
 	PF_None = 0,
 };
+REFLECTABLE_ENUM(PropertyFlags)
 
 /** A class representing information for a Property (part of the public API for a compound). */
 struct CORE_API PropertyInfo final
@@ -19,7 +20,7 @@ struct CORE_API PropertyInfo final
 	///   Information   ///
 public:
 
-	REFLECTABLE_STRUCT;
+	REFLECTABLE_STRUCT
 
 	friend Property;
 	friend ImmutableProperty;
@@ -222,8 +223,3 @@ String FromString(ImmutableProperty) = delete;
 
 /** You can't call 'FromArchive' on an ImmutableProperty. */
 void FromArchive(ImmutableProperty) = delete;
-
-//////////////////////
-///   Reflection   ///
-
-REFLECTABLE_ENUM(PropertyFlags)

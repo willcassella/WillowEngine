@@ -156,9 +156,6 @@
     <ClInclude Include="include\Core\Reflection\CompoundInfo.h">
       <Filter>include\Reflection</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Memory\Ptr.h">
-      <Filter>include\Memory</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Forwards\Operations.h">
       <Filter>include\Forwards</Filter>
     </ClInclude>
@@ -224,6 +221,15 @@
     </ClInclude>
     <ClInclude Include="include\Core\Reflection\DataInfo.h">
       <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Memory\MemoryBlock.h">
+      <Filter>include\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Memory\Ptr.h">
+      <Filter>include\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Memory\MemoryManager.h">
+      <Filter>include\Memory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -319,6 +325,12 @@
     </ClCompile>
     <ClCompile Include="source\Reflection\DataInfo.cpp">
       <Filter>source\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Memory\MemoryManager.cpp">
+      <Filter>source\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Memory\MemoryBlock.cpp">
+      <Filter>source\Memory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

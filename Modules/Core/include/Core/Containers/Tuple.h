@@ -27,6 +27,4 @@ private:
 	TupleStorage<AnyTypes...> _value;
 };
 
-// Tuple<int, float, char> = 
-
 // @TODO: Figure out a way to make tuples elements appear in order

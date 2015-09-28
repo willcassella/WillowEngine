@@ -6,15 +6,9 @@
 ///////////////////
 ///   Methods   ///
 
-Application& Application::Instance()
+void Application::BeginShutdown()
 {
-	static Application app;
-	return app;
-}
-
-const Array<const TypeInfo*>& Application::GetAllTypes()
-{
-	return Instance()._types;
+	GetMemoryManager().Sweep();
 }
 
 const TypeInfo* Application::FindType(const String& name)
@@ -28,4 +22,10 @@ const TypeInfo* Application::FindType(const String& name)
 	}
 
 	return nullptr;
+}
+
+Application& Application::Instance()
+{
+	static Application app;
+	return app;
 }

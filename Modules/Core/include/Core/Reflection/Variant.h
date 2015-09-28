@@ -83,6 +83,17 @@ public:
 		_type->_data.fromArchiveImplementation(_value, node);
 	}
 
+	/** Calls the destructor on the referenced value, and nullifies this Variant. */
+	FORCEINLINE void Destroy()
+	{
+		if (_value)
+		{
+			_type->GetDestructor()(_value);
+			_value = nullptr;
+			_type = nullptr;
+		}
+	}
+
 	/////////////////////
 	///   Operators   ///
 public:

@@ -2,6 +2,7 @@
 #pragma once
 
 #include "../Reflection/StructInfo.h"
+#include "MemoryManager.h"
 #include "../Application.h"
 
 /////////////////
@@ -18,9 +19,11 @@ public:
 
 	REFLECTABLE_STRUCT
 
+	/** Different instances of the UniquePtr type need to access eachother's members. */
 	template <typename F> 
 	friend struct UniquePtr;
 
+	/** Only the 'new' function is allowed to create new UniquePtr values. */
 	template <typename F, typename ... Args>
 	friend UniquePtr<F> New(Args&& ...);
 
@@ -29,7 +32,7 @@ public:
 public:
 
 	UniquePtr()
-		: _value(nullptr)
+		: _header(nullptr)
 	{
 		// All done
 	}
@@ -40,13 +43,13 @@ public:
 	}
 	UniquePtr(const UniquePtr& copy) = delete;
 	UniquePtr(UniquePtr&& move)
-		: _value(move._value)
+		: _header(move._header)
 	{
-		move._value = nullptr;
+		move._header = nullptr;
 	}
 	~UniquePtr()
 	{
-		delete _value;
+		self = nullptr;
 	}
 
 	template <typename F>
@@ -54,16 +57,15 @@ public:
 
 	template <typename F, WHERE(std::is_convertible<F*, T*>::value)>
 	UniquePtr(UniquePtr<F>&& move)
-		: _value(move._value)
+		: _header(move._header)
 	{
-		move._value = nullptr;
+		move._header = nullptr;
 	}
 
 private:
 
-	template <typename NewT>
-	UniquePtr(NewT* value)
-		: _value(value)
+	UniquePtr(MemoryBlockHeader* value)
+		: _header(value)
 	{
 		// All done
 	}
@@ -74,12 +76,12 @@ public:
 
 	FORCEINLINE T* Get()
 	{
-		return _value;
+		return (T*)_header->GetData();
 	}
 
 	FORCEINLINE const T* Get() const
 	{
-		return _value;
+		return (T*)_header->GetData();
 	}
 
 	FORCEINLINE UniquePtr<T>&& Transfer()
@@ -89,17 +91,17 @@ public:
 
 	void ToArchive(ArchiveNode& node) const
 	{
-		if (_value)
+		if (_header)
 		{
 			if (std::is_polymorphic<T>::value)
 			{
 				// Since T is polymorphic, we need to document value's type
-				auto child = node.AddChild(TypeOf(*_value).GetName().Cstr());
-				::ToArchive(*_value, *child);
+				auto child = node.AddChild(_header->GetAllocatedType().GetName());
+				::ToArchive(*self, *child);
 			}
 			else
 			{
-				::ToArchive(*_value, node);
+				::ToArchive(*self, node);
 			}
 		}
 		else
@@ -120,14 +122,24 @@ public:
 		}
 	}
 
+private:
+
+	FORCEINLINE void MarkHeaderForDestruction()
+	{
+		if (_header)
+		{
+			_header->MarkForDestruction();
+		}
+	}
+
 	/////////////////////
 	///   Operators   ///
 public:
 	
 	UniquePtr& operator=(std::nullptr_t)
 	{
-		delete _value;
-		_value = nullptr;
+		MarkHeaderForDestruction();
+		_header = nullptr;
 
 		return self;
 	}
@@ -136,32 +148,32 @@ public:
 	{
 		if (this != &move)
 		{
-			delete _value;
-			_value = move._value;
-			move._value = nullptr;
+			MarkHeaderForDestruction();
+			_header = move._header;
+			move._header = nullptr;
 		}
 
 		return self;
 	}
 	T& operator*()
 	{
-		return *_value;
+		return *Get();
 	}
 	const T& operator*() const
 	{
-		return *_value;
+		return *Get();
 	}
 	T* operator->()
 	{
-		return _value;
+		return Get();
 	}
 	const T* operator->() const
 	{
-		return _value;
+		return Get();
 	}
 	operator bool() const
 	{
-		return _value != nullptr;
+		return _header != nullptr;
 	}
 
 	template <typename F>
@@ -172,9 +184,9 @@ public:
 	{
 		if (this != &move)
 		{
-			delete _value;
-			_value = move._value;
-			move._value = nullptr;
+			MarkHeaderForDestruction();
+			_header = move._header;
+			move._header = nullptr;
 		}
 
 		return self;
@@ -184,7 +196,7 @@ public:
 	///   Data   ///
 private:
 
-	T* _value;
+	MemoryBlockHeader* _header;
 };
 
 template <>
@@ -200,26 +212,35 @@ public:
 	///   Constructors   ///
 public:
 
-	UniquePtr();
+	UniquePtr()
+		: _header(nullptr)
+	{
+		// All done
+	}
 	UniquePtr(std::nullptr_t)
 		: UniquePtr()
 	{
 		// All done
 	}
 	UniquePtr(const UniquePtr& copy) = delete;
-	UniquePtr(UniquePtr&& move);
-	~UniquePtr();
+	UniquePtr(UniquePtr&& move)
+		: _header(move._header)
+	{
+		move._header = nullptr;
+	}
+	~UniquePtr()
+	{
+		self = nullptr;
+	}
 
-	/** UniquePtr cannot be copied. */
 	template <typename T>
 	UniquePtr(const UniquePtr<T>& copy) = delete;
 
-	/** But it may be moved! */
 	template <typename T>
 	UniquePtr(UniquePtr<T>&& move)
-		: _value(move._value), _type(&TypeOf(*move))
+		: _header(move._header)
 	{
-		move._value = nullptr;
+		move._header = nullptr;
 	}
 
 	///////////////////
@@ -229,17 +250,17 @@ public:
 	// TODO: Documentation
 	FORCEINLINE void* Get()
 	{
-		return _value;
+		return _header->GetData();
 	}
 
 	FORCEINLINE const void* Get() const
 	{
-		return _value;
+		return _header->GetData();
 	}
 
 	FORCEINLINE const TypeInfo& GetValueType() const
 	{
-		return *_type;
+		return _header->GetAllocatedType();
 	}
 
 	FORCEINLINE UniquePtr&& Transfer()
@@ -249,9 +270,9 @@ public:
 
 	void ToArchive(ArchiveNode& node) const
 	{
-		if (_value)
+		if (_header)
 		{
-			auto child = node.AddChild(_type->GetName());
+			auto child = node.AddChild(_header->GetAllocatedType().GetName());
 			::ToArchive(*self, *child);
 		}
 		else
@@ -260,18 +281,43 @@ public:
 		}
 	}
 
+private:
+
+	FORCEINLINE void MarkHeaderForDestruction()
+	{
+		if (_header)
+		{
+			_header->MarkForDestruction();
+		}
+	}
+
 	/////////////////////
 	///   Operators   ///
 public:
 
-	UniquePtr& operator=(std::nullptr_t);
+	UniquePtr& operator=(std::nullptr_t)
+	{
+		MarkHeaderForDestruction();
+		_header = nullptr;
+		return self;
+	}
 	UniquePtr& operator=(const UniquePtr& copy) = delete;
-	UniquePtr& operator=(UniquePtr&& move);
+	UniquePtr& operator=(UniquePtr&& move)
+	{
+		if (this != &move)
+		{
+			MarkHeaderForDestruction();
+			_header = move._header;
+			move._header = nullptr;
+		}
+
+		return self;
+	}
 	Variant operator*();
 	ImmutableVariant operator*() const;
 	operator bool() const
 	{
-		return _value != nullptr;
+		return _header != nullptr;
 	}
 
 	template <typename T>
@@ -281,10 +327,9 @@ public:
 	UniquePtr& operator=(UniquePtr<F>&& move)
 	{
 		// UniquePtr<void> can never be viewed as another type of UniquePtr, so identity check is not necessary
-		self = nullptr;
-		_value = move._value;
-		_type = &TypeOf(*move);
-		move._value = nullptr;
+		MarkHeaderForDestruction();
+		_header = move._header;
+		move._header = nullptr;
 
 		return self;
 	}
@@ -293,18 +338,21 @@ public:
 	///   Data   ///
 private:
 
-	void* _value;
-	const TypeInfo* _type;
+	MemoryBlockHeader* _header;
 };
 
 /////////////////////
 ///   Functions   ///
 
 /** Constructs a new instance of 'T'. */
-template <typename T, typename ... Args>
-UniquePtr<T> New(Args&& ... args)
+template <typename T, typename ... ArgT>
+UniquePtr<T> New(ArgT&& ... args)
 {
-	return new T(std::forward<Args>(args)...);
+	auto header = Application::GetMemoryManager().AllocateNew(TypeOf<T>());
+	new (header->GetData()) T(std::forward<ArgT>(args)...);
+	header->Status = MemoryBlockStatus::Valid;
+
+	return header;
 }
 
 //////////////////////

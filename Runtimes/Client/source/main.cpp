@@ -82,7 +82,8 @@ int main(int32 /*argc*/, char** /*argv*/)
 	//Cleanup the engine
 	cleanUp(window);
 
-	return 0;
+	// Shut down the application
+	Application::BeginShutdown();
 }
 
 GLFWwindow* InitGLFW()
@@ -218,6 +219,9 @@ void eventLoop(GLFWwindow* window)
 		//render the frame
 		RenderScene(scene);
 		glfwSwapBuffers(window);
+
+		// Free memory
+		Application::GetMemoryManager().Sweep();
 	}
 
 	Console::WriteLine("Leaving event loop...");

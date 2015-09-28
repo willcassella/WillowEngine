@@ -6,6 +6,8 @@
 ///   Reflection   ///
 
 BUILD_REFLECTION(Scene)
+//.Data("Objects", &Scene::_objects)
+//.Data("FreshObjects", &Scene::_freshObjects)
 .Field("TimeDilation", &Scene::TimeDilation, "The time dilation of the scene. Default is 1.")
 .Field("TimeStep", &Scene::TimeStep, "The amount of time (ms) that each update of the scene represents.");
 

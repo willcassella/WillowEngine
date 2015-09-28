@@ -10,66 +10,15 @@
 
 BUILD_REFLECTION(UniquePtr<void>);
 
-////////////////////////
-///   Constructors   ///
-
-UniquePtr<void>::UniquePtr()
-	: _value(nullptr), _type(&TypeOf<void>())
-{
-	// All done
-}
-
-UniquePtr<void>::UniquePtr(UniquePtr&& move)
-	: _value(move._value), _type(move._type)
-{
-	move._value = nullptr;
-	move._type = &TypeOf<void>();
-}
-
-UniquePtr<void>::~UniquePtr()
-{
-	if (_value)
-	{
-		_type->GetDestructor()(_value);
-		delete _value;
-	}
-}
-
 /////////////////////
 ///   Operators   ///
 
-UniquePtr<void>& UniquePtr<void>::operator=(std::nullptr_t)
-{
-	_type->GetDestructor()(_value);
-
-	_value = nullptr;
-	_type = &TypeOf<void>();
-
-	return self;
-}
-
-UniquePtr<void>& UniquePtr<void>::operator=(UniquePtr&& move)
-{
-	if (this != &move)
-	{
-		_type->GetDestructor()(_value);
-		
-		_value = move._value;
-		_type = move._type;
-
-		move._value = nullptr;
-		move._type = &TypeOf<void>();
-	}
-
-	return self;
-}
-
 Variant UniquePtr<void>::operator*()
 {
-	return Variant(_value, *_type);
+	return Variant(_header->GetData(), _header->GetAllocatedType());
 }
 
 ImmutableVariant UniquePtr<void>::operator*() const
 {
-	return ImmutableVariant(_value, *_type);
+	return ImmutableVariant(_header->GetData(), _header->GetAllocatedType());
 }

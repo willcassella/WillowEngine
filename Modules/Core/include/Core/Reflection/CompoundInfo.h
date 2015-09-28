@@ -16,7 +16,7 @@ enum FieldFlags : byte
 	FF_Transient = (1 << 0)
 };
 
-// TODO: Documentation
+/** A 'Compound' is a type that is composed over several other types, such as a 'struct', 'class', or 'interface'. */
 class CORE_API CompoundInfo : public TypeInfo
 {
 	///////////////////////
@@ -452,10 +452,10 @@ private:
 		
 		byte base[sizeof(CompoundT)]; // Create a fake object to dereference this field from
 		
-		CompoundT* fake = (CompoundT*)base;
+		CompoundT* fake = reinterpret_cast<CompoundT*>(base);
 		FieldT* member = &(fake->*field);
 		
-		return (byte*)member - base; // Calculate the offset of the field from the base
+		return reinterpret_cast<byte*>(member) - base; // Calculate the offset of the field from the base
 	}
 
 	/** Translates the given FieldFlags into the relevant DataFlags. */

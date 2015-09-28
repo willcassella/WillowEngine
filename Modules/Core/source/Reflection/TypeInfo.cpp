@@ -23,6 +23,7 @@ BUILD_REFLECTION(TypeInfo)
 TypeInfo::TypeInfo(TypeInfo&& move)
 	: _data(std::move(move._data))
 {
+	ReferenceClearStatus = ReferenceClearState::NotRequired;
 	RegisterWithApplication();
 	// So basically with this, the compiler only has to THINK that TypeInfo objects are move-constructible (which I guess they are, but whatever).
 	// When you initialize an object with "T blah = arg", the standard says that the type HAS to be move-constructible, even though the compiler implementor is free to not call it.

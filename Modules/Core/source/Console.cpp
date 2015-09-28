@@ -3,12 +3,12 @@
 #include <iostream>
 #include "../include/Core/Console.h"
 
-const uint32 MaxInput = 256; // Max number of characters retrieved from one line of input
+constexpr uint32 MaxInput = 256; // Max number of characters retrieved from one line of input
+constexpr CString WarningPrefix = "WARNING: "; // String printed before every warning
+constexpr CString ErrorPrefix = "ERROR: "; // String printed before every error
+constexpr CString PromptPrefix = "> "; // String printed before every input
 bool EmptyLine = true; // Whether the current line is empty
 bool EmptyLineAbove = true; // Whether the line above is empty
-CString WarningPrefix = "WARNING: "; // String printed before every warning
-CString ErrorPrefix = "ERROR: "; // String printed before every error
-CString PromptPrefix = "> "; // String printed before every input
 
 ////////////////////
 ///   Functions  ///

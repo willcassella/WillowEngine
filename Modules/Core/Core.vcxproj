@@ -48,8 +48,10 @@
     <ClInclude Include="include\Core\Math\Vec2.h" />
     <ClInclude Include="include\Core\Math\Vec3.h" />
     <ClInclude Include="include\Core\Math\Vec4.h" />
-    <ClInclude Include="include\Core\Memory\UniquePtr.h" />
+    <ClInclude Include="include\Core\Memory\MemoryBlock.h" />
+    <ClInclude Include="include\Core\Memory\MemoryManager.h" />
     <ClInclude Include="include\Core\Memory\Ptr.h" />
+    <ClInclude Include="include\Core\Memory\UniquePtr.h" />
     <ClInclude Include="include\Core\Misc\Signature.h" />
     <ClInclude Include="include\Core\Misc\TimeStamp.h" />
     <ClInclude Include="include\Core\Object.h" />
@@ -88,6 +90,8 @@
     <ClCompile Include="source\Math\Vec2.cpp" />
     <ClCompile Include="source\Math\Vec3.cpp" />
     <ClCompile Include="source\Math\Vec4.cpp" />
+    <ClCompile Include="source\Memory\MemoryBlock.cpp" />
+    <ClCompile Include="source\Memory\MemoryManager.cpp" />
     <ClCompile Include="source\Memory\OwnerPtr.cpp" />
     <ClCompile Include="source\Misc\TimeStamp.cpp" />
     <ClCompile Include="source\Object.cpp" />

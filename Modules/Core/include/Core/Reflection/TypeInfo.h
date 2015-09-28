@@ -55,6 +55,8 @@ public:
 	TypeInfo(const TypeInfoBuilder<T, TypeInfo>& builder)
 		: _data(std::move(builder._data))
 	{
+		// References to a TypeInfo object are cleared when its respective module has been unloaded
+		ReferenceClearStatus = ReferenceClearState::NotRequired;
 		RegisterWithApplication();
 	}
 

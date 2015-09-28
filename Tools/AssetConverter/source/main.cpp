@@ -30,5 +30,5 @@ int main(int32 argCount, char** args)
 		AssetConverter::Convert(path, Array<String>());
 	}
 
-	return 0;
+	Application::BeginShutdown();
 }

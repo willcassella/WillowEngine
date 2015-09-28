@@ -4,6 +4,12 @@
 /////////////////
 ///   Types   ///
 
+/** Defined in 'Memory/MemoryBlockHeader.h' */
+struct MemoryBlockHeader;
+
+/** Defined in 'Memory/MemoryManager.h' */
+struct MemoryManager;
+
 /** Defined in 'Memory/UniquePtr.h' */
 template <typename T>
 struct UniquePtr;
