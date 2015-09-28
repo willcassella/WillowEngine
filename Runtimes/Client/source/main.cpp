@@ -78,6 +78,9 @@ int main(int32 /*argc*/, char** /*argv*/)
 	//Execute the main event loop
 	eventLoop(window, *scene);
 
+	// Destroy the scene
+	scene = nullptr;
+
 	//Cleanup the engine
 	cleanUp(window);
 
