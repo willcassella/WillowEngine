@@ -3,7 +3,6 @@
 #include <GLFW/glfw3.h>
 #include <Core/Console.h>
 #include <Core/Math/Vec2.h>
-#include <Engine/Game.h>
 #include <GLRender/GLRender.h>
 #include <ExampleGame/FPSCamera.h>
 #include <ExampleGame/Ghost.h>
@@ -14,7 +13,7 @@ int32 window_height = 720;
 
 //Function Prototypes
 GLFWwindow* InitGLFW();
-void eventLoop(GLFWwindow* window);
+void eventLoop(GLFWwindow* window, Scene& scene);
 void cleanUp(GLFWwindow* window);
 
 struct
@@ -63,21 +62,21 @@ int main(int32 /*argc*/, char** /*argv*/)
 	///   Setting up a simple   ///
 	///          scene          ///
 
-	Scene& test = Game::Instance().GetCurrentScene();
+	auto scene = New<Scene>();
 
 	//auto& sponza = test.Spawn<Prop>();
 	//sponza.MeshComponent.Mesh = "data/sponza.dat";
 	//sponza.MeshComponent.Mesh->SetMaterial(String("data/Sponza.mat"));
 
-	test.Spawn<Ghost>();
+	scene->Spawn<Ghost>();
 	//gun.MeshComponent.Mesh = "data/battle_rifle.dat";
 	//gun.MeshComponent.Mesh->SetMaterial(String("data/Gun.mat"));
 
-	test.Spawn<FPSCamera>();
+	scene->Spawn<FPSCamera>();
 	//test.Cameras.Add(&cam);
 
 	//Execute the main event loop
-	eventLoop(window);
+	eventLoop(window, *scene);
 
 	//Cleanup the engine
 	cleanUp(window);
@@ -132,7 +131,7 @@ GLFWwindow* InitGLFW()
 	return window;
 }
 
-void eventLoop(GLFWwindow* window)
+void eventLoop(GLFWwindow* window, Scene& scene)
 {
 	Console::WriteLine("Entering event loop...");
 
@@ -146,8 +145,6 @@ void eventLoop(GLFWwindow* window)
 	// Begin the event loop
 	while (!glfwWindowShouldClose(window) && !exit)
 	{
-		Scene& scene = Game::Instance().GetCurrentScene();
-
 		double currentTime = glfwGetTime();
 		lag += currentTime - previous;
 		previous = currentTime;

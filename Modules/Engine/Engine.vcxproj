@@ -26,7 +26,6 @@
     <ClCompile Include="source\Component.cpp" />
     <ClCompile Include="source\Components\CameraComponent.cpp" />
     <ClCompile Include="source\Components\StaticMeshComponent.cpp" />
-    <ClCompile Include="source\Game.cpp" />
     <ClCompile Include="source\GameObject.cpp" />
     <ClCompile Include="source\GameObjects\Camera.cpp" />
     <ClCompile Include="source\Scene.cpp" />
@@ -41,7 +40,6 @@
     <ClInclude Include="include\Engine\Components\CameraComponent.h" />
     <ClInclude Include="include\Engine\Components\StaticMeshComponent.h" />
     <ClInclude Include="include\Engine\config.h" />
-    <ClInclude Include="include\Engine\Game.h" />
     <ClInclude Include="include\Engine\GameObject.h" />
     <ClInclude Include="include\Engine\GameObjects\Camera.h" />
     <ClInclude Include="include\Engine\GameObjects\Pawn.h" />
