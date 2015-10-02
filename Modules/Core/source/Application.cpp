@@ -20,7 +20,7 @@ const TypeInfo* Application::FindType(const String& name)
 	{
 		if (type->GetName() == name)
 		{
-			return &*type;
+			return type;
 		}
 	}
 

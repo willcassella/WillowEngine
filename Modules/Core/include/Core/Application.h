@@ -36,6 +36,8 @@ public:
 		return Instance()._types;
 	}
 
+	/** Searches for a type matching the given name.
+	* NOTE: Returns a null pointer if the type was not found. */
 	static const TypeInfo* FindType(const String& name);
 
 private:
