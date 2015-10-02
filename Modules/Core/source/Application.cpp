@@ -9,7 +9,7 @@
 
 void Application::Initialize()
 {
-	// Register the 'ApplicationExit' to execute when 'main' returns
+	// Register the 'Application::AtExit' function to execute when 'main' returns
 	int atExitResult = std::atexit(Application::AtExit);
 	assert(atExitResult == 0);
 }
