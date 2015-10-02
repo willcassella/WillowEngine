@@ -5,10 +5,10 @@
 
 int main()
 {
+	Application::Initialize();
+
 	Vec3 test(1, 2, 3);
 
 	auto y = test.GetType().FindData("Y")->Get(Variant{ test }).ToString();
 	Console::Prompt(y);
-
-	Application::BeginShutdown();
 }

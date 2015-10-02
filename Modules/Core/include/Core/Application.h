@@ -21,9 +21,8 @@ private:
 	///   Methods   ///
 public:
 
-	/** Performs operations necessary to begin shutting down the application. 
-	* NOTE: This should be the last function called before 'main' returns. */
-	static void BeginShutdown();
+	/** Performs start-up procedures for the Application. This should be the first function called in 'main'. */
+	static void Initialize();
 
 	/** Returns the default memory manager for this Application. */
 	FORCEINLINE static MemoryManager& GetMemoryManager()
@@ -42,6 +41,9 @@ public:
 private:
 
 	static Application& Instance();
+
+	/** Behavior run when 'main' returns, registered in 'Initialize' (which is why calling that function is crucial). */
+	static void AtExit();
 
 	////////////////
 	///   Data   ///

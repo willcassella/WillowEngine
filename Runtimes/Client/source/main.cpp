@@ -49,6 +49,8 @@ public:
 
 int main(int32 /*argc*/, char** /*argv*/)
 {
+	Application::Initialize();
+
 	Console::WriteLine("Initializing subsystems...");
 
 	// Initialize GLFW and get a window
@@ -83,9 +85,6 @@ int main(int32 /*argc*/, char** /*argv*/)
 
 	//Cleanup the engine
 	cleanUp(window);
-
-	// Shut down the application
-	Application::BeginShutdown();
 }
 
 GLFWwindow* InitGLFW()

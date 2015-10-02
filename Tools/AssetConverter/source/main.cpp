@@ -5,6 +5,8 @@
 
 int main(int32 argCount, char** args)
 {
+	Application::Initialize();
+
 	// If files were passed in via the command line
 	if (argCount > 1)
 	{
@@ -29,6 +31,4 @@ int main(int32 argCount, char** args)
 		// @TODO: Parse options (setting compression level, renaming output)
 		AssetConverter::Convert(path, Array<String>());
 	}
-
-	Application::BeginShutdown();
 }
