@@ -82,9 +82,9 @@ int main(int32 /*argc*/, char** /*argv*/)
 
 	//Cleanup the engine
 	cleanUp(window);
-
+	
 	// Remove owning reference to scene, and sweep memory
-	// This has to be done because Microsoft's C++ compiler is a TOTAL FUCKING PEICE OF TRASH
+	// This has to be done because Microsoft's C++ compiler is a TOTAL FUCKING PIECE OF TRASH
 	scene = nullptr;
 	Application::GetMemoryManager().Sweep();
 }
