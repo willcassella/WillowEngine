@@ -80,11 +80,13 @@ int main(int32 /*argc*/, char** /*argv*/)
 	//Execute the main event loop
 	eventLoop(window, *scene);
 
-	// Destroy the scene
-	scene = nullptr;
-
 	//Cleanup the engine
 	cleanUp(window);
+
+	// Remove owning reference to scene, and sweep memory
+	// This has to be done because Microsoft's C++ compiler is a TOTAL FUCKING PEICE OF TRASH
+	scene = nullptr;
+	Application::GetMemoryManager().Sweep();
 }
 
 GLFWwindow* InitGLFW()
