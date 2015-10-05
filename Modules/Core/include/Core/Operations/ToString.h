@@ -1,6 +1,8 @@
 // ToString.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
+#include <cstdlib>
+#include <cstring>
 #include "../Forwards/Operations.h"
 #include "../Containers/Array.h"
 #include "../Containers/List.h"
@@ -410,4 +412,50 @@ String Format(const String& format, const T& value, const MoreT& ... more)
 
 	// You passed in an empty format String, dumbass
 	return "";
+}
+
+template <typename ... T>
+String fFormat(const String& format, const T& ... values)
+{
+    // Turn our values into an array of Strings
+    String strs[] = { ToString(values)... };
+    
+    // Determine how large our stack buffer for the resultant string must be
+    uint32 bufferSize = (format.Length() + 1) * sizeof(Char);
+    for (const auto& str : strs)
+    {
+        bufferSize += str.Length() * sizeof(Char);
+    }
+    
+    // The start of our stack buffer for the string
+    auto buffStart = (Char*)malloc(bufferSize);
+    memset(buffStart, 0, bufferSize);
+    auto buff = buffStart;
+    
+    // Iterate over the format string
+    for (uint32 formatIndex = 0, valueIndex = 0; formatIndex < format.Length(); ++formatIndex)
+    {
+        // Get the current character from the format string
+        Char c = format[formatIndex];
+        
+        // If we've reached a format character, and we have more value strings to add
+        if (c == '@' && valueIndex < sizeof...(values))
+        {
+            const String& vString = strs[valueIndex];
+            memcpy(buff, vString.Cstr(), vString.Length());
+            
+            buff += vString.Length();
+            valueIndex++;
+        }
+        else
+        {
+            *buff = c;
+            buff++;
+        }
+    }
+    
+    // Create string from result, and free buffer
+    String result = buffStart;
+    free(buffStart);
+    return result;
 }

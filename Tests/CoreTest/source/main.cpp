@@ -2,13 +2,15 @@
 
 #include <Core/Core.h>
 #include <Core/Math/Vec4.h>
+#include <Core/Math/Quat.h>	
 
 int main()
 {
 	Application::Initialize();
 
-	Vec3 test(1, 2, 3);
-
-	auto y = test.GetType().FindData("Y")->Get(Variant{ test }).ToString();
-	Console::Prompt(y);
+	String test = Format("UniquePtr<@>{ <@, @, @> }", TypeOf<Vec3>().GetName(), 1.f, 2.5f, 3.5f);
+        String fTest = fFormat("UniquePtr<@>{ <@, @, @> }", TypeOf<Vec3>().GetName(), 1.f, 2.5f, 3.5f);
+        
+        Console::WriteLine(test);
+        Console::WriteLine(fTest);
 }
