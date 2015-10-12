@@ -17,8 +17,8 @@ struct NewPtr final
 public:
 
 	/** NewPtr may only be created by this function. */
-	template <typename T, typename ... ArgT>
-	friend NewPtr<T> New(ArgT&&...);
+	template <typename F, typename ... ArgT>
+	friend NewPtr<F> New(ArgT&&...);
 
 	////////////////////////
 	///   Constructors   ///

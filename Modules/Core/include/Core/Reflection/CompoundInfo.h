@@ -451,7 +451,7 @@ private:
 		// Bit of a hack, but necessary. If this becomes problematic, I can replace the field offset with a getter/setter std::function pair or something.
 		// Though that would be much less performant.
 		StaticBuffer<sizeof(CompoundT)> fake; // Create a fake object to dereference this field from
-		FieldT* member = &(fake.GetValueAs<CompoundT>()->*field);
+		FieldT* member = &(fake.template GetValueAs<CompoundT>()->*field);
 		
 		return reinterpret_cast<byte*>(member) - fake.GetValue(); // Calculate the offset of the field from the base
 	}
