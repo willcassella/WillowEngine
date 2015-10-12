@@ -9,9 +9,11 @@
 
 MemoryManager::~MemoryManager()
 {
-	// All memory managed by the memory manager should have been freed by the time it is shut down
-	// TODO: On MSVC this assertion never fails, even when the condition is false. I should figure out why.
-	assert(_blocks.IsEmpty());
+	for (auto& block : _blocks)
+	{
+		assert(block->GetStatus() == MemoryBlockValueStatus::Destroyed || block->GetStatus() == MemoryBlockValueStatus::Uninitialized);
+		free(block);
+	}
 }
 
 ///////////////////
