@@ -50,6 +50,7 @@
     <ClInclude Include="include\Core\Math\Vec4.h" />
     <ClInclude Include="include\Core\Memory\MemoryBlock.h" />
     <ClInclude Include="include\Core\Memory\MemoryManager.h" />
+    <ClInclude Include="include\Core\Memory\New.h" />
     <ClInclude Include="include\Core\Memory\Ptr.h" />
     <ClInclude Include="include\Core\Memory\UniquePtr.h" />
     <ClInclude Include="include\Core\Misc\Signature.h" />

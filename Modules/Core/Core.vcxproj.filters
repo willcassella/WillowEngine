@@ -231,6 +231,9 @@
     <ClInclude Include="include\Core\Memory\MemoryManager.h">
       <Filter>include\Memory</Filter>
     </ClInclude>
+    <ClInclude Include="include\Core\Memory\New.h">
+      <Filter>include\Memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\String.cpp">

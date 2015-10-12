@@ -64,7 +64,7 @@ int main(int32 /*argc*/, char** /*argv*/)
 	///   Setting up a simple   ///
 	///          scene          ///
 
-	auto scene = New<Scene>();
+	UniquePtr<Scene> scene = New<Scene>();
 
 	//auto& sponza = test.Spawn<Prop>();
 	//sponza.MeshComponent.Mesh = "data/sponza.dat";
@@ -82,11 +82,10 @@ int main(int32 /*argc*/, char** /*argv*/)
 
 	//Cleanup the engine
 	cleanUp(window);
-	
-	// Remove owning reference to scene, and sweep memory
-	// This has to be done because Microsoft's C++ compiler is a TOTAL FUCKING PIECE OF TRASH
+
 	scene = nullptr;
-	Application::GetMemoryManager().Sweep();
+	
+	Application::Terminate();
 }
 
 GLFWwindow* InitGLFW()
@@ -95,7 +94,7 @@ GLFWwindow* InitGLFW()
 	if (!glfwInit())
 	{
 		Console::WriteLine("GLFW Initialization failure");
-		exit(EXIT_FAILURE);
+		Application::Terminate(EXIT_FAILURE);
 	}
 
 	// Make the window invisible
@@ -111,7 +110,7 @@ GLFWwindow* InitGLFW()
 	{
 		Console::WriteLine("Window failed to initialize properly");
 		glfwTerminate();
-		exit(EXIT_FAILURE);
+		Application::Terminate(EXIT_FAILURE);
 	}
 
 	// figure out the center of the screen

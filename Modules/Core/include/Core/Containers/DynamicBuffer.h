@@ -43,6 +43,20 @@ public:
 	/** Resizes this DynamicBuffer, erasing existing data. */
 	void Reset(uint32 newSize);
 
+	/** Returns a pointer to the start of this DynamicBuffer, as the given type. */
+	template <typename T>
+	FORCEINLINE T* GetValueAs()
+	{
+		return reinterpret_cast<T*>(_value);
+	}
+
+	/** Returns a pointer to the start of this DynamicBuffer, as the given type. */
+	template <typename T>
+	FORCEINLINE const T* GetValueAs() const
+	{
+		return reinterpret_cast<const T*>(_value);
+	}
+
 	/////////////////////
 	///   Operators   ///
 public:

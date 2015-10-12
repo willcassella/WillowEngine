@@ -15,10 +15,10 @@ BUILD_REFLECTION(UniquePtr<void>);
 
 Variant UniquePtr<void>::operator*()
 {
-	return Variant(_header->GetData(), _header->GetAllocatedType());
+	return Variant(_controller->GetData(), _controller->GetAllocatedType());
 }
 
 ImmutableVariant UniquePtr<void>::operator*() const
 {
-	return ImmutableVariant(_header->GetData(), _header->GetAllocatedType());
+	return ImmutableVariant(_controller->GetData(), _controller->GetAllocatedType());
 }

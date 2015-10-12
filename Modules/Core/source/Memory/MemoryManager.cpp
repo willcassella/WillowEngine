@@ -17,12 +17,12 @@ MemoryManager::~MemoryManager()
 ///////////////////
 ///   Methods   ///
 
-MemoryBlockHeader* MemoryManager::AllocateNew(const TypeInfo& type)
+MemoryBlockController* MemoryManager::AllocateNew(const TypeInfo& type)
 {
-	auto addr = (MemoryBlockHeader*)calloc(sizeof(MemoryBlockHeader) + type.GetSize(), 1);
+	auto addr = (MemoryBlockController*)calloc(sizeof(MemoryBlockController) + type.GetSize(), 1);
 
 	// Construct the memory block header
-	new (addr) MemoryBlockHeader(type);
+	new (addr) MemoryBlockController(type);
 
 	// Add the block and return it
 	_blocks.Add(addr);
@@ -31,23 +31,18 @@ MemoryBlockHeader* MemoryManager::AllocateNew(const TypeInfo& type)
 
 void MemoryManager::Sweep()
 {
-	// Deconstruct values in blocks marked for destruction
+	// Free blocks that may be destroyed
 	for (auto& block : _blocks)
 	{
-		if (block->Status == MemoryBlockStatus::MarkedForDestruction)
+		if (block->GetStatus() == MemoryBlockValueStatus::Destroyed)
 		{
-			Variant value = block->GetDataAsVariant();
+			const auto& refCounter = block->GetRefCounter();
 
-			// If the block contains a value of type 'Object', indicate that referencing clearing has already occurred
-			if (auto pValue = Cast<Object>(value))
+			if (refCounter.GetTotalRefs() == 0)
 			{
-				pValue->ReferenceClearStatus = Object::ReferenceClearState::Complete;
+				free(block);
+				block = nullptr;
 			}
-
-			// Deconstruct value, and free block
-			value.Destroy();
-			free(block);
-			block = nullptr;
 		}
 	}
 

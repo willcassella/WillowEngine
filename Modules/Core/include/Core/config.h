@@ -20,4 +20,8 @@
 #	undef THIS_MODULE_API
 #endif
 
+#ifdef THIS_MODULE_API
+#	undef THIS_MODULE_API
+#endif
+
 #define THIS_MODULE_API CORE_API

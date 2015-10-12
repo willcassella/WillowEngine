@@ -6,10 +6,25 @@
 ///////////////////
 ///   Methods   ///
 
-Variant MemoryBlockHeader::GetDataAsVariant() const
+Variant MemoryBlockController::GetDataAsVariant()
 {
-	/** Returning a Variant pointing to an uninitialized object isn't safe. */
-	assert(this->Status != MemoryBlockStatus::Uninitialized);
-
+	/** Returning a Variant pointing to an uninitialized or destroyed object isn't safe. */
+	assert(this->_status == MemoryBlockValueStatus::Constructed);
 	return Variant(this->GetData(), this->GetAllocatedType());
+}
+
+ImmutableVariant MemoryBlockController::GetDataAsVariant() const
+{
+	/** Returning a Variant pointing to an uninitialized or destroyed object isn't safe. */
+	assert(this->_status == MemoryBlockValueStatus::Constructed);
+	return ImmutableVariant(this->GetData(), this->GetAllocatedType());
+}
+
+void MemoryBlockController::Destroy()
+{
+	assert(this->GetRefCounter().GetNumOwnerRefs() == 0);
+	assert(this->GetRefCounter().GetNumBorrowedRefs() == 0);
+	assert(this->GetStatus() == MemoryBlockValueStatus::Constructed);
+	this->GetDataAsVariant().Destroy();
+	_status = MemoryBlockValueStatus::Destroyed;
 }

@@ -27,14 +27,15 @@ private:
 	///   Methods   ///
 public:
 
-	FORCEINLINE const Array<MemoryBlockHeader*>& GetAllBlocks()
+	/** Returns all memory blocks in the Manager. */
+	FORCEINLINE const Array<MemoryBlockController*>& GetAllBlocks()
 	{
 		return _blocks;
 	}
 
 	/** Allocates and zeroes a memory block for the given type, but DOES NOT construct the value. 
 	* NOTE: The status of the returned memory block is "Uninitialized". */
-	MemoryBlockHeader* AllocateNew(const TypeInfo& type);
+	MemoryBlockController* AllocateNew(const TypeInfo& type);
 
 	/** Destroys and frees blocks marked for destruction. */
 	void Sweep();
@@ -56,5 +57,5 @@ private:
 	///   Data   ///
 private:
 
-	Array<MemoryBlockHeader*> _blocks;
+	Array<MemoryBlockController*> _blocks;
 };

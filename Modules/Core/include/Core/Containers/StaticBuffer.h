@@ -28,6 +28,20 @@ public:
 		return _value;
 	}
 
+	/** Returns a pointer to the start of this Buffer, as the given type. */
+	template <typename T>
+	FORCEINLINE T* GetValueAs()
+	{
+		return reinterpret_cast<T*>(_value);
+	}
+
+	/** Returns a pointer to the start of this Buffer, as the given type. */
+	template <typename T>
+	FORCEINLINE const T* GetValueAs() const
+	{
+		return reinterpret_cast<T*>(_value);
+	}
+
 	////////////////
 	///   Data   ///
 private:

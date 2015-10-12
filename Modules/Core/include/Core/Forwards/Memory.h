@@ -4,11 +4,15 @@
 /////////////////
 ///   Types   ///
 
-/** Defined in 'Memory/MemoryBlockHeader.h' */
-struct MemoryBlockHeader;
+/** Defined in 'Memory/MemoryBlockController.h' */
+struct MemoryBlockController;
 
 /** Defined in 'Memory/MemoryManager.h' */
 struct MemoryManager;
+
+/** Defined in 'Memory/New.h' */
+template <typename T>
+struct NewPtr;
 
 /** Defined in 'Memory/UniquePtr.h' */
 template <typename T>
@@ -21,6 +25,6 @@ struct Ptr;
 /////////////////////
 ///   Functions   ///
 
-/** Defined in 'Memory/UniquePtr.h' */
+/** Defined in 'Memory/New.h' */
 template <typename T, typename ... Arg>
-UniquePtr<T> New(Arg&& ... args);
+NewPtr<T> New(Arg&& ... args);

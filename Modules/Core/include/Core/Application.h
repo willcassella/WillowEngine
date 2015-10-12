@@ -24,6 +24,9 @@ public:
 	/** Performs start-up procedures for the Application. This should be the first function called in 'main'. */
 	static void Initialize();
 
+	/** Performs shutdown procedure for the Applicaion. This should be the last function called in 'main'. */
+	static void Terminate(int code = 0);
+
 	/** Returns the default memory manager for this Application. */
 	FORCEINLINE static MemoryManager& GetMemoryManager()
 	{
@@ -42,6 +45,7 @@ public:
 
 private:
 
+	/** Returns the instance of the Application singleton. */
 	static Application& Instance();
 
 	/** Behavior run when 'main' returns, registered in 'Initialize' (which is why calling that function is crucial). */

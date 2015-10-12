@@ -4,29 +4,14 @@
 #include "Forwards/Core.h"
 #include "Containers/Array.h"
 #include "Reflection/Reflection.h"
+#include "Memory/MemoryBlock.h"
 
 /////////////////
 ///   Types   ///
 
-/** Base of every polymorphic type in the engine */
+/** Base of every polymorphic type in the engine. */
 class CORE_API Object
 {
-	///////////////////////
-	///   Inner Types   ///
-public:
-
-	enum class ReferenceClearState : byte
-	{
-		/** The application must scan for and nullify all references to this object once it has been destroyed. */
-		Required,
-
-		/** The application has already scanned for and nullified all references to this object - new references should not be created. */
-		Complete,
-
-		/** The application will not scan for and nullify references to this object upon destruction, as that behavior is not necessary or managed elsewhere. */
-		NotRequired
-	};
-
 	///////////////////////
 	///   Information   ///
 public:
@@ -42,22 +27,37 @@ public:
 	///   Constructors   ///
 public:
 
-	Object();
+	Object() = default;
 	Object(const Object& copy) = delete;
 	Object(Object&& move) = delete;
 	virtual ~Object();
 
-	//////////////////
-	///   Fields   ///
-public:
-
-	/** Indicates whether references to this object should be cleared upon its destruction (defaults to 'Required').
-	* NOTE: 99% of the time this should remain unmodified. This should only be changed if this Object is being managed specially. */
-	ReferenceClearState ReferenceClearStatus;
-
 	///////////////////
 	///   Methods   ///
 public:
+
+	/** Returns a pointer to the block header for this Object.
+	* NOTE: Returns 'null' if this Object is not managed (or if it is still being constructed). */
+	FORCEINLINE const MemoryBlockController* GetBlockController() const
+	{
+		if (_managedWithBlockController)
+		{
+			// MemoryBlockControllers are always constructed immediately before the value they control, so we just use some pointer arithmetic.
+			return reinterpret_cast<const MemoryBlockController*>(this) - 1;
+		}
+		else
+		{
+			return nullptr;
+		}
+	}
+
+	/** Returns a pointer to the block controller for this Object.
+	* NOTE: Returns 'null' if this Object is not managed (or if it is still being constructed). */
+	FORCEINLINE MemoryBlockController* GetBlockController()
+	{
+		auto blockController = static_cast<const Object*>(this)->GetBlockController();
+		return const_cast<MemoryBlockController*>(blockController);
+	}
 
 	/** Returns the type information for this Object. */
 	virtual const ClassInfo& GetType() const = 0;
@@ -84,6 +84,9 @@ public:
 	////////////////
 	///   Data   ///
 private:
+
+	/** Whether this object is managed. If it is, you may access its block controller via 'GetBlockController()'. */
+	bool _managedWithBlockController = false;
 
 	// @TODO: Remove this in favor of managed references
 	mutable Array<void*> _references;

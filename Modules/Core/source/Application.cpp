@@ -10,8 +10,13 @@
 void Application::Initialize()
 {
 	// Register the 'Application::AtExit' function to execute when 'main' returns
-	int atExitResult = std::atexit(Application::AtExit);
-	assert(atExitResult == 0);
+
+}
+
+void Application::Terminate(int code)
+{
+	// TODO: Memory cleanup stuff
+	std::exit(code);
 }
 
 const TypeInfo* Application::FindType(const String& name)

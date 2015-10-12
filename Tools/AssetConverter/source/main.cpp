@@ -31,4 +31,6 @@ int main(int32 argCount, char** args)
 		// @TODO: Parse options (setting compression level, renaming output)
 		AssetConverter::Convert(path, Array<String>());
 	}
+
+	Application::Terminate();
 }
