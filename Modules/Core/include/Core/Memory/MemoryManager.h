@@ -37,14 +37,8 @@ public:
 	* NOTE: The status of the returned memory block is "Uninitialized". */
 	MemoryBlockController* AllocateNew(const TypeInfo& type);
 
-	/** Destroys and frees blocks marked for destruction. */
+	/** Destroys and frees unused blocks. */
 	void Sweep();
-
-	/** Clears all references to the given address. */
-	void ClearReferences(const void* addr);
-
-	/** Clears all references to the given addresses. */
-	void ClearReferences(const Array<const void*>& addrs);
 
 	/////////////////////
 	///   Operators   ///

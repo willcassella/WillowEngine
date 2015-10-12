@@ -51,13 +51,3 @@ void MemoryManager::Sweep()
 	// Remove all nulled block pointers
 	_blocks.DeleteAll(nullptr);
 }
-
-void MemoryManager::ClearReferences(const void* /*addr*/)
-{
-	// Do nothing, this needs to be implemented
-}
-
-void MemoryManager::ClearReferences(const Array<const void*>& /*addrs*/)
-{
-	// Do nothing, this needs to be implemented
-}
