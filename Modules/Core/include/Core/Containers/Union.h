@@ -180,7 +180,7 @@ private:
 
 	/** End case, never actually reached. */
 	template <typename S>
-	static constexpr Index IndexOf(Index current, stdEXT::type_sequence<>)
+	static constexpr Index IndexOf(Index /*current*/, stdEXT::type_sequence<>)
 	{
 		return 0;
 	}
