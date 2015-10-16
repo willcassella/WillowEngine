@@ -14,6 +14,8 @@ private:
 
 	/** Honestly if you need a Union of more than 255 types you're doing something wrong. */
 	using Index = byte;
+
+	/** Aliasis a type_sequence holding the types supported by this Union. */
 	using Seq = stdEXT::type_sequence<T...>;
 
 	////////////////////////
@@ -22,12 +24,14 @@ public:
 
 	Union() = default;
 	Union(const Union& copy)
+		: Union()
 	{
-		// TODO
+		self = copy;
 	}
 	Union(Union&& move)
+		: Union()
 	{
-		// TODO
+		self = std::move(move);
 	}
 	~Union()
 	{
@@ -45,16 +49,55 @@ public:
 	///   Methods   ///
 public:
 
+	/** Returns whether this Union is currently holding a value. */
 	FORCEINLINE bool HasValue() const
 	{
 		return _index.HasValue();
 	}
 
+	/** Returns the type of the currently heald value.
+	* NOTE: Returns 'null' if this Union is not currently holding a value. */
+	const TypeInfo* GetCurrentType() const
+	{
+		if (_index.HasValue())
+		{
+			return Invoke<const TypeInfo*>([](const auto& a) { return &TypeOf(a); });
+		}
+		else
+		{
+			return nullptr;
+		}
+	}
+
+	/** Destroys the currently held value. */
+	void Nullify()
+	{
+		if (HasValue())
+		{
+			// Destroy the value
+			Invoke([](auto& v) -> void
+			{
+				using F = std::decay_t<decltype(v)>;
+				v.~F();
+			});
+			_index.Nullify();
+		}
+	}
+
+	/** Returns the current value as a Variant. 
+	* WARNING: This function will fail if this Variant is not currently holding a value. */
+	Variant Get();
+
+	/** Returns the current value as an ImmutableVariant. 
+	* WARNING: This function will fail if this Variant is not currently holding a value. */
+	ImmutableVariant Get() const;
+
+	/** Sets the current value of this Union. */
 	template <typename F>
 	void Set(F&& value)
 	{
 		Index newIndex = IndexOf<F>();
-		
+
 		// If we have a currently loaded value
 		if (_index.HasValue())
 		{
@@ -76,6 +119,8 @@ public:
 		_index = newIndex;
 	}
 
+	/** Gets the current value of this Union as the given type.
+	* WARNING: This function will fail if this Variant is not currently holding a value. */
 	template <typename F>
 	F& Get()
 	{
@@ -83,6 +128,8 @@ public:
 		return *_value.template GetValueAs<F>();
 	}
 
+	/** Gets the current value of this Union as the given type.
+	* WARNING: This function will fail if this Variant is not currently holding a value. */
 	template <typename F>
 	const F& Get() const
 	{
@@ -90,38 +137,10 @@ public:
 		return *_value.template GetValueAs<F>();
 	}
 
-	const TypeInfo* GetCurrentType() const
-	{
-		if (_index.HasValue())
-		{
-			return CallFunction<const TypeInfo*>([](const auto& a) { return &TypeOf(a); });
-		}
-		else
-		{
-			return nullptr;
-		}
-	}
-
-	void Nullify()
-	{
-		if (HasValue())
-		{
-			// Destroy the value
-			auto destructor = [](auto& v) -> void
-			{
-				using F = std::decay_t<decltype(v)>;
-				v.~F();
-			};
-
-			CallFunction(destructor);
-			_index.Nullify();
-		}
-	}
-
-	/** Calls the given function on the current value.
+	/** Invokes the given function on the current value.
 	* WARNING: If this Union is not holding a value, this function will fail. */
 	template <typename R = void, typename Func>
-	R CallFunction(const Func& func)
+	R Invoke(const Func& func)
 	{
 		using Invoker = R (void*, const Func&);	
 		Invoker* funcs[] = { CreateInvoker<T, R, Func>()... };
@@ -130,10 +149,10 @@ public:
 		return funcs[_index.GetValue()](_value.GetValue(), func);
 	}
 
-	/** Calls the given function on the current value.
+	/** Invokes the given function on the current value.
 	* WARNING: If this Union is not holding a value, this function will fail. */
 	template <typename R = void, typename Func>
-	R CallFunction(const Func& func) const
+	R Invoke(const Func& func) const
 	{
 		using Invoker = R (const void*, const Func&);
 		Invoker* funcs[] = { CreateInvoker<T, R, Func>()... };
@@ -148,29 +167,29 @@ private:
 	template <typename S>
 	static constexpr Index IndexOf()
 	{
-		//static_assert(Seq::template Contains<S>(), "The given type does not exist in this Union.");
-		return IndexOf(0, Seq{});
+		static_assert(Seq::template Contains<S>(), "The given type does not exist in this Union.");
+		return IndexOf<S>(0, Seq{});
 	}
 
-	/** Returns the index of the given type. */
+	/** Recursively finds the index of the given type. */
 	template <typename S, typename C, typename ... F>
 	static constexpr Index IndexOf(Index current, stdEXT::type_sequence<C, F...>)
 	{
-		return IndexOf(current + 1, stdEXT::type_sequence<F...>{});
+		return std::is_same<S, C>::value ? current : IndexOf<S>(current + 1, stdEXT::type_sequence<F...>{});
 	}
 
-	/** Returns the index of the given type. */
-	template <typename S, typename ... F>
-	static constexpr Index IndexOf(Index current, stdEXT::type_sequence<S, F...>)
+	/** End case, never actually reached. */
+	template <typename S>
+	static constexpr Index IndexOf(Index current, stdEXT::type_sequence<>)
 	{
-		return current;
+		return 0;
 	}
 
 	/** Creates a function that invokes a function of the given type ("Func") on a type-erased
 	* instance of "F", returning an instance of "R".
-	* Used by the "CallFunction" method. */
+	* Used by the "Invoke" method. */
 	template <typename F, typename R, typename Func>
-	constexpr auto CreateInvoker()
+	/*MSVCS: constexpr*/ auto CreateInvoker()
 	{
 		return [](void* arg, const Func& func) -> R
 		{
@@ -180,9 +199,9 @@ private:
 
 	/** Creates a function that invokes a function of the given type ("Func") on a type-erased
 	* instance of "F", returning an instance of "R".
-	* Used by the "CallFunction" method. */
+	* Used by the "Invoke" method. */
 	template <typename F, typename R, typename Func>
-	constexpr auto CreateInvoker() const
+	/*MSVCS: constexpr*/ auto CreateInvoker() const
 	{
 		return [](const void* arg, const Func& func) -> R
 		{
@@ -190,17 +209,20 @@ private:
 		};
 	}
 
+	/** Returns the size of the largest type among the types suppored by this Union. */
 	static constexpr std::size_t GetMaxSize()
 	{
 		return GetMaxSize(Seq{});
 	}
 
+	/** Returns the size of the largest type among the types suppored by this Union. */
 	template <typename F, typename ... MoreF>
 	static constexpr std::size_t GetMaxSize(stdEXT::type_sequence<F, MoreF...>)
 	{
 		return Max(sizeof(F), GetMaxSize(stdEXT::type_sequence<MoreF...>{}));
 	}
 
+	/** Returns the size of the largest type among the types suppored by this Union. */
 	static constexpr std::size_t GetMaxSize(stdEXT::type_sequence<>)
 	{
 		return 0;
@@ -212,12 +234,43 @@ public:
 
 	Union& operator=(const Union& copy)
 	{
-		// TODO
+		if (this != &copy)
+		{
+			if (copy.HasValue())
+			{
+				// Copy the value
+				copy.Invoke([this](const auto& v) -> void
+				{
+					this->Set(v);
+				});
+			}
+			else
+			{
+				Nullify();
+			}
+		}
+
 		return self;
 	}
 	Union& operator=(Union&& move)
 	{
-		// TODO
+		if (this != &move)
+		{
+			if (move.HasValue())
+			{
+				// Move the value
+				move.Invoke([this](auto& v) -> void
+				{
+					this->Set(std::move(v));
+				});
+				move.Nullify();
+			}
+			else
+			{
+				Nullify();
+			}
+		}
+
 		return self;
 	}
 
@@ -233,5 +286,9 @@ public:
 private:
 
 	Nullable<Index> _index;
-	StaticBuffer<GetMaxSize()> _value;
+
+	// For some reason, again ONLY ON MSVC, I have to store this as a static constexpr variable,
+	// rather than just putting "GetMaxSize()" into the StaticBuffer size
+	static constexpr std::size_t Size = GetMaxSize();
+	StaticBuffer<Size> _value;
 };

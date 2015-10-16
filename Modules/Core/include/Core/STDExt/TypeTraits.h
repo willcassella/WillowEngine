@@ -48,6 +48,7 @@ namespace stdEXT
 	template <typename ... T>
 	struct type_sequence final
 	{
+		/** Returns whether this type_sequence contains the given type. */
 		template <typename S>
 		static constexpr bool Contains()
 		{
@@ -56,12 +57,14 @@ namespace stdEXT
 
 	private:
 
+		/** Recursively checks eac element of the given type_sequence. */
 		template <typename S, typename C, typename ... F>
 		static constexpr bool Contains(type_sequence<C, F...>)
 		{
-			return Contains<S>(type_sequence<F...>{});
+			return std::is_same<S, C>::value || Contains<S>(type_sequence<F...>{});
 		}
 
+		/** Case were we have no more types in the type_sequence. */
 		template <typename S>
 		static constexpr bool Contains(type_sequence<>)
 		{

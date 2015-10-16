@@ -99,7 +99,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>CORETEST_BUILD;WINDOWS;BITS_32;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4251</DisableSpecificWarnings>
-      <AdditionalOptions>/Zc:auto %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -116,7 +115,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>CORETEST_BUILD;WINDOWS;BITS_64;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4251</DisableSpecificWarnings>
-      <AdditionalOptions>/Zc:auto %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -135,7 +133,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>CORETEST_BUILD;WINDOWS;BITS_32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4251</DisableSpecificWarnings>
-      <AdditionalOptions>/Zc:auto %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -156,7 +153,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>CORETEST_BUILD;WINDOWS;BITS_64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4251</DisableSpecificWarnings>
-      <AdditionalOptions>/Zc:auto %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

@@ -18,9 +18,28 @@ int main()
 {
 	Application::Initialize();
 
+	auto printer = [](const auto& v)
+	{
+		Console::WriteLine(v);
+	};
+
 	{
 		Union<int, float, String> test;
 		test.Set<String>("herro");
+		
+		test.Invoke(printer);
+		
+		test.Set(3);
+
+		test.Invoke(printer);
+
+		test.Set(2.5f);
+
+		test.Invoke(printer);
+
+		Console::WriteLine(*test.GetCurrentType());
+
+		Console::Prompt();
 	}
 
 	Application::Terminate();

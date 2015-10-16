@@ -39,7 +39,7 @@ public:
 	template <typename T>
 	FORCEINLINE const T* GetValueAs() const
 	{
-		return reinterpret_cast<T*>(_value);
+		return reinterpret_cast<const T*>(_value);
 	}
 
 	////////////////
