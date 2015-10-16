@@ -55,7 +55,7 @@ public:
 		return _index.HasValue();
 	}
 
-	/** Returns the type of the currently heald value.
+	/** Returns the type of the currently held value.
 	* NOTE: Returns 'null' if this Union is not currently holding a value. */
 	const TypeInfo* GetCurrentType() const
 	{
@@ -85,11 +85,11 @@ public:
 	}
 
 	/** Returns the current value as a Variant. 
-	* WARNING: This function will fail if this Variant is not currently holding a value. */
+	* WARNING: This function will fail if this Union is not currently holding a value. */
 	Variant Get();
 
 	/** Returns the current value as an ImmutableVariant. 
-	* WARNING: This function will fail if this Variant is not currently holding a value. */
+	* WARNING: This function will fail if this Union is not currently holding a value. */
 	ImmutableVariant Get() const;
 
 	/** Sets the current value of this Union. */
@@ -120,7 +120,7 @@ public:
 	}
 
 	/** Gets the current value of this Union as the given type.
-	* WARNING: This function will fail if this Variant is not currently holding a value. */
+	* WARNING: This function will fail if this Variant is not currently holding a value of the given type. */
 	template <typename F>
 	F& Get()
 	{
@@ -129,7 +129,7 @@ public:
 	}
 
 	/** Gets the current value of this Union as the given type.
-	* WARNING: This function will fail if this Variant is not currently holding a value. */
+	* WARNING: This function will fail if this Variant is not currently holding a value of the given type. */
 	template <typename F>
 	const F& Get() const
 	{
