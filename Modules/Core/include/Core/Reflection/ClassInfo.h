@@ -23,7 +23,6 @@ public:
 	///   Constructors   ///
 public:
 
-	// @TODO: Documentation
 	template <class ClassT>
 	ClassInfo(const TypeInfoBuilder<ClassT, ClassInfo>& builder)
 		: Base(builder), _data(std::move(builder._data))

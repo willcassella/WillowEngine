@@ -17,7 +17,7 @@ namespace Implementation
 
 		/** Implementation for if the type defines its own 'FromString' method (preferred). */
 		template <typename F>
-		FORCEINLINE static auto Impl(Preferred, F& value, const String& string) -> decltype(value.FromString(string))
+		FORCEINLINE static auto Impl(Preferred, F& value, const String& string) -> decltype(value.F::FromString(string))
 		{
 			return value.FromString(string);
 		}

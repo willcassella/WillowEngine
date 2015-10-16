@@ -4,6 +4,7 @@
 #include <Resource/AssetPtr.h>
 #include "../Component.h"
 #include "../Assets/StaticMesh.h"
+#include "../Assets/Material.h"
 
 class ENGINE_API StaticMeshComponent final : public Component
 {
@@ -25,4 +26,6 @@ public:
 public:
 
 	AssetPtr<StaticMesh> Mesh;
+	AssetPtr<Material> Material;
+	Table<String, Material::Param> OverrideParams;
 };

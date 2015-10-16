@@ -8,35 +8,21 @@
 	
 /** Returns the greater of two values, with preference to 'a' */
 template <typename T>
-FORCEINLINE const T& Max(const T& a, const T& b)
+FORCEINLINE constexpr const T& Max(const T& a, const T& b)
 {
-	if (a >= b)
-	{
-		return a;
-	}
-	else
-	{
-		return b;
-	}
+	return a >= b ? a : b;
 }
 
 /** Returns the least of two values, with preference to 'a' */
 template <typename T>
-FORCEINLINE const T& Min(const T& a, const T& b)
+FORCEINLINE constexpr const T& Min(const T& a, const T& b)
 {
-	if (a <= b)
-	{
-		return a;
-	}
-	else
-	{
-		return b;
-	}
+	return a <= b ? a : b;
 }
 
 /** Returns the given value, clamped between the given upper and lower bounds */
 template <typename T>
-FORCEINLINE T Clamp(const T& value, const T& lowerBound, const T& upperBound)
+FORCEINLINE constexpr const T& Clamp(const T& value, const T& lowerBound, const T& upperBound)
 {
 	return Min(Max(value, lowerBound), upperBound);
 }

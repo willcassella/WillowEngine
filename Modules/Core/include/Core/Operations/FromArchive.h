@@ -17,7 +17,7 @@ namespace Implementation
 
 		/** Implementation for if the type defines its own 'FromArchive' function (preferred). */
 		template <typename F>
-		FORCEINLINE static auto Impl(Preferred, F& value, const ArchiveNode& node) -> decltype(value.FromArchive(node))
+		FORCEINLINE static auto Impl(Preferred, F& value, const ArchiveNode& node) -> decltype(value.F::FromArchive(node))
 		{
 			return value.FromArchive(node);
 		}

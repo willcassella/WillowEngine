@@ -234,6 +234,12 @@
     <ClInclude Include="include\Core\Memory\New.h">
       <Filter>include\Memory</Filter>
     </ClInclude>
+    <ClInclude Include="include\Core\Containers\Nullable.h">
+      <Filter>include\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Containers\Union.h">
+      <Filter>include\Containers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\String.cpp">

@@ -2,7 +2,6 @@
 #pragma once
 
 #include <type_traits>
-#include "../Forwards/Reflection.h"
 
 /////////////////
 ///   Types   ///
@@ -48,7 +47,27 @@ namespace stdEXT
 	/** Type holding a sequence of other types. */
 	template <typename ... T>
 	struct type_sequence final
-	{};
+	{
+		template <typename S>
+		static constexpr bool Contains()
+		{
+			return Contains<S>(type_sequence<T...>{});
+		}
+
+	private:
+
+		template <typename S, typename C, typename ... F>
+		static constexpr bool Contains(type_sequence<C, F...>)
+		{
+			return Contains<S>(type_sequence<F...>{});
+		}
+
+		template <typename S>
+		static constexpr bool Contains(type_sequence<>)
+		{
+			return false;
+		}
+	};
 }
 
 //////////////////

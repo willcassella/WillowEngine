@@ -9,8 +9,7 @@
 
 void Application::Initialize()
 {
-	// Register the 'Application::AtExit' function to execute when 'main' returns
-
+	// TODO: Application initialization stuff
 }
 
 void Application::Terminate(int code)

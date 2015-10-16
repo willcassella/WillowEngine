@@ -3,6 +3,7 @@
 #include <Core/Core.h>
 #include <Core/Math/Vec4.h>
 #include <Core/Math/Quat.h>
+#include <Core/Containers/Union.h>
 
 void FormatTest()
 {
@@ -17,7 +18,11 @@ int main()
 {
 	Application::Initialize();
 
-	FormatTest();
+	{
+		Union<int, float, String> test;
+		test.Set<String>("herro");
+		test.CallFunction(Console::WriteLine);
+	}
 
 	Application::Terminate();
 }

@@ -25,7 +25,7 @@ namespace Implementation
 
 		/** Implementation for if the type defines its own "ToString" method (preferred). */
 		template <typename F>
-		FORCEINLINE static auto Impl(Preferred, const F& value) -> decltype(value.ToString())
+		FORCEINLINE static auto Impl(Preferred, const F& value) -> decltype(value.F::ToString())
 		{
 			return value.ToString();
 		}

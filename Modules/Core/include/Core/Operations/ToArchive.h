@@ -17,7 +17,7 @@ namespace Implementation
 
 		/** Implementation for types that define their own 'ToArchive' method. */
 		template <typename F>
-		FORCEINLINE static auto Impl(Preferred, const F& value, ArchiveNode& node) -> decltype(value.ToArchive(node))
+		FORCEINLINE static auto Impl(Preferred, const F& value, ArchiveNode& node) -> decltype(value.F::ToArchive(node))
 		{
 			return value.ToArchive(node);
 		}

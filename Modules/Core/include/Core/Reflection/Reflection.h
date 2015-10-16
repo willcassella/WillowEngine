@@ -51,9 +51,9 @@ namespace Implementation
 			return T::StaticTypeInfo;
 		}
 
-		FORCEINLINE static auto Function(const T& value) -> decltype(value.GetType())
+		FORCEINLINE static auto Function(const T& value) -> decltype(value.T::GetType())
 		{
-			using ReturnT = decltype(value.GetType());
+			using ReturnT = decltype(value.T::GetType());
 			using TypeInfoT = std::decay_t<ReturnT>;
 
 			CommonAsserts<TypeInfoT>();
