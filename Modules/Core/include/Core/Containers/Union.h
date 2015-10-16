@@ -107,19 +107,24 @@ public:
 		if (HasValue())
 		{
 			// Destroy the value
-			CallFunction([](auto& v) { v.~decltype(v)(); });
+			auto destructor = [](auto& v) -> void
+			{
+				using F = std::decay_t<decltype(v)>;
+				v.~F();
+			};
+
+			CallFunction(destructor);
 			_index.Nullify();
 		}
 	}
 
 	/** Calls the given function on the current value.
 	* WARNING: If this Union is not holding a value, this function will fail. */
-	template <typename R = void>
-	R CallFunction(const auto& func)
+	template <typename R = void, typename Func>
+	R CallFunction(const Func& func)
 	{
-		using Func = decltype(func);
 		using Invoker = R (void*, const Func&);	
-		constexpr Invoker* funcs[] = { CreateInvoker<T, R, Func>()... };
+		Invoker* funcs[] = { CreateInvoker<T, R, Func>()... };
 		
 		assert(HasValue());
 		return funcs[_index.GetValue()](_value.GetValue(), func);
@@ -127,12 +132,11 @@ public:
 
 	/** Calls the given function on the current value.
 	* WARNING: If this Union is not holding a value, this function will fail. */
-	template <typename R = void>
-	R CallFunction(const auto& func) const
+	template <typename R = void, typename Func>
+	R CallFunction(const Func& func) const
 	{
-		using Func = decltype(func);
 		using Invoker = R (const void*, const Func&);
-		constexpr Invoker* funcs[] = { CreateInvoker<T, R, Func>()... };
+		Invoker* funcs[] = { CreateInvoker<T, R, Func>()... };
 
 		assert(HasValue());
 		return funcs[_index.GetValue()](_value.GetValue(), func);
@@ -144,7 +148,7 @@ private:
 	template <typename S>
 	static constexpr Index IndexOf()
 	{
-		static_assert(Seq::template Contains<S>(), "The given type does not exist in this Union.");
+		//static_assert(Seq::template Contains<S>(), "The given type does not exist in this Union.");
 		return IndexOf(0, Seq{});
 	}
 
@@ -197,10 +201,9 @@ private:
 		return Max(sizeof(F), GetMaxSize(stdEXT::type_sequence<MoreF...>{}));
 	}
 
-	template <typename F>
-	static constexpr std::size_t GetMaxSize(stdEXT::type_sequence<F>)
+	static constexpr std::size_t GetMaxSize(stdEXT::type_sequence<>)
 	{
-		return sizeof(F);
+		return 0;
 	}
 
 	/////////////////////

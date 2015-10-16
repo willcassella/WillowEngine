@@ -21,7 +21,6 @@ int main()
 	{
 		Union<int, float, String> test;
 		test.Set<String>("herro");
-		test.CallFunction(Console::WriteLine);
 	}
 
 	Application::Terminate();
