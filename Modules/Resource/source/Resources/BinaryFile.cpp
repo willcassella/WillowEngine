@@ -31,7 +31,7 @@ BinaryFile::BinaryFile(const Path& path)
 	file.read(_data.GetValueAs<char>(), this->GetSize());
 
 	// Make sure the contents were read correctly
-	if (!file.gcount() == this->GetSize())
+	if (file.gcount() != this->GetSize())
 	{
 		Console::WriteLine("An error occurred while reading the binary file '@'.", path);
 	}
