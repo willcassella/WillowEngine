@@ -3,7 +3,7 @@
 #include <fstream>
 #include <Core/Containers/Array.h>
 #include "glew.h"
-#include "..\include\GLRender\GLStaticMesh.h"
+#include "../include/GLRender/GLStaticMesh.h"
 
 ////////////////////////
 ///   Constructors   ///
