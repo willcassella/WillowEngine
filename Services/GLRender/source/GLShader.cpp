@@ -2,12 +2,12 @@
 
 #include "glew.h"
 #include "../include/GLRender/GLShader.h"
-#include <Resource/Path.h>
 
 ////////////////////////
 ///   Constructors   ///
 
-GLShader::GLShader(const Shader& shader)
+GLShader::GLShader(GLRenderer& renderer, const Shader& shader)
+	: GLPrimitive(renderer)
 {
 	// Identify the shader type and construct the shader
 	String type = shader.GetPath().GetFileExtension();
@@ -44,12 +44,14 @@ GLShader::GLShader(const Shader& shader)
 	}
 }
 
-GLShader::GLShader(const Path& path)
+GLShader::GLShader(GLRenderer& renderer, const Path& path)
+	: GLShader(renderer, Shader(path))
 {
-	
+	// All done
 }
 
 GLShader::GLShader(GLShader&& move)
+	: GLPrimitive(move.GetRenderer())
 {
 	_id = move._id;
 	move._id = 0;

@@ -23,10 +23,11 @@ FPSCamera::FPSCamera(Scene& scene)
 
 void FPSCamera::Move(Vec2 direction)
 {
-	Transform.Translate(Vec3(direction.X, 0, direction.Y));
+	Transform.Translate(Vec3(direction.X, 0, -direction.Y)/10);
 }
 
 void FPSCamera::Look(Vec2 direction)
 {
-	Transform.Rotate(Vec3::Up, direction.X, false); // TODO: This
+	Transform.Rotate(Vec3::Up, direction.X, false);
+	Transform.Rotate(Vec3::Right, direction.Y, true);
 }

@@ -57,7 +57,7 @@ namespace stdEXT
 
 	private:
 
-		/** Recursively checks eac element of the given type_sequence. */
+		/** Recursively checks each element of the given type_sequence. */
 		template <typename S, typename C, typename ... F>
 		static constexpr bool Contains(type_sequence<C, F...>)
 		{

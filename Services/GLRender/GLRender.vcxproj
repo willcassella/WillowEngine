@@ -21,14 +21,19 @@
   <ItemGroup>
     <ClInclude Include="include\GLRender\config.h" />
     <ClInclude Include="include\GLRender\GLMaterial.h" />
-    <ClInclude Include="include\GLRender\GLRender.h" />
+    <ClInclude Include="include\GLRender\GLPrimitive.h" />
+    <ClInclude Include="include\GLRender\GLRenderer.h" />
     <ClInclude Include="include\GLRender\GLShader.h" />
     <ClInclude Include="include\GLRender\GLStaticMesh.h" />
     <ClInclude Include="include\GLRender\GLTexture.h" />
     <ClInclude Include="source\glew.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\GLRender.cpp" />
+    <ClCompile Include="source\GLMaterial.cpp" />
+    <ClCompile Include="source\GLRenderer.cpp" />
+    <ClCompile Include="source\GLShader.cpp" />
+    <ClCompile Include="source\GLStaticMesh.cpp" />
+    <ClCompile Include="source\GLTexture.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D3DE9FCC-C429-4E36-A88E-DAC1004F1944}</ProjectGuid>

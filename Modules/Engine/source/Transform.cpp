@@ -42,3 +42,8 @@ void Transform::Rotate(const Vec3& axis, float angle, bool isLocal)
 {
 	Orientation.RotateByAxisAngle(axis, angle, isLocal);
 }
+
+Mat4 Transform::GetMatrix() const
+{
+	return Mat4::Translate(Location) * Mat4::Scale(Scale) * Mat4::Rotate(Orientation);
+}

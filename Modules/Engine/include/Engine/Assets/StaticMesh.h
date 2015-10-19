@@ -11,7 +11,7 @@ class ENGINE_API StaticMesh final : public Asset
 	///   Information   ///
 public:
 
-	REFLECTABLE_ASSET
+	REFLECTABLE_CLASS
 	EXTENDS(Asset)
 
 	///////////////////////

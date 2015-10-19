@@ -9,7 +9,7 @@ OUT=-o bin/GLRender.so
 .PHONY: setup
 
 all: setup
-	$(CXX) $(CFLAGS) source/GLRender.cpp $(LFLAGS) $(DEPS) $(OUT)
+	$(CXX) $(CFLAGS) `find source/ -name "*.cpp"` $(LFLAGS) $(DEPS) $(OUT)
 
 setup:
 	mkdir -p bin

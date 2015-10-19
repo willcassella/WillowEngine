@@ -2,7 +2,6 @@
 
 #include <Core/Core.h>
 #include <Core/Math/Vec4.h>
-#include <Core/Math/Quat.h>
 #include <Core/Containers/Union.h>
 
 void FormatTest()
@@ -26,6 +25,8 @@ int main()
 	{
 		Union<int, float, String> test;
 		test.Set<String>("herro");
+
+		auto test2 = std::move(test);
 		
 		test.Invoke(printer);
 		

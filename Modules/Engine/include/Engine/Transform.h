@@ -41,4 +41,7 @@ public:
 	* 'axis' - The axis about which to rotate.
 	* 'isLocal' - Whether to rotate in local space. */
 	void Rotate(const Vec3& axis, float angle, bool isLocal = true);
+
+	/** Returns the transformation matrix for this Transform. */
+	Mat4 GetMatrix() const;
 };

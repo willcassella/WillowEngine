@@ -109,20 +109,15 @@ public:
 		return false;
 	}
 
-	/** Inserts a new key-value pair, replacing the existing entry if there is a conflict */
+	/** Inserts a new key-value pair.
+	* Returns a reference to the new value. 
+	* WARNING: You must be sure that the given key does not already appear in the table. */
 	template <typename RelatedKeyT, typename RelatedValueT>
-	void Insert(RelatedKeyT&& key, RelatedValueT&& value)
+	std::decay_t<RelatedValueT>& Insert(RelatedKeyT&& key, RelatedValueT&& value)
 	{
-		for (auto& entry : _values)
-		{
-			if (entry.First == key)
-			{
-				entry.Second = std::forward<RelatedValueT>(value);
-				return;
-			}
-		}
-
-		_values.Add(PairType(std::forward<RelatedKeyT>(key), std::forward<RelatedValueT>(value)));
+		assert(!HasKey(key));
+		auto index = _values.Add(PairT(std::forward<RelatedKeyT>(key), std::forward<RelatedValueT>(value)));
+		return _values[index].Second;
 	}
 
 	/** Deletes all key-value pairs from the table */

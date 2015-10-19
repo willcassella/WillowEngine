@@ -38,7 +38,7 @@ public:
 		Nullify();
 	}
 
-	template <typename F>
+	template <typename F, WHERE(!std::is_same<std::decay_t<F>, Union>::value)>
 	Union(F&& value)
 		: Union()
 	{
@@ -96,7 +96,8 @@ public:
 	template <typename F>
 	void Set(F&& value)
 	{
-		Index newIndex = IndexOf<F>();
+		using DecayF = std::decay_t<F>;
+		Index newIndex = IndexOf<DecayF>();
 
 		// If we have a currently loaded value
 		if (_index.HasValue())
@@ -105,7 +106,7 @@ public:
 			if (_index.GetValue() == newIndex)
 			{
 				// Just assign directly
-				Get<F>() = std::forward<F>(value);
+				Get<DecayF>() = std::forward<F>(value);
 				return;
 			}
 			else
@@ -115,7 +116,7 @@ public:
 			}
 		}
 
-		new (_value.GetValue()) F(std::forward<F>(value));
+		new (_value.GetValue()) DecayF(std::forward<F>(value));
 		_index = newIndex;
 	}
 
@@ -274,7 +275,7 @@ public:
 		return self;
 	}
 
-	template <typename F>
+	template <typename F, WHERE(!std::is_same<std::decay_t<F>, Union>::value)>
 	Union& operator=(F&& value)
 	{
 		Set(std::forward<F>(value));

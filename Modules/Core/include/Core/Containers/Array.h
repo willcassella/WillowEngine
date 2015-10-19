@@ -325,6 +325,19 @@ public:
 		return FastGet(0);
 	}
 
+	/** Returns (by value) the first element in this Array, or a default-constructed object if this Array is empty. */
+	FORCEINLINE T FirstOrDefault() const
+	{
+		if (Size() == 0)
+		{
+			return T();
+		}
+		else
+		{
+			return First();
+		}
+	}
+
 	/** Returns a reference to the last element in this Array.
 	* WARNING: Check 'IsEmpty()' before calling this. */
 	FORCEINLINE T& Last()
@@ -339,6 +352,19 @@ public:
 	{
 		assert(Size() > 0);
 		return FastGet(Size() - 1);
+	}
+
+	/** Returns (by value) the last element in this Array, or a default-constructed object if this Array is empty. */
+	FORCEINLINE T LastOrDefault() const
+	{
+		if (Size() == 0)
+		{
+			return T();
+		}
+		else
+		{
+			return Last();
+		}
 	}
 		
 	/** Returns a portion of this Array from the given index to the end. */

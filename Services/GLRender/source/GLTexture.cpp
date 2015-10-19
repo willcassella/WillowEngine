@@ -6,7 +6,8 @@
 ////////////////////////
 ///   Constructors   ///
 
-GLTexture::GLTexture(const Texture& image)
+GLTexture::GLTexture(GLRenderer& renderer, const Texture& image)
+	: GLPrimitive(renderer)
 {
 	// Create and bind the buffer
 	glGenTextures(1, &_id);
@@ -20,10 +21,11 @@ GLTexture::GLTexture(const Texture& image)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.GetWidth(), image.GetHeight(), 0, GL_BGRA, GL_UNSIGNED_BYTE, image.GetBitmap());
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.GetWidth(), image.GetHeight(), 0, GL_BGRA, GL_UNSIGNED_BYTE, image.GetBitmap());
 }
 
 GLTexture::GLTexture(GLTexture&& move)
+	: GLPrimitive(move.GetRenderer())
 {
 	_id = move._id;
 	move._id = 0;

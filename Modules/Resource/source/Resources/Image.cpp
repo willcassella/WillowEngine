@@ -13,7 +13,7 @@ BUILD_REFLECTION(Image);
 ///   Constructors   ///
 
 Image::Image(const Path& path)
-	: Base(path)
+	: Base(path), _bitmap(nullptr), _width(0), _height(0), _image(nullptr)
 {
 	// Open the file
 	FREE_IMAGE_FORMAT format = FreeImage_GetFileType(path.ToString().Cstr());
@@ -25,19 +25,24 @@ Image::Image(const Path& path)
 		return;
 	}
 
-	FIBITMAP* temp = image;
-	_bitmap = (uint32*)FreeImage_ConvertTo32Bits(image);
-	FreeImage_Unload(temp);
+	// Convert the image to 32 bits
+	{
+		FIBITMAP* temp = image;
+		image = FreeImage_ConvertTo32Bits(image);
+		FreeImage_Unload(temp);
+	}
 
+	_bitmap = FreeImage_GetBits(image);
 	_width = FreeImage_GetWidth(image);
 	_height = FreeImage_GetHeight(image);
+	_image = image;
 
 	Console::WriteLine("'@' loaded successfully", path);
 }
 
 Image::~Image()
 {
-	FreeImage_Unload(reinterpret_cast<FIBITMAP*>(_bitmap));
+	FreeImage_Unload(static_cast<FIBITMAP*>(_image));
 }
 
 ///////////////////
@@ -53,7 +58,7 @@ uint32 Image::GetHeight() const
 	return _height;
 }
 
-const uint32* Image::GetBitmap() const
+const byte* Image::GetBitmap() const
 {
 	return _bitmap;
 }

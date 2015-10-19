@@ -3,7 +3,8 @@
 #include <GLFW/glfw3.h>
 #include <Core/Console.h>
 #include <Core/Math/Vec2.h>
-#include <GLRender/GLRender.h>
+#include <GLRender/GLRenderer.h>
+#include <Engine/GameObjects/Prop.h>
 #include <ExampleGame/FPSCamera.h>
 #include <ExampleGame/Ghost.h>
 
@@ -13,7 +14,7 @@ int32 window_height = 720;
 
 //Function Prototypes
 GLFWwindow* InitGLFW();
-void eventLoop(GLFWwindow* window, Scene& scene);
+void eventLoop(GLFWwindow* window, Scene& scene, GLRenderer& renderer);
 void cleanUp(GLFWwindow* window);
 
 struct
@@ -58,32 +59,35 @@ int main(int32 /*argc*/, char** /*argv*/)
 
 	// Make an openGL context in window
 	glfwMakeContextCurrent(window);
-	InitRenderer(window_width, window_height);
 
-	///////////////////////////////
-	///   Setting up a simple   ///
-	///          scene          ///
+	// Create the renderer and scene to simulate
+	{
+		GLRenderer renderer(window_width, window_height);
 
-	UniquePtr<Scene> scene = New<Scene>();
+		///////////////////////////////
+		///   Setting up a simple   ///
+		///          scene          ///
 
-	//auto& sponza = test.Spawn<Prop>();
-	//sponza.MeshComponent.Mesh = "data/sponza.dat";
-	//sponza.MeshComponent.Mesh->SetMaterial(String("data/Sponza.mat"));
+		UniquePtr<Scene> scene = New<Scene>();
 
-	scene->Spawn<Ghost>();
-	//gun.MeshComponent.Mesh = "data/battle_rifle.dat";
-	//gun.MeshComponent.Mesh->SetMaterial(String("data/Gun.mat"));
+		auto& sponza = scene->Spawn<Prop>();
+		sponza.MeshComponent->Mesh = "Content/Models/sponza.dat"_p;
+		sponza.MeshComponent->Material = "Content/Materials/Sponza.mat"_p;
+		sponza.MeshComponent->InstanceParams["diffuse"] = AssetPtr<Texture>("Content/Textures/sponza_tex.png"_p);
 
-	scene->Spawn<FPSCamera>();
-	//test.Cameras.Add(&cam);
+		auto& gun = scene->Spawn<Ghost>();
+		gun.MeshComponent->Mesh = "Content/Models/battle_rifle.dat"_p;
+		gun.MeshComponent->Material = "Content/Materials/Gun.mat"_p;
+		gun.MeshComponent->InstanceParams["diffuse"] = AssetPtr<Texture>("Content/Textures/battle_rifle_tex.png"_p);
 
-	//Execute the main event loop
-	eventLoop(window, *scene);
+		scene->Spawn<FPSCamera>();
+
+		//Execute the main event loop
+		eventLoop(window, *scene, renderer);
+	}
 
 	//Cleanup the engine
 	cleanUp(window);
-
-	scene = nullptr;
 	
 	Application::Terminate();
 }
@@ -100,8 +104,8 @@ GLFWwindow* InitGLFW()
 	// Make the window invisible
 	glfwWindowHint(GLFW_VISIBLE, false);
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
 	GLFWwindow* window = glfwCreateWindow(window_width, window_height, "Willow Engine", NULL, NULL);
 
@@ -134,7 +138,7 @@ GLFWwindow* InitGLFW()
 	return window;
 }
 
-void eventLoop(GLFWwindow* window, Scene& scene)
+void eventLoop(GLFWwindow* window, Scene& scene, GLRenderer& renderer)
 {
 	Console::WriteLine("Entering event loop...");
 
@@ -217,7 +221,7 @@ void eventLoop(GLFWwindow* window, Scene& scene)
 		}
 
 		//render the frame
-		RenderScene(scene);
+		renderer.RenderScene(scene);
 		glfwSwapBuffers(window);
 
 		// Free memory

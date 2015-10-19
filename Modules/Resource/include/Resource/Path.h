@@ -9,15 +9,23 @@ struct RESOURCE_API Path final
 	///   Information   ///
 public:
 
-	REFLECTABLE_STRUCT;
+	REFLECTABLE_STRUCT
 
 	////////////////////////
 	///   Constructors   ///
 public:
 
-	Path();
-	Path(CString path);
-	Path(const String& path);
+	Path() = default;
+	Path(CString path)
+		: _path(path)
+	{
+		Sanitize();
+	}
+	Path(String path)
+		: _path(std::move(path))
+	{
+		Sanitize();
+	}
 
 	///////////////////
 	///   Methods   ///
@@ -44,11 +52,27 @@ private:
 	///   Operators   ///
 public:
 
-	Path& operator=(CString path);
-	Path& operator=(const String& path);
+	Path& operator=(CString path)
+	{
+		_path = path;
+		Sanitize();
+
+		return self;
+	}
+	Path& operator=(String path)
+	{
+		_path = std::move(path);
+		Sanitize();
+
+		return self;
+	}
 	operator const String&() const
 	{
 		return _path;
+	}
+	friend FORCEINLINE bool operator==(const Path& lhs, const Path& rhs)
+	{
+		return lhs._path == rhs._path;
 	}
 	friend FORCEINLINE bool operator==(const Path& lhs, const String& rhs)
 	{
@@ -57,6 +81,10 @@ public:
 	friend FORCEINLINE bool operator==(const String& lhs, const Path& rhs)
 	{
 		return rhs == lhs;
+	}
+	friend FORCEINLINE bool operator!=(const Path& lhs, const Path& rhs)
+	{
+		return lhs._path != rhs._path;
 	}
 	friend FORCEINLINE bool operator!=(const Path& lhs, const String& rhs)
 	{
@@ -73,3 +101,12 @@ private:
 
 	String _path;
 };
+
+/////////////////////
+///   Functions   ///
+
+/** Custom operator for String literals. */
+FORCEINLINE Path operator"" _p(CString string, std::size_t /*size*/)
+{
+	return Path(string);
+}

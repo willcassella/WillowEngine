@@ -2,7 +2,6 @@
 #pragma once
 
 #include "../Resource.h"
-#include "../Reflection/ResourceInfo.h"
 
 class RESOURCE_API BinaryFile final : public Resource
 {
@@ -10,7 +9,7 @@ class RESOURCE_API BinaryFile final : public Resource
 	///   Information   ///
 public:
 
-	REFLECTABLE_RESOURCE
+	REFLECTABLE_CLASS
 	EXTENDS(Resource)
 
 	////////////////////////

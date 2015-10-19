@@ -2,7 +2,6 @@
 #pragma once
 
 #include "../Resource.h"
-#include "../Reflection/ResourceInfo.h"
 
 class RESOURCE_API Image final : public Resource
 {
@@ -10,7 +9,7 @@ class RESOURCE_API Image final : public Resource
 	///   Information   ///
 public:
 
-	REFLECTABLE_RESOURCE
+	REFLECTABLE_CLASS
 	EXTENDS(Resource)
 
 	////////////////////////
@@ -26,13 +25,14 @@ public:
 
 	uint32 GetWidth() const;
 	uint32 GetHeight() const;
-	const uint32* GetBitmap() const;
+	const byte* GetBitmap() const;
 
 	////////////////
 	///   Data   ///
 private:
 
-	uint32* _bitmap;
+	const byte* _bitmap;
 	uint32 _width;
 	uint32 _height;
+	void* _image;
 };

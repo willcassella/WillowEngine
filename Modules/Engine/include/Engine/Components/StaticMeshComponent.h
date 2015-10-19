@@ -25,7 +25,15 @@ public:
 	///   Fields   ///
 public:
 
+	/** Whether this mesh is visible. */
+	bool Visible = true;
+
+	/** The Static Mesh used. */
 	AssetPtr<StaticMesh> Mesh;
+
+	/** The material applied to the StaticMesh. */
 	AssetPtr<Material> Material;
-	Table<String, Material::Param> OverrideParams;
+
+	/** The material parameters specific to this instance. */
+	Table<String, Material::Param> InstanceParams;
 };

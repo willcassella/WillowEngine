@@ -4,6 +4,9 @@
 #include "Asset.h"
 #include "AssetManager.h"
 
+/////////////////
+///   Types   ///
+
 template <class AssetT>
 struct AssetPtr final
 {
@@ -11,7 +14,7 @@ struct AssetPtr final
 	///   Information   ///
 public:
 
-	REFLECTABLE_STRUCT;
+	REFLECTABLE_STRUCT
 
 	////////////////////////
 	///   Constructors   ///
@@ -56,7 +59,7 @@ public:
 		_asset = AssetManager::FindAsset<AssetT>(path);
 		return self;
 	}
-
+	
 	////////////////
 	///   Data   ///
 private:

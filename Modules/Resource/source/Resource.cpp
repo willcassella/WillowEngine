@@ -2,12 +2,6 @@
 
 #include <sys/stat.h>
 #include "../include/Resource/Resource.h"
-#include "../include/Resource/Asset.h"
-
-///////////////////
-///   Statics   ///
-
-Table<String, Resource*> resourceTable;
 
 //////////////////////
 ///   Reflection   ///
@@ -19,23 +13,16 @@ BUILD_REFLECTION(Resource)
 ////////////////////////
 ///   Constructors   ///
 
-Resource::Resource(const Path& path)
-	: _path(path)
+Resource::Resource(Path path)
+	: _path(std::move(path))
 {
-	resourceTable[path] = this;
-
 	struct stat fileStats;
 
-	if (stat(path.ToString().Cstr(), &fileStats) == -1)
+	if (stat(_path.ToString().Cstr(), &fileStats) == -1)
 	{
-		Console::Warning("Resource '@' could not be found.", path);
+		Console::Warning("Resource '@' could not be found.", _path);
 		return;
 	}
 
 	_size = uint32(fileStats.st_size);
-}
-
-Resource::~Resource()
-{
-	resourceTable[_path] = nullptr;
 }

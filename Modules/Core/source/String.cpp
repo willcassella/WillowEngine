@@ -296,7 +296,7 @@ int32 String::Compare(const String& stringA, const String& stringB, bool caseSen
 {
 	if (!caseSensitive)
 	{
-		return String::Compare(stringA.ToLower(), stringB.ToLower(), true);
+		return Compare(stringA.ToLower(), stringB.ToLower(), true);
 	}
 
 	return strcmp(stringA.Cstr(), stringB.Cstr());
@@ -307,7 +307,7 @@ int32 String::Compare(const String& stringA, const String& stringB, bool caseSen
 
 String& String::operator=(CString rhs)
 {
-	_value = Array<Char>(rhs, String::Length(rhs) + 1);
+	_value = Array<Char>(rhs, Length(rhs) + 1);
 	return self;
 }
 

@@ -1,7 +1,6 @@
 // Ghost.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-//#include <Engine/StaticMeshComponent.h>
 #include <Engine/GameObject.h>
 #include <Engine/Components/StaticMeshComponent.h>
 #include "SlideComponent.h"
@@ -34,10 +33,4 @@ public:
 
 	void Disappear();
 	void Spin(float value);
-
-	////////////////
-	///   Data   ///
-protected:
-
-	bool hasDisappeared;
 };

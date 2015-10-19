@@ -7,27 +7,6 @@
 
 BUILD_REFLECTION(Path);
 
-////////////////////////
-///   Constructors   ///
-
-Path::Path()
-{
-	// All done
-}
-
-Path::Path(CString path)
-	: _path(path)
-{
-	Sanitize();
-}
-
-
-Path::Path(const String& path)
-	: _path(path)
-{
-	Sanitize();
-}
-
 ///////////////////
 ///   Methods   ///
 
@@ -86,23 +65,4 @@ String Path::GetFileName() const
 void Path::Sanitize()
 {
 	// TODO: This
-}
-
-/////////////////////
-///   Operators   ///
-
-Path& Path::operator=(CString path)
-{
-	_path = path;
-	Sanitize();
-
-	return self;
-}
-
-Path& Path::operator=(const String& path)
-{
-	_path = path;
-	Sanitize();
-
-	return self;
 }

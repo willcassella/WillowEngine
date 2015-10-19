@@ -184,12 +184,9 @@ public:
 	template <typename F, WHERE(std::is_convertible<F*, T*>::value)>
 	UniquePtr& operator=(UniquePtr<F>&& move)
 	{
-		if (this != &move)
-		{
-			this->Destroy();
-			_controller = move._controller;
-			move._controller = nullptr;
-		}
+		this->Destroy();
+		_controller = move._controller;
+		move._controller = nullptr;
 
 		return self;
 	}

@@ -2,64 +2,22 @@
 
 #include <Core/Console.h>
 #include "glew.h"
-#include "..\include\Render\Material.h"
-
-//////////////////////
-///   Reflection   ///
-
-CLASS_REFLECTION(Material);
+#include "../include/GLRender/GLMaterial.h"
+#include "../include/GLRender/GLRenderer.h"
 
 ////////////////////////
 ///   Constructors   ///
 
-Material::Material(const TextFile& file)
-	: Super(file)
+GLMaterial::GLMaterial(GLRenderer& renderer, const Material& mat)
+	: GLPrimitive(renderer), _params(mat.DefaultParams)
 {
-	for (const auto& line : file.GetLines())
-	{
-		if (line == "Shaders:")
-		{
-			for (file.GetNextLine(line); !line.IsNullOrEmpty(); file.GetNextLine(line))
-			{
-				auto shader = String::ParseEquality(line);
+	_id = glCreateProgram();
 
-				if (shader.First == "VertexShader")
-				{
-					this->VertexShader = shader.Second;
-				}
-				else if (shader.First == "FragmentShader")
-				{
-					this->FragmentShader = shader.Second;
-				}
-			}
-		}
-		else if (line == "Textures:")
-		{
-			for (file.GetNextLine(line); !line.IsNullOrEmpty(); file.GetNextLine(line))
-			{
-				auto texture = String::ParseEquality(line);
+	BufferID vShader = GetRenderer().FindShader(*mat.VertexShader).GetID();
+	BufferID fShader = GetRenderer().FindShader(*mat.FragmentShader).GetID();
 
-				this->Textures[texture.First] = texture.Second;
-			}
-		}
-	}
-
-	this->_id = glCreateProgram();
-	this->Compile();
-}
-
-Material::~Material()
-{
-	glDeleteProgram(_id);
-}
-
-///////////////////
-///   Methods   ///
-
-void Material::Compile()
-{
-	glAttachShader(_id, VertexShader->GetID());
-	glAttachShader(_id, FragmentShader->GetID());
+	glAttachShader(_id, vShader);
+	glAttachShader(_id, fShader);
 	glBindAttribLocation(_id, 0, "vPosition");
 	glBindAttribLocation(_id, 1, "vTexCoord");
 	glBindAttribLocation(_id, 2, "vNormal");
@@ -83,41 +41,90 @@ void Material::Compile()
 	_view = glGetUniformLocation(_id, "view");
 	_projection = glGetUniformLocation(_id, "projection");
 
-	glDetachShader(_id, VertexShader->GetID());
-	glDetachShader(_id, FragmentShader->GetID());
+	glDetachShader(_id, vShader);
+	glDetachShader(_id, fShader);
 }
 
-void Material::Bind() const
+GLMaterial::GLMaterial(GLMaterial&& move)
+	: GLPrimitive(move.GetRenderer()), _params(std::move(move._params))
 {
-	glUseProgram(_id);
+	_id = move._id;
+	_model = move._model;
+	_view = move._view;
+	_projection = move._projection;
 
+	move._id = 0;
+}
+
+GLMaterial::~GLMaterial()
+{
+	glDeleteProgram(_id);
+}
+
+///////////////////
+///   Methods   ///
+
+void GLMaterial::Bind(const Table<String, Material::Param>& instanceParams)
+{
 	uint32 texIndex = 0;
-	for (const auto& i : Textures)
-	{
-		glActiveTexture(GL_TEXTURE0 + texIndex);
-		glBindTexture(GL_TEXTURE_2D, i.Second->GetID());
+	glUseProgram(_id);
+	UploadParams(_params, texIndex);
+	UploadParams(instanceParams, texIndex);
+}
 
-		glUniform1i(glGetUniformLocation(_id, i.First.Cstr()), texIndex);
-		++texIndex;
+void GLMaterial::UploadParams(const Table<String, Material::Param>& params, uint32& texIndex)
+{
+	for (const auto& param : params)
+	{
+		// Handles parameter binding in a generic way
+		auto bindHandler = [&](const auto& value)
+		{
+			using T = std::decay_t<decltype(value)>;
+
+			// Get param location
+			auto location = glGetUniformLocation(_id, param.First.Cstr());
+
+			// Handle texture case
+			if (std::is_same<AssetPtr<Texture>, T>::value)
+			{
+				const auto& texValue = reinterpret_cast<const AssetPtr<Texture>&>(value);
+
+				// Set active texture, and upload
+				glActiveTexture(GL_TEXTURE0 + texIndex);
+				glBindTexture(GL_TEXTURE_2D, GetRenderer().FindTexture(*texValue).GetID());
+				glUniform1i(location, texIndex);
+				++texIndex;
+			}
+
+			// Upload the parameter
+			UploadParam(location, value);
+		};
+
+		param.Second.Invoke(bindHandler);
 	}
 }
 
-BufferID Material::GetID() const
+void GLMaterial::UploadParam(int32 location, float value) const
 {
-	return _id;
+	glUniform1f(location, value);
 }
 
-void Material::UploadModelMatrix(const Mat4& matrix) const
+void GLMaterial::UploadParam(int32 location, Vec2 value) const
 {
-	glUniformMatrix4fv(_model, 1, GL_FALSE, matrix[0]);
+	glUniform1fv(location, 2, (const GLfloat*)&value);
 }
 
-void Material::UploadViewMatrix(const Mat4& matrix) const
+void GLMaterial::UploadParam(int32 location, Vec3 value) const
 {
-	glUniformMatrix4fv(_view, 1, GL_FALSE, matrix[0]);
+	glUniform1fv(location, 3, (const GLfloat*)&value);
 }
 
-void Material::UploadProjectionMatrix(const Mat4& matrix) const
+void GLMaterial::UploadParam(int32 location, Vec4 value) const
 {
-	glUniformMatrix4fv(_projection, 1, GL_FALSE, matrix[0]);
+	glUniform1fv(location, 4, (const GLfloat*)&value);
+}
+
+void GLMaterial::UploadParam(int32 /*location*/, const AssetPtr<Texture>& /*value*/)
+{
+	// Do nothing, uploading performed in bind handler
 }

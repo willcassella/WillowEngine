@@ -20,7 +20,6 @@ Ghost::Ghost(Scene& scene)
 
 	scene.Events.Bind("Poof", self, &Ghost::Disappear);
 	scene.Events.Bind("Spin", self, &Ghost::Spin);
-	hasDisappeared = false;
 }
 
 ///////////////////
@@ -28,19 +27,10 @@ Ghost::Ghost(Scene& scene)
 
 void Ghost::Disappear()
 {
-	if (!hasDisappeared)
-	{
-		//MeshComponent.Disable();
-		hasDisappeared = true;
-	}
-	else
-	{
-		//MeshComponent.Enable();
-		hasDisappeared = false;
-	}
+	MeshComponent->Visible = !MeshComponent->Visible;
 }
 
 void Ghost::Spin(float value)
 {
-	Transform.Rotate(Vec3::Up, value);
+	Transform.Rotate(Vec3::Up, value/10);
 }

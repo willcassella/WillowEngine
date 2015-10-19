@@ -2,31 +2,14 @@
 
 #include <Core/Console.h>
 #include "glew.h"
-#include "../include/GLRender/GLRender.h"
+#include "../include/GLRender/GLRenderer.h"
 #include <Engine/Components/StaticMeshComponent.h>
+#include <Engine/Components/CameraComponent.h>
 
-////////////////
-///   Data   ///
+////////////////////////
+///   Constructors   ///
 
-///** GBuffer and its sub-buffers */
-//BufferID gBuffer = NULL;
-//BufferID positionBuffer = NULL;
-//BufferID depthBuffer = NULL;
-//BufferID diffuseBuffer = NULL;
-//BufferID normalBuffer = NULL;
-//BufferID specularBuffer = NULL;
-//BufferID metallicBuffer = NULL;
-//BufferID roughnessBuffer = NULL;
-//
-///** VAO, VBO, and material for screen-sized quad */
-//BufferID screenQuadVAO = NULL;
-//BufferID screenQuadVBO = NULL;
-//BufferID screenQuadProgram = NULL;
-
-/////////////////////
-///   Functions   ///
-
-void InitRenderer(uint32 /*width*/, uint32 /*height*/)
+GLRenderer::GLRenderer(uint32 /*width*/, uint32 /*height*/)
 {
 	// Initialize GLEW
 	glewExperimental = GL_TRUE;
@@ -34,12 +17,11 @@ void InitRenderer(uint32 /*width*/, uint32 /*height*/)
 
 	// Initialize OpenGL
 	glClearColor(0, 0, 0, 1);
-	glPointSize(10);
 	//glClearDepth(1.f);
-	//glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_CULL_FACE);
-	//glDisable(GL_STENCIL_TEST);
-//
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glDisable(GL_STENCIL_TEST);
+
 //	// Create a framebuffer for deferred rendering (GBuffer)
 //	glGenFramebuffers(1, &gBuffer);
 //	glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
@@ -165,35 +147,99 @@ void InitRenderer(uint32 /*width*/, uint32 /*height*/)
 //	glUniform3fv(glGetUniformLocation(screenQuadProgram, "lightPos"), 1, lightPos);
 }
 
-void RenderScene(const Scene& scene)
+GLRenderer::~GLRenderer()
 {
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	glBegin(GL_POINTS);
-	glColor3f(0, 1, 0);
-	
-	for (const auto& staticMesh : scene.GetComponentsOfType<StaticMeshComponent>())
-	{
-		auto transform = staticMesh->GetOwner().Transform;
-		transform.Location /= 10;
-
-		glVertex2d(transform.Location.X, transform.Location.Z);
-	}
-
-	glEnd();
+	// TODO
 }
 
-//
-//void CleanUpRenderer()
-//{
-//	// @TODO: Do something here
-//}
-//
-//void Resize(uint32 width, uint32 height)
-//{
-//	// @TODO: Do something here
-//}
-//
+///////////////////
+///   Methods   ///
+
+void GLRenderer::RenderScene(const Scene& scene)
+{
+	// Clear color and depth buffer
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	// Get first camera in scene
+	const auto* cam = scene.GetComponentsOfType<CameraComponent>().FirstOrDefault();
+
+	// We can't render the scene without a camera
+	if (!cam)
+		return;
+
+	Mat4 view = cam->GetOwner().GetModelMatrix().Inverse();
+	Mat4 proj = cam->GetPerspective();
+
+	// Render each StaticMeshComponent in the scene
+	for (auto staticMesh : scene.GetComponentsOfType<StaticMeshComponent>())
+	{
+		if (!staticMesh->Visible)
+			continue;
+
+		Mat4 model = staticMesh->GetOwner().Transform.GetMatrix();
+		
+		// Bind the mesh and material
+		auto& mesh = FindStaticMesh(*staticMesh->Mesh);
+		mesh.Bind();
+		FindMaterial(*staticMesh->Material).Bind(staticMesh->InstanceParams);
+
+		// Upload transformation matrices
+		glUniformMatrix4fv(0, 1, false, (const float*)&model);
+		glUniformMatrix4fv(1, 1, false, (const float*)&view);
+		glUniformMatrix4fv(2, 1, false, (const float*)&proj);
+
+		glDrawElements(GL_TRIANGLES, mesh.GetNumElements(), GL_UNSIGNED_INT, nullptr);
+	}
+}
+
+GLShader& GLRenderer::FindShader(const Shader& asset)
+{
+	if (auto pShader = _shaders.Find(asset.GetID()))
+	{
+		return *pShader;
+	}
+	else
+	{
+		return _shaders.Insert(asset.GetID(), GLShader(self, asset));
+	}
+}
+
+GLTexture& GLRenderer::FindTexture(const Texture& asset)
+{
+	if (auto pTexture = _textures.Find(asset.GetID()))
+	{
+		return *pTexture;
+	}
+	else
+	{
+		return _textures.Insert(asset.GetID(), GLTexture(self, asset));
+	}
+}
+
+GLMaterial& GLRenderer::FindMaterial(const Material& asset)
+{
+	if (auto pMaterial = _materials.Find(asset.GetID()))
+	{
+		return *pMaterial;
+	}
+	else
+	{
+		return _materials.Insert(asset.GetID(), GLMaterial(self, asset));
+	}
+}
+
+GLStaticMesh& GLRenderer::FindStaticMesh(const StaticMesh& asset)
+{
+	if (auto pMesh = _staticMeshes.Find(asset.GetID()))
+	{
+		return *pMesh;
+	}
+	else
+	{
+		return _staticMeshes.Insert(asset.GetID(), GLStaticMesh(self, asset));
+	}
+}
+
 //void BeginFrame()
 //{
 //	glEnable(GL_DEPTH_TEST);

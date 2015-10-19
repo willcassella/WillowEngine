@@ -4,6 +4,7 @@
 #include "../String.h"
 #include "../Memory/UniquePtr.h"
 #include "../Reflection/Variant.h"
+#include "../Reflection/VoidInfo.h"
 
 /** Abstract base for events */
 struct CORE_API Event final
@@ -45,7 +46,14 @@ public:
 	/** Returns the type of argument that this Event was created with. */
 	FORCEINLINE const TypeInfo& GetArgType() const
 	{
-		return (*_value).GetType();
+		if (_value)
+		{
+			return (*_value).GetType();
+		}
+		else
+		{
+			return TypeOf<void>();
+		}
 	}
 
 	/** Returns the value of this event. */

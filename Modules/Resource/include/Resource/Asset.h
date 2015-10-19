@@ -2,10 +2,12 @@
 #pragma once
 
 #include "Path.h"
-#include "Reflection/AssetInfo.h"
 
 /////////////////
 ///   Types   ///
+
+/** Uniquely identifies each asset. */
+using AssetID = uint32;
 
 class RESOURCE_API Asset : public Object
 {
@@ -13,14 +15,8 @@ class RESOURCE_API Asset : public Object
 	///   Information   ///
 public:
 
+	REFLECTABLE_CLASS
 	EXTENDS(Object)
-
-	//////////////////////
-	///   Reflection   ///
-public:
-
-	REFLECTION_DECL(ClassInfo)
-	const AssetInfo& GetType() const override = 0;
 
 	////////////////////////
 	///   Constructors   ///
@@ -32,9 +28,16 @@ public:
 	///   Methods   ///
 public:
 
+	/** Returns the path for this Asset. */
 	FORCEINLINE const Path& GetPath() const
 	{
 		return _path;
+	}
+
+	/** Returns the Unique ID for this asset. */
+	FORCEINLINE AssetID GetID() const
+	{
+		return _id;
 	}
 
 	////////////////
@@ -42,4 +45,5 @@ public:
 private:
 
 	Path _path;
+	AssetID _id;
 };

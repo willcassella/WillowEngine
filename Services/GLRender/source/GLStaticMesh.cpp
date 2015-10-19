@@ -8,9 +8,10 @@
 ////////////////////////
 ///   Constructors   ///
 
-GLStaticMesh::GLStaticMesh(const StaticMesh& mesh)
+GLStaticMesh::GLStaticMesh(GLRenderer& renderer, const StaticMesh& mesh)
+	: GLPrimitive(renderer)
 {
-	this->_numElements = elements.Size();
+	_numElements = mesh.Elements.Size();
 
 	// Generate buffers and upload data
 	glGenVertexArrays(1, &_vao);
@@ -18,24 +19,38 @@ GLStaticMesh::GLStaticMesh(const StaticMesh& mesh)
 	
 	glGenBuffers(1, &_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
-	glBufferData(GL_ARRAY_BUFFER, vertices.Size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, mesh.Vertices.Size() * sizeof(StaticMesh::Vertex), &mesh.Vertices[0], GL_STATIC_DRAW);
 
 	glGenBuffers(1, &_ebo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.Size() * sizeof(uint32), &elements[0] , GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.Elements.Size() * sizeof(uint32), &mesh.Elements[0] , GL_STATIC_DRAW);
 
 	// Setup vertex specification
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0); // "vPosition" attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(StaticMesh::Vertex), 0); // "vPosition" attribute
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, U)); // "vTexCoord" attribute
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(StaticMesh::Vertex), (void*)offsetof(StaticMesh::Vertex, UV)); // "vTexCoord" attribute
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_TRUE, sizeof(Vertex), (void*)offsetof(Vertex, I)); // "vNormal" attribute
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_TRUE, sizeof(StaticMesh::Vertex), (void*)offsetof(StaticMesh::Vertex, Normal)); // "vNormal" attribute
 
 	glBindVertexArray(NULL);
 }
 
-StaticMesh::~StaticMesh()
+GLStaticMesh::GLStaticMesh(GLStaticMesh&& move)
+	: GLPrimitive(move.GetRenderer())
+{
+	_vao = move._vao;
+	_vbo = move._vbo;
+	_ebo = move._ebo;
+	_numElements = move._numElements;
+
+	move._vao = 0;
+	move._vbo = 0;
+	move._ebo = 0;
+	move._numElements = 0;
+}
+
+GLStaticMesh::~GLStaticMesh()
 {
 	glDeleteBuffers(1, &_vbo);
 	glDeleteBuffers(1, &_ebo);
@@ -45,31 +60,7 @@ StaticMesh::~StaticMesh()
 ///////////////////
 ///   Methods   ///
 
-void StaticMesh::Render(const Mat4& orientation, const Mat4& view, const Mat4& perspective) const
+void GLStaticMesh::Bind() const
 {
-	// Bind the mesh
 	glBindVertexArray(_vao);
-
-	// Bind the material
-	_mat->Bind();
-
-	// Upload the matrix to the GPU
-	_mat->UploadModelMatrix(orientation);
-	_mat->UploadViewMatrix(view);
-	_mat->UploadProjectionMatrix(perspective);
-
-	//Draw the mesh
-	glDrawElements(GL_TRIANGLES, (GLsizei)_numElements, GL_UNSIGNED_INT, 0);
-
-	glBindVertexArray(NULL);
-}
-
-const ResourcePtr<Material>& StaticMesh::GetMaterial() const
-{
-	return _mat;
-}
-
-void StaticMesh::SetMaterial(const ResourcePtr<Material>& material)
-{
-	_mat = material;
 }

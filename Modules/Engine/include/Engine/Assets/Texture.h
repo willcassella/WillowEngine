@@ -11,7 +11,7 @@ class ENGINE_API Texture final : public Asset
 	///   Information   ///
 public:
 
-	REFLECTABLE_ASSET
+	REFLECTABLE_CLASS
 	EXTENDS(Asset)
 
 	////////////////////////
@@ -26,24 +26,22 @@ public:
 
 	FORCEINLINE uint32 GetWidth() const
 	{
-		return _width;
+		return _image.GetWidth();
 	}
 
 	FORCEINLINE uint32 GetHeight() const
 	{
-		return _height;
+		return _image.GetHeight();
 	}
 
 	FORCEINLINE const byte* GetBitmap() const
 	{
-		return _bitmap.GetValue();
+		return _image.GetBitmap();
 	}
 
 	////////////////
 	///   Data   ///
 private:
 
-	DynamicBuffer _bitmap;
-	uint32 _width;
-	uint32 _height;
+	Image _image;
 };

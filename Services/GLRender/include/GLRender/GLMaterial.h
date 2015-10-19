@@ -5,39 +5,54 @@
 #include "GLShader.h"
 #include "GLTexture.h"
 
-struct GLRENDER_API GLMaterial final
+struct GLRENDER_API GLMaterial final : GLPrimitive
 {
 	////////////////////////
 	///   Constructors   ///
 public:
 
-	GLMaterial(const Material& material);
-	~GLMaterial() override;
+	/** Constructs an OpenGL material from the given Material asset. */
+	GLMaterial(GLRenderer& renderer, const Material& mat);
 
-	//////////////////
-	///   Fields   ///
-public:
-
-	Shader* VertexShader;
-	Shader* FragmentShader;
-	Table<String, Texture*> Textures;
+	GLMaterial(GLMaterial&& move);
+	~GLMaterial();
 
 	///////////////////
 	///   Methods   ///
 public:
 
-	// @TODO: This needs some serious work. Once I have a more finalized rendering pipeline set up I'll do some major refactoring here
-	void Compile();
-	void Bind() const;
-	BufferID GetID() const;
-	void UploadModelMatrix(const Mat4& matrix) const;
-	void UploadViewMatrix(const Mat4& matrix) const;
-	void UploadProjectionMatrix(const Mat4& matrix) const;
+	void Bind(const Table<String, Material::Param>& instanceParams);
 
+	FORCEINLINE BufferID GetID() const
+	{
+		return _id;
+	}
+
+private:
+
+	/** Uploads the given parameters to this material. */
+	void UploadParams(const Table<String, Material::Param>& params, uint32& texIndex);
+
+	/** Uploads a scalar parameter to the given location. */
+	void UploadParam(int32 location, float value) const;
+
+	/** Uploads a Vec2 parameter to the given location. */
+	void UploadParam(int32 location, Vec2 value) const;
+
+	/** Uploads a Vec3 parameter to the given location. */
+	void UploadParam(int32 location, Vec3 value) const;
+
+	/** Uploads a Vec4 location to the given location. */
+	void UploadParam(int32 location, Vec4 value) const;
+
+	/** Uploads a texture parameter to the given location. */
+	void UploadParam(int32 location, const AssetPtr<Texture>& value);
+	
 	////////////////
 	///   Data   ///
 private:
 
+	Table<String, Material::Param> _params;
 	BufferID _id;
 	BufferID _model;
 	BufferID _view;

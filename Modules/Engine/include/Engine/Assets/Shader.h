@@ -11,7 +11,7 @@ class ENGINE_API Shader final : public Asset
 	///   Information   ///
 public:
 
-	REFLECTABLE_ASSET
+	REFLECTABLE_CLASS
 	EXTENDS(Asset)
 
 	////////////////////////

@@ -13,7 +13,7 @@ BUILD_REFLECTION(Camera)
 ///   Constructors   ///
 
 Camera::Camera(Scene& scene)
-	: Base(scene), Lens(New<CameraComponent>(self))
+	: Base(scene)
 {
-	// All done
+	Lens = New<CameraComponent>(self);
 }

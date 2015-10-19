@@ -21,26 +21,20 @@
   <ItemGroup>
     <ClInclude Include="include\Resource\AssetManager.h" />
     <ClInclude Include="include\Resource\config.h" />
-    <ClInclude Include="include\Resource\Forwards\Reflection.h" />
     <ClInclude Include="include\Resource\Forwards\Resource.h" />
     <ClInclude Include="include\Resource\Path.h" />
-    <ClInclude Include="include\Resource\Reflection\AssetInfo.h" />
-    <ClInclude Include="include\Resource\Reflection\ResourceInfo.h" />
     <ClInclude Include="include\Resource\Resource.h" />
     <ClInclude Include="include\Resource\Asset.h" />
     <ClInclude Include="include\Resource\AssetPtr.h" />
-    <ClInclude Include="include\Resource\ResourceManager.h" />
     <ClInclude Include="include\Resource\Resources\BinaryFile.h" />
     <ClInclude Include="include\Resource\Resources\Image.h" />
     <ClInclude Include="include\Resource\Resources\TextFile.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\AssetManager.cpp" />
     <ClCompile Include="source\Path.cpp" />
-    <ClCompile Include="source\Reflection\AssetInfo.cpp" />
-    <ClCompile Include="source\Reflection\ResourceInfo.cpp" />
     <ClCompile Include="source\Resource.cpp" />
     <ClCompile Include="source\Asset.cpp" />
-    <ClCompile Include="source\ResourceManager.cpp" />
     <ClCompile Include="source\Resources\BinaryFile.cpp" />
     <ClCompile Include="source\Resources\Image.cpp" />
     <ClCompile Include="source\Resources\TextFile.cpp" />
@@ -130,7 +124,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>RESOURCE_BUILD;WINDOWS;BITS_32;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;RESOURCE_BUILD;WINDOWS;BITS_32;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4251</DisableSpecificWarnings>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -150,7 +144,7 @@ xcopy "$(SolutionDir)packages\FreeImage\$(Platform)\*.dll" "$(SolutionDir)bin\" 
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>RESOURCE_BUILD;WINDOWS;BITS_64;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;RESOURCE_BUILD;WINDOWS;BITS_64;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4251</DisableSpecificWarnings>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -172,7 +166,7 @@ xcopy "$(SolutionDir)packages\FreeImage\$(Platform)\*.dll" "$(SolutionDir)bin\" 
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>RESOURCE_BUILD;WINDOWS;BITS_32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;RESOURCE_BUILD;WINDOWS;BITS_32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4251</DisableSpecificWarnings>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
@@ -198,7 +192,7 @@ xcopy "$(SolutionDir)packages\FreeImage\$(Platform)\*.dll" "$(SolutionDir)bin\" 
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>RESOURCE_BUILD;WINDOWS;BITS_64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;RESOURCE_BUILD;WINDOWS;BITS_64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4251</DisableSpecificWarnings>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>

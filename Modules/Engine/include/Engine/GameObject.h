@@ -72,6 +72,12 @@ public:
 		return _components;
 	}
 
+	/** Returns the model matrix for this GameObject. */
+	Mat4 GetModelMatrix() const
+	{
+		return Transform.GetMatrix();
+	}
+
 	/** Returns a collection of Components of the specified type attached to this GameObject */
 	template <class ComponentType>
 	Array<ComponentType*> GetComponentsOfType()

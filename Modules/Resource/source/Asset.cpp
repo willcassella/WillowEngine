@@ -1,7 +1,11 @@
 // Asset.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
 #include "../include/Resource/Asset.h"
-#include "../include/Resource/Resource.h"
+
+///////////////////
+///   Statics   ///
+
+AssetID _lastID = 0;
 
 //////////////////////
 ///   Reflection   ///
@@ -14,5 +18,5 @@ BUILD_REFLECTION(Asset);
 Asset::Asset(const Path& path)
 	: _path(path)
 {
-	// All done
+	_id = ++_lastID;
 }

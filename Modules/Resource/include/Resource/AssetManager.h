@@ -34,9 +34,6 @@ public:
 	///   Fields   ///
 public:
 
-	/** The type of asset that is requested. */
-	TypePtr<AssetInfo> Type;
-
 	/** The requested asset (null until loaded). */
 	UniquePtr<class Asset> Asset;
 
@@ -57,7 +54,6 @@ struct RESOURCE_API AssetManager final
 	///   Information   ///
 public:
 
-	REFLECTABLE_STRUCT
 	template <class AssetT>
 	friend struct AssetPtr;
 
@@ -85,7 +81,13 @@ private:
 		else
 		{
 			// Create a new asset
-			return (Instance()._requestedAssets[path] = New<AssetT>(path)).Get();
+			UniquePtr<AssetT> asset = New<AssetT>(path);
+			auto pAsset = asset.Get();
+
+			// Add it to the table
+			Instance()._requestedAssets[path] = asset.Transfer();
+
+			return pAsset;
 		}
 	}
 

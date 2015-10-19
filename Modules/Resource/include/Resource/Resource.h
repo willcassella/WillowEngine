@@ -3,7 +3,6 @@
 
 #include "config.h"
 #include "Forwards/Resource.h"
-#include "Reflection/ResourceInfo.h"
 #include "Path.h"
 
 class RESOURCE_API Resource : public Object
@@ -12,22 +11,15 @@ class RESOURCE_API Resource : public Object
 	///   Information   ///
 public:
 
+	REFLECTABLE_CLASS
 	EXTENDS(Object)
 	friend Asset;
-
-	//////////////////////
-	///   Reflection   ///
-public:
-
-	REFLECTION_DECL(ClassInfo)
-	const ResourceInfo& GetType() const override = 0;
 
 	////////////////////////
 	///   Constructors   ///
 public:
 
-	Resource(const Path& path);
-	~Resource() override;
+	Resource(Path path);
 
 	///////////////////
 	///   Methods   ///
@@ -39,6 +31,7 @@ public:
 		return _path;
 	}
 
+	/** Returns the size of this Resource on disk. */
 	FORCEINLINE uint32 GetSize()
 	{
 		return _size;

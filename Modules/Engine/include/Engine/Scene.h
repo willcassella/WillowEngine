@@ -33,8 +33,10 @@ public:
 	GameObjectClass& Spawn(Args&& ... args)
 	{
 		UniquePtr<GameObjectClass> object = New<GameObjectClass>(self, std::forward<Args>(args)...);
+		auto pObject = object.Get();
+		
 		_freshObjects.Push(object.Transfer());
-		return *object;
+		return *pObject;
 	}
 
 	template <typename ComponentT>

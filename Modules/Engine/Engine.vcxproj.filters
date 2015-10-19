@@ -61,6 +61,9 @@
     <ClCompile Include="source\Components\StaticMeshComponent.cpp">
       <Filter>source\Components</Filter>
     </ClCompile>
+    <ClCompile Include="source\GameObjects\Prop.cpp">
+      <Filter>source\GameObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Engine\Component.h">
@@ -101,6 +104,9 @@
     </ClInclude>
     <ClInclude Include="include\Engine\Assets\StaticMesh.h">
       <Filter>include\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\GameObjects\Prop.h">
+      <Filter>include\GameObjects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

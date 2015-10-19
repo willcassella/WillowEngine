@@ -2,15 +2,17 @@
 #pragma once
 
 #include <Engine/Assets/Texture.h>
-#include "GLRender.h"
+#include "GLPrimitive.h"
 
-struct GLRENDER_API GLTexture final
+struct GLRENDER_API GLTexture final : GLPrimitive
 {
 	////////////////////////
 	///   Constructors   ///
 public:
 
-	GLTexture(const Texture& texture);
+	/** Creates an OpenGL texture from the corresponding Texture asset. */
+	GLTexture(GLRenderer& renderer, const Texture& texture);
+
 	GLTexture(GLTexture&& move);
 	~GLTexture();
 

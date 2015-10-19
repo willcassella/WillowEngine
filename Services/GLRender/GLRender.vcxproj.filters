@@ -16,9 +16,6 @@
     <ClInclude Include="include\GLRender\GLMaterial.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\GLRender\GLRender.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="include\GLRender\GLShader.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -31,9 +28,27 @@
     <ClInclude Include="source\glew.h">
       <Filter>source</Filter>
     </ClInclude>
+    <ClInclude Include="include\GLRender\GLPrimitive.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GLRender\GLRenderer.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\GLRender.cpp">
+    <ClCompile Include="source\GLShader.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GLTexture.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GLMaterial.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GLStaticMesh.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GLRenderer.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
