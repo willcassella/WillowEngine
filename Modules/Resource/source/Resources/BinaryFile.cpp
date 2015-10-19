@@ -1,6 +1,6 @@
 // BinaryFile.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
-#include <cstdio>
+#include <fstream>
 #include "../../include/Resource/Resources/BinaryFile.h"
 
 //////////////////////
@@ -14,14 +14,30 @@ BUILD_REFLECTION(BinaryFile);
 BinaryFile::BinaryFile(const Path& path)
 	: Base(path)
 {
-	// Create a buffer to hold the contents of the file
-	_data.Reset(GetSize());
+	// Open the file
+	std::ifstream file;
+	file.open(path.ToString().Cstr(), std::ios::in | std::ios::binary);
 
-	// I'm using the standard C api since for some reason C++'s
-	// ifstream was unbeleivably slow compared to this (or at least how I was using it)
-	FILE* file = fopen(path.ToString().Cstr(), "r");
-	fread(_data.GetValue(), sizeof(byte), GetSize(), file);
-	fclose(file);
+	// Make sure the file opened correctly
+	if (!file.is_open())
+	{
+		return;
+	}
+
+	// Resize the buffer to hold the file
+	_data.Reset(this->GetSize());
+
+	// Read the contents of the file into the buffer
+	file.read(_data.GetValueAs<char>(), this->GetSize());
+
+	// Make sure the contents were read correctly
+	if (!file.gcount() == this->GetSize())
+	{
+		Console::WriteLine("An error occurred while reading the binary file '@'.", path);
+	}
+
+	// Close the file
+	file.close();
 }
 
 ///////////////////
