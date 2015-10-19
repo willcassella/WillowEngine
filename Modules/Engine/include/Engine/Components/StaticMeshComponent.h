@@ -32,8 +32,8 @@ public:
 	AssetPtr<StaticMesh> Mesh;
 
 	/** The material applied to the StaticMesh. */
-	AssetPtr<Material> Material;
+	AssetPtr<class Material> Material;
 
 	/** The material parameters specific to this instance. */
-	Table<String, Material::Param> InstanceParams;
+	Table<String, ::Material::Param> InstanceParams;
 };
