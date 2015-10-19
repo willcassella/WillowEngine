@@ -91,13 +91,13 @@ void GLMaterial::UploadParams(const Table<String, Material::Param>& params, uint
 
 				// Set active texture, and upload
 				glActiveTexture(GL_TEXTURE0 + texIndex);
-				glBindTexture(GL_TEXTURE_2D, GetRenderer().FindTexture(*texValue).GetID());
+				glBindTexture(GL_TEXTURE_2D, this->GetRenderer().FindTexture(*texValue).GetID());
 				glUniform1i(location, texIndex);
 				++texIndex;
 			}
 
 			// Upload the parameter
-			UploadParam(location, value);
+			this->UploadParam(location, value);
 		};
 
 		param.Second.Invoke(bindHandler);

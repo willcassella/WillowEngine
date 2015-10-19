@@ -27,13 +27,13 @@ GLStaticMesh::GLStaticMesh(GLRenderer& renderer, const StaticMesh& mesh)
 
 	// Setup vertex specification
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(StaticMesh::Vertex), 0); // "vPosition" attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(StaticMesh::Vertex), nullptr); // "vPosition" attribute
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(StaticMesh::Vertex), (void*)offsetof(StaticMesh::Vertex, UV)); // "vTexCoord" attribute
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_TRUE, sizeof(StaticMesh::Vertex), (void*)offsetof(StaticMesh::Vertex, Normal)); // "vNormal" attribute
 
-	glBindVertexArray(NULL);
+	glBindVertexArray(0);
 }
 
 GLStaticMesh::GLStaticMesh(GLStaticMesh&& move)
