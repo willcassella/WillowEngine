@@ -28,7 +28,7 @@ int main()
 
 		auto test2 = std::move(test);
 		
-		test.Invoke(printer);
+		test2.Invoke(printer);
 		
 		test.Set(3);
 
