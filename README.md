@@ -2,10 +2,6 @@
 
 Willow Engine is a game engine in development by Will Cassella.
 
-## What works
-
-Right now the most glaring issue with the engine is the renderer. It worked previously (I actually implemented a deferred renderer with phong shading), but unfortunately all it does at the moment is draw a little green square wherever a StaticMesh is. While most of the actual rendering code is still there, it needs to undergo some work before it's functional. Right now the biggest hurdle to reaching that is finishing the resource management system; that's my biggest priority with the engine at the moment. Once that's complete, I'll move on to finishing the implementation of the renderer.
-
 ## Compiling the engine
 
 ### Windows
