@@ -20,7 +20,7 @@ This module defines the classes and functions that make up the meat of the game 
 
 ### GLRender service
 
-This service observes the current state of the game world and draws it to the screen. The engine has no knowledge of whether it is being rendered and does not interact with the renderer, other than supplying it all necessary rendering data. At the moment this module does not compile, though that is being addressed.
+This service observes the current state of the game world and draws it to the screen, implemented in OpenGL. The engine has no knowledge of whether it is being rendered and does not interact with the renderer, other than supplying it all necessary rendering data.
 
 ## Runtimes
 
