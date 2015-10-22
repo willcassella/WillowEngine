@@ -21,12 +21,14 @@ public:
 	///   Methods   ///
 public:
 
-	void Bind(const Table<String, Material::Param>& instanceParams);
-
+	/** Returns the ID of this Material. */
 	FORCEINLINE BufferID GetID() const
 	{
 		return _id;
 	}
+
+	/** Sets this material as the current active material, with the given instance parameters. */
+	void Bind(const Table<String, Material::Param>& instanceParams);
 
 private:
 
