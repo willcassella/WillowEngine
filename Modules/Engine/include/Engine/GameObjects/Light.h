@@ -1,10 +1,10 @@
-// Prop.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
+// Light.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
 #include "../GameObject.h"
-#include "../Components/StaticMeshComponent.h"
+#include "../Components/LightComponent.h"
 
-class ENGINE_API Prop : public GameObject
+class ENGINE_API Light : public GameObject
 {
 	///////////////////////
 	///   Information   ///
@@ -17,11 +17,11 @@ public:
 	///   Constructors   ///
 public:
 
-	Prop(Scene& scene);
+	Light(Scene& scene);
 
 	//////////////////
 	///   Fields   ///
 public:
 
-	UniquePtr<StaticMeshComponent> MeshComponent;
+	UniquePtr<class LightComponent> LightComponent;
 };

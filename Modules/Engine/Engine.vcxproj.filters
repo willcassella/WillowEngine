@@ -67,6 +67,12 @@
     <ClCompile Include="source\GameObjects\Prop.cpp">
       <Filter>source\GameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="source\Components\LightComponent.cpp">
+      <Filter>source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GameObjects\Light.cpp">
+      <Filter>source\GameObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Engine\Component.h">
@@ -113,6 +119,12 @@
     </ClInclude>
     <ClInclude Include="include\Engine\ServiceInterfaces\IRenderer.h">
       <Filter>include\ServiceInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Components\LightComponent.h">
+      <Filter>include\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\GameObjects\Light.h">
+      <Filter>include\GameObjects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
