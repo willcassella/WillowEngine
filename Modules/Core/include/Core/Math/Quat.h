@@ -16,7 +16,7 @@ public:
 	///   Constructors   ///
 public:
 
-	Quat()
+	constexpr Quat()
 		: X(0), Y(0), Z(0), W(1)
 	{
 		// All done

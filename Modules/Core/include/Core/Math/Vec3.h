@@ -15,22 +15,22 @@ public:
 	///   Constructors   ///
 public:
 
-	Vec3()
+	constexpr Vec3()
 		: X(0.f), Y(0.f), Z(0.f)
 	{
 		// All done
 	}
-	Vec3(float x, float y, float z)
+	constexpr Vec3(float x, float y, float z)
 		: X(x), Y(y), Z(z)
 	{
 		// All done
 	}
-	Vec3(const Vec2& xy, float z)
+	constexpr Vec3(const Vec2& xy, float z)
 		: X(xy.X), Y(xy.Y), Z(z)
 	{
 		// All done
 	}
-	Vec3(float x, const Vec2& yz)
+	constexpr Vec3(float x, const Vec2& yz)
 		: X(x), Y(yz.X), Z(yz.Y)
 	{
 		// All done

@@ -18,12 +18,12 @@ public:
 	///   Constructors   ///
 public:
 
-	Vec2()
+	constexpr Vec2()
 		: X(0.f), Y(0.f)
 	{
 		// All done
 	}
-	Vec2(float x, float y)
+	constexpr Vec2(float x, float y)
 		: X(x), Y(y)
 	{
 		// All done

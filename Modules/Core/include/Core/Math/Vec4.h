@@ -15,42 +15,42 @@ public:
 	///   Constructors   ///
 public:
 
-	Vec4()
+	constexpr Vec4()
 		: X(0.f), Y(0.f), Z(0.f), W(0.f)
 	{
 		// All done
 	}
-	Vec4(float x, float y, float z, float w)
+	constexpr Vec4(float x, float y, float z, float w)
 		: X(x), Y(y), Z(z), W(w)
 	{
 		// All done
 	}
-	Vec4(const Vec3& xyz, float w)
+	constexpr Vec4(const Vec3& xyz, float w)
 		: X(xyz.X), Y(xyz.Y), Z(xyz.Z), W(w)
 	{
 		// All done
 	}
-	Vec4(float x, const Vec3& yzw)
+	constexpr Vec4(float x, const Vec3& yzw)
 		: X(x), Y(yzw.X), Z(yzw.Y), W(yzw.Z)
 	{
 		// All done
 	}
-	Vec4(const Vec2& xy, const Vec2& zw)
+	constexpr Vec4(const Vec2& xy, const Vec2& zw)
 		: X(xy.X), Y(xy.Y), Z(zw.X), W(zw.Y)
 	{
 		// All done
 	}
-	Vec4(const Vec2& xy, float z, float w)
+	constexpr Vec4(const Vec2& xy, float z, float w)
 		: X(xy.X), Y(xy.Y), Z(z), W(w)
 	{
 		// All done
 	}
-	Vec4(float x, const Vec2& yz, float w)
+	constexpr Vec4(float x, const Vec2& yz, float w)
 		: X(x), Y(yz.X), Z(yz.Y), W(w)
 	{
 		// All done
 	}
-	Vec4(float x, float y, const Vec2& zw)
+	constexpr Vec4(float x, float y, const Vec2& zw)
 		: X(x), Y(y), Z(zw.X), W(zw.Y)
 	{
 		// All done
