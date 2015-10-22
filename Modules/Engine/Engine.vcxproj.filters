@@ -26,6 +26,9 @@
     <Filter Include="source\Components">
       <UniqueIdentifier>{30595b4a-e14f-4fc3-ac79-50b01dee0520}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\ServiceInterfaces">
+      <UniqueIdentifier>{52017b75-ea13-45c3-aec8-8736b670de11}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Scene.cpp">
@@ -107,6 +110,9 @@
     </ClInclude>
     <ClInclude Include="include\Engine\GameObjects\Prop.h">
       <Filter>include\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\ServiceInterfaces\IRenderer.h">
+      <Filter>include\ServiceInterfaces</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

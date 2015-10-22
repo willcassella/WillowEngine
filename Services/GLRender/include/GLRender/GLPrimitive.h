@@ -6,7 +6,8 @@
 ////////////////////////////////
 ///   Forward-declarations   ///
 
-struct GLRenderer;
+/** Defined in 'GLRenderer.h' */
+class GLRenderer;
 
 /////////////////
 ///   Types   ///

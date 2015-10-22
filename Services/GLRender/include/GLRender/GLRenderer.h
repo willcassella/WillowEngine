@@ -3,6 +3,7 @@
 
 #include <Core/Math/Vec3.h>
 #include <Engine/Scene.h>
+#include <Engine/ServiceInterfaces/IRenderer.h>
 #include <Engine/Assets/Shader.h>
 #include <Engine/Assets/Texture.h>
 #include <Engine/Assets/Material.h>
@@ -15,7 +16,7 @@
 /////////////////
 ///   Types   ///
 
-struct GLRENDER_API GLRenderer final
+class GLRENDER_API GLRenderer final : public IRenderer
 {
 	////////////////////////
 	///   Constructors   ///
@@ -24,14 +25,14 @@ public:
 	GLRenderer(uint32 width, uint32 height);
 	GLRenderer(const GLRenderer& copy) = delete;
 	GLRenderer(GLRenderer&& move) = delete;
-	~GLRenderer();
+	~GLRenderer() override;
 
 	///////////////////
 	///   Methods   ///
 public:
 
 	/** Renders the given scene. */
-	void RenderScene(const Scene& scene);
+	void RenderScene(const Scene& scene) override;
 
 	/** Finds or loads a GLShader from the given Shader asset. */
 	GLShader& FindShader(const Shader& asset);

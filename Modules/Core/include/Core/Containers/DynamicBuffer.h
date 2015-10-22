@@ -10,7 +10,7 @@ struct CORE_API DynamicBuffer final
 public:
 
 	DynamicBuffer();
-	DynamicBuffer(uint32 size);
+	explicit DynamicBuffer(uint32 size);
 	DynamicBuffer(const DynamicBuffer& copy);
 	DynamicBuffer(DynamicBuffer&& move);
 	~DynamicBuffer();

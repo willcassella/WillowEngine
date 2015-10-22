@@ -11,6 +11,7 @@ class CORE_API Interface
 	///   Constructors   ///
 public:
 
+	Interface() = default;
 	Interface(const Interface& copy) = delete;
 	Interface(Interface&& move) = delete;
 	virtual ~Interface() = default;
