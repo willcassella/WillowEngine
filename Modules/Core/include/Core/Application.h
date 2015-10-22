@@ -11,8 +11,12 @@ struct CORE_API Application final
 	///   Information   ///
 public:
 
+	/** 'TypeInfo' objects have to be able to register themselves
+	* with the Application. */
 	friend TypeInfo;
-	
+
+	////////////////////////
+	///   Constructors   ///
 private:
 
 	Application() = default;
