@@ -17,7 +17,7 @@ GLRenderer::GLRenderer(uint32 /*width*/, uint32 /*height*/)
 
 	// Initialize OpenGL
 	glClearColor(0, 0, 0, 1);
-	//glClearDepth(1.f);
+	glClearDepth(1.f);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glDisable(GL_STENCIL_TEST);
