@@ -8,6 +8,26 @@
 
 namespace stdEXT
 {
+	namespace Implementation
+	{
+		/** Executes the given function with the given arguments, since the predicate is true. */
+		template <typename T, typename ... Args>
+		inline void conditionally_execute(std::true_type /*predicate*/, const T& function, Args&& ... args)
+		{
+			function(std::forward<Args>(args)...);
+		}
+
+		/** Does not execute the given function with the given arguments, since the predicate is false. */
+		template <typename T, typename ... Args>
+		inline void conditionally_execute(std::false_type /*predicate*/, const T& /*function*/, Args&& ... /*args*/)
+		{
+			// Do nothing
+		}
+	}
+
+	//////////////////
+	///   Traits   ///
+
 	/** Type representing boolean constants.
 	* NOTE: This should be removed in favor of 'std::bool_constant' once C++17 rolls around. */
 	template <bool Value>
@@ -77,18 +97,15 @@ namespace stdEXT
 		}
 	};
 
-	/** Executes the given function with the given arguments, since the predicate is true. */
-	template <typename T, typename ... Args>
-	inline void conditionally_execute(std::true_type /*predicate*/, const T& function, Args&& ... args)
-	{
-		function(std::forward<Args>(args)...);
-	}
+	/////////////////////
+	///   Functions   ///
 
-	/** Does not execute the given function with the given arguments, since the predicate is false. */
-	template <typename T, typename ... Args>
-	inline void conditionally_execute(std::false_type /*predicate*/, const T& /*function*/, Args&& ... /*args*/)
+	/** Executes the given function with the given arguments if the predicate is true, otherwise does nothing. 
+	* NOTE: This is a useful substitute for 'static_if', and should be deprecated once that becomes a part of the language. */
+	template <bool Predicate, typename T, typename ... Args>
+	inline void conditionally_execute(const T& function, Args&& ... args)
 	{
-		// Do nothing
+		Implementation::conditionally_execute(bool_constant<Predicate>{}, function, std::forward<Args>(args)...);
 	}
 }
 
