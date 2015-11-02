@@ -11,15 +11,30 @@ namespace Operations
 	template <typename T, typename ... Args>
 	struct Construct final
 	{
+	private:
+
+		/** Case for if the type IS constructible with the given arguments. */
+		template <typename F>
+		FORCEINLINE static void Impl(std::true_type, byte* location, Args&& ... args)
+		{
+			new(location) F(std::forward<Args>(args)...);
+		}
+
+		/** Case for if the type IS NOT constructible with the given arguments. */
+		template <typename F>
+		FORCEINLINE static void Impl(std::false_type, byte* /*location*/, Args&& ... /*args*/)
+		{
+			// Do nothing
+		}
+
+	public:
+
 		/** Conditionally executes the constructor. */
 		FORCEINLINE static void Function(byte* location, Args ... args)
 		{
-			auto function = [location](auto&& ... a)
-			{
-				new (location) T(std::forward<decltype(a)>(a)...);
-			};
-
-			stdEXT::conditionally_execute(stdEXT::bool_constant<Supported>{}, function, std::forward<Args>(args)...);
+			// Determine which implementation to use.
+			// Unfortunatly, I can't use 'stdEXT::conditionally_execute', because the type being constructed cannot be deduced from 'Args' alone.
+			Impl<T>(stdEXT::bool_constant<Supported>{}, location, std::forward<Args>(args)...);
 		}
 
 		/** Whether the type supports being constructed with these arguments. */
@@ -57,7 +72,8 @@ namespace Operations
 		{
 			auto function = [location](const auto& c)
 			{
-				new(location) T(c);
+				using F = std::decay_t<decltype(c)>;
+				new(location) F(c);
 			};
 
 			stdEXT::conditionally_execute(stdEXT::bool_constant<Supported>{}, function, copy);
@@ -98,7 +114,8 @@ namespace Operations
 		{
 			auto function = [location](auto&& m)
 			{
-				new (location) T(std::move(m));
+				using F = std::decay_t<decltype(m)>;
+				new (location) F(std::move(m));
 			};
 
 			stdEXT::conditionally_execute(stdEXT::bool_constant<Supported>{}, function, std::move(move));

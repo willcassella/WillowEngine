@@ -30,13 +30,13 @@ namespace stdEXT
 	struct is_non_const_reference
 		: std::is_same<std::decay_t<T>&, T>
 	{};
-	
+
 	/** Evaluates to 'true' if the given type is a const object. */
 	template <typename T>
 	struct is_const_object
 		: bool_constant<std::is_object<T>::value && std::is_const<T>::value>
 	{};
-	
+
 	/** Evaluates to 'true' if the given type is a non-const object. */
 	template <typename T>
 	struct is_non_const_object
@@ -79,14 +79,14 @@ namespace stdEXT
 
 	/** Executes the given function with the given arguments, since the predicate is true. */
 	template <typename T, typename ... Args>
-	void conditionally_execute(std::true_type /*predicate*/, const T& function, Args&& ... args)
+	inline void conditionally_execute(std::true_type /*predicate*/, const T& function, Args&& ... args)
 	{
 		function(std::forward<Args>(args)...);
 	}
 
 	/** Does not execute the given function with the given arguments, since the predicate is false. */
 	template <typename T, typename ... Args>
-	void conditionally_execute(std::false_type /*predicate*/, const T& /*function*/, Args&& ... /*args*/)
+	inline void conditionally_execute(std::false_type /*predicate*/, const T& /*function*/, Args&& ... /*args*/)
 	{
 		// Do nothing
 	}
@@ -97,7 +97,7 @@ namespace stdEXT
 
 /** This macro makes std::enable_if a little easier on the eyes.
 * It has to be a variadic macro, because otherwise the preprocessor interprets
-* any commas in the template argument as separate macro arguments, and throws an error. 
+* any commas in the template argument as separate macro arguments, and throws an error.
 * Unfortunately, Visual Studio's Intellisense has a hard time parsing this, and usually makes
 * at least half of the argument uncolored. */
 #define WHERE(...) typename = ::std::enable_if_t<__VA_ARGS__>
