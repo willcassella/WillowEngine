@@ -8,10 +8,15 @@
 
 namespace stdEXT
 {
+	/** Type representing boolean constants.
+	* NOTE: This should be removed in favor of 'std::bool_constant' once C++17 rolls around. */
+	template <bool Value>
+	using bool_constant = std::integral_constant<bool, Value>;
+
 	/** Evaluates to 'true' if the given type is a primitive (arithmetic, or pointer). */
 	template <typename T>
 	struct is_primitive
-		: std::bool_constant<std::is_arithmetic<T>::value || std::is_pointer<T>::value>
+		: bool_constant<std::is_arithmetic<T>::value || std::is_pointer<T>::value>
 	{};
 
 	/** Evaluates to 'true' if the given type is a reference to const. */
@@ -29,13 +34,13 @@ namespace stdEXT
 	/** Evaluates to 'true' if the given type is a const object. */
 	template <typename T>
 	struct is_const_object
-		: std::bool_constant<std::is_object<T>::value && std::is_const<T>::value>
+		: bool_constant<std::is_object<T>::value && std::is_const<T>::value>
 	{};
 	
 	/** Evaluates to 'true' if the given type is a non-const object. */
 	template <typename T>
 	struct is_non_const_object
-		: std::bool_constant<std::is_object<T>::value && !std::is_const<T>::value>
+		: bool_constant<std::is_object<T>::value && !std::is_const<T>::value>
 	{};
 
 	/** Evaluates to 'true' if the given type (T) implements the given contract (ContractT). */

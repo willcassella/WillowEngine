@@ -19,7 +19,7 @@ namespace Operations
 				new (location) T(std::forward<decltype(a)>(a)...);
 			};
 
-			stdEXT::conditionally_execute(std::bool_constant<Supported>{}, function, std::forward<Args>(args)...);
+			stdEXT::conditionally_execute(stdEXT::bool_constant<Supported>{}, function, std::forward<Args>(args)...);
 		}
 
 		/** Whether the type supports being constructed with these arguments. */
@@ -60,7 +60,7 @@ namespace Operations
 				new(location) T(c);
 			};
 
-			stdEXT::conditionally_execute(std::bool_constant<Supported>{}, function, copy);
+			stdEXT::conditionally_execute(stdEXT::bool_constant<Supported>{}, function, copy);
 		}
 
 		/** Whether this type supports the copy-constructor. */
@@ -101,7 +101,7 @@ namespace Operations
 				new (location) T(std::move(m));
 			};
 
-			stdEXT::conditionally_execute(std::bool_constant<Supported>{}, function, std::move(move));
+			stdEXT::conditionally_execute(stdEXT::bool_constant<Supported>{}, function, std::move(move));
 		}
 
 		/** Whether this type supports the move-constructor. */
@@ -120,7 +120,7 @@ namespace Operations
 				v = std::forward<Arg>(a);
 			};
 
-			stdEXT::conditionally_execute(std::bool_constant<Supported>{}, function, value, std::forward<Arg>(arg));
+			stdEXT::conditionally_execute(stdEXT::bool_constant<Supported>{}, function, value, std::forward<Arg>(arg));
 		}
 
 		/** Whether an assignment operator accepting the given arguments is supported. */
@@ -161,7 +161,7 @@ namespace Operations
 				value = c;
 			};
 
-			stdEXT::conditionally_execute(std::bool_constant<Supported>{}, function, copy);
+			stdEXT::conditionally_execute(stdEXT::bool_constant<Supported>{}, function, copy);
 		}
 
 		/** Whether this type supports the copy-assignment operator. */
@@ -202,7 +202,7 @@ namespace Operations
 				value = std::move(m);
 			};
 
-			stdEXT::conditionally_execute(std::bool_constant<Supported>{}, function, move);
+			stdEXT::conditionally_execute(stdEXT::bool_constant<Supported>{}, function, move);
 		}
 
 		/** Whether this type supports the move-assignment operator. */
@@ -222,7 +222,7 @@ namespace Operations
 				v.~F();
 			};
 
-			stdEXT::conditionally_execute(std::bool_constant<Supported>{}, function, value);
+			stdEXT::conditionally_execute(stdEXT::bool_constant<Supported>{}, function, value);
 		}
 
 		/** Whether the destructor is supported. */
