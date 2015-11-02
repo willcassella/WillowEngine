@@ -19,21 +19,12 @@ VoidInfo::VoidInfo(const TypeInfoBuilder<void, VoidInfo>& builder)
 
 TypeInfoBuilder<void, TypeInfo>::TypeInfoBuilder()
 {
-	_data.name = "void";
-	_data.constructor = [](byte* /*location*/) -> void {};
-	_data.destructor = [](void* /*value*/) -> void {};
-
-	_data.toStringImplementation = nullptr;
-	_data.fromStringImplementation = nullptr;
-	_data.toArchiveImplementation = nullptr;
-	_data.fromArchiveImplementation = nullptr;
+	_data.rawName = "void";
 
 	_data.size = 0;
 	_data.isCompound = false;
 	_data.isAbstract = false;
 	_data.isPolymorphic = false;
-	_data.isConstructible = false;
-	_data.isDestructible = false;
 	_data.isTrivial = false;
 }
 

@@ -24,26 +24,6 @@ TypeInfoBuilder<std::nullptr_t, PointerInfo>::TypeInfoBuilder()
 ///////////////////
 ///   Methods   ///
 
-String PointerInfo::GetName() const
-{
-	if (_data.IsConst)
-	{
-		// If we have a pointer to a pointer
-		if (_data.PointedType->GetType() == TypeOf<PointerInfo>())
-		{
-			return Format("@ const*", _data.PointedType->GetName());
-		}
-		else
-		{
-			return Format("const @*", _data.PointedType->GetName());
-		}
-	}
-	else
-	{
-		return Format("@*", _data.PointedType->GetName());
-	}
-}
-
 bool PointerInfo::IsCastableTo(const TypeInfo& type) const
 {
 	// Make sure the given type is a pointer type
@@ -63,5 +43,25 @@ bool PointerInfo::IsCastableTo(const TypeInfo& type) const
 	else
 	{
 		return false;
+	}
+}
+
+String PointerInfo::GenerateName() const
+{
+	if (_data.IsConst)
+	{
+		// If we have a pointer to a pointer
+		if (_data.PointedType->GetType() == TypeOf<PointerInfo>())
+		{
+			return Format("@ const*", _data.PointedType->GetName());
+		}
+		else
+		{
+			return Format("const @*", _data.PointedType->GetName());
+		}
+	}
+	else
+	{
+		return Format("@*", _data.PointedType->GetName());
 	}
 }

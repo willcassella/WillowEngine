@@ -1,107 +1,231 @@
 // TypeOps.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <type_traits>
+#include "../STDExt/TypeTraits.h"
+#include "../Forwards/Operations.h"
 #include "../config.h"
 
-//////////////////////////
-///   Implementation   ///
-
-namespace Implementation
+namespace Operations
 {
-	/** Conditionally constructs a type, returning whether it was successful. */
+	/** Conditionally constructs a type, if a constructor accepting the given arguments is supported. */
 	template <typename T, typename ... Args>
 	struct Construct final
 	{
-	private:
-
-		/** Implementation for if the type IS constructible. */
-		template <typename F>
-		FORCEINLINE static void Impl(std::true_type, byte* location, Args ... args)
+		/** Conditionally executes the constructor. */
+		FORCEINLINE static void Function(byte* location, Args ... args)
 		{
-			new (location) F(std::forward<Args>(args)...);
+			auto function = [location](auto&& ... a)
+			{
+				new (location) T(std::forward<decltype(a)>(a)...);
+			};
+
+			stdEXT::conditionally_execute(std::bool_constant<Supported>{}, function, std::forward<Args>(args)...);
 		}
 
-		/** Implementation for if the type IS NOT constructible. */
+		/** Whether the type supports being constructed with these arguments. */
+		static constexpr bool Supported = std::is_constructible<T, Args...>::value;
+	};
+
+	/** Conditionally copy-constructs a type, if the copy-constructor is supported. */
+	template <typename T>
+	struct Construct < T, const T& > final
+	{
+	private:
+
+		/** This allows the type to explicitly declare whether it is copy-constructible (for cases where 'std::is_copy_constructible' fails).
+		* Simply use the static boolean constant 'CopyConstructorSupported' on your class, and this will detect it. */
 		template <typename F>
-		FORCEINLINE static void Impl(std::false_type, byte* /*location*/, Args ... /*args*/)
+		static constexpr auto HasSupport(Implementation::Preferred) -> decltype(F::CopyConstructorSupported)
 		{
-			// Do nothing
+			static_assert(std::is_same<const bool, decltype(F::CopyConstructorSupported)>::value,
+				"The 'CopyConstructorSupported' class tag must be a boolean constant.");
+
+			return F::CopyConstructorSupported;
+		}
+
+		/** If the type has not explicitly declared support for the copy-constructor, then this falls back to 'std::is_copy_constructible'. */
+		template <typename F>
+		static constexpr auto HasSupport(Implementation::Fallback) -> bool
+		{
+			return std::is_copy_constructible<F>::value;
 		}
 
 	public:
 
-		/** Entry point for the implementation. */
-		FORCEINLINE static void Function(byte* location, Args ... args)
+		/** Conditionally executes the copy-constructor. */
+		FORCEINLINE static void Function(byte* location, const T& copy)
 		{
-			Impl<T>(std::integral_constant<bool, Result>(), location, std::forward<Args>(args)...);
+			auto function = [location](const auto& c)
+			{
+				new(location) T(c);
+			};
+
+			stdEXT::conditionally_execute(std::bool_constant<Supported>{}, function, copy);
 		}
 
-		/** Whether the type is constructible with these arguments. */
-		static constexpr bool Result = std::is_constructible<T, Args...>::value;
+		/** Whether this type supports the copy-constructor. */
+		static constexpr bool Supported = HasSupport<T>(0);
 	};
 
-	// TODO: Documentation
+	/** Conditionally move-constructs a type, if the move-constructor is supported. */
+	template <typename T>
+	struct Construct < T, T&& > final
+	{
+	private:
+
+		/** This allows the type to explicitly declare whether it is move-constructible (for cases where 'std::is_move_constructible' fails).
+		* Simply use the static boolean constant 'MoveConstructorSupported' on your class, and this will detect it. */
+		template <typename F>
+		static constexpr auto HasSupport(Implementation::Preferred) -> decltype(F::MoveConstructorSupported)
+		{
+			static_assert(std::is_same<const bool, decltype(F::MoveConstructorSupported)>::value,
+				"The 'MoveConstructorSupported' class tag must be a boolean constant.");
+
+			return F::MoveConstructorSupported;
+		}
+
+		/** If the type has not explicitly declared support for the move-constructor, then this falls back to 'std::is_move_constructible'. */
+		template <typename F>
+		static constexpr auto HasSupport(Implementation::Fallback) -> bool
+		{
+			return std::is_move_constructible<F>::value;
+		}
+
+	public:
+
+		/** Conditionally executes the move-constructor. */
+		FORCEINLINE static void Function(byte* location, T&& move)
+		{
+			auto function = [location](auto&& m)
+			{
+				new (location) T(std::move(m));
+			};
+
+			stdEXT::conditionally_execute(std::bool_constant<Supported>{}, function, std::move(move));
+		}
+
+		/** Whether this type supports the move-constructor. */
+		static constexpr bool Supported = HasSupport<T>(0);
+	};
+
+	/** Conditionally assigns to a value, if an assignment operator accepting the given argument is supported. */
 	template <typename T, typename Arg>
 	struct Assign final
 	{
-	private:
-
-		/** Implementation for if the type IS assignable. */
-		template <typename F>
-		FORCEINLINE static void Impl(std::true_type, F& value, Arg arg)
-		{
-			value = std::forward<Arg>(arg);
-		}
-
-		/** Implementation for if the type IS NOT assignable. */
-		template <typename F>
-		FORCEINLINE static void Impl(std::false_type, F& /*value*/, Arg /*arg*/)
-		{
-			// Do nothing
-		}
-
-	public:
-
-		/** Entry point for the implementation. */
+		/** Conditionally executes the assignment operator. */
 		FORCEINLINE static void Function(T& value, Arg arg)
 		{
-			Impl(std::integral_constant<bool, Result>(), value, std::forward<Arg>(arg));
+			auto function = [](auto& v, Arg a)
+			{
+				v = std::forward<Arg>(a);
+			};
+
+			stdEXT::conditionally_execute(std::bool_constant<Supported>{}, function, value, std::forward<Arg>(arg));
 		}
 
-		/** Whether the implementation succeeds in assigning to the object. */
-		static constexpr bool Result = std::is_assignable<std::add_lvalue_reference_t<T>, Arg>::value;
+		/** Whether an assignment operator accepting the given arguments is supported. */
+		static constexpr bool Supported = std::is_assignable<std::add_lvalue_reference_t<T>, Arg>::value;
 	};
 
-	// TODO: Documentation
+	/** Conditionally copy-assigns a value, if the copy-assignment operator is supported. */
 	template <typename T>
-	struct Destroy final
+	struct Assign < T, const T& > final
 	{
 	private:
 
-		/** Implementation for if the type IS destructible. */
+		/** This allows the type to explicitly declare whether it is copy-assignable (for cases where 'std::is_copy_assignable' fails).
+		* Simply use the static boolean constant 'CopyAssignmentSupported' on your class, and this will detect it. */
 		template <typename F>
-		FORCEINLINE static void Impl(std::true_type, F& value)
+		static constexpr auto HasSupport(Implementation::Preferred) -> decltype(F::CopyAssignmentSupported)
 		{
-			value.~F();
+			static_assert(std::is_same<const bool, decltype(F::CopyAssignmentSupported)>::value,
+				"The 'CopyAssignmentSupported' class tag must be a boolean constant.");
+
+			return F::CopyAssignmentSupported;
 		}
 
-		/** Implementation for if the type IS NOT destructible. */
+		/** If the type has not explicitly declared support for the copy-assignment operator, then this falls back to 'std::is_copy_assignable'. */
 		template <typename F>
-		FORCEINLINE static void Impl(std::false_type, F& /*value*/)
+		static constexpr auto HasSupport(Implementation::Fallback) -> bool
 		{
-			// Do nothing
+			return std::is_copy_assignable<F>::value;
 		}
 
 	public:
 
-		/** Entry point for the implementation. */
-		FORCEINLINE static void Function(T& value)
+		/** Conditionally executes the copy-assignment operator. */
+		FORCEINLINE static void Function(T& value, const T& copy)
 		{
-			Impl(std::integral_constant<bool, Result>(), value);
+			auto function = [&value](const auto& c)
+			{
+				value = c;
+			};
+
+			stdEXT::conditionally_execute(std::bool_constant<Supported>{}, function, copy);
 		}
 
-		/** Whether the implementation succeeds in destroying the object. */
-		static constexpr bool Result = std::is_destructible<T>::value;
+		/** Whether this type supports the copy-assignment operator. */
+		static constexpr bool Supported = HasSupport<T>(0);
+	};
+
+	/** Conditionally move-assigns a value, if the move-assignment operator is supported. */
+	template <typename T>
+	struct Assign < T, T&& > final
+	{
+	private:
+
+		/** This allows the type to explicitly declare whether it is move-assignable (for cases where 'std::is_move_assignable' fails).
+		* Simply use the static boolean constant 'MoveAssignmentSupported' on your class, and this will detect it. */
+		template <typename F>
+		static constexpr auto HasSupport(Implementation::Preferred) -> decltype(F::MoveAssignmentSupported)
+		{
+			static_assert(std::is_same<const bool, decltype(F::MoveAssignmentSupported)>::value,
+				"The 'MoveAssignmentSupported' class tag must be a boolean constant.");
+
+			return F::MoveAssignmentSupported;
+		}
+
+		/** If the type has not explicitly declared support for the move-assignment operator, then this falls back to 'std::is_move_assignable'. */
+		template <typename F>
+		static constexpr auto HasSupport(Implementation::Fallback) -> bool
+		{
+			return std::is_move_assignable<F>::value;
+		}
+
+	public:
+
+		/** Conditionally executes the move-assignment operator. */
+		FORCEINLINE static void Function(T& value, T&& move)
+		{
+			auto function = [&value](auto&& m)
+			{
+				value = std::move(m);
+			};
+
+			stdEXT::conditionally_execute(std::bool_constant<Supported>{}, function, move);
+		}
+
+		/** Whether this type supports the move-assignment operator. */
+		static constexpr bool Supported = HasSupport<T>(0);
+	};
+
+	/** Conditionally destroys a value, if the destructor is supported. */
+	template <typename T>
+	struct Destroy final
+	{
+		/** Conditionally executes the destructor. */
+		FORCEINLINE static void Function(T& value)
+		{
+			auto function = [](auto& v)
+			{
+				using F = std::decay_t<decltype(v)>;
+				v.~F();
+			};
+
+			stdEXT::conditionally_execute(std::bool_constant<Supported>{}, function, value);
+		}
+
+		/** Whether the destructor is supported. */
+		static constexpr bool Supported = std::is_destructible<T>::value;
 	};
 }

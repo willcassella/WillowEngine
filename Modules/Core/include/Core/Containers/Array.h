@@ -6,6 +6,7 @@
 #include <utility>
 #include <initializer_list>
 #include "../STDExt/TypeTraits.h"
+#include "../Operations/TypeOps.h"
 #include "DynamicBuffer.h"
 
 /** A linear, contiguous array. Replacement for 'std::vector'.
@@ -29,6 +30,15 @@ public:
 
 	static_assert(!std::is_reference<T>::value,
 		"You can't create an 'Array' of references, dumbass");
+
+	static_assert(Operations::Construct<T, T&&>::Supported,
+		"T must be move-constructible.");
+
+	/** Array's copy-constructor is only supported if T's copy-constructor is supported. */
+	static constexpr bool CopyConstructorSupported = Operations::Construct<T, const T&>::Supported;
+
+	/** Array's copy-assignment operator is only supported it T's copy-assignment operator is supported. */
+	static constexpr bool CopyAssignmentSupported = Operations::Assign<T, const T&>::Supported;
 
 	///////////////////////
 	///   Inner Types   ///

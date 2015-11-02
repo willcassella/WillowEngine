@@ -101,10 +101,10 @@ private:
 
 namespace Implementation
 {
-	///** Register TypeInfo for std::intializer_list */
-	//template <typename T>
-	//const StructInfo GetType<std::initializer_list<T>>::StaticTypeInfo =
-	//	StructInfo::CreateTemplate<std::initializer_list, T>("std::initializer_list");
+	/** Register TypeInfo for std::intializer_list */
+	template <typename T>
+	const StructInfo TypeOf<std::initializer_list<T>>::StaticTypeInfo =
+		TypeInfoBuilder<std::initializer_list<T>>("std::initializer_list");
 
 	/** Register TypeInfo for 'Array' */
 	template <typename T>
@@ -116,10 +116,10 @@ namespace Implementation
 	//const StructInfo TypeOf<List<T>>::StaticTypeInfo = 
 	//	StructInfo::CreateTemplate<List, T>("List");
 
-	///** Register TypeInfo for Queue */
-	//template <typename T>
-	//const StructInfo TypeOf<Queue<T>>::StaticTypeInfo =
-	//	StructInfo::CreateTemplate<Queue, T>("Queue");
+	/** Register TypeInfo for Queue */
+	template <typename T>
+	const StructInfo TypeOf<Queue<T>>::StaticTypeInfo =
+		TypeInfoBuilder<Queue<T>>("Queue");
 
 	///** Register TypeInfo for Stack */
 	//template <typename T>

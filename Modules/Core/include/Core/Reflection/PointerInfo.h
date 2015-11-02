@@ -35,9 +35,6 @@ public:
 	///   Methods   ///
 public:
 
-	// TODO: Documentation
-	String GetName() const override;
-
 	/** Returns whether this type is castable (via reinterpret_cast) to the given type */
 	bool IsCastableTo(const TypeInfo& type) const override;
 
@@ -52,6 +49,10 @@ public:
 	{
 		return *_data.PointedType;
 	}
+
+protected:
+
+	String GenerateName() const override;
 
 	////////////////
 	///   Data   ///

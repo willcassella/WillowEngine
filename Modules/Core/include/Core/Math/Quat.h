@@ -31,10 +31,10 @@ public:
 		Vec3 normAxis = axis.Normalize();
 		float sinHalfAngle = sinf(angle * 0.5f);
 
-		W = cosf(angle / 2);
 		X = normAxis.X * sinHalfAngle;
 		Y = normAxis.Y * sinHalfAngle;
 		Z = normAxis.Z * sinHalfAngle;
+		W = cosf(angle * 0.5f);
 	}
 
 	//////////////////

@@ -28,11 +28,6 @@ public:
 		: Base(builder), _data(std::move(builder._data))
 	{
 		static_assert(std::is_base_of<Object, ClassT>::value, "Classes must be extend 'Object'");
-		static_assert(!std::is_copy_constructible<ClassT>::value, "Class types may not be copy-constructible.");
-		static_assert(!std::is_copy_assignable<ClassT>::value, "Class types may not be copy-assignable.");
-		static_assert(!std::is_move_assignable<ClassT>::value, "Class types may not be move-assignable.");
-		static_assert(!std::is_move_constructible<ClassT>::value || std::is_base_of<TypeInfo, ClassT>::value,
-			"Class types may not be move-constructible."); // Except for 'TypeInfo' types
 	}
 
 	///////////////////

@@ -346,9 +346,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ProjectPony.vcxproj.filters">
-      <Filter>source</Filter>
-    </None>
     <None Include="include\Core\Operations\ToString.h">
       <Filter>include\Operations</Filter>
     </None>

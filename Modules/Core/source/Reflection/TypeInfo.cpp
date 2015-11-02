@@ -14,8 +14,14 @@ BUILD_REFLECTION(TypeInfo)
 .Property("Compound", &TypeInfo::IsCompound, nullptr, "Whether this type is a compound type.")
 .Property("Abstract", &TypeInfo::IsAbstract, nullptr, "Whether this type is an abstract type.")
 .Property("Polymorphic", &TypeInfo::IsPolymorphic, nullptr, "Whether this type is polymorphic.")
-.Property("Constructible", &TypeInfo::IsConstructible, nullptr, "Whether this type may be constructed.")
-.Property("Destructible", &TypeInfo::IsDestructible, nullptr, "Whether this type is destructible.");
+.Property("Trivial", &TypeInfo::IsTrivial, nullptr, "Whether this type is trivial.")
+.Property("Default Constructible", &TypeInfo::IsDefaultConstructible, nullptr, "Whether this type may be constructed.")
+.Property("Has Dynamic Constructor", &TypeInfo::HasDynamicConstructor, nullptr, "Whether this type has a dynamic constructor.")
+.Property("Copy Constructible", &TypeInfo::IsCopyConstructible, nullptr, "Whether this type is copy-constructible.")
+.Property("Move Constructible", &TypeInfo::IsMoveConstructible, nullptr, "Whether this type is move-constructible")
+.Property("Destructible", &TypeInfo::IsDestructible, nullptr, "Whether this type is destructible.")
+.Property("Copy Assignable", &TypeInfo::IsCopyAssignable, nullptr, "Whether this type is copy-assignable.")
+.Property("Move Assignable", &TypeInfo::IsMoveAssignable, nullptr, "Whether this type is move-assignable");
 
 ////////////////////////
 ///   Constructors   ///
@@ -38,9 +44,9 @@ TypeInfo::~TypeInfo()
 ///////////////////
 ///   Methods   ///
 
-String TypeInfo::GetName() const
+String TypeInfo::GenerateName() const
 {
-	return _data.name;
+	return _data.rawName;
 }
 
 void TypeInfo::RegisterWithApplication()

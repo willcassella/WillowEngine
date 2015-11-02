@@ -23,6 +23,13 @@ public:
 	/** Forward iterator for an immutable Table */
 	using ConstIterator = typename StorageType::ConstIterator;
 
+	///////////////////////
+	///   Information   ///
+public:
+
+	static constexpr bool CopyConstructorSupported = StorageType::CopyConstructorSupported;
+	static constexpr bool CopyAssignmentSupported = StorageType::CopyAssignmentSupported;
+
 	////////////////////////
 	///   Constructors   ///
 public:

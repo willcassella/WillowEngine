@@ -8,6 +8,13 @@ template <typename T>
 struct Stack final
 {
 	///////////////////////
+	///   Information   ///
+public:
+
+	static constexpr bool CopyConstructorSupported = Array<T>::CopyConstructorSupported;
+	static constexpr bool CopyAssignmentSupported = Array<T>::CopyAssignmentSupported;
+
+	///////////////////////
 	///   Inner Types   ///
 public:
 

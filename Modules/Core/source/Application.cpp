@@ -1,20 +1,38 @@
 // Application.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
 #include <cstdlib>
+#include "../include/Core/Console.h"
 #include "../include/Core/Application.h"
 #include "../include/Core/Reflection/TypeInfo.h"
+
+////////////////////////
+///   Constructors   ///
+
+Application::Application()
+{
+	Console::WriteLine("Initializing application...");
+}
+
+Application::~Application()
+{
+	GetMemoryManager().Sweep();
+	Console::WriteLine("Shutting down application...");
+}
 
 ///////////////////
 ///   Methods   ///
 
 void Application::Initialize()
 {
-	// TODO: Application initialization stuff
+	for (auto type : Instance()._types)
+	{
+		// Force the type to generate its name
+		type->GetName();
+	}
 }
 
 void Application::Terminate(int code)
 {
-	// TODO: Memory cleanup stuff
 	std::exit(code);
 }
 
@@ -35,10 +53,4 @@ Application& Application::Instance()
 {
 	static Application app;
 	return app;
-}
-
-void Application::AtExit()
-{
-	// Remove all references
-	GetMemoryManager().Sweep();
 }

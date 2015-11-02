@@ -43,14 +43,26 @@ public:
 	/** The function signature for a reflected constructor. */
 	typedef void(*Constructor)(byte*);
 
+	/** The function signature for a reflected copy-constructor. */
+	typedef void(*CopyConstructor)(byte*, const void*);
+
+	/** The function signature for a reflected move-constructor. */
+	typedef void(*MoveConstructor)(byte*, void*);
+
 	/** The function signature for a reflected destructor. */
 	typedef void(*Destructor)(void*);
+
+	/** The function signature for a reflected copy-assignment operator. */
+	typedef void(*CopyAssignmentOperator)(void*, const void*);
+
+	/** The function signature for a reflected move-assignment operator. */
+	typedef void(*MoveAssignmentOperator)(void*, void*);
 
 	////////////////////////
 	///   Constructors   ///
 public:
 
-	// TODO: Documentation
+	/** Constructs this TypeInfo object from the given builder, and registers with the Application. */
 	template <typename T>
 	TypeInfo(const TypeInfoBuilder<T, TypeInfo>& builder)
 		: _data(std::move(builder._data))
@@ -74,14 +86,22 @@ public:
 		return GetName();
 	}
 
+	/** Gets the name for this type. */
+	FORCEINLINE const String& GetName() const
+	{
+		if (_name.IsEmpty())
+		{
+			_name = GenerateName();
+		}
+
+		return _name;
+	}
+
 	/** Returns the static size of this type */
 	FORCEINLINE uint32 GetSize() const
 	{
 		return _data.size;
 	}
-
-	/** Returns the name of this type */
-	virtual String GetName() const;
 
 	/** Returns whether this type is a compound type.
 	* i.e - It is composed of smaller types (like a class, struct, or interface). */
@@ -104,37 +124,103 @@ public:
 		return _data.isPolymorphic;
 	}
 
-	/** Returns whether this type is constructible,
-	* Either with a default-constructor, or a DynamicInitializer. */
-	FORCEINLINE bool IsConstructible() const
-	{
-		return _data.isConstructible;
-	}
-
-	/** Returns whether this type is destructible. */
-	FORCEINLINE bool IsDestructible() const
-	{
-		return _data.isDestructible;
-	}
-
 	/** Returns whether this type is trivial (it can be safely memcopy'd). */
 	FORCEINLINE bool IsTrivial() const
 	{
 		return _data.isTrivial;
 	}
 
-	/** Returns the constructor for this type.
-	* NOTE: Returns an empty implementation if this type is not constructible. */
-	FORCEINLINE Constructor GetConstructor() const
+	/** Returns whether this type is default-constructible */
+	FORCEINLINE bool IsDefaultConstructible() const
 	{
-		return _data.constructor;
+		return this->GetDefaultConstructor() != nullptr;
+	}
+
+	/** Returns whether this type has a dynamic constructor. */
+	FORCEINLINE bool HasDynamicConstructor() const
+	{
+		return this->GetDynamicConstructor() != nullptr;
+	}
+
+	/** Returns whether this type is copy-constructible. */
+	FORCEINLINE bool IsCopyConstructible() const
+	{
+		return this->GetCopyConstructor() != nullptr;
+	}
+
+	/** Returns whether this type is move-constructible. */
+	FORCEINLINE bool IsMoveConstructible() const
+	{
+		return this->GetMoveConstructor() != nullptr;
+	}
+
+	/** Returns whether this type is destructible. */
+	FORCEINLINE bool IsDestructible() const
+	{
+		return this->GetDestructor() != nullptr;
+	}
+
+	/** Returns whether this type is copy-assignable. */
+	FORCEINLINE bool IsCopyAssignable() const
+	{
+		return this->GetCopyAssignmentOperator() != nullptr;
+	}
+
+	/** Returns whether this type is move-assignable. */
+	FORCEINLINE bool IsMoveAssignable() const
+	{
+		return this->GetMoveAssignmentOperator() != nullptr;
+	}
+
+	/** Returns the constructor for this type.
+	* NOTE: Returns 'null' if this type is not constructible. */
+	FORCEINLINE Constructor GetDefaultConstructor() const
+	{
+		return _data.defaultConstructor;
+	}
+
+	/** Returns the dynamic constructor for this type.
+	* The dynamic constructor is similar to the default constructor, except it is explicitly intended for serialization.
+	* If the type does not have a dynamic constructor, just use the default-constructor. If this type does not have either, then it is not serializable.
+	* NOTE: Returns 'null' if this type does not have a dynamic constructor. */
+	FORCEINLINE Constructor GetDynamicConstructor() const
+	{
+		return _data.dynamicConstructor;
+	}
+
+	/** Returns the copy-constructor for this type. 
+	* NOTE: Returns 'null' if this type is not copy-constructible. */
+	FORCEINLINE CopyConstructor GetCopyConstructor() const
+	{
+		return _data.copyConstructor;
+	}
+
+	/** Returns the move-constructor for this type.
+	* NOTE: Returns 'null' if this type is not move-constructible. */
+	FORCEINLINE MoveConstructor GetMoveConstructor() const
+	{
+		return _data.moveConstructor;
 	}
 
 	/** Returns the destructor for this type.
-	* NOTE: Returns an empty implementation if this type is not destructible. */
+	* NOTE: Returns 'null' if this type is not destructible. */
 	FORCEINLINE Destructor GetDestructor() const
 	{
 		return _data.destructor;
+	}
+
+	/** Returns the copy-assignment operator for this type.
+	* NOTE: Returns 'null' if this type is not copy-assignable. */
+	FORCEINLINE CopyAssignmentOperator GetCopyAssignmentOperator() const
+	{
+		return _data.copyAssignmentOperator;
+	}
+
+	/** Returns the move-assignment operator for this type.
+	* NOTE: Returns 'null' if this type is not move-assignable. */
+	FORCEINLINE MoveAssignmentOperator GetMoveAssignmentOperator() const
+	{
+		return _data.moveAssignmentOperator;
 	}
 
 	/** Returns whether this type is bitwise castable to the given type */
@@ -142,6 +228,13 @@ public:
 
 	/** Returns whether this type is stable (its memory layout is unlikely to ever change). */
 	virtual bool IsStable() const = 0;
+
+protected:
+
+	/** Generates the name of the type. Since some types need special name-formatting behavior that is unsafe
+	* to do while the application is starting up, this needs to be done when the application is initialized.
+	* Called when the Application is initialized. */
+	virtual String GenerateName() const;
 
 private:
 
@@ -165,22 +258,30 @@ public:
 	///   Data   ///
 private:
 
-	struct Data
+	/** Some types need special behavior when generating their name.
+	* While '_data.rawName' holds the ungenerated part of the name, '_name' holds the final name.
+	* After the application is initialized, '_rawName' should be ignored. */
+	mutable String _name;
+	
+	struct Data final
 	{
-		CString name;
-		Constructor constructor;
-		Destructor destructor;
-		String(*toStringImplementation)(const void*);
-		String(*fromStringImplementation)(void*, const String&);
-		void(*toArchiveImplementation)(const void*, ArchiveNode&);
-		void(*fromArchiveImplementation)(void*, const ArchiveNode&);
-		uint32 size;
-		bool isCompound;
-		bool isAbstract;
-		bool isPolymorphic;
-		bool isConstructible;
-		bool isDestructible;
-		bool isTrivial;
+		CString rawName = nullptr;
+		Constructor defaultConstructor = nullptr;
+		Constructor dynamicConstructor = nullptr;
+		CopyConstructor copyConstructor = nullptr;
+		MoveConstructor moveConstructor = nullptr;
+		Destructor destructor = nullptr;
+		CopyAssignmentOperator copyAssignmentOperator = nullptr;
+		MoveAssignmentOperator moveAssignmentOperator = nullptr;
+		String(*toStringImplementation)(const void*) = nullptr;
+		String(*fromStringImplementation)(void*, const String&) = nullptr;
+		void(*toArchiveImplementation)(const void*, ArchiveNode&) = nullptr;
+		void(*fromArchiveImplementation)(void*, const ArchiveNode&) = nullptr;
+		uint32 size = 0;
+		bool isCompound = false;
+		bool isAbstract = false;
+		bool isPolymorphic = false;
+		bool isTrivial = false;
 	} _data;
 };
 
@@ -211,24 +312,67 @@ public:
 
 	TypeInfoBuilder(CString name)
 	{
-		_data.name = name;
+		_data.rawName = name;
 
-		if (std::is_constructible<T, DynamicInitializer>::value)
+		// If the type is default-constructible
+		if (Operations::Construct<T>::Supported)
 		{
-			_data.constructor = [](byte* location) -> void
+			_data.defaultConstructor = Operations::Construct<T>::Function;
+		}
+
+		// If the type is constructible via a dynamic initializer
+		if (Operations::Construct<T, DynamicInitializer>::Supported)
+		{
+			_data.dynamicConstructor = [](byte* location) -> void
 			{
-				Implementation::Construct<T, DynamicInitializer>::Function(location, DynamicInitializer{});
+				Operations::Construct<T, DynamicInitializer>::Function(location, DynamicInitializer{});
 			};
 		}
-		else
+
+		// If the type is copy-constructible
+		if (Operations::Construct<T, const T&>::Supported)
 		{
-			_data.constructor = Implementation::Construct<T>::Function;
+			_data.copyConstructor = [](byte* location, const void* copy) -> void
+			{
+				Operations::Construct<T, const T&>::Function(location, *static_cast<const T*>(copy));
+			};
 		}
 
-		_data.destructor = [](void* value) -> void
+		// If the type is move-constructible
+		if (Operations::Construct<T, T&&>::Supported)
 		{
-			Implementation::Destroy<T>::Function(*static_cast<T*>(value));
-		};
+			_data.moveConstructor = [](byte* location, void* move) -> void
+			{
+				Operations::Construct<T, T&&>::Function(location, std::move(*static_cast<T*>(move)));
+			};
+		}
+
+		// If the type is destructible
+		if (Operations::Destroy<T>::Supported)
+		{
+			_data.destructor = [](void* value) -> void
+			{
+				Operations::Destroy<T>::Function(*static_cast<T*>(value));
+			};
+		}
+
+		// If the type is copy-assignable
+		if (Operations::Assign<T, const T&>::Supported)
+		{
+			_data.copyAssignmentOperator = [](void* lhs, const void* rhs) -> void
+			{
+				Operations::Assign<T, const T&>::Function(*static_cast<T*>(lhs), *static_cast<const T*>(rhs));
+			};
+		}
+
+		// If the type is move-assignable
+		if (Operations::Assign<T, T&&>::Supported)
+		{
+			_data.moveAssignmentOperator = [](void* lhs, void* rhs) -> void
+			{
+				Operations::Assign<T, T&&>::Function(*static_cast<T*>(lhs), std::move(*static_cast<T*>(rhs)));
+			};
+		}
 
 		_data.toStringImplementation = [](const void* value) -> String
 		{
@@ -251,8 +395,6 @@ public:
 		_data.isCompound = std::is_class<T>::value;
 		_data.isAbstract = std::is_abstract<T>::value;
 		_data.isPolymorphic = std::is_polymorphic<T>::value;
-		_data.isConstructible = std::is_constructible<T, DynamicInitializer>::value || std::is_default_constructible<T>::value;
-		_data.isDestructible = std::is_destructible<T>::value;
 		_data.isTrivial = std::is_trivial<T>::value;
 	}
 

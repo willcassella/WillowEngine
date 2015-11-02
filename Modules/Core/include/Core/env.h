@@ -46,6 +46,12 @@ using Char = char;
 /** A c-style string of characters. */
 using CString = const Char*;
 
+/** Note on 'void*' vs 'byte*':
+* In some parts of the engine you can see 'void*' and 'byte*' used.
+* Instances of 'byte*' indicate that the address should be treated as raw memory, which may or may not contain an instance of a type (usually not).
+* Instances of 'void*' indicate that the address should be treated as a type-erased value, and an accompanied 'const TypeInfo*' should be passed along.
+* In general, 'void*' + 'const TypeInfo*' pairs will be wrapped in the 'Variant' or 'ImmutableVariant' types, so you really don't have to worry about this. */
+
 //////////////////
 ///   Macros   ///
 

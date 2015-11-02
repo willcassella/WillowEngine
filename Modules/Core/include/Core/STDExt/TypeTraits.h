@@ -11,7 +11,7 @@ namespace stdEXT
 	/** Evaluates to 'true' if the given type is a primitive (arithmetic, or pointer). */
 	template <typename T>
 	struct is_primitive
-		: std::integral_constant<bool, std::is_arithmetic<T>::value || std::is_pointer<T>::value>
+		: std::bool_constant<std::is_arithmetic<T>::value || std::is_pointer<T>::value>
 	{};
 
 	/** Evaluates to 'true' if the given type is a reference to const. */
@@ -29,13 +29,13 @@ namespace stdEXT
 	/** Evaluates to 'true' if the given type is a const object. */
 	template <typename T>
 	struct is_const_object
-		: std::integral_constant<bool, std::is_object<T>::value && std::is_const<T>::value>
+		: std::bool_constant<std::is_object<T>::value && std::is_const<T>::value>
 	{};
 	
 	/** Evaluates to 'true' if the given type is a non-const object. */
 	template <typename T>
 	struct is_non_const_object
-		: std::integral_constant<bool, std::is_object<T>::value && !std::is_const<T>::value>
+		: std::bool_constant<std::is_object<T>::value && !std::is_const<T>::value>
 	{};
 
 	/** Evaluates to 'true' if the given type (T) implements the given contract (ContractT). */
@@ -71,6 +71,20 @@ namespace stdEXT
 			return false;
 		}
 	};
+
+	/** Executes the given function with the given arguments, since the predicate is true. */
+	template <typename T, typename ... Args>
+	void conditionally_execute(std::true_type /*predicate*/, const T& function, Args&& ... args)
+	{
+		function(std::forward<Args>(args)...);
+	}
+
+	/** Does not execute the given function with the given arguments, since the predicate is false. */
+	template <typename T, typename ... Args>
+	void conditionally_execute(std::false_type /*predicate*/, const T& /*function*/, Args&& ... /*args*/)
+	{
+		// Do nothing
+	}
 }
 
 //////////////////

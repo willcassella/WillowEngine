@@ -17,9 +17,15 @@ public:
 
 	////////////////////////
 	///   Constructors   ///
+public:
+
+	Application(const Application& copy) = delete;
+	Application(Application&& move) = delete;
+
 private:
 
-	Application() = default;
+	Application();
+	~Application();
 
 	///////////////////
 	///   Methods   ///
@@ -52,8 +58,12 @@ private:
 	/** Returns the instance of the Application singleton. */
 	static Application& Instance();
 
-	/** Behavior run when 'main' returns, registered in 'Initialize' (which is why calling that function is crucial). */
-	static void AtExit();
+	/////////////////////
+	///   Operators   ///
+public:
+
+	Application& operator=(const Application& copy) = delete;
+	Application& operator=(Application&& move) = delete;
 
 	////////////////
 	///   Data   ///
