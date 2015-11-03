@@ -22,6 +22,9 @@ void Console::Write(CString message)
 
 	if (firstWrite)
 	{
+		// For some reason this needs to be constructed, otherwise printing upon starting (ie, pre-main) on linux will
+		// occasionally fail completely.
+		std::ios_base::Init initializer;
 		NewLine();
 		firstWrite = false;
 	}
@@ -50,7 +53,7 @@ void Console::Error(CString error)
 String Console::Prompt()
 {
 	Write(PromptPrefix);
-	
+
 	char input[MaxInput];
 	std::cin.getline(input, MaxInput);
 	return String(input);

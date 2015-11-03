@@ -10,13 +10,12 @@
 
 Application::Application()
 {
-	Console::WriteLine("Initializing application...");
+	// Do nothing
 }
 
 Application::~Application()
 {
 	GetMemoryManager().Sweep();
-	Console::WriteLine("Shutting down application...");
 }
 
 ///////////////////
