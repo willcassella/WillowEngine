@@ -3,9 +3,6 @@
 
 #include <type_traits>
 
-/////////////////
-///   Types   ///
-
 namespace stdEXT
 {
 	namespace Implementation
@@ -25,13 +22,16 @@ namespace stdEXT
 		}
 	}
 
-	//////////////////
-	///   Traits   ///
+	/////////////////
+	///   Types   ///
 
 	/** Type representing boolean constants.
 	* NOTE: This should be removed in favor of 'std::bool_constant' once C++17 rolls around. */
 	template <bool Value>
 	using bool_constant = std::integral_constant<bool, Value>;
+
+	//////////////////
+	///   Traits   ///
 
 	/** Evaluates to 'true' if the given type is a primitive (arithmetic, or pointer). */
 	template <typename T>

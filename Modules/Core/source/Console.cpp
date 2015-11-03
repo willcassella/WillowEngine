@@ -7,8 +7,6 @@ constexpr uint32 MaxInput = 256; // Max number of characters retrieved from one 
 constexpr CString WarningPrefix = "WARNING: "; // String printed before every warning
 constexpr CString ErrorPrefix = "ERROR: "; // String printed before every error
 constexpr CString PromptPrefix = "> "; // String printed before every input
-bool EmptyLine = true; // Whether the current line is empty
-bool EmptyLineAbove = true; // Whether the line above is empty
 
 ////////////////////
 ///   Functions  ///
@@ -16,17 +14,6 @@ bool EmptyLineAbove = true; // Whether the line above is empty
 void Console::NewLine()
 {
 	std::cout << std::endl << " ";
-
-	if (EmptyLine)
-	{
-		EmptyLineAbove = true;
-	}
-	else
-	{
-		EmptyLineAbove = false;
-	}
-
-	EmptyLine = true;
 }
 
 void Console::Write(CString message)
@@ -40,7 +27,6 @@ void Console::Write(CString message)
 	}
 
 	std::cout << message;
-	EmptyLine = false;
 }
 
 void Console::WriteLine(CString message)
@@ -61,30 +47,17 @@ void Console::Error(CString error)
 	WriteLine(error);
 }
 
-String GetUserInput()
+String Console::Prompt()
 {
+	Write(PromptPrefix);
+	
 	char input[MaxInput];
 	std::cin.getline(input, MaxInput);
 	return String(input);
 }
 
-String Console::Prompt()
-{
-	NewLine();
-
-	if (!EmptyLineAbove)
-	{
-		NewLine();
-	}
-
-	Write(PromptPrefix);
-	String input = GetUserInput();
-	NewLine();
-	return input;
-}
-
 String Console::Prompt(CString message)
 {
-	WriteLine(message);
+	Write(message);
 	return Prompt();
 }
