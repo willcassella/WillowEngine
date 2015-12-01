@@ -89,4 +89,4 @@ private:
 	Mobility _mobility = Mobility::Dynamic;
 	Ptr<Transform> _parent;
 };
-REFLECTABLE_ENUM(Transform::Mobility);
+REFLECTABLE_ENUM(Transform::Mobility)

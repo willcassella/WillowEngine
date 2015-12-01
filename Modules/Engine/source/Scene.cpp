@@ -203,7 +203,7 @@ void Scene::Destroy(GameObject& object)
 
 void Scene::Destroy(GHandle<GameObject> handle)
 {
-	_gameObjects.Find(handle.GetID(), [this](auto& object) { Destroy(*object); });
+	_gameObjects.Find(handle.GetID(), [this](auto& object) { this->Destroy(*object); });
 }
 
 
