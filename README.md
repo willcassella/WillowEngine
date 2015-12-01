@@ -17,6 +17,7 @@ The engine compiles cleanly on Clang and GCC, however you do need to install the
 + libglfw3-dev
 + libfreeimage-dev
 + libglew-dev
++ libbullet-dev
 
 You also need the following packages, since for some reason GLFW doesn't actually download all of its dependencies:
 + xorg-dev

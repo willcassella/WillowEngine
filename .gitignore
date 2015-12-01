@@ -2,6 +2,7 @@ bin/
 build/
 packages/
 *.opensdf
+*.opendb
 *.sdf
 *.suo
 *.user
