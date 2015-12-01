@@ -48,8 +48,8 @@ Vec3 StaticMesh::GetBoundingBox() const
 
 	for (const auto& vec : Vertices)
 	{
-		result.X = Max(abs(vec.Position.X), abs(result.X));
-		result.Y = Max(abs(vec.Position.Y), abs(result.Y));
+		result.X = Max(fabs(vec.Position.X), fabs(result.X));
+		result.Y = Max(fabs(vec.Position.Y), fabs(result.Y));
 	}
 
 	return result;
