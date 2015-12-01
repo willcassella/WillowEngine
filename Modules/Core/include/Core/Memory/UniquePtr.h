@@ -201,6 +201,24 @@ public:
 		return self;
 	}
 
+	template <typename F, WHERE(!std::is_void<F>::value)>
+	explicit operator UniquePtr<F>&() &
+	{
+		return reinterpret_cast<UniquePtr<F>&>(self);
+	}
+
+	template <typename F, WHERE(!std::is_void<F>::value)>
+	explicit operator const UniquePtr<F>&() const &
+	{
+		return reinterpret_cast<const UniquePtr<F>&>(self);
+	}
+
+	template <typename F, WHERE(!std::is_void<F>::value)>
+	explicit operator UniquePtr<F>&&() const &&
+	{
+		return reinterpret_cast<UniquePtr<F>&&>(self);
+	}
+
 	////////////////
 	///   Data   ///
 private:

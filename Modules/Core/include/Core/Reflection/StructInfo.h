@@ -111,30 +111,30 @@ namespace Implementation
 	const StructInfo TypeOf<Array<T>>::StaticTypeInfo =
 		TypeInfoBuilder<Array<T>>("Array");
 
-	///** Register TypeInfo for List */
-	//template <typename T>
-	//const StructInfo TypeOf<List<T>>::StaticTypeInfo = 
-	//	StructInfo::CreateTemplate<List, T>("List");
+	/** Register TypeInfo for List */
+	template <typename T>
+	const StructInfo TypeOf<List<T>>::StaticTypeInfo =
+		TypeInfoBuilder<List<T>>("List");
 
 	/** Register TypeInfo for Queue */
 	template <typename T>
 	const StructInfo TypeOf<Queue<T>>::StaticTypeInfo =
 		TypeInfoBuilder<Queue<T>>("Queue");
 
-	///** Register TypeInfo for Stack */
-	//template <typename T>
-	//const StructInfo TypeOf<Stack<T>>::StaticTypeInfo = 
-	//	StructInfo::CreateTemplate<Stack, T>("Stack");
+	/** Register TypeInfo for Stack */
+	template <typename T>
+	const StructInfo TypeOf<Stack<T>>::StaticTypeInfo =
+		TypeInfoBuilder<Stack<T>>("Stack");
 
-	///** Register TypeInfo for Table */
-	//template <typename KeyT, typename ValueT>
-	//const StructInfo TypeOf<Table<KeyT, ValueT>>::StaticTypeInfo = 
-	//	StructInfo::CreateTemplate<Table, KeyT, ValueT>("Table");
+	/** Register TypeInfo for Table */
+	template <typename KeyT, typename ValueT>
+	const StructInfo TypeOf<Table<KeyT, ValueT>>::StaticTypeInfo =
+		TypeInfoBuilder<Table<KeyT, ValueT>>("Table");
 
-	///** Register TypeInfo for Pair */
-	//template <typename A, typename B>
-	//const StructInfo TypeOf<Pair<A, B>>::StaticTypeInfo = 
-	//	StructInfo::CreateTemplate<Pair, A, B>("Pair");
+	/** Register TypeInfo for Pair */
+	template <typename A, typename B>
+	const StructInfo TypeOf<Pair<A, B>>::StaticTypeInfo =
+		TypeInfoBuilder<Pair<A, B>>("Pair");
 }
 
 //////////////////////

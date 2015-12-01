@@ -19,7 +19,8 @@ BUILD_REFLECTION(PropertyInfo)
 
 BUILD_ENUM_REFLECTION(PropertyFlags)
 .IsBitFlag()
-.Value("None", PF_None, "This property has no flags.");
+.Value("None", PF_None, "This property has no flags.")
+.Value("EditorOnly", PF_EditorOnly, "This property should only be exposed to the editor.");
 
 ////////////////////////
 ///   Constructors   ///

@@ -67,6 +67,12 @@ using CString = const Char*;
 #	define FORCEINLINE inline
 #endif
 
+/** Macro that makes it easier to call const overloads on a non-const object. */
+#define const_this static_cast<const std::remove_pointer_t<decltype(this)>*>(this)
+
 /** Shortcut for dereferencing 'this', useful for calling operators on self and returning reference to self in a clean way.
 * Still, you should prefer using 'this' over 'self'. */
 #define self (*this)
+
+/** This is to 'self' what 'const_this' is to 'this'. */
+#define const_self (*const_this)

@@ -46,7 +46,7 @@ namespace Implementation
 				"Proxy types do not have any static reflection data.");
 				
 			static_assert(stdEXT::is_const_object<StorageT>::value,
-				"The 'StaticTypeInfo' static object must be a const value type.");
+				"The 'StaticTypeInfo' static object must be a const value.");
 
 			return T::StaticTypeInfo;
 		}

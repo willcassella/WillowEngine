@@ -136,6 +136,14 @@ public:
 	{
 		return _value != nullptr;
 	}
+	bool operator==(std::nullptr_t) const
+	{
+		return _value == nullptr;
+	}
+	bool operator!=(std::nullptr_t) const
+	{
+		return _value != nullptr;
+	}
 
 	template <class CopyType>//, WHERE(std::is_base_of<ObjectType, CopyType>::value)>
 	Ptr& operator=(const Ptr<CopyType>& copy)

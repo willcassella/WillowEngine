@@ -13,8 +13,9 @@
 
 enum FieldFlags : byte
 {
-	FF_None = 0,
-	FF_Transient = (1 << 0)
+	FF_None = 0,				/** No special considerations need to be made for this field. */
+	FF_Transient = (1 << 0),	/** This field should not be serialized. */
+	FF_EditorOnly = (1 << 1)	/** This field should only be exposed to the editor. */
 };
 
 /** A 'Compound' is a type that is composed over several other types, such as a 'struct', 'class', or 'interface'. */
@@ -85,7 +86,7 @@ public:
 private:
 
 	/** The default category that properties are sorted into. */
-	constexpr static const char* DefaultCategory = "General";
+	static constexpr CString DefaultCategory = "General";
 
 	////////////////////////
 	///   Constructors   ///
