@@ -2,6 +2,8 @@
 
 Willow Engine is a game engine in development by Will Cassella.
 
+<img src="http://www.willcassella.net/WillowEngine/demo_screenshot.png" alt="Demo scene">
+
 ## Compiling the engine
 
 ### Windows
