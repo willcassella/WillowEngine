@@ -13,11 +13,11 @@ public:
 	REFLECTABLE_CLASS
 	EXTENDS(Camera)
 
-	////////////////////////
-	///   Constructors   ///
+	///////////////////
+	///   Methods   ///
 public:
 
-	FPSCamera(Scene& scene);
+	void OnSpawn() override;
 
 	///////////////////
 	///   Actions   ///
@@ -25,4 +25,5 @@ public:
 
 	void Move(Vec2 direction);
 	void Look(Vec2 direction);
+	void Click();
 };

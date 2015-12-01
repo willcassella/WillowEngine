@@ -13,24 +13,12 @@
     <ClCompile Include="source\FPSCamera.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="source\Ghost.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\SlideComponent.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ExampleGame\FPSCamera.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\ExampleGame\config.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ExampleGame\Ghost.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ExampleGame\SlideComponent.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

@@ -3,7 +3,6 @@
 
 #include <Engine/GameObject.h>
 #include <Engine/Components/StaticMeshComponent.h>
-#include "SlideComponent.h"
 
 class EXAMPLEGAME_API Ghost : public GameObject
 {
@@ -14,18 +13,17 @@ public:
 	REFLECTABLE_CLASS
 	EXTENDS(GameObject)
 
-	/////////////////////////
-	///   Constructors   ///
-public:
-
-	Ghost(Scene& scene);
-
 	//////////////////////
 	///   Components   ///
 public:
 
-	UniquePtr<StaticMeshComponent> MeshComponent;
-	UniquePtr<SlideComponent> Slider;
+	GHandle<StaticMeshComponent> MeshComponent;
+
+	///////////////////
+	///   Methods   ///
+public:
+
+	void OnSpawn() const;
 
 	///////////////////
 	///   Actions   ///

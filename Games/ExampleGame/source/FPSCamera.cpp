@@ -8,14 +8,16 @@
 
 BUILD_REFLECTION(FPSCamera);
 
-////////////////////////
-///   Constructors   ///
+///////////////////
+///   Methods   ///
 
-FPSCamera::FPSCamera(Scene& scene)
-	: Base(scene)
+void FPSCamera::OnSpawn()
 {
-	scene.Events.Bind("Move", self, &FPSCamera::Move);
-	scene.Events.Bind("Look", self, &FPSCamera::Look);
+	Base::OnSpawn();
+
+	GetScene().Events.Bind("Move", self, &FPSCamera::Move);
+	GetScene().Events.Bind("Look", self, &FPSCamera::Look);
+	GetScene().Events.Bind("Click", self, &FPSCamera::Click);
 }
 
 ///////////////////
@@ -23,11 +25,16 @@ FPSCamera::FPSCamera(Scene& scene)
 
 void FPSCamera::Move(Vec2 direction)
 {
-	Transform.Translate(Vec3(direction.X, 0, -direction.Y)/10);
+	GetTransform()->Translate(Vec3(direction.X, 0, -direction.Y)/10);
 }
 
 void FPSCamera::Look(Vec2 direction)
 {
-	Transform.Rotate(Vec3::Up, direction.X, false);
-	Transform.Rotate(Vec3::Right, direction.Y, true);
+	GetTransform()->Rotate(Vec3::Up, direction.X, false);
+	GetTransform()->Rotate(Vec3::Right, direction.Y, true);
+}
+
+void FPSCamera::Click()
+{
+	// Spawn something
 }
