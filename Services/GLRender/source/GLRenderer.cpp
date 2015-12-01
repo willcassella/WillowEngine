@@ -167,7 +167,7 @@ void GLRenderer::RenderScene(const Scene& scene)
 	if (!cam)
 		return;
 
-	Mat4 view = cam->GetOwner().GetModelMatrix().Inverse();
+	Mat4 view = cam->GetTransform().GetMatrix().Inverse();
 	Mat4 proj = cam->GetPerspective();
 
 	// Render each StaticMeshComponent in the scene
@@ -176,7 +176,7 @@ void GLRenderer::RenderScene(const Scene& scene)
 		if (!staticMesh->Visible)
 			continue;
 
-		Mat4 model = staticMesh->GetOwner().Transform.GetMatrix();
+		Mat4 model = staticMesh->GetTransform().GetMatrix();
 		
 		// Bind the mesh and material
 		auto& mesh = FindStaticMesh(*staticMesh->Mesh);
