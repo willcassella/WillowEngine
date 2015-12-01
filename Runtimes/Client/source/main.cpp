@@ -6,7 +6,6 @@
 #include <GLRender/GLRenderer.h>
 #include <Engine/GameObjects/Prop.h>
 #include <ExampleGame/FPSCamera.h>
-#include <ExampleGame/Ghost.h>
 
 //Define context parameters
 int32 window_width = 1280;
@@ -14,7 +13,7 @@ int32 window_height = 720;
 
 //Function Prototypes
 GLFWwindow* InitGLFW();
-void eventLoop(GLFWwindow* window, Scene& scene, GLRenderer& renderer);
+void eventLoop(GLFWwindow* window, Scene& scene, IRenderer& renderer);
 void cleanUp(GLFWwindow* window);
 
 struct
@@ -71,16 +70,13 @@ int main(int32 /*argc*/, char** /*argv*/)
 		UniquePtr<Scene> scene = New<Scene>();
 
 		auto& sponza = scene->Spawn<Prop>();
-		sponza.MeshComponent->Mesh = "Content/Models/sponza.dat"_p;
-		sponza.MeshComponent->Material = "Content/Materials/Sponza.mat"_p;
-		sponza.MeshComponent->InstanceParams["diffuse"] = AssetPtr<Texture>("Content/Textures/sponza_tex.png"_p);
+		sponza.GetTransform()->Scale3D(Vec3{ 0.6f, 0.6f, 0.6f });
+		sponza.GetComponent(sponza.GetStaticMeshComponent())->Mesh = "Content/Models/sponza_new.wmesh"_p;
+		sponza.GetComponent(sponza.GetStaticMeshComponent())->Material = "Content/Materials/Sponza.mat"_p;
+		sponza.GetComponent(sponza.GetStaticMeshComponent())->InstanceParams["diffuse"] = AssetPtr<Texture>("Content/Textures/sponza_new_tex.png"_p);
 
-		auto& gun = scene->Spawn<Ghost>();
-		gun.MeshComponent->Mesh = "Content/Models/battle_rifle.dat"_p;
-		gun.MeshComponent->Material = "Content/Materials/Gun.mat"_p;
-		gun.MeshComponent->InstanceParams["diffuse"] = AssetPtr<Texture>("Content/Textures/battle_rifle_tex.png"_p);
-
-		scene->Spawn<FPSCamera>();
+		auto& cam = scene->Spawn<FPSCamera>();
+		cam.GetTransform()->Location.Y += 3;
 
 		//Execute the main event loop
 		eventLoop(window, *scene, renderer);
@@ -138,7 +134,7 @@ GLFWwindow* InitGLFW()
 	return window;
 }
 
-void eventLoop(GLFWwindow* window, Scene& scene, GLRenderer& renderer)
+void eventLoop(GLFWwindow* window, Scene& scene, IRenderer& renderer)
 {
 	Console::WriteLine("Entering event loop...");
 
@@ -204,7 +200,6 @@ void eventLoop(GLFWwindow* window, Scene& scene, GLRenderer& renderer)
 			{
 				scene.Events.DispatchEvent("Spin", 0.5f);
 			}
-
 			if (moveAccum != Vec2(0, 0))
 			{
 				scene.Events.DispatchEvent("Move", moveAccum.Normalize());
