@@ -1,0 +1,33 @@
+Constructors vs initializers:
+
+Assertions:
+- The "Scene" class is soley responsible for constructing/initializing objects (API just exposes what/when)
+- Objects may not be transferred between scenes, at least in their current form (maybe creat a "Prefab" class?)
+
+Constructors:
++ Secure (you MUST call the base constructor)
++ More conventional
+- Requires second constructor for serialization, constructor inheritance
+- No virtual dispatch in constructors (could be useful in GameObject<->Behavior hookup)
+- When scene is given as a parameter to the constructor, could cause you to do unintended things in the constructor
+
+Initializer method:
++ Requires less code (no second constructor!)
++ Supports virtual dispatch (object is fully initialized before being ... initialized)
++ May map to the problem better (GameObject initialization is still logically a two-step process)
+- Not secure (no way to enforce calling of base initializer)
+- Less conventional
+
+Third approach: Generic initializer
++ Same as "Constructor" approach, but removes the second constructor con
+
+Some types (Behavior) are going to need initialization to be done in the constructor anyway, because otherwise it doesn't make sense
+
+Here's how I'm going to do it:
+Component: Nothing
+GameObject: Initialize method
+Behavior: Initialize method
+
+This allows for cheap API verification without any weird tricks, and the only real con is that it could be a source of invalid code
+
+IF I was using a garbage-collected language (no need to worry about ownership), AND serialization was no concern, I would go with the constructor solution
