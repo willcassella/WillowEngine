@@ -7,13 +7,13 @@
 ///   Reflection   ///
 
 BUILD_REFLECTION(Camera)
-.Field("Lens", &Camera::Lens, "");
+;//.Field("Lens", &Camera::Lens, "");
 
-////////////////////////
-///   Constructors   ///
+///////////////////
+///   Methods   ///
 
-Camera::Camera(Scene& scene)
-	: Base(scene)
+void Camera::Build()
 {
-	Lens = New<CameraComponent>(self);
+	Base::Build();
+	_cameraComponent = Attach<CameraComponent>();
 }

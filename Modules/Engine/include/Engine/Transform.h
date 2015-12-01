@@ -2,15 +2,28 @@
 #pragma once
 
 #include <Core/Math/Mat4.h>
+#include <Core/Object.h>
 #include "config.h"
 
-struct ENGINE_API Transform final
+class ENGINE_API Transform final : public Object
 {
 	///////////////////////
 	///   Information   ///
 public:
 
-	REFLECTABLE_STRUCT
+	REFLECTABLE_CLASS
+	EXTENDS(Object)
+
+	///////////////////////
+	///   Inner Types   ///
+public:
+
+	/** Possible different modes of mobility */
+	enum class Mobility : byte
+	{
+		Static,
+		Dynamic
+	};
 
 	//////////////////
 	///   Fields   ///
@@ -24,8 +37,14 @@ public:
 	///   Methods   ///
 public:
 
+	/** Returns the mobility state of this Transform. */
+	FORCEINLINE Mobility GetMobility() const
+	{
+		return _mobility;
+	}
+
 	/** Formats the state of this Transform as a String. */
-	String ToString() const;
+	String ToString() const override;
 
 	/** Translates this transform by the given vector.
 	* 'vec' - The vector to translate this transform by.
@@ -44,4 +63,30 @@ public:
 
 	/** Returns the transformation matrix for this Transform. */
 	Mat4 GetMatrix() const;
+
+	/** Returns the parent of this Transform. */
+	Transform* GetParent()
+	{
+		return _parent.Get();
+	}
+
+	/** Returns the parent of this Transform. */
+	const Transform* GetParent() const
+	{
+		return _parent.Get();
+	}
+
+	/** Sets the parent of this Transform. */
+	void SetParent(Transform* parent)
+	{
+		_parent = parent;
+	}
+
+	////////////////
+	///   Data   ///
+private:
+
+	Mobility _mobility = Mobility::Dynamic;
+	Ptr<Transform> _parent;
 };
+REFLECTABLE_ENUM(Transform::Mobility);

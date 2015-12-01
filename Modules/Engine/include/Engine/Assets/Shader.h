@@ -2,7 +2,6 @@
 #pragma once
 
 #include <Resource/Asset.h>
-#include <Resource/Resources/TextFile.h>
 #include "../config.h"
 
 class ENGINE_API Shader final : public Asset

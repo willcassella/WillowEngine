@@ -1,18 +1,19 @@
 // Light.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
+#include "../../include/Engine/Scene.h"
 #include "../../include/Engine/GameObjects/Light.h"
 
 ///////////////////////
 ///    Reflection   ///
 
 BUILD_REFLECTION(Light)
-.Field("LightComponent", &Light::LightComponent, "The light.");
+;//.Field("LightComponent", &Light::LightComponent, "The light.");
 
-////////////////////////
-///   Constructors   ///
+///////////////////
+///   Methods   ///
 
-Light::Light(Scene& scene)
-	: Base(scene)
+void Light::Build()
 {
-	LightComponent = New<class LightComponent>(self);
+	Base::Build();
+	_lightComponent = Attach<LightComponent>();
 }

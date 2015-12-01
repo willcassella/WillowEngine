@@ -1,6 +1,8 @@
 // Mesh.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
+#include <cmath>
 #include <Core/Console.h>
+#include <Core/Math/Math.h>
 #include <Resource/Resources/BinaryFile.h>
 #include "../../include/Engine/Assets/StaticMesh.h"
 
@@ -35,4 +37,20 @@ StaticMesh::StaticMesh(const Path& path)
 
 	// Load in elements
 	Elements = Array<uint32>(reinterpret_cast<const uint32*>(cursor), numElems);
+}
+
+///////////////////
+///   Methods   ///
+
+Vec3 StaticMesh::GetBoundingBox() const
+{
+	Vec3 result;
+
+	for (const auto& vec : Vertices)
+	{
+		result.X = Max(abs(vec.Position.X), abs(result.X));
+		result.Y = Max(abs(vec.Position.Y), abs(result.Y));
+	}
+
+	return result;
 }

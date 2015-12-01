@@ -54,4 +54,11 @@ public:
 
 	Array<Vertex> Vertices;
 	Array<uint32> Elements;
+
+	///////////////////
+	///   Methods   ///
+public:
+
+	/** Returns the lengths of a bounding box containing this StaticMesh; */
+	Vec3 GetBoundingBox() const;
 };

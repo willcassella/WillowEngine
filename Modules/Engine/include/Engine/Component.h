@@ -1,17 +1,9 @@
 // Component.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <Core/Memory/Ptr.h>
-#include "config.h"
-
-////////////////////////////////
-///   Forward-declarations   ///
-
-/** Defined in 'GameObject.h' */
-class GameObject;
-
-/** Defined in 'Scene.h' */
-class Scene;
+#include <Core/Memory/UniquePtr.h>
+#include "Forwards/Engine.h"
+#include "Transform.h"
 
 /////////////////
 ///   Types   ///
@@ -24,48 +16,82 @@ public:
 
 	REFLECTABLE_CLASS
 	EXTENDS(Object)
+	friend GameObject;
 	friend Scene;
+
+	///////////////////////
+	///   Inner Types   ///
+public:
+
+	/** The type of ID for components. */
+	using ID = uint64;
 
 	////////////////////////
 	///   Constructors   ///
 public:
 
-	Component(GameObject& owner);
+	Component();
 
 	///////////////////
 	///   Methods   ///
 public:
 
-	/** Returns whether this component is enabled on the GameObject that owns it. */
-	FORCEINLINE bool IsEnabled() const
+	/** Returns a reference to the Transform for this Component. */
+	FORCEINLINE Transform& GetTransform()
 	{
-		return _isEnabled;
+		return *_transform;
 	}
 
-	/** Enables this component, if it is currently disabled. */
-	void Enable();
+	/** Returns a reference to the Transform for this Component. */
+	FORCEINLINE const Transform& GetTransform() const
+	{
+		return *_transform;
+	}
 
-	/** Disable the component, if it is currently enabled. */
-	void Disable();
+	/** Returns a reference to the Scene that this Component is a part of. */
+	FORCEINLINE Scene& GetScene()
+	{
+		return *_scene;
+	}
 
-	/** Returns the GameObject that this component is attached to. */
-	GameObject& GetOwner();
+	/** Returns a reference to the Scene that this Component is a part of. */
+	FORCEINLINE const Scene& GetScene() const
+	{
+		return *_scene;
+	}
 
-	/** Returns the GameObject that this component is attached to. */
-	const GameObject& GetOwner() const;
+	/** Returns the ID of this Component. */
+	FORCEINLINE ID GetID() const
+	{
+		return _id;
+	}
 
-protected:
+	/** Returns whether this Component is an orphan (has no owning GameObject). */
+	FORCEINLINE bool IsOrphan() const
+	{
+		return _owner == nullptr;
+	}
 
-	/** Function called when this component is disabled. */
-	virtual void OnDisabled();
+	/** Returns a pointer to the GameObject that owns this Component.
+	* NOTE: Returns 'null' if this Component is orphaned. */
+	FORCEINLINE GameObject* GetOwner()
+	{
+		return _owner;
+	}
 
-	/** Function called when this component is enabled. */
-	virtual void OnEnabled();
+	/** Returns a pointer to the GameObject that owns this Component.
+	* NOTE: Returns 'null' if this Component is orphaned. */
+	FORCEINLINE const GameObject* GetOwner() const
+	{
+		return _owner;
+	}
 
 	////////////////
 	///   Data   ///
 private:
 
-	Ptr<GameObject> _owner;
-	bool _isEnabled;
+	UniquePtr<Transform> _transform;
+	GameObject* _owner;
+	Scene* _scene;
+	ID _id;
 };

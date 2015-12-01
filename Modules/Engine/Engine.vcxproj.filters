@@ -29,6 +29,9 @@
     <Filter Include="include\ServiceInterfaces">
       <UniqueIdentifier>{52017b75-ea13-45c3-aec8-8736b670de11}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\Forwards">
+      <UniqueIdentifier>{4dc7fded-fff2-4fb0-9045-870ca456cf4b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Scene.cpp">
@@ -102,9 +105,6 @@
     <ClInclude Include="include\Engine\GameObjects\Camera.h">
       <Filter>include\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="include\Engine\GameObjects\Pawn.h">
-      <Filter>include\GameObjects</Filter>
-    </ClInclude>
     <ClInclude Include="include\Engine\Components\CameraComponent.h">
       <Filter>include\Components</Filter>
     </ClInclude>
@@ -125,6 +125,18 @@
     </ClInclude>
     <ClInclude Include="include\Engine\GameObjects\Light.h">
       <Filter>include\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Components\CollisionComponent.h">
+      <Filter>include\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Forwards\Engine.h">
+      <Filter>include\Forwards</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\GHandle.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Behavior.h">
+      <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

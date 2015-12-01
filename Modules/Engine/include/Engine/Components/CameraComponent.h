@@ -13,12 +13,6 @@ public:
 	REFLECTABLE_CLASS
 	EXTENDS(Component)
 
-	////////////////////////
-	///   Constructors   ///
-public:
-
-	using Component::Component;
-
 	//////////////////
 	///   Fields   ///
 public:

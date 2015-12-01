@@ -1,18 +1,19 @@
 // Prop.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
+#include "../../include/Engine/Scene.h"
 #include "../../include/Engine/GameObjects/Prop.h"
 
 //////////////////////
 ///   Reflection   ///
 
 BUILD_REFLECTION(Prop)
-.Field("Mesh", &Prop::MeshComponent, "");
+;//.Field("Mesh", &Prop::MeshComponent, "");
 
-////////////////////////
-///   Constructors   ///
+///////////////////
+///   Methods   ///
 
-Prop::Prop(Scene& scene)
-	: Base(scene)
+void Prop::Build()
 {
-	MeshComponent = New<StaticMeshComponent>(self);
+	Base::Build();
+	_meshComponent = Attach<StaticMeshComponent>();
 }
