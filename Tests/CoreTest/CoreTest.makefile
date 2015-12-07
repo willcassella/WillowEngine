@@ -1,7 +1,7 @@
 # CoreTest.makefile
 
 CXX=clang++
-CFLAGS=-std=c++14 -Ofast -Wall -Wextra -Wpedantic -D BITS_64 -I ../../Modules/Core/include
+CFLAGS=-std=c++14 -Ofast -Wall -Wextra -Wpedantic -I ../../Modules/Core/include
 LFLAGS=-Wl,-rpath='$$ORIGIN'
 DEPS=../../Modules/Core/bin/Core.so
 OUT=-o bin/CoreTest

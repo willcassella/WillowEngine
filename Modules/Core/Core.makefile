@@ -1,7 +1,7 @@
 # Core.makefile
 
 CXX=clang++
-CFLAGS=-std=c++14 -Ofast -Wall -Wextra -Wpedantic -D BITS_64
+CFLAGS=-std=c++14 -Ofast -Wall -Wextra -Wpedantic
 LFLAGS=-fPIC -shared -Wl,-soname='Core.so'
 DEPS=
 OUT=-o bin/Core.so

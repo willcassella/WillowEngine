@@ -505,10 +505,7 @@ public:
 	/** Ensures that 'Capacity' is at least as big as 'Size' + 'size'. */
 	void ReserveAdditional(uint32 size)
 	{
-		if (Capacity() < size + Size())
-		{
-			Resize(size + Size());
-		}
+		Resize(Size() + size);
 	}
 
 	/** Reallocates the internal array with more (or less) space, moving existing elements into the new array.
