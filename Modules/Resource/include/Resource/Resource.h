@@ -32,7 +32,7 @@ public:
 	}
 
 	/** Returns the size of this Resource on disk. */
-	FORCEINLINE uint32 GetSize()
+	FORCEINLINE uint32 GetSize() const
 	{
 		return _size;
 	}
