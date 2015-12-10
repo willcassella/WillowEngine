@@ -13,6 +13,12 @@ public:
 	REFLECTABLE_CLASS
 	EXTENDS(GameObject)
 
+	//////////////////
+	///   Fields   ///
+public:
+
+	GHandle<class CameraComponent> CameraComponent;
+
 	///////////////////
 	///   Methods   ///
 public:
@@ -20,22 +26,10 @@ public:
 	/** Returns the perspective matrix of the CameraComponent attached to this Camera. */
 	FORCEINLINE Mat4 GetPerspective() const
 	{ 
-		return GetComponent(_cameraComponent)->GetPerspective();
-	}
-	
-	/** Returns the CameraComponent attached to this Camera. */
-	FORCEINLINE auto GetCameraComponent() const
-	{
-		return _cameraComponent;
+		return GetComponent(CameraComponent)->GetPerspective();
 	}
 
 protected:
 
 	void Build() override;
-
-	////////////////
-	///   Data   ///
-private:
-
-	GHandle<CameraComponent> _cameraComponent;
 };

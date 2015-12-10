@@ -15,5 +15,5 @@ BUILD_REFLECTION(Camera)
 void Camera::Build()
 {
 	Base::Build();
-	_cameraComponent = Attach<CameraComponent>();
+	CameraComponent = Attach<class CameraComponent>();
 }

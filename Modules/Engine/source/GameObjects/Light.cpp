@@ -15,5 +15,5 @@ BUILD_REFLECTION(Light)
 void Light::Build()
 {
 	Base::Build();
-	_lightComponent = Attach<LightComponent>();
+	LightComponent = Attach<class LightComponent>();
 }

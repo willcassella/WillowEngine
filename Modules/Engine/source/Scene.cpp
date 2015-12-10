@@ -140,9 +140,9 @@ Scene::Scene()
 	_nextComponentID(1)
 {
 	testObject = &Spawn<Prop>();
-	testObject->GetComponent(testObject->GetStaticMeshComponent())->Material = "Content/Materials/Sponza.mat"_p;
-	testObject->GetComponent(testObject->GetStaticMeshComponent())->Mesh = "Content/Models/battle_rifle.dat";
-	testObject->GetComponent(testObject->GetStaticMeshComponent())->InstanceParams["diffuse"] = AssetPtr<Texture>("Content/Textures/battle_rifle_tex.png");
+	testObject->GetComponent(testObject->MeshComponent)->Material = "Content/Materials/Sponza.mat"_p;
+	testObject->GetComponent(testObject->MeshComponent)->Mesh = "Content/Models/battle_rifle.dat";
+	testObject->GetComponent(testObject->MeshComponent)->InstanceParams["diffuse"] = AssetPtr<Texture>("Content/Textures/battle_rifle_tex.png");
 	_physicsData = new PhysicsData();
 }
 

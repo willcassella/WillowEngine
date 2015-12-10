@@ -71,9 +71,9 @@ int main(int32 /*argc*/, char** /*argv*/)
 
 		auto& sponza = scene->Spawn<Prop>();
 		sponza.GetTransform()->Scale3D(Vec3{ 0.6f, 0.6f, 0.6f });
-		sponza.GetComponent(sponza.GetStaticMeshComponent())->Mesh = "Content/Models/sponza_new.wmesh"_p;
-		sponza.GetComponent(sponza.GetStaticMeshComponent())->Material = "Content/Materials/Sponza.mat"_p;
-		sponza.GetComponent(sponza.GetStaticMeshComponent())->InstanceParams["diffuse"] = AssetPtr<Texture>("Content/Textures/sponza_new_tex.png"_p);
+		sponza.GetComponent(sponza.MeshComponent)->Mesh = "Content/Models/sponza_new.wmesh"_p;
+		sponza.GetComponent(sponza.MeshComponent)->Material = "Content/Materials/Sponza.mat"_p;
+		sponza.GetComponent(sponza.MeshComponent)->InstanceParams["diffuse"] = AssetPtr<Texture>("Content/Textures/sponza_new_tex.png"_p);
 
 		auto& cam = scene->Spawn<FPSCamera>();
 		cam.GetTransform()->Location.Y += 3;

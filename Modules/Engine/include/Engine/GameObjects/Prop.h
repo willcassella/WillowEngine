@@ -13,22 +13,15 @@ public:
 	REFLECTABLE_CLASS
 	EXTENDS(GameObject)
 
-	///////////////////
-	///   Methods   ///
+	//////////////////
+	///   Fields   ///
 public:
 
-	FORCEINLINE auto GetStaticMeshComponent() const
-	{
-		return _meshComponent;
-	}
+	GHandle<StaticMeshComponent> MeshComponent;
 
+	///////////////////
+	///   Methods   ///
 protected:
 
 	void Build() override;
-
-	////////////////
-	///   Data   ///
-private:
-
-	GHandle<StaticMeshComponent> _meshComponent;
 };

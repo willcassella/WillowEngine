@@ -13,22 +13,15 @@ public:
 	REFLECTABLE_CLASS
 	EXTENDS(GameObject)
 
-	///////////////////
-	///   Methods   ///
+	//////////////////
+	///   Fields   ///
 public:
 
-	FORCEINLINE auto GetLightComponent() const
-	{
-		return _lightComponent;
-	}
+	GHandle<class LightComponent> LightComponent;
 
+	///////////////////
+	///   Methods   ///
 protected:
 
 	void Build() override;
-
-	//////////////////////
-	///   Components   ///
-private:
-
-	GHandle<LightComponent> _lightComponent;
 };

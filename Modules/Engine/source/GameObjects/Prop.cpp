@@ -15,5 +15,5 @@ BUILD_REFLECTION(Prop)
 void Prop::Build()
 {
 	Base::Build();
-	_meshComponent = Attach<StaticMeshComponent>();
+	MeshComponent = Attach<StaticMeshComponent>();
 }
