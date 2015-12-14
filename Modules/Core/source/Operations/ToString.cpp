@@ -131,4 +131,9 @@ namespace Implementation
 	{
 		return String(std::to_string(value).c_str());
 	}
+
+	String ToString<long double>::Function(long double value)
+	{
+		return String(std::to_string(value).c_str());
+	}
 }

@@ -5,8 +5,14 @@
 #include "Vec3.h"
 #include "Quat.h"
 
-const float Deg2Rad = 0.0174532925f;
-const float Rad2Deg = 57.2957795f;
+/////////////////////
+///   Constants   ///
+
+constexpr Scalar Deg2Rad = Scalar(0.0174532925);
+constexpr Scalar Rad2Deg = Scalar(57.2957795);
+
+/////////////////
+///   Types   ///
 
 struct CORE_API Mat4 final
 {
@@ -23,10 +29,10 @@ public:
 	/** Constructs a new 4x4 matrix
 	default - identity matrix
 	values - what to set each element of the matrix to */
-	Mat4(	float aa = 1.f, float ba = 0.f, float ca = 0.f, float da = 0.f,
-			float ab = 0.f, float bb = 1.f, float cb = 0.f, float db = 0.f,
-			float ac = 0.f, float bc = 0.f, float cc = 1.f, float dc = 0.f,
-			float ad = 0.f, float bd = 0.f, float cd = 0.f, float dd = 1.f)
+	Mat4(	Scalar aa = 1.f, Scalar ba = 0.f, Scalar ca = 0.f, Scalar da = 0.f,
+			Scalar ab = 0.f, Scalar bb = 1.f, Scalar cb = 0.f, Scalar db = 0.f,
+			Scalar ac = 0.f, Scalar bc = 0.f, Scalar cc = 1.f, Scalar dc = 0.f,
+			Scalar ad = 0.f, Scalar bd = 0.f, Scalar cd = 0.f, Scalar dd = 1.f)
 	{
 		_values[0][0] = aa; _values[1][0] = ba; _values[2][0] = ca; _values[3][0] = da;
 		_values[0][1] = ab; _values[1][1] = bb; _values[2][1] = cb; _values[3][1] = db;
@@ -55,21 +61,21 @@ public:
 	Mat4 Inverse() const;
 
 	/** Generates a perspective projection matrix with the given properties */
-	FORCEINLINE static Mat4 Perspective(float hFOV, float vFOV, float zMin, float zMax)
+	FORCEINLINE static Mat4 Perspective(Scalar hFOV, Scalar vFOV, Scalar zMin, Scalar zMax)
 	{
 		// Convert vertical and horizontal FOV to radians
-		float RadHFOV = hFOV * Deg2Rad;
-		float RadVFOV = vFOV * Deg2Rad;
+		Scalar RadHFOV = hFOV * Deg2Rad;
+		Scalar RadVFOV = vFOV * Deg2Rad;
 
-		float xMax = tanf(RadHFOV * 0.5f) * zMin;
-		float xMin = -xMax;
+		Scalar xMax = std::tan(RadHFOV * 0.5f) * zMin;
+		Scalar xMin = -xMax;
 
-		float yMax = tanf(RadVFOV * 0.5f) * zMin;
-		float yMin = -yMax;
+		Scalar yMax = std::tan(RadVFOV * 0.5f) * zMin;
+		Scalar yMin = -yMax;
 
-		float width = xMax - xMin;
-		float height = yMax - yMin;
-		float depth = zMax - zMin;
+		Scalar width = xMax - xMin;
+		Scalar height = yMax - yMin;
+		Scalar depth = zMax - zMin;
 
 		return Mat4(
 			2*zMin/width,	0,				(xMax+xMin)/width,	0,
@@ -79,31 +85,31 @@ public:
 	}
 
 	/** Generates a perspective projection matrix with the following horizontal FOV */
-	FORCEINLINE static Mat4 PerspectiveHFOV(float hFOV, float ratio, float zMin, float zMax)
+	FORCEINLINE static Mat4 PerspectiveHFOV(Scalar hFOV, Scalar ratio, Scalar zMin, Scalar zMax)
 	{
 		// Convert hFOV to radians
-		float RadHFOV = hFOV * Deg2Rad;
-		float vFOV = Rad2Deg * 2 * atan(tan(RadHFOV * 0.5f) * 1 / ratio);
+		Scalar RadHFOV = hFOV * Deg2Rad;
+		Scalar vFOV = Rad2Deg * 2 * atan(tan(RadHFOV * 0.5f) * 1 / ratio);
 
 		return Perspective(hFOV, vFOV, zMin, zMax);
 	}
 
 	/** Generates a perspective projection matrix with the following vertical FOV */
-	FORCEINLINE static Mat4 PerspectiveVFOV(float vFOV, float ratio, float zMin, float zMax)
+	FORCEINLINE static Mat4 PerspectiveVFOV(Scalar vFOV, Scalar ratio, Scalar zMin, Scalar zMax)
 	{
 		// Convert the vFOV to radians
-		float RadVFOV = vFOV * Deg2Rad;
-		float hFOV = Rad2Deg * 2 * atan(tan(RadVFOV * 0.5f) * ratio);
+		Scalar RadVFOV = vFOV * Deg2Rad;
+		Scalar hFOV = Rad2Deg * 2 * std::atan(std::tan(RadVFOV * 0.5f) * ratio);
 
 		return Perspective(hFOV, vFOV, zMin, zMax);
 	}
 
 	/** Generates an orthographic projection matrix with the given properties */
-	FORCEINLINE static Mat4 Orthographic(float xMin, float xMax, float yMin, float yMax, float zMin, float zMax)
+	FORCEINLINE static Mat4 Orthographic(Scalar xMin, Scalar xMax, Scalar yMin, Scalar yMax, Scalar zMin, Scalar zMax)
 	{
-		float width = xMax - xMin;
-		float height = yMax - yMin;
-		float depth = zMax - zMin;
+		Scalar width = xMax - xMin;
+		Scalar height = yMax - yMin;
+		Scalar depth = zMax - zMin;
 
 		return Mat4(
 			2 / width, 0, 0, -(xMax + xMin) / width,
@@ -135,7 +141,7 @@ public:
 	/** Generates a transformation matrix representing a rotation */
 	FORCEINLINE static Mat4 Rotate(const Quat& rot)
 	{
-		float x, y, z, w;
+		Scalar x, y, z, w;
 		x = rot.X;
 		y = rot.Y;
 		z = rot.Z;
@@ -149,14 +155,14 @@ public:
 	}
 
 	/** Gets the value at the specified column and row */
-	FORCEINLINE float Get(uint32 column, uint32 row) const
+	FORCEINLINE Scalar Get(uint32 column, uint32 row) const
 	{
 		assert(column < 4 && row < 4);
 		return _values[column][row];
 	}
 
 	/** Sets the value at the specified column and row */
-	FORCEINLINE void Set(uint32 column, uint32 row, float value)
+	FORCEINLINE void Set(uint32 column, uint32 row, Scalar value)
 	{
 		assert(column < 4 && row < 4);
 		_values[column][row] = value;
@@ -166,12 +172,12 @@ public:
 	///   Operators   ///
 public:
 
-	FORCEINLINE float* operator[](uint32 index)
+	FORCEINLINE Scalar* operator[](uint32 index)
 	{
 		assert(index < 16);
 		return _values[index];
 	}
-	FORCEINLINE const float* operator[](uint32 index) const
+	FORCEINLINE const Scalar* operator[](uint32 index) const
 	{
 		assert(index < 16);
 		return _values[index];
@@ -186,7 +192,7 @@ public:
 			// For each column
 			for (uint32 col = 0; col < 4; ++col)
 			{
-				float value = 0;
+				Scalar value = 0;
 
 				// For each addition
 				for (uint32 i = 0; i < 4; ++i)
@@ -238,5 +244,5 @@ public:
 	///   Data   ///
 private:
 
-	float _values[4][4];
+	Scalar _values[4][4];
 };

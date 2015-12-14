@@ -243,6 +243,9 @@
     <ClInclude Include="include\Core\Memory\PointerBase.h">
       <Filter>include\Memory</Filter>
     </ClInclude>
+    <ClInclude Include="include\Core\Math\Angle.h">
+      <Filter>include\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\String.cpp">

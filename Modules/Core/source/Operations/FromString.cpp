@@ -142,6 +142,13 @@ namespace Implementation
 		return string.SubString(static_cast<uint32>(remainder));
 	}
 
+	String FromString<long double>::Function(long double& value, const String& string)
+	{
+		size_t remainder;
+		value = std::stold(string.Cstr(), &remainder);
+		return string.SubString(static_cast<uint32>(remainder));
+	}
+
 	////////////////////////
 	///   String Types   ///
 

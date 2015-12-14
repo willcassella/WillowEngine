@@ -3,8 +3,8 @@
 
 #include <cmath>
 #include "../String.h"
-#include "../Operations/ToString.h"
 #include "../Reflection/Reflection.h"
+#include "Math.h"
 
 struct CORE_API Vec2 final
 {
@@ -19,11 +19,11 @@ public:
 public:
 
 	constexpr Vec2()
-		: X(0.f), Y(0.f)
+		: X(0), Y(0)
 	{
 		// All done
 	}
-	constexpr Vec2(float x, float y)
+	constexpr Vec2(Scalar x, Scalar y)
 		: X(x), Y(y)
 	{
 		// All done
@@ -33,8 +33,8 @@ public:
 	///   Fields   ///
 public:
 
-	float X;
-	float Y;
+	Scalar X;
+	Scalar Y;
 
 	///////////////////
 	///   Methods   ///
@@ -47,28 +47,28 @@ public:
 	}
 
 	/** Returns the length of this vector */
-	FORCEINLINE float Length() const
+	FORCEINLINE Scalar Length() const
 	{
-		return sqrtf(X*X + Y*Y);
+		return std::sqrt(X*X + Y*Y);
 	}
 
 	/** Returns the normalized version of this vector */
 	FORCEINLINE Vec2 Normalize() const
 	{
-		float length = Length();
+		auto length = Length();
 		return Vec2(X / length, Y / length);
 	}
 	
 	/** Returns the dot product of two vectors */
-	FORCEINLINE static float Dot(const Vec2& a, const Vec2& b)
+	FORCEINLINE static Scalar Dot(const Vec2& a, const Vec2& b)
 	{
 		return a.X * b.X + a.Y * b.Y;
 	}
 
 	/** Returns the angle between two vectors */
-	FORCEINLINE static float Angle(const Vec2& a, const Vec2& b)
+	FORCEINLINE static Scalar Angle(const Vec2& a, const Vec2& b)
 	{
-		return acosf(Vec2::Dot(a.Normalize(), b.Normalize()));
+		return std::acos(Vec2::Dot(a.Normalize(), b.Normalize()));
 	}
 
 	////////////////////////////
@@ -87,11 +87,11 @@ public:
 	{
 		return Vec2(lhs.X + rhs.X, lhs.Y + rhs.Y);
 	}
-	friend FORCEINLINE Vec2 operator+(const Vec2& lhs, float rhs)
+	friend FORCEINLINE Vec2 operator+(const Vec2& lhs, Scalar rhs)
 	{
 		return Vec2(lhs.X + rhs, lhs.Y + rhs);
 	}
-	friend FORCEINLINE Vec2 operator+(float lhs, const Vec2& rhs)
+	friend FORCEINLINE Vec2 operator+(Scalar lhs, const Vec2& rhs)
 	{
 		return Vec2(lhs + rhs.X, lhs + rhs.Y);
 	}
@@ -100,7 +100,7 @@ public:
 		lhs = lhs + rhs;
 		return lhs;
 	}
-	friend FORCEINLINE Vec2& operator+=(Vec2& lhs, float rhs)
+	friend FORCEINLINE Vec2& operator+=(Vec2& lhs, Scalar rhs)
 	{
 		lhs = lhs + rhs;
 		return lhs;
@@ -109,11 +109,11 @@ public:
 	{
 		return Vec2(lhs.X - rhs.X, lhs.Y - rhs.Y);
 	}
-	friend FORCEINLINE Vec2 operator-(const Vec2& lhs, float rhs)
+	friend FORCEINLINE Vec2 operator-(const Vec2& lhs, Scalar rhs)
 	{
 		return Vec2(lhs.X - rhs, lhs.Y - rhs);
 	}
-	friend FORCEINLINE Vec2 operator-(float lhs, const Vec2& rhs)
+	friend FORCEINLINE Vec2 operator-(Scalar lhs, const Vec2& rhs)
 	{
 		return Vec2(lhs - rhs.X, lhs - rhs.Y);
 	}
@@ -122,7 +122,7 @@ public:
 		lhs = lhs - rhs;
 		return lhs;
 	}
-	friend FORCEINLINE Vec2& operator-=(Vec2& lhs, float rhs)
+	friend FORCEINLINE Vec2& operator-=(Vec2& lhs, Scalar rhs)
 	{
 		lhs = lhs - rhs;
 		return lhs;
@@ -131,11 +131,11 @@ public:
 	{
 		return Vec2(lhs.X * rhs.X, lhs.Y * rhs.Y);
 	}
-	friend FORCEINLINE Vec2 operator*(const Vec2& lhs, float rhs)
+	friend FORCEINLINE Vec2 operator*(const Vec2& lhs, Scalar rhs)
 	{
 		return Vec2(lhs.X * rhs, lhs.Y * rhs);
 	}
-	friend FORCEINLINE Vec2 operator*(float lhs, const Vec2& rhs)
+	friend FORCEINLINE Vec2 operator*(Scalar lhs, const Vec2& rhs)
 	{
 		return Vec2(lhs * rhs.X, lhs * rhs.Y);
 	}
@@ -144,7 +144,7 @@ public:
 		lhs = lhs * rhs;
 		return lhs;
 	}
-	friend FORCEINLINE Vec2& operator*=(Vec2& lhs, float rhs)
+	friend FORCEINLINE Vec2& operator*=(Vec2& lhs, Scalar rhs)
 	{
 		lhs = lhs * rhs;
 		return lhs;
@@ -153,11 +153,11 @@ public:
 	{
 		return Vec2(lhs.X / rhs.X, lhs.Y / rhs.Y);
 	}
-	friend FORCEINLINE Vec2 operator/(const Vec2& lhs, float rhs)
+	friend FORCEINLINE Vec2 operator/(const Vec2& lhs, Scalar rhs)
 	{
 		return Vec2(lhs.X / rhs, lhs.Y / rhs);
 	}
-	friend FORCEINLINE Vec2 operator/(float lhs, const Vec2& rhs)
+	friend FORCEINLINE Vec2 operator/(Scalar lhs, const Vec2& rhs)
 	{
 		return Vec2(lhs / rhs.X, lhs / rhs.Y);
 	}
@@ -166,7 +166,7 @@ public:
 		lhs = lhs / rhs;
 		return lhs;
 	}
-	friend FORCEINLINE Vec2& operator/=(Vec2& lhs, float rhs)
+	friend FORCEINLINE Vec2& operator/=(Vec2& lhs, Scalar rhs)
 	{
 		lhs = lhs / rhs;
 		return lhs;

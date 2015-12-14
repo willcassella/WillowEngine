@@ -140,6 +140,13 @@ namespace Implementation
 		static String Function(double value);
 	};
 
+	/** Implementation of 'ToString' for long double */
+	template <>
+	struct CORE_API ToString < long double > final
+	{
+		static String Function(long double value);
+	};
+
 	/** Implementation of 'ToString' for pointers */
 	template <typename T>
 	struct ToString < T* > final

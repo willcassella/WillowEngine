@@ -44,6 +44,7 @@
     <ClInclude Include="include\Core\Forwards\Memory.h" />
     <ClInclude Include="include\Core\Forwards\Operations.h" />
     <ClInclude Include="include\Core\Interface.h" />
+    <ClInclude Include="include\Core\Math\Angle.h" />
     <ClInclude Include="include\Core\Math\Mat4.h" />
     <ClInclude Include="include\Core\Math\Math.h" />
     <ClInclude Include="include\Core\Math\Quat.h" />

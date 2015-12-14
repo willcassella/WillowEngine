@@ -311,6 +311,24 @@ namespace Implementation
 		}
 	};
 
+	/** Implementation of 'TypeOf' for long double */
+	template <>
+	struct CORE_API TypeOf < long double > final
+	{
+	    /** Defined in 'Reflection/Reflection.cpp' */
+		static const PrimitiveInfo StaticTypeInfo;
+
+		FORCEINLINE static const PrimitiveInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const PrimitiveInfo& Function(long double /*value*/)
+		{
+			return StaticTypeInfo;
+		}
+	};
+
 	/** Implementation of 'TypeOf' for pointers */
 	template <typename PointedT>
 	struct TypeOf < PointedT* > final

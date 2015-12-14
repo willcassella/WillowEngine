@@ -2,8 +2,8 @@
 #pragma once
 
 #include "Vec3.h"
+#include "Angle.h"
 
-// @TODO: conversion to Euler angles, conversion to axis+angle, and rotation by Euler angles
 struct CORE_API Quat final
 {
 	///////////////////////
@@ -24,27 +24,27 @@ public:
 
 	/** Constructs a new Quaternion
 	* 'axis' - The axis about which this rotation represents
-	* 'angle' - The amount (in degrees) to rotate about 'axis' */
-	Quat(const Vec3& axis, float angle)
+	* 'angle' - The amount to rotate about 'axis' */
+	Quat(const Vec3& axis, Angle angle)
 	{
 		// Make sure the axis vector is normalized
 		Vec3 normAxis = axis.Normalize();
-		float sinHalfAngle = sinf(angle * 0.5f);
+		Scalar sinHalfAngle = std::sin(angle * Scalar(0.5));
 
 		X = normAxis.X * sinHalfAngle;
 		Y = normAxis.Y * sinHalfAngle;
 		Z = normAxis.Z * sinHalfAngle;
-		W = cosf(angle * 0.5f);
+		W = std::cos(angle * Scalar(0.5));
 	}
 
 	//////////////////
 	///   Fields   ///
 public:
 
-	float X;
-	float Y;
-	float Z;
-	float W;
+	Scalar X;
+	Scalar Y;
+	Scalar Z;
+	Scalar W;
 
 	///////////////////
 	///   Methods   ///
@@ -57,7 +57,7 @@ public:
 	}
 
 	/** Rotate this quaternion around an axis by a certain angle */
-	FORCEINLINE void RotateByAxisAngle(const Vec3& axis, float angle, bool local)
+	FORCEINLINE void RotateByAxisAngle(const Vec3& axis, Angle angle, bool local)
 	{
 		// Construct a quaternion from the axis and angle
 		Quat rotation(axis, angle);

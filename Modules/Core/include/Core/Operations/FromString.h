@@ -122,6 +122,13 @@ namespace Implementation
 		static String Function(double& value, const String& string);
 	};
 
+	/** Implementation of 'FromString' for long double */
+	template <>
+	struct CORE_API FromString < long double > final
+	{
+		static String Function(long double& value, const String& string);
+	};
+
 	/** Implementation of 'FromString' for pointers */
 	template <typename T>
 	struct FromString < T* > final

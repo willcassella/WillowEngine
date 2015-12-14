@@ -55,6 +55,9 @@ namespace Implementation
 	/** Register TypeInfo for double */
 	const PrimitiveInfo TypeOf<double>::StaticTypeInfo = TypeInfoBuilder<double>("double");
 
+	/** Register TypeInfo for long double */
+	const PrimitiveInfo TypeOf<long double>::StaticTypeInfo = TypeInfoBuilder<long double>("long double");
+
 	/** Register TypeInfo for 'String' */
 	const StructInfo TypeOf<String>::StaticTypeInfo = TypeInfoBuilder<String>("String");
 }

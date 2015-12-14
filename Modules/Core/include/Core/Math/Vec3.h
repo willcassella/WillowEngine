@@ -16,21 +16,21 @@ public:
 public:
 
 	constexpr Vec3()
-		: X(0.f), Y(0.f), Z(0.f)
+		: X(0), Y(0), Z(0)
 	{
 		// All done
 	}
-	constexpr Vec3(float x, float y, float z)
+	constexpr Vec3(Scalar x, Scalar y, Scalar z)
 		: X(x), Y(y), Z(z)
 	{
 		// All done
 	}
-	constexpr Vec3(const Vec2& xy, float z)
+	constexpr Vec3(const Vec2& xy, Scalar z)
 		: X(xy.X), Y(xy.Y), Z(z)
 	{
 		// All done
 	}
-	constexpr Vec3(float x, const Vec2& yz)
+	constexpr Vec3(Scalar x, const Vec2& yz)
 		: X(x), Y(yz.X), Z(yz.Y)
 	{
 		// All done
@@ -40,9 +40,9 @@ public:
 	///   Fields   ///
 public:
 
-	float X;
-	float Y;
-	float Z;
+	Scalar X;
+	Scalar Y;
+	Scalar Z;
 
 	///////////////////
 	///   Methods   ///
@@ -55,20 +55,20 @@ public:
 	}
 
 	/** Returns the length of this vector */
-	FORCEINLINE float Length() const
+	FORCEINLINE Scalar Length() const
 	{
-		return sqrtf(X * X + Y * Y + Z * Z);
+		return std::sqrt(X * X + Y * Y + Z * Z);
 	}
 
 	/** Returns the normalized version of this vector */
 	FORCEINLINE Vec3 Normalize() const
 	{
-		float length = Length();
+		Scalar length = Length();
 		return Vec3(X / length, Y / length, Z / length);
 	}
 
 	/** Returns the dot product of two vectors */
-	FORCEINLINE static float Dot(const Vec3& a, const Vec3& b)
+	FORCEINLINE static Scalar Dot(const Vec3& a, const Vec3& b)
 	{
 		return a.X * b.X + a.Y * b.Y + a.Z * b.Z;
 	}
@@ -84,9 +84,9 @@ public:
 	}
 
 	/** Returns the angle between two vectors */
-	FORCEINLINE static float Angle(const Vec3& a, const Vec3& b)
+	FORCEINLINE static Scalar Angle(const Vec3& a, const Vec3& b)
 	{
-		return acosf(Vec3::Dot(a.Normalize(), b.Normalize()));
+		return std::acos(Vec3::Dot(a.Normalize(), b.Normalize()));
 	}
 
 	////////////////////////////
@@ -106,11 +106,11 @@ public:
 	{
 		return Vec3(lhs.X + rhs.X, lhs.Y + rhs.Y, lhs.Z + rhs.Z);
 	}
-	friend FORCEINLINE Vec3 operator+(const Vec3& lhs, float rhs)
+	friend FORCEINLINE Vec3 operator+(const Vec3& lhs, Scalar rhs)
 	{
 		return Vec3(lhs.X + rhs, lhs.Y + rhs, lhs.Z + rhs);
 	}
-	friend FORCEINLINE Vec3 operator+(float lhs, const Vec3& rhs)
+	friend FORCEINLINE Vec3 operator+(Scalar lhs, const Vec3& rhs)
 	{
 		return Vec3(lhs + rhs.X, lhs + rhs.Y, lhs + rhs.Z);
 	}
@@ -119,7 +119,7 @@ public:
 		lhs = lhs + rhs;
 		return lhs;
 	}
-	friend FORCEINLINE Vec3& operator+=(Vec3& lhs, float rhs)
+	friend FORCEINLINE Vec3& operator+=(Vec3& lhs, Scalar rhs)
 	{
 		lhs = lhs + rhs;
 		return lhs;
@@ -128,11 +128,11 @@ public:
 	{
 		return Vec3(lhs.X - rhs.X, lhs.Y - rhs.Y, lhs.Z - rhs.Z);
 	}
-	friend FORCEINLINE Vec3 operator-(const Vec3& lhs, float rhs)
+	friend FORCEINLINE Vec3 operator-(const Vec3& lhs, Scalar rhs)
 	{
 		return Vec3(lhs.X - rhs, lhs.Y - rhs, lhs.Z - rhs);
 	}
-	friend FORCEINLINE Vec3 operator-(float lhs, const Vec3& rhs)
+	friend FORCEINLINE Vec3 operator-(Scalar lhs, const Vec3& rhs)
 	{
 		return Vec3(lhs - rhs.X, lhs - rhs.Y, lhs - rhs.Z);
 	}
@@ -141,7 +141,7 @@ public:
 		lhs = lhs - rhs;
 		return lhs;
 	}
-	friend FORCEINLINE Vec3& operator-=(Vec3& lhs, float rhs)
+	friend FORCEINLINE Vec3& operator-=(Vec3& lhs, Scalar rhs)
 	{
 		lhs = lhs - rhs;
 		return lhs;
@@ -150,11 +150,11 @@ public:
 	{
 		return Vec3(lhs.X * rhs.X, lhs.Y * rhs.Y, lhs.Z * rhs.Z);
 	}
-	friend FORCEINLINE Vec3 operator*(const Vec3& lhs, float rhs)
+	friend FORCEINLINE Vec3 operator*(const Vec3& lhs, Scalar rhs)
 	{
 		return Vec3(lhs.X * rhs, lhs.Y * rhs, lhs.Z * rhs);
 	}
-	friend FORCEINLINE Vec3 operator*(float lhs, const Vec3& rhs)
+	friend FORCEINLINE Vec3 operator*(Scalar lhs, const Vec3& rhs)
 	{
 		return Vec3(lhs * rhs.X, lhs * rhs.Y, lhs * rhs.Z);
 	}
@@ -163,7 +163,7 @@ public:
 		lhs = lhs * rhs;
 		return lhs;
 	}
-	friend FORCEINLINE Vec3& operator*=(Vec3& lhs, float rhs)
+	friend FORCEINLINE Vec3& operator*=(Vec3& lhs, Scalar rhs)
 	{
 		lhs = lhs * rhs;
 		return lhs;
@@ -172,11 +172,11 @@ public:
 	{
 		return Vec3(lhs.X / rhs.X, lhs.Y / rhs.Y, lhs.Z / rhs.Z);
 	}
-	friend FORCEINLINE Vec3 operator/(const Vec3& lhs, float rhs)
+	friend FORCEINLINE Vec3 operator/(const Vec3& lhs, Scalar rhs)
 	{
 		return Vec3(lhs.X / rhs, lhs.Y / rhs, lhs.Z / rhs);
 	}
-	friend FORCEINLINE Vec3 operator/(float lhs, const Vec3& rhs)
+	friend FORCEINLINE Vec3 operator/(Scalar lhs, const Vec3& rhs)
 	{
 		return Vec3(lhs / rhs.X, lhs / rhs.Y, lhs / rhs.Z);
 	}
@@ -185,7 +185,7 @@ public:
 		lhs = lhs / rhs;
 		return lhs;
 	}
-	friend FORCEINLINE Vec3& operator/=(Vec3& lhs, float rhs)
+	friend FORCEINLINE Vec3& operator/=(Vec3& lhs, Scalar rhs)
 	{
 		lhs = lhs / rhs;
 		return lhs;

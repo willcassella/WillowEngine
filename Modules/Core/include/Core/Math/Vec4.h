@@ -20,17 +20,17 @@ public:
 	{
 		// All done
 	}
-	constexpr Vec4(float x, float y, float z, float w)
+	constexpr Vec4(Scalar x, Scalar y, Scalar z, Scalar w)
 		: X(x), Y(y), Z(z), W(w)
 	{
 		// All done
 	}
-	constexpr Vec4(const Vec3& xyz, float w)
+	constexpr Vec4(const Vec3& xyz, Scalar w)
 		: X(xyz.X), Y(xyz.Y), Z(xyz.Z), W(w)
 	{
 		// All done
 	}
-	constexpr Vec4(float x, const Vec3& yzw)
+	constexpr Vec4(Scalar x, const Vec3& yzw)
 		: X(x), Y(yzw.X), Z(yzw.Y), W(yzw.Z)
 	{
 		// All done
@@ -40,17 +40,17 @@ public:
 	{
 		// All done
 	}
-	constexpr Vec4(const Vec2& xy, float z, float w)
+	constexpr Vec4(const Vec2& xy, Scalar z, Scalar w)
 		: X(xy.X), Y(xy.Y), Z(z), W(w)
 	{
 		// All done
 	}
-	constexpr Vec4(float x, const Vec2& yz, float w)
+	constexpr Vec4(Scalar x, const Vec2& yz, Scalar w)
 		: X(x), Y(yz.X), Z(yz.Y), W(w)
 	{
 		// All done
 	}
-	constexpr Vec4(float x, float y, const Vec2& zw)
+	constexpr Vec4(Scalar x, Scalar y, const Vec2& zw)
 		: X(x), Y(y), Z(zw.X), W(zw.Y)
 	{
 		// All done
@@ -60,10 +60,10 @@ public:
 	///   Fields   ///
 public:
 
-	float X;
-	float Y;
-	float Z;
-	float W;
+	Scalar X;
+	Scalar Y;
+	Scalar Z;
+	Scalar W;
 
 	///////////////////
 	///   Methods   ///
@@ -76,28 +76,28 @@ public:
 	}
 
 	/** Returns the length of this vector */
-	FORCEINLINE float Length() const
+	FORCEINLINE Scalar Length() const
 	{
-		return sqrtf(X * X + Y * Y + Z * Z + W * W);
+		return std::sqrt(X * X + Y * Y + Z * Z + W * W);
 	}
 
 	/** Normalizes this vector */
 	FORCEINLINE Vec4 Normalize() const
 	{
-		float length = Length();
+		auto length = Length();
 		return Vec4(X / length, Y / length, Z / length, W / length);
 	}
 
 	/** Returns the dot product of two Vec4s */
-	FORCEINLINE static float Dot(const Vec4& a, const Vec4& b)
+	FORCEINLINE static Scalar Dot(const Vec4& a, const Vec4& b)
 	{
 		return a.X * b.X + a.Y * b.Y + a.Z * b.Z + a.W * b.W;
 	}
 
 	/** Returns the angle between two radians */
-	FORCEINLINE static float Angle(const Vec4& a, const Vec4& b)
+	FORCEINLINE static Scalar Angle(const Vec4& a, const Vec4& b)
 	{
-		return acosf(Vec4::Dot(a.Normalize(), b.Normalize()));
+		return std::acos(Vec4::Dot(a.Normalize(), b.Normalize()));
 	}
 
 	////////////////////////////
@@ -114,11 +114,11 @@ public:
 	{
 		return Vec4(lhs.X + rhs.X, lhs.Y + rhs.Y, lhs.Z + rhs.Z, lhs.W + rhs.W);
 	}
-	friend FORCEINLINE Vec4 operator+(const Vec4& lhs, float rhs)
+	friend FORCEINLINE Vec4 operator+(const Vec4& lhs, Scalar rhs)
 	{
 		return Vec4(lhs.X + rhs, lhs.Y + rhs, lhs.Z + rhs, lhs.W + rhs);
 	}
-	friend FORCEINLINE Vec4 operator+(float lhs, const Vec4& rhs)
+	friend FORCEINLINE Vec4 operator+(Scalar lhs, const Vec4& rhs)
 	{
 		return Vec4(lhs + rhs.X, lhs + rhs.Y, lhs + rhs.Z, lhs + rhs.W);
 	}
@@ -127,7 +127,7 @@ public:
 		lhs = lhs + rhs;
 		return lhs;
 	}
-	friend FORCEINLINE Vec4& operator+=(Vec4& lhs, float rhs)
+	friend FORCEINLINE Vec4& operator+=(Vec4& lhs, Scalar rhs)
 	{
 		lhs = lhs + rhs;
 		return lhs;
@@ -136,11 +136,11 @@ public:
 	{
 		return Vec4(lhs.X - rhs.X, lhs.Y - rhs.Y, lhs.Z - rhs.Z, lhs.W - rhs.W);
 	}
-	friend FORCEINLINE Vec4 operator-(const Vec4& lhs, float rhs)
+	friend FORCEINLINE Vec4 operator-(const Vec4& lhs, Scalar rhs)
 	{
 		return Vec4(lhs.X - rhs, lhs.Y - rhs, lhs.Z - rhs, lhs.W - rhs);
 	}
-	friend FORCEINLINE Vec4 operator-(float lhs, const Vec4& rhs)
+	friend FORCEINLINE Vec4 operator-(Scalar lhs, const Vec4& rhs)
 	{
 		return Vec4(lhs - rhs.X, lhs - rhs.Y, lhs - rhs.Z, lhs - rhs.W);
 	}
@@ -149,7 +149,7 @@ public:
 		lhs = lhs - rhs;
 		return lhs;
 	}
-	friend FORCEINLINE Vec4& operator-=(Vec4& lhs, float rhs)
+	friend FORCEINLINE Vec4& operator-=(Vec4& lhs, Scalar rhs)
 	{
 		lhs = lhs - rhs;
 		return lhs;
@@ -158,11 +158,11 @@ public:
 	{
 		return Vec4(lhs.X * rhs.X, lhs.Y * rhs.Y, lhs.Z * rhs.Z, lhs.W * rhs.W);
 	}
-	friend FORCEINLINE Vec4 operator*(const Vec4& lhs, float rhs)
+	friend FORCEINLINE Vec4 operator*(const Vec4& lhs, Scalar rhs)
 	{
 		return Vec4(lhs.X * rhs, lhs.Y * rhs, lhs.Z * rhs, lhs.W * rhs);
 	}
-	friend FORCEINLINE Vec4 operator*(float lhs, const Vec4& rhs)
+	friend FORCEINLINE Vec4 operator*(Scalar lhs, const Vec4& rhs)
 	{
 		return Vec4(lhs * rhs.X, lhs * rhs.Y, lhs * rhs.Z, lhs * rhs.W);
 	}
@@ -171,7 +171,7 @@ public:
 		lhs = lhs * rhs;
 		return lhs;
 	}
-	friend FORCEINLINE Vec4& operator*=(Vec4& lhs, float rhs)
+	friend FORCEINLINE Vec4& operator*=(Vec4& lhs, Scalar rhs)
 	{
 		lhs = lhs * rhs;
 		return lhs;
@@ -180,11 +180,11 @@ public:
 	{
 		return Vec4(lhs.X * rhs.X, lhs.Y * rhs.Y, lhs.Z * rhs.Z, lhs.W * rhs.W);
 	}
-	friend FORCEINLINE Vec4 operator/(const Vec4& lhs, float rhs)
+	friend FORCEINLINE Vec4 operator/(const Vec4& lhs, Scalar rhs)
 	{
 		return Vec4(lhs.X * rhs, lhs.Y * rhs, lhs.Z * rhs, lhs.W * rhs);
 	}
-	friend FORCEINLINE Vec4 operator/(float lhs, const Vec4& rhs)
+	friend FORCEINLINE Vec4 operator/(Scalar lhs, const Vec4& rhs)
 	{
 		return Vec4(lhs / rhs.X, lhs / rhs.Y, lhs / rhs.Z, lhs / rhs.W);
 	}
@@ -193,7 +193,7 @@ public:
 		lhs = lhs / rhs;
 		return lhs;
 	}
-	friend FORCEINLINE Vec4& operator/=(Vec4& lhs, float rhs)
+	friend FORCEINLINE Vec4& operator/=(Vec4& lhs, Scalar rhs)
 	{
 		lhs = lhs / rhs;
 		return lhs;
