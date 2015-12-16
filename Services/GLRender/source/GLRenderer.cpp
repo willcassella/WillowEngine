@@ -1,15 +1,15 @@
 // GLRender.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
 #include <Core/Console.h>
-#include "glew.h"
-#include "../include/GLRender/GLRenderer.h"
 #include <Engine/Components/StaticMeshComponent.h>
 #include <Engine/Components/CameraComponent.h>
+#include "glew.h"
+#include "../include/GLRender/GLRenderer.h"
 
 ////////////////////////
 ///   Constructors   ///
 
-GLRenderer::GLRenderer(uint32 /*width*/, uint32 /*height*/)
+GLRenderer::GLRenderer(uint32 width, uint32 height)
 {
 	// Initialize GLEW
 	glewExperimental = GL_TRUE;
@@ -22,89 +22,89 @@ GLRenderer::GLRenderer(uint32 /*width*/, uint32 /*height*/)
 	glEnable(GL_CULL_FACE);
 	glDisable(GL_STENCIL_TEST);
 
-//	// Create a framebuffer for deferred rendering (GBuffer)
-//	glGenFramebuffers(1, &gBuffer);
-//	glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
-//
-//	// Create a depth buffer for the GBuffer
-//	glGenTextures(1, &depthBuffer);
-//	glBindTexture(GL_TEXTURE_2D, depthBuffer);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-//	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, width, height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, NULL); // 1 32-bit unsigned integer component for depth
-//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthBuffer, 0);
-//
-//	// Create a position buffer for the GBuffer
-//	glGenTextures(1, &positionBuffer);
-//	glBindTexture(GL_TEXTURE_2D, positionBuffer);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-//	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, width, height, 0, GL_RGB, GL_FLOAT, NULL); // 3 32-bit floating point components for position
-//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, positionBuffer, 0);
-//
-//	// Create a diffuse buffer for the GBuffer
-//	glGenTextures(1, &diffuseBuffer);
-//	glBindTexture(GL_TEXTURE_2D, diffuseBuffer);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-//	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL); // 4 8-bit unsigned integer components for diffuse
-//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, diffuseBuffer, 0);
-//
-//	// Create a normal buffer for the GBuffer
-//	glGenTextures(1, &normalBuffer);
-//	glBindTexture(GL_TEXTURE_2D, normalBuffer);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-//	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, width, height, 0, GL_RGB, GL_FLOAT, NULL); // 3 32-bit floating point components for normal
-//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, normalBuffer, 0);
-//
-//	// Create a specular buffer for the GBuffer
-//	glGenTextures(1, &specularBuffer);
-//	glBindTexture(GL_TEXTURE_2D, specularBuffer);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-//	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, width, height, 0, GL_RED, GL_FLOAT, NULL); // 1 32-bit floating point component for specular
-//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, specularBuffer, 0);
-//
-//	// Create a metallic buffer for the GBuffer
-//	glGenTextures(1, &metallicBuffer);
-//	glBindTexture(GL_TEXTURE_2D, metallicBuffer);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-//	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, width, height, 0, GL_RED, GL_FLOAT, NULL); // 1 32-bit floating point component for metallic
-//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT4, GL_TEXTURE_2D, metallicBuffer, 0);
-//
-//	// Create a roughness buffer for the GBuffer
-//	glGenTextures(1, &roughnessBuffer);
-//	glBindTexture(GL_TEXTURE_2D, roughnessBuffer);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-//	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, width, height, 0, GL_RED, GL_FLOAT, NULL); // 1 32-bit floating point component for roughness
-//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT5, GL_TEXTURE_2D, roughnessBuffer, 0);
-//
-//	// Make sure the GBuffer was constructed successfully
-//	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
-//	{
-//		Console::WriteLine("GBuffer created successfully");
-//	}
-//	else
-//	{
-//		Console::WriteLine("Error creating the GBuffer");
-//	}
+	// Create a framebuffer for deferred rendering (GBuffer)
+	glGenFramebuffers(1, &_gBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, _gBuffer);
+
+	// Create a depth buffer for the GBuffer
+	glGenTextures(1, &_depthBuffer);
+	glBindTexture(GL_TEXTURE_2D, _depthBuffer);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, width, height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, nullptr); // 1 32-bit unsigned integer component for depth
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _depthBuffer, 0);
+
+	// Create a position buffer for the GBuffer
+	glGenTextures(1, &_positionBuffer);
+	glBindTexture(GL_TEXTURE_2D, _positionBuffer);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, width, height, 0, GL_RGB, GL_FLOAT, nullptr); // 3 32-bit floating point components for position
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _positionBuffer, 0);
+
+	// Create a diffuse buffer for the GBuffer
+	glGenTextures(1, &_diffuseBuffer);
+	glBindTexture(GL_TEXTURE_2D, _diffuseBuffer);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr); // 4 8-bit unsigned integer components for diffuse
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, _diffuseBuffer, 0);
+
+	// Create a normal buffer for the GBuffer
+	glGenTextures(1, &_normalBuffer);
+	glBindTexture(GL_TEXTURE_2D, _normalBuffer);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, width, height, 0, GL_RGB, GL_FLOAT, nullptr); // 3 32-bit floating point components for normal
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, _normalBuffer, 0);
+
+	// Create a specular buffer for the GBuffer
+	glGenTextures(1, &_specularBuffer);
+	glBindTexture(GL_TEXTURE_2D, _specularBuffer);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, width, height, 0, GL_RED, GL_FLOAT, NULL); // 1 32-bit floating point component for specular
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, _specularBuffer, 0);
+
+	// Create a metallic buffer for the GBuffer
+	glGenTextures(1, &_metallicBuffer);
+	glBindTexture(GL_TEXTURE_2D, _metallicBuffer);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, width, height, 0, GL_RED, GL_FLOAT, nullptr); // 1 32-bit floating point component for metallic
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT4, GL_TEXTURE_2D, _metallicBuffer, 0);
+
+	// Create a roughness buffer for the GBuffer
+	glGenTextures(1, &_roughnessBuffer);
+	glBindTexture(GL_TEXTURE_2D, _roughnessBuffer);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, width, height, 0, GL_RED, GL_FLOAT, nullptr); // 1 32-bit floating point component for roughness
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT5, GL_TEXTURE_2D, _roughnessBuffer, 0);
+
+	// Make sure the GBuffer was constructed successfully
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
+	{
+		Console::WriteLine("GBuffer created successfully");
+	}
+	else
+	{
+		Console::WriteLine("Error creating the GBuffer");
+	}
 //
 //	// Create a VAO for screen quad
 //	glGenVertexArrays(1, &screenQuadVAO);
@@ -149,34 +149,35 @@ GLRenderer::GLRenderer(uint32 /*width*/, uint32 /*height*/)
 
 GLRenderer::~GLRenderer()
 {
-	// TODO
+	// Todo
 }
 
 ///////////////////
 ///   Methods   ///
 
-void GLRenderer::RenderScene(const Scene& scene)
+void GLRenderer::RenderWorld(const World& world)
 {
 	// Clear color and depth buffer
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
-	// Get first camera in scene
-	const auto* cam = scene.GetComponentsOfType<CameraComponent>().FirstOrDefault();
+	// Get first camera in the World
+	const auto* cam = world.GetComponentsOfType<CameraComponent>().FirstOrDefault();
 
-	// We can't render the scene without a camera
+	// We can't render the World without a camera
 	if (!cam)
 		return;
 
-	Mat4 view = cam->GetTransform().GetMatrix().Inverse();
+	Mat4 view = cam->GetTransformationMatrix().Inverse();
 	Mat4 proj = cam->GetPerspective();
 
-	// Render each StaticMeshComponent in the scene
-	for (auto staticMesh : scene.GetComponentsOfType<StaticMeshComponent>())
+	// Render each StaticMeshComponent in the World
+	for (auto staticMesh : world.GetComponentsOfType<StaticMeshComponent>())
 	{
 		if (!staticMesh->Visible)
 			continue;
 
-		Mat4 model = staticMesh->GetTransform().GetMatrix();
+		Mat4 model = staticMesh->GetTransformationMatrix();
 		
 		// Bind the mesh and material
 		auto& mesh = FindStaticMesh(*staticMesh->Mesh);
@@ -245,7 +246,7 @@ GLStaticMesh& GLRenderer::FindStaticMesh(const StaticMesh& asset)
 //	glEnable(GL_DEPTH_TEST);
 //
 //	// Bind the GBuffer and its sub-buffers for drawing
-//	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, gBuffer);
+//	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _gBuffer);
 //	BufferID drawBuffers[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4, GL_COLOR_ATTACHMENT5 };
 //	glDrawBuffers(6, drawBuffers);
 //
@@ -273,16 +274,16 @@ GLStaticMesh& GLRenderer::FindStaticMesh(const StaticMesh& asset)
 //
 //	// Bind the GBuffer's sub-buffers as textures for reading
 //	glActiveTexture(GL_TEXTURE0);
-//	glBindTexture(GL_TEXTURE_2D, positionBuffer);
+//	glBindTexture(GL_TEXTURE_2D, _positionBuffer);
 //	
 //	glActiveTexture(GL_TEXTURE1);
-//	glBindTexture(GL_TEXTURE_2D, diffuseBuffer);
+//	glBindTexture(GL_TEXTURE_2D, _diffuseBuffer);
 //	
 //	glActiveTexture(GL_TEXTURE2);
-//	glBindTexture(GL_TEXTURE_2D, normalBuffer);
+//	glBindTexture(GL_TEXTURE_2D, _normalBuffer);
 //
 //	glActiveTexture(GL_TEXTURE3);
-//	glBindTexture(GL_TEXTURE_2D, specularBuffer);
+//	glBindTexture(GL_TEXTURE_2D, _specularBuffer);
 //
 //	// Draw the screen quad
 //	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);

@@ -2,7 +2,7 @@
 #pragma once
 
 #include <Core/Math/Vec3.h>
-#include <Engine/Scene.h>
+#include <Engine/World.h>
 #include <Engine/ServiceInterfaces/IRenderer.h>
 #include <Engine/Assets/Shader.h>
 #include <Engine/Assets/Texture.h>
@@ -31,8 +31,8 @@ public:
 	///   Methods   ///
 public:
 
-	/** Renders the given scene. */
-	void RenderScene(const Scene& scene) override;
+	/** Renders the given World. */
+	void RenderWorld(const World& world) override;
 
 	/** Finds or loads a GLShader from the given Shader asset. */
 	GLShader& FindShader(const Shader& asset);
@@ -61,12 +61,13 @@ private:
 	Table<AssetID, GLTexture> _textures;
 	Table<AssetID, GLMaterial> _materials;
 	Table<AssetID, GLStaticMesh> _staticMeshes;
-	//BufferID gBuffer;
-	//BufferID depthBuffer;
-	//BufferID positionBuffer;
-	//BufferID diffuseBuffer;
-	//BufferID normalBuffer;
-	//BufferID specularBuffer;
-	//BufferID metallicBuffer;
-	//BufferID roughnessBuffer;
+	BufferID _defaultFrameBuffer;
+	BufferID _gBuffer;
+	BufferID _depthBuffer;
+	BufferID _positionBuffer;
+	BufferID _diffuseBuffer;
+	BufferID _normalBuffer;
+	BufferID _specularBuffer;
+	BufferID _metallicBuffer;
+	BufferID _roughnessBuffer;
 };
