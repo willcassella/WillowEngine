@@ -212,6 +212,8 @@ Component& World::SpawnComponent(UniquePtr<Component> component)
 	component->_world = this;
 	_components[component->_id] = component.Transfer();
 
+	ref.Initialize(self);
+
 	return ref;
 }
 

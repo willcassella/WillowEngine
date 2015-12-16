@@ -8,7 +8,19 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Component);
+BUILD_REFLECTION(Component)
+.Data("Owner", &Component::_owner)
+.Data("World", &Component::_world)
+.Data("ID", &Component::_id)
+.Data("Status", &Component::_status)
+.Data("Transform", &Component::_transform)
+.Data("Parent", &Component::_parent)
+.Data("Children", &Component::_children);
+
+BUILD_ENUM_REFLECTION(Component::Status)
+.Value("Uninitialized", Component::Status::Uninitialized, "This Component has not yet been initialized.")
+.Value("Initializing", Component::Status::Initializing, "This Component is currently initializing.")
+.Value("Initialized", Component::Status::Initialized, "This Component has successfully been Initialized.");
 
 ////////////////////////
 ///   Constructors   ///
@@ -19,6 +31,7 @@ Component::Component()
 	_owner = nullptr;
 	_world = nullptr;
 	_id = 0;
+	_status = Status::Uninitialized;
 }
 
 Component::~Component()
@@ -77,4 +90,19 @@ Mat4 Component::GetTransformationMatrix() const
 	{
 		return _transform.GetMatrix();
 	}
+}
+
+void Component::OnInitialize()
+{
+	assert(_status == Status::Initializing /* You may not call 'Component::OnInitialize' before or after a Component has begun Initialization. */);
+}
+
+void Component::Initialize(World& world)
+{
+	assert(_status == Status::Uninitialized /* You may not call 'Component::Initialize' after a Component has begun Initialization. */);
+	_world = &world;
+
+	_status = Status::Initializing;
+	this->OnInitialize();
+	_status = Status::Initialized;
 }

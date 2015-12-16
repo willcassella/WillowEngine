@@ -24,6 +24,19 @@ public:
 	/** The type of ID for components. */
 	using ID = uint64;
 
+	/** Different management states a Component may exist in. */
+	enum class Status : byte
+	{
+		/* This Component has not yet been initialized, and should not be used in the Scene. */
+		Uninitialized,
+
+		/* This Component is currently undergoing its Initialization procedure. */
+		Initializing,
+		
+		/* This Component is currently Initialized in the Scene. */
+		Initialized
+	};
+
 	////////////////////////
 	///   Constructors   ///
 public:
@@ -39,6 +52,12 @@ public:
 	FORCEINLINE ID GetID() const
 	{
 		return _id;
+	}
+
+	/** Returns the management status of this Component. */
+	FORCEINLINE Status GetStatus() const
+	{
+		return _status;
 	}
 
 	/** Returns whether this Component is an orphan (has no owning GameObject). */
@@ -219,6 +238,15 @@ public:
 	/** Returns the transformation matrix of this Component. */
 	Mat4 GetTransformationMatrix() const;
 
+protected:
+
+	/** Method called when this Component is spawned into the World. */
+	virtual void OnInitialize();
+
+private:
+
+	void Initialize(World& world);
+
 	////////////////
 	///   Data   ///
 private:
@@ -226,8 +254,11 @@ private:
 	GameObject* _owner;
 	World* _world;
 	ID _id;
-	
+	Status _status;
+
 	Transform _transform;
 	Component* _parent;
 	Array<Component*> _children;
 };
+
+REFLECTABLE_ENUM(Component::Status);
