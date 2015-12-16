@@ -61,7 +61,7 @@ private:
 	Table<AssetID, GLTexture> _textures;
 	Table<AssetID, GLMaterial> _materials;
 	Table<AssetID, GLStaticMesh> _staticMeshes;
-	BufferID _defaultFrameBuffer;
+	/*BufferID _defaultFrameBuffer;*/
 	BufferID _gBuffer;
 	BufferID _depthBuffer;
 	BufferID _positionBuffer;
