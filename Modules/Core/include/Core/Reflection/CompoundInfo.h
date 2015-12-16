@@ -312,10 +312,10 @@ public:
 		propInfo._ownerType = &TypeOf<CompoundT>();
 		propInfo._isReadOnly = false;
 
-		ImplementToString(propInfo, getter);
-		ImplementFromString(propInfo, getter, setter);
-		ImplementToArchive(propInfo, getter);
-		ImplementFromArchive(propInfo, getter, setter);
+		ImplementPropertyToString(propInfo, getter);
+		ImplementPropertyFromString(propInfo, getter, setter);
+		ImplementPropertyToArchive(propInfo, getter);
+		ImplementPropertyFromArchive(propInfo, getter, setter);
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(propInfo));
 		return this->SelfAsMostSpecificTypeInfoBuilder();
