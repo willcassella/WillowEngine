@@ -759,7 +759,7 @@ public:
 	}
 
 	/** Appends an Array onto another Array. */
-	template <typename RelatedT>//, WHERE(std::is_constructible<T, const RelatedT&>::value)>
+	template <typename RelatedT, WHERE(std::is_constructible<T, const RelatedT&>::value)>
 	friend Array& operator+=(Array& lhs, const Array<RelatedT>& rhs)
 	{
 		lhs.ReserveAdditional(rhs.Size());
@@ -770,6 +770,13 @@ public:
 		}
 
 		return lhs;
+	}
+
+	/** Converts this Array to another Array by reference. */
+	template <typename CompatibleT, WHERE(std::is_convertible<T*, const CompatibleT*>::value && sizeof(T) == sizeof(CompatibleT))>
+	operator const Array<CompatibleT>&() const
+	{
+		return reinterpret_cast<const Array<CompatibleT>&>(self);
 	}
 
 	////////////////
