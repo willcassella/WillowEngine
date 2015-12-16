@@ -4,7 +4,8 @@
 #include "Component.h"
 #include "GHandle.h"
 
-class ENGINE_API GameObject : public Object
+class ENGINE_API GameObject : public Object,
+	public ITransformable
 {
 	///////////////////////
 	///   Information   ///
@@ -12,7 +13,7 @@ public:
 
 	REFLECTABLE_CLASS
 	EXTENDS(Object)
-	friend Scene;
+	friend World;
 
 	///////////////////////
 	///   Inner Types   ///
@@ -31,25 +32,10 @@ public:
 	///   Methods   ///
 public:
 
-	/** Returns the Transform of this GameObject.
-	* Note: Returns 'null' if this GameObject has no root component. */
-	FORCEINLINE Transform* GetTransform()
+	/** Returns the ID of this GameObject. */
+	FORCEINLINE ID GetID() const
 	{
-		return const_cast<Transform*>(const_self.GetTransform());
-	}
-
-	/** Returns the Transform of this GameObject.
-	* Note: Returns 'null' if this GameObject has no root component. */
-	FORCEINLINE const Transform* GetTransform() const
-	{
-		if (_rootComponent)
-		{
-			return &_rootComponent->GetTransform();
-		}
-		else
-		{
-			return nullptr;
-		}
+		return _id;
 	}
 
 	/** Returns the name of this GameObject. */
@@ -58,16 +44,16 @@ public:
 		return _name;
 	}
 
-	/** Returns a reference to the scene that this GameObject is a part of. */
-	FORCEINLINE Scene& GetScene()
+	/** Returns a reference to the World that this GameObject is a part of. */
+	FORCEINLINE World& GetWorld()
 	{
-		return *_scene;
+		return *_world;
 	}
 
-	/** Returns a reference to the Scene that this GameObject is a part of. */
-	FORCEINLINE const Scene& GetScene() const
+	/** Returns a reference to the World that this GameObject is a part of. */
+	FORCEINLINE const World& GetWorld() const
 	{
-		return *_scene;
+		return *_world;
 	}
 
 	/** Returns whether this GameObject has spawned yet. */
@@ -76,16 +62,28 @@ public:
 		return _hasSpawned;
 	}
 
-	/** Returns whether this GameObject will be destroyed at the end of the scene update. */
+	/** Returns whether this GameObject will be destroyed at the end of the World update. */
 	FORCEINLINE bool IsDestroyed() const
 	{
 		return _isDestroyed;
 	}
 
-	/** Returns the ID of this GameObject. */
-	FORCEINLINE ID GetID() const
+	/** Returns the root Component of this GameObject. */
+	FORCEINLINE Component* GetRootComponent()
 	{
-		return _id;
+		return _rootComponent;
+	}
+
+	/** Returns the root Component of this GameObject. */
+	FORCEINLINE const Component* GetRootComponent() const
+	{
+		return _rootComponent;
+	}
+
+	/** Sets the root Component of this GameObject. */
+	FORCEINLINE void SetRootComponent(Component* rootComponent)
+	{
+		_rootComponent = rootComponent;
 	}
 
 	/** Returns a collection of all the Components attached to this GameObject. */
@@ -179,16 +177,16 @@ public:
 	template <class ComponentT>
 	ComponentT& AddComponent();
 
-	/** Adds the given Component to this GameObject, and parents it to this GameObject's RootComponent. 
-	* NOTE: If this GameObject has no root component, this will become it. */
+	/** Adds the given Component to this GameObject, and parents it to this GameObject's root Component. 
+	* NOTE: If this GameObject has no root Component, this will become it. */
 	void Attach(Component& component);
 
-	/** Adds the given Component to this GameObject, and parents it to this GameObject's RootComponent.
-	* NOTE: If this GameObject has no root component, this will become it. */
+	/** Adds the given Component to this GameObject, and parents it to this GameObject's root Component.
+	* NOTE: If this GameObject has no root Component, this will become it. */
 	void Attach(GHandle<Component> handle);
 
-	/** Spawns a new instance of the given Component type, and parents it to this GameObject's RootComponent.
-	* NOTE: If this GameObject has no root component, this will become it. */
+	/** Spawns a new instance of the given Component type, and parents it to this GameObject's root Component.
+	* NOTE: If this GameObject has no root Component, this will become it. */
 	template <class ComponentT>
 	ComponentT& Attach();
 
@@ -215,6 +213,108 @@ public:
 	/** Initiates the destruction procedure for this GameObject. */
 	void Destroy();
 
+	/** Sets the location of this GameObject's root Component relative to its parent.
+	* NOTE: If the root Component has no parent, this has the same effect as "SetWorldLocation".
+	* NOTE: If this GameObject has no root Component, this has no effect. */
+	FORCEINLINE void SetLocation(const Vec3& vec) final override
+	{
+		if (_rootComponent)
+		{
+			_rootComponent->SetLocation(vec);
+		}
+	}
+
+	/** Sets the location of this GameObject's root Component in world space. 
+	* NOTE: If this GameObject has no root Component, this has no effect. */
+	FORCEINLINE void SetWorldLocation(const Vec3& vec) final override
+	{
+		if (_rootComponent)
+		{
+			_rootComponent->SetWorldLocation(vec);
+		}
+	}
+
+	/** Translates this GameObject's root Component along the given vector, in local space.
+	* NOTE: If this GameObject has no root Component, this has no effect. */
+	FORCEINLINE void Translate(const Vec3& vec) final override
+	{
+		if (_rootComponent)
+		{
+			_rootComponent->Translate(vec);
+		}
+	}
+
+	/** Translates this GameObject's root Component along the given vector, in world space.
+	* NOTE: If this GameObject has no root Component, this has no effect. */
+	FORCEINLINE void TranslateGlobal(const Vec3& vec) final override
+	{
+		if (_rootComponent)
+		{
+			_rootComponent->TranslateGlobal(vec);
+		}
+	}
+
+	/** Sets the rotation of this GameObject's root Component relative to its parent.
+	* NOTE: If the root Component has no parent, this has the same effect as "SetWorldRotation".
+	* NOTE: If this GameObject has no root Component, this has no effect. */
+	FORCEINLINE void SetRotation(const Quat& rot) final override
+	{
+		if (_rootComponent)
+		{
+			_rootComponent->SetRotation(rot);
+		}
+	}
+
+	/** Sets the rotation of this GameObject's root Component in world space.
+	* NOTE: If this GameObject has no root Component, this has no effect. */
+	FORCEINLINE void SetWorldRotation(const Quat& rot) final override
+	{
+		if (_rootComponent)
+		{
+			_rootComponent->SetWorldRotation(rot);
+		}
+	}
+
+	/** Rotates this GameObject's root Component along the given axis by the given angle, in local space.
+	* NOTE: If this GameObject has no root Component, this has no effect. */
+	FORCEINLINE void Rotate(const Vec3& axis, Angle angle) final override
+	{
+		if (_rootComponent)
+		{
+			_rootComponent->Rotate(axis, angle);
+		}
+	}
+
+	/** Rotates this GameObject's root Component along the given axis by the given angle, in world space.
+	* NOTE: If this GameObject has no root Component, this has no effect. */
+	FORCEINLINE void RotateGlobal(const Vec3& axis, Angle angle) final override
+	{
+		if (_rootComponent)
+		{
+			_rootComponent->RotateGlobal(axis, angle);
+		}
+	}
+
+	/** Sets this GameObject's root Component's scale to the given value.
+	* NOTE: If this GameObject has no root Component, this has no effect. */
+	FORCEINLINE void SetScale(const Vec3& scale) final override
+	{
+		if (_rootComponent)
+		{
+			_rootComponent->SetScale(scale);
+		}
+	}
+
+	/** Scales this GameObject's root Component by the given value.
+	* NOTE: If this GameObject has no root Component, this has no effect. */
+	FORCEINLINE void Scale(const Vec3& scale) final override
+	{
+		if (_rootComponent)
+		{
+			_rootComponent->Scale(scale);
+		}
+	}
+
 protected:
 
 	/** Performs building procedure for this GameObject. */
@@ -230,7 +330,7 @@ protected:
 	///   Data   ///
 private:
 
-	Scene* _scene;
+	World* _world;
 	Component* _rootComponent;
 	Table<Component::ID, Component*> _components;
 	Array<UniquePtr<Behavior>> _behaviors;

@@ -1,14 +1,14 @@
 // GameObject.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
 #include "../include/Engine/GameObject.h"
-#include "../include/Engine/Scene.h"
+#include "../include/Engine/World.h"
 
 //////////////////////
 ///   Reflection   ///
 
 BUILD_REFLECTION(GameObject)
 .Data("ID", &GameObject::_id)
-.Data("Scene", &GameObject::_scene)
+.Data("World", &GameObject::_world)
 .Data("Destroyed", &GameObject::_isDestroyed)
 .Field("Name", &GameObject::_name, "The name of this GameObject.", FF_EditorOnly)
 .Property("Destroyed", &GameObject::_isDestroyed, nullptr, "Whether this GameObject has been destroyed.");
@@ -18,7 +18,8 @@ BUILD_REFLECTION(GameObject)
 
 GameObject::GameObject()
 {
-	_scene = nullptr;
+	_hasSpawned = false;
+	_world = nullptr;
 	_rootComponent = nullptr;
 	_id = 0;
 	_isDestroyed = false;
@@ -41,7 +42,7 @@ const Component* GameObject::GetComponent(GHandle<Component> handle) const
 
 void GameObject::AddComponent(Component& component)
 {
-	assert(&component.GetScene() == _scene);
+	assert(&component.GetWorld() == _world);
 
 	_components[component.GetID()] = &component;
 	component._owner = this;
@@ -49,7 +50,7 @@ void GameObject::AddComponent(Component& component)
 
 void GameObject::AddComponent(GHandle<Component> handle)
 {
-	auto pComponent = GetScene().FindComponent(handle);
+	auto pComponent = GetWorld().FindComponent(handle);
 	assert(pComponent);
 	
 	AddComponent(*pComponent);
@@ -61,7 +62,7 @@ void GameObject::Attach(Component& component)
 
 	if (_rootComponent)
 	{
-		component.GetTransform().SetParent(&_rootComponent->GetTransform());
+		component.SetParent(_rootComponent);
 	}
 	else
 	{
@@ -71,7 +72,7 @@ void GameObject::Attach(Component& component)
 
 void GameObject::Attach(GHandle<Component> handle)
 {
-	auto pComponent = GetScene().FindComponent(handle);
+	auto pComponent = GetWorld().FindComponent(handle);
 	assert(pComponent);
 
 	Attach(*pComponent);
@@ -79,7 +80,7 @@ void GameObject::Attach(GHandle<Component> handle)
 
 void GameObject::RemoveComponent(Component& component)
 {
-	assert(&component.GetScene() == _scene);
+	assert(&component.GetWorld() == _world);
 
 	_components.Remove(component.GetID());
 	component._owner = nullptr;
@@ -87,7 +88,7 @@ void GameObject::RemoveComponent(Component& component)
 
 void GameObject::RemoveComponent(GHandle<Component> handle)
 {
-	auto pComponent = GetScene().FindComponent(handle);
+	auto pComponent = GetWorld().FindComponent(handle);
 	assert(pComponent);
 
 	RemoveComponent(*pComponent);
@@ -96,12 +97,12 @@ void GameObject::RemoveComponent(GHandle<Component> handle)
 void GameObject::Detach(Component& component)
 {
 	RemoveComponent(component);
-	component.GetTransform().SetParent(nullptr);
+	component.SetParent(nullptr);
 }
 
 void GameObject::Detach(GHandle<Component> handle)
 {
-	auto pComponent = GetScene().FindComponent(handle);
+	auto pComponent = GetWorld().FindComponent(handle);
 	assert(pComponent);
 
 	Detach(*pComponent);
@@ -109,7 +110,7 @@ void GameObject::Detach(GHandle<Component> handle)
 
 void GameObject::Destroy()
 {
-	GetScene().Destroy(*this);
+	GetWorld().Destroy(*this);
 }
 
 void GameObject::Build()

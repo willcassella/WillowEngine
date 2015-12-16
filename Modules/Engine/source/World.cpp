@@ -1,9 +1,9 @@
-// Scene.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
+// World.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
 #include <memory>
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
-#include "../include/Engine/Scene.h"
+#include "../include/Engine/World.h"
 #include "../include/Engine/GameObjects/Prop.h"
 #include "../include/Engine/ServiceInterfaces/IRenderer.h"
 
@@ -86,7 +86,7 @@ public:
 		btRigidBody::btRigidBodyConstructionInfo sphereRigidBodyCI(mass, GunMotionState.get(), GunShape.get(), localInertia);
 		GunRigidBody = std::make_unique<btRigidBody>(sphereRigidBodyCI);
 
-		// Add the gun to the scene
+		// Add the gun to the world
 		DynamicsWorld->addRigidBody(GunRigidBody.get());
 	}
 
@@ -125,36 +125,36 @@ public:
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Scene)
-.Data("GameObject", &Scene::_gameObjects)
-.Data("Components", &Scene::_components)
-.Field("TimeDilation", &Scene::TimeDilation, "The time dilation of the scene. Default is 1.")
-.Field("TimeStep", &Scene::TimeStep, "The amount of time (ms) that each update of the scene represents.");
+BUILD_REFLECTION(World)
+.Data("GameObject", &World::_gameObjects)
+.Data("Components", &World::_components)
+.Field("TimeDilation", &World::TimeDilation, "The time dilation of the world. Default is 1.")
+.Field("TimeStep", &World::TimeStep, "The amount of time (ms) that each update of the world represents.");
 
 ////////////////////////
 ///   Constructors   ///
 
-Scene::Scene()
-	: _physicsData(nullptr), 
-	_nextGameObjectID(1), 
-	_nextComponentID(1)
+World::World()
 {
+	_nextGameObjectID = 1;
+	_nextComponentID = 1;
 	testObject = &Spawn<Prop>();
 	testObject->GetComponent(testObject->MeshComponent)->Material = "Content/Materials/Sponza.mat"_p;
 	testObject->GetComponent(testObject->MeshComponent)->Mesh = "Content/Models/battle_rifle.dat";
 	testObject->GetComponent(testObject->MeshComponent)->InstanceParams["diffuse"] = AssetPtr<Texture>("Content/Textures/battle_rifle_tex.png");
-	_physicsData = new PhysicsData();
+	_physicsData = std::make_unique<PhysicsData>();
 }
 
-Scene::~Scene()
+World::~World()
 {
-	delete _physicsData;
+	// Do nothing (PhysicsData is only defined in this file, so we must define a destructor here to prevent errors when other files attempt
+	// to call the implicitly defined destructor. This is why we can't have nice things).
 }
 
 ///////////////////
 ///   Methods   ///
 
-void Scene::Update()
+void World::Update()
 {
 	Events.DispatchEvent("Update", 1.f);
 	Events.Flush();
@@ -181,47 +181,45 @@ void Scene::Update()
 	_physicsData->GunRigidBody->getMotionState()->getWorldTransform(trans);
 
 	// Move the test object
-	Transform* t = testObject->GetTransform();
-	t->Location.X = trans.getOrigin().getX();
-	t->Location.Y = trans.getOrigin().getY();
-	t->Location.Z = trans.getOrigin().getZ();
+	testObject->GetRootComponent()->SetLocation({ trans.getOrigin().getX(), trans.getOrigin().getY(), trans.getOrigin().getZ() });
 
-	t->Orientation.X = -trans.getRotation().getX();
-	t->Orientation.Y = -trans.getRotation().getY();
-	t->Orientation.Z = -trans.getRotation().getZ();
-	t->Orientation.W = -trans.getRotation().getW();
+
+	//t->Orientation.X = -trans.getRotation().getX();
+	//t->Orientation.Y = -trans.getRotation().getY();
+	//t->Orientation.Z = -trans.getRotation().getZ();
+	//t->Orientation.W = -trans.getRotation().getW();
 
 	//_physicsData->GunRigidBody->setMotionState(_physicsData->GunMotionState.get());
 }
 
-void Scene::Destroy(GameObject& object)
+void World::Destroy(GameObject& object)
 {
 	_destroyedObjects.Push(&object);
 	object._isDestroyed = true;
 	object.OnDestroy();
 }
 
-void Scene::Destroy(GHandle<GameObject> handle)
+void World::Destroy(GHandle<GameObject> handle)
 {
 	_gameObjects.Find(handle.GetID(), [this](auto& object) { this->Destroy(*object); });
 }
 
 
-Component& Scene::SpawnComponent(UniquePtr<Component> component)
+Component& World::SpawnComponent(UniquePtr<Component> component)
 {
 	auto& ref = *component;
 	component->_id = _nextComponentID++;
-	component->_scene = this;
+	component->_world = this;
 	_components[component->_id] = component.Transfer();
 
 	return ref;
 }
 
-GameObject& Scene::SpawnGameObject(UniquePtr<GameObject> gameObject)
+GameObject& World::SpawnGameObject(UniquePtr<GameObject> gameObject)
 {
 	auto& ref = *gameObject;
 	gameObject->_id = _nextGameObjectID++;
-	gameObject->_scene = this;
+	gameObject->_world = this;
 	_gameObjects[gameObject->_id] = gameObject.Transfer();
 	_unspawnedObjects.Push(&ref);
 

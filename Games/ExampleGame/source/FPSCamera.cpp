@@ -1,6 +1,6 @@
 // FPSCamera.cpp
 
-#include <Engine/Scene.h>
+#include <Engine/World.h>
 #include "../include/ExampleGame/FPSCamera.h"
 
 //////////////////////
@@ -15,9 +15,9 @@ void FPSCamera::OnSpawn()
 {
 	Base::OnSpawn();
 
-	GetScene().Events.Bind("Move", self, &FPSCamera::Move);
-	GetScene().Events.Bind("Look", self, &FPSCamera::Look);
-	GetScene().Events.Bind("Click", self, &FPSCamera::Click);
+	GetWorld().Events.Bind("Move", self, &FPSCamera::Move);
+	GetWorld().Events.Bind("Look", self, &FPSCamera::Look);
+	GetWorld().Events.Bind("Click", self, &FPSCamera::Click);
 }
 
 ///////////////////
@@ -25,13 +25,13 @@ void FPSCamera::OnSpawn()
 
 void FPSCamera::Move(Vec2 direction)
 {
-	GetTransform()->Translate(Vec3(direction.X, 0, -direction.Y)/10);
+	Translate(Vec3(direction.X, 0, -direction.Y)/10);
 }
 
 void FPSCamera::Look(Vec2 direction)
 {
-	GetTransform()->Rotate(Vec3::Up, direction.X, false);
-	GetTransform()->Rotate(Vec3::Right, direction.Y, true);
+	RotateGlobal(Vec3::Up, direction.X);
+	Rotate(Vec3::Right, direction.Y);
 }
 
 void FPSCamera::Click()

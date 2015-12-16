@@ -13,7 +13,7 @@ int32 window_height = 720;
 
 //Function Prototypes
 GLFWwindow* InitGLFW();
-void eventLoop(GLFWwindow* window, Scene& scene, IRenderer& renderer);
+void eventLoop(GLFWwindow* window, World& world, IRenderer& renderer);
 void cleanUp(GLFWwindow* window);
 
 struct
@@ -59,7 +59,7 @@ int main(int32 /*argc*/, char** /*argv*/)
 	// Make an openGL context in window
 	glfwMakeContextCurrent(window);
 
-	// Create the renderer and scene to simulate
+	// Create the renderer and world to simulate
 	{
 		GLRenderer renderer(window_width, window_height);
 
@@ -67,19 +67,19 @@ int main(int32 /*argc*/, char** /*argv*/)
 		///   Setting up a simple   ///
 		///          scene          ///
 
-		UniquePtr<Scene> scene = New<Scene>();
+		UniquePtr<World> world = New<World>();
 
-		auto& sponza = scene->Spawn<Prop>();
-		sponza.GetTransform()->Scale3D(Vec3{ 0.6f, 0.6f, 0.6f });
+		auto& sponza = world->Spawn<Prop>();
+		sponza.SetScale(Vec3{ 0.6f, 0.6f, 0.6f });
 		sponza.GetComponent(sponza.MeshComponent)->Mesh = "Content/Models/sponza_new.wmesh"_p;
 		sponza.GetComponent(sponza.MeshComponent)->Material = "Content/Materials/Sponza.mat"_p;
 		sponza.GetComponent(sponza.MeshComponent)->InstanceParams["diffuse"] = AssetPtr<Texture>("Content/Textures/sponza_new_tex.png"_p);
 
-		auto& cam = scene->Spawn<FPSCamera>();
-		cam.GetTransform()->Location.Y += 3;
+		auto& cam = world->Spawn<FPSCamera>();
+		cam.Translate({ 0, 3, 0 });
 
 		//Execute the main event loop
-		eventLoop(window, *scene, renderer);
+		eventLoop(window, *world, renderer);
 	}
 
 	//Cleanup the engine
@@ -134,7 +134,7 @@ GLFWwindow* InitGLFW()
 	return window;
 }
 
-void eventLoop(GLFWwindow* window, Scene& scene, IRenderer& renderer)
+void eventLoop(GLFWwindow* window, World& world, IRenderer& renderer)
 {
 	Console::WriteLine("Entering event loop...");
 
@@ -167,7 +167,7 @@ void eventLoop(GLFWwindow* window, Scene& scene, IRenderer& renderer)
 
 		Cursor.UpdatePosition(window);
 
-		while (lag >= scene.TimeStep)
+		while (lag >= world.TimeStep)
 		{
 			Vec2 moveAccum;
 
@@ -190,7 +190,7 @@ void eventLoop(GLFWwindow* window, Scene& scene, IRenderer& renderer)
 			}
 			if (glfwGetKey(window, GLFW_KEY_SPACE))
 			{
-				scene.Events.DispatchEvent("Poof");
+				world.Events.DispatchEvent("Poof");
 			}
 			if (glfwGetKey(window, GLFW_KEY_ESCAPE))
 			{
@@ -198,25 +198,25 @@ void eventLoop(GLFWwindow* window, Scene& scene, IRenderer& renderer)
 			}
 			if (glfwGetKey(window, GLFW_KEY_Q))
 			{
-				scene.Events.DispatchEvent("Spin", 0.5f);
+				world.Events.DispatchEvent("Spin", 0.5f);
 			}
 			if (moveAccum != Vec2(0, 0))
 			{
-				scene.Events.DispatchEvent("Move", moveAccum.Normalize());
+				world.Events.DispatchEvent("Move", moveAccum.Normalize());
 			}
 
-			scene.Events.DispatchEvent("Look", Vec2(Cursor.Position.X / 100, Cursor.Position.Y / 100));
+			world.Events.DispatchEvent("Look", Vec2(Cursor.Position.X / 100, Cursor.Position.Y / 100));
 			Cursor.SetPosition(window, 0, 0);
 
-			// Update the scene
-			scene.Update();
+			// Update the world
+			world.Update();
 
-			lag -= scene.TimeStep;
+			lag -= world.TimeStep;
 			numUpdates++;
 		}
 
 		//render the frame
-		renderer.RenderScene(scene);
+		renderer.RenderWorld(world);
 		glfwSwapBuffers(window);
 
 		// Free memory

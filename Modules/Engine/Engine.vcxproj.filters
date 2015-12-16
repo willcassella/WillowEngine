@@ -34,9 +34,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\Scene.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="source\GameObject.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -76,6 +73,9 @@
     <ClCompile Include="source\GameObjects\Light.cpp">
       <Filter>source\GameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="source\World.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Engine\Component.h">
@@ -85,9 +85,6 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Engine\GameObject.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engine\Scene.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Engine\Transform.h">
@@ -136,6 +133,12 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Engine\Behavior.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\ITransformable.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\World.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

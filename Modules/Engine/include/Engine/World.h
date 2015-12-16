@@ -1,14 +1,15 @@
-// Scene.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
+// World.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
+#include <memory>
 #include <Core/Containers/Queue.h>
 #include "GameObject.h"
 
 /////////////////
 ///   Types   ///
 
-/* Scene class contains all game objects and scene information */
-class ENGINE_API Scene final : public Object
+/* World class contains all game objects and world information */
+class ENGINE_API World final : public Object
 {
 	///////////////////////
 	///   Information   ///
@@ -21,8 +22,8 @@ public:
 	///   Constructors   ///
 public:
 
-	Scene();
-	~Scene() override;
+	World();
+	~World() override;
 
 	//////////////////
 	///   Fields   ///
@@ -38,7 +39,7 @@ public:
 
 	void Update();
 
-	/** Spawns a new instance of the given GameObject type into the scene at the start of the next frame.
+	/** Spawns a new instance of the given GameObject type into the world at the start of the next frame.
 	* Returns a reference to the GameObject. */
 	template <class T>
 	std::enable_if_t<std::is_base_of<GameObject, T>::value, T&> Spawn()
@@ -46,7 +47,7 @@ public:
 		return static_cast<T&>(SpawnGameObject(New<T>()));
 	}
 
-	/** Spawns a new instance of the given Component type into the scene at the start of the next frame.
+	/** Spawns a new instance of the given Component type into the world at the start of the next frame.
 	* Returns a reference to the new Component. */
 	template <class T>
 	std::enable_if_t<std::is_base_of<Component, T>::value, T&> Spawn()
@@ -95,7 +96,7 @@ public:
 		return result;
 	}
 
-	/** Returns an Array of the components of the given type in this Scene. */
+	/** Returns an Array of the components of the given type in this World. */
 	template <typename ComponentT>
 	Array<const ComponentT*> GetComponentsOfType() const
 	{
@@ -128,13 +129,13 @@ private:
 	///   Data   ///
 private:
 
-	struct PhysicsData* _physicsData;
 	Table<GameObject::ID, UniquePtr<GameObject>> _gameObjects;
 	Table<Component::ID, UniquePtr<Component>> _components;
 	Queue<GameObject*> _destroyedObjects;
 	Queue<GameObject*> _unspawnedObjects;
 	GameObject::ID _nextGameObjectID;
 	Component::ID _nextComponentID;
+	std::unique_ptr<struct PhysicsData> _physicsData;
 };
 
 ///////////////////
@@ -143,7 +144,7 @@ private:
 template <class ComponentT>
 ComponentT& GameObject::AddComponent()
 {
-	auto& component = GetScene().Spawn<ComponentT>();
+	auto& component = GetWorld().Spawn<ComponentT>();
 	AddComponent(component);
 
 	return component;
@@ -152,7 +153,7 @@ ComponentT& GameObject::AddComponent()
 template <class ComponentT>
 ComponentT& GameObject::Attach()
 {
-	auto& component = GetScene().Spawn<ComponentT>();
+	auto& component = GetWorld().Spawn<ComponentT>();
 	Attach(component);
 
 	return component;

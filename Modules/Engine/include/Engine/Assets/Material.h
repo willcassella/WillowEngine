@@ -13,8 +13,8 @@ class ENGINE_API Material final : public Asset
 	///   Inner Types   ///
 public:
 
-	/** A material parameter may either be a float, vec2, vec3, vec4, or texture. */
-	using Param = Union<float, Vec2, Vec3, Vec4, AssetPtr<Texture>>;
+	/** A material parameter may either be a Scalars, Vec2, Vec3, Vec4, or texture. */
+	using Param = Union<Scalar, Vec2, Vec3, Vec4, AssetPtr<Texture>>;
 
 	///////////////////////
 	///   Information   ///

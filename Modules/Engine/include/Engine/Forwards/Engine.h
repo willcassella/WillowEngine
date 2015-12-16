@@ -4,8 +4,8 @@
 /////////////////
 ///   Types   ///
 
-/** Defined in "Scene.h" */
-class Scene;
+/** Defined in "World.h" */
+class World;
 
 /** Defined in "GameObject.h" */
 class GameObject;

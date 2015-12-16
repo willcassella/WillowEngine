@@ -2,91 +2,64 @@
 #pragma once
 
 #include <Core/Math/Mat4.h>
-#include <Core/Object.h>
 #include "config.h"
 
-class ENGINE_API Transform final : public Object
+struct ENGINE_API Transform final 
 {
 	///////////////////////
 	///   Information   ///
 public:
 
-	REFLECTABLE_CLASS
-	EXTENDS(Object)
-
-	///////////////////////
-	///   Inner Types   ///
-public:
-
-	/** Possible different modes of mobility */
-	enum class Mobility : byte
-	{
-		Static,
-		Dynamic
-	};
-
-	//////////////////
-	///   Fields   ///
-public:
-
-	Vec3 Location = Vec3(0, 0, 0);
-	Quat Orientation = Quat();
-	Vec3 Scale = Vec3(1, 1, 1);
+	REFLECTABLE_STRUCT
 
 	///////////////////
 	///   Methods   ///
 public:
 
-	/** Returns the mobility state of this Transform. */
-	FORCEINLINE Mobility GetMobility() const
-	{
-		return _mobility;
-	}
-
-	/** Formats the state of this Transform as a String. */
-	String ToString() const override;
-
-	/** Translates this transform by the given vector.
-	* 'vec' - The vector to translate this transform by.
-	* 'isLocal' - Whether to translate in local space. */
-	void Translate(const Vec3& vec, bool isLocal = true);
-
-	/** Scales this transform by the given vector.
-	* 'vec' - The vector to scale this transform by.
-	* 'isLocal' - Whether to scale in local space. */
-	void Scale3D(const Vec3& vec, bool isLocal = true);
-
-	/** Rotates this transform by the given axis and angle.
-	* 'axis' - The axis about which to rotate.
-	* 'isLocal' - Whether to rotate in local space. */
-	void Rotate(const Vec3& axis, float angle, bool isLocal = true);
-
 	/** Returns the transformation matrix for this Transform. */
 	Mat4 GetMatrix() const;
 
-	/** Returns the parent of this Transform. */
-	Transform* GetParent()
+	/** Sets the location of this Transform. */
+	FORCEINLINE void SetLocation(const Vec3& location)
 	{
-		return _parent.Get();
+		_location = location;
 	}
 
-	/** Returns the parent of this Transform. */
-	const Transform* GetParent() const
+	/** Returns the location of this Transform. */
+	FORCEINLINE const Vec3& GetLocation() const
 	{
-		return _parent.Get();
+		return _location;
 	}
 
-	/** Sets the parent of this Transform. */
-	void SetParent(Transform* parent)
+	/** Sets the rotation of this Transform. */
+	FORCEINLINE void SetRotation(const Quat& rotation)
 	{
-		_parent = parent;
+		_rotation = rotation;
+	}
+
+	/** Returns the rotation of this Transform. */
+	FORCEINLINE const Quat& GetRotation() const
+	{
+		return _rotation;
+	}
+
+	/** Sets the scale of this Transform. */
+	FORCEINLINE void SetScale(const Vec3& scale)
+	{
+		_scale = scale;
+	}
+
+	/** Returns the scale of this Transform. */
+	FORCEINLINE const Vec3& GetScale() const
+	{
+		return _scale;
 	}
 
 	////////////////
 	///   Data   ///
 private:
 
-	Mobility _mobility = Mobility::Dynamic;
-	Ptr<Transform> _parent;
+	Vec3 _location;
+	Quat _rotation;
+	Vec3 _scale = { 1, 1, 1 };
 };
-REFLECTABLE_ENUM(Transform::Mobility)

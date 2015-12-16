@@ -4,7 +4,7 @@
 #include <Core/STDExt/TypeTraits.h>
 #include <Core/env.h>
 
-/** Handle that can reference an object in a scene, independent of frame. */
+/** Handle that can reference an object in a World, independent of frame. */
 template <class T>
 struct GHandle final
 {
@@ -32,7 +32,7 @@ public:
 	GHandle(GHandle<F> copy)
 		: _id(copy.GetID())
 	{
-		// All done
+		static_assert(std::is_base_of<T, F>::value, "Incompatible handle types");
 	}
 
 	///////////////////

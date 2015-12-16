@@ -17,10 +17,10 @@ public:
 	///   Fields   ///
 public:
 
-	float HFov = 90.f;
-	float VFov = 59.f;
-	float ZMin = 0.1f;
-	float ZMax = 100.f;
+	Scalar HFov = 90.f;
+	Scalar VFov = 59.f;
+	Scalar ZMin = 0.1f;
+	Scalar ZMax = 100.f;
 
 	///////////////////
 	///   Methods   ///
@@ -33,13 +33,13 @@ public:
 	}
 
 	/** Sets the horizontal field of view with respect to the given vertical field of view and aspect ratio */
-	FORCEINLINE void SetHFOV(float /*vFOV*/, float /*aspectRatio*/)
+	FORCEINLINE void SetHFOV(Scalar /*vFOV*/, Scalar /*aspectRatio*/)
 	{
 		// @TODO: Implement this
 	}
 
 	/** Sets the vertical field of view with respect to the given horizontal field of view and aspect ratio */
-	FORCEINLINE void SetVFOV(float /*hFOV*/, float /*aspectRatio*/)
+	FORCEINLINE void SetVFOV(Scalar /*hFOV*/, Scalar /*aspectRatio*/)
 	{
 		// @TODO: Implement this
 	}

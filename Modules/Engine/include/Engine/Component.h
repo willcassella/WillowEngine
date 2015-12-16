@@ -1,14 +1,12 @@
 // Component.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <Core/Memory/UniquePtr.h>
 #include "Forwards/Engine.h"
+#include "ITransformable.h"
 #include "Transform.h"
 
-/////////////////
-///   Types   ///
-
-class ENGINE_API Component : public Object
+class ENGINE_API Component : public Object, 
+	public ITransformable
 {
 	///////////////////////
 	///   Information   ///
@@ -17,7 +15,7 @@ public:
 	REFLECTABLE_CLASS
 	EXTENDS(Object)
 	friend GameObject;
-	friend Scene;
+	friend World;
 
 	///////////////////////
 	///   Inner Types   ///
@@ -31,34 +29,11 @@ public:
 public:
 
 	Component();
+	~Component() override;
 
 	///////////////////
 	///   Methods   ///
 public:
-
-	/** Returns a reference to the Transform for this Component. */
-	FORCEINLINE Transform& GetTransform()
-	{
-		return *_transform;
-	}
-
-	/** Returns a reference to the Transform for this Component. */
-	FORCEINLINE const Transform& GetTransform() const
-	{
-		return *_transform;
-	}
-
-	/** Returns a reference to the Scene that this Component is a part of. */
-	FORCEINLINE Scene& GetScene()
-	{
-		return *_scene;
-	}
-
-	/** Returns a reference to the Scene that this Component is a part of. */
-	FORCEINLINE const Scene& GetScene() const
-	{
-		return *_scene;
-	}
 
 	/** Returns the ID of this Component. */
 	FORCEINLINE ID GetID() const
@@ -86,12 +61,173 @@ public:
 		return _owner;
 	}
 
+	/** Returns a reference to the World that this Component is a part of. */
+	FORCEINLINE World& GetWorld()
+	{
+		return *_world;
+	}
+
+	/** Returns a reference to the World that this Component is a part of. */
+	FORCEINLINE const World& GetWorld() const
+	{
+		return *_world;
+	}
+
+	/** Returns the parent of this Component.
+	* NOTE: If 'null' is returned, then this Component has no parent. */
+	FORCEINLINE Component* GetParent()
+	{
+		return _parent;
+	}
+
+	/** Returns the parent of this Component.
+	* NOTE: If 'null' is returned, then this Component has no parent. */
+	FORCEINLINE const Component* GetParent() const
+	{
+		return _parent;
+	}
+
+	/** Returns whether this Component is parented to the given Component (directly or indirectly). */
+	bool IsParentedTo(const Component& component) const;
+
+	/** Parents this Component to the given Component.
+	* NOTE: You may pass 'null' if you wish for this Component to have no parent. */
+	void SetParent(Component* parent);
+
+	/** Returns an Array of all Components parented to this Component. */
+	FORCEINLINE const Array<Component*>& GetChildren()
+	{
+		return _children;
+	}
+
+	/** Returns an Array of all Components parented to this Component. */
+	FORCEINLINE const Array<const Component*>& GetChildren() const
+	{
+		return _children;
+	}
+
+	/** Returns the location of this Component relative to its parent. */
+	FORCEINLINE const Vec3& GetLocation() const
+	{
+		return _transform.GetLocation();
+	}
+	
+	/** Returns the location of this Component in world space. */
+	FORCEINLINE Vec3 GetWorldLocation() const
+	{
+		if (_parent)
+		{
+			return _parent->GetTransformationMatrix() * _transform.GetLocation();
+		}
+		else
+		{
+			return _transform.GetLocation();
+		}
+	}
+
+	/** Sets the location of this Component in parent space. */
+	FORCEINLINE void SetLocation(const Vec3& location) final override
+	{
+		_transform.SetLocation(location);
+	}
+
+	/** Sets the location of this Component in world space. */
+	FORCEINLINE void SetWorldLocation(const Vec3& location) final override
+	{
+		// TODO
+	}
+
+	/** Translates this Component along the given vector in local space. */
+	FORCEINLINE void Translate(const Vec3& vec) final override
+	{
+		auto translateVec = _transform.GetLocation() + Mat4::Rotate(_transform.GetRotation()) * vec;
+		_transform.SetLocation(translateVec);
+	}
+
+	/** Translates this Component along the given vector in world space. */
+	FORCEINLINE void TranslateGlobal(const Vec3& vec) final override
+	{
+		_transform.SetLocation(_transform.GetLocation() + vec);
+	}
+
+	/** Returns the rotation of this Component relative to its parent. */
+	FORCEINLINE const Quat& GetRotation() const
+	{
+		return _transform.GetRotation();
+	}
+
+	/** Returns the rotation of this Component in world space. */
+	FORCEINLINE Quat GetWorldRotation() const
+	{
+		if (_parent)
+		{
+			return _parent->GetWorldRotation() * _transform.GetRotation();
+		}
+		else
+		{
+			return _transform.GetRotation();
+		}
+	}
+
+	/** Sets the rotation of this Component relative to the parent. */
+	FORCEINLINE void SetRotation(const Quat& rotation) final override
+	{
+		_transform.SetRotation(rotation);
+	}
+
+	/** Sets the rotation of this Component in world space. */
+	FORCEINLINE void SetWorldRotation(const Quat& rotation) final override
+	{
+		// TODO
+	}
+
+	/** Rotates this Component along the given axis by the given angle in local space. */
+	FORCEINLINE void Rotate(const Vec3& axis, Angle angle) final override
+	{
+		Quat rotation = _transform.GetRotation();
+		rotation.RotateByAxisAngle(axis, angle, true);
+		_transform.SetRotation(rotation);
+	}
+
+	/** Rotates this Component along the given axis by the given angle in global space. */
+	FORCEINLINE void RotateGlobal(const Vec3& axis, Angle angle) final override
+	{
+		Quat rotation = _transform.GetRotation();
+		rotation.RotateByAxisAngle(axis, angle, false);
+		_transform.SetRotation(rotation);
+	}
+
+	/** Returns the scale of this Component, relative to the parent. */
+	FORCEINLINE const Vec3& GetScale() const
+	{
+		return _transform.GetScale();
+	}
+
+	/** Sets the scale of this Component. */
+	FORCEINLINE void SetScale(const Vec3& scale) final override
+	{
+		_transform.SetScale(scale);
+	}
+
+	/** Scales this Component by the given amount. */
+	FORCEINLINE void Scale(const Vec3& scale) final override
+	{
+		Vec3 newScale = _transform.GetScale() * scale;
+		_transform.SetScale(newScale);
+	}
+
+	/** Returns the transformation matrix of this Component. */
+	Mat4 GetTransformationMatrix() const;
+
 	////////////////
 	///   Data   ///
 private:
 
-	UniquePtr<Transform> _transform;
 	GameObject* _owner;
-	Scene* _scene;
+	World* _world;
 	ID _id;
+	
+	Transform _transform;
+	Component* _parent;
+	Array<Component*> _children;
 };

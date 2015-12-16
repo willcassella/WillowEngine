@@ -6,8 +6,8 @@
 ////////////////////////////////
 ///   Forward-declarations   ///
 
-/** Defined in 'Scene.h' */
-class Scene;
+/** Defined in 'World.h' */
+class World;
 
 /////////////////
 ///   Types   ///
@@ -24,5 +24,5 @@ public:
 	///   Methods   ///
 public:
 
-	virtual void RenderScene(const Scene& scene) = 0;
+	virtual void RenderWorld(const World& world) = 0;
 };
