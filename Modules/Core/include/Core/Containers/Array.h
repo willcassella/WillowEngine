@@ -774,7 +774,7 @@ public:
 
 	/** Converts this Array to another Array by reference. */
 	template <typename CompatibleT, WHERE(std::is_convertible<T*, const CompatibleT*>::value && sizeof(T) == sizeof(CompatibleT))>
-	operator const Array<CompatibleT>&() const
+	explicit operator const Array<CompatibleT>&() const
 	{
 		return reinterpret_cast<const Array<CompatibleT>&>(self);
 	}

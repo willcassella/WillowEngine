@@ -103,7 +103,7 @@ public:
 	/** Returns an Array of all Components parented to this Component. */
 	FORCEINLINE const Array<const Component*>& GetChildren() const
 	{
-		return _children;
+		return static_cast<const Array<const Component*>&>(_children);
 	}
 
 	/** Returns the location of this Component relative to its parent. */
@@ -132,7 +132,7 @@ public:
 	}
 
 	/** Sets the location of this Component in world space. */
-	FORCEINLINE void SetWorldLocation(const Vec3& location) final override
+	FORCEINLINE void SetWorldLocation(const Vec3& /*location*/) final override
 	{
 		// TODO
 	}
@@ -176,7 +176,7 @@ public:
 	}
 
 	/** Sets the rotation of this Component in world space. */
-	FORCEINLINE void SetWorldRotation(const Quat& rotation) final override
+	FORCEINLINE void SetWorldRotation(const Quat& /*rotation*/) final override
 	{
 		// TODO
 	}
