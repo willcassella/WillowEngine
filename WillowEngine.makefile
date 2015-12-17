@@ -1,13 +1,10 @@
 # WillowEngine.makefile
 
 ### Variables ###
-# C++ compiler to use
-CXX=clang++
-export CXX
+CXX=clang++	# C++ Compiler to use
+OPT=-Ofast	# Optimization seting to use
 
-# Optimization setting to use
-OPT=-Ofast
-export OPT
+export
 
 ### Targets ###
 
