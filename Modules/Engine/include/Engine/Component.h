@@ -261,4 +261,4 @@ private:
 	Array<Component*> _children;
 };
 
-REFLECTABLE_ENUM(Component::Status);
+REFLECTABLE_ENUM(Component::Status)
