@@ -458,9 +458,9 @@ private:
 	}
 
 	/** Translates the given FieldFlags into the relevant DataFlags. */
-	DataFlags FieldFlagsToDataFlags(FieldFlags flags) const
+	static DataFlags FieldFlagsToDataFlags(FieldFlags flags)
 	{
-		DataFlags dFlags = DF_None;
+		auto dFlags = DF_None;
 
 		if (flags & FF_Transient)
 		{
@@ -471,25 +471,28 @@ private:
 	}
 
 	/** Translates the given FieldFlags to the relevant PropertyFlags. */
-	PropertyFlags FieldFlagsToPropertyFlags(FieldFlags /*flags*/) const
+	static PropertyFlags FieldFlagsToPropertyFlags(FieldFlags flags)
 	{
-		PropertyFlags pFlags = PF_None;
+		auto pFlags = PF_None;
 
-		// There aren't any property flags at the moment, so this isn't necessary.
+		if (flags & FF_EditorOnly)
+		{
+			pFlags = PropertyFlags(pFlags | PF_EditorOnly);
+		}
 
 		return pFlags;
 	}
 
 	/** Assertions common to all types of members. */
 	template <typename PropertyT>
-	void CommonAsserts() const
+	static void CommonAsserts()
 	{
 		static_assert(!std::is_polymorphic<std::decay_t<PropertyT>>::value, "Compounds may not contain polymorphic types.");
 	}
 
 	/** Assertions common to field members. */
 	template <typename DataT>
-	void FieldAsserts() const
+	static void FieldAsserts()
 	{
 		static_assert(!std::is_reference<DataT>::value, "You may not have references as data.");
 		static_assert(!std::is_function<DataT>::value, "You can't register a member function as data.");
@@ -497,7 +500,7 @@ private:
 
 	/** Assertions common to all getter/setter functions */
 	template <typename GetT, typename SetT>
-	void GetterSetterAsserts() const
+	static void GetterSetterAsserts()
 	{
 		static_assert(std::is_same<std::decay_t<GetT>, std::decay_t<SetT>>::value, "The setter must accept the same type as the getter.");
 		static_assert(std::is_object<SetT>::value || stdEXT::is_const_reference<SetT>::value, "The setter must either accept by value or const-reference.");
