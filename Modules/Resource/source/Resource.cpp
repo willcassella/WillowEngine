@@ -1,4 +1,4 @@
-// Resource.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
+// Resource.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
 #include <sys/stat.h>
 #include "../include/Resource/Resource.h"
