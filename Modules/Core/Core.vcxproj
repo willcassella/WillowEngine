@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="include\Core\Application.h" />
     <ClInclude Include="include\Core\ArchiveNode.h" />
+    <ClInclude Include="include\Core\Concurrency\Task.h" />
     <ClInclude Include="include\Core\config.h" />
     <ClInclude Include="include\Core\Console.h" />
     <ClInclude Include="include\Core\Containers\Array.h" />
@@ -80,6 +81,7 @@
     <ClInclude Include="include\Core\Reflection\TypeInfo.h" />
     <ClInclude Include="include\Core\Reflection\VoidInfo.h" />
     <ClInclude Include="include\Core\STDExt\TypeTraits.h" />
+    <ClInclude Include="include\Core\STDExt\Utility.h" />
     <ClInclude Include="include\Core\String.h" />
     <ClInclude Include="include\Core\env.h" />
   </ItemGroup>
@@ -114,7 +116,6 @@
     <ClCompile Include="source\Reflection\Reflection.cpp" />
     <ClCompile Include="source\Reflection\StructInfo.cpp" />
     <ClCompile Include="source\Reflection\TypeInfo.cpp" />
-    <ClCompile Include="source\Reflection\Variant.cpp" />
     <ClCompile Include="source\Reflection\VoidInfo.cpp" />
     <ClCompile Include="source\String.cpp" />
   </ItemGroup>

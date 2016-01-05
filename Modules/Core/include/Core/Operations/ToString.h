@@ -421,6 +421,8 @@ String Format(const String& format, const T& value, const MoreT& ... more)
 	return "";
 }
 
+/** Experimental fast implementation of String formattig. This is pretty low-priority, but once I get the engine stuff worked out
+* I'll come back and fix this. */
 template <typename ... T>
 String fFormat(const String& format, const T& ... values)
 {

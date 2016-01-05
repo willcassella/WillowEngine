@@ -2,6 +2,7 @@
 #pragma once
 
 #include "Forwards/Core.h"
+#include "STDExt/Utility.h"
 #include "Containers/Array.h"
 #include "Reflection/Reflection.h"
 #include "Memory/MemoryBlock.h"
@@ -55,8 +56,7 @@ public:
 	* NOTE: Returns 'null' if this Object is not managed (or if it is still being constructed). */
 	FORCEINLINE MemoryBlockController* GetBlockController()
 	{
-		auto blockController = static_cast<const Object*>(this)->GetBlockController();
-		return const_cast<MemoryBlockController*>(blockController);
+		return const_cast<MemoryBlockController*>(stde::as_const(*this).GetBlockController());
 	}
 
 	/** Returns the type information for this Object. */
@@ -88,6 +88,6 @@ private:
 	/** Whether this object is managed. If it is, you may access its block controller via 'GetBlockController()'. */
 	bool _managedWithBlockController = false;
 
-	// @TODO: Remove this in favor of managed references
+	// @TODO: Remove this in favor of externally managed references
 	mutable Array<void*> _references;
 };

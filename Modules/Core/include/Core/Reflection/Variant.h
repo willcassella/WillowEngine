@@ -6,15 +6,12 @@
 /////////////////
 ///   Types   ///
 
-/** Basically a smart wrapper over "void*" @TODO: Figure out a safer way of doing this */
+/** Basically a wrapper over "void*" */
 struct CORE_API Variant final : Contract::Proxy<Variant>
 {
 	////////////////////////
 	///   Constructors   ///
 public:
-
-	/** Constructs a Variant to 'void' */
-	Variant();
 
 	/** Constructs a Variant to a value of any type
 	* 'value' - The value to reference
@@ -22,7 +19,7 @@ public:
 	Variant(void* value, const TypeInfo& type)
 		: _value(value), _type(&type)
 	{
-		// All done
+		assert(value != nullptr);
 	}
 
 	/** Constructs a Variant to a value of any type (except Variant types). */
@@ -58,52 +55,25 @@ public:
 	// TODO: Documentation
 	FORCEINLINE String ToString() const
 	{
-		assert(_value != nullptr);
-		return _type->_data.toStringImplementation(_value);
+		return _type->GetToStringImplementation()(_value);
 	}
 
 	// TODO: Documentation
 	FORCEINLINE String FromString(const String& string)
 	{
-		assert(_value != nullptr);
-		return _type->_data.fromStringImplementation(_value, string);
+		return _type->GetFromStringImplementation()(_value, string);
 	}
 
 	// TODO: Documentation
 	FORCEINLINE void ToArchive(ArchiveNode& node) const
 	{
-		assert(_value != nullptr);
-		_type->_data.toArchiveImplementation(_value, node);
+		_type->GetToArchiveImplementation()(_value, node);
 	}
 
 	// TODO: Documentation
 	FORCEINLINE void FromArchive(const ArchiveNode& node)
 	{
-		assert(_value != nullptr);
-		_type->_data.fromArchiveImplementation(_value, node);
-	}
-
-	/** Calls the destructor on the referenced value, and nullifies this Variant. */
-	FORCEINLINE void Destroy()
-	{
-		if (_value)
-		{
-			_type->GetDestructor()(_value);
-			_value = nullptr;
-			_type = nullptr;
-		}
-	}
-
-	/////////////////////
-	///   Operators   ///
-public:
-
-	template <typename T, WHERE(!std::is_same<T, Variant>::value && !std::is_same<T, ImmutableVariant>::value)>
-	Variant& operator=(T& value)
-	{
-		_value = &value;
-		_type = TypeOf(value);
-		return self;
+		_type->GetFromArchiveImplementation()(_value, node);
 	}
 
 	////////////////
@@ -114,15 +84,12 @@ private:
 	const TypeInfo* _type;
 };
 
-/** Basically a smart wrapper of "const void*" */
+/** Basically a wrapper of "const void*" */
 struct CORE_API ImmutableVariant final : Contract::Proxy<ImmutableVariant>
 {
 	////////////////////////
 	///   Constructors   ///
 public:
-
-	/** Constructs an ImmutableVariant to 'void' */
-	ImmutableVariant();
 
 	/** Constructs an ImmutableVariant to the value referenced by a non-immutable variant */
 	ImmutableVariant(Variant value)
@@ -137,7 +104,7 @@ public:
 	ImmutableVariant(const void* value, const TypeInfo& type)
 		: _value(value), _type(&type)
 	{
-		// All done
+		assert(value != nullptr);
 	}
 
 	/** Constructs an ImmutableVariant to a value of any type (except Variant types) */
@@ -167,34 +134,13 @@ public:
 	/** Formats the state of this ImmutableVariant as a String. */
 	FORCEINLINE String ToString() const
 	{
-		assert(_value != nullptr);
-		return _type->_data.toStringImplementation(_value);
+		return _type->GetToStringImplementation()(_value);
 	}
 
 	// TODO: Documentation
 	FORCEINLINE void ToArchive(ArchiveNode& node) const
 	{
-		assert(_value != nullptr);
-		_type->_data.toArchiveImplementation(_value, node);
-	}
-
-	/////////////////////
-	///   Operators   ///
-public:
-
-	ImmutableVariant& operator=(Variant value)
-	{
-		_value = value.GetValue();
-		_type = &value.GetType();
-		return self;
-	}
-
-	template <typename T, WHERE(!std::is_same<T, Variant>::value && !std::is_same<T, ImmutableVariant>::value)>
-	ImmutableVariant& operator=(const T& value)
-	{
-		_value = &value;
-		_type = TypeOf(value);
-		return self;
+		_type->GetToArchiveImplementation()(_value, node);
 	}
 
 	////////////////

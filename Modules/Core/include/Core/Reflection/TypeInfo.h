@@ -31,8 +31,6 @@ public:
 	REFLECTABLE_CLASS
 	EXTENDS(Object)
 
-	friend Variant;
-	friend ImmutableVariant;
 	template <typename T, class TypeInfoT>
 	friend struct TypeInfoBuilder;
 
@@ -41,22 +39,34 @@ public:
 public:
 
 	/** The function signature for a reflected constructor. */
-	typedef void(*Constructor)(byte*);
+	using Constructor = void(*)(byte*);
 
 	/** The function signature for a reflected copy-constructor. */
-	typedef void(*CopyConstructor)(byte*, const void*);
+	using CopyConstructor =  void(*)(byte*, const void*);
 
 	/** The function signature for a reflected move-constructor. */
-	typedef void(*MoveConstructor)(byte*, void*);
+	using MoveConstructor = void(*)(byte*, void*);
 
 	/** The function signature for a reflected destructor. */
-	typedef void(*Destructor)(void*);
+	using Destructor = void(*)(void*);
 
 	/** The function signature for a reflected copy-assignment operator. */
-	typedef void(*CopyAssignmentOperator)(void*, const void*);
+	using CopyAssignmentOperator = void(*)(void*, const void*);
 
 	/** The function signature for a reflected move-assignment operator. */
-	typedef void(*MoveAssignmentOperator)(void*, void*);
+	using MoveAssignmentOperator = void(*)(void*, void*);
+
+	/** The function signature for a reflected ToString implementation. */
+	using ToStringImplementation = String(*)(const void*);
+
+	/** The function signature for a reflected FromString implementation. */
+	using FromStringImplementation = String(*)(void*, const String&);
+
+	/** The function signature for a reflected ToArchive implementation. */
+	using ToArchiveImplementation = void(*)(const void*, ArchiveNode&);
+
+	/** The function signature for a reflected FromArchive implementation. */
+	using FromArchiveImplementation = void(*)(void*, const ArchiveNode&);
 
 	////////////////////////
 	///   Constructors   ///
@@ -67,7 +77,7 @@ public:
 	TypeInfo(const TypeInfoBuilder<T, TypeInfo>& builder)
 		: _data(std::move(builder._data))
 	{
-		RegisterWithApplication();
+		this->RegisterWithApplication();
 	}
 
 	/** Stupid move-constructor that will never get called. See notes in source. */
@@ -91,7 +101,7 @@ public:
 	{
 		if (_name.IsEmpty())
 		{
-			_name = GenerateName();
+			_name = this->GenerateName();
 		}
 
 		return _name;
@@ -223,6 +233,30 @@ public:
 		return _data.moveAssignmentOperator;
 	}
 
+	/** Returns the implementation of 'ToString' for this type. */
+	FORCEINLINE ToStringImplementation GetToStringImplementation() const
+	{
+		return _data.toStringImplementation;
+	}
+
+	/** Returns the implementation of 'FromString' for this type. */
+	FORCEINLINE FromStringImplementation GetFromStringImplementation() const
+	{
+		return _data.fromStringImplementation;
+	}
+
+	/** Returns the implementation of 'ToArchive' for this type. */
+	FORCEINLINE ToArchiveImplementation GetToArchiveImplementation() const
+	{
+		return _data.toArchiveImplementation;
+	}
+
+	/** Returns the implementation of 'FromArchive' for this type. */
+	FORCEINLINE FromArchiveImplementation GetFromArchiveImplementation() const
+	{
+		return _data.fromArchiveImplementation;
+	}
+
 	/** Returns whether this type is bitwise castable to the given type */
 	virtual bool IsCastableTo(const TypeInfo& type) const = 0;
 
@@ -273,10 +307,10 @@ private:
 		Destructor destructor = nullptr;
 		CopyAssignmentOperator copyAssignmentOperator = nullptr;
 		MoveAssignmentOperator moveAssignmentOperator = nullptr;
-		String(*toStringImplementation)(const void*) = nullptr;
-		String(*fromStringImplementation)(void*, const String&) = nullptr;
-		void(*toArchiveImplementation)(const void*, ArchiveNode&) = nullptr;
-		void(*fromArchiveImplementation)(void*, const ArchiveNode&) = nullptr;
+		ToStringImplementation toStringImplementation = nullptr;
+		FromStringImplementation fromStringImplementation = nullptr;
+		ToArchiveImplementation toArchiveImplementation = nullptr;
+		FromArchiveImplementation fromArchiveImplementation = nullptr;
 		uint32 size = 0;
 		bool isCompound = false;
 		bool isAbstract = false;
@@ -315,9 +349,9 @@ public:
 		_data.rawName = name;
 
 		// If the type is default-constructible
-		if (Operations::Construct<T>::Supported)
+		if (Operations::DefaultConstruct<T>::Supported)
 		{
-			_data.defaultConstructor = Operations::Construct<T>::Function;
+			_data.defaultConstructor = Operations::DefaultConstruct<T>::Function;
 		}
 
 		// If the type is constructible via a dynamic initializer
@@ -330,20 +364,20 @@ public:
 		}
 
 		// If the type is copy-constructible
-		if (Operations::Construct<T, const T&>::Supported)
+		if (Operations::CopyConstruct<T>::Supported)
 		{
 			_data.copyConstructor = [](byte* location, const void* copy) -> void
 			{
-				Operations::Construct<T, const T&>::Function(location, *static_cast<const T*>(copy));
+				Operations::CopyConstruct<T>::Function(location, *static_cast<const T*>(copy));
 			};
 		}
 
 		// If the type is move-constructible
-		if (Operations::Construct<T, T&&>::Supported)
+		if (Operations::MoveConstruct<T>::Supported)
 		{
 			_data.moveConstructor = [](byte* location, void* move) -> void
 			{
-				Operations::Construct<T, T&&>::Function(location, std::move(*static_cast<T*>(move)));
+				Operations::MoveConstruct<T>::Function(location, std::move(*static_cast<T*>(move)));
 			};
 		}
 
@@ -357,20 +391,20 @@ public:
 		}
 
 		// If the type is copy-assignable
-		if (Operations::Assign<T, const T&>::Supported)
+		if (Operations::CopyAssign<T>::Supported)
 		{
 			_data.copyAssignmentOperator = [](void* lhs, const void* rhs) -> void
 			{
-				Operations::Assign<T, const T&>::Function(*static_cast<T*>(lhs), *static_cast<const T*>(rhs));
+				Operations::CopyAssign<T>::Function(*static_cast<T*>(lhs), *static_cast<const T*>(rhs));
 			};
 		}
 
 		// If the type is move-assignable
-		if (Operations::Assign<T, T&&>::Supported)
+		if (Operations::MoveAssign<T>::Supported)
 		{
 			_data.moveAssignmentOperator = [](void* lhs, void* rhs) -> void
 			{
-				Operations::Assign<T, T&&>::Function(*static_cast<T*>(lhs), std::move(*static_cast<T*>(rhs)));
+				Operations::MoveAssign<T>::Function(*static_cast<T*>(lhs), std::move(*static_cast<T*>(rhs)));
 			};
 		}
 
@@ -406,7 +440,7 @@ protected:
 	* without losing compmile-time info. */
 	auto& SelfAsMostSpecificTypeInfoBuilder()
 	{
-		return static_cast<TypeInfoBuilder<T>&>(self);
+		return static_cast<TypeInfoBuilder<T>&>(*this);
 	}
 
 	////////////////
@@ -447,9 +481,7 @@ namespace Implementation
 template <typename TargetT, typename T>
 FORCEINLINE TargetT* Cast(T& value)
 {
-	static_assert(!std::is_reference<TargetT>::value, "Using 'Cast' to cast to a reference type is not allowed");
-
-	if (TypeOf(value).IsCastableTo(TypeOf<TargetT>()))
+	if (std::is_base_of<TargetT, T>::value || TypeOf(value).IsCastableTo(TypeOf<TargetT>()))
 	{
 		return reinterpret_cast<TargetT*>(&value);
 	}
@@ -463,10 +495,8 @@ FORCEINLINE TargetT* Cast(T& value)
 * NOTE: Returns a null pointer if the cast is invalid (value does not legally translate to the given type). */
 template <typename TargetT, typename T>
 FORCEINLINE const TargetT* Cast(const T& value)
-{
-	static_assert(!std::is_reference<TargetT>::value, "Using 'Cast' to cast to a reference is not allowed");
-	
-	if (TypeOf(value).IsCastableTo(TypeOf<TargetT>()))
+{	
+	if (std::is_base_of<TargetT, T>::value || TypeOf(value).IsCastableTo(TypeOf<TargetT>()))
 	{
 		return reinterpret_cast<const TargetT*>(&value);
 	}

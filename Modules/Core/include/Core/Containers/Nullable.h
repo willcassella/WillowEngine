@@ -2,41 +2,88 @@
 #pragma once
 
 #include <cassert>
-#include <utility>
 #include "../STDExt/TypeTraits.h"
 #include "StaticBuffer.h"
 
 template <typename T>
 struct Nullable final
 {
+	///////////////////////
+	///   Information   ///
+public:
+
+	template <typename F>
+	friend struct Nullable;
+
 	////////////////////////
 	///   Constructors   ///
 public:
 
 	Nullable()
+		: _hasValue(false)
 	{
-		_hasValue = false;
+		// All done
 	}
 	Nullable(const Nullable& copy)
-		: Nullable()
 	{
-		self = copy;
+		if (copy.HasValue())
+		{
+			this->PlaceValue(copy.FastGet());
+		}
+		else
+		{
+			_hasValue = false;
+		}
 	}
 	Nullable(Nullable&& move)
-		: Nullable()
 	{
-		self = std::move(move);
+		if (move.HasValue())
+		{
+			this->PlaceValue(std::move(move.FastGet()));
+		}
+		else
+		{
+			_hasValue = false;
+		}
 	}
 	~Nullable()
 	{
-		Nullify();
+		if (_hasValue)
+		{
+			this->FastGet().~T();
+		}
+	}
+
+	template <typename F>
+	Nullable(const Nullable<F>& copy)
+	{
+		if (copy.HasValue())
+		{
+			this->PlaceValue(copy.FastGet());
+		}
+		else
+		{
+			_hasValue = false;
+		}
+	}
+
+	template <typename F>
+	Nullable(Nullable<F>&& move)
+	{
+		if (move.HasValue())
+		{
+			this->PlaceValue(std::move(move.FastGet()));
+		}
+		else
+		{
+			_hasValue = false;
+		}
 	}
 	
-	template <typename F, WHERE(std::is_constructible<T, F>::value)>
+	template <typename F, WHERE(!std::is_same<F, Nullable>::value)>
 	Nullable(F&& value)
 	{
-		new (_value.GetValue()) T(std::forward<F>(value));
-		_hasValue = true;
+		this->PlaceValue(std::forward<F>(value));
 	}
 
 	///////////////////
@@ -52,7 +99,7 @@ public:
 
 	/** Returns the currently held value.
 	* WARNING: Check 'HasValue' before calling this. */
-	T& GetValue()
+	T& GetValue() &
 	{
 		assert(_hasValue);
 		return FastGet();
@@ -60,10 +107,66 @@ public:
 
 	/** Returns the currently held value.
 	* WARNING: Check 'HasValue' before calling this. */
-	const T& GetValue() const
+	const T& GetValue() const &
 	{
 		assert(_hasValue);
 		return FastGet();
+	}
+
+	/** Returns the currently held value. 
+	* WARNING: Check 'HasValue' before calling this. */
+	T&& GetValue() &&
+	{
+		assert(_hasValue);
+		return std::move(this->FastGet());
+	}
+
+	/** Invokes the given function object on the contained value, if it exists. Otherwise does nothing.
+	* Returns whether the given function was executed. */
+	template <typename Func>
+	bool Invoke(const Func& func) &
+	{
+		if (this->HasValue())
+		{
+			func(this->FastGet());
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/** Invokes the given function object on the contained value, if it exists. Otherwise does nothing.
+	* Returns whether the given function was executed. */
+	template <typename Func>
+	bool Invoke(const Func& func) const &
+	{
+		if (this->HasValue())
+		{
+			func(this->FastGet());
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/** Invokes the given function object on the contained value, if it exists. Otherwise does nothing.
+	* Returns whether the given function was executed. */
+	template <typename Func>
+	bool Invoke(const Func& func) &&
+	{
+		if (this->HasValue())
+		{
+			func(std::move(this->FastGet()));
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	/** Destroys the currently held value. */
@@ -78,13 +181,24 @@ public:
 
 private:
 
+	/** Returns a reference to the value, without checking whether one exists. */
 	T& FastGet()
 	{
-		return *_value.template GetValueAs<T>();
+		return *_buffer.template GetPointer<T>();
 	}
+
+	/** Returns a reference to the value, without checking whether one exists. */
 	const T& FastGet() const
 	{
-		return *_value.template GetValueAs<T>();
+		return *_buffer.template GetPointer<T>();
+	}
+	
+	/** Constructs an instance of 'T' with the given value, without checking whether a current value exists. */
+	template <typename F>
+	void PlaceValue(F&& value)
+	{
+		_buffer.template PlaceValue<T>(std::forward<F>(value));
+		_hasValue = true;
 	}
 
 	/////////////////////
@@ -97,7 +211,7 @@ public:
 		{
 			if (copy.HasValue())
 			{
-				self = copy.GetValue();
+				*this = copy.FastGet();
 			}
 			else
 			{
@@ -105,7 +219,7 @@ public:
 			}
 		}
 
-		return self;
+		return *this;
 	}
 	Nullable& operator=(Nullable&& move)
 	{
@@ -113,10 +227,7 @@ public:
 		{
 			if (move.HasValue())
 			{
-				// Move and destroy move's value
-				self = std::move(move.GetValue());
-				move.GetValue().~T();
-				move._hasValue = false;
+				*this = std::move(move.FastGet());
 			}
 			else
 			{
@@ -124,29 +235,58 @@ public:
 			}
 		}
 
-		return self;
+		return *this;
 	}
 
-	template <typename F, WHERE(std::is_constructible<T, F>::value)>
+	template <typename F>
+	Nullable& operator=(const Nullable<F>& copy)
+	{
+		if (copy.HasValue())
+		{
+			*this = copy.FastGet();
+		}
+		else
+		{
+			Nullify();
+		}
+
+		return *this;
+	}
+
+	template <typename F>
+	Nullable& operator=(Nullable<F>&& move)
+	{
+		if (move.HasValue())
+		{
+			*this = std::move(move.FastGet());
+		}
+		else
+		{
+			Nullify();
+		}
+
+		return *this;
+	}
+
+	template <typename F, WHERE(!std::is_same<F, Nullable>::value)>
 	Nullable& operator=(F&& value)
 	{
 		if (_hasValue)
 		{
-			GetValue() = std::forward<F>(value);
+			FastGet() = std::forward<F>(value);
 		}
 		else
 		{
-			new (_value.GetValue()) T(std::forward<F>(value));
-			_hasValue = true;
+			PlaceValue(std::forward<F>(value));
 		}
 
-		return self;
+		return *this;
 	}
 
 	////////////////
 	///   Data   ///
 private:
 
-	StaticBuffer<sizeof(T)> _value;
+	StaticBuffer<sizeof(T)> _buffer;
 	bool _hasValue;
 };

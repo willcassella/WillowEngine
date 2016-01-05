@@ -9,14 +9,14 @@ namespace stdEXT
 	{
 		/** Executes the given function with the given arguments, since the predicate is true. */
 		template <typename T, typename ... Args>
-		inline void conditionally_execute(std::true_type /*predicate*/, const T& function, Args&& ... args)
+		void conditionally_execute(std::true_type /*predicate*/, const T& function, Args&& ... args)
 		{
 			function(std::forward<Args>(args)...);
 		}
 
 		/** Does not execute the given function with the given arguments, since the predicate is false. */
 		template <typename T, typename ... Args>
-		inline void conditionally_execute(std::false_type /*predicate*/, const T& /*function*/, Args&& ... /*args*/)
+		void conditionally_execute(std::false_type /*predicate*/, const T& /*function*/, Args&& ... /*args*/)
 		{
 			// Do nothing
 		}
@@ -35,39 +35,27 @@ namespace stdEXT
 
 	/** Evaluates to 'true' if the given type is a primitive (arithmetic, or pointer). */
 	template <typename T>
-	struct is_primitive
-		: bool_constant<std::is_arithmetic<T>::value || std::is_pointer<T>::value>
-	{};
+	using is_primitive = bool_constant<std::is_arithmetic<T>::value || std::is_pointer<T>::value>;
 
 	/** Evaluates to 'true' if the given type is a reference to const. */
 	template <typename T>
-	struct is_const_reference
-		: std::is_same<const std::decay_t<T>&, T>
-	{};
+	using is_const_reference = std::is_same<const std::decay_t<T>&, T>;
 
 	/** Evaluates to 'true' if the given type is a reference to non-const. */
 	template <typename T>
-	struct is_non_const_reference
-		: std::is_same<std::decay_t<T>&, T>
-	{};
+	using is_mutable_reference = std::is_same<std::decay_t<T>&, T>;
 
 	/** Evaluates to 'true' if the given type is a const object. */
 	template <typename T>
-	struct is_const_object
-		: bool_constant<std::is_object<T>::value && std::is_const<T>::value>
-	{};
+	using is_const_object = bool_constant<std::is_object<T>::value && std::is_const<T>::value>;
 
 	/** Evaluates to 'true' if the given type is a non-const object. */
 	template <typename T>
-	struct is_non_const_object
-		: bool_constant<std::is_object<T>::value && !std::is_const<T>::value>
-	{};
+	using is_mutable_object = bool_constant<std::is_object<T>::value && !std::is_const<T>::value>;
 
 	/** Evaluates to 'true' if the given type (T) implements the given contract (ContractT). */
 	template <class T, template <class F> class ContractT>
-	struct has_contract
-		: std::is_base_of<ContractT<T>, T>
-	{};
+	using has_contract = std::is_base_of<ContractT<T>, T>;
 
 	/** Type holding a sequence of other types. */
 	template <typename ... T>
@@ -103,7 +91,7 @@ namespace stdEXT
 	/** Executes the given function with the given arguments if the predicate is true, otherwise does nothing. 
 	* NOTE: This is a useful substitute for 'static_if', and should be deprecated once that becomes a part of the language. */
 	template <bool Predicate, typename T, typename ... Args>
-	inline void conditionally_execute(const T& function, Args&& ... args)
+	void conditionally_execute(const T& function, Args&& ... args)
 	{
 		Implementation::conditionally_execute(bool_constant<Predicate>{}, function, std::forward<Args>(args)...);
 	}

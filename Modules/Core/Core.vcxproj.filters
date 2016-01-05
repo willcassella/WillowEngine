@@ -55,6 +55,9 @@
     <Filter Include="source\Math">
       <UniqueIdentifier>{2d940d36-c5e3-4814-8cec-2f815e9143f4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\Concurrency">
+      <UniqueIdentifier>{6127085b-8d7f-4d75-9835-f9a0316688af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Core\Containers\Array.h">
@@ -246,6 +249,12 @@
     <ClInclude Include="include\Core\Math\Angle.h">
       <Filter>include\Math</Filter>
     </ClInclude>
+    <ClInclude Include="include\Core\Concurrency\Task.h">
+      <Filter>include\Concurrency</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\STDExt\Utility.h">
+      <Filter>include\STDExt</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\String.cpp">
@@ -285,9 +294,6 @@
       <Filter>source\Misc</Filter>
     </ClCompile>
     <ClCompile Include="source\Reflection\VoidInfo.cpp">
-      <Filter>source\Reflection</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Reflection\Variant.cpp">
       <Filter>source\Reflection</Filter>
     </ClCompile>
     <ClCompile Include="source\Operations\ToString.cpp">

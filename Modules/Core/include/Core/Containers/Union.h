@@ -18,6 +18,8 @@ private:
 	/** Aliasis a type_sequence holding the types supported by this Union. */
 	using Seq = stdEXT::type_sequence<T...>;
 
+	static_assert(sizeof...(T) <= std::numeric_limits<Index>::max(), "You have too many types in this Union.");
+
 	////////////////////////
 	///   Constructors   ///
 public:
@@ -251,7 +253,7 @@ public:
 			}
 		}
 
-		return self;
+		return *this;
 	}
 	Union& operator=(Union&& move)
 	{
@@ -272,14 +274,14 @@ public:
 			}
 		}
 
-		return self;
+		return *this;
 	}
 
 	template <typename F, WHERE(!std::is_same<std::decay_t<F>, Union>::value)>
 	Union& operator=(F&& value)
 	{
 		Set(std::forward<F>(value));
-		return self;
+		return *this;
 	}
 
 	////////////////

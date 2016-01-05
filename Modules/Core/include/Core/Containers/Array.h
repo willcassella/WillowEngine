@@ -31,14 +31,14 @@ public:
 	static_assert(!std::is_reference<T>::value,
 		"You can't create an 'Array' of references, dumbass");
 
-	static_assert(Operations::Construct<T, T&&>::Supported,
+	static_assert(Operations::MoveConstruct<T>::Supported,
 		"T must be move-constructible.");
 
 	/** Array's copy-constructor is only supported if T's copy-constructor is supported. */
-	static constexpr bool CopyConstructorSupported = Operations::Construct<T, const T&>::Supported;
+	static constexpr bool CopyConstructorSupported = Operations::CopyConstruct<T>::Supported;
 
 	/** Array's copy-assignment operator is only supported it T's copy-assignment operator is supported. */
-	static constexpr bool CopyAssignmentSupported = Operations::Assign<T, const T&>::Supported;
+	static constexpr bool CopyAssignmentSupported = Operations::CopyAssign<T>::Supported;
 
 	///////////////////////
 	///   Inner Types   ///
@@ -512,14 +512,14 @@ public:
 	* NOTE: To prevent loss of data, ensure that the given size is greater than the current size of the array. */
 	void Resize(uint32 size)
 	{
-		DynamicBuffer newBuff = DynamicBuffer(size * sizeof(T));
+		auto newBuff = DynamicBuffer(size * sizeof(T));
 
 		uint32 i;
 		for (i = 0; i < size && i < Size(); ++i)
 		{
 			// Move all elements below 'size' into new array
 			T& value = FastGet(i);
-			new((T*)newBuff.GetValue() + i) T(std::move(value));
+			new(newBuff.GetValueAs<T>() + i) T(std::move(value));
 			value.~T();
 		}
 

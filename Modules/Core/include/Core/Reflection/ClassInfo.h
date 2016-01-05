@@ -51,7 +51,7 @@ public:
 	const DataInfo* FindData(const String& name) const final override;
 
 	/** Returns a pointer to the base class of this class. 
-	* NOTE: In the case of 'Object', this return null. */
+	* NOTE: In the case of 'Object', this returns null. */
 	FORCEINLINE const ClassInfo* GetBase() const
 	{
 		return _data.Base;

@@ -16,7 +16,7 @@ DynamicBuffer::DynamicBuffer()
 DynamicBuffer::DynamicBuffer(uint32 size)
 {
 	_size = size;
-	_value = (byte*)malloc(size);
+	_value = static_cast<byte*>(malloc(size));
 }
 
 DynamicBuffer::DynamicBuffer(const DynamicBuffer& copy)
@@ -45,7 +45,7 @@ DynamicBuffer::~DynamicBuffer()
 void DynamicBuffer::Resize(uint32 newSize)
 {
 	_size = newSize;
-	_value = (byte*)realloc(_value, newSize);
+	_value = static_cast<byte*>(realloc(_value, newSize));
 }
 
 void DynamicBuffer::Reset(uint32 newSize)
@@ -53,7 +53,7 @@ void DynamicBuffer::Reset(uint32 newSize)
 	free(_value);
 
 	_size = newSize;
-	_value = (byte*)malloc(newSize);
+	_value = static_cast<byte*>(malloc(newSize));
 }
 
 /////////////////////

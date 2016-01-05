@@ -245,4 +245,24 @@ namespace Operations
 		/** Whether the destructor is supported. */
 		static constexpr bool Supported = std::is_destructible<T>::value;
 	};
+
+	/** Aliases the default constructor operation. */
+	template <typename T>
+	using DefaultConstruct = Construct<T>;
+
+	/** Aliases the copy constructor operation. */
+	template <typename T>
+	using CopyConstruct = Construct<T, const T&>;
+
+	/** Aliases the move constructor operation. */
+	template <typename T>
+	using MoveConstruct = Construct<T, T&&>;
+
+	/** Aliases the copy assignment operation. */
+	template <typename T>
+	using CopyAssign = Assign<T, const T&>;
+
+	/** Aliases the move assignment operation. */
+	template <typename T>
+	using MoveAssign = Assign<T, T&&>;
 }

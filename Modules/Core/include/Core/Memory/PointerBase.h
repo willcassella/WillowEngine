@@ -7,3 +7,14 @@ struct PointerBase
 {
 	
 };
+
+/** Smart pointers used for non-nullable borrows. Will be used in the future. */
+template <typename T>
+using ref = T&;
+
+/** Smart pointer used for nullable borrows. Will be used in the future. */
+template <typename T>
+using ptr = T*;
+
+template <typename T>
+using weak_ptr = T*;

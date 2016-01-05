@@ -20,8 +20,6 @@ public:
 public:
 
 	Module(const String& name);
-	Module(const Module& copy) = delete;
-	Module(Module&& other) = delete;
 
 	///////////////////
 	///   Methods   ///
@@ -42,13 +40,6 @@ public:
 	/** Searches for the type with the given name in this module
 	* NOTE: returns a null pointer if the type was not found */
 	const TypeInfo* FindType(const String& name) const;
-
-	/////////////////////
-	///   Operators   ///
-public:
-
-	Module& operator=(const Module& copy) = delete;
-	Module& operator=(Module&& other) = delete;
 
 	////////////////
 	///   Data   ///

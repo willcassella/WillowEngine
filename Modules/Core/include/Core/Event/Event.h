@@ -48,7 +48,7 @@ public:
 	{
 		if (_value)
 		{
-			return (*_value).GetType();
+			return _value.GetValueType();
 		}
 		else
 		{

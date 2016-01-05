@@ -28,15 +28,15 @@ public:
 	/** Dispatch an event */
 	void DispatchEvent(Event&& event);
 
-	FORCEINLINE void DispatchEvent(const String& name)
+	FORCEINLINE void DispatchEvent(String name)
 	{
-		DispatchEvent(Event(name));
+		DispatchEvent(Event{ std::move(name) });
 	}
 
 	template <typename ArgT>
-	FORCEINLINE void DispatchEvent(const String& name, const ArgT& value)
+	FORCEINLINE void DispatchEvent(String name, ArgT&& value)
 	{
-		DispatchEvent(Event(name, value));
+		DispatchEvent(Event{ std::move(name), std::forward<ArgT>(value) });
 	}
 
 	/** Binds the given event handler on the given object to the given event */

@@ -5,6 +5,7 @@
 #include "Reflection/TypePtr.h"
 #include "Memory/MemoryManager.h"
 
+/** Singleton for the entire application. */
 struct CORE_API Application final
 {
 	///////////////////////

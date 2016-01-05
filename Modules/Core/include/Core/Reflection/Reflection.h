@@ -519,8 +519,7 @@ namespace Implementation
 /////////////////////
 ///   Functions   ///
 
-/** Retrieves the type information for the given type.
-* DO NOT OVERLOAD: Specialize struct 'Implementation::TypeOf'. */
+/** Retrieves the type information for the given type. */
 template <typename T>
 FORCEINLINE const auto& TypeOf()
 {
@@ -528,7 +527,7 @@ FORCEINLINE const auto& TypeOf()
 }
 
 /** Retrieves the type information for the given value.
-* DO NOT OVERLOAD: Specialize struct 'Implementation::GetType'. */
+* DO NOT OVERLOAD: Specialize struct 'Implementation::TypeOf'. */
 template <typename T>
 FORCEINLINE const auto& TypeOf(const T& value)
 {

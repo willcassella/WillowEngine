@@ -178,6 +178,15 @@ public:
 		return _controller != nullptr;
 	}
 
+	operator T*() &
+	{
+		return this->Get();
+	}
+	operator const T*() const &
+	{
+		return this->Get();
+	}
+
 	template <typename F>
 	UniquePtr& operator=(const UniquePtr<F>& copy) = delete;
 

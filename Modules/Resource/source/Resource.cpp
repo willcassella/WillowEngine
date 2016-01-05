@@ -7,8 +7,10 @@
 ///   Reflection   ///
 
 BUILD_REFLECTION(Resource)
-.Property("Path", &Resource::_path, nullptr, "The path to the Resource.")
-.Property("Size", &Resource::_size, nullptr, "The size of the Resource.");
+.Data("Path", &Resource::_path)
+.Data("Size", &Resource::_size)
+.Property("Path", &Resource::GetPath, nullptr, "The path to the Resource.")
+.Property("Size", &Resource::GetSize, nullptr, "The size of the Resource.");
 
 ////////////////////////
 ///   Constructors   ///
