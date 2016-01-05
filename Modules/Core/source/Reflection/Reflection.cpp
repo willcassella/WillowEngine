@@ -1,4 +1,4 @@
-// Reflection.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
+// Reflection.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
 #include "../../include/Core/Reflection/VoidInfo.h"
 #include "../../include/Core/Reflection/PrimitiveInfo.h"

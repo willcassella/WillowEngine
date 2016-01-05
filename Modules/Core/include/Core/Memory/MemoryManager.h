@@ -1,4 +1,4 @@
-// MemoryManager.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
+// MemoryManager.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
 #include "../Forwards/Core.h"

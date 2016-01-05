@@ -1,4 +1,4 @@
-// Vec4.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
+// Vec4.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
 #include "../../include/Core/Math/Vec4.h"
 #include "../../include/Core/Reflection/StructInfo.h"

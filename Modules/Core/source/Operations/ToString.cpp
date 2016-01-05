@@ -1,4 +1,4 @@
-// ToString.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
+// ToString.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
 #include <string>
 #include "../../include/Core/Operations/ToString.h"

@@ -1,4 +1,4 @@
-// Event.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
+// Event.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
 #include "../String.h"

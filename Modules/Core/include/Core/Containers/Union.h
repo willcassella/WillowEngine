@@ -1,4 +1,4 @@
-// Union.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
+// Union.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
 #include "../Forwards/Reflection.h"

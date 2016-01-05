@@ -1,4 +1,4 @@
-// CompoundInfo.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
+// CompoundInfo.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
 #include "../../include/Core/Reflection/CompoundInfo.h"
 #include "../../include/Core/Reflection/ClassInfo.h"

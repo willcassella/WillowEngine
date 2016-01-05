@@ -1,4 +1,4 @@
-// env.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
+// env.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 /** All macros for determining compiler and build environment go here */
 #pragma once
 

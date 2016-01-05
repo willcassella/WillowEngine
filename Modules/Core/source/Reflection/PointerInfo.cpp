@@ -1,4 +1,4 @@
-// PointerInfo.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
+// PointerInfo.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
 #include "../../include/Core/Reflection/PointerInfo.h"
 #include "../../include/Core/Reflection/ClassInfo.h"

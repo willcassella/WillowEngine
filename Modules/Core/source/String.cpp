@@ -1,4 +1,4 @@
-// String.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
+// String.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
 #include <cstring>
 #include "../include/Core/String.h"

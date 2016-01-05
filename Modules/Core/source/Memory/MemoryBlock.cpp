@@ -1,4 +1,4 @@
-// MemoryBlock.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
+// MemoryBlock.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
 #include "../../include/Core/Memory/MemoryBlock.h"
 #include "../../include/Core/Reflection/Variant.h"

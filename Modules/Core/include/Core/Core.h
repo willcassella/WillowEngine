@@ -1,4 +1,4 @@
-// Core.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
+// Core.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 /** Since a lot of the core behavior is spread out across many header files, this includes all of them */
 #pragma once
 
