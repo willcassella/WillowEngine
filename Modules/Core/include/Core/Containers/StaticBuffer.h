@@ -32,7 +32,7 @@ public:
 
 	/** Uses placement new to construct an instance of the given type in this StaticBuffer. */
 	template <typename T, typename ... Args>
-	T& PlaceValue(Args&& ... args) &
+	T& Emplace(Args&& ... args) &
 	{
 		static_assert(sizeof(T) <= Size, "This StaticBuffer is not large enough to contain the given value.");
 		return *new (_value) T(std::forward<Args>(args)...);

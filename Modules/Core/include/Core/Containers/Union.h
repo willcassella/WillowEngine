@@ -118,7 +118,7 @@ public:
 			}
 		}
 
-		new (_value.GetValue()) DecayF(std::forward<F>(value));
+		_value.Emplace<DecayF>(std::forward<F>(value));
 		_index = newIndex;
 	}
 
@@ -128,7 +128,7 @@ public:
 	F& Get()
 	{
 		assert(HasValue() && _index.GetValue() == IndexOf<F>());
-		return *_value.template GetValueAs<F>();
+		return *_value.template GetPointer<F>();
 	}
 
 	/** Gets the current value of this Union as the given type.
@@ -137,7 +137,7 @@ public:
 	const F& Get() const
 	{
 		assert(_index.HasValue() && _index.GetValue() == IndexOf<F>());
-		return *_value.template GetValueAs<F>();
+		return *_value.template GetPointer<F>();
 	}
 
 	/** Invokes the given function on the current value.
@@ -149,7 +149,7 @@ public:
 		Invoker* funcs[] = { CreateInvoker<T, R, Func>()... };
 		
 		assert(HasValue());
-		return funcs[_index.GetValue()](_value.GetValue(), func);
+		return funcs[_index.GetValue()](_value.GetPointer<void>(), func);
 	}
 
 	/** Invokes the given function on the current value.
@@ -161,7 +161,7 @@ public:
 		Invoker* funcs[] = { CreateInvoker<T, R, Func>()... };
 
 		assert(HasValue());
-		return funcs[_index.GetValue()](_value.GetValue(), func);
+		return funcs[_index.GetValue()](_value.GetPointer<void>(), func);
 	}
 
 private:

@@ -197,7 +197,7 @@ private:
 	template <typename F>
 	void PlaceValue(F&& value)
 	{
-		_buffer.template PlaceValue<T>(std::forward<F>(value));
+		_buffer.template Emplace<T>(std::forward<F>(value));
 		_hasValue = true;
 	}
 
