@@ -1,5 +1,6 @@
 // String.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
+#include <locale>
 #include <cstring>
 #include "../include/Core/String.h"
 
@@ -8,7 +9,7 @@
 
 String String::SubString(uint32 start, uint32 end) const
 {
-	if (start >= end || start >= Length())
+	if (start >= end || start >= this->Length())
 	{
 		return "";
 	}
@@ -18,96 +19,11 @@ String String::SubString(uint32 start, uint32 end) const
 
 String String::ToUpper() const
 {
-	Array<Char> result(Length());
+	auto result = Array<Char>(this->Length());
 
-	for (uint32 i = 0; i < Length(); ++i)
+	for (uint32 i = 0; i < this->Length(); ++i)
 	{
-		Char character = self[i];
-
-		switch (character)
-		{
-		case 'a':
-			result.Add('A');
-			break;
-		case 'b':
-			result.Add('B');
-			break;
-		case 'c':
-			result.Add('C');
-			break;
-		case 'd':
-			result.Add('D');
-			break;
-		case 'e':
-			result.Add('E');
-			break;
-		case 'f':
-			result.Add('F');
-			break;
-		case 'g':
-			result.Add('G');
-			break;
-		case 'h':
-			result.Add('H');
-			break;
-		case 'i':
-			result.Add('I');
-			break;
-		case 'j':
-			result.Add('J');
-			break;
-		case 'k':
-			result.Add('K');
-			break;
-		case 'l':
-			result.Add('L');
-			break;
-		case 'm':
-			result.Add('M');
-			break;
-		case 'n':
-			result.Add('N');
-			break;
-		case 'o':
-			result.Add('O');
-			break;
-		case 'p':
-			result.Add('P');
-			break;
-		case 'q':
-			result.Add('Q');
-			break;
-		case 'r':
-			result.Add('R');
-			break;
-		case 's':
-			result.Add('S');
-			break;
-		case 't':
-			result.Add('T');
-			break;
-		case 'u':
-			result.Add('U');
-			break;
-		case 'v':
-			result.Add('V');
-			break;
-		case 'w':
-			result.Add('W');
-			break;
-		case 'x':
-			result.Add('X');
-			break;
-		case 'y':
-			result.Add('Y');
-			break;
-		case 'z':
-			result.Add('Z');
-			break;
-		default:
-			result.Add(character);
-			break;
-		}
+		result.Add(std::toupper(this->CharAt(i), std::locale()));
 	}
 
 	return String(result);
@@ -115,96 +31,11 @@ String String::ToUpper() const
 
 String String::ToLower() const
 {
-	Array<Char> result(Length());
+	auto result = Array<Char>(this->Length());
 
-	for (uint32 i = 0; i < Length(); ++i)
+	for (uint32 i = 0; i < this->Length(); ++i)
 	{
-		Char character = self[i];
-
-		switch (character)
-		{
-		case 'A':
-			result.Add('a');
-			break;
-		case 'B':
-			result.Add('b');
-			break;
-		case 'C':
-			result.Add('c');
-			break;
-		case 'D':
-			result.Add('d');
-			break;
-		case 'E':
-			result.Add('e');
-			break;
-		case 'F':
-			result.Add('f');
-			break;
-		case 'G':
-			result.Add('g');
-			break;
-		case 'H':
-			result.Add('h');
-			break;
-		case 'I':
-			result.Add('i');
-			break;
-		case 'J':
-			result.Add('j');
-			break;
-		case 'K':
-			result.Add('k');
-			break;
-		case 'L':
-			result.Add('l');
-			break;
-		case 'M':
-			result.Add('m');
-			break;
-		case 'N':
-			result.Add('n');
-			break;
-		case 'O':
-			result.Add('o');
-			break;
-		case 'P':
-			result.Add('p');
-			break;
-		case 'Q':
-			result.Add('q');
-			break;
-		case 'R':
-			result.Add('r');
-			break;
-		case 'S':
-			result.Add('s');
-			break;
-		case 'T':
-			result.Add('t');
-			break;
-		case 'U':
-			result.Add('u');
-			break;
-		case 'V':
-			result.Add('v');
-			break;
-		case 'W':
-			result.Add('w');
-			break;
-		case 'X':
-			result.Add('x');
-			break;
-		case 'Y':
-			result.Add('y');
-			break;
-		case 'Z':
-			result.Add('z');
-			break;
-		default:
-			result.Add(character);
-			break;
-		}
+		result.Add(std::tolower(this->CharAt(i), std::locale()));
 	}
 
 	return String(result);
@@ -214,7 +45,7 @@ bool String::StartsWith(const String& string) const
 {
 	for (uint32 i = 0; i < string.Length(); ++i)
 	{
-		if (self[i] != string[i])
+		if (this->CharAt(i) != string.CharAt(i))
 		{
 			return false;
 		}
@@ -227,7 +58,7 @@ bool String::EndsWith(const String& string) const
 {
 	for (uint32 i = 1; i <= string.Length(); ++i)
 	{
-		if (self[Length() - i] != string[string.Length() - i])
+		if (this->CharAt(this->Length() - i) != string.CharAt(string.Length() - i))
 		{
 			return false;
 		}
@@ -263,7 +94,7 @@ Array<uint32> String::OccurencesOf(const String& string) const
 {
 	Array<uint32> occurences;
 
-	for (uint32 i = 0; i < Length(); ++i)
+	for (uint32 i = 0; i < this->Length(); ++i)
 	{
 		String comp = SubString(i, i + string.Length());
 		if (comp == string)
@@ -279,9 +110,9 @@ String String::Reverse() const
 {
 	Array<Char> result;
 
-	for (int32 i = Length(); i > 0; --i)
+	for (int32 i = this->Length(); i > 0; --i)
 	{
-		result.Add(self[i - 1]);
+		result.Add(this->CharAt(i - 1));
 	}
 
 	return String(result);
@@ -296,7 +127,7 @@ int32 String::Compare(const String& stringA, const String& stringB, bool caseSen
 {
 	if (!caseSensitive)
 	{
-		return Compare(stringA.ToLower(), stringB.ToLower(), true);
+		return String::Compare(stringA.ToLower(), stringB.ToLower(), true);
 	}
 
 	return strcmp(stringA.Cstr(), stringB.Cstr());
@@ -307,8 +138,8 @@ int32 String::Compare(const String& stringA, const String& stringB, bool caseSen
 
 String& String::operator=(CString rhs)
 {
-	_value = Array<Char>(rhs, Length(rhs) + 1);
-	return self;
+	_value = Array<Char>(rhs, this->Length(rhs) + 1);
+	return *this;
 }
 
 String& String::operator=(Char rhs)
@@ -316,7 +147,7 @@ String& String::operator=(Char rhs)
 	_value.Reset(2);
 	_value.Add(rhs);
 	_value.Add('\0');
-	return self;
+	return *this;
 }
 
 bool operator>(const String& lhs, const String& rhs)

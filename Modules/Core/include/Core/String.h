@@ -64,11 +64,17 @@ public:
 		return &_value.First();
 	}
 
+	/** Returns the character at the given index in this String. */
+	FORCEINLINE Char CharAt(uint32 index) const
+	{
+		return _value[index];
+	}
+
 	/** Returns a substring from the character at the start index to the end of this String
 	* Returns an empty String if start is greater than the length of this String */
 	FORCEINLINE String SubString(uint32 start) const
 	{
-		return SubString(start, Length());
+		return this->SubString(start, this->Length());
 	}
 
 	/** Returns a substring from the character at the start index to the character and the end index
@@ -117,14 +123,7 @@ public:
 	String& operator=(Char rhs);
 	FORCEINLINE Char operator[](uint32 index) const
 	{
-		if (index < Length())
-		{
-			return _value[index];
-		}
-		else
-		{
-			return '\0';
-		}
+		return _value[index];
 	}
 	friend FORCEINLINE bool operator==(const String& lhs, const String& rhs)
 	{
