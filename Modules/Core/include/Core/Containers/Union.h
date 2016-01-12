@@ -16,7 +16,7 @@ private:
 	using Index = byte;
 
 	/** Aliasis a type_sequence holding the types supported by this Union. */
-	using Seq = stdEXT::type_sequence<T...>;
+	using Seq = stde::type_sequence<T...>;
 
 	static_assert(sizeof...(T) <= std::numeric_limits<Index>::max(), "You have too many types in this Union.");
 
@@ -170,20 +170,20 @@ private:
 	template <typename S>
 	static constexpr Index IndexOf()
 	{
-		static_assert(Seq::template Contains<S>(), "The given type does not exist in this Union.");
+		static_assert(Seq::template contains<S>(), "The given type does not exist in this Union.");
 		return IndexOf<S>(0, Seq{});
 	}
 
 	/** Recursively finds the index of the given type. */
 	template <typename S, typename C, typename ... F>
-	static constexpr Index IndexOf(Index current, stdEXT::type_sequence<C, F...>)
+	static constexpr Index IndexOf(Index current, stde::type_sequence<C, F...>)
 	{
-		return std::is_same<S, C>::value ? current : IndexOf<S>(current + 1, stdEXT::type_sequence<F...>{});
+		return std::is_same<S, C>::value ? current : IndexOf<S>(current + 1, stde::type_sequence<F...>{});
 	}
 
 	/** End case, never actually reached. */
 	template <typename S>
-	static constexpr Index IndexOf(Index /*current*/, stdEXT::type_sequence<>)
+	static constexpr Index IndexOf(Index /*current*/, stde::type_sequence<>)
 	{
 		return 0;
 	}
@@ -220,13 +220,13 @@ private:
 
 	/** Returns the size of the largest type among the types suppored by this Union. */
 	template <typename F, typename ... MoreF>
-	static constexpr std::size_t GetMaxSize(stdEXT::type_sequence<F, MoreF...>)
+	static constexpr std::size_t GetMaxSize(stde::type_sequence<F, MoreF...>)
 	{
-		return Max(sizeof(F), GetMaxSize(stdEXT::type_sequence<MoreF...>{}));
+		return Max(sizeof(F), GetMaxSize(stde::type_sequence<MoreF...>{}));
 	}
 
 	/** Returns the size of the largest type among the types suppored by this Union. */
-	static constexpr std::size_t GetMaxSize(stdEXT::type_sequence<>)
+	static constexpr std::size_t GetMaxSize(stde::type_sequence<>)
 	{
 		return 0;
 	}

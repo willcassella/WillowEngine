@@ -366,7 +366,7 @@ private:
 			auto val = pOwner->*field;
 			String remainder = FromString(val, string);
 			(pOwner->*setter)(std::move(val));
-			return std::move(remainder);
+			return remainder;
 		};
 	}
 
@@ -380,7 +380,7 @@ private:
 			auto val = (pOwner->*getter)();
 			String remainder = FromString(val, string);
 			(pOwner->*setter)(std::move(val));
-			return std::move(remainder);
+			return remainder;
 		};
 	}
 
@@ -503,7 +503,7 @@ private:
 	static void GetterSetterAsserts()
 	{
 		static_assert(std::is_same<std::decay_t<GetT>, std::decay_t<SetT>>::value, "The setter must accept the same type as the getter.");
-		static_assert(std::is_object<SetT>::value || stdEXT::is_const_reference<SetT>::value, "The setter must either accept by value or const-reference.");
+		static_assert(std::is_object<SetT>::value || stde::is_const_reference<SetT>::value, "The setter must either accept by value or const-reference.");
 	}
 
 	////////////////

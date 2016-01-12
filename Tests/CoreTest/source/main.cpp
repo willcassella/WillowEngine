@@ -4,6 +4,7 @@
 #include <Core/Math/Vec4.h>
 #include <Core/Containers/Nullable.h>
 #include <Core/Containers/Union.h>
+#include <Core/Testing/Test.h>
 
 void FormatTest()
 {
@@ -14,15 +15,25 @@ void FormatTest()
 	Console::WriteLine(fTest);
 }
 
+void StringTest()
+{
+	String test = "Hello";
+	Console::WriteLine(test);
+	test = test.ToUpper();
+	Console::WriteLine(test);
+	test = test.ToLower();
+	Console::WriteLine(test);
+}
+
 void NullableTest()
 {
 	auto printer = [](String value) { Console::WriteLine(value); };
 
 	Nullable<String> test;
-	test = "Oh, herro";
+	test = "Hello, world";
 	test.Invoke(printer);
 
-	Nullable<String>{"Herro"}.Invoke(printer);
+	Nullable<String>{"Test"}.Invoke(printer);
 }
 
 void UnionTest()
@@ -35,9 +46,11 @@ int main()
 {
 	Application::Initialize();	
 
-	FormatTest();
-	NullableTest();
-	UnionTest();
+	RUN_TEST(FormatTest);
+	RUN_TEST(StringTest);
+	RUN_TEST(NullableTest);
+	RUN_TEST(UnionTest);
+
 	Console::Prompt();
 
 	Application::Terminate();

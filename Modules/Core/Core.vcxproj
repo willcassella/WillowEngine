@@ -84,6 +84,7 @@
     <ClInclude Include="include\Core\STDExt\Utility.h" />
     <ClInclude Include="include\Core\String.h" />
     <ClInclude Include="include\Core\env.h" />
+    <ClInclude Include="include\Core\Testing\Test.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Application.cpp" />
@@ -118,6 +119,7 @@
     <ClCompile Include="source\Reflection\TypeInfo.cpp" />
     <ClCompile Include="source\Reflection\VoidInfo.cpp" />
     <ClCompile Include="source\String.cpp" />
+    <ClCompile Include="source\Testing\Test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\Core\Operations\ToString.h" />

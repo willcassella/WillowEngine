@@ -7,22 +7,6 @@
 #include "../Forwards/Reflection.h"
 #include "../STDExt/TypeTraits.h"
 
-/////////////////
-///   Types   ///
-
-namespace Contract
-{
-	/** Proxy contract. Proxies represent runtime access to values of unknown type. */
-	template <class T>
-	struct Proxy
-	{
-		Proxy()
-		{
-			// No contract assertions
-		}
-	};
-}
-
 //////////////////////////
 ///   Implementation   ///
 
@@ -41,11 +25,8 @@ namespace Implementation
 			using TypeInfoT = std::decay_t<StorageT>;
 
 			CommonAsserts<TypeInfoT>();
-			
-			static_assert(!stdEXT::has_contract<T, Contract::Proxy>::value,
-				"Proxy types do not have any static reflection data.");
 				
-			static_assert(stdEXT::is_const_object<StorageT>::value,
+			static_assert(stde::is_const_object<StorageT>::value,
 				"The 'StaticTypeInfo' static object must be a const value.");
 
 			return T::StaticTypeInfo;
@@ -58,7 +39,7 @@ namespace Implementation
 
 			CommonAsserts<TypeInfoT>();
 
-			static_assert(stdEXT::is_const_reference<ReturnT>::value,
+			static_assert(stde::is_const_reference<ReturnT>::value,
 				"The 'GetType()' member function must return an immutable reference");
 			
 			return value.GetType();
@@ -616,4 +597,4 @@ public:												\
 /** Put this macro in the Information section of every reflectable class that implements interfaces. */
 #define IMPLEMENTS(...)										\
 public:														\
-	using Interfaces = stdEXT::type_sequence<__VA_ARGS__>;
+	using Interfaces = stde::type_sequence<__VA_ARGS__>;

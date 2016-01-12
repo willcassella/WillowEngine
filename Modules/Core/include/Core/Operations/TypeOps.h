@@ -33,8 +33,8 @@ namespace Operations
 		FORCEINLINE static void Function(byte* location, Args ... args)
 		{
 			// Determine which implementation to use.
-			// Unfortunatly, I can't use 'stdEXT::conditionally_execute', because the type being constructed cannot be deduced from 'Args' alone.
-			Impl<T>(stdEXT::bool_constant<Supported>{}, location, std::forward<Args>(args)...);
+			// Unfortunatly, I can't use 'stde::conditionally_execute', because the type being constructed cannot be deduced from 'Args' alone.
+			Impl<T>(stde::bool_constant<Supported>{}, location, std::forward<Args>(args)...);
 		}
 
 		/** Whether the type supports being constructed with these arguments. */
@@ -76,7 +76,7 @@ namespace Operations
 				new(location) F(c);
 			};
 
-			stdEXT::conditionally_execute<Supported>(function, copy);
+			stde::conditionally_execute<Supported>(function, copy);
 		}
 
 		/** Whether this type supports the copy-constructor. */
@@ -118,7 +118,7 @@ namespace Operations
 				new (location) F(std::move(m));
 			};
 
-			stdEXT::conditionally_execute<Supported>(function, std::move(move));
+			stde::conditionally_execute<Supported>(function, std::move(move));
 		}
 
 		/** Whether this type supports the move-constructor. */
@@ -137,7 +137,7 @@ namespace Operations
 				v = std::forward<Arg>(a);
 			};
 
-			stdEXT::conditionally_execute<Supported>(function, value, std::forward<Arg>(arg));
+			stde::conditionally_execute<Supported>(function, value, std::forward<Arg>(arg));
 		}
 
 		/** Whether an assignment operator accepting the given arguments is supported. */
@@ -178,7 +178,7 @@ namespace Operations
 				value = c;
 			};
 
-			stdEXT::conditionally_execute<Supported>(function, copy);
+			stde::conditionally_execute<Supported>(function, copy);
 		}
 
 		/** Whether this type supports the copy-assignment operator. */
@@ -219,7 +219,7 @@ namespace Operations
 				value = std::move(m);
 			};
 
-			stdEXT::conditionally_execute<Supported>(function, std::move(move));
+			stde::conditionally_execute<Supported>(function, std::move(move));
 		}
 
 		/** Whether this type supports the move-assignment operator. */
@@ -239,7 +239,7 @@ namespace Operations
 				v.~F();
 			};
 
-			stdEXT::conditionally_execute<Supported>(function, value);
+			stde::conditionally_execute<Supported>(function, value);
 		}
 
 		/** Whether the destructor is supported. */

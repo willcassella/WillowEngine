@@ -16,7 +16,7 @@ struct TypePtr final
 	///   Information   ///
 public:
 
-	REFLECTABLE_STRUCT;
+	REFLECTABLE_STRUCT
 
 	////////////////////////
 	///   Constructors   ///
@@ -43,11 +43,6 @@ public:
 	///   Operators   ///
 public:
 
-	FORCEINLINE TypePtr& operator=(const TypeInfoT& type)
-	{
-		_type = &type;
-		return self;
-	}
 	FORCEINLINE operator const TypeInfoT&() const
 	{
 		return *_type;

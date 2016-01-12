@@ -121,20 +121,20 @@ public:
 private:
 
 	/** Adds all the interfaces within "type_sequence<...>" to this class's collection of implemented interfaces. */
-	void AddInterfaces(stdEXT::type_sequence<>)
+	void AddInterfaces(stde::type_sequence<>)
 	{
 		// Do nothing, no interfaces exist
 	}
 
 	/** Adds all the interfaces within "type_sequence<...>" to this class's collection of implemented interfaces. */
 	template <class InterfaceT, class ... MoreInterfaceT>
-	void AddInterfaces(stdEXT::type_sequence<InterfaceT, MoreInterfaceT...>)
+	void AddInterfaces(stde::type_sequence<InterfaceT, MoreInterfaceT...>)
 	{
 		static_assert(std::is_base_of<InterfaceT, ClassT>::value, "You must actually implement the interface.");
 		static_assert(std::is_same<TypeInfoTypeOf<InterfaceT>, InterfaceInfo>::value, "The type given to 'AddInterface' must be an interface.");
 
 		_data.Interfaces.Add(&TypeOf<InterfaceT>());
-		AddInterface(stdEXT::type_sequence<MoreInterfaceT...>{});
+		AddInterface(stde::type_sequence<MoreInterfaceT...>{});
 	}
 
 	////////////////

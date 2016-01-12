@@ -58,6 +58,12 @@
     <Filter Include="include\Concurrency">
       <UniqueIdentifier>{6127085b-8d7f-4d75-9835-f9a0316688af}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\Testing">
+      <UniqueIdentifier>{23c6307d-40d7-4a30-9f9d-7466427e97d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Testing">
+      <UniqueIdentifier>{f7fd4350-9b08-40b5-a354-1e2235deefdd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Core\Containers\Array.h">
@@ -255,6 +261,9 @@
     <ClInclude Include="include\Core\STDExt\Utility.h">
       <Filter>include\STDExt</Filter>
     </ClInclude>
+    <ClInclude Include="include\Core\Testing\Test.h">
+      <Filter>include\Testing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\String.cpp">
@@ -352,6 +361,9 @@
     </ClCompile>
     <ClCompile Include="source\Memory\MemoryBlock.cpp">
       <Filter>source\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Testing\Test.cpp">
+      <Filter>source\Testing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

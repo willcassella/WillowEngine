@@ -3,7 +3,7 @@
 
 #include <type_traits>
 
-namespace stdEXT
+namespace stde
 {
 	namespace Implementation
 	{
@@ -53,33 +53,29 @@ namespace stdEXT
 	template <typename T>
 	using is_mutable_object = bool_constant<std::is_object<T>::value && !std::is_const<T>::value>;
 
-	/** Evaluates to 'true' if the given type (T) implements the given contract (ContractT). */
-	template <class T, template <class F> class ContractT>
-	using has_contract = std::is_base_of<ContractT<T>, T>;
-
 	/** Type holding a sequence of other types. */
 	template <typename ... T>
 	struct type_sequence final
 	{
 		/** Returns whether this type_sequence contains the given type. */
 		template <typename S>
-		static constexpr bool Contains()
+		static constexpr bool contains()
 		{
-			return Contains<S>(type_sequence<T...>{});
+			return contains<S>(type_sequence<T...>{});
 		}
 
 	private:
 
 		/** Recursively checks each element of the given type_sequence. */
 		template <typename S, typename C, typename ... F>
-		static constexpr bool Contains(type_sequence<C, F...>)
+		static constexpr bool contains(type_sequence<C, F...>)
 		{
-			return std::is_same<S, C>::value || Contains<S>(type_sequence<F...>{});
+			return std::is_same<S, C>::value || contains<S>(type_sequence<F...>{});
 		}
 
 		/** Case were we have no more types in the type_sequence. */
 		template <typename S>
-		static constexpr bool Contains(type_sequence<>)
+		static constexpr bool contains(type_sequence<>)
 		{
 			return false;
 		}

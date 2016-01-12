@@ -25,7 +25,7 @@ public:
 	PrimitiveInfo(const TypeInfoBuilder<PrimitiveT, PrimitiveInfo>& builder)
 		: Base(builder)
 	{
-		static_assert(stdEXT::is_primitive<PrimitiveT>::value || std::is_fundamental<PrimitiveT>::value || std::is_enum<PrimitiveT>::value,
+		static_assert(stde::is_primitive<PrimitiveT>::value || std::is_fundamental<PrimitiveT>::value || std::is_enum<PrimitiveT>::value,
 			"Primitives types must be primitive");
 	}
 
@@ -33,10 +33,8 @@ public:
 	///   Methods   ///
 public:
 
-	/** Returns whether this type is castable (via reinterpret_cast) to the given type */
 	bool IsCastableTo(const TypeInfo& type) const override;
 
-	// TODO: Docuentation
 	bool IsStable() const final override;
 };
 
