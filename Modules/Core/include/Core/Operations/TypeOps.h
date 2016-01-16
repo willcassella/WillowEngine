@@ -1,9 +1,9 @@
 // TypeOps.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "../STDExt/TypeTraits.h"
+#include "../STDE/TypeTraits.h"
 #include "../Forwards/Operations.h"
-#include "../config.h"
+#include "../env.h"
 
 namespace Operations
 {

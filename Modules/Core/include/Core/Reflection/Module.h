@@ -1,9 +1,8 @@
 // Module.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "../Containers/Table.h"
-#include "../String.h"
 #include "../Object.h"
+#include "../Containers/String.h"
 
 /** Class holding a collection of Type information, associated with a .DLL/.SO */
 class CORE_API Module final : public Object

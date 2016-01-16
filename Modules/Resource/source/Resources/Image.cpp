@@ -1,7 +1,7 @@
 // Image.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
 #include <FreeImage.h>
-#include <Core/Console.h>
+#include <Core/IO/Console.h>
 #include "../../include/Resource/Resources/Image.h"
 
 //////////////////////

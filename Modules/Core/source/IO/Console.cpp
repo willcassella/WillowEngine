@@ -1,7 +1,7 @@
 // Console.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
 #include <iostream>
-#include "../include/Core/Console.h"
+#include "../../include/Core/IO/Console.h"
 
 constexpr uint32 MaxInput = 256; // Max number of characters retrieved from one line of input
 constexpr CString WarningPrefix = "WARNING: "; // String printed before every warning

@@ -5,7 +5,7 @@
 #include "../config.h"
 #include "../Forwards/Containers.h"
 #include "../Forwards/Reflection.h"
-#include "../STDExt/TypeTraits.h"
+#include "../STDE/TypeTraits.h"
 
 //////////////////////////
 ///   Implementation   ///

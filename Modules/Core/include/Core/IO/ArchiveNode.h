@@ -1,8 +1,8 @@
 // ArchiveNode.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "Forwards/Core.h"
-#include "Forwards/Containers.h"
+#include "../config.h"
+#include "../Forwards/Containers.h"
 
 /////////////////
 ///   Types   ///

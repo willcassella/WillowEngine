@@ -2,7 +2,7 @@
 #pragma once
 
 #include "../Forwards/Operations.h"
-#include "../String.h"
+#include "../Containers/String.h"
 
 //////////////////////////
 ///   Implementation   ///

@@ -2,7 +2,7 @@
 
 #include <locale>
 #include <cstring>
-#include "../include/Core/String.h"
+#include "../../include/Core/Containers/String.h"
 
 ///////////////////
 ///   Methods   ///

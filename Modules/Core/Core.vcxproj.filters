@@ -58,10 +58,16 @@
     <Filter Include="include\Concurrency">
       <UniqueIdentifier>{6127085b-8d7f-4d75-9835-f9a0316688af}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\Testing">
+    <Filter Include="include\IO">
+      <UniqueIdentifier>{9c50e67e-59ad-420b-b035-1406bbdf837d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Test">
       <UniqueIdentifier>{23c6307d-40d7-4a30-9f9d-7466427e97d4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\Testing">
+    <Filter Include="source\IO">
+      <UniqueIdentifier>{580e232c-26e7-4b12-9b1c-b7356f739dec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Test">
       <UniqueIdentifier>{f7fd4350-9b08-40b5-a354-1e2235deefdd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -105,16 +111,10 @@
     <ClInclude Include="include\Core\config.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Console.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Interface.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Core\Object.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Core\String.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Core\Application.h">
@@ -225,9 +225,6 @@
     <ClInclude Include="include\Core\Operations\FromArchive.h">
       <Filter>include\Operations</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\ArchiveNode.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Reflection\DataInfo.h">
       <Filter>include\Reflection</Filter>
     </ClInclude>
@@ -261,17 +258,23 @@
     <ClInclude Include="include\Core\STDExt\Utility.h">
       <Filter>include\STDExt</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Testing\Test.h">
-      <Filter>include\Testing</Filter>
+    <ClInclude Include="include\Core\IO\ArchiveNode.h">
+      <Filter>include\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\IO\Console.h">
+      <Filter>include\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Containers\String.h">
+      <Filter>include\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Test\Test.h">
+      <Filter>include\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Forwards\IO.h">
+      <Filter>include\Forwards</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\String.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Console.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="source\Object.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -363,7 +366,13 @@
       <Filter>source\Memory</Filter>
     </ClCompile>
     <ClCompile Include="source\Testing\Test.cpp">
-      <Filter>source\Testing</Filter>
+      <Filter>source\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Containers\String.cpp">
+      <Filter>source\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="source\IO\Console.cpp">
+      <Filter>source\IO</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -5,7 +5,6 @@
 ////////////////
 ///   Core   ///
 
-#include "Console.h"
 #include "Object.h"
 #include "Interface.h"
 #include "Application.h"

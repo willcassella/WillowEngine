@@ -4,7 +4,7 @@
 #include <Core/Math/Vec4.h>
 #include <Core/Containers/Nullable.h>
 #include <Core/Containers/Union.h>
-#include <Core/Testing/Test.h>
+#include <Core/Test/Test.h>
 
 void FormatTest()
 {
@@ -33,7 +33,7 @@ void NullableTest()
 	test = "Hello, world";
 	test.Invoke(printer);
 
-	Nullable<String>{"Test"}.Invoke(printer);
+	Nullable<String>("Test").Invoke(printer);
 }
 
 void UnionTest()

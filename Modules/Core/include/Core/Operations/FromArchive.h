@@ -2,7 +2,6 @@
 #pragma once
 
 #include "../Forwards/Operations.h"
-#include "../ArchiveNode.h"
 
 //////////////////////////
 ///   Implementation   ///

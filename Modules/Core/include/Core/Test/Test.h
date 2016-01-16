@@ -1,7 +1,7 @@
 // Test.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "../Console.h"
+#include "../config.h"
 
 namespace WTest
 {

@@ -46,10 +46,6 @@ struct Property;
 /** Defined in 'Reflection/PropertyInfo.h' */
 struct ImmutableProperty;
 
-/** Defined in 'Reflection/Reflection.h' */
-template <typename T>
-struct Proxy;
-
 /////////////////////
 ///   Functions   ///
 

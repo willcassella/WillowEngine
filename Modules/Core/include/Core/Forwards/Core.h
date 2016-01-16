@@ -4,9 +4,6 @@
 /////////////////
 ///   Types   ///
 
-/** Defined in 'String.h' */
-struct String;
-
 /** Defined in 'Object.h */
 class Object;
 
@@ -15,6 +12,3 @@ class Interface;
 
 /** Defined in 'Application.h' */
 struct Application;
-
-/** Defined in 'ArchiveNode.h' */
-class ArchiveNode;

@@ -1,8 +1,8 @@
 // TypeInfo.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "../String.h"
 #include "../Object.h"
+#include "../Containers/String.h"
 #include "../Operations/TypeOps.h"
 #include "../Operations/ToString.h"
 #include "../Operations/FromString.h"

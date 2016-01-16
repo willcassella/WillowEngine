@@ -2,7 +2,7 @@
 #pragma once
 
 #include "Forwards/Core.h"
-#include "STDExt/Utility.h"
+#include "STDE/Utility.h"
 #include "Containers/Array.h"
 #include "Reflection/Reflection.h"
 #include "Memory/MemoryBlock.h"

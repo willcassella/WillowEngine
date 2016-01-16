@@ -1,7 +1,7 @@
 // Event.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "../String.h"
+#include "../Containers/String.h"
 #include "../Memory/UniquePtr.h"
 #include "../Reflection/Variant.h"
 #include "../Reflection/VoidInfo.h"

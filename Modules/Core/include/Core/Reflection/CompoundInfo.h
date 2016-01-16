@@ -3,7 +3,7 @@
 
 #include "../Containers/StaticBuffer.h"
 #include "../Containers/Table.h"
-#include "../Console.h"
+#include "../IO/Console.h"
 #include "TypeInfo.h"
 #include "DataInfo.h"
 #include "PropertyInfo.h"

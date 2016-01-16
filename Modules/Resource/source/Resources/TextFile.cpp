@@ -2,7 +2,7 @@
 
 #include <string>
 #include <fstream>
-#include <Core/Console.h>
+#include <Core/IO/Console.h>
 #include "../../include/Resource/Resources/TextFile.h"
 
 //////////////////////

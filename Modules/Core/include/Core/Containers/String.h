@@ -1,7 +1,7 @@
 // String.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "Containers/Array.h"
+#include "Array.h"
 
 /** A String. Basically just an array of characters, and the
 * operations associated with that. */

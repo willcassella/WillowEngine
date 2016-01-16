@@ -1,6 +1,7 @@
 // Testing.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
-#include "../../include/Core/Testing/Test.h"
+#include "../../include/Core/IO/Console.h"
+#include "../../include/Core/Test/Test.h"
 #include "../../include/Core/Operations/ToString.h"
 
 /////////////////////

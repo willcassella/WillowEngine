@@ -1,8 +1,10 @@
 // StaticBuffer.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "../config.h"
+#include <utility>
+#include "../env.h"
 
+/** Object containing a statically-sized buffer, for various purposes. */
 template <uint32 Size>
 struct StaticBuffer final
 {

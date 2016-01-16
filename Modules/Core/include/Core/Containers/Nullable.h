@@ -2,7 +2,7 @@
 #pragma once
 
 #include <cassert>
-#include "../STDExt/TypeTraits.h"
+#include "../STDE/TypeTraits.h"
 #include "StaticBuffer.h"
 
 template <typename T>
@@ -79,7 +79,7 @@ public:
 			_hasValue = false;
 		}
 	}
-	
+
 	template <typename F, WHERE(!std::is_same<F, Nullable>::value)>
 	Nullable(F&& value)
 	{
@@ -113,12 +113,37 @@ public:
 		return FastGet();
 	}
 
-	/** Returns the currently held value. 
-	* WARNING: Check 'HasValue' before calling this. */
-	T&& GetValue() &&
+	/** Since this is a temporary object, you couldn't have possibly checked if it contains a value. */
+	T&& GetValue() && = delete;
+
+	/** Sets the given receptor to the currently held value, if it exists.
+	* Returns whether the receptor was set or not. */
+	bool GetValue(T& receptor) const &
 	{
-		assert(_hasValue);
-		return std::move(this->FastGet());
+		if (_hasValue)
+		{
+			receptor = FastGet();
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/** Sets the given receptor to the currently held value, if it exists.
+	* Returns whether the receptor was set or not. */
+	bool GetValue(T& receptor) &&
+	{
+		if (_hasValue)
+		{
+			receptor = std::move(FastGet());
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	/** Invokes the given function object on the contained value, if it exists. Otherwise does nothing.

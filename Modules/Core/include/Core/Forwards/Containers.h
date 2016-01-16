@@ -6,6 +6,9 @@
 /////////////////
 ///   Types   ///
 
+/** Defined in 'Containers/String.h' */
+struct String;
+
 /** Defined in 'Containers/DynamicBuffer.h' */
 struct DynamicBuffer;
 
@@ -40,3 +43,11 @@ struct Table;
 /** Defined in 'Containers/Tuple.h' */
 template <typename ... T>
 struct Tuple;
+
+/** Defined in 'Containers/Nullable.h' */
+template <typename T>
+struct Nullable;
+
+/** Defined in 'Containers/Union.h' */
+template <typename ... T>
+struct Union;

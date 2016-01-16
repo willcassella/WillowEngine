@@ -10,7 +10,7 @@
 #include "../Containers/Stack.h"
 #include "../Containers/Table.h"
 #include "../Containers/Pair.h"
-#include "../String.h"
+#include "../Containers/String.h"
 
 //////////////////////////
 ///   Implementation   ///

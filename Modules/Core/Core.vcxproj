@@ -20,10 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Core\Application.h" />
-    <ClInclude Include="include\Core\ArchiveNode.h" />
     <ClInclude Include="include\Core\Concurrency\Task.h" />
     <ClInclude Include="include\Core\config.h" />
-    <ClInclude Include="include\Core\Console.h" />
     <ClInclude Include="include\Core\Containers\Array.h" />
     <ClInclude Include="include\Core\Containers\Nullable.h" />
     <ClInclude Include="include\Core\Containers\StaticBuffer.h" />
@@ -32,6 +30,7 @@
     <ClInclude Include="include\Core\Containers\Pair.h" />
     <ClInclude Include="include\Core\Containers\Queue.h" />
     <ClInclude Include="include\Core\Containers\Stack.h" />
+    <ClInclude Include="include\Core\Containers\String.h" />
     <ClInclude Include="include\Core\Containers\Table.h" />
     <ClInclude Include="include\Core\Containers\Tuple.h" />
     <ClInclude Include="include\Core\Containers\Union.h" />
@@ -41,10 +40,13 @@
     <ClInclude Include="include\Core\Event\EventManager.h" />
     <ClInclude Include="include\Core\Forwards\Containers.h" />
     <ClInclude Include="include\Core\Forwards\Core.h" />
+    <ClInclude Include="include\Core\Forwards\IO.h" />
     <ClInclude Include="include\Core\Forwards\Reflection.h" />
     <ClInclude Include="include\Core\Forwards\Memory.h" />
     <ClInclude Include="include\Core\Forwards\Operations.h" />
     <ClInclude Include="include\Core\Interface.h" />
+    <ClInclude Include="include\Core\IO\ArchiveNode.h" />
+    <ClInclude Include="include\Core\IO\Console.h" />
     <ClInclude Include="include\Core\Math\Angle.h" />
     <ClInclude Include="include\Core\Math\Mat4.h" />
     <ClInclude Include="include\Core\Math\Math.h" />
@@ -82,17 +84,17 @@
     <ClInclude Include="include\Core\Reflection\VoidInfo.h" />
     <ClInclude Include="include\Core\STDExt\TypeTraits.h" />
     <ClInclude Include="include\Core\STDExt\Utility.h" />
-    <ClInclude Include="include\Core\String.h" />
     <ClInclude Include="include\Core\env.h" />
-    <ClInclude Include="include\Core\Testing\Test.h" />
+    <ClInclude Include="include\Core\Test\Test.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Application.cpp" />
-    <ClCompile Include="source\Console.cpp" />
     <ClCompile Include="source\Containers\DynamicBuffer.cpp" />
+    <ClCompile Include="source\Containers\String.cpp" />
     <ClCompile Include="source\Event\Event.cpp" />
     <ClCompile Include="source\Event\EventHandler.cpp" />
     <ClCompile Include="source\Event\EventManager.cpp" />
+    <ClCompile Include="source\IO\Console.cpp" />
     <ClCompile Include="source\Math\Mat4.cpp" />
     <ClCompile Include="source\Math\Quat.cpp" />
     <ClCompile Include="source\Math\Vec2.cpp" />
@@ -118,7 +120,6 @@
     <ClCompile Include="source\Reflection\StructInfo.cpp" />
     <ClCompile Include="source\Reflection\TypeInfo.cpp" />
     <ClCompile Include="source\Reflection\VoidInfo.cpp" />
-    <ClCompile Include="source\String.cpp" />
     <ClCompile Include="source\Testing\Test.cpp" />
   </ItemGroup>
   <ItemGroup>

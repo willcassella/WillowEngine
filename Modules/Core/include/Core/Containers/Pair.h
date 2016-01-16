@@ -1,8 +1,8 @@
 // Pair.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "../config.h"
-#include "../STDExt/TypeTraits.h"
+#include "../env.h"
+#include "../STDE/TypeTraits.h"
 
 /** A pair of values */
 template <typename A, typename B>

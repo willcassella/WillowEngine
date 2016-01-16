@@ -4,7 +4,8 @@
 * the desired function, it can still be called if the derived type does. */
 #pragma once
 
-#include "Core.h"
+#include "IO.h"
+#include "Containers.h"
 
 /////////////////////
 ///   Functions   ///
