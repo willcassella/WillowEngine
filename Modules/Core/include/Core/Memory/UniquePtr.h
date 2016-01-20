@@ -403,6 +403,10 @@ private:
 	MemoryBlockController* _controller;
 };
 
+/** Future-proof Alias for 'UniquePtr'. */
+template <typename T>
+using unique = UniquePtr<T>;
+
 //////////////////////
 ///   Reflection   ///
 

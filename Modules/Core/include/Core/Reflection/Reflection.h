@@ -597,4 +597,4 @@ public:												\
 /** Put this macro in the Information section of every reflectable class that implements interfaces. */
 #define IMPLEMENTS(...)										\
 public:														\
-	using Interfaces = stde::type_sequence<__VA_ARGS__>;
+	using Interfaces = ::stde::type_sequence<__VA_ARGS__>;

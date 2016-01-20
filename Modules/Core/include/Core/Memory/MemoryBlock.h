@@ -199,15 +199,13 @@ public:
 		return _refCounter;
 	}
 
-	/** Returns a pointer to the data allocated within this MemoryBlock.
-	* NOTE: You should understand the state of the value constructed within this first, via 'GetStatus()'. */
+	/** Returns a pointer to the data allocated within this MemoryBlock. */
 	FORCEINLINE void* GetData()
 	{
 		return this + 1;
 	}
 
-	/** Returns a pointer to the data allocated within this MemoryBlock.
-	* NOTE: You should understand the state of the value constructed within this first, via 'GetStatus()'. */
+	/** Returns a pointer to the data allocated within this MemoryBlock. */
 	FORCEINLINE const void* GetData() const
 	{
 		return this + 1;

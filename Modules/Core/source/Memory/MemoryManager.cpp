@@ -21,7 +21,7 @@ MemoryManager::~MemoryManager()
 
 MemoryBlockController* MemoryManager::AllocateNew(const TypeInfo& type)
 {
-	auto addr = (MemoryBlockController*)calloc(sizeof(MemoryBlockController) + type.GetSize(), 1);
+	auto addr = static_cast<MemoryBlockController*>(calloc(sizeof(MemoryBlockController) + type.GetSize(), 1));
 
 	// Construct the memory block header
 	new (addr) MemoryBlockController(type);
