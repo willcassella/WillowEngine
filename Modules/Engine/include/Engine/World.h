@@ -3,7 +3,8 @@
 
 #include <memory>
 #include <Core/Containers/Queue.h>
-#include "GameObject.h"
+#include "Forwards/Physics.h"
+#include "Component.h"
 
 /////////////////
 ///   Types   ///
@@ -37,124 +38,165 @@ public:
 	///   Methods   ///
 public:
 
+	/** Updates the state of this World by one time step. */
 	void Update();
 
-	/** Spawns a new instance of the given GameObject type into the world at the start of the next frame.
-	* Returns a reference to the GameObject. */
+	/** Spawns a new instance of the given type into the World. */
 	template <class T>
-	std::enable_if_t<std::is_base_of<GameObject, T>::value, T&> Spawn()
+	std::enable_if_t<std::is_base_of<Entity, T>::value, T&> Spawn()
 	{
-		return static_cast<T&>(SpawnGameObject(New<T>()));
+		auto& entity = this->InitializeGameObject(unique<T>(New<T>()));
+		entity._world = this;
+		entity.Spawn();
+
+		return entity;
 	}
 
-	/** Spawns a new instance of the given Component type into the world at the start of the next frame.
-	* Returns a reference to the new Component. */
+	/** Spawns a new instance of the given type into the World. */
 	template <class T>
 	std::enable_if_t<std::is_base_of<Component, T>::value, T&> Spawn()
 	{
-		return static_cast<T&>(SpawnComponent(New<T>()));
+		return this->Spawn<Entity>().Connect<T>();
 	}
 
-	/** Spawns a new named GameObject of the given type at the start of the next frame. 
-	* Returns a reference to the spawned GameObject. */
-	template <class GameObjectT>
-	GameObjectT& Spawn(String name)
+	/** Spawns a new instance of the given type with the given name into the World. */
+	template <class T>
+	std::enable_if_t<std::is_base_of<Entity, T>::value, T&> Spawn(String name)
 	{
-		static_assert(std::is_base_of<GameObject, GameObjectT>::value, "Only GameObjects may be given names.");
+		auto& entity = this->Spawn<T>();
+		entity._name = std::move(name);
 
-		// Create the object and set its name and ID
-		UniquePtr<GameObjectT> object = New<GameObjectT>();
-		object->_name = std::move(name);
-		return static_cast<GameObjectT&>(Spawn(object.Transfer()));
+		return entity;
 	}
 
-	template <class ComponentT>
-	ComponentT* FindComponent(GHandle<ComponentT> handle)
+	/** Spawns a new instance of the given type with the given name into the World. */
+	template <class T>
+	std::enable_if_t<std::is_base_of<Component, T>::value, T&> Spawn(String name)
 	{
-		return const_cast<ComponentT*>(const_self.FindComponent(handle));
+		return this->Spawn<Entity>(std::move(name)).Connect<T>();
 	}
 
-	template <class ComponentT>
-	const ComponentT* FindComponent(GHandle<ComponentT> handle) const
+	/** Returns an enumeration of the given types of objects in this World. */
+	template <typename T>
+	auto Enumerate() const
 	{
-		const ComponentT* result = nullptr;
-		_components.Find(handle.GetID(), [&result](const auto& c) { result = c.Get();});
-		return result;
-	}
+		static_assert(std::is_base_of<GameObject, T>::value, "The given type does not exist in this World.");
 
-	template <class GameObjectT>
-	GameObjectT* FindGameObject(GHandle<GameObjectT> handle)
-	{
-		return const_cast<GameObjectT*>(const_self.FindGameObject(handle));
-	}
+		Array<const T*> result;
 
-	template <class GameObjectT>
-	const GameObjectT* FindGameObject(GHandle<GameObjectT> handle)
-	{
-		const GameObjectT* result = nullptr;
-		_gameObjects.Find(handle.GetID(), [&result](const auto& g) { result = g.Get(); });
-		return result;
-	}
-
-	/** Returns an Array of the components of the given type in this World. */
-	template <typename ComponentT>
-	Array<const ComponentT*> GetComponentsOfType() const
-	{
-		Array<const ComponentT*> result;
-
-		for (const auto& component : _components)
+		if (std::is_base_of<Entity, T>::value)
 		{
-			if (auto pComponent = Cast<ComponentT>(*component.Second))
+			for (auto entity : _entities)
 			{
-				result.Add(pComponent);
+				if (auto e = Cast<const T>(*entity.Second))
+				{
+					result.Add(e);
+				}
+			}
+		}
+		else if (std::is_base_of<Component, T>::value)
+		{
+			for (auto component : _components)
+			{
+				if (auto c = Cast<const T>(*component.Second))
+				{
+					result.Add(c);
+				}
+			}
+		}
+		else
+		{
+			for (const auto& gameObject : _gameObjects)
+			{
+				if (auto g = Cast<const T>(*gameObject.Second))
+				{
+					result.Add(g);
+				}
 			}
 		}
 
 		return result;
 	}
 
-	/** Marks the given object for destruction. */
-	void Destroy(GameObject& object);
+	/** Returns the physics world for this World. */
+	FORCEINLINE PhysicsWorld& GetPhysicsWorld()
+	{
+		return *_physicsWorld;
+	}
 
-	/** Marks the given object for destruction. */
-	void Destroy(GHandle<GameObject> handle);
+	/** Returns the physics world for this World. */
+	FORCEINLINE const PhysicsWorld& GetPhysicsWorld() const
+	{
+		return *_physicsWorld;
+	}
+	
+	/** Initializes the given GameObject in this World. 
+	* NOTE: This does not call "GameObject::Spawn()". 
+	* That is the caller's responsibility. */
+	template <class T>
+	T& InitializeGameObject(unique<T> object)
+	{
+		auto& ref = *object;
+		ref.Initialize(_nextGameObjectID++);
+		_gameObjects[ref.GetID()] = std::move(object);
 
-private:
+		if (std::is_base_of<Entity, T>::value)
+		{
+			_entities[ref.GetID()] = reinterpret_cast<Entity*>(&ref);
+		}
+		else if (std::is_base_of<Component, T>::value)
+		{
+			_components[ref.GetID()] = reinterpret_cast<Component*>(&ref);
+		}
 
-	Component& SpawnComponent(UniquePtr<Component> component);
-
-	GameObject& SpawnGameObject(UniquePtr<GameObject> gameObject);
+		return ref;
+	}
 
 	////////////////
 	///   Data   ///
 private:
 
-	Table<GameObject::ID, UniquePtr<GameObject>> _gameObjects;
-	Table<Component::ID, UniquePtr<Component>> _components;
-	Queue<GameObject*> _destroyedObjects;
-	Queue<GameObject*> _unspawnedObjects;
 	GameObject::ID _nextGameObjectID;
-	Component::ID _nextComponentID;
-	std::unique_ptr<struct PhysicsData> _physicsData;
+	Table<GameObject::ID, unique<GameObject>> _gameObjects;
+	Queue<GameObject*> _destroyedObjects;
+	
+	Table<GameObject::ID, Entity*> _entities;
+	Table<Component::ID, Component*> _components;
+
+	std::unique_ptr<PhysicsWorld> _physicsWorld;
 };
 
 ///////////////////
 ///   Methods   ///
 
-template <class ComponentT>
-ComponentT& GameObject::AddComponent()
+template <class T>
+T& Entity::Attach()
 {
-	auto& component = GetWorld().Spawn<ComponentT>();
-	AddComponent(component);
-
-	return component;
+	auto& object = this->GetWorld().Spawn<T>();
+	object.SetParent(this, SP_MoveToOrigin);
+	return object;
 }
 
-template <class ComponentT>
-ComponentT& GameObject::Attach()
+template <class T>
+T& Entity::Attach(String name)
 {
-	auto& component = GetWorld().Spawn<ComponentT>();
-	Attach(component);
+	auto& object = this->GetWorld().Spawn<T>(std::move(name));
+	object.SetParent(this, SP_MoveToOrigin);
+	return object;
+}
+
+template <class T>
+T& Entity::Connect()
+{
+	static_assert(std::is_base_of<Component, T>::value, "You can only connect Component types");
+
+	// Construct and initialize component
+	auto& component = this->GetWorld().InitializeGameObject(unique<T>(New<T>()));
+
+	// Connect component
+	component._entity = this;
+	_components.Add(&component);
+	component.Spawn();
 
 	return component;
 }

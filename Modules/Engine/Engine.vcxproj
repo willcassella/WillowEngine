@@ -25,12 +25,12 @@
     <ClCompile Include="source\Assets\Texture.cpp" />
     <ClCompile Include="source\Component.cpp" />
     <ClCompile Include="source\Components\CameraComponent.cpp" />
+    <ClCompile Include="source\Components\CapsuleComponent.cpp" />
     <ClCompile Include="source\Components\LightComponent.cpp" />
+    <ClCompile Include="source\Components\PhysicalComponent.cpp" />
     <ClCompile Include="source\Components\StaticMeshComponent.cpp" />
+    <ClCompile Include="source\Entity.cpp" />
     <ClCompile Include="source\GameObject.cpp" />
-    <ClCompile Include="source\GameObjects\Camera.cpp" />
-    <ClCompile Include="source\GameObjects\Light.cpp" />
-    <ClCompile Include="source\GameObjects\Prop.cpp" />
     <ClCompile Include="source\World.cpp" />
     <ClCompile Include="source\Transform.cpp" />
   </ItemGroup>
@@ -39,23 +39,21 @@
     <ClInclude Include="include\Engine\Assets\StaticMesh.h" />
     <ClInclude Include="include\Engine\Assets\Shader.h" />
     <ClInclude Include="include\Engine\Assets\Texture.h" />
-    <ClInclude Include="include\Engine\Behavior.h" />
     <ClInclude Include="include\Engine\Component.h" />
     <ClInclude Include="include\Engine\Components\CameraComponent.h" />
-    <ClInclude Include="include\Engine\Components\CollisionComponent.h" />
+    <ClInclude Include="include\Engine\Components\CapsuleComponent.h" />
     <ClInclude Include="include\Engine\Components\LightComponent.h" />
+    <ClInclude Include="include\Engine\Components\PhysicalComponent.h" />
     <ClInclude Include="include\Engine\Components\StaticMeshComponent.h" />
     <ClInclude Include="include\Engine\config.h" />
+    <ClInclude Include="include\Engine\Entity.h" />
     <ClInclude Include="include\Engine\Forwards\Engine.h" />
+    <ClInclude Include="include\Engine\Forwards\Physics.h" />
     <ClInclude Include="include\Engine\GameObject.h" />
-    <ClInclude Include="include\Engine\GameObjects\Camera.h" />
-    <ClInclude Include="include\Engine\GameObjects\Light.h" />
-    <ClInclude Include="include\Engine\GameObjects\Prop.h" />
     <ClInclude Include="include\Engine\GHandle.h" />
-    <ClInclude Include="include\Engine\ITransformable.h" />
-    <ClInclude Include="include\Engine\World.h" />
     <ClInclude Include="include\Engine\ServiceInterfaces\IRenderer.h" />
     <ClInclude Include="include\Engine\Transform.h" />
+    <ClInclude Include="include\Engine\World.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C257E175-629A-42F3-A52A-CEC2D0DBBCF2}</ProjectGuid>
@@ -146,6 +144,7 @@
       <DisableSpecificWarnings>4251;</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -169,6 +168,7 @@
       <DisableSpecificWarnings>4251;</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -196,6 +196,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -225,6 +226,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

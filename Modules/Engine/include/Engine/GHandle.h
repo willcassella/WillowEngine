@@ -1,8 +1,7 @@
 // GHandle.h - Copyright 2013-2015 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <Core/STDExt/TypeTraits.h>
-#include <Core/env.h>
+#include "GameObject.h"
 
 /** Handle that can reference an object in a World, independent of frame. */
 template <class T>
@@ -40,7 +39,7 @@ public:
 public:
 
 	/** Returns the ID of the object this handle currently refers to. */
-	FORCEINLINE auto GetID() const
+	FORCEINLINE GameObject::ID GetID() const
 	{
 		return _id;
 	}
@@ -55,16 +54,6 @@ public:
 	///   Operators   ///
 public:
 
-	GHandle& operator=(T& value)
-	{
-		_id = value.GetID();
-		return self;
-	}
-	GHandle& operator=(std::nullptr_t)
-	{
-		_id = 0;
-		return self;
-	}
 	friend bool operator==(GHandle lhs, GHandle rhs)
 	{
 		return lhs.GetID() == rhs.GetID();
@@ -82,16 +71,9 @@ public:
 		return lhs.GetID() != 0;
 	}
 
-	template <class F>
-	GHandle& operator=(GHandle<F> handle)
-	{
-		_id = handle.GetID();
-		return self;
-	}
-
 	////////////////
 	///   Data   ///
 private:
 
-	typename T::ID _id;
+	GameObject::ID _id;
 };

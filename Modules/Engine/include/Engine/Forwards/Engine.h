@@ -4,18 +4,17 @@
 /////////////////
 ///   Types   ///
 
+/** Defined in "Transform.h" */
+struct Transform;
+
 /** Defined in "World.h" */
 class World;
 
 /** Defined in "GameObject.h" */
 class GameObject;
 
+/** Defined in "Entity.h" */
+class Entity;
+
 /** Defined in "Component.h" */
 class Component;
-
-/** Defined in "Behavior.h" */
-class Behavior;
-
-/** Defined in "GHandle.h" */
-template <class T>
-struct GHandle;

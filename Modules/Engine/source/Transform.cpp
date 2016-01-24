@@ -11,7 +11,8 @@ BUILD_REFLECTION(Transform)
 .Data("Scale", &Transform::_scale)
 .Property("Location", &Transform::GetLocation, &Transform::SetLocation, "The location of this Transform.")
 .Property("Rotation", &Transform::GetRotation, &Transform::SetRotation, "The rotation of this Transform.")
-.Property("Scale", &Transform::GetScale, &Transform::SetScale, "The scale of this Transform.");
+.Property("Scale", &Transform::GetScale, &Transform::SetScale, "The scale of this Transform.")
+.Property("Matrix", &Transform::GetMatrix, nullptr, "Matrix representation of this Transform.");
 
 ///////////////////
 ///   Methods   ///

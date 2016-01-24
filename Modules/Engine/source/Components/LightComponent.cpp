@@ -1,7 +1,6 @@
 // LightComponent.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
 #include "../../include/Engine/Components/LightComponent.h"
-#include "../../include/Engine/GameObject.h"
 
 //////////////////////
 ///   Reflection   ///

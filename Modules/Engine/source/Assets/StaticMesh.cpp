@@ -1,7 +1,7 @@
 // Mesh.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
 #include <cmath>
-#include <Core/Console.h>
+#include <Core/IO/Console.h>
 #include <Core/Math/Math.h>
 #include <Resource/Resources/BinaryFile.h>
 #include "../../include/Engine/Assets/StaticMesh.h"
