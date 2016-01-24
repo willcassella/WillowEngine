@@ -1,6 +1,6 @@
 // main.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
-#include <Core/Console.h>
+#include <Core/IO/Console.h>
 #include "../include/AssetConverter/AssetConverter.h"
 
 int main(int32 argCount, char** args)

@@ -1,7 +1,7 @@
 // AssetConverter.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
 #include <fstream>
-#include <Core/Console.h>
+#include <Core/IO/Console.h>
 #include <Resource/Resources/TextFile.h>
 #include "../include/AssetConverter/AssetConverter.h"
 
@@ -175,7 +175,8 @@ bool AssetConverter::WriteStaticMesh(const Path& name, const Array<StaticMesh::V
 	uint32 numElements = elements.Size();
 
 	// Write it to a file
-	std::basic_fstream<byte> output;
+	// TODO: Change this to a normal std::ofstream. For some reason anything other than std::basic_fstream<char> is unreasonably slow
+	std::basic_fstream<byte> output; 
 	output.open((name + ".wmesh"_s).Cstr(), std::ios::binary | std::ios::out);
 
 	output.write((byte*)&numVerts, sizeof(uint32));
