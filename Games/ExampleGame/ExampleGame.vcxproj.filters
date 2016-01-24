@@ -10,16 +10,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\FPSCamera.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="include\ExampleGame\FPSCamera.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="include\ExampleGame\config.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\ExampleGame\FPSCharacter.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\FPSCharacter.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
