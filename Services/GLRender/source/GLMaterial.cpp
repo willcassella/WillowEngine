@@ -1,6 +1,6 @@
 // GLMaterial.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
-#include <Core/Console.h>
+#include <Core/IO/Console.h>
 #include "glew.h"
 #include "../include/GLRender/GLMaterial.h"
 #include "../include/GLRender/GLRenderer.h"

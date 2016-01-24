@@ -1,21 +1,23 @@
 // GLRender.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
-#include <Core/Console.h>
+#include <Core/IO/Console.h>
 #include <Engine/Components/StaticMeshComponent.h>
 #include <Engine/Components/CameraComponent.h>
 #include "glew.h"
 #include "../include/GLRender/GLRenderer.h"
+
+static_assert(!std::is_same<Scalar, long double>::value, "The renderer does not yet support 'long double' as a Scalar type.");
 
 ////////////////////////
 ///   Constructors   ///
 
 GLRenderer::GLRenderer(uint32 width, uint32 height)
 {
-	// Initialize GLEW
+	// Spawn GLEW
 	glewExperimental = GL_TRUE;
 	glewInit();
 
-	// Initialize OpenGL
+	// Spawn OpenGL
 	glClearColor(0, 0, 0, 1);
 	glClearDepth(1.f);
 	glEnable(GL_DEPTH_TEST);
@@ -73,7 +75,7 @@ GLRenderer::GLRenderer(uint32 width, uint32 height)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, width, height, 0, GL_RED, GL_FLOAT, NULL); // 1 32-bit floating point component for specular
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, width, height, 0, GL_RED, GL_FLOAT, nullptr); // 1 32-bit floating point component for specular
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, _specularBuffer, 0);
 
 	// Create a metallic buffer for the GBuffer
@@ -162,7 +164,7 @@ void GLRenderer::RenderWorld(const World& world)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	// Get first camera in the World
-	const auto* cam = world.GetComponentsOfType<CameraComponent>().FirstOrDefault();
+	const auto* cam = world.Enumerate<CameraComponent>().FirstOrDefault();
 
 	// We can't render the World without a camera
 	if (!cam)
@@ -172,7 +174,7 @@ void GLRenderer::RenderWorld(const World& world)
 	Mat4 proj = cam->GetPerspective();
 
 	// Render each StaticMeshComponent in the World
-	for (auto staticMesh : world.GetComponentsOfType<StaticMeshComponent>())
+	for (auto staticMesh : world.Enumerate<StaticMeshComponent>())
 	{
 		if (!staticMesh->Visible)
 			continue;
@@ -201,7 +203,7 @@ GLShader& GLRenderer::FindShader(const Shader& asset)
 	}
 	else
 	{
-		return _shaders.Insert(asset.GetID(), GLShader(self, asset));
+		return _shaders.Insert(asset.GetID(), GLShader(*this, asset));
 	}
 }
 
@@ -213,7 +215,7 @@ GLTexture& GLRenderer::FindTexture(const Texture& asset)
 	}
 	else
 	{
-		return _textures.Insert(asset.GetID(), GLTexture(self, asset));
+		return _textures.Insert(asset.GetID(), GLTexture(*this, asset));
 	}
 }
 
@@ -225,7 +227,7 @@ GLMaterial& GLRenderer::FindMaterial(const Material& asset)
 	}
 	else
 	{
-		return _materials.Insert(asset.GetID(), GLMaterial(self, asset));
+		return _materials.Insert(asset.GetID(), GLMaterial(*this, asset));
 	}
 }
 
@@ -237,7 +239,7 @@ GLStaticMesh& GLRenderer::FindStaticMesh(const StaticMesh& asset)
 	}
 	else
 	{
-		return _staticMeshes.Insert(asset.GetID(), GLStaticMesh(self, asset));
+		return _staticMeshes.Insert(asset.GetID(), GLStaticMesh(*this, asset));
 	}
 }
 
