@@ -1,11 +1,10 @@
 // main.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
 
 #include <GLFW/glfw3.h>
-#include <Core/Console.h>
+#include <Core/IO/Console.h>
 #include <Core/Math/Vec2.h>
 #include <GLRender/GLRenderer.h>
-#include <Engine/GameObjects/Prop.h>
-#include <ExampleGame/FPSCamera.h>
+#include <ExampleGame/FPSCharacter.h>
 
 //Define context parameters
 int32 window_width = 1280;
@@ -69,14 +68,14 @@ int main(int32 /*argc*/, char** /*argv*/)
 
 		UniquePtr<World> world = New<World>();
 
-		auto& sponza = world->Spawn<Prop>();
-		sponza.SetScale(Vec3{ 0.6f, 0.6f, 0.6f });
-		sponza.GetComponent(sponza.MeshComponent)->Mesh = "Content/Models/sponza_new.wmesh"_p;
-		sponza.GetComponent(sponza.MeshComponent)->Material = "Content/Materials/Sponza.mat"_p;
-		sponza.GetComponent(sponza.MeshComponent)->InstanceParams["diffuse"] = AssetPtr<Texture>("Content/Textures/sponza_new_tex.png"_p);
+		auto& sponza = world->Spawn<StaticMeshComponent>("Sponza");
+		sponza.SetScale({ 0.6f, 0.6f, 0.6f });
+		sponza.Mesh = "Content/Models/sponza_new.wmesh"_p;
+		sponza.Material = "Content/Materials/Sponza.mat"_p;
+		sponza.InstanceParams["diffuse"] = AssetPtr<Texture>("Content/Textures/sponza_new_tex.png"_p);
 
-		auto& cam = world->Spawn<FPSCamera>();
-		cam.Translate({ 0, 3, 0 });
+		auto& player = world->Spawn<FPSCharacter>("Player");
+		player.Translate({ 0, 3, 0 });
 
 		//Execute the main event loop
 		eventLoop(window, *world, renderer);
@@ -90,7 +89,7 @@ int main(int32 /*argc*/, char** /*argv*/)
 
 GLFWwindow* InitGLFW()
 {
-	//Initialize GLFW
+	//Spawn GLFW
 	if (!glfwInit())
 	{
 		Console::WriteLine("GLFW Initialization failure");
