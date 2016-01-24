@@ -29,12 +29,12 @@ public:
 	Union(const Union& copy)
 		: Union()
 	{
-		self = copy;
+		*this = copy;
 	}
 	Union(Union&& move)
 		: Union()
 	{
-		self = std::move(move);
+		*this = std::move(move);
 	}
 	~Union()
 	{
@@ -119,7 +119,7 @@ public:
 			}
 		}
 
-		_value.Emplace<DecayF>(std::forward<F>(value));
+		_value.template Emplace<DecayF>(std::forward<F>(value));
 		_index = newIndex;
 	}
 
@@ -150,7 +150,7 @@ public:
 		Invoker* funcs[] = { CreateInvoker<T, R, Func>()... };
 		
 		assert(HasValue());
-		return funcs[_index.GetValue()](_value.GetPointer<void>(), func);
+		return funcs[_index.GetValue()](_value.GetPointer(), func);
 	}
 
 	/** Invokes the given function on the current value.
@@ -162,7 +162,7 @@ public:
 		Invoker* funcs[] = { CreateInvoker<T, R, Func>()... };
 
 		assert(HasValue());
-		return funcs[_index.GetValue()](_value.GetPointer<void>(), func);
+		return funcs[_index.GetValue()](_value.GetPointer(), func);
 	}
 
 private:
