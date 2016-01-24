@@ -18,7 +18,7 @@ BUILD_ENUM_REFLECTION(PhysicsMode);
 
 PhysicalComponent::PhysicalComponent()
 {
-	_physicsState = std::make_unique<PhysicsState>(self);
+	_physicsState = std::make_unique<PhysicsState>(*this);
 }
 
 PhysicalComponent::~PhysicalComponent()
@@ -29,7 +29,7 @@ PhysicalComponent::~PhysicalComponent()
 ///////////////////
 ///   Methods   ///
 
-void PhysicalComponent::SetMass(Scalar value)
+void PhysicalComponent::SetMass(Scalar)
 {
 	// TODO
 }

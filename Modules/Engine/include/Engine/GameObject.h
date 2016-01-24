@@ -5,6 +5,7 @@
 #include <Core/Math/Quat.h>
 #include <Core/Math/Mat4.h>
 #include "config.h"
+#include "Forwards/Engine.h"
 
 /** Behavior for handling the transform of a GameObject upon setting the parent.
 * Used by the 'SetParent' member functions. */

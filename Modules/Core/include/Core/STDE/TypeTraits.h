@@ -1,6 +1,7 @@
 // TypeTraits.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
+#include <utility>
 #include <type_traits>
 
 namespace stde
