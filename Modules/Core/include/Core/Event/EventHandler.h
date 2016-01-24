@@ -24,7 +24,7 @@ public:
 	{
 		static_assert(std::is_base_of<Object, OwnerT>::value || std::is_base_of<Interface, OwnerT>::value,
 			"Only 'Object' or 'Interface' types may have event handlers.");
-		static_assert(!stde::is_non_const_reference<ArgT>::value,
+		static_assert(!stde::is_mutable_reference<ArgT>::value,
 			"You cannot create an event handler which accepts a non-const reference");
 
 		_handler = [&object, handler](const Event& event)-> void
@@ -41,7 +41,7 @@ public:
 	{
 		static_assert(std::is_base_of<Object, OwnerT>::value || std::is_base_of<Interface, OwnerT>::value,
 			"Only 'Object' or 'Interface' types may have event handlers.");
-		static_assert(!stde::is_non_const_reference<ArgT>::value,
+		static_assert(!stde::is_mutable_reference<ArgT>::value,
 			"You cannot create an event handler which accepts a non-const reference");
 
 		_handler = [&object, handler](const Event& event)-> void

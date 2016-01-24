@@ -1,6 +1,7 @@
 // Union.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
+#include <limits>
 #include "../Forwards/Reflection.h"
 #include "../Math/Math.h"
 #include "Nullable.h"

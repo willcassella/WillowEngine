@@ -23,20 +23,20 @@ Object::~Object()
 
 String Object::ToString() const
 {
-	return Implementation::Default::ToString(self);
+	return Implementation::Default::ToString(*this);
 }
 
 String Object::FromString(const String& string)
 {
-	return Implementation::Default::FromString(self, string);
+	return Implementation::Default::FromString(*this, string);
 }
 
 void Object::ToArchive(ArchiveNode& node) const
 {
-	Implementation::Default::ToArchive(self, node);
+	Implementation::Default::ToArchive(*this, node);
 }
 
 void Object::FromArchive(const ArchiveNode& node)
 {
-	Implementation::Default::FromArchive(self, node);
+	Implementation::Default::FromArchive(*this, node);
 }

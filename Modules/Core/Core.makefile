@@ -1,6 +1,6 @@
 # Core.makefile
 
-CFLAGS=-std=c++14 -Wall -Wextra -Wpedantic
+CFLAGS=-std=c++14 -Wall -Wextra -Wpedantic -D CORE_BUILD
 LFLAGS=-fPIC -shared -Wl,-soname='Core.so'
 DEPS=
 OUT=-o bin/Core.so

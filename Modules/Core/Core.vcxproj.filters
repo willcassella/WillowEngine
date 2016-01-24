@@ -40,9 +40,6 @@
     <Filter Include="include\Forwards">
       <UniqueIdentifier>{0b780da5-afb7-46cb-8d61-2ee263c9a423}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\STDExt">
-      <UniqueIdentifier>{e16c4a17-428e-47dc-9d14-94d5cce65c36}</UniqueIdentifier>
-    </Filter>
     <Filter Include="source\Memory">
       <UniqueIdentifier>{f385ed7c-d2b3-4e5f-9e63-205e0a0b6745}</UniqueIdentifier>
     </Filter>
@@ -69,6 +66,9 @@
     </Filter>
     <Filter Include="source\Test">
       <UniqueIdentifier>{f7fd4350-9b08-40b5-a354-1e2235deefdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\STDE">
+      <UniqueIdentifier>{e16c4a17-428e-47dc-9d14-94d5cce65c36}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -168,9 +168,6 @@
     <ClInclude Include="include\Core\Forwards\Operations.h">
       <Filter>include\Forwards</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\STDExt\TypeTraits.h">
-      <Filter>include\STDExt</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Forwards\Memory.h">
       <Filter>include\Forwards</Filter>
     </ClInclude>
@@ -255,9 +252,6 @@
     <ClInclude Include="include\Core\Concurrency\Task.h">
       <Filter>include\Concurrency</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\STDExt\Utility.h">
-      <Filter>include\STDExt</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\IO\ArchiveNode.h">
       <Filter>include\IO</Filter>
     </ClInclude>
@@ -272,6 +266,12 @@
     </ClInclude>
     <ClInclude Include="include\Core\Forwards\IO.h">
       <Filter>include\Forwards</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\STDE\TypeTraits.h">
+      <Filter>include\STDE</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\STDE\Utility.h">
+      <Filter>include\STDE</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
