@@ -6,40 +6,43 @@
 #include <Core/Containers/Union.h>
 #include <Core/Test/Test.h>
 
-void FormatTest()
+void FormatTest(WTest::Context& context)
 {
 	String test = Format("UniquePtr<@>{ <@, @, @> }", TypeOf<Vec3>().GetName(), 1.f, 2.5f, 3.5f);
 	String fTest = fFormat("UniquePtr<@>{ <@, @, @> }", TypeOf<Vec3>().GetName(), 1.f, 2.5f, 3.5f);
 
-	Console::WriteLine(test);
-	Console::WriteLine(fTest);
+	context.AssertEquals(test, fTest);
 }
 
-void StringTest()
+void StringTest(WTest::Context& context)
 {
 	String test = "Hello";
-	Console::WriteLine(test);
-	test = test.ToUpper();
-	Console::WriteLine(test);
-	test = test.ToLower();
-	Console::WriteLine(test);
+	context.AssertEquals("hello", test.ToLower());
+	context.AssertEquals("HELLO", test.ToUpper());
 }
 
-void NullableTest()
+void NullableTest(WTest::Context& context)
 {
-	auto printer = [](String value) { Console::WriteLine(value); };
+	auto func = [](auto) {};
 
+	String receptor;
 	Nullable<String> test;
-	test = "Hello, world";
-	test.Invoke(printer);
+	context.AssertFalse(test.HasValue());
+	context.AssertFalse(test.Invoke(func));
+	context.AssertFalse(test.GetValue(receptor));
+	context.AssertEquals("", receptor);
 
-	Nullable<String>("Test").Invoke(printer);
+	test = "Hello, world";
+	context.AssertTrue(test.HasValue());
+	context.AssertTrue(test.Invoke(func));
+	context.AssertTrue(test.GetValue(receptor));
+	context.AssertEquals("Hello, world", receptor);
 }
 
-void UnionTest()
+void UnionTest(WTest::Context& context)
 {
 	Union<int32, Scalar, String> test = 3;
-	test.Invoke([](auto v) { Console::WriteLine(v); });
+	context.AssertTrue(test.HasValue());
 }
 
 int main()
