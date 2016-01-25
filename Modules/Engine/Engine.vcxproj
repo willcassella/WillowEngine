@@ -54,6 +54,7 @@
     <ClInclude Include="include\Engine\ServiceInterfaces\IRenderer.h" />
     <ClInclude Include="include\Engine\Transform.h" />
     <ClInclude Include="include\Engine\World.h" />
+    <ClInclude Include="source\Physics.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C257E175-629A-42F3-A52A-CEC2D0DBBCF2}</ProjectGuid>

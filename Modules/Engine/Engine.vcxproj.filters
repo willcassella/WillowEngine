@@ -129,5 +129,8 @@
     <ClInclude Include="include\Engine\GameObject.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="source\Physics.h">
+      <Filter>source</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
