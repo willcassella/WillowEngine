@@ -36,7 +36,7 @@ void FPSCharacter::Move(Vec2 direction)
 void FPSCharacter::Look(Vec2 direction)
 {
 	this->RotateGlobal(Vec3::Up, direction.X);
-	View->Rotate(Vec3::Right, direction.Y);
+	this->Rotate(Vec3::Right, direction.Y);
 }
 
 void FPSCharacter::Fire()
