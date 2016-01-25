@@ -108,16 +108,14 @@ BUILD_ENUM_REFLECTION(e)
 ;
 ```
 
-You may use the `.AddValue("Name", "Description", Value)` method to register values for the enum. Additionally, you may use `.IsBitFlag()` to indicate that an instance of this enum may be composed of multiple values, as is the case for bit flags.
+You may use the `.Value("Name", Value, [optional]"Description")` method to register values for the enum. Additionally, you may use `.IsBitFlag()` to indicate that an instance of this enum may be composed of multiple values, as is the case for bit flags.
 
 ### Describing Classes, Structs, and Interfaces
 
-Classes, Interfaces, and Structs are all considered "Compounds" (in the sense that that are composed of multiple other types). You may describe properties on the type, via the following methods:
-- `.AddProperty("Name", "Description", &T::Field, [optional]Flags)` - Creates a field property
-- `.AddProperty("Name", "Description", &T::Field, nullptr, [optional]Flags)` - Creates a read-only property pointing to a field
-- `.AddProperty("Name", "Description", &T::Field, &T::Setter, [optional]Flags)` - Creates a property that gets via a field, and sets via a method.
-- `.AddProperty("Name", "Description", &T::Getter, nullptr, [optional]Flags)` - Creates a read-only property that gets via a method.
-- `.AddProperty("Name", "Description", &T::Getter, &T::Setter, [optional]Flags)` - Creates a property that gets via a method, and sets via a method.
+Classes, Interfaces, and Structs are all considered "Compounds" (in the sense that that are composed of multiple other types). You can describe Properties, Fields, and Data via the following methods:
+- `.Property("Name", Getter, Setter, [optional]"Description", [optional]"Category", [optional]Flags)` - Registers a property that uses the given getter and setter. If 'nullptr' is provided as the setter, the property is considered read-only.
+- `.Data("Name", Field, [optional]Flags)` - Registers a data member. Data members form the private interface of the type, and may only be actual fields.
+- `.Field("Name", Field, [optional]"Description", [optional]"Category", [optional]Flags)` - Registers both a property and a data member that gets and sets with the given field.
 
 In the case of structs you may also use `.IsStable()` to indicate that layout of this struct will never change. This is used to optimize some part of serialization, but should be used *very cautiously*, as changes to the layout will make this struct incompatible with old archives.
 
