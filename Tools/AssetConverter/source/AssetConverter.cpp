@@ -1,4 +1,4 @@
-// AssetConverter.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
+// AssetConverter.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
 #include <fstream>
 #include <Core/IO/Console.h>
