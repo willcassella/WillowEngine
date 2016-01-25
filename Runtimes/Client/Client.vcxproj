@@ -105,8 +105,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLFW_DLL;WINDOWS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4251;</DisableSpecificWarnings>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -128,8 +126,6 @@ xcopy "$(SolutionDir)packages\glfw3\$(Platform)\glfw3.dll" "$(SolutionDir)bin\" 
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLFW_DLL;WINDOWS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4251;</DisableSpecificWarnings>
-      <ExceptionHandling>SyncCThrow</ExceptionHandling>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -155,12 +151,9 @@ xcopy "$(SolutionDir)packages\glfw3\$(Platform)\glfw3.dll" "$(SolutionDir)bin\" 
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLFW_DLL;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4251;</DisableSpecificWarnings>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <StringPooling>true</StringPooling>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -188,12 +181,9 @@ xcopy "$(SolutionDir)packages\glfw3\$(Platform)\glfw3.dll" "$(SolutionDir)bin\" 
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLFW_DLL;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4251;</DisableSpecificWarnings>
-      <ExceptionHandling>SyncCThrow</ExceptionHandling>
-      <StringPooling>true</StringPooling>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
