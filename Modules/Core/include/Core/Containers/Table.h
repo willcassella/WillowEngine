@@ -180,7 +180,7 @@ public:
 	* Returns a reference to the new value. 
 	* WARNING: You must be sure that the given key does not already appear in the table. */
 	template <typename RelatedKeyT, typename RelatedValueT>
-	std::decay_t<RelatedValueT>& Insert(RelatedKeyT&& key, RelatedValueT&& value)
+	ValueT& Insert(RelatedKeyT&& key, RelatedValueT&& value)
 	{
 		assert(!HasKey(key));
 		auto index = _values.Add(PairT(std::forward<RelatedKeyT>(key), std::forward<RelatedValueT>(value)));
