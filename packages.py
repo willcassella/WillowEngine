@@ -17,8 +17,8 @@ if not os.path.exists(packageDir):
 	
 	# Identify and download correct set of packages
 	if True:# platform.system() == "Windows":
-		print "Downloading Windows packages..."
-		urllib.urlretrieve ("http://www.willcassella.net/WillowEngine/packages/windows.zip", zipDir)
+		print("Downloading Windows packages...")
+		urllib.urlretrieve("http://www.willcassella.net/WillowEngine/packages/windows.zip", zipDir)
 	
 	print "Extracting packages..."
 	pak = zipfile.ZipFile(zipDir)
@@ -28,4 +28,4 @@ if not os.path.exists(packageDir):
 	# Delete temp directory
 	shutil.rmtree(tempDir)
 	
-print "Packages up to date"
+print("Packages up to date")
