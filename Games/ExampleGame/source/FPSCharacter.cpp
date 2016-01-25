@@ -7,8 +7,8 @@
 ///   Reflection   ///
 
 BUILD_REFLECTION(FPSCharacter)
-.Field("View", &FPSCharacter::View, "")
-.Field("Capsule", &FPSCharacter::Capsule, "");
+.Field("View", &FPSCharacter::View)
+.Field("Capsule", &FPSCharacter::Capsule);
 
 ///////////////////
 ///   Methods   ///
