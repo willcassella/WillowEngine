@@ -1,8 +1,8 @@
 import os
-import urllib
 import zipfile
 import shutil
 import platform
+import urllib.request
 
 packageDir = "packages"
 tempDir = os.path.join(packageDir, "temp")
@@ -18,7 +18,7 @@ if not os.path.exists(packageDir):
 	# Identify and download correct set of packages
 	if True:# platform.system() == "Windows":
 		print("Downloading Windows packages...")
-		urllib.urlretrieve("http://www.willcassella.net/WillowEngine/packages/windows.zip", zipDir)
+		urllib.request.urlretrieve("http://www.willcassella.net/WillowEngine/packages/windows.zip", zipDir)
 	
 	print("Extracting packages...")
 	pak = zipfile.ZipFile(zipDir)
