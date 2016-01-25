@@ -1,4 +1,4 @@
-// main.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
+// main.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
 #include <GLFW/glfw3.h>
 #include <Core/IO/Console.h>
