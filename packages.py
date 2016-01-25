@@ -20,7 +20,7 @@ if not os.path.exists(packageDir):
 		print("Downloading Windows packages...")
 		urllib.urlretrieve("http://www.willcassella.net/WillowEngine/packages/windows.zip", zipDir)
 	
-	print "Extracting packages..."
+	print("Extracting packages...")
 	pak = zipfile.ZipFile(zipDir)
 	pak.extractall(packageDir)
 	pak.close()
