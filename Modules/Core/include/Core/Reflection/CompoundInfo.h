@@ -88,6 +88,9 @@ private:
 	/** The default category that properties are sorted into. */
 	static constexpr CString DefaultCategory = "General";
 
+	/** Default description for properties. */
+	static constexpr CString DefaultDescription = "";
+
 	////////////////////////
 	///   Constructors   ///
 public:
@@ -119,6 +122,16 @@ public:
 
 		_data.DataTable[name] = _data.DataMembers.Add(std::move(dataInfo));
 		return this->SelfAsMostSpecificTypeInfoBuilder();
+	}
+
+	/** Registers a field member in the default category with a default description. */
+	template <typename FieldT>
+	auto& Field(
+		CString name,
+		FieldT CompoundT::*field,
+		FieldFlags flags = FF_None)
+	{
+		return Field(name, field, DefaultDescription, DefaultCategory, flags);
 	}
 
 	/** Registers a field member in the default category. */
@@ -162,6 +175,17 @@ public:
 		return this->SelfAsMostSpecificTypeInfoBuilder();
 	}
 
+	/** Adds a readonly property with a field getter, in the default category with a default description. */
+	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
+	auto& Property(
+		CString name,
+		FieldT CompoundT::*field,
+		std::nullptr_t /*setter*/,
+		PropertyFlags flags = PF_None)
+	{
+		return Property(name, field, nullptr, DefaultDescription, DefaultCategory, flags);
+	}
+
 	/** Adds a readonly property with a field getter, in the default category. */
 	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
 	auto& Property(
@@ -201,6 +225,17 @@ public:
 		return this->SelfAsMostSpecificTypeInfoBuilder();
 	}
 
+	/** Adds a field property with a custom setter, in the default category with a default description. */
+	template <typename FieldT, typename SetT, typename SetRetT, WHERE(!std::is_function<FieldT>::value)>
+	auto& Property(
+		CString name,
+		FieldT CompoundT::*field,
+		SetRetT (CompoundT::*setter)(SetT),
+		PropertyFlags flags = PF_None)
+	{
+		return Property(name, field, setter, DefaultDescription, DefaultCategory, flags);
+	}
+
 	/** Adds a field property with a custom setter, in the default category. */
 	template <typename FieldT, typename SetT, typename SetRetT, WHERE(!std::is_function<FieldT>::value)>
 	auto& Property(
@@ -213,7 +248,7 @@ public:
 		return Property(name, field, setter, description, DefaultCategory, flags);
 	}
 
-	/** Adds a property with a custom setter. */
+	/** Adds a field property with a custom setter. */
 	template <typename FieldT, typename SetT, typename SetRetT, WHERE(!std::is_function<FieldT>::value)>
 	auto& Property(
 		CString name,
@@ -240,6 +275,17 @@ public:
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(propInfo));
 		return this->SelfAsMostSpecificTypeInfoBuilder();
+	}
+
+	/** Adds a read-only property with a custom getter, in the default category with a default description. */
+	template <typename GetT>
+	auto& Property(
+		CString name,
+		GetT (CompoundT::*getter)() const,
+		std::nullptr_t /*setter*/,
+		PropertyFlags flags = PF_None)
+	{
+		return Property(name, getter, nullptr, DefaultDescription, DefaultCategory, flags);
 	}
 
 	/** Adds a read-only property with a custom getter, in the default category. */
@@ -279,6 +325,17 @@ public:
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(propInfo));
 		return this->SelfAsMostSpecificTypeInfoBuilder();
+	}
+
+	/** Adds a property with a custom getter and setter, in the default category with a default desciption. */
+	template <typename GetT, typename SetRetT, typename SetT>
+	auto& Property(
+		CString name,
+		GetT (CompoundT::*getter)() const,
+		SetRetT (CompoundT::*setter)(SetT),
+		PropertyFlags flags = PF_None)
+	{
+		return Property(name, getter, setter, DefaultDescription, DefaultCategory, flags);
 	}
 
 	/** Adds a property with a custom getter and setter, in the default category. */
