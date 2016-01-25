@@ -1,6 +1,7 @@
 // EnumInfo.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
+#include "../Containers/Union.h"
 #include "PrimitiveInfo.h"
 
 /////////////////
@@ -17,6 +18,13 @@ public:
 
 	template <typename T, class TypeInfoT>
 	friend struct TypeInfoBuilder;
+
+	///////////////////////
+	///   Inner Types   ///
+public:
+
+	/** Union of all possible underlying enum types. */
+	using GenericEnum = Union<byte, int16, uint16, int32, uint32, int64, uint64>;
 
 	////////////////////////
 	///   Constructors   ///
@@ -48,7 +56,7 @@ public:
 	}
 
 	/** Returns all the values for this enum. */
-	FORCEINLINE const Table<String, int64>& GetValues() const
+	FORCEINLINE const Table<String, GenericEnum>& GetValues() const
 	{
 		return _data.values;
 	}
@@ -60,7 +68,7 @@ private:
 	struct Data
 	{
 		const PrimitiveInfo* underlyingType;
-		Table<String, int64> values;
+		Table<String, GenericEnum> values;
 		bool isBitFlag = false;
 	} _data;
 };
@@ -74,6 +82,13 @@ struct TypeInfoBuilder< EnumT, EnumInfo > final : TypeInfoBuilderBase<EnumT, Enu
 public:
 
 	friend EnumInfo;
+
+	/////////////////////
+	///   Constants   ///
+private:
+
+	/** Default description for enum value. */
+	static constexpr CString DefaultDescription = "";
 
 	////////////////////////
 	///   Constructors   ///
@@ -96,10 +111,16 @@ public:
 		return this->SelfAsMostSpecificTypeInfoBuilder();
 	}
 
-	/** Adds a value for this enum. */
-	auto& Value(CString name, EnumT value, CString /*description*/ = "")
+	/** Adds a value for this enum, with a default description. */
+	auto& Value(CString name, EnumT value)
 	{
-		_data.values[name] = static_cast<int64>(value);
+		return this->Value(name, value, DefaultDescription);
+	}
+
+	/** Adds a value for this enum. */
+	auto& Value(CString name, EnumT value, CString /*description*/)
+	{
+		_data.values.Insert(name, static_cast<std::underlying_type_t<EnumT>>(value));
 		return this->SelfAsMostSpecificTypeInfoBuilder();
 	}
 
