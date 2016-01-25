@@ -146,8 +146,14 @@ Quat Entity::GetRotation() const
 
 Quat Entity::GetWorldRotation() const
 {
-	// TODO
-	return Quat();
+	if (this->HasParent())
+	{
+		return this->GetParent()->GetWorldRotation() * _transform.GetRotation();
+	}
+	else
+	{
+		return _transform.GetRotation();
+	}
 }
 
 void Entity::SetRotation(const Quat&)
@@ -160,9 +166,11 @@ void Entity::SetWorldRotation(const Quat&)
 	// TODO
 }
 
-void Entity::Rotate(const Vec3&, Angle)
+void Entity::Rotate(const Vec3& axis, Angle angle)
 {
-	// TODO
+	auto rotation = _transform.GetRotation();
+	rotation.RotateByAxisAngle(axis, angle, true);
+	_transform.SetRotation(rotation);
 }
 
 void Entity::RotateGlobal(const Vec3& axis, Angle angle)
