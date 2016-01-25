@@ -1,4 +1,4 @@
-// PhysicalComponent.cpp - Copyright 2013-2015 Will Cassella, All Rights Reserved
+// PhysicalComponent.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include "../../include/Engine/Components/PhysicalComponent.h"
