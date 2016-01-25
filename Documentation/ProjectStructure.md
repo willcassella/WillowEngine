@@ -1,4 +1,4 @@
-# Architecture
+# Project Structure
 
 The engine is currently divided into several major bits: "Modules", "Services", "Runtimes", "Games", "Tools", and "Tests".
 
