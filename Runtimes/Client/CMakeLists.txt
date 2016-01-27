@@ -8,6 +8,6 @@ add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 # Dependencies
 pkg_check_modules(GLFW glfw3 REQUIRED)
-include_directories(BEFORE ${GLFW_STATIC_INCLUDE_DIRS})
-include_directories(AFTER ${Core_INCLUDE_DIRS} ${Resource_INCLUDE_DIRS} ${Engine_INCLUDE_DIRS} ${GLRender_INCLUDE_DIRS} ${ExampleGame_INCLUDE_DIRS})
+include_directories(${GLFW_STATIC_INCLUDE_DIRS})
+include_directories(${Core_INCLUDE_DIRS} ${Resource_INCLUDE_DIRS} ${Engine_INCLUDE_DIRS} ${GLRender_INCLUDE_DIRS} ${ExampleGame_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} Core Resource Engine GLRender ExampleGame ${GLFW_STATIC_LIBRARIES})

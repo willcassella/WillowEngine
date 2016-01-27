@@ -8,8 +8,8 @@ add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
 
 # Dependencies
 pkg_check_modules(Bullet bullet REQUIRED)
-include_directories(BEFORE ${Bullet_STATIC_INCLUDE_DIRS})
-include_directories(AFTER ${Core_INCLUDE_DIRS} ${Resource_INCLUDE_DIRS})
+include_directories(SYSTEM ${Bullet_STATIC_INCLUDE_DIRS}) # Supress warnings from Bullet headers
+include_directories(${Core_INCLUDE_DIRS} ${Resource_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} Core Resource ${Bullet_STATIC_LIBRARIES})
 
 # Public

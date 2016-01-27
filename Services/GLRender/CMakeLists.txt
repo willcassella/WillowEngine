@@ -8,8 +8,8 @@ add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
 
 # Dependencies
 pkg_check_modules(Glew glew REQUIRED)
-include_directories(BEFORE ${Glew_STATIC_INCLUDE_DIRS})
-include_directories(AFTER ${Core_INCLUDE_DIRS} ${Resource_INCLUDE_DIRS} ${Engine_INCLUDE_DIRS})
+include_directories(${Glew_STATIC_INCLUDE_DIRS})
+include_directories(${Core_INCLUDE_DIRS} ${Resource_INCLUDE_DIRS} ${Engine_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} Core Resource Engine ${Glew_STATIC_LIBRARIES})
 
 # Public
