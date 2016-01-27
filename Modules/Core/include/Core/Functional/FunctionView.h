@@ -19,9 +19,7 @@ public:
 		_func = &func;
 		_invoker = [](void* f, Args ... args) -> R
 		{
-			// So apparently if I do this within parentesis, Clang and GCC think that I'm referring to the overloaded operator().
-			auto& ref = *static_cast<std::decay_t<F>*>(f);
-			return ref(std::forward<Args>(args)...);
+			return (*static_cast<std::decay_t<F>*>(f))(std::forward<Args>(args)...);
 		};
 	}
 
