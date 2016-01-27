@@ -1,5 +1,6 @@
 // Application.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
+#include <iostream>
 #include <cstdlib>
 #include "../include/Core/Application.h"
 #include "../include/Core/Reflection/TypeInfo.h"
@@ -9,7 +10,9 @@
 
 Application::Application()
 {
-	// Do nothing
+	// For some reason this needs to be constructed, otherwise printing upon starting (ie, pre-main) on linux will
+	// occasionally fail completely.
+	std::ios_base::Init initializer;
 }
 
 Application::~Application()

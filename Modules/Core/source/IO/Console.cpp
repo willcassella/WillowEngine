@@ -18,23 +18,144 @@ void Console::NewLine()
 
 void Console::Write(CString message)
 {
-	static bool firstWrite = true;
-
-	if (firstWrite)
-	{
-		// For some reason this needs to be constructed, otherwise printing upon starting (ie, pre-main) on linux will
-		// occasionally fail completely.
-		std::ios_base::Init initializer;
-		NewLine();
-		firstWrite = false;
-	}
-
 	std::cout << message;
+}
+
+void Console::Write(bool value)
+{
+	std::cout << value;
+}
+
+void Console::Write(char value)
+{
+	std::cout << value;
+}
+
+void Console::Write(byte value)
+{
+	std::cout << value;
+}
+
+void Console::Write(int16 value)
+{
+	std::cout << value;
+}
+
+void Console::Write(uint16 value)
+{
+	std::cout << value;
+}
+
+void Console::Write(int32 value)
+{
+	std::cout << value;
+}
+
+void Console::Write(uint32 value)
+{
+	std::cout << value;
+}
+
+void Console::Write(int64 value)
+{
+	std::cout << value;
+}
+
+void Console::Write(uint64 value)
+{
+	std::cout << value;
+}
+
+void Console::Write(float value)
+{
+	std::cout << value;
+}
+
+void Console::Write(double value)
+{
+	std::cout << value;
+}
+
+void Console::Write(long double value)
+{
+	std::cout << value;
 }
 
 void Console::WriteLine(CString message)
 {
 	Write(message);
+	NewLine();
+}
+
+void Console::WriteLine(bool value)
+{
+	Write(value);
+	NewLine();
+}
+
+void Console::WriteLine(char value)
+{
+	Write(value);
+	NewLine();
+}
+
+void Console::WriteLine(byte value)
+{
+	Write(value);
+	NewLine();
+}
+
+void Console::WriteLine(int16 value)
+{
+	Write(value);
+	NewLine();
+}
+
+void Console::WriteLine(uint16 value)
+{
+	Write(value);
+	NewLine();
+}
+
+void Console::WriteLine(int32 value)
+{
+	Write(value);
+	NewLine();
+}
+
+void Console::WriteLine(uint32 value)
+{
+	Write(value);
+	NewLine();
+}
+
+void Console::WriteLine(int64 value)
+{
+	Write(value);
+	NewLine();
+}
+
+void Console::WriteLine(uint64 value)
+{
+	Write(value);
+	NewLine();
+}
+
+void Console::WriteLine(float value)
+{
+	Write(value);
+	NewLine();
+}
+
+void Console::WriteLine(double value)
+{
+	Write(value);
+	NewLine();
+}
+
+void Console::WriteLine(long double value)
+{
+	Write(value);
 	NewLine();
 }
 

@@ -12,6 +12,42 @@ namespace Console
 	/** Writes a message to the console. */
 	CORE_API void Write(CString message);
 
+	/** Writes a bool value to this console. */
+	CORE_API void Write(bool value);
+
+	/** Writes a char value to this console. */
+	CORE_API void Write(char value);
+
+	/** Writes a byte value to this console. */
+	CORE_API void Write(byte value);
+
+	/** Writes an int16 value to this console. */
+	CORE_API void Write(int16 value);
+
+	/** Writes a uint16 value to this console. */
+	CORE_API void Write(uint16 value);
+
+	/** Writes an int32 value to this console. */
+	CORE_API void Write(int32 value);
+
+	/** Writes a uint32 value to this console. */
+	CORE_API void Write(uint32 value);
+
+	/** Writes an int64 value to this console. */
+	CORE_API void Write(int64 value);
+
+	/** Writes a uint64 value to this console. */
+	CORE_API void Write(uint64 value);
+
+	/** Writes a float value to this console. */
+	CORE_API void Write(float value);
+
+	/** Writes a double value to this console. */
+	CORE_API void Write(double value);
+
+	/** Writes a long double value to this console. */
+	CORE_API void Write(long double value);
+
 	/** Writes a message to the console. */
 	FORCEINLINE void Write(const String& message)
 	{
@@ -20,6 +56,42 @@ namespace Console
 
 	/** Writes a message to the console, and then sends the caret to the start of the next line. */
 	CORE_API void WriteLine(CString message);
+
+	/** Writes a bool value to the console, and then sends the caret to the start of the next line. */
+	CORE_API void WriteLine(bool value);
+
+	/** Writes a char value to the console, and then sends the caret to the start of the next line. */
+	CORE_API void WriteLine(char value);
+
+	/** Writes a byte value to the console, and then sends the caret to the start of the next line. */
+	CORE_API void WriteLine(byte value);
+
+	/** Writes an int16 value to the console, and then sends the caret to the start of the next line. */
+	CORE_API void WriteLine(int16 value);
+
+	/** Writes a uint16 value to the console, and then sends the caret to the start of the next line. */
+	CORE_API void WriteLine(uint16 value);
+
+	/** Writes an int32 value to the console, and then sends the caret to the start of the next line. */
+	CORE_API void WriteLine(int32 value);
+
+	/** Writes a uint32 value to the console, and then sends the caret to the start of the next line. */
+	CORE_API void WriteLine(uint32 value);
+
+	/** Writes an int64 value to the console, and then sends the caret to the start of the next line. */
+	CORE_API void WriteLine(int64 value);
+
+	/** Writes a uint64 value to the console, and then sends the caret to the start of the next line. */
+	CORE_API void WriteLine(uint64 value);
+
+	/** Writes a float value to the console, and then sends the caret to the start of the next line. */
+	CORE_API void WriteLine(float value);
+
+	/** Writes a double value to the console, and then sends the caret to the start of the next line. */
+	CORE_API void WriteLine(double value);
+
+	/** Writes a long double value to the console, and then sends the caret to the start of the next line. */
+	CORE_API void WriteLine(long double value);
 
 	/** Writes a message to the console, and then sends the caret to the start of the next line. */
 	FORCEINLINE void WriteLine(const String& message)
