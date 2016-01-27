@@ -38,7 +38,8 @@ private:
 		_func = &func;
 		_invoker = [](void* f, T value) -> EnumeratorControl
 		{
-			return (*static_cast<std::decay_t<F>*>(f))(std::forward<T>(value));
+			auto& ref = *static_cast<std::decay_t<F>*>(f);
+			return ref(std::forward<T>(value));
 		};
 	}
 
@@ -49,7 +50,8 @@ private:
 		_func = &func;
 		_invoker = [](void* f, T value) -> EnumeratorControl
 		{
-			(*static_cast<std::decay_t<F>*>(f))(std::forward<T>(value));
+			auto& ref = *static_cast<std::decay_t<F>*>(f);
+			ref(std::forward<T>(value));
 			return EnumeratorControl::Continue;
 		};
 	}
