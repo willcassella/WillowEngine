@@ -28,12 +28,12 @@ public:
 		Setup(func);
 	}
 
-    EnumeratorView(EnumeratorView&& move) = default;
+    	EnumeratorView(EnumeratorView&& move) = default;
 	EnumeratorView(EnumeratorView& copy)
-        : View(copy), _hasBroken(copy._hasBroken), _func(copy._func), _invoker(copy._invoker)
-    {
-        // I have to define this because apparently MSVC can't deal with having multiple defaulted copy-constructors.
-    }
+        	: View(copy), _hasBroken(copy._hasBroken), _func(copy._func), _invoker(copy._invoker)
+    	{
+        	// I have to define this because apparently MSVC can't deal with having multiple defaulted copy-constructors.
+    	}
 	EnumeratorView(const EnumeratorView& copy)
 		: View(copy), _hasBroken(copy._hasBroken), _func(copy._func), _invoker(copy._invoker)
 	{
