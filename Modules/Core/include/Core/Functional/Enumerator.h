@@ -26,6 +26,7 @@ public:
 	{
 		Setup(func);
 	}
+	Enumerator(Enumerator& copy) = default;
 
 	///////////////////
 	///   Methods   ///

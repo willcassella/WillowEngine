@@ -19,6 +19,11 @@ Array<PropertyInfo> CompoundInfo::GetProperties() const
 	return _data.Properties;
 }
 
+void CompoundInfo::EnumerateProperties(Enumerator<const PropertyInfo&> enumerator) const
+{
+	enumerator(_data.Properties);
+}
+
 const PropertyInfo* CompoundInfo::FindProperty(const String& name) const
 {
 	auto index = _data.PropertyTable.Find(name);
@@ -35,6 +40,11 @@ const PropertyInfo* CompoundInfo::FindProperty(const String& name) const
 Array<DataInfo> CompoundInfo::GetData() const
 {
 	return _data.DataMembers;
+}
+
+void CompoundInfo::EnumerateData(Enumerator<const DataInfo&> enumerator) const
+{
+	enumerator(_data.DataMembers);
 }
 
 const DataInfo* CompoundInfo::FindData(const String& name) const

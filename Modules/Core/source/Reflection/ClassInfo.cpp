@@ -63,6 +63,16 @@ Array<PropertyInfo> ClassInfo::GetProperties() const
 	}
 }
 
+void ClassInfo::EnumerateProperties(Enumerator<const PropertyInfo&> enumerator) const
+{
+	if (GetBase())
+	{
+		return GetBase()->EnumerateProperties(enumerator);
+	}
+
+	CompoundInfo::EnumerateProperties(enumerator);
+}
+
 const PropertyInfo* ClassInfo::FindProperty(const String& name) const
 {
 	const PropertyInfo* property = CompoundInfo::FindProperty(name);
@@ -91,6 +101,16 @@ Array<DataInfo> ClassInfo::GetData() const
 	{
 		return CompoundInfo::GetData();
 	}
+}
+
+void ClassInfo::EnumerateData(Enumerator<const DataInfo&> enumerator) const
+{
+	if (GetBase())
+	{
+		GetBase()->EnumerateData(enumerator);
+	}
+	
+	CompoundInfo::EnumerateData(enumerator);
 }
 
 const DataInfo* ClassInfo::FindData(const String& name) const

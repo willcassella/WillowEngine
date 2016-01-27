@@ -41,11 +41,17 @@ public:
 	/** Returns all properties on this type (including base type properties). */
 	Array<PropertyInfo> GetProperties() const final override;
 
+	/** Enumerates all properties of this type (including base type properties). */
+	void EnumerateProperties(Enumerator<const PropertyInfo&> enumerator) const final override;
+
 	/** Searches for a property on this type by name (including base type properties). */
 	const PropertyInfo* FindProperty(const String& name) const final override;
 
 	/** Returns all data members on this type (including base type members). */
 	Array<DataInfo> GetData() const final override;
+
+	/** Enumerates all data members on this type (including base members). */
+	void EnumerateData(Enumerator<const DataInfo&> enumerator) const final override;
 
 	/** Searches for a data member on this type by name (including base type members). */
 	const DataInfo* FindData(const String& name) const final override;

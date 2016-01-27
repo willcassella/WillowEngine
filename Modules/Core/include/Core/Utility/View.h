@@ -10,9 +10,8 @@ struct View
 public:
 
 	View() = default;
-	View(const View& copy) = delete;
+	View(const View& copy) = default;
 	View(View&& move) = default;
-	~View() = default;
 
 	/////////////////////
 	///   Operators   ///

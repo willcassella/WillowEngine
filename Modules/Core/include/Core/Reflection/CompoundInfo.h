@@ -3,6 +3,7 @@
 
 #include "../Containers/StaticBuffer.h"
 #include "../Containers/Table.h"
+#include "../Functional/Enumerator.h"
 #include "../IO/Console.h"
 #include "TypeInfo.h"
 #include "DataInfo.h"
@@ -49,11 +50,17 @@ public:
 	/** Returns an Array of all the properties of this type. */
 	virtual Array<PropertyInfo> GetProperties() const;
 
+	/** Enumerates all properties of this type. */
+	virtual void EnumerateProperties(Enumerator<const PropertyInfo&> enumerator) const;
+
 	/** Searches for the given property in this type by name. */
 	virtual const PropertyInfo* FindProperty(const String& name) const;
 
 	/** Returns an Array of all data members of this type. */
 	virtual Array<DataInfo> GetData() const;
+
+	/** Enumerates all data members of this type. */
+	virtual void EnumerateData(Enumerator<const DataInfo&> enumerator) const;
 
 	/** Searches for the given data member in this type by name. */
 	virtual const DataInfo* FindData(const String& name) const;
@@ -587,7 +594,7 @@ namespace Implementation
 				const auto& type = reinterpret_cast<const CompoundInfo&>(::TypeOf(value));
 				
 				// Iterate through all data members
-				for (const auto& dataInfo : type.GetData())
+				type.EnumerateData([&](const auto& dataInfo)
 				{
 					// If this data is not marked as transient
 					if (!(dataInfo.GetFlags() & DF_Transient))
@@ -595,7 +602,7 @@ namespace Implementation
 						// Add a sub-archive for the data, naming it after the data
 						archive.Push(dataInfo.Get(ImmutableVariant{ value }), dataInfo.GetName());
 					}
-				}
+				});
 			}
 			else
 			{
