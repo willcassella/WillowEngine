@@ -40,7 +40,7 @@ public:
 public:
 
 	/** Invokes the held function. */
-	R operator()(Args ... args)
+	R operator()(Args ... args) const
 	{
 		return _invoker(_func, std::forward<Args>(args)...);
 	}

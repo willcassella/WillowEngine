@@ -63,7 +63,7 @@ Array<PropertyInfo> ClassInfo::GetProperties() const
 	}
 }
 
-void ClassInfo::EnumerateProperties(Enumerator<const PropertyInfo&> enumerator) const
+void ClassInfo::EnumerateProperties(EnumeratorView<const PropertyInfo&> enumerator) const
 {
 	if (GetBase())
 	{
@@ -103,7 +103,7 @@ Array<DataInfo> ClassInfo::GetData() const
 	}
 }
 
-void ClassInfo::EnumerateData(Enumerator<const DataInfo&> enumerator) const
+void ClassInfo::EnumerateData(EnumeratorView<const DataInfo&> enumerator) const
 {
 	if (GetBase())
 	{

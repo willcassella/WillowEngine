@@ -1,4 +1,4 @@
-// Enumerator.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
+// EnumeratorView.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
 #include <utility>
@@ -15,32 +15,42 @@ enum class EnumeratorControl
 };
 
 template <typename T>
-struct Enumerator final : View
+struct EnumeratorView final : View
 {
 	////////////////////////
 	///   Constructors   ///
 public:
 
 	template <typename F>
-	Enumerator(F&& func)
+	EnumeratorView(F&& func)
+		: _hasBroken(false)
 	{
 		Setup(func);
 	}
 
-    Enumerator(Enumerator&& move) = default;
-	Enumerator(Enumerator& copy)
-        : View(copy), _func(copy._func), _invoker(copy._invoker)
+    EnumeratorView(EnumeratorView&& move) = default;
+	EnumeratorView(EnumeratorView& copy)
+        : View(copy), _hasBroken(copy._hasBroken), _func(copy._func), _invoker(copy._invoker)
     {
         // I have to define this because apparently MSVC can't deal with having multiple defaulted copy-constructors.
     }
-	Enumerator(const Enumerator& copy)
-		: View(copy), _func(copy._func), _invoker(copy._invoker)
+	EnumeratorView(const EnumeratorView& copy)
+		: View(copy), _hasBroken(copy._hasBroken), _func(copy._func), _invoker(copy._invoker)
 	{
 		// I have to define this because apparently MSVC can't deal with having multiple defaulted copy-constructors.
 	}
 
 	///////////////////
 	///   Methods   ///
+public:
+
+	/** Returns whether the enumerator has broken. If it has this EnumeratorView will refuse to continue enumeration,
+	* but checking this can save you the trouble of trying. */
+	FORCEINLINE bool HasBroken() const
+	{
+		return _hasBroken;
+	}
+
 private:
 
 	/** Creates an invoker that decides whether to continue or not. */
@@ -70,17 +80,21 @@ private:
 	///   Operators   ///
 public:
 
-	/** Enumerates over the given enumerable object. */
+	/** Enumerates over the given enumerable object, if the enumerator has not yet broken. */
 	template <typename E>
 	void operator()(E&& enumerable)
 	{
-		for (T i : enumerable)
+		if (!_hasBroken)
 		{
-			auto result = _invoker(_func, std::forward<T>(i));
-
-			if (result == EnumeratorControl::Break)
+			for (T i : enumerable)
 			{
-				break;
+				auto result = _invoker(_func, std::forward<T>(i));
+
+				if (result == EnumeratorControl::Break)
+				{
+					_hasBroken = true;
+					break;
+				}
 			}
 		}
 	}
@@ -89,6 +103,7 @@ public:
 	///   Data   ///
 private:
 
+	bool _hasBroken;
 	void* _func;
 	EnumeratorControl(*_invoker)(void*, T);
 };

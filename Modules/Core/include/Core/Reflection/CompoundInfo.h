@@ -3,7 +3,7 @@
 
 #include "../Containers/StaticBuffer.h"
 #include "../Containers/Table.h"
-#include "../Functional/Enumerator.h"
+#include "../Functional/EnumeratorView.h"
 #include "../IO/Console.h"
 #include "TypeInfo.h"
 #include "DataInfo.h"
@@ -51,7 +51,7 @@ public:
 	virtual Array<PropertyInfo> GetProperties() const;
 
 	/** Enumerates all properties of this type. */
-	virtual void EnumerateProperties(Enumerator<const PropertyInfo&> enumerator) const;
+	virtual void EnumerateProperties(EnumeratorView<const PropertyInfo&> enumerator) const;
 
 	/** Searches for the given property in this type by name. */
 	virtual const PropertyInfo* FindProperty(const String& name) const;
@@ -60,7 +60,7 @@ public:
 	virtual Array<DataInfo> GetData() const;
 
 	/** Enumerates all data members of this type. */
-	virtual void EnumerateData(Enumerator<const DataInfo&> enumerator) const;
+	virtual void EnumerateData(EnumeratorView<const DataInfo&> enumerator) const;
 
 	/** Searches for the given data member in this type by name. */
 	virtual const DataInfo* FindData(const String& name) const;

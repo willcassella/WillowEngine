@@ -288,7 +288,7 @@
     <ClInclude Include="include\Core\IO\InArchive.h">
       <Filter>include\IO</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Functional\Enumerator.h">
+    <ClInclude Include="include\Core\Functional\EnumeratorView.h">
       <Filter>include\Functional</Filter>
     </ClInclude>
   </ItemGroup>

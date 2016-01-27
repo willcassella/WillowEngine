@@ -44,7 +44,7 @@
     <ClInclude Include="include\Core\Forwards\Reflection.h" />
     <ClInclude Include="include\Core\Forwards\Memory.h" />
     <ClInclude Include="include\Core\Forwards\Operations.h" />
-    <ClInclude Include="include\Core\Functional\Enumerator.h" />
+    <ClInclude Include="include\Core\Functional\EnumeratorView.h" />
     <ClInclude Include="include\Core\Functional\FunctionView.h" />
     <ClInclude Include="include\Core\Interface.h" />
     <ClInclude Include="include\Core\IO\InArchive.h" />

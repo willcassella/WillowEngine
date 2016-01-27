@@ -3,7 +3,7 @@
 
 #include "../config.h"
 #include "../Forwards/Containers.h"
-#include "../Functional/Enumerator.h"
+#include "../Functional/EnumeratorView.h"
 
 /** Represents an Archive that may have data retrieved from it. */
 class CORE_API InArchive
@@ -62,5 +62,5 @@ public:
 	virtual bool Get(String& value) const = 0;
 
 	/** Iterates over all child archives in the archive. */
-	virtual void EnumerateChildren(Enumerator<const InArchive&> enumerator) const = 0;
+	virtual void EnumerateChildren(EnumeratorView<const InArchive&> enumerator) const = 0;
 };
