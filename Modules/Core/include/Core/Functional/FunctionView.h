@@ -23,6 +23,18 @@ public:
 		};
 	}
 
+	FunctionView(FunctionView&& move) = default;
+	FunctionView(FunctionView& copy)
+		: View(copy), _func(copy._func), _invoker(copy._invoker)
+	{
+		// All done TODO: Default this once MSVC doesn't suck
+	}
+	FunctionView(const FunctionView& copy)
+		: View(copy), _func(copy._func), _invoker(copy._invoker)
+	{
+		// All done TODO: Default this once MSVC doesn't suck
+	}
+
 	/////////////////////
 	///   Operators   ///
 public:
