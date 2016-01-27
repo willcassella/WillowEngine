@@ -5,6 +5,7 @@ project(GLRender LANGUAGES CXX)
 # Private
 file(GLOB_RECURSE SOURCE_FILES "${PROJECT_SOURCE_DIR}/source/*.cpp")
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
+add_definitions(-DGLRENDER_BUILD)
 
 # Dependencies
 pkg_check_modules(Glew glew REQUIRED)

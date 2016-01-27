@@ -5,6 +5,7 @@ project(Engine LANGUAGES CXX)
 # Private
 file(GLOB_RECURSE SOURCE_FILES "${PROJECT_SOURCE_DIR}/source/*.cpp")
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
+add_definitions(-DENGINE_BUILD)
 
 # Dependencies
 pkg_check_modules(Bullet bullet REQUIRED)

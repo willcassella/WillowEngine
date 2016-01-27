@@ -5,6 +5,7 @@ project(Resource LANGUAGES CXX)
 # Private
 file(GLOB_RECURSE SOURCE_FILES "${PROJECT_SOURCE_DIR}/source/*.cpp")
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
+add_definitions(-DRESOURCE_BUILD)
 
 # Dependencies
 include_directories(${Core_INCLUDE_DIRS})
