@@ -5,6 +5,7 @@
 #include "../Forwards/Containers.h"
 #include "../Functional/Enumerator.h"
 
+/** Represents an Archive that may have data retrieved from it. */
 class CORE_API InArchive
 {
 	////////////////////////
