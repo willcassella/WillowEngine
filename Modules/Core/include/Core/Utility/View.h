@@ -11,7 +11,8 @@ public:
 
 	View() = default;
 	View(const View& copy) = delete;
-	View(View&& move) = delete;
+	View(View&& move) = default;
+	~View() = default;
 
 	/////////////////////
 	///   Operators   ///
