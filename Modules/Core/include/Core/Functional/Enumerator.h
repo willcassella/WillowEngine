@@ -21,12 +21,19 @@ struct Enumerator final : View
 	///   Constructors   ///
 public:
 
+    Enumerator(const Enumerator& copy) = default;
+    Enumerator(Enumerator&& move) = default;
+	Enumerator(Enumerator& copy)
+        : _func(copy._func), _invoker(copy._invoker)
+    {
+        // I have to define this because apparently MSVC can't deal with having multiple defaulted copy-constructors.
+    }
+
 	template <typename F>
 	Enumerator(F&& func)
 	{
 		Setup(func);
 	}
-	Enumerator(Enumerator& copy) = default;
 
 	///////////////////
 	///   Methods   ///
