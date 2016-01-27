@@ -7,5 +7,5 @@ file(GLOB_RECURSE SOURCE_FILES "${PROJECT_SOURCE_DIR}/source/*.cpp")
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 # Dependencies
-include_directories(AFTER ${Core_INCLUDE_DIRS} ${Resource_INCLUDE_DIRS} ${Engine_INCLUDE_DIRS})
+include_directories(${Core_INCLUDE_DIRS} ${Resource_INCLUDE_DIRS} ${Engine_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} Core Resource Engine)
