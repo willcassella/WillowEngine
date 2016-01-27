@@ -23,12 +23,12 @@ public:
 
     Enumerator(Enumerator&& move) = default;
 	Enumerator(const Enumerator& copy)
-		: _func(copy._func), _invoker(copy._invoker)
+		: View(copy), _func(copy._func), _invoker(copy._invoker)
 	{
 		// I have to define this because apparently MSVC can't deal with having multiple defaulted copy-constructors.
 	}
 	Enumerator(Enumerator& copy)
-        : _func(copy._func), _invoker(copy._invoker)
+        : View(copy), _func(copy._func), _invoker(copy._invoker)
     {
         // I have to define this because apparently MSVC can't deal with having multiple defaulted copy-constructors.
     }
