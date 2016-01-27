@@ -6,7 +6,6 @@
 #include "../Reflection/Variant.h"
 #include "../Reflection/VoidInfo.h"
 
-/** Abstract base for events */
 struct CORE_API Event final
 {
 	///////////////////////
