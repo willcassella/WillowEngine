@@ -10,6 +10,7 @@ Willow Engine is a game engine in development by Will Cassella.
 
 The engine requires Visual Studio 2015 to compile on Windows, older versions of VS will not work.
 Before building for the first time, you must run the 'packages.py' script in the root directory; this downloads and extracts all required Windows binaries.
+Note that the CMake files have not been tested on Windows, but I'm not planning on replacing my beautiful hand-crafted Visual Studio project files with ugly CMake generated ones anyway.
 
 Additionally, there are natvis files for various types in the engine in the "extras" directory, so you can use those to assist debugging in Visual Studio.
 
@@ -27,11 +28,15 @@ You also need the following packages, since for some reason GLFW doesn't actuall
 
 Once you have all packages installed, compiling the engine is as simple as:
 
-`make -f WillowEngine.makefile all`
+`mkdir build`  
+`cd build`  
+`cmake ../`  
+`make`  
 
 ### Mac
 
-I honestly haven't tried Mac, but it works on Linux and since all the packages are portable, I don't see why it wouldn't work on Mac as well.
+Mac is not officially supported, but I don't see any reason why it wouldn't work, assuming you set up the packages (which are all portable) correctly.
+If I eventually get a Mac I'll add support for it in the CMake files.
 
 ## Further documentation
 
