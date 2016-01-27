@@ -65,15 +65,15 @@ public:
 	}
 
 	// TODO: Documentation
-	FORCEINLINE void ToArchive(ArchiveNode& node) const
+	FORCEINLINE void ToArchive(OutArchive& archive) const
 	{
-		_type->GetToArchiveImplementation()(_value, node);
+		_type->GetToArchiveImplementation()(_value, archive);
 	}
 
 	// TODO: Documentation
-	FORCEINLINE void FromArchive(const ArchiveNode& node)
+	FORCEINLINE void FromArchive(const InArchive& archive)
 	{
-		_type->GetFromArchiveImplementation()(_value, node);
+		_type->GetFromArchiveImplementation()(_value, archive);
 	}
 
 	////////////////
@@ -138,9 +138,9 @@ public:
 	}
 
 	// TODO: Documentation
-	FORCEINLINE void ToArchive(ArchiveNode& node) const
+	FORCEINLINE void ToArchive(OutArchive& archive) const
 	{
-		_type->GetToArchiveImplementation()(_value, node);
+		_type->GetToArchiveImplementation()(_value, archive);
 	}
 
 	////////////////

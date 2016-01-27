@@ -4,5 +4,8 @@
 /////////////////
 ///   Types   ///
 
-/** Defined in 'IO/AcrhiveNode.h' */
-class ArchiveNode;
+/** Defined in 'IO/OutArchive.h' */
+class OutArchive;
+
+/** Defined in 'IO/InArchive.h' */
+class InArchive;

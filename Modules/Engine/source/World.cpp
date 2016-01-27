@@ -10,11 +10,12 @@ static_assert(std::is_same<Scalar, btScalar>::value, "The engine is not configur
 ///   Reflection   ///
 
 BUILD_REFLECTION(World)
-.Data("GameObject", &World::_gameObjects)
+.Data("GameObjects", &World::_gameObjects)
 .Data("Entities", &World::_entities)
 .Data("Components", &World::_components)
 .Data("Destroyed", &World::_destroyedObjects, DF_Transient)
-.Data("NextGameObject ID", &World::_nextGameObjectID)
+.Data("NextGameObjectID", &World::_nextGameObjectID)
+.Field("Events", &World::Events)
 .Field("TimeDilation", &World::TimeDilation, "The time dilation of the world. Default is 1.")
 .Field("TimeStep", &World::TimeStep, "The amount of time (ms) that each update of the world represents.");
 

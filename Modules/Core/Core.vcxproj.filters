@@ -70,6 +70,12 @@
     <Filter Include="include\STDE">
       <UniqueIdentifier>{e16c4a17-428e-47dc-9d14-94d5cce65c36}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\Utility">
+      <UniqueIdentifier>{542222eb-9e3e-4ba6-9f09-71d88432de4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Functional">
+      <UniqueIdentifier>{1eb5aede-b9ed-4b9f-9e39-47c88945d167}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Core\Containers\Array.h">
@@ -252,9 +258,6 @@
     <ClInclude Include="include\Core\Concurrency\Task.h">
       <Filter>include\Concurrency</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\IO\ArchiveNode.h">
-      <Filter>include\IO</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\IO\Console.h">
       <Filter>include\IO</Filter>
     </ClInclude>
@@ -272,6 +275,21 @@
     </ClInclude>
     <ClInclude Include="include\Core\STDE\Utility.h">
       <Filter>include\STDE</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Utility\View.h">
+      <Filter>include\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Functional\FunctionView.h">
+      <Filter>include\Functional</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\IO\OutArchive.h">
+      <Filter>include\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\IO\InArchive.h">
+      <Filter>include\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Functional\Enumerator.h">
+      <Filter>include\Functional</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -332,9 +350,6 @@
     <ClCompile Include="source\Event\EventManager.cpp">
       <Filter>source\Event</Filter>
     </ClCompile>
-    <ClCompile Include="source\Memory\OwnerPtr.cpp">
-      <Filter>source\Memory</Filter>
-    </ClCompile>
     <ClCompile Include="source\Containers\DynamicBuffer.cpp">
       <Filter>source\Containers</Filter>
     </ClCompile>
@@ -373,6 +388,15 @@
     </ClCompile>
     <ClCompile Include="source\IO\Console.cpp">
       <Filter>source\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Memory\UniquePtr.cpp">
+      <Filter>source\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Operations\ToArchive.cpp">
+      <Filter>source\Operations</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Operations\FromArchive.cpp">
+      <Filter>source\Operations</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -13,7 +13,7 @@ constexpr CString PromptPrefix = "> "; // String printed before every input
 
 void Console::NewLine()
 {
-	std::cout << std::endl << " ";
+	std::cout << std::endl;
 }
 
 void Console::Write(CString message)

@@ -7,7 +7,7 @@
 
 BUILD_REFLECTION(GameObject)
 .Data("ID", &GameObject::_id)
-.Data("State", &GameObject::_state)
+.Data("State", &GameObject::_state, DF_Transient)
 .Property("ID", &GameObject::GetID, nullptr, "Unique ID")
 .Property("State", &GameObject::GetState, nullptr, "State of GameObject")
 .Property("Location", &GameObject::GetLocation, &GameObject::SetLocation, "Location in local space", "Transform")

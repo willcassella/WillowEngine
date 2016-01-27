@@ -6,7 +6,9 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(EventManager);
+BUILD_REFLECTION(EventManager)
+.Data("Handlers", &EventManager::_handlers)
+.Data("EventQueue", &EventManager::_eventQueue);
 
 ///////////////////
 ///   Methods   ///

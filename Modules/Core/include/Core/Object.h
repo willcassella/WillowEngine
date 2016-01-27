@@ -68,11 +68,11 @@ public:
 	/** Sets the state of this Object from the given String. */
 	virtual String FromString(const String& string);
 
-	/** Serializes the state of this Object to the given archive node. */
-	virtual void ToArchive(ArchiveNode& node) const;
+	/** Serializes the state of this Object to the given archive. */
+	virtual void ToArchive(OutArchive& archive) const;
 
-	/** Deserializes the state of this Object from the given archive node. */
-	virtual void FromArchive(const ArchiveNode& node);
+	/** Deserializes the state of this Object from the given archive. */
+	virtual void FromArchive(const InArchive& archive);
 
 	/////////////////////
 	///   Operators   ///

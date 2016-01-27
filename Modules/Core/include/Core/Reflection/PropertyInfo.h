@@ -106,8 +106,8 @@ private:
 	const CompoundInfo* _ownerType;
 	std::function<String (const void*)> _toString;
 	std::function<String (void*, const String&)> _fromString;
-	std::function<void (const void*, ArchiveNode&)> _toArchive;
-	std::function<void (void*, const ArchiveNode&)> _fromArchive;
+	std::function<void (const void*, OutArchive&)> _toArchive;
+	std::function<void (void*, const InArchive&)> _fromArchive;
 	PropertyFlags _flags;
 	bool _isReadOnly;
 };
@@ -151,12 +151,12 @@ public:
 	* WARNING: This function will fail if this is a read-only property. */
 	String FromString(const String& string);
 
-	/** Serializes this property to the given archive node. */
-	void ToArchive(ArchiveNode& node) const;
+	/** Serializes this property to the given archive. */
+	void ToArchive(OutArchive& archive) const;
 
-	/** Deserializes this property from the given archive node.
+	/** Deserializes this property from the given archive.
 	* WARNING: This will fail if this is a read-only property. */
-	void FromArchive(const ArchiveNode& node);
+	void FromArchive(const InArchive& archive);
 
 	////////////////
 	///   Data   ///
@@ -205,8 +205,8 @@ public:
 	/** Formats the state of this property as a String. */
 	String ToString() const;
 
-	/** Serializes this property to the given archive node. */
-	void ToArchive(ArchiveNode& node) const;
+	/** Serializes this property to the given archive. */
+	void ToArchive(OutArchive& archive) const;
 
 	////////////////
 	///   Data   ///
@@ -220,7 +220,7 @@ private:
 ///   Functions   ///
 
 /** You can't call 'FromString' on an ImmutableProperty. */
-String FromString(ImmutableProperty) = delete;
+String FromString(ImmutableProperty, const String&) = delete;
 
 /** You can't call 'FromArchive' on an ImmutableProperty. */
-void FromArchive(ImmutableProperty) = delete;
+void FromArchive(ImmutableProperty, const InArchive&) = delete;

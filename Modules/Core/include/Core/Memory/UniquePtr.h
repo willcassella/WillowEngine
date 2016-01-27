@@ -83,39 +83,6 @@ public:
 		return std::move(self);
 	}
 
-	void ToArchive(ArchiveNode& node) const
-	{
-		if (_controller)
-		{
-			if (std::is_polymorphic<T>::value)
-			{
-				// Since T is polymorphic, we need to document value's type
-				auto child = node.AddChild(_controller->GetAllocatedType().GetName());
-				::ToArchive(*self, *child);
-			}
-			else
-			{
-				::ToArchive(*self, node);
-			}
-		}
-		else
-		{
-			node.SetValue("null");
-		}
-	}
-
-	void FromArchive(const ArchiveNode& node)
-	{
-		if (node.GetValue() != "null")
-		{
-			// TODO: Implement this
-		}
-		else
-		{
-			self = nullptr;
-		}
-	}
-
 private:
 
 	FORCEINLINE void Destroy()
@@ -309,19 +276,6 @@ public:
 	FORCEINLINE UniquePtr&& Transfer()
 	{
 		return std::move(self);
-	}
-
-	void ToArchive(ArchiveNode& node) const
-	{
-		if (_controller)
-		{
-			auto child = node.AddChild(_controller->GetAllocatedType().GetName());
-			::ToArchive(*self, *child);
-		}
-		else
-		{
-			node.SetValue("null");
-		}
 	}
 
 private:

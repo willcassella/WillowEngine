@@ -445,10 +445,10 @@ private:
 	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
 	void ImplementPropertyToArchive(PropertyInfo& propInfo, FieldT CompoundT::*field)
 	{
-		propInfo._toArchive = [field](const void* owner, ArchiveNode& node) -> void
+		propInfo._toArchive = [field](const void* owner, OutArchive& archive) -> void
 		{
 			auto pOwner = static_cast<const CompoundT*>(owner);
-			ToArchive(pOwner->*field, node);
+			ToArchive(pOwner->*field, archive);
 		};
 	}
 
@@ -456,10 +456,10 @@ private:
 	template <typename GetT>
 	void ImplementPropertyToArchive(PropertyInfo& propInfo, GetT (CompoundT::*getter)() const)
 	{
-		propInfo._toArchive = [getter](const void* owner, ArchiveNode& node) -> void
+		propInfo._toArchive = [getter](const void* owner, OutArchive& archive) -> void
 		{
 			auto pOwner = static_cast<const CompoundT*>(owner);
-			ToArchive((pOwner->*getter)(), node);
+			ToArchive((pOwner->*getter)(), archive);
 		};
 	}
 
@@ -467,10 +467,10 @@ private:
 	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
 	void ImplementPropertyFromArchive(PropertyInfo& propInfo, FieldT CompoundT::*field)
 	{
-		propInfo._fromArchive = [field](void* owner, const ArchiveNode& node) -> void
+		propInfo._fromArchive = [field](void* owner, const InArchive& archive) -> void
 		{
 			auto pOwner = static_cast<CompoundT*>(owner);
-			FromArchive(pOwner->*field, node);
+			FromArchive(pOwner->*field, archive);
 		};
 	}
 
@@ -478,11 +478,11 @@ private:
 	template <typename FieldT, typename RetT, typename SetT, WHERE(!std::is_function<FieldT>::value)>
 	void ImplementPropertyFromArchive(PropertyInfo& propInfo, FieldT CompoundT::*field, RetT (CompoundT::*setter)(SetT))
 	{
-		propInfo._fromArchive = [field, setter](void* owner, const ArchiveNode& node) -> void
+		propInfo._fromArchive = [field, setter](void* owner, const InArchive& archive) -> void
 		{
 			auto pOwner = static_cast<CompoundT*>(owner);
 			auto value = pOwner->*field;
-			FromArchive(value, node);
+			FromArchive(value, archive);
 			(pOwner->*setter)(value);
 		};
 	}
@@ -491,11 +491,11 @@ private:
 	template <typename GetT, typename RetT, typename SetT>
 	void ImplementPropertyFromArchive(PropertyInfo& propInfo, GetT (CompoundT::*getter)() const, RetT (CompoundT::*setter)(SetT))
 	{
-		propInfo._fromArchive = [getter, setter](void* owner, const ArchiveNode& node) -> void
+		propInfo._fromArchive = [getter, setter](void* owner, const InArchive& archive) -> void
 		{
 			auto pOwner = static_cast<CompoundT*>(owner);
 			auto value = (pOwner->*getter)();
-			FromArchive(value, node);
+			FromArchive(value, archive);
 			(pOwner->*setter)(value);
 		};
 	}
@@ -579,7 +579,7 @@ namespace Implementation
 	{
 		/** Default implementation of 'ToArchive', prints out data members or 'ToString'. */
 		template <typename T>
-		void ToArchive(const T& value, ArchiveNode& node)
+		void ToArchive(const T& value, OutArchive& archive)
 		{
 			if(std::is_class<T>::value)
 			{
@@ -592,49 +592,47 @@ namespace Implementation
 					// If this data is not marked as transient
 					if (!(dataInfo.GetFlags() & DF_Transient))
 					{
-						// Add a node for the data, naming it after the data
-						auto dataNode = node.AddChild(dataInfo.GetName());
-
-						// Serialize the property to the node TODO: Figure out why I need to explicitly initialize "ImmutableVariant" here
-						dataInfo.Get(ImmutableVariant{ value }).ToArchive(*dataNode);
+						// Add a sub-archive for the data, naming it after the data
+						archive.Push(dataInfo.Get(ImmutableVariant{ value }), dataInfo.GetName());
 					}
 				}
 			}
 			else
 			{
-				// Type is primitive, just serialize it to a string
-				node.SetValue(::ToString(value).Cstr());
+				// Implementation unkown, just save it as a String. TODO: Determine if this is the best course of action
+				archive.Set(::ToString(value));
 			}
 		}
 
 		/** Default implementation of 'FromArchive'. */
 		template <typename T>
-		void FromArchive(T& value, const ArchiveNode& node)
+		void FromArchive(T& value, const InArchive& archive)
 		{
 			if (std::is_class<T>::value)
 			{
 				const auto& type = reinterpret_cast<const CompoundInfo&>(::TypeOf(value));
 
-				// Iterate through all child nodes
-				for (auto pChild : node.GetChildren())
+				// Iterate through all child archives
+				archive.EnumerateChildren([&](const InArchive& child)
 				{
-					// Try to find the data that this node references
-					if (auto data = type.FindData(pChild->GetName()))
+					// Try to find the data that this child archive references
+					if (auto data = type.FindData(child.GetName()))
 					{
 						// Deserialize the data
-						data->Get(Variant{ value }).FromArchive(*pChild);
+						data->Get(Variant{ value }).FromArchive(child);
 					}
 					else
 					{
 						// This property does not exist, give a warning
-						Console::Warning("The data member '@' does not exist on the type '@'.", pChild->GetName(), type);
+						Console::Warning("The data member '@' does not exist on the type '@'.", child.GetName(), type);
 					}
-				}
+				});
 			}
 			else
 			{
-				// This node must hold a value, get the value from this node
-				::FromString(value, node.GetValue());
+				// Type unknown, get value as a String. TODO: Determine if this is the best course of action
+				String stringValue;
+				::FromString(value, archive.Get(stringValue));
 			}
 		}
 	}
