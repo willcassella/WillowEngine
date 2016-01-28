@@ -19,6 +19,7 @@ Additionally, there are natvis files for various types in the engine in the "ext
 The engine compiles cleanly on Clang and GCC, however you do need to install the following aptitude packages:
 + libglfw3-dev
 + libfreeimage-dev
++ libpugixml-dev
 + libglew-dev
 + libbullet-dev
 

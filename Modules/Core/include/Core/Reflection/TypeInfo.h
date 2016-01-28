@@ -63,10 +63,10 @@ public:
 	using FromStringImplementation = String(*)(void*, const String&);
 
 	/** The function signature for a reflected ToArchive implementation. */
-	using ToArchiveImplementation = void(*)(const void*, OutArchive&);
+	using ToArchiveImplementation = void(*)(const void*, ArchiveWriter&);
 
 	/** The function signature for a reflected FromArchive implementation. */
-	using FromArchiveImplementation = void(*)(void*, const InArchive&);
+	using FromArchiveImplementation = void(*)(void*, const ArchiveReader&);
 
 	////////////////////////
 	///   Constructors   ///
@@ -416,13 +416,13 @@ public:
 		{
 			return Implementation::FromString<T>::Function(*static_cast<T*>(value), string);
 		};
-		_data.toArchiveImplementation = [](const void* value, OutArchive& archive) -> void
+		_data.toArchiveImplementation = [](const void* value, ArchiveWriter& writer) -> void
 		{
-			Implementation::ToArchive<T>::Function(*static_cast<const T*>(value), archive);
+			Implementation::ToArchive<T>::Function(*static_cast<const T*>(value), writer);
 		};
-		_data.fromArchiveImplementation = [](void* value, const InArchive& archive) -> void
+		_data.fromArchiveImplementation = [](void* value, const ArchiveReader& reader) -> void
 		{
-			Implementation::FromArchive<T>::Function(*static_cast<T*>(value), archive);
+			Implementation::FromArchive<T>::Function(*static_cast<T*>(value), reader);
 		};
 
 		_data.size = sizeof(T);

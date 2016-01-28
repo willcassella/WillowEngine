@@ -106,8 +106,8 @@ private:
 	const CompoundInfo* _ownerType;
 	std::function<String (const void*)> _toString;
 	std::function<String (void*, const String&)> _fromString;
-	std::function<void (const void*, OutArchive&)> _toArchive;
-	std::function<void (void*, const InArchive&)> _fromArchive;
+	std::function<void (const void*, ArchiveWriter&)> _toArchive;
+	std::function<void (void*, const ArchiveReader&)> _fromArchive;
 	PropertyFlags _flags;
 	bool _isReadOnly;
 };
@@ -152,11 +152,11 @@ public:
 	String FromString(const String& string);
 
 	/** Serializes this property to the given archive. */
-	void ToArchive(OutArchive& archive) const;
+	void ToArchive(ArchiveWriter& writer) const;
 
 	/** Deserializes this property from the given archive.
 	* WARNING: This will fail if this is a read-only property. */
-	void FromArchive(const InArchive& archive);
+	void FromArchive(const ArchiveReader& reader);
 
 	////////////////
 	///   Data   ///
@@ -206,7 +206,7 @@ public:
 	String ToString() const;
 
 	/** Serializes this property to the given archive. */
-	void ToArchive(OutArchive& archive) const;
+	void ToArchive(ArchiveWriter& writer) const;
 
 	////////////////
 	///   Data   ///
@@ -223,4 +223,4 @@ private:
 String FromString(ImmutableProperty, const String&) = delete;
 
 /** You can't call 'FromArchive' on an ImmutableProperty. */
-void FromArchive(ImmutableProperty, const InArchive&) = delete;
+void FromArchive(ImmutableProperty, const ArchiveReader&) = delete;

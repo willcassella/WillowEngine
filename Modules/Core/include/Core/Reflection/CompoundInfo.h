@@ -452,10 +452,10 @@ private:
 	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
 	void ImplementPropertyToArchive(PropertyInfo& propInfo, FieldT CompoundT::*field)
 	{
-		propInfo._toArchive = [field](const void* owner, OutArchive& archive) -> void
+		propInfo._toArchive = [field](const void* owner, ArchiveWriter& writer) -> void
 		{
 			auto pOwner = static_cast<const CompoundT*>(owner);
-			ToArchive(pOwner->*field, archive);
+			ToArchive(pOwner->*field, writer);
 		};
 	}
 
@@ -463,10 +463,10 @@ private:
 	template <typename GetT>
 	void ImplementPropertyToArchive(PropertyInfo& propInfo, GetT (CompoundT::*getter)() const)
 	{
-		propInfo._toArchive = [getter](const void* owner, OutArchive& archive) -> void
+		propInfo._toArchive = [getter](const void* owner, ArchiveWriter& writer) -> void
 		{
 			auto pOwner = static_cast<const CompoundT*>(owner);
-			ToArchive((pOwner->*getter)(), archive);
+			ToArchive((pOwner->*getter)(), writer);
 		};
 	}
 
@@ -474,10 +474,10 @@ private:
 	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
 	void ImplementPropertyFromArchive(PropertyInfo& propInfo, FieldT CompoundT::*field)
 	{
-		propInfo._fromArchive = [field](void* owner, const InArchive& archive) -> void
+		propInfo._fromArchive = [field](void* owner, const ArchiveReader& reader) -> void
 		{
 			auto pOwner = static_cast<CompoundT*>(owner);
-			FromArchive(pOwner->*field, archive);
+			FromArchive(pOwner->*field, reader);
 		};
 	}
 
@@ -485,11 +485,11 @@ private:
 	template <typename FieldT, typename RetT, typename SetT, WHERE(!std::is_function<FieldT>::value)>
 	void ImplementPropertyFromArchive(PropertyInfo& propInfo, FieldT CompoundT::*field, RetT (CompoundT::*setter)(SetT))
 	{
-		propInfo._fromArchive = [field, setter](void* owner, const InArchive& archive) -> void
+		propInfo._fromArchive = [field, setter](void* owner, const ArchiveReader& reader) -> void
 		{
 			auto pOwner = static_cast<CompoundT*>(owner);
 			auto value = pOwner->*field;
-			FromArchive(value, archive);
+			FromArchive(value, reader);
 			(pOwner->*setter)(value);
 		};
 	}
@@ -498,11 +498,11 @@ private:
 	template <typename GetT, typename RetT, typename SetT>
 	void ImplementPropertyFromArchive(PropertyInfo& propInfo, GetT (CompoundT::*getter)() const, RetT (CompoundT::*setter)(SetT))
 	{
-		propInfo._fromArchive = [getter, setter](void* owner, const InArchive& archive) -> void
+		propInfo._fromArchive = [getter, setter](void* owner, const ArchiveReader& reader) -> void
 		{
 			auto pOwner = static_cast<CompoundT*>(owner);
 			auto value = (pOwner->*getter)();
-			FromArchive(value, archive);
+			FromArchive(value, reader);
 			(pOwner->*setter)(value);
 		};
 	}
@@ -586,7 +586,7 @@ namespace Implementation
 	{
 		/** Default implementation of 'ToArchive', prints out data members or 'ToString'. */
 		template <typename T>
-		void ToArchive(const T& value, OutArchive& archive)
+		void ToArchive(const T& value, ArchiveWriter& writer)
 		{
 			if(std::is_class<T>::value)
 			{
@@ -600,27 +600,27 @@ namespace Implementation
 					if (!(dataInfo.GetFlags() & DF_Transient))
 					{
 						// Add a sub-archive for the data, naming it after the data
-						archive.Push(dataInfo.Get(ImmutableVariant{ value }), dataInfo.GetName());
+						writer.PushValue(dataInfo.Get(ImmutableVariant{ value }), dataInfo.GetName());
 					}
 				});
 			}
 			else
 			{
 				// Implementation unkown, just save it as a String. TODO: Determine if this is the best course of action
-				archive.Set(::ToString(value));
+				writer.SetValue(::ToString(value));
 			}
 		}
 
 		/** Default implementation of 'FromArchive'. */
 		template <typename T>
-		void FromArchive(T& value, const InArchive& archive)
+		void FromArchive(T& value, const ArchiveReader& reader)
 		{
 			if (std::is_class<T>::value)
 			{
 				const auto& type = reinterpret_cast<const CompoundInfo&>(::TypeOf(value));
 
 				// Iterate through all child archives
-				archive.EnumerateChildren([&](const InArchive& child)
+				reader.EnumerateChildren([&](const ArchiveReader& child)
 				{
 					// Try to find the data that this child archive references
 					if (auto data = type.FindData(child.GetName()))
@@ -639,7 +639,8 @@ namespace Implementation
 			{
 				// Type unknown, get value as a String. TODO: Determine if this is the best course of action
 				String stringValue;
-				::FromString(value, archive.Get(stringValue));
+				reader.GetValue(stringValue);
+				::FromString(value, stringValue);
 			}
 		}
 	}

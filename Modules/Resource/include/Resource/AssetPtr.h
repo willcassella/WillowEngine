@@ -30,6 +30,49 @@ public:
 		_asset = AssetManager::FindAsset<AssetT>(path);
 	}
 
+	///////////////////
+	///   Methods   ///
+public:
+
+	String ToString() const
+	{
+		if (_asset)
+		{
+			return _asset->GetPath();
+		}
+		else
+		{
+			return "null";
+		}
+	}
+
+	void ToArchive(ArchiveWriter& writer) const
+	{
+		if (_asset)
+		{
+			writer.SetValue(_asset->GetPath());
+		}
+		else
+		{
+			writer.SetValue("null"_s);
+		}
+	}
+
+	void FromArchive(const ArchiveReader& reader)
+	{
+		String path;
+		reader.GetValue(path);
+
+		if (path == "null")
+		{
+			_asset = nullptr;
+		}
+		else
+		{
+			_asset = AssetManager::FindAsset<AssetT>(path);
+		}
+	}
+
 	/////////////////////
 	///   Operators   ///
 public:

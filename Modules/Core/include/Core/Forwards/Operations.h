@@ -36,11 +36,11 @@ String Parse(const String& string, const String& format, T& value, MoreT& ... mo
 
 /** Defined in 'Operations/ToArchive.h' */
 template <typename T>
-void ToArchive(const T& value, OutArchive& archive);
+void ToArchive(const T& value, ArchiveWriter& writer);
 
 /** Defined in 'Operations/FromArchive.h' */
 template <typename T>
-void FromArchive(T& value, const InArchive& archive);
+void FromArchive(T& value, const ArchiveReader& reader);
 
 //////////////////////////
 ///   Implementation   ///
@@ -63,10 +63,10 @@ namespace Implementation
 
 		/** Defined in 'Reflection/CompoundInfo.h' */
 		template <typename T>
-		void ToArchive(const T& value, OutArchive& archive);
+		void ToArchive(const T& value, ArchiveWriter& writer);
 
 		/** Defined in 'Reflection/CompoundInfo.h' */
 		template <typename T>
-		void FromArchive(T& value, const InArchive& archive);
+		void FromArchive(T& value, const ArchiveReader& reader);
 	}
 }

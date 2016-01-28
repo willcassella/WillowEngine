@@ -1,7 +1,7 @@
 // Object.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "Forwards/Core.h"
+#include "Forwards/IO.h"
 #include "STDE/Utility.h"
 #include "Containers/Array.h"
 #include "Reflection/Reflection.h"
@@ -69,10 +69,10 @@ public:
 	virtual String FromString(const String& string);
 
 	/** Serializes the state of this Object to the given archive. */
-	virtual void ToArchive(OutArchive& archive) const;
+	virtual void ToArchive(ArchiveWriter& writer) const;
 
 	/** Deserializes the state of this Object from the given archive. */
-	virtual void FromArchive(const InArchive& archive);
+	virtual void FromArchive(const ArchiveReader& reader);
 
 	/////////////////////
 	///   Operators   ///

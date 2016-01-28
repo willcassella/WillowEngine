@@ -132,5 +132,8 @@
     <ClInclude Include="source\Physics.h">
       <Filter>source</Filter>
     </ClInclude>
+    <ClInclude Include="include\Engine\Components\RigidBodyComponent.h">
+      <Filter>include\Components</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

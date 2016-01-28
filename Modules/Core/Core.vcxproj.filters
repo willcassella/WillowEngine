@@ -282,14 +282,14 @@
     <ClInclude Include="include\Core\Functional\FunctionView.h">
       <Filter>include\Functional</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\IO\OutArchive.h">
-      <Filter>include\IO</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Core\IO\InArchive.h">
-      <Filter>include\IO</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Functional\EnumeratorView.h">
       <Filter>include\Functional</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\IO\ArchiveReader.h">
+      <Filter>include\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\IO\ArchiveWriter.h">
+      <Filter>include\IO</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

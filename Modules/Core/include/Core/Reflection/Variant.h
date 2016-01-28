@@ -65,15 +65,15 @@ public:
 	}
 
 	// TODO: Documentation
-	FORCEINLINE void ToArchive(OutArchive& archive) const
+	FORCEINLINE void ToArchive(ArchiveWriter& writer) const
 	{
-		_type->GetToArchiveImplementation()(_value, archive);
+		_type->GetToArchiveImplementation()(_value, writer);
 	}
 
 	// TODO: Documentation
-	FORCEINLINE void FromArchive(const InArchive& archive)
+	FORCEINLINE void FromArchive(const ArchiveReader& reader)
 	{
-		_type->GetFromArchiveImplementation()(_value, archive);
+		_type->GetFromArchiveImplementation()(_value, reader);
 	}
 
 	////////////////
@@ -138,9 +138,9 @@ public:
 	}
 
 	// TODO: Documentation
-	FORCEINLINE void ToArchive(OutArchive& archive) const
+	FORCEINLINE void ToArchive(ArchiveWriter& writer) const
 	{
-		_type->GetToArchiveImplementation()(_value, archive);
+		_type->GetToArchiveImplementation()(_value, writer);
 	}
 
 	////////////////

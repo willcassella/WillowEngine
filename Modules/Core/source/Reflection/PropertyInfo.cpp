@@ -76,16 +76,16 @@ String Property::FromString(const String& string)
 	return _info->_fromString(_owner, string);
 }
 
-void Property::ToArchive(OutArchive& archive) const
+void Property::ToArchive(ArchiveWriter& writer) const
 {
-	_info->_toArchive(_owner, archive);
+	_info->_toArchive(_owner, writer);
 }
 
-void Property::FromArchive(const InArchive& archive)
+void Property::FromArchive(const ArchiveReader& reader)
 {
 	// Read only properties may not have mutable operation performed on them.
 	assert(_info->IsReadOnly());
-	_info->_fromArchive(_owner, archive);
+	_info->_fromArchive(_owner, reader);
 }
 
 String ImmutableProperty::ToString() const
@@ -93,7 +93,7 @@ String ImmutableProperty::ToString() const
 	return _info->_toString(_owner);
 }
 
-void ImmutableProperty::ToArchive(OutArchive& archive) const
+void ImmutableProperty::ToArchive(ArchiveWriter& writer) const
 {
-	_info->_toArchive(_owner, archive);
+	_info->_toArchive(_owner, writer);
 }

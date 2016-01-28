@@ -16,6 +16,12 @@
     <Filter Include="include\Forwards">
       <UniqueIdentifier>{beece0ca-0d4d-4516-898e-c3a890a57717}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\Archives">
+      <UniqueIdentifier>{5b0fc700-f37a-4c89-9e4d-604a33726220}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Archives">
+      <UniqueIdentifier>{f10b6e39-f5fb-4fa4-9c91-c746103d6669}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Resource\config.h">
@@ -48,6 +54,12 @@
     <ClInclude Include="include\Resource\Path.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\Resource\Archives\XMLArchive.h">
+      <Filter>include\Archives</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Resource\Archive.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Resource.cpp">
@@ -69,6 +81,12 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="source\AssetManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Archives\XMLArchive.cpp">
+      <Filter>source\Archives</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Archive.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

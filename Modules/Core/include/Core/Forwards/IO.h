@@ -4,8 +4,8 @@
 /////////////////
 ///   Types   ///
 
-/** Defined in 'IO/OutArchive.h' */
-class OutArchive;
+/** Defined in 'IO/ArchiveWriter.h' */
+class ArchiveWriter;
 
-/** Defined in 'IO/InArchive.h' */
-class InArchive;
+/** Defined in 'IO/ArchiveReader.h' */
+class ArchiveReader;

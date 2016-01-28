@@ -10,71 +10,71 @@ namespace Implementation
 	///////////////////////////
 	///   Primitive Types   ///
 
-	void ToArchive<bool>::Function(bool value, OutArchive& archive)
+	void ToArchive<bool>::Function(bool value, ArchiveWriter& writer)
 	{
-		archive.Set(value);
+		writer.SetValue(value);
 	}
 
-	void ToArchive<char>::Function(char value, OutArchive& archive)
+	void ToArchive<char>::Function(char value, ArchiveWriter& writer)
 	{
-		archive.Set(value);
+		writer.SetValue(value);
 	}
 
-	void ToArchive<byte>::Function(byte value, OutArchive& archive)
+	void ToArchive<byte>::Function(byte value, ArchiveWriter& writer)
 	{
-		archive.Set(value);
+		writer.SetValue(value);
 	}
 
-	void ToArchive<int16>::Function(int16 value, OutArchive& archive)
+	void ToArchive<int16>::Function(int16 value, ArchiveWriter& writer)
 	{
-		archive.Set(value);
+		writer.SetValue(value);
 	}
 
-	void ToArchive<uint16>::Function(uint16 value, OutArchive& archive)
+	void ToArchive<uint16>::Function(uint16 value, ArchiveWriter& writer)
 	{
-		archive.Set(value);
+		writer.SetValue(value);
 	}
 
-	void ToArchive<int32>::Function(int32 value, OutArchive& archive)
+	void ToArchive<int32>::Function(int32 value, ArchiveWriter& writer)
 	{
-		archive.Set(value);
+		writer.SetValue(value);
 	}
 
-	void ToArchive<uint32>::Function(uint32 value, OutArchive& archive)
+	void ToArchive<uint32>::Function(uint32 value, ArchiveWriter& writer)
 	{
-		archive.Set(value);
+		writer.SetValue(value);
 	}
 
-	void ToArchive<int64>::Function(int64 value, OutArchive& archive)
+	void ToArchive<int64>::Function(int64 value, ArchiveWriter& writer)
 	{
-		archive.Set(value);
+		writer.SetValue(value);
 	}
 
-	void ToArchive<uint64>::Function(uint64 value, OutArchive& archive)
+	void ToArchive<uint64>::Function(uint64 value, ArchiveWriter& writer)
 	{
-		archive.Set(value);
+		writer.SetValue(value);
 	}
 
-	void ToArchive<float>::Function(float value, OutArchive& archive)
+	void ToArchive<float>::Function(float value, ArchiveWriter& writer)
 	{
-		archive.Set(value);
+		writer.SetValue(value);
 	}
 
-	void ToArchive<double>::Function(double value, OutArchive& archive)
+	void ToArchive<double>::Function(double value, ArchiveWriter& writer)
 	{
-		archive.Set(value);
+		writer.SetValue(value);
 	}
 
-	void ToArchive<long double>::Function(long double value, OutArchive& archive)
+	void ToArchive<long double>::Function(long double value, ArchiveWriter& writer)
 	{
-		archive.Set(value);
+		writer.SetValue(value);
 	}
 
 	////////////////////////
 	///   String Types   ///
 
-	void ToArchive<String>::Function(const String& value, OutArchive& archive)
+	void ToArchive<String>::Function(const String& value, ArchiveWriter& writer)
 	{
-		archive.Set(value);
+		writer.SetValue(value);
 	}
 }

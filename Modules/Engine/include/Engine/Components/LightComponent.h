@@ -4,9 +4,6 @@
 #include <Core/Math/Vec3.h>
 #include "../Component.h"
 
-/////////////////
-///   Types   ///
-
 class ENGINE_API LightComponent : public Component
 {
 	///////////////////////

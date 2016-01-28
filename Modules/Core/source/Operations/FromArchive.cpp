@@ -10,71 +10,71 @@ namespace Implementation
 	///////////////////////////
 	///   Primitive Types   ///
 
-	void FromArchive<bool>::Function(bool& value, const InArchive& archive)
+	void FromArchive<bool>::Function(bool& value, const ArchiveReader& reader)
 	{
-		archive.Get(value);
+		reader.GetValue(value);
 	}
 
-	void FromArchive<char>::Function(char& value, const InArchive& archive)
+	void FromArchive<char>::Function(char& value, const ArchiveReader& reader)
 	{
-		archive.Get(value);
+		reader.GetValue(value);
 	}
 
-	void FromArchive<byte>::Function(byte& value, const InArchive& archive)
+	void FromArchive<byte>::Function(byte& value, const ArchiveReader& reader)
 	{
-		archive.Get(value);
+		reader.GetValue(value);
 	}
 
-	void FromArchive<int16>::Function(int16& value, const InArchive& archive)
+	void FromArchive<int16>::Function(int16& value, const ArchiveReader& reader)
 	{
-		archive.Get(value);
+		reader.GetValue(value);
 	}
 
-	void FromArchive<uint16>::Function(uint16& value, const InArchive& archive)
+	void FromArchive<uint16>::Function(uint16& value, const ArchiveReader& reader)
 	{
-		archive.Get(value);
+		reader.GetValue(value);
 	}
 
-	void FromArchive<int32>::Function(int32& value, const InArchive& archive)
+	void FromArchive<int32>::Function(int32& value, const ArchiveReader& reader)
 	{
-		archive.Get(value);
+		reader.GetValue(value);
 	}
 
-	void FromArchive<uint32>::Function(uint32& value, const InArchive& archive)
+	void FromArchive<uint32>::Function(uint32& value, const ArchiveReader& reader)
 	{
-		archive.Get(value);
+		reader.GetValue(value);
 	}
 
-	void FromArchive<int64>::Function(int64& value, const InArchive& archive)
+	void FromArchive<int64>::Function(int64& value, const ArchiveReader& reader)
 	{
-		archive.Get(value);
+		reader.GetValue(value);
 	}
 
-	void FromArchive<uint64>::Function(uint64& value, const InArchive& archive)
+	void FromArchive<uint64>::Function(uint64& value, const ArchiveReader& reader)
 	{
-		archive.Get(value);
+		reader.GetValue(value);
 	}
 
-	void FromArchive<float>::Function(float& value, const InArchive& archive)
+	void FromArchive<float>::Function(float& value, const ArchiveReader& reader)
 	{
-		archive.Get(value);
+		reader.GetValue(value);
 	}
 
-	void FromArchive<double>::Function(double& value, const InArchive& archive)
+	void FromArchive<double>::Function(double& value, const ArchiveReader& reader)
 	{
-		archive.Get(value);
+		reader.GetValue(value);
 	}
 
-	void FromArchive<long double>::Function(long double& value, const InArchive& archive)
+	void FromArchive<long double>::Function(long double& value, const ArchiveReader& reader)
 	{
-		archive.Get(value);
+		reader.GetValue(value);
 	}
 
 	////////////////////////
 	///   String Types   ///
 
-	void FromArchive<String>::Function(String& value, const InArchive& archive)
+	void FromArchive<String>::Function(String& value, const ArchiveReader& reader)
 	{
-		archive.Get(value);
+		reader.GetValue(value);
 	}
 }

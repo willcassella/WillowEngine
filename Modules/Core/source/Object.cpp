@@ -31,12 +31,12 @@ String Object::FromString(const String& string)
 	return Implementation::Default::FromString(*this, string);
 }
 
-void Object::ToArchive(OutArchive& archive) const
+void Object::ToArchive(ArchiveWriter& writer) const
 {
-	Implementation::Default::ToArchive(*this, archive);
+	Implementation::Default::ToArchive(*this, writer);
 }
 
-void Object::FromArchive(const InArchive& archive)
+void Object::FromArchive(const ArchiveReader& reader)
 {
-	Implementation::Default::FromArchive(*this, archive);
+	Implementation::Default::FromArchive(*this, reader);
 }
