@@ -9,7 +9,7 @@ enum class EnumeratorResult : byte
 {
 	/** Continues the enumeration. */
 	Continue,
-	
+
 	/** Quits the enumeration. */
 	Break
 };
@@ -31,7 +31,7 @@ public:
 		_lastResult = EnumeratorResult::Continue;
 	}
 
-    EnumeratorView(EnumeratorView&& move) = delete;
+    EnumeratorView(EnumeratorView&& move) = default;
 	EnumeratorView(EnumeratorView& copy) = delete;
 	EnumeratorView(const EnumeratorView& copy) = delete;
 

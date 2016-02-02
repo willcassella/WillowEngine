@@ -55,7 +55,7 @@ int main(int32 /*argc*/, char** /*argv*/)
 
 	// TEST OUT SERIALIZATION
 
-	Table<GameObject::ID, Vec4> nameTable;
+	Table<int32, Vec4> nameTable;
 	nameTable[1] = Vec4(1, 2, 3, 4);
 	nameTable[2] = Vec4(6, 9, 2, 5);
 	nameTable[3] = Vec4(1, 2, 3, 4);
