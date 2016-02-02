@@ -56,6 +56,16 @@ public:
 		return Format("<@, @, @, @>", X, Y, Z, W);
 	}
 
+	void ToArchive(ArchiveWriter& writer) const
+	{
+		Operations::Default::ToArchive(*this, writer);
+	}
+
+	void FromArchive(const ArchiveReader& reader)
+	{
+		Operations::Default::FromArchive(*this, reader);
+	}
+
 	/** Rotate this quaternion around an axis by a certain angle */
 	FORCEINLINE void RotateByAxisAngle(const Vec3& axis, Angle angle, bool local)
 	{

@@ -52,48 +52,80 @@ ImmutableProperty::ImmutableProperty(const PropertyInfo& info, const void* owner
 ///////////////////
 ///   Methods   ///
 
-Property PropertyInfo::Get(Variant owner) const
+Property PropertyInfo::GetFromOwner(Variant owner) const
 {
 	assert(owner.GetType().IsCastableTo(*_ownerType));
 	return Property(self, owner.GetValue());
 }
 
-ImmutableProperty PropertyInfo::Get(ImmutableVariant owner) const
+ImmutableProperty PropertyInfo::GetFromOwner(ImmutableVariant owner) const
 {
 	assert(owner.GetType().IsCastableTo(*_ownerType));
 	return ImmutableProperty(self, owner.GetValue());
 }
 
+bool Property::HasToStringImplementation() const
+{
+	return _info->_toString != nullptr;
+}
+
 String Property::ToString() const
 {
+	assert(this->HasToStringImplementation());
 	return _info->_toString(_owner);
+}
+
+bool Property::HasFromStringImplementation() const
+{
+	return _info->_fromString != nullptr;
 }
 
 String Property::FromString(const String& string)
 {
-	// Read only properties may not have mutable operation performed on them.
-	assert(_info->IsReadOnly());
+	assert(this->HasFromStringImplementation());
 	return _info->_fromString(_owner, string);
+}
+
+bool Property::HasToArchiveImplementation() const
+{
+	return _info->_toArchive != nullptr;
 }
 
 void Property::ToArchive(ArchiveWriter& writer) const
 {
+	assert(this->HasToArchiveImplementation());
 	_info->_toArchive(_owner, writer);
+}
+
+bool Property::HasFromArchiveImplementation() const
+{
+	return _info->_fromArchive != nullptr;
 }
 
 void Property::FromArchive(const ArchiveReader& reader)
 {
-	// Read only properties may not have mutable operation performed on them.
-	assert(_info->IsReadOnly());
+	assert(this->HasFromArchiveImplementation());
 	_info->_fromArchive(_owner, reader);
+}
+
+bool ImmutableProperty::HasToStringImplementation() const
+{
+	return _info->_toString != nullptr;
 }
 
 String ImmutableProperty::ToString() const
 {
+	assert(this->HasToStringImplementation());
 	return _info->_toString(_owner);
+}
+
+bool ImmutableProperty::HasToArchiveImplementation() const
+{
+	return _info->_toArchive != nullptr;
 }
 
 void ImmutableProperty::ToArchive(ArchiveWriter& writer) const
 {
+	assert(this->HasToArchiveImplementation());
 	_info->_toArchive(_owner, writer);
 }

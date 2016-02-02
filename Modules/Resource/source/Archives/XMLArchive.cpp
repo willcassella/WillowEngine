@@ -7,7 +7,7 @@
 ///   Types   ///
 
 /** Archive wrapper for pugi::xml_node. */
-struct XMLNode final : ArchiveWriter
+struct XMLNode final : ArchiveWriter, ArchiveReader
 {
 	////////////////////////
 	///   Constructors   ///
@@ -29,6 +29,101 @@ public:
 	///   Methods   ///
 public:
 
+	String GetName() const override
+	{
+		return Node.name();
+	}
+
+	void GetValue(bool& value) const override
+	{
+		value = Node.first_attribute().as_bool(value);
+	}
+
+	void GetValue(char& value) const override
+	{
+		value = static_cast<char>(Node.first_attribute().as_int(value));
+	}
+
+	void GetValue(byte& value) const override
+	{
+		value = static_cast<byte>(Node.first_attribute().as_uint(value));
+	}
+
+	void GetValue(int16& value) const override
+	{
+		value = static_cast<int16>(Node.first_attribute().as_int(value));
+	}
+
+	void GetValue(uint16& value) const override
+	{
+		value = static_cast<uint16>(Node.first_attribute().as_uint(value));
+	}
+
+	void GetValue(int32& value) const override
+	{
+		value = static_cast<int32>(Node.first_attribute().as_int(value));
+	}
+
+	void GetValue(uint32& value) const override
+	{
+		value = static_cast<uint32>(Node.first_attribute().as_uint(value));
+	}
+
+	void GetValue(int64& value) const override
+	{
+		FromString(value, Node.first_attribute().value());
+	}
+
+	void GetValue(uint64& value) const override
+	{
+		FromString(value, Node.first_attribute().value());
+	}
+
+	void GetValue(float& value) const override
+	{
+		value = Node.first_attribute().as_float(value);
+	}
+
+	void GetValue(double& value) const override
+	{
+		value = Node.first_attribute().as_double(value);
+	}
+
+	void GetValue(long double& value) const override
+	{
+		FromString(value, Node.first_attribute().value());
+	}
+
+	void GetValue(String& value) const override
+	{
+		value = Node.first_attribute().value();
+	}
+
+	bool GetChild(const String& name, FunctionView<void, const ArchiveReader&> function) const override
+	{
+		auto child = Node.child(name.Cstr());
+
+		if (!child.empty())
+		{
+			XMLNode node(child);
+			function(node);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	void EnumerateChildren(EnumeratorView<const ArchiveReader&> enumerator) const override
+	{
+		for (auto node : Node)
+		{
+			XMLNode child(node);
+			enumerator.Invoke(child);
+		}
+	}
+
 	void SetValue(bool value) override
 	{
 		Node.append_attribute("value") = value;
@@ -36,22 +131,22 @@ public:
 
 	void SetValue(char value) override
 	{
-		Node.append_attribute("value") = value;
+		Node.append_attribute("value") = static_cast<int>(value);
 	}
 
 	void SetValue(byte value) override
 	{
-		Node.append_attribute("value") = value;
+		Node.append_attribute("value") = static_cast<unsigned int>(value);
 	}
 
 	void SetValue(int16 value) override
 	{
-		Node.append_attribute("value") = value;
+		Node.append_attribute("value") = static_cast<int>(value);
 	}
 
 	void SetValue(uint16 value) override
 	{
-		Node.append_attribute("value") = value;
+		Node.append_attribute("value") = static_cast<unsigned int>(value);
 	}
 
 	void SetValue(int32 value) override
@@ -66,12 +161,12 @@ public:
 
 	void SetValue(int64 value) override
 	{
-		Node.append_attribute("value") = value;
+		Node.append_attribute("value") = ToString(value).Cstr();
 	}
 
 	void SetValue(uint64 value) override
 	{
-		Node.append_attribute("value") = value;
+		Node.append_attribute("value") = ToString(value).Cstr();
 	}
 
 	void SetValue(float value) override
@@ -86,7 +181,7 @@ public:
 
 	void SetValue(long double value) override
 	{
-		Node.append_attribute("value") = static_cast<double>(value);
+		Node.append_attribute("value") = ToString(value).Cstr();
 	}
 
 	void SetValue(const String& value) override
@@ -94,10 +189,10 @@ public:
 		Node.append_attribute("value") = value.Cstr();
 	}
 
-	void PushHandler(FunctionView<void, ArchiveWriter&> handler, const String& name) override
+	void AddChild(const String& name, FunctionView<void, ArchiveWriter&> function) override
 	{
-		XMLNode child = Node.append_child(name.Cstr());
-		handler(child);
+		XMLNode child(Node.append_child(name.Cstr()));
+		function(child);
 	}
 };
 
@@ -141,11 +236,12 @@ bool XMLArchive::Save(const Path& path) const
 
 void XMLArchive::AddRoot(FunctionView<void, ArchiveWriter&> handler)
 {
-	XMLNode root = _doc->Doc.append_child("root");
+	XMLNode root(_doc->Doc.append_child("root"));
 	handler(root);
 }
 
-void XMLArchive::GetRoot(FunctionView<void, const ArchiveReader&>) const
+void XMLArchive::GetRoot(FunctionView<void, const ArchiveReader&> handler) const
 {
-	// TODO: Implement this
+	XMLNode root(_doc->Doc.first_child());
+	handler(root);
 }

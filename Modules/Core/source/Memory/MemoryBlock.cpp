@@ -10,14 +10,14 @@ Variant MemoryBlockController::GetDataAsVariant()
 {
 	/** Returning a Variant pointing to an uninitialized or destroyed object isn't safe. */
 	assert(this->_status == MemoryBlockValueStatus::Constructed);
-	return Variant{ this->GetData(), this->GetAllocatedType() };
+	return Variant(this->GetData(), this->GetAllocatedType());
 }
 
 ImmutableVariant MemoryBlockController::GetDataAsVariant() const
 {
 	/** Returning a Variant pointing to an uninitialized or destroyed object isn't safe. */
 	assert(this->_status == MemoryBlockValueStatus::Constructed);
-	return ImmutableVariant{ this->GetData(), this->GetAllocatedType() };
+	return ImmutableVariant(this->GetData(), this->GetAllocatedType());
 }
 
 void MemoryBlockController::Destroy()

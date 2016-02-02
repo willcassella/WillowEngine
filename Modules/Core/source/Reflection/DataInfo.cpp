@@ -23,14 +23,14 @@ DataInfo::DataInfo(CString name, DataFlags flags)
 ///////////////////
 ///   Methods   ///
 
-Variant DataInfo::Get(Variant owner) const
+Variant DataInfo::GetFromOwner(Variant owner) const
 {
 	assert(owner.GetType().IsCastableTo(*_ownerType));
-	return Variant((byte*)owner.GetValue() + _offset, *_dataType);
+	return Variant(static_cast<byte*>(owner.GetValue()) + _offset, *_dataType);
 }
 
-ImmutableVariant DataInfo::Get(ImmutableVariant owner) const
+ImmutableVariant DataInfo::GetFromOwner(ImmutableVariant owner) const
 {
 	assert(owner.GetType().IsCastableTo(*_ownerType));
-	return ImmutableVariant((const byte*)owner.GetValue() + _offset, *_dataType);
+	return ImmutableVariant(static_cast<const byte*>(owner.GetValue()) + _offset, *_dataType);
 }

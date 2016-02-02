@@ -3,10 +3,7 @@
 #include <string>
 #include "../../include/Core/Operations/ToString.h"
 
-//////////////////////////
-///   Implementation   ///
-
-namespace Implementation
+namespace Operations
 {
 	///////////////////////////
 	///   Primitive Types   ///
@@ -70,70 +67,70 @@ namespace Implementation
 		return result.Reverse();
 	}
 
-	String ToString<bool>::Function(bool value)
+	void ToString<bool>::Function(String& out, bool value)
 	{
 		if (value)
 		{
-			return String("true");
+			out = "true";
 		}
 		else
 		{
-			return String("false");
+			out = "false";
 		}
 	}
 
-	String ToString<char>::Function(char value)
+	void ToString<char>::Function(String& out, char value)
 	{
-		return String(value);
+		out = value;
 	}
 
-	String ToString<byte>::Function(byte value)
+	void ToString<byte>::Function(String& out, byte value)
 	{
-		return IntToString(value);
+		out = IntToString(value);
 	}
 
-	String ToString<int16>::Function(int16 value)
+	void ToString<int16>::Function(String& out, int16 value)
 	{
-		return IntToString(value);
+		out = IntToString(value);
 	}
 
-	String ToString<int32>::Function(int32 value)
+	void ToString<int32>::Function(String& out, int32 value)
 	{
-		return IntToString(value);
+		out = IntToString(value);
 	}
 
-	String ToString<int64>::Function(int64 value)
+	void ToString<int64>::Function(String& out, int64 value)
 	{
-		return IntToString(value);
+		out = IntToString(value);
 	}
 
-	String ToString<uint16>::Function(uint16 value)
+	void ToString<uint16>::Function(String& out, uint16 value)
 	{
-		return IntToString(value);
+		out = IntToString(value);
 	}
 
-	String ToString<uint32>::Function(uint32 value)
+	void ToString<uint32>::Function(String& out, uint32 value)
 	{
-		return IntToString(value);
+		out = IntToString(value);
 	}
 
-	String ToString<uint64>::Function(uint64 value)
+	void ToString<uint64>::Function(String& out, uint64 value)
 	{
-		return IntToString(value);
+		out = IntToString(value);
 	}
 
-	String ToString<float>::Function(float value)
+	void ToString<float>::Function(String& out, float value)
 	{
-		return String(std::to_string(value).c_str());
+		out = std::to_string(value).c_str();
 	}
 
-	String ToString<double>::Function(double value)
+	void ToString<double>::Function(String& out, double value)
 	{
-		return String(std::to_string(value).c_str());
+		out = std::to_string(value).c_str();
 	}
 
-	String ToString<long double>::Function(long double value)
+	void ToString<long double>::Function(String& out, long double value)
 	{
-		return String(std::to_string(value).c_str());
+		out = std::to_string(value).c_str();
 	}
 }

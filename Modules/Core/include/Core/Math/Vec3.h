@@ -54,6 +54,16 @@ public:
 		return Format("<@, @, @>", X, Y, Z);
 	}
 
+	void ToArchive(ArchiveWriter& writer) const
+	{
+		Operations::Default::ToArchive(*this, writer);
+	}
+
+	void FromArchive(const ArchiveReader& reader)
+	{
+		Operations::Default::FromArchive(*this, reader);
+	}
+
 	/** Returns the length of this vector */
 	FORCEINLINE Scalar Length() const
 	{

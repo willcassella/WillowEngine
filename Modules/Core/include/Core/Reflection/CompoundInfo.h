@@ -51,7 +51,7 @@ public:
 	virtual Array<PropertyInfo> GetProperties() const;
 
 	/** Enumerates all properties of this type. */
-	virtual void EnumerateProperties(EnumeratorView<const PropertyInfo&> enumerator) const;
+	virtual void EnumerateProperties(const EnumeratorView<const PropertyInfo&>& enumerator) const;
 
 	/** Searches for the given property in this type by name. */
 	virtual const PropertyInfo* FindProperty(const String& name) const;
@@ -60,7 +60,7 @@ public:
 	virtual Array<DataInfo> GetData() const;
 
 	/** Enumerates all data members of this type. */
-	virtual void EnumerateData(EnumeratorView<const DataInfo&> enumerator) const;
+	virtual void EnumerateData(const EnumeratorView<const DataInfo&>& enumerator) const;
 
 	/** Searches for the given data member in this type by name. */
 	virtual const DataInfo* FindData(const String& name) const;
@@ -391,120 +391,178 @@ private:
 	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
 	void ImplementPropertyToString(PropertyInfo& propInfo, FieldT CompoundT::*field)
 	{
-		propInfo._toString = [field](const void* owner) -> String
+		using ToStringT = Operations::ToString<FieldT>;
+
+		if (ToStringT::Supported)
 		{
-			auto pOwner = static_cast<const CompoundT*>(owner);
-			return ToString(pOwner->*field);
-		};
+			propInfo._toString = [field](const void* owner) -> String
+			{
+				auto pOwner = static_cast<const CompoundT*>(owner);
+				String out;
+				FailableOperation<ToStringT>(out, pOwner->*field);
+				return out;
+			};
+		}
 	}
 
 	/** Implements the 'ToString' function on a method getter. */
 	template <typename GetT>
 	void ImplementPropertyToString(PropertyInfo& propInfo, GetT (CompoundT::*getter)() const)
 	{
-		propInfo._toString = [getter](const void* owner) -> String
+		using ToStringT = Operations::ToString<std::decay_t<GetT>>;
+
+		if (ToStringT::Supported)
 		{
-			auto pOwner = static_cast<const CompoundT*>(owner);
-			return ToString((pOwner->*getter)());
-		};
+			propInfo._toString = [getter](const void* owner) -> String
+			{
+				auto pOwner = static_cast<const CompoundT*>(owner);
+				String out;
+				FailableOperation<ToStringT>(out, (pOwner->*getter)());
+				return out;
+			};
+		}
 	}
 
 	/** Implements the 'FromString' function with a field. */
 	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
 	void ImplementPropertyFromString(PropertyInfo& propInfo, FieldT CompoundT::*field)
 	{
-		propInfo._fromString = [field](void* owner, const String& string) -> String
+		using FromStringT = Operations::FromString<FieldT>;
+
+		if (FromStringT::Supported)
 		{
-			auto pOwner = static_cast<CompoundT*>(owner);
-			return FromString(pOwner->*field, string);
-		};
+			propInfo._fromString = [field](void* owner, const String& string) -> String
+			{
+				auto pOwner = static_cast<CompoundT*>(owner);
+				String out;
+				FailableOperation<FromStringT>(out, pOwner->*field, string);
+				return out;
+			};
+		}
 	}
 
 	/** Implements the 'FromString' function with a field getter, and method setter. */
 	template <typename FieldT, typename RetT, typename SetT, WHERE(!std::is_function<FieldT>::value)>
 	void ImplementPropertyFromString(PropertyInfo& propInfo, FieldT CompoundT::*field, RetT (CompoundT::*setter)(SetT))
 	{
-		propInfo._fromString = [field, setter](void* owner, const String& string) -> String
+		using FromStringT = Operations::FromString<FieldT>;
+
+		if (FromStringT::Supported)
 		{
-			auto pOwner = static_cast<CompoundT*>(owner);
-			auto val = pOwner->*field;
-			String remainder = FromString(val, string);
-			(pOwner->*setter)(std::move(val));
-			return remainder;
-		};
+			propInfo._fromString = [field, setter](void* owner, const String& string) -> String
+			{
+				auto pOwner = static_cast<CompoundT*>(owner);
+				auto val = pOwner->*field;
+				String out;
+				FailableOperation<FromStringT>(out, val, string);
+				(pOwner->*setter)(std::move(val));
+				return out;
+			};
+		}
 	}
 
 	/** Implements the 'FromString' function with a method getter, and method setter. */
 	template <typename GetT, typename RetT, typename SetT>
 	void ImplementPropertyFromString(PropertyInfo& propInfo, GetT (CompoundT::*getter)() const, RetT (CompoundT::*setter)(SetT))
 	{
-		propInfo._fromString = [getter, setter](void* owner, const String& string) -> String
+		using FromStringT = Operations::FromString<std::decay_t<GetT>>;
+
+		if (FromStringT::Supported)
 		{
-			auto pOwner = static_cast<CompoundT*>(owner);
-			auto val = (pOwner->*getter)();
-			String remainder = FromString(val, string);
-			(pOwner->*setter)(std::move(val));
-			return remainder;
-		};
+			propInfo._fromString = [getter, setter](void* owner, const String& string) -> String
+			{
+				auto pOwner = static_cast<CompoundT*>(owner);
+				auto val = (pOwner->*getter)();
+				String out;
+				FailableOperation<FromStringT>(out, val, string);
+				(pOwner->*setter)(std::move(val));
+				return out;
+			};
+		}
 	}
 
 	/** Implements the 'ToArchive' function with a field getter. */
 	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
 	void ImplementPropertyToArchive(PropertyInfo& propInfo, FieldT CompoundT::*field)
 	{
-		propInfo._toArchive = [field](const void* owner, ArchiveWriter& writer) -> void
+		using ToArchiveT = Operations::ToArchive<FieldT>;
+
+		if (ToArchiveT::Supported)
 		{
-			auto pOwner = static_cast<const CompoundT*>(owner);
-			ToArchive(pOwner->*field, writer);
-		};
+			propInfo._toArchive = [field](const void* owner, ArchiveWriter& writer) -> void
+			{
+				auto pOwner = static_cast<const CompoundT*>(owner);
+				FailableOperation<ToArchiveT>(pOwner->*field, writer);
+			};
+		}
 	}
 
 	/** Implements the 'ToArchive' function with a method getter. */
 	template <typename GetT>
 	void ImplementPropertyToArchive(PropertyInfo& propInfo, GetT (CompoundT::*getter)() const)
 	{
-		propInfo._toArchive = [getter](const void* owner, ArchiveWriter& writer) -> void
+		using ToArchiveT = Operations::ToArchive<std::decay_t<GetT>>;
+
+		if (ToArchiveT::Supported)
 		{
-			auto pOwner = static_cast<const CompoundT*>(owner);
-			ToArchive((pOwner->*getter)(), writer);
-		};
+			propInfo._toArchive = [getter](const void* owner, ArchiveWriter& writer) -> void
+			{
+				auto pOwner = static_cast<const CompoundT*>(owner);
+				FailableOperation<ToArchiveT>((pOwner->*getter)(), writer);
+			};
+		}
 	}
 
 	/** Implements the 'FromArchive' function with a field. */
 	template <typename FieldT, WHERE(!std::is_function<FieldT>::value)>
 	void ImplementPropertyFromArchive(PropertyInfo& propInfo, FieldT CompoundT::*field)
 	{
-		propInfo._fromArchive = [field](void* owner, const ArchiveReader& reader) -> void
+		using FromArchiveT = Operations::FromArchive<FieldT>;
+
+		if (FromArchiveT::Supported)
 		{
-			auto pOwner = static_cast<CompoundT*>(owner);
-			FromArchive(pOwner->*field, reader);
-		};
+			propInfo._fromArchive = [field](void* owner, const ArchiveReader& reader) -> void
+			{
+				auto pOwner = static_cast<CompoundT*>(owner);
+				FailableOperation<FromArchiveT>(pOwner->*field, reader);
+			};
+		}
 	}
 
 	/** Implements the 'FromArchive' function with a field getter and method setter. */
 	template <typename FieldT, typename RetT, typename SetT, WHERE(!std::is_function<FieldT>::value)>
 	void ImplementPropertyFromArchive(PropertyInfo& propInfo, FieldT CompoundT::*field, RetT (CompoundT::*setter)(SetT))
 	{
-		propInfo._fromArchive = [field, setter](void* owner, const ArchiveReader& reader) -> void
+		using FromArchiveT = Operations::FromArchive<FieldT>;
+
+		if (FromArchiveT::Supported)
 		{
-			auto pOwner = static_cast<CompoundT*>(owner);
-			auto value = pOwner->*field;
-			FromArchive(value, reader);
-			(pOwner->*setter)(value);
-		};
+			propInfo._fromArchive = [field, setter](void* owner, const ArchiveReader& reader) -> void
+			{
+				auto pOwner = static_cast<CompoundT*>(owner);
+				auto value = pOwner->*field;
+				FailableOperation<FromArchiveT>(value, reader);
+				(pOwner->*setter)(value);
+			};
+		}
 	}
 
 	/** Implements the 'FromArchive' function with a method getter and method setter. */
 	template <typename GetT, typename RetT, typename SetT>
 	void ImplementPropertyFromArchive(PropertyInfo& propInfo, GetT (CompoundT::*getter)() const, RetT (CompoundT::*setter)(SetT))
 	{
-		propInfo._fromArchive = [getter, setter](void* owner, const ArchiveReader& reader) -> void
+		using FromArchiveT = Operations::FromArchive<std::decay_t<GetT>>;
+
+		if (FromArchiveT::Supported)
 		{
-			auto pOwner = static_cast<CompoundT*>(owner);
-			auto value = (pOwner->*getter)();
-			FromArchive(value, reader);
-			(pOwner->*setter)(value);
-		};
+			propInfo._fromArchive = [getter, setter](void* owner, const ArchiveReader& reader) -> void
+			{
+				auto pOwner = static_cast<CompoundT*>(owner);
+				auto value = (pOwner->*getter)();
+				FailableOperation<FromArchiveT>(value, reader);
+				(pOwner->*setter)(value);
+			};
+		}
 	}
 
 	/** Returns the offset of the given field within the compound. */
@@ -577,10 +635,7 @@ private:
 	mutable CompoundInfo::Data _data;
 };
 
-//////////////////////////
-///   Implementation   ///
-
-namespace Implementation
+namespace Operations
 {
 	namespace Default
 	{
@@ -599,15 +654,10 @@ namespace Implementation
 					// If this data is not marked as transient
 					if (!(dataInfo.GetFlags() & DF_Transient))
 					{
-						// Add a sub-archive for the data, naming it after the data
-						writer.PushValue(dataInfo.Get(ImmutableVariant{ value }), dataInfo.GetName());
+						// Add a node for the data member, naming it after the data member
+						writer.PushValue(dataInfo.GetName(), dataInfo.GetFromOwner(value));
 					}
 				});
-			}
-			else
-			{
-				// Implementation unkown, just save it as a String. TODO: Determine if this is the best course of action
-				writer.SetValue(::ToString(value));
 			}
 		}
 
@@ -626,7 +676,7 @@ namespace Implementation
 					if (auto data = type.FindData(child.GetName()))
 					{
 						// Deserialize the data
-						data->Get(Variant{ value }).FromArchive(child);
+						data->GetFromOwner(value).FromArchive(child);
 					}
 					else
 					{
@@ -634,13 +684,6 @@ namespace Implementation
 						Console::Warning("The data member '@' does not exist on the type '@'.", child.GetName(), type);
 					}
 				});
-			}
-			else
-			{
-				// Type unknown, get value as a String. TODO: Determine if this is the best course of action
-				String stringValue;
-				reader.GetValue(stringValue);
-				::FromString(value, stringValue);
 			}
 		}
 	}

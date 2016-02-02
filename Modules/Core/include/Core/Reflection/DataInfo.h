@@ -66,11 +66,27 @@ public:
 
 	/** Gets the value of this data member on the given owner.
 	* WARNING: The type of 'owner' must be castable to the type that owns this data member (check "GetOwnerType()" first). */
-	Variant Get(Variant owner) const;
+	Variant GetFromOwner(Variant owner) const;
 
 	/** Gets the value of this data member on the given owner.
 	* WARNING: The type of 'owner' must be castable to the type that owns this data member (check "GetOwnerType()" first). */
-	ImmutableVariant Get(ImmutableVariant owner) const;
+	ImmutableVariant GetFromOwner(ImmutableVariant owner) const;
+
+	/** Gets the value of this data member on the given owner.
+	* WARNING: The type of 'owner' must be castable to the type that owns this data member (check "GetOwnerType()" first). */
+	template <typename T>
+	Variant GetFromOwner(T& owner) const
+	{
+		return this->GetFromOwner(Variant(owner));
+	}
+
+	/** Gets the value of this data member on the given owner.
+	* WARNING: The type of 'owner' must be castable to the type that owns this data member (check "GetOwnerType()" first). */
+	template <typename T>
+	ImmutableVariant GetFromOwner(const T& owner) const
+	{
+		return this->GetFromOwner(ImmutableVariant(owner));
+	}
 
 	////////////////
 	///   Data   ///

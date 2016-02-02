@@ -3,10 +3,7 @@
 #include <string>
 #include "../../include/Core/Operations/FromString.h"
 
-//////////////////////////
-///   Implementation   ///
-
-namespace Implementation
+namespace Operations
 {
 	///////////////////////////
 	///   Primitive Types   ///
@@ -67,92 +64,92 @@ namespace Implementation
 		return "";
 	}
 
-	String FromString<bool>::Function(bool& value, const String& string)
+	void FromString<bool>::Function(String& out, bool& value, const String& string)
 	{
 		String head = string.SubString(0, 6).ToLower();
 
 		if (head.StartsWith("true"))
 		{
 			value = true;
-			return string.SubString(4);
+			out = string.SubString(4);
 		}
 		else if (head.StartsWith("false"))
 		{
 			value = false;
-			return string.SubString(5);
+			out = string.SubString(5);
 		}
 		else
 		{
-			return string;
+			out = string;
 		}
 	}
 
-	String FromString<char>::Function(char& value, const String& string)
+	void FromString<char>::Function(String& out, char& value, const String& string)
 	{
 		value = string[1];
-		return string.SubString(1);
+		out = string.SubString(1);
 	}
 
-	String FromString<byte>::Function(byte& value, const String& string)
+	void FromString<byte>::Function(String& out, byte& value, const String& string)
 	{
-		return IntFromString(value, string);
+		out = IntFromString(value, string);
 	}
 
-	String FromString<int16>::Function(int16& value, const String& string)
+	void FromString<int16>::Function(String& out, int16& value, const String& string)
 	{
-		return IntFromString(value, string);
+		out = IntFromString(value, string);
 	}
 
-	String FromString<int32>::Function(int32& value, const String& string)
+	void FromString<int32>::Function(String&out, int32& value, const String& string)
 	{
-		return IntFromString(value, string);
+		out = IntFromString(value, string);
 	}
 
-	String FromString<int64>::Function(int64& value, const String& string)
+	void FromString<int64>::Function(String& out, int64& value, const String& string)
 	{
-		return IntFromString(value, string);
+		out = IntFromString(value, string);
 	}
 
-	String FromString<uint16>::Function(uint16& value, const String& string)
+	void FromString<uint16>::Function(String& out, uint16& value, const String& string)
 	{
-		return IntFromString(value, string);
+		out = IntFromString(value, string);
 	}
 
-	String FromString<uint32>::Function(uint32& value, const String& string)
+	void FromString<uint32>::Function(String& out, uint32& value, const String& string)
 	{
-		return IntFromString(value, string);
+		out = IntFromString(value, string);
 	}
 
-	String FromString<uint64>::Function(uint64& value, const String& string)
+	void FromString<uint64>::Function(String& out, uint64& value, const String& string)
 	{
-		return IntFromString(value, string);
+		out = IntFromString(value, string);
 	}
 
-	String FromString<float>::Function(float& value, const String& string)
+	void FromString<float>::Function(String& out, float& value, const String& string)
 	{
 		size_t remainder;
 		value = std::stof(string.Cstr(), &remainder);
-		return string.SubString(static_cast<uint32>(remainder));
+		out = string.SubString(static_cast<uint32>(remainder));
 	}
 
-	String FromString<double>::Function(double& value, const String& string)
+	void FromString<double>::Function(String& out, double& value, const String& string)
 	{
 		size_t remainder;
 		value = std::stod(string.Cstr(), &remainder);
-		return string.SubString(static_cast<uint32>(remainder));
+		out = string.SubString(static_cast<uint32>(remainder));
 	}
 
-	String FromString<long double>::Function(long double& value, const String& string)
+	void FromString<long double>::Function(String& out, long double& value, const String& string)
 	{
 		size_t remainder;
 		value = std::stold(string.Cstr(), &remainder);
-		return string.SubString(static_cast<uint32>(remainder));
+		out = string.SubString(static_cast<uint32>(remainder));
 	}
 
 	////////////////////////
 	///   String Types   ///
 
-	String FromString<String>::Function(String& value, const String& string)
+	void FromString<String>::Function(String& out, String& value, const String& string)
 	{
 		if (string.StartsWith('"'))
 		{
@@ -160,7 +157,8 @@ namespace Implementation
 			{
 				if (string[i] == '"')
 				{
-					return string.SubString(i + 1);
+					out = string.SubString(i + 1);
+					return;
 				}
 				else
 				{
@@ -169,12 +167,12 @@ namespace Implementation
 			}
 
 			// We've reached the end of the String
-			return "";
+			out = "";
 		}
 		else
 		{
 			value = "";
-			return string;
+			out = string;
 		}
 	}
 }

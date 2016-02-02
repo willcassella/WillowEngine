@@ -51,8 +51,8 @@ void EnumerationViewTest(WTest::Context& context)
 	{
 		Array<int> collectionA = { 1, 2, 3, 4 };
 		Queue<int> collectionB = { 5, 6, 7, 8 };
-		enumerator(collectionA);
-		enumerator(collectionB);
+		enumerator.Enumerate(collectionA);
+		enumerator.Enumerate(collectionB);
 	};
 
 	int sum = 0;
@@ -60,7 +60,7 @@ void EnumerationViewTest(WTest::Context& context)
 	context.AssertEquals(1 + 2 + 3 + 4 + 5 + 6 + 7 + 8, sum);
 
 	sum = 0;
-	func([&sum](int value) { sum += value; return sum == 6 ? EnumeratorControl::Break : EnumeratorControl::Continue; });
+	func([&sum](int value) { sum += value; return sum == 6 ? EnumeratorResult::Break : EnumeratorResult::Continue; });
 	context.AssertEquals(6, sum);
 }
 

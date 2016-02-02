@@ -4,10 +4,7 @@
 #include "../Forwards/Operations.h"
 #include "../Containers/String.h"
 
-//////////////////////////
-///   Implementation   ///
-
-namespace Implementation
+namespace Operations
 {
 	/** Generic implementation of 'FromString' */
 	template <typename T>
@@ -15,31 +12,31 @@ namespace Implementation
 	{
 	private:
 
-		/** Implementation for if the type defines its own 'FromString' method (preferred). */
-		template <typename F>
-		FORCEINLINE static auto Impl(Preferred, F& value, const String& string) -> decltype(value.F::FromString(string))
+		/** Detects support for this operation if the 'String FromString(const String&)' member function is present. */
+		template <typename F, typename ImplT = decltype(&F::FromString)>
+		static constexpr bool HasSupport(Implementation::Preferred)
 		{
-			return value.FromString(string);
+			return std::is_convertible<ImplT, String(F::*)(const String&)>::value ||
+				std::is_convertible<ImplT, String(F::*)(String)>::value;
 		}
 
-		/** Implementation for if the type does not define its own 'FromString' method (fallback). */
+		/** Detects lack of support for this operation. */
 		template <typename F>
-		FORCEINLINE static auto Impl(Fallback, F& value, const String& string) -> String
+		static constexpr bool HasSupport(Implementation::Fallback)
 		{
-			return Default::FromString(value, string);
+			return false;
 		}
 
 	public:
 
-		/** Entry point for the implementation. */
-		FORCEINLINE static String Function(T& value, const String& string)
+		/** Executes the operation. */
+		static void Function(String &out, T& value, const String& string)
 		{
-			using ReturnType = decltype(Impl(0, value, string));
-			static_assert(std::is_same<String, ReturnType>::value || std::is_same<const String&, ReturnType>::value,
-				"The return type of the 'FromString' method must either be a 'String' or a const reference to one.");
-
-			return Impl(0, value, string);
+			out = value.FromString(string);
 		}
+
+		/** Whether this operation is supported for the given type. */
+		static constexpr bool Supported = HasSupport<T>(0);
 	};
 
 	///////////////////////////
@@ -49,103 +46,129 @@ namespace Implementation
 	template <>
 	struct CORE_API FromString < bool > final
 	{
-		static String Function(bool& value, const String& string);
+		static void Function(String& out, bool& value, const String& string);
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'FromString' for char */
 	template <>
 	struct CORE_API FromString < char > final
 	{
-		static String Function(char& value, const String& string);
+		static void Function(String& out, char& value, const String& string);
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'FromString' for byte */
 	template <>
 	struct CORE_API FromString < byte > final
 	{
-		static String Function(byte& value, const String& string);
+		static void Function(String& out, byte& value, const String& string);
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'FromString' for int16 */
 	template <>
 	struct CORE_API FromString < int16 > final
 	{
-		static String Function(int16& value, const String& string);
+		static void Function(String& out, int16& value, const String& string);
+		
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'FromString' for int32 */
 	template <>
 	struct CORE_API FromString < int32 > final
 	{
-		static String Function(int32& value, const String& string);
+		static void Function(String& out, int32& value, const String& string);
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'FromString' for int64 */
 	template <>
 	struct CORE_API FromString < int64 > final
 	{
-		static String Function(int64& value, const String& string);
+		static void Function(String& out, int64& value, const String& string);
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'FromString' for uint16 */
 	template <>
 	struct CORE_API FromString < uint16 > final
 	{
-		static String Function(uint16& value, const String& string);
+		static void Function(String& out, uint16& value, const String& string);
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'FromString' for uint32 */
 	template <>
 	struct CORE_API FromString < uint32 > final
 	{
-		static String Function(uint32& value, const String& string);
+		static void Function(String& out, uint32& value, const String& string);
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'FromString' for uint64 */
 	template <>
 	struct CORE_API FromString < uint64 > final
 	{
-		static String Function(uint64& value, const String& string);
+		static void Function(String& out, uint64& value, const String& string);
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'FromString' for float */
 	template <>
 	struct CORE_API FromString < float > final
 	{
-		static String Function(float& value, const String& string);
+		static void Function(String& out, float& value, const String& string);
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'FromString' for double */
 	template <>
 	struct CORE_API FromString < double > final
 	{
-		static String Function(double& value, const String& string);
+		static void Function(String& out, double& value, const String& string);
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'FromString' for long double */
 	template <>
 	struct CORE_API FromString < long double > final
 	{
-		static String Function(long double& value, const String& string);
+		static void Function(String& out, long double& value, const String& string);
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'FromString' for pointers */
 	template <typename T>
 	struct FromString < T* > final
 	{
-		static String Function(T*& value, const String& string)
+		static void Function(String& out, T*& value, const String& string)
 		{
 			if (string.StartsWith("0x"))
 			{
 				value = nullptr;
-				return string.SubString(9); // @TODO: Implement this
+				out = string.SubString(9); // @TODO: Implement this
 			}
 			else
 			{
 				value = nullptr;
-				return string;
+				out = string;
 			}
 		}
+
+		static constexpr bool Supported = true;
 	};
 
 	////////////////////////
@@ -155,7 +178,9 @@ namespace Implementation
 	template <>
 	struct CORE_API FromString < String > final
 	{
-		static String Function(String& value, const String& string);
+		static void Function(String& out, String& value, const String& string);
+
+		static constexpr bool Supported = true;
 	};
 }
 
@@ -169,7 +194,12 @@ namespace Implementation
 template <typename T>
 FORCEINLINE String FromString(T& value, const String& string)
 {
-	return Implementation::FromString<T>::Function(value, string);
+	static_assert(Operations::FromString<T>::Supported,
+		"'FromString' is not supported on the given type. If it's supposed to be, make sure the member function signature is correct.");
+
+	String out;
+	Operations::FromString<T>::Function(out, value, string);
+	return out;
 }
 
 /** Parses the given value from the given String, following the given format. The remainder of the String is returned.

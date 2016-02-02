@@ -291,6 +291,9 @@
     <ClInclude Include="include\Core\IO\ArchiveWriter.h">
       <Filter>include\IO</Filter>
     </ClInclude>
+    <ClInclude Include="include\Core\Operations\FailableOperation.h">
+      <Filter>include\Operations</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Object.cpp">

@@ -52,27 +52,59 @@ public:
 		return *_type;
 	}
 
-	// TODO: Documentation
+	/** Returns whether 'ToString' is supported by the referenced value. */
+	FORCEINLINE bool HasToStringImplementation() const
+	{
+		return _type->HasToStringImplementation();
+	}
+
+	/** Formats the state of this Variant as a String. 
+	* WARNING: Check 'HasToStringImplementation()' first. */
 	FORCEINLINE String ToString() const
 	{
+		assert(this->HasToStringImplementation());
 		return _type->GetToStringImplementation()(_value);
 	}
 
-	// TODO: Documentation
+	/** Returns whether 'FromString' is supported by the referenced value. */
+	FORCEINLINE bool HasFromStringImplementation() const
+	{
+		return _type->HasFromArchiveImplementation();
+	}
+
+	/** Sets the state of this Variant from a String, returning the remainder. 
+	* WARNING: Check 'HasFromStringImplementation()' first. */
 	FORCEINLINE String FromString(const String& string)
 	{
+		assert(this->HasFromStringImplementation());
 		return _type->GetFromStringImplementation()(_value, string);
 	}
 
-	// TODO: Documentation
+	/** Returns whether 'ToArchive' is supported by the referenced value. */
+	FORCEINLINE bool HasToArchiveImplementation() const
+	{
+		return _type->HasToArchiveImplementation();
+	}
+
+	/** Serializes the state of this Variant to the given archive. 
+	* WARNING: Check 'HasToArchiveImplementation()' first. */
 	FORCEINLINE void ToArchive(ArchiveWriter& writer) const
 	{
+		assert(this->HasToArchiveImplementation());
 		_type->GetToArchiveImplementation()(_value, writer);
 	}
 
-	// TODO: Documentation
+	/** Returns whether 'FromArchive' is supported by the referenced value. */
+	FORCEINLINE bool HasFromArchiveImplementatino() const
+	{
+		return _type->HasFromArchiveImplementation();
+	}
+
+	/** Deserializes the state of this Variant from the given archive.
+	* WARNING: Check 'HasFromArchiveImplementation()' first. */
 	FORCEINLINE void FromArchive(const ArchiveReader& reader)
 	{
+		assert(this->HasFromStringImplementation());
 		_type->GetFromArchiveImplementation()(_value, reader);
 	}
 
@@ -131,15 +163,31 @@ public:
 		return *_type;
 	}
 
-	/** Formats the state of this ImmutableVariant as a String. */
+	/** Returns whether 'ToString' is supported by the referenced value. */
+	FORCEINLINE bool HasToStringImplementation() const
+	{
+		return _type->HasToStringImplementation();
+	}
+
+	/** Formats the state of this ImmutableVariant as a String. 
+	* WARNING: Check 'HasToStringImplementation()' first. */
 	FORCEINLINE String ToString() const
 	{
+		assert(this->HasToStringImplementation());
 		return _type->GetToStringImplementation()(_value);
 	}
 
-	// TODO: Documentation
+	/** Returns whether 'ToArchive' is supported by the referenced value. */
+	FORCEINLINE bool HasToArchiveImplementation() const
+	{
+		return _type->HasToArchiveImplementation();
+	}
+
+	/** Serializes the state of this ImmutableVariant to the given archive. 
+	* WARNING: Check 'HasFromArchiveImplementation' first. */
 	FORCEINLINE void ToArchive(ArchiveWriter& writer) const
 	{
+		assert(this->HasToArchiveImplementation());
 		_type->GetToArchiveImplementation()(_value, writer);
 	}
 
@@ -181,9 +229,3 @@ FORCEINLINE const TargetT* Cast(ImmutableVariant value)
 		return nullptr;
 	}
 }
-
-/** You cannot call 'FromString' on an ImmutableVariant. */
-String FromString(ImmutableVariant) = delete;
-
-/** You cannot call 'FromArchive' on an ImmutableVariant. */
-void FromArchive(ImmutableVariant) = delete;

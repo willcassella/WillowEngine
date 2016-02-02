@@ -87,13 +87,23 @@ public:
 		return *_ownerType;
 	}
 
-	/** Gets this Property on the given owner.
+	/** Gets this Property from the given owner.
 	* WARNING: 'owner' must be castable to the type that owns this property. */
-	Property Get(Variant owner) const;
+	Property GetFromOwner(Variant owner) const;
 
-	/** Gets this Property on the given owner. 
+	/** Gets this Property from the given owner. 
 	* WARNING: 'owner' must be castable to the type that owns this property. */
-	ImmutableProperty Get(ImmutableVariant owner) const;
+	ImmutableProperty GetFromOwner(ImmutableVariant owner) const;
+
+	/** Gets this Property from the given owner.
+	* WARNING: 'owner' must be castable to the type that owns this property. */
+	template <typename T>
+	Property GetFromOwner(T& owner) const;
+
+	/** Gets this Property from the given owner.
+	* WARNING: 'owner' must be castable to the type that owns this property. */
+	template <typename T>
+	ImmutableProperty GetFromOwner(const T& owner) const;
 
 	////////////////
 	///   Data   ///
@@ -144,18 +154,32 @@ public:
 		return _info->GetPropertyType();
 	}
 
-	/** Formats the state of this Property as a String. */
+	/** Returns whether this Property may be formatted as a String. */
+	bool HasToStringImplementation() const;
+
+	/** Formats the state of this Property as a String. 
+	* WARNING: Check 'HasToStringImplementation()' first. */
 	String ToString() const;
 
-	/** Parses this Property from a String, a returns the remainder of the string. 
-	* WARNING: This function will fail if this is a read-only property. */
+	/** Returns whether this Property may be set from a String. */
+	bool HasFromStringImplementation() const;
+
+	/** Parses this Property from a String, returning the remainder of the string. 
+	* WARNING: This function will fail if this is a read-only property. Check 'HasFromStringImplementation()' first. */
 	String FromString(const String& string);
 
-	/** Serializes this property to the given archive. */
+	/** Returns whether this Property may be serialized to an Archive. */
+	bool HasToArchiveImplementation() const;
+
+	/** Serializes this property to the given archive. 
+	* WARNING: Check 'HasToArchiveImplementation()' first. */
 	void ToArchive(ArchiveWriter& writer) const;
 
+	/** Returns whether this Property may be deserialized from an Archive. */
+	bool HasFromArchiveImplementation() const;
+
 	/** Deserializes this property from the given archive.
-	* WARNING: This will fail if this is a read-only property. */
+	* WARNING: This will fail if this is a read-only property. Check 'HasFromArchiveImplementation()' first. */
 	void FromArchive(const ArchiveReader& reader);
 
 	////////////////
@@ -202,10 +226,18 @@ public:
 		return _info->GetPropertyType();
 	}
 
-	/** Formats the state of this property as a String. */
+	/** Returns whether this ImmutableProperty may be formatted as a String. */
+	bool HasToStringImplementation() const;
+
+	/** Formats the state of this ImmutableProperty as a String. 
+	* WARNING: Check 'HasToStringImplementation()' first. */
 	String ToString() const;
 
-	/** Serializes this property to the given archive. */
+	/** Returns whether this ImmutableProperty may be serialized to an Archive. */
+	bool HasToArchiveImplementation() const;
+
+	/** Serializes the state of this ImmutableProperty to the given archive. 
+	* WARNING: Check 'HasToArchiveImplementation()' first. */
 	void ToArchive(ArchiveWriter& writer) const;
 
 	////////////////
@@ -216,11 +248,17 @@ private:
 	const void* _owner;
 };
 
-/////////////////////
-///   Functions   ///
+///////////////////
+///   Methods   ///
 
-/** You can't call 'FromString' on an ImmutableProperty. */
-String FromString(ImmutableProperty, const String&) = delete;
+template <typename T>
+Property PropertyInfo::GetFromOwner(T& owner) const
+{
+	return this->GetFromOwner(Variant(owner));
+}
 
-/** You can't call 'FromArchive' on an ImmutableProperty. */
-void FromArchive(ImmutableProperty, const ArchiveReader&) = delete;
+template <typename T>
+ImmutableProperty PropertyInfo::GetFromOwner(const T& owner) const
+{
+	return this->GetFromOwner(ImmutableVariant(owner));
+}

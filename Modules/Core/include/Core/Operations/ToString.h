@@ -12,10 +12,7 @@
 #include "../Containers/Pair.h"
 #include "../Containers/String.h"
 
-//////////////////////////
-///   Implementation   ///
-
-namespace Implementation
+namespace Operations
 {
 	/** Generic implementation of 'ToString' */
 	template <typename T>
@@ -23,31 +20,31 @@ namespace Implementation
 	{
 	private:
 
-		/** Implementation for if the type defines its own "ToString" method (preferred). */
-		template <typename F>
-		FORCEINLINE static auto Impl(Preferred, const F& value) -> decltype(value.F::ToString())
+		/** Detects support for this operation if the 'String ToString() const' member function is present. */
+		template <typename F, typename ImplT = decltype(&F::ToString)>
+		static constexpr bool HasSupport(Implementation::Preferred)
 		{
-			return value.ToString();
+			return std::is_convertible<ImplT, String(F::*)() const>::value ||
+				std::is_convertible<ImplT, const String& (F::*)() const>::value;
 		}
 
-		/** Implementation for if the type does not define its own "ToString" method (fallback). */
+		/** Detects lack of support for this operation. */
 		template <typename F>
-		FORCEINLINE static auto Impl(Fallback, const F& value) -> String
+		static constexpr bool HasSupport(Implementation::Fallback)
 		{
-			return Default::ToString(value);
+			return false;
 		}
 
 	public:
 
-		/** Entry point for the implementation. */
-		FORCEINLINE static String Function(const T& value)
+		/** Executes the operation. */
+		static void Function(String& out, const T& value)
 		{
-			using ReturnType = decltype(Impl(0, value));
-			static_assert(std::is_same<String, ReturnType>::value || std::is_same<const String&, ReturnType>::value,
-				"The return type of the 'ToString' method must be either a 'String' or a const reference to one.");
-
-			return Impl(0, value);
+			out = value.ToString();
 		}
+
+		/** Whether this operation is supported for the given type. */
+		static constexpr bool Supported = HasSupport<T>(0);
 	};
 
 	/** Generic implementation of 'ToExplicitString' (no quotation marks) */
@@ -67,94 +64,120 @@ namespace Implementation
 	template <>
 	struct CORE_API ToString < bool > final
 	{
-		static String Function(bool value);
+		static void Function(String& out, bool value);
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'ToString' for char */
 	template <>
 	struct CORE_API ToString < char > final
 	{
-		static String Function(char value);
+		static void Function(String& out, char value);
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'ToString' for byte */
 	template <>
 	struct CORE_API ToString < byte > final
 	{
-		static String Function(byte value);
+		static void Function(String& out, byte value);
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'ToString' for int16 */
 	template <>
 	struct CORE_API ToString < int16 > final
 	{
-		static String Function(int16 value);
+		static void Function(String& out, int16 value);
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'ToString' for int32 */
 	template <>
 	struct CORE_API ToString < int32 > final
 	{
-		static String Function(int32 value);
+		static void Function(String& out, int32 value);
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'ToString' for int64 */
 	template <>
 	struct CORE_API ToString < int64 > final
 	{
-		static String Function(int64 value);
+		static void Function(String& out, int64 value);
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'ToString' for uint16 */
 	template <>
 	struct CORE_API ToString < uint16 > final
 	{
-		static String Function(uint16 value);
+		static void Function(String& out, uint16 value);
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'ToString' for uint32 */
 	template <>
 	struct CORE_API ToString < uint32 > final
 	{
-		static String Function(uint32 value);
+		static void Function(String& out, uint32 value);
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'ToString' for uint64 */
 	template <>
 	struct CORE_API ToString < uint64 > final
 	{
-		static String Function(uint64 value);
+		static void Function(String& out, uint64 value);
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'ToString' for float */
 	template <>
 	struct CORE_API ToString < float > final
 	{
-		static String Function(float value);
+		static void Function(String& out, float value);
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'ToString' for double */
 	template <>
 	struct CORE_API ToString < double > final
 	{
-		static String Function(double value);
+		static void Function(String& out, double value);
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'ToString' for long double */
 	template <>
 	struct CORE_API ToString < long double > final
 	{
-		static String Function(long double value);
+		static void Function(String& out, long double value);
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'ToString' for pointers */
 	template <typename T>
 	struct ToString < T* > final
 	{
-		FORCEINLINE static String Function(T* /*value*/)
+		FORCEINLINE static void Function(String& out, T* /*value*/)
 		{
-			return "0xAddress"; // @TODO: Implement this
+			out = "0xAddress"; // @TODO: Implement this
 		}
+
+		static constexpr bool Supported = true;
 	};
 
 	////////////////////////
@@ -164,10 +187,12 @@ namespace Implementation
 	template <>
 	struct ToString < char* > final
 	{
-		FORCEINLINE static String Function(const char* value)
+		FORCEINLINE static void Function(String& out, const char* value)
 		{
-			return String(value);
+			out = value;
 		}
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'ToExplicitString' for c-strings  */
@@ -184,10 +209,12 @@ namespace Implementation
 	template <>
 	struct ToString < const char* > final
 	{
-		FORCEINLINE static String Function(const char* value)
+		FORCEINLINE static void Function(String& out, const char* value)
 		{
-			return String(value);
+			out = value;
 		}
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'ToExplicitString' for const c-strings */
@@ -204,10 +231,12 @@ namespace Implementation
 	template <std::size_t size>
 	struct ToString < char[size] > final
 	{
-		FORCEINLINE static String Function(const char value[size])
+		FORCEINLINE static void Function(String& out, const char value[size])
 		{
-			return String(value);
+			out = value;
 		}
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'ToExplicitString' for clang/gcc c-string literals */
@@ -224,10 +253,12 @@ namespace Implementation
 	template <std::size_t size>
 	struct ToString < const char[size] > final
 	{
-		FORCEINLINE static String Function(const char value[size])
+		FORCEINLINE static void Function(String& out, const char value[size])
 		{
-			return String(value);
+			out = value;
 		}
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'ToExplicitString' for MSVC c-string literals @TODO: Determine if this can be removed */
@@ -244,10 +275,12 @@ namespace Implementation
 	template <>
 	struct ToString < String > final
 	{
-		FORCEINLINE static String Function(const String& value)
+		FORCEINLINE static void Function(String& out, const String& value)
 		{
-			return value;
+			out = value;
 		}
+
+		static constexpr bool Supported = true;
 	};
 
 	/** Implementation of 'ToExplicitString' for 'String' */
@@ -294,47 +327,55 @@ namespace Implementation
 	template <typename T>
 	struct ToString < Array<T> > final
 	{
-		FORCEINLINE static String Function(const Array<T>& value)
+		static void Function(String& out, const Array<T>& value)
 		{
-			return ContainerToString<Array, T>::Function(value);
+			out = ContainerToString<Array, T>::Function(value);
 		}
+
+		static constexpr bool Supported = ToString<T>::Supported;
 	};
 
 	/** Implementation of 'ToString' for List */
 	template <typename T>
 	struct ToString < List<T> > final
 	{
-		FORCEINLINE static String Function(const List<T>& value)
+		static void Function(String& out, const List<T>& value)
 		{
-			return ContainerToString<List, T>::Function(value);
+			out = ContainerToString<List, T>::Function(value);
 		}
+
+		static constexpr bool Supported = ToString<T>::Supported;
 	};
 
 	/** Implementation of 'ToString' for Queue */
 	template <typename T>
 	struct ToString < Queue<T> > final
 	{
-		FORCEINLINE static String Function(const Queue<T>& value)
+		static void Function(String& out, const Queue<T>& value)
 		{
-			return ContainerToString<Queue, T>::Function(value);
+			out = ContainerToString<Queue, T>::Function(value);
 		}
+
+		static constexpr bool Supported = ToString<T>::Supported;
 	};
 
 	/** Implementation of 'ToString' for Stack */
 	template <typename T>
 	struct ToString < Stack<T> > final
 	{
-		FORCEINLINE static String Function(const Stack<T>& value)
+		static void Function(String& out, const Stack<T>& value)
 		{
-			return ContainerToString<Stack, T>(value);
+			out = ContainerToString<Stack, T>(value);
 		}
+
+		static constexpr bool Supported = ToString<T>::Supported;
 	};
 
 	/** Implementation of 'ToString' for Table */
 	template <typename KeyT, typename ValueT>
 	struct ToString < Table<KeyT, ValueT> > final
 	{
-		static String Function(const Table<KeyT, ValueT>& value)
+		static void Function(String& out, const Table<KeyT, ValueT>& value)
 		{
 			String result = '{';
 
@@ -356,21 +397,25 @@ namespace Implementation
 					ToExplicitString<ValueT>::Function(pair.Second));
 			}
 
-			return result + '}';
+			out = result + '}';
 		}
+
+		static constexpr bool Supported = ToString<KeyT>::Supported && ToString<ValueT>::Supported;
 	};
 
 	/** Implementation of 'ToString' for Pair */
 	template <typename A, typename B>
 	struct ToString < Pair<A, B> > final
 	{
-		FORCEINLINE static String Function(const Pair<A, B>& value)
+		static void Function(String& out, const Pair<A, B>& value)
 		{
-			return Format(
+			out = Format(
 				"{@ | @}",
 				ToExplicitString<A>::Function(value.First),
 				ToExplicitString<B>::Function(value.Second));
 		}
+
+		static constexpr bool Supported = ToString<A>::Supported && ToString<B>::Supported;
 	};
 }
 
@@ -384,7 +429,12 @@ namespace Implementation
 template <typename T>
 FORCEINLINE String ToString(const T& value)
 {
-	return Implementation::ToString<T>::Function(value);
+	static_assert(Operations::ToString<T>::Supported,
+		"'ToString' is not supported on the given type. If it's supposed to be, make sure the member function signature is correct.");
+
+	String out;
+	Operations::ToString<T>::Function(out, value);
+	return out;
 }
 
 /** Formats the given String with the given value, returning the result

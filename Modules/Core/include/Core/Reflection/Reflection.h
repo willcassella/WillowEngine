@@ -352,24 +352,6 @@ namespace Implementation
 	////////////////////////
 	///   Struct Types   ///
 
-	/** Implementation of 'TypeOf' for String */
-	template <>
-	struct CORE_API TypeOf < String > final
-	{
-		/** Defined in 'Reflection/Reflection.cpp' */
-		static const StructInfo StaticTypeInfo;
-
-		FORCEINLINE static const StructInfo& Function()
-		{
-			return StaticTypeInfo;
-		}
-
-		FORCEINLINE static const StructInfo& Function(const String& /*value*/)
-		{
-			return StaticTypeInfo;
-		}
-	};
-
 	/** Implementation of 'TypeOf' for std::intializer_list */
 	template <typename T>
 	struct TypeOf < std::initializer_list<T> > final
@@ -383,6 +365,24 @@ namespace Implementation
 		}
 
 		FORCEINLINE static const StructInfo& Function(const std::initializer_list<T>& /*value*/)
+		{
+			return StaticTypeInfo;
+		}
+	};
+
+	/** Implementation of 'TypeOf' for String */
+	template <>
+	struct CORE_API TypeOf < String > final
+	{
+		/** Defined in 'Reflection/Reflection.cpp' */
+		static const StructInfo StaticTypeInfo;
+
+		FORCEINLINE static const StructInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const StructInfo& Function(const String& /*value*/)
 		{
 			return StaticTypeInfo;
 		}

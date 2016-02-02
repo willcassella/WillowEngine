@@ -1,47 +1,38 @@
 // TypeOps.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "../STDE/TypeTraits.h"
+#include "../STDE/Utility.h"
 #include "../Forwards/Operations.h"
 #include "../env.h"
 
+/** This type soley exists for types that aren't default-constructible, but still wish to be constructible for serialization porposes.
+* Just implement a constructor that accepts an object of this type, and it may be serialized.
+* Think of it like this:
+* - A constructor configures and initializes the object all at once.
+* - A constructor accepting 'DynamicInitializer' indicates that the object will be configured and initialized post-construction.
+* Note that this means that you shouldn't invoke the 'DynamicInitializer' constructor directly, unless you know what you're doing. */
+struct DynamicInitializer final
+{
+	// Nothing here
+};
+
 namespace Operations
 {
-	/** Conditionally constructs a type, if a constructor accepting the given arguments is supported. */
+	/** Constructs a type with the given arguments. */
 	template <typename T, typename ... Args>
 	struct Construct final
 	{
-	private:
-
-		/** Case for if the type IS constructible with the given arguments. */
-		template <typename F>
-		FORCEINLINE static void Impl(std::true_type, byte* location, Args&& ... args)
+		/** Executes the constructor. */
+		static void Function(byte* location, Args ... args)
 		{
-			new(location) F(std::forward<Args>(args)...);
-		}
-
-		/** Case for if the type IS NOT constructible with the given arguments. */
-		template <typename F>
-		FORCEINLINE static void Impl(std::false_type, byte* /*location*/, Args&& ... /*args*/)
-		{
-			// Do nothing
-		}
-
-	public:
-
-		/** Conditionally executes the constructor. */
-		FORCEINLINE static void Function(byte* location, Args ... args)
-		{
-			// Determine which implementation to use.
-			// Unfortunatly, I can't use 'stde::conditionally_execute', because the type being constructed cannot be deduced from 'Args' alone.
-			Impl<T>(stde::bool_constant<Supported>{}, location, std::forward<Args>(args)...);
+			new(location) T(std::forward<Args>(args)...);
 		}
 
 		/** Whether the type supports being constructed with these arguments. */
 		static constexpr bool Supported = std::is_constructible<T, Args...>::value;
 	};
 
-	/** Conditionally copy-constructs a type, if the copy-constructor is supported. */
+	/** Copy-constructs a type. */
 	template <typename T>
 	struct Construct < T, const T& > final
 	{
@@ -67,23 +58,17 @@ namespace Operations
 
 	public:
 
-		/** Conditionally executes the copy-constructor. */
-		FORCEINLINE static void Function(byte* location, const T& copy)
+		/** Executes the copy-constructor. */
+		static void Function(byte* location, const T& copy)
 		{
-			auto function = [location](const auto& c)
-			{
-				using F = std::decay_t<decltype(c)>;
-				new(location) F(c);
-			};
-
-			stde::conditionally_execute<Supported>(function, copy);
+			new(location) T(copy);
 		}
 
 		/** Whether this type supports the copy-constructor. */
 		static constexpr bool Supported = HasSupport<T>(0);
 	};
 
-	/** Conditionally move-constructs a type, if the move-constructor is supported. */
+	/** Move-constructs a type. */
 	template <typename T>
 	struct Construct < T, T&& > final
 	{
@@ -109,42 +94,31 @@ namespace Operations
 
 	public:
 
-		/** Conditionally executes the move-constructor. */
-		FORCEINLINE static void Function(byte* location, T&& move)
+		/** Executes the move-constructor. */
+		static void Function(byte* location, T&& move)
 		{
-			auto function = [location](auto&& m)
-			{
-				using F = std::decay_t<decltype(m)>;
-				new (location) F(std::move(m));
-			};
-
-			stde::conditionally_execute<Supported>(function, std::move(move));
+			new (location) T(std::move(move));
 		}
 
 		/** Whether this type supports the move-constructor. */
 		static constexpr bool Supported = HasSupport<T>(0);
 	};
 
-	/** Conditionally assigns to a value, if an assignment operator accepting the given argument is supported. */
+	/** Assigns a value to the given argument. */
 	template <typename T, typename Arg>
 	struct Assign final
 	{
-		/** Conditionally executes the assignment operator. */
-		FORCEINLINE static void Function(T& value, Arg arg)
+		/** Executes the assignment operator. */
+		static void Function(T& value, Arg arg)
 		{
-			auto function = [](auto& v, Arg a)
-			{
-				v = std::forward<Arg>(a);
-			};
-
-			stde::conditionally_execute<Supported>(function, value, std::forward<Arg>(arg));
+			value = std::forward<Arg>(arg);
 		}
 
 		/** Whether an assignment operator accepting the given arguments is supported. */
 		static constexpr bool Supported = std::is_assignable<std::add_lvalue_reference_t<T>, Arg>::value;
 	};
 
-	/** Conditionally copy-assigns a value, if the copy-assignment operator is supported. */
+	/** Copy-assigns a value. */
 	template <typename T>
 	struct Assign < T, const T& > final
 	{
@@ -170,22 +144,17 @@ namespace Operations
 
 	public:
 
-		/** Conditionally executes the copy-assignment operator. */
-		FORCEINLINE static void Function(T& value, const T& copy)
+		/** Executes the copy-assignment operator. */
+		static void Function(T& value, const T& copy)
 		{
-			auto function = [&value](const auto& c)
-			{
-				value = c;
-			};
-
-			stde::conditionally_execute<Supported>(function, copy);
+			value = copy;
 		}
 
 		/** Whether this type supports the copy-assignment operator. */
 		static constexpr bool Supported = HasSupport<T>(0);
 	};
 
-	/** Conditionally move-assigns a value, if the move-assignment operator is supported. */
+	/** Move-assigns a value. */
 	template <typename T>
 	struct Assign < T, T&& > final
 	{
@@ -211,35 +180,24 @@ namespace Operations
 
 	public:
 
-		/** Conditionally executes the move-assignment operator. */
-		FORCEINLINE static void Function(T& value, T&& move)
+		/** Executes the move-assignment operator. */
+		static void Function(T& value, T&& move)
 		{
-			auto function = [&value](auto&& m)
-			{
-				value = std::move(m);
-			};
-
-			stde::conditionally_execute<Supported>(function, std::move(move));
+			value = std::move(move);
 		}
 
 		/** Whether this type supports the move-assignment operator. */
 		static constexpr bool Supported = HasSupport<T>(0);
 	};
 
-	/** Conditionally destroys a value, if the destructor is supported. */
+	/** Destroys a value. */
 	template <typename T>
 	struct Destroy final
 	{
-		/** Conditionally executes the destructor. */
-		FORCEINLINE static void Function(T& value)
+		/** Executes the destructor. */
+		static void Function(T& value)
 		{
-			auto function = [](auto& v)
-			{
-				using F = std::decay_t<decltype(v)>;
-				v.~F();
-			};
-
-			stde::conditionally_execute<Supported>(function, value);
+			value.~T();
 		}
 
 		/** Whether the destructor is supported. */
@@ -249,6 +207,10 @@ namespace Operations
 	/** Aliases the default constructor operation. */
 	template <typename T>
 	using DefaultConstruct = Construct<T>;
+
+	/** Aliases the dynamic initialization operator. */
+	template <typename T>
+	using DynamicInitialize = Construct<T, DynamicInitializer>;
 
 	/** Aliases the copy constructor operation. */
 	template <typename T>

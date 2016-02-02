@@ -3,6 +3,7 @@
 
 #include "../config.h"
 #include "../Forwards/Containers.h"
+#include "../Functional/FunctionView.h"
 #include "../Functional/EnumeratorView.h"
 
 /** Represents access to a node in an Archive that may have data read from it. */
@@ -18,48 +19,52 @@ public:
 	///   Methods   ///
 public:
 
-	/** Returns the name of this node.
-	* NOTE: Returns an empty String if this node has no name. */
+	/** Returns the name of this node. */
 	virtual String GetName() const = 0;
 
-	/** Attempts to get a boolean value out of this node, returning whether it succeeded. */
-	virtual bool GetValue(bool& value) const = 0;
+	/** Gets a boolean value out of this node. */
+	virtual void GetValue(bool& value) const = 0;
 
-	/** Attempts to get a char value out of this node, returning whether it succeeded. */
-	virtual bool GetValue(char& value) const = 0;
+	/** Gets a char value out of this node. */
+	virtual void GetValue(char& value) const = 0;
 
-	/** Attempts to get a byte value out of this node, returning whether it succeeded. */
-	virtual bool GetValue(byte& value) const = 0;
+	/** Gets a byte value out of this node. */
+	virtual void GetValue(byte& value) const = 0;
 
-	/** Attempts to get an int16 value out of this node, returning whether it succeeded. */
-	virtual bool GetValue(int16& value) const = 0;
+	/** Gets an int16 value out of this node. */
+	virtual void GetValue(int16& value) const = 0;
 
-	/** Attempts to get a uint16 value out of this node, returning whether it succeeded. */
-	virtual bool GetValue(uint16& value) const = 0;
+	/** Gets a uint16 value out of this node. */
+	virtual void GetValue(uint16& value) const = 0;
 
-	/** Attempts to get an int32 value out of this node, returning whether it succeeded. */
-	virtual bool GetValue(int32& value) const = 0;
+	/** Gets an int32 value out of this node. */
+	virtual void GetValue(int32& value) const = 0;
 
-	/** Attempts to get a uint32 value out of this node, returning whether it succeeded. */
-	virtual bool GetValue(uint32& value) const = 0;
+	/** Gets a uint32 value out of this node. */
+	virtual void GetValue(uint32& value) const = 0;
 
-	/** Attempts to get an int64 value out of this node, returning whether it succeeded. */
-	virtual bool GetValue(int64& value) const = 0;
+	/** Gets a int64 value out of this node. */
+	virtual void GetValue(int64& value) const = 0;
 
-	/** Attempts to get a uint64 value out of this node, returning whether it succeeded. */
-	virtual bool GetValue(uint64& value) const = 0;
+	/** Gets a uint64 value out of this node. */
+	virtual void GetValue(uint64& value) const = 0;
 
-	/** Attempts to get a float value out of this node, returning whether it succeeded. */
-	virtual bool GetValue(float& value) const = 0;
+	/** Gets a float value out of this node. */
+	virtual void GetValue(float& value) const = 0;
 
-	/** Attempts to get a double value out of this node, returning whether it succeeded. */
-	virtual bool GetValue(double& value) const = 0;
+	/** Gets a double value out of this node. */
+	virtual void GetValue(double& value) const = 0;
 
-	/** Attempts to get a long double value out of this node, returning whether it succeeded. */
-	virtual bool GetValue(long double& value) const = 0;
+	/** Gets a long double value out of this node. */
+	virtual void GetValue(long double& value) const = 0;
 
-	/** Attempts to get a String value out of this node, returning whether it succeeded. */
-	virtual bool GetValue(String& value) const = 0;
+	/** Gets a String value out of this node. */
+	virtual void GetValue(String& value) const = 0;
+
+	/** Searches for the first child node of this node with the given name.
+	* Calls the given function if the node was found, and returns 'true'.
+	* Returns 'false' if the node was not found. */
+	virtual bool GetChild(const String& name, FunctionView<void, const ArchiveReader&> function) const = 0;
 
 	/** Iterates over all child nodes of this node. */
 	virtual void EnumerateChildren(EnumeratorView<const ArchiveReader&> enumerator) const = 0;

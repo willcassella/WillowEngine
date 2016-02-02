@@ -2,6 +2,7 @@
 #pragma once
 
 #include <cmath>
+#include "../Forwards/Operations.h"
 #include "../Containers/String.h"
 #include "../Reflection/Reflection.h"
 #include "Math.h"
@@ -44,6 +45,16 @@ public:
 	FORCEINLINE String ToString() const
 	{
 		return Format("<@, @>", X, Y);
+	}
+
+	void ToArchive(ArchiveWriter& writer) const
+	{
+		Operations::Default::ToArchive(*this, writer);
+	}
+
+	void FromArchive(const ArchiveReader& reader)
+	{
+		Operations::Default::FromArchive(*this, reader);
 	}
 
 	/** Returns the length of this vector */

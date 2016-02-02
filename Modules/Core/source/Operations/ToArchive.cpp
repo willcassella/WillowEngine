@@ -2,10 +2,7 @@
 
 #include "../../include/Core/Operations/ToArchive.h"
 
-//////////////////////////
-///   Implementation   ///
-
-namespace Implementation
+namespace Operations
 {
 	///////////////////////////
 	///   Primitive Types   ///

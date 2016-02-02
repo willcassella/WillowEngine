@@ -65,15 +65,6 @@ public:
 	/** Formats the state of this Object as a String. */
 	virtual String ToString() const;
 
-	/** Sets the state of this Object from the given String. */
-	virtual String FromString(const String& string);
-
-	/** Serializes the state of this Object to the given archive. */
-	virtual void ToArchive(ArchiveWriter& writer) const;
-
-	/** Deserializes the state of this Object from the given archive. */
-	virtual void FromArchive(const ArchiveReader& reader);
-
 	/////////////////////
 	///   Operators   ///
 public:

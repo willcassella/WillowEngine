@@ -60,13 +60,13 @@ public:
 	/** Sets the value of this node as the given String value. */
 	virtual void SetValue(const String& value) = 0;
 
-	/** Pushes a new node with the given name into this node, and runs the given handler on that node. */
-	virtual void PushHandler(FunctionView<void, ArchiveWriter&> func, const String& name) = 0;
+	/** Adds a new node with the given name as a child of this node, and runs the given function on that node. */
+	virtual void AddChild(const String& name, FunctionView<void, ArchiveWriter&> function) = 0;
 
-	/** Pushes a new node with the given name into this Archive, and sets its value as the given value. */
+	/** Pushes a new node with the given name into this Archive, and serializes the given value to that node. */
 	template <typename T>
-	void PushValue(const T& value, const String& name)
+	void PushValue(const String& name, const T& value)
 	{
-		this->PushHandler([&value](ArchiveWriter& writer) { ::ToArchive(value, writer); }, name);
+		this->AddChild(name, [&value](auto& writer) { ::ToArchive(value, writer); });
 	}
 };

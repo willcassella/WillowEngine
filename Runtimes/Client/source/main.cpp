@@ -5,6 +5,7 @@
 #include <Core/Math/Vec2.h>
 #include <GLRender/GLRenderer.h>
 #include <ExampleGame/FPSCharacter.h>
+#include <Resource/Archives/XMLArchive.h>
 
 //Define context parameters
 int32 window_width = 1280;
@@ -51,6 +52,23 @@ int main(int32 /*argc*/, char** /*argv*/)
 	Application::Initialize();
 
 	Console::WriteLine("Initializing subsystems...");
+
+	// TEST OUT SERIALIZATION
+
+	Table<GameObject::ID, Vec4> nameTable;
+	nameTable[1] = Vec4(1, 2, 3, 4);
+	nameTable[2] = Vec4(6, 9, 2, 5);
+	nameTable[3] = Vec4(1, 2, 3, 4);
+
+	auto time = glfwGetTime();
+	XMLArchive archive;
+	archive.Serialize(nameTable);
+	archive.Save("table.xml");
+	//archive.Load("table.xml");
+	//archive.Deserialize(nameTable);
+	auto end = glfwGetTime();
+
+	Console::WriteLine("Serialized table in @ milliseconds", end - time);
 
 	// Initialize GLFW and get a window
 	GLFWwindow* window = InitGLFW();

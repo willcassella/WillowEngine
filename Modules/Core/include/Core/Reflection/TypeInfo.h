@@ -3,6 +3,7 @@
 
 #include "../Object.h"
 #include "../Containers/String.h"
+#include "../Operations/FailableOperation.h"
 #include "../Operations/TypeOps.h"
 #include "../Operations/ToString.h"
 #include "../Operations/FromString.h"
@@ -182,6 +183,30 @@ public:
 		return this->GetMoveAssignmentOperator() != nullptr;
 	}
 
+	/** Returns whether this type supports the 'ToString' operation. */
+	FORCEINLINE bool HasToStringImplementation() const
+	{
+		return this->GetToStringImplementation() != nullptr;
+	}
+
+	/** Returns whether this type supports the 'FromString' operation. */
+	FORCEINLINE bool HasFromStringImplementation() const
+	{
+		return this->GetFromStringImplementation() != nullptr;
+	}
+
+	/** Returns whether this type supports the 'ToArchive' operation. */
+	FORCEINLINE bool HasToArchiveImplementation() const
+	{
+		return this->GetToArchiveImplementation() != nullptr;
+	}
+
+	/** Returns whether this type supports the 'FromArchive' operation. */
+	FORCEINLINE bool HasFromArchiveImplementation() const
+	{
+		return this->GetFromArchiveImplementation() != nullptr;
+	}
+
 	/** Returns the constructor for this type.
 	* NOTE: Returns 'null' if this type is not constructible. */
 	FORCEINLINE Constructor GetDefaultConstructor() const
@@ -319,17 +344,6 @@ private:
 	} _data;
 };
 
-/** This type soley exists for types that aren't default-constructible, but still wish to be constructible via reflection.
-* Just implement a constructor that accepts an object of this type, and it may be serialized.
-* Think of it like this:
-* - A constructor configures and initializes the object all at once.
-* - A constructor accepting 'DynamicInitializer' indicates that the object will be configured and initialized post-construction.
-* Note that this means that you shouldn't invoke the 'DynamicInitializer' constructor directly, unless you know what you're doing. */
-struct DynamicInitializer final
-{
-	// Nothing here
-};
-
 /** Generic TypeInfoBuilder for TypeInfo */
 template <typename T>
 struct TypeInfoBuilder < T, TypeInfo >
@@ -349,81 +363,118 @@ public:
 		_data.rawName = name;
 
 		// If the type is default-constructible
-		if (Operations::DefaultConstruct<T>::Supported)
+		using DefaultConstructT = Operations::DefaultConstruct<T>;
+		if (DefaultConstructT::Supported)
 		{
-			_data.defaultConstructor = Operations::DefaultConstruct<T>::Function;
+			_data.defaultConstructor = [](byte* location)
+			{
+				FailableOperation<DefaultConstructT>(location);
+			};
 		}
 
 		// If the type is constructible via a dynamic initializer
-		if (Operations::Construct<T, DynamicInitializer>::Supported)
+		using DynamicInitializeT = Operations::DynamicInitialize<T>;
+		if (DynamicInitializeT::Supported)
 		{
 			_data.dynamicConstructor = [](byte* location) -> void
 			{
-				Operations::Construct<T, DynamicInitializer>::Function(location, DynamicInitializer{});
+				FailableOperation<DynamicInitializeT>(location, DynamicInitializer());
 			};
 		}
 
 		// If the type is copy-constructible
-		if (Operations::CopyConstruct<T>::Supported)
+		using CopyConstructT = Operations::CopyConstruct<T>;
+		if (CopyConstructT::Supported)
 		{
 			_data.copyConstructor = [](byte* location, const void* copy) -> void
 			{
-				Operations::CopyConstruct<T>::Function(location, *static_cast<const T*>(copy));
+				FailableOperation<CopyConstructT>(location, *static_cast<const T*>(copy));
 			};
 		}
 
 		// If the type is move-constructible
-		if (Operations::MoveConstruct<T>::Supported)
+		using MoveConstructT = Operations::MoveConstruct<T>;
+		if (MoveConstructT::Supported)
 		{
 			_data.moveConstructor = [](byte* location, void* move) -> void
 			{
-				Operations::MoveConstruct<T>::Function(location, std::move(*static_cast<T*>(move)));
+				FailableOperation<MoveConstructT>(location, std::move(*static_cast<T*>(move)));
 			};
 		}
 
 		// If the type is destructible
-		if (Operations::Destroy<T>::Supported)
+		using DestroyT = Operations::Destroy<T>;
+		if (DestroyT::Supported)
 		{
 			_data.destructor = [](void* value) -> void
 			{
-				Operations::Destroy<T>::Function(*static_cast<T*>(value));
+				FailableOperation<DestroyT>(*static_cast<T*>(value));
 			};
 		}
 
 		// If the type is copy-assignable
-		if (Operations::CopyAssign<T>::Supported)
+		using CopyAssignT = Operations::CopyAssign<T>;
+		if (CopyAssignT::Supported)
 		{
 			_data.copyAssignmentOperator = [](void* lhs, const void* rhs) -> void
 			{
-				Operations::CopyAssign<T>::Function(*static_cast<T*>(lhs), *static_cast<const T*>(rhs));
+				FailableOperation<CopyAssignT>(*static_cast<T*>(lhs), *static_cast<const T*>(rhs));
 			};
 		}
 
 		// If the type is move-assignable
-		if (Operations::MoveAssign<T>::Supported)
+		using MoveAssignT = Operations::MoveAssign<T>;
+		if (MoveAssignT::Supported)
 		{
 			_data.moveAssignmentOperator = [](void* lhs, void* rhs) -> void
 			{
-				Operations::MoveAssign<T>::Function(*static_cast<T*>(lhs), std::move(*static_cast<T*>(rhs)));
+				FailableOperation<MoveAssignT>(*static_cast<T*>(lhs), std::move(*static_cast<T*>(rhs)));
 			};
 		}
 
-		_data.toStringImplementation = [](const void* value) -> String
+		// If the type supports 'ToString'
+		using ToStringT = Operations::ToString<T>;
+		if (ToStringT::Supported)
 		{
-			return Implementation::ToString<T>::Function(*static_cast<const T*>(value));
-		};
-		_data.fromStringImplementation = [](void* value, const String& string) -> String
+			_data.toStringImplementation = [](const void* value) -> String
+			{
+				String out;
+				FailableOperation<ToStringT>(out, *static_cast<const T*>(value));
+				return out;
+			};
+		}
+
+		// If the type supports 'FromString'
+		using FromStringT = Operations::FromString<T>;
+		if (FromStringT::Supported)
 		{
-			return Implementation::FromString<T>::Function(*static_cast<T*>(value), string);
-		};
-		_data.toArchiveImplementation = [](const void* value, ArchiveWriter& writer) -> void
+			_data.fromStringImplementation = [](void* value, const String& string) -> String
+			{
+				String out;
+				FailableOperation<FromStringT>(out, *static_cast<T*>(value), string);
+				return out;
+			};
+		}
+
+		// If the type supports 'ToArchive'
+		using ToArchiveT = Operations::ToArchive<T>;
+		if (ToArchiveT::Supported)
 		{
-			Implementation::ToArchive<T>::Function(*static_cast<const T*>(value), writer);
-		};
-		_data.fromArchiveImplementation = [](void* value, const ArchiveReader& reader) -> void
+			_data.toArchiveImplementation = [](const void* value, ArchiveWriter& writer) -> void
+			{
+				FailableOperation<ToArchiveT>(*static_cast<const T*>(value), writer);
+			};
+		}
+
+		// If the type supports 'FromArchive'
+		using FromArchiveT = Operations::FromArchive<T>;
+		if (FromArchiveT::Supported)
 		{
-			Implementation::FromArchive<T>::Function(*static_cast<T*>(value), reader);
-		};
+			_data.fromArchiveImplementation = [](void* value, const ArchiveReader& reader) -> void
+			{
+				FailableOperation<FromArchiveT>(*static_cast<T*>(value), reader);
+			};
+		}
 
 		_data.size = sizeof(T);
 		_data.isCompound = std::is_class<T>::value;
@@ -450,10 +501,7 @@ private:
 	mutable TypeInfo::Data _data;
 };
 
-//////////////////////////
-///   Implementation   ///
-
-namespace Implementation
+namespace Operations
 {
 	namespace Default
 	{
@@ -462,13 +510,6 @@ namespace Implementation
 		FORCEINLINE String ToString(const T& value)
 		{
 			return ::TypeOf(value).GetName();
-		}
-
-		/** Default implementation of 'FromString', does nothing. */
-		template <typename T>
-		FORCEINLINE String FromString(T& /*value*/, const String& string)
-		{
-			return string;
 		}
 	}
 }

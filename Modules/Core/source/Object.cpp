@@ -23,20 +23,5 @@ Object::~Object()
 
 String Object::ToString() const
 {
-	return Implementation::Default::ToString(*this);
-}
-
-String Object::FromString(const String& string)
-{
-	return Implementation::Default::FromString(*this, string);
-}
-
-void Object::ToArchive(ArchiveWriter& writer) const
-{
-	Implementation::Default::ToArchive(*this, writer);
-}
-
-void Object::FromArchive(const ArchiveReader& reader)
-{
-	Implementation::Default::FromArchive(*this, reader);
+	return Operations::Default::ToString(*this);
 }

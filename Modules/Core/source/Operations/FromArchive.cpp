@@ -2,10 +2,7 @@
 
 #include "../../include/Core/Operations/FromArchive.h"
 
-//////////////////////////
-///   Implementation   ///
-
-namespace Implementation
+namespace Operations
 {
 	///////////////////////////
 	///   Primitive Types   ///

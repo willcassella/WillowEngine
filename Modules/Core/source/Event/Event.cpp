@@ -22,3 +22,8 @@ Event::Event(String name)
 {
 	// All done
 }
+
+Event::Event(DynamicInitializer)
+{
+	// Do nothing
+}

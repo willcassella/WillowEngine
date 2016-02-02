@@ -21,6 +21,8 @@ public:
 	/** Constructs an Event that has no value. */
 	Event(String name);
 
+	/** Serialization constructor. */
+	Event(DynamicInitializer);
 	Event(const Event& copy) = delete;
 	Event(Event&& move) = default;
 

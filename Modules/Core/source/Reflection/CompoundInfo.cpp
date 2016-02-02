@@ -19,9 +19,9 @@ Array<PropertyInfo> CompoundInfo::GetProperties() const
 	return _data.Properties;
 }
 
-void CompoundInfo::EnumerateProperties(EnumeratorView<const PropertyInfo&> enumerator) const
+void CompoundInfo::EnumerateProperties(const EnumeratorView<const PropertyInfo&>& enumerator) const
 {
-	enumerator(_data.Properties);
+	enumerator.Enumerate(_data.Properties);
 }
 
 const PropertyInfo* CompoundInfo::FindProperty(const String& name) const
@@ -42,9 +42,9 @@ Array<DataInfo> CompoundInfo::GetData() const
 	return _data.DataMembers;
 }
 
-void CompoundInfo::EnumerateData(EnumeratorView<const DataInfo&> enumerator) const
+void CompoundInfo::EnumerateData(const EnumeratorView<const DataInfo&>& enumerator) const
 {
-	enumerator(_data.DataMembers);
+	enumerator.Enumerate(_data.DataMembers);
 }
 
 const DataInfo* CompoundInfo::FindData(const String& name) const

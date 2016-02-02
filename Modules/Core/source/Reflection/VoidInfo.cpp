@@ -33,7 +33,7 @@ TypeInfoBuilder<void, TypeInfo>::TypeInfoBuilder()
 
 bool VoidInfo::IsCastableTo(const TypeInfo& type) const
 {
-	return type == self;
+	return type == *this;
 }
 
 bool VoidInfo::IsStable() const

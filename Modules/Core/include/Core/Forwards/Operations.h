@@ -7,6 +7,16 @@
 #include "IO.h"
 #include "Containers.h"
 
+/////////////////
+///   Types   ///
+
+namespace Implementation
+{
+	/** These types are useful for overload resolution when using SFINAE. */
+	using Preferred = int;
+	using Fallback = char;
+}
+
 /////////////////////
 ///   Functions   ///
 
@@ -42,24 +52,13 @@ void ToArchive(const T& value, ArchiveWriter& writer);
 template <typename T>
 void FromArchive(T& value, const ArchiveReader& reader);
 
-//////////////////////////
-///   Implementation   ///
-
-namespace Implementation
+namespace Operations
 {
-	/** These types are useful for overload resolution when using SFINAE. */
-	using Preferred = int;
-	using Fallback = char;
-
 	namespace Default
 	{
 		/** Defined in 'Reflection/TypeInfo.h' */
 		template <typename T>
 		String ToString(const T& value);
-
-		/** Defined in 'Reflection/TypeInfo.h' */
-		template <typename T>
-		String FromString(T& value, const String& string);
 
 		/** Defined in 'Reflection/CompoundInfo.h' */
 		template <typename T>

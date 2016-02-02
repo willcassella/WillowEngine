@@ -68,6 +68,7 @@
     <ClInclude Include="include\Core\Object.h" />
     <ClInclude Include="include\Core\Operations\FromArchive.h" />
     <ClInclude Include="include\Core\Operations\ToArchive.h" />
+    <ClInclude Include="include\Core\Operations\FailableOperation.h" />
     <ClInclude Include="include\Core\Operations\TypeOps.h" />
     <ClInclude Include="include\Core\Operations\FromString.h" />
     <ClInclude Include="include\Core\Reflection\ClassInfo.h" />
