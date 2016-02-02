@@ -4,7 +4,7 @@
 #include "Vec3.h"
 #include "Angle.h"
 
-struct CORE_API Quat final
+struct CORE_API Quat final : SerializeableStruct<Quat>
 {
 	///////////////////////
 	///   Information   ///
@@ -54,16 +54,6 @@ public:
 	FORCEINLINE String ToString() const
 	{
 		return Format("<@, @, @, @>", X, Y, Z, W);
-	}
-
-	void ToArchive(ArchiveWriter& writer) const
-	{
-		Operations::Default::ToArchive(*this, writer);
-	}
-
-	void FromArchive(const ArchiveReader& reader)
-	{
-		Operations::Default::FromArchive(*this, reader);
 	}
 
 	/** Rotate this quaternion around an axis by a certain angle */

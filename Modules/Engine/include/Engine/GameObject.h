@@ -4,6 +4,7 @@
 #include <Core/Math/Vec3.h>
 #include <Core/Math/Quat.h>
 #include <Core/Math/Mat4.h>
+#include <Core/Misc/SerializeableObject.h>
 #include "config.h"
 #include "Forwards/Engine.h"
 
@@ -22,7 +23,7 @@ enum SetParentOffsetMode
 };
 
 /** Base for all "Objects" in the game (Entities, Components, Actors, etc). */
-class ENGINE_API GameObject : public Object
+class ENGINE_API GameObject : public Object, public SerializeableObject<GameObject>
 {
 	///////////////////////
 	///   Information   ///
@@ -61,10 +62,6 @@ public:
 	///////////////////
 	///   Methods   ///
 public:
-
-	virtual void ToArchive(ArchiveWriter& writer) const;
-
-	virtual void FromArchive(const ArchiveReader& reader);
 
 	/** Returns the ID of this GameObject. */
 	FORCEINLINE ID GetID() const
