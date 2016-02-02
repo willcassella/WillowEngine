@@ -26,6 +26,16 @@ BUILD_ENUM_REFLECTION(GameObject::State)
 ///////////////////
 ///   Methods   ///
 
+void GameObject::ToArchive(ArchiveWriter& writer) const
+{
+	Operations::Default::ToArchive(*this, writer);
+}
+
+void GameObject::FromArchive(const ArchiveReader& reader)
+{
+	Operations::Default::FromArchive(*this, reader);
+}
+
 void GameObject::Destroy()
 {
 	assert(this->GetState() >= State::Spawned);

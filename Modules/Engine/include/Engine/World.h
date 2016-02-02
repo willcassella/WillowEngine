@@ -38,6 +38,10 @@ public:
 	///   Methods   ///
 public:
 
+	void ToArchive(ArchiveWriter& writer) const;
+
+	void FromArchive(const ArchiveReader& reader);
+
 	/** Updates the state of this World by one time step. */
 	void Update();
 

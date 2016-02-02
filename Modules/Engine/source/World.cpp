@@ -36,6 +36,16 @@ World::~World()
 ///////////////////
 ///   Methods   ///
 
+void World::ToArchive(ArchiveWriter& writer) const
+{
+	Operations::Default::ToArchive(*this, writer);
+}
+
+void World::FromArchive(const ArchiveReader& reader)
+{
+	Operations::Default::FromArchive(*this, reader);
+}
+
 void World::Update()
 {
 	Events.DispatchEvent("Update", this->TimeDilation);

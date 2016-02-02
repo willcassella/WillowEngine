@@ -643,48 +643,49 @@ namespace Operations
 		template <typename T>
 		void ToArchive(const T& value, ArchiveWriter& writer)
 		{
-			if(std::is_class<T>::value)
-			{
-				// Type is compound, serialize its data
-				const auto& type = reinterpret_cast<const CompoundInfo&>(::TypeOf(value));
+			static_assert(std::is_class<T>::value, "You can only default 'ToArchive' for reflected classes.");
+			
+			const CompoundInfo& type = ::TypeOf(value);
 				
-				// Iterate through all data members
-				type.EnumerateData([&](const auto& dataInfo)
+			// Iterate through all data members
+			type.EnumerateData([&](const auto& dataInfo)
+			{
+				// If this data is not marked as transient
+				if (dataInfo.GetDataType().HasToArchiveImplementation() && !(dataInfo.GetFlags() & DF_Transient))
 				{
-					// If this data is not marked as transient
-					if (!(dataInfo.GetFlags() & DF_Transient))
-					{
-						// Add a node for the data member, naming it after the data member
-						writer.PushValue(dataInfo.GetName(), dataInfo.GetFromOwner(value));
-					}
-				});
-			}
+					// Add a node for the data member, naming it after the data member
+					writer.PushValue(dataInfo.GetName(), dataInfo.GetFromOwner(value));
+				}
+			});
 		}
 
 		/** Default implementation of 'FromArchive'. */
 		template <typename T>
 		void FromArchive(T& value, const ArchiveReader& reader)
 		{
-			if (std::is_class<T>::value)
-			{
-				const auto& type = reinterpret_cast<const CompoundInfo&>(::TypeOf(value));
+			static_assert(std::is_class<T>::value, "You can only default 'FromArchive' for reflected classes.");
+			static_assert(!std::is_const<T>::value, "You can't deserialize const objects.");
 
-				// Iterate through all child archives
-				reader.EnumerateChildren([&](const ArchiveReader& child)
+			const CompoundInfo& type = ::TypeOf(value);
+
+			// Iterate through all child archives
+			reader.EnumerateChildren([&](const ArchiveReader& child)
+			{
+				// Try to find the data that this child archive references
+				if (auto data = type.FindData(child.GetName()))
 				{
-					// Try to find the data that this child archive references
-					if (auto data = type.FindData(child.GetName()))
+					if (data->GetDataType().HasFromArchiveImplementation())
 					{
 						// Deserialize the data
 						data->GetFromOwner(value).FromArchive(child);
 					}
-					else
-					{
-						// This property does not exist, give a warning
-						Console::Warning("The data member '@' does not exist on the type '@'.", child.GetName(), type);
-					}
-				});
-			}
+				}
+				else
+				{
+					// This property does not exist, give a warning
+					Console::Warning("The data member '@' does not exist on the type '@'.", child.GetName(), type);
+				}
+			});
 		}
 	}
 }

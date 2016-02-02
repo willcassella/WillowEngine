@@ -62,6 +62,10 @@ public:
 	///   Methods   ///
 public:
 
+	virtual void ToArchive(ArchiveWriter& writer) const;
+
+	virtual void FromArchive(const ArchiveReader& reader);
+
 	/** Returns the ID of this GameObject. */
 	FORCEINLINE ID GetID() const
 	{
