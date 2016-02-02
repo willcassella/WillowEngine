@@ -1,6 +1,8 @@
 bin/
 build/
 packages/
+.idea/workspace.xml
+.idea/tasks.xml
 *.opensdf
 *.opendb
 *.sdf

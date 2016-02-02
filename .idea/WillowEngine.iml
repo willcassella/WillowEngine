@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="CPP_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/Games/ExampleGame/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Games/ExampleGame/source/FPSCharacter.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Resource/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Resource/source/Asset.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Resource/source/Archive.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Resource/source/Resources/TextFile.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Resource/source/Resources/Image.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Resource/source/Resources/BinaryFile.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Resource/source/AssetManager.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Resource/source/Resource.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Resource/source/Archives/XMLArchive.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Resource/source/Path.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Object.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Application.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Misc/TimeStamp.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/IO/Console.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Memory/MemoryManager.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Memory/UniquePtr.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Memory/MemoryBlock.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Testing/Test.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Containers/DynamicBuffer.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Containers/String.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Math/Vec2.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Math/Vec4.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Math/Mat4.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Math/Quat.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Math/Vec3.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Operations/FromArchive.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Operations/FromString.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Operations/ToString.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Operations/ToArchive.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Event/EventManager.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Event/Event.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Event/EventHandler.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Reflection/InterfaceInfo.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Reflection/PointerInfo.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Reflection/EnumInfo.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Reflection/Reflection.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Reflection/PropertyInfo.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Reflection/Module.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Reflection/CompoundInfo.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Reflection/VoidInfo.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Reflection/PrimitiveInfo.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Reflection/DataInfo.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Reflection/StructInfo.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Reflection/ClassInfo.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Core/source/Reflection/TypeInfo.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Engine/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Engine/source/Assets/StaticMesh.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Engine/source/Assets/Shader.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Engine/source/Assets/Texture.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Engine/source/Assets/Material.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Engine/source/Components/CameraComponent.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Engine/source/Components/PhysicalComponent.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Engine/source/Components/CapsuleComponent.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Engine/source/Components/LightComponent.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Engine/source/Components/StaticMeshComponent.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Engine/source/World.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Engine/source/Component.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Engine/source/Transform.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Engine/source/GameObject.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Modules/Engine/source/Entity.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Tools/AssetConverter/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Tools/AssetConverter/source/AssetConverter.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Tools/AssetConverter/source/main.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Services/GLRender/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Services/GLRender/source/GLTexture.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Services/GLRender/source/GLStaticMesh.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Services/GLRender/source/GLMaterial.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Services/GLRender/source/GLRenderer.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Services/GLRender/source/GLShader.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Runtimes/Client/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Runtimes/Client/source/main.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Tests/CoreTest/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Tests/CoreTest/source/main.cpp" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/bin" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library name="Header Search Paths">
+        <CLASSES>
+          <root url="file:///usr/include" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/5/include-fixed" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/5/include" />
+          <root url="file:///usr/local/include" />
+          <root url="file://$MODULE_DIR$/Games/ExampleGame/include" />
+          <root url="file://$MODULE_DIR$/Modules/Resource/include" />
+          <root url="file://$MODULE_DIR$/Modules/Core/include" />
+          <root url="file://$MODULE_DIR$/Modules/Engine/include" />
+          <root url="file://$MODULE_DIR$/Services/GLRender/include" />
+        </CLASSES>
+        <SOURCES>
+          <root url="file:///usr/include" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/5/include-fixed" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/5/include" />
+          <root url="file:///usr/local/include" />
+          <root url="file://$MODULE_DIR$/Games/ExampleGame/include" />
+          <root url="file://$MODULE_DIR$/Modules/Resource/include" />
+          <root url="file://$MODULE_DIR$/Modules/Core/include" />
+          <root url="file://$MODULE_DIR$/Modules/Engine/include" />
+          <root url="file://$MODULE_DIR$/Services/GLRender/include" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+  </component>
+</module>
