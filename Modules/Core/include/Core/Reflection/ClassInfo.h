@@ -118,7 +118,7 @@ public:
 		// If this class adds new implemented interfaces
 		if (!std::is_same<InterfaceTypesOf<BaseTypeOf<ClassT>>, InterfaceTypesOf<ClassT>>::value)
 		{
-			AddInterfaces(InterfaceTypesOf<ClassT>{});
+			this->AddInterfaces(InterfaceTypesOf<ClassT>{});
 		}
 	}
 
@@ -140,7 +140,7 @@ private:
 		static_assert(std::is_same<TypeInfoTypeOf<InterfaceT>, InterfaceInfo>::value, "The type given to 'AddInterface' must be an interface.");
 
 		_data.Interfaces.Add(&TypeOf<InterfaceT>());
-		AddInterface(stde::type_sequence<MoreInterfaceT...>{});
+		this->AddInterfaces(stde::type_sequence<MoreInterfaceT...>{});
 	}
 
 	////////////////
