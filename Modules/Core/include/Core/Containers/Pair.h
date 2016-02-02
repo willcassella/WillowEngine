@@ -18,16 +18,16 @@ public:
 		// All done
 	}
 
-	template <typename RelA, WHERE(std::is_constructible<A, RelA>::value)>
-	Pair(RelA&& first)
-		: First(std::forward<RelA>(first)), Second()
+	template <typename UA>
+	Pair(UA&& first)
+		: First(std::forward<UA>(first)), Second()
 	{
 		// All done
 	}
 
-	template <typename RelA, typename RelB, WHERE(std::is_constructible<A, RelA>::value && std::is_constructible<B, RelB>::value)>
-	Pair(RelA&& first, RelB&& second)
-		: First(std::forward<RelA>(first)), Second(std::forward<RelB>(second))
+	template <typename UA, typename UB>
+	Pair(UA&& first, UB&& second)
+		: First(std::forward<UA>(first)), Second(std::forward<UB>(second))
 	{
 		// All done
 	}

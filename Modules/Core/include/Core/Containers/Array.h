@@ -4,6 +4,7 @@
 #include <new>
 #include <cassert>
 #include <utility>
+#include <algorithm>
 #include <initializer_list>
 #include "../STDE/TypeTraits.h"
 #include "../Operations/TypeOps.h"
@@ -64,7 +65,7 @@ public:
 		FORCEINLINE Iterator& operator++()
 		{
 			++_value;
-			return self;
+			return *this;
 		}
 		FORCEINLINE T& operator*()
 		{
@@ -102,7 +103,7 @@ public:
 		FORCEINLINE ConstIterator& operator++()
 		{
 			++_value;
-			return self;
+			return *this;
 		}
 		FORCEINLINE const T& operator*() const
 		{
@@ -145,7 +146,7 @@ public:
 	{
 		for (const auto& value : copy)
 		{
-			FastAdd(value);
+			this->FastAdd(value);
 		}
 	}
 
@@ -163,7 +164,7 @@ public:
 	{
 		for (uint32 i = 0; i < size; ++i)
 		{
-			FastAdd(cArray[i]);
+			this->FastAdd(cArray[i]);
 		}
 	}
 
@@ -174,7 +175,7 @@ public:
 	{
 		for (const auto& value : init)
 		{
-			FastAdd(value);
+			this->FastAdd(value);
 		}
 	}
 
@@ -185,7 +186,7 @@ public:
 	{
 		for (const auto& value : copy)
 		{
-			FastAdd(value);
+			this->FastAdd(value);
 		}
 	}
 
@@ -200,7 +201,7 @@ public:
 	/** Destroys an Array. */
 	~Array()
 	{
-		Clear();
+		this->Clear();
 	}
 
 	///////////////////
@@ -222,7 +223,7 @@ public:
 	/** Returns whether this Array is empty. */
 	FORCEINLINE bool IsEmpty() const
 	{
-		return Size() == 0;
+		return this->Size() == 0;
 	}
 
 	/** Returns a pointer to the start of this Array. */
@@ -240,7 +241,7 @@ public:
 	/** Returns whether a copy of the given value exists in this Array. */
 	bool Contains(const T& value)
 	{
-		for (const auto& element : self)
+		for (const auto& element : *this)
 		{
 			if (element == value)
 			{
@@ -252,53 +253,53 @@ public:
 	}
 
 	/** Appends a new element to the end of this Array, returning the new element's index. */
-	template <typename RelatedT, WHERE(std::is_constructible<T, RelatedT>::value)>
-	uint32 Add(RelatedT&& value)
+	template <typename UT>
+	uint32 Add(UT&& value)
 	{
-		if (Size() >= Capacity())
+		if (this->Size() >= this->Capacity())
 		{
-			if (IsEmpty())
+			if (this->IsEmpty())
 			{
-				Resize(1);
+				this->Resize(1);
 			}
 			else
 			{
-				Resize(Capacity() * 2);
+				this->Resize(this->Capacity() * 2);
 			}
 		}
 
-		return FastAdd(std::forward<RelatedT>(value));
+		return this->FastAdd(std::forward<UT>(value));
 	}
 
 	/** Insert the given value at the given index, returning the index of the new element
 	* (which may be different from the given index). */
-	template <typename RelatedT, WHERE(std::is_constructible<T, RelatedT>::value)>
-	uint32 Insert(RelatedT&& value, uint32 index)
+	template <typename UT>
+	uint32 Insert(UT&& value, uint32 index)
 	{
 		// If our insert index is beyond the size of the array
-		if (index > Size())
+		if (index > this->Size())
 		{
 			// Add it to the end
-			return Add(std::forward<RelatedT>(value));
+			return this->Add(std::forward<UT>(value));
 		}
 
 		// If the array is already full
-		if (Size() >= Capacity())
+		if (this->Size() >= this->Capacity())
 		{
-			Resize(Capacity() * 2);
+			Resize(this->Capacity() * 2);
 		}
 
 		// Move element on the end up an index
-		new(CArray() + Size()) T(std::move(FastGet(Size() - 1)));
+		new(this->CArray() + this->Size()) T(std::move(this->FastGet(this->Size() - 1)));
 
 		// Move all proceeding elements up an index
-		for (uint32 i = Size() - 1; i > index; --i)
+		for (uint32 i = this->Size() - 1; i > index; --i)
 		{
-			FastGet(i) = std::move(FastGet(i - 1));
+			this->FastGet(i) = std::move(this->FastGet(i - 1));
 		}
 
 		// Insert the value
-		FastGet(index) = std::forward<RelatedT>(value);
+		this->FastGet(index) = std::move(value);
 		++_numElements;
 		return index;
 	}
@@ -307,44 +308,42 @@ public:
 	* WARNING: Make sure the index exists in this Array. */
 	FORCEINLINE T& Get(uint32 index)
 	{
-		assert(index < Size());
-		return FastGet(index);
+		assert(index < this->Size());
+		return this->FastGet(index);
 	}
 
 	/** Returns an immutable reference to the element at the given index.
 	* WARNING: Make sure the index exists in this Array. */
 	FORCEINLINE const T& Get(uint32 index) const
 	{
-		assert(index < Size());
-		return FastGet(index);
+		assert(index < this->Size());
+		return this->FastGet(index);
 	}
 
 	/** Returns a reference to the first element in this Array.
 	* WARNING: Check 'IsEmpty()' before calling this. */
 	FORCEINLINE T& First()
 	{
-		assert(Size() > 0);
-		return FastGet(0);
+		return this->Get(0);
 	}
 
 	/** Returns an immutable reference to the first element in this Array.
 	* WARNING: Check 'IsEmpty()' before calling this. */
 	FORCEINLINE const T& First() const
 	{
-		assert(Size() > 0);
-		return FastGet(0);
+		return this->Get(0);
 	}
 
 	/** Returns (by value) the first element in this Array, or a default-constructed object if this Array is empty. */
 	FORCEINLINE T FirstOrDefault() const
 	{
-		if (Size() == 0)
+		if (this->IsEmpty())
 		{
 			return T();
 		}
 		else
 		{
-			return First();
+			return this->First();
 		}
 	}
 
@@ -352,51 +351,46 @@ public:
 	* WARNING: Check 'IsEmpty()' before calling this. */
 	FORCEINLINE T& Last()
 	{
-		assert(Size() > 0);
-		return FastGet(Size() - 1);
+		return this->Get(this->Size() - 1);
 	}
 
 	/** Returns an immutable reference to the last element in this Array.
 	* WARNING: Check 'IsEmpty()' before calling this. */
 	FORCEINLINE const T& Last() const
 	{
-		assert(Size() > 0);
-		return FastGet(Size() - 1);
+		return this->Get(this->Size() - 1);
 	}
 
 	/** Returns (by value) the last element in this Array, or a default-constructed object if this Array is empty. */
 	FORCEINLINE T LastOrDefault() const
 	{
-		if (Size() == 0)
+		if (this->IsEmpty())
 		{
 			return T();
 		}
 		else
 		{
-			return Last();
+			return this->Last();
 		}
 	}
 		
 	/** Returns a portion of this Array from the given index to the end. */
 	FORCEINLINE Array Slice(uint32 start) const
 	{
-		return Slice(start, Size());
+		return this->Slice(start, this->Size());
 	}
 
 	/** Returns a portion of this Array, starting at the 'start' index and ending at the 'end' index. */
 	Array Slice(uint32 start, uint32 end) const
 	{
-		if (start >= end || start > Size())
+		end = std::min(end, this->Size());
+
+		if (start >= end)
 		{
 			return Array();
 		}
 
-		if (end > Size())
-		{
-			end = Size();
-		}
-
-		return Array(CArray() + start, end - start);
+		return Array(this->CArray() + start, end - start);
 	}
 
 	/** Returns the indices at which a copy of the given value occurs in this Array. */
@@ -404,9 +398,9 @@ public:
 	{
 		Array<uint32> occurrences;
 
-		for (uint32 i = 0; i < Size(); ++i)
+		for (uint32 i = 0; i < this->Size(); ++i)
 		{
-			if (value == FastGet(i))
+			if (value == this->FastGet(i))
 			{
 				occurrences.Add(i);
 			}
@@ -419,22 +413,22 @@ public:
 	* NOTE: This may offset the index of every proceeding element by -1. */
 	void DeleteAt(uint32 index)
 	{
-		for (uint32 i = index; i < Size() - 1; ++i)
+		for (uint32 i = index; i < this->Size() - 1; ++i)
 		{
-			FastGet(i) = std::move(FastGet(i + 1));
+			this->FastGet(i) = std::move(this->FastGet(i + 1));
 		}
-		FastGet(--_numElements).~T();
+		this->FastGet(--_numElements).~T();
 	}
 
 	/** Deletes the first occurrence of the given value in this Array.
 	* NOTE: This may offset the index of every proceeding element by -1. */
 	void DeleteFirst(const T& value)
 	{
-		for (uint32 i = 0; i < Size(); ++i)
+		for (uint32 i = 0; i < this->Size(); ++i)
 		{
-			if (value == FastGet(i))
+			if (value == this->FastGet(i))
 			{
-				DeleteAt(i);
+				this->DeleteAt(i);
 				return;
 			}
 		}
@@ -444,11 +438,11 @@ public:
 	* NOTE: This may offset the index of every proceeding element by -1. */
 	void DeleteLast(const T& value)
 	{
-		for (uint32 i = Size(); i > 0; --i)
+		for (uint32 i = this->Size(); i > 0; --i)
 		{
-			if (value == FastGet(i - 1))
+			if (value == this->FastGet(i - 1))
 			{
-				DeleteAt(i - 1);
+				this->DeleteAt(i - 1);
 				return;
 			}
 		}
@@ -460,16 +454,16 @@ public:
 	{
 		uint32 x = 0;
 
-		for (uint32 i = 0; i < Size(); ++i)
+		for (uint32 i = 0; i < this->Size(); ++i)
 		{
 			// If we've found a match
-			if (value == FastGet(i))
+			if (value == this->FastGet(i))
 			{
 				continue;
 			}
 
 			// Shift next element down
-			FastGet(x++) = std::move(FastGet(i));
+			this->FastGet(x++) = std::move(this->FastGet(i));
 		}
 
 		// Adjust size
@@ -479,7 +473,7 @@ public:
 		// Destroy remaining elements
 		for (; x < oldSize; ++x)
 		{
-			FastGet(x).~T();
+			this->FastGet(x).~T();
 		}
 	}
 
@@ -488,24 +482,24 @@ public:
 	* NOTE: This offsets the index of every proceeding element by -1. */
 	T RemoveAt(uint32 index)
 	{
-		T value = std::move(Get(index));
-		DeleteAt(index);
+		T value = std::move(this->Get(index));
+		this->DeleteAt(index);
 		return value;
 	}
 
 	/** Ensures that 'Capacity' is at least as big as the value specified in 'size'. */
 	void Reserve(uint32 size)
 	{
-		if (Capacity() < size)
+		if (this->Capacity() < size)
 		{
-			Resize(size);
+			this->Resize(size);
 		}
 	}
 
 	/** Ensures that 'Capacity' is at least as big as 'Size' + 'size'. */
 	void ReserveAdditional(uint32 size)
 	{
-		Resize(Size() + size);
+		this->Resize(this->Size() + size);
 	}
 
 	/** Reallocates the internal array with more (or less) space, moving existing elements into the new array.
@@ -515,10 +509,10 @@ public:
 		auto newBuff = DynamicBuffer(size * sizeof(T));
 
 		uint32 i;
-		for (i = 0; i < size && i < Size(); ++i)
+		for (i = 0; i < size && i < this->Size(); ++i)
 		{
 			// Move all elements below 'size' into new array
-			T& value = FastGet(i);
+			T& value = this->FastGet(i);
 			new(newBuff.GetValueAs<T>() + i) T(std::move(value));
 			value.~T();
 		}
@@ -530,15 +524,15 @@ public:
 	/** Frees unused space in internal array, so that 'Capacity() == Size()'. */
 	FORCEINLINE void ShrinkWrap()
 	{
-		Resize(Size());
+		this->Resize(this->Size());
 	}
 
 	/** Quickly deletes all values from this Array, preserving size. */
 	FORCEINLINE void Clear()
 	{
-		for (uint32 i = 0; i < Size(); ++i)
+		for (uint32 i = 0; i < this->Size(); ++i)
 		{
-			FastGet(i).~T();
+			this->FastGet(i).~T();
 		}
 		_numElements = 0;
 	}
@@ -546,26 +540,26 @@ public:
 	/** Deletes all values from this Array, resetting size. */
 	void Reset(uint32 size)
 	{
-		Clear();
+		this->Clear();
 		_value.Reset(size);
 	}
 
 	/* Iteration methods */
 	FORCEINLINE Iterator begin()
 	{
-		return Iterator(CArray());
+		return Iterator(this->CArray());
 	}
 	FORCEINLINE ConstIterator begin() const
 	{
-		return ConstIterator(CArray());
+		return ConstIterator(this->CArray());
 	}
 	FORCEINLINE Iterator end()
 	{
-		return Iterator(&FastGet(Size()));
+		return Iterator(&this->FastGet(this->Size()));
 	}
 	FORCEINLINE ConstIterator end() const
 	{
-		return ConstIterator(&FastGet(Size()));
+		return ConstIterator(&this->FastGet(this->Size()));
 	}
 
 private:
@@ -574,23 +568,22 @@ private:
 	* WARNING: Only use this if you KNOW (algorithmically) that the index exists in this Array. */
 	FORCEINLINE T& FastGet(uint32 index)
 	{
-		return CArray()[index];
+		return this->CArray()[index];
 	}
 
 	/** Returns an immutable reference to the element at the given index.
 	* WARNING: Only use this if you KNOW (algorithmically) that the index exists in this Array. */
 	FORCEINLINE const T& FastGet(uint32 index) const
 	{
-		return CArray()[index];
+		return this->CArray()[index];
 	}
 
 	/** Adds an element to the end of this Array without checking for available space.
 	* Returns the index of the new element.
 	* WARNING: Only use this if you KNOW (algorithmically) that there is enough space. */
-	template <typename RelatedT, WHERE(std::is_constructible<T, RelatedT>::value)>
-	FORCEINLINE uint32 FastAdd(RelatedT&& value)
+	FORCEINLINE uint32 FastAdd(T value)
 	{
-		new(CArray() + Size()) T(std::forward<RelatedT>(value));
+		new(this->CArray() + this->Size()) T(std::move(value));
 		return _numElements++;
 	}
 
@@ -600,11 +593,11 @@ public:
 
 	FORCEINLINE T& operator[](uint32 index)
 	{
-		return Get(index);
+		return this->Get(index);
 	}
 	FORCEINLINE const T& operator[](uint32 index) const
 	{
-		return Get(index);
+		return this->Get(index);
 	}
 	friend FORCEINLINE bool operator!=(const Array& lhs, const Array& rhs)
 	{
@@ -633,15 +626,15 @@ public:
 	{
 		if (this != &copy)
 		{
-			Reset(copy.Size());
+			this->Reset(copy.Size());
 
 			for (const auto& value : copy)
 			{
-				FastAdd(value);
+				this->FastAdd(value);
 			}
 		}
 
-		return self;
+		return *this;
 	}
 
 	/** Moves an existing Array. */
@@ -649,7 +642,7 @@ public:
 	{
 		if (this != &move)
 		{
-			Reset(0);
+			this->Reset(0);
 			
 			_value = std::move(move._value);
 			_numElements = move._numElements;
@@ -657,21 +650,21 @@ public:
 			move._numElements = 0;
 		}
 
-		return self;
+		return *this;
 	}
 
 	/** Copies an initializer-list of related types onto this Array. */
 	template <typename RelatedT, WHERE(std::is_constructible<T, const RelatedT&>::value)>
 	Array& operator=(const std::initializer_list<RelatedT>& init)
 	{
-		Reset(init.size());
+		this->Reset(init.size());
 
 		for (const auto& value : init)
 		{
-			FastAdd(value);
+			this->FastAdd(value);
 		}
 
-		return self;
+		return *this;
 	}
 	
 	/** Copies an Array of related types. */
@@ -680,15 +673,15 @@ public:
 	{
 		if (this != &copy)
 		{
-			Reset(copy.Size());
+			this->Reset(copy.Size());
 
 			for (const auto& value : copy)
 			{
-				FastAdd(value);
+				this->FastAdd(value);
 			}
 		}
 
-		return self;
+		return *this;
 	}
 
 	/** Moves an Array of compatible types. */
@@ -697,14 +690,14 @@ public:
 	{
 		if (this != &move)
 		{
-			Reset(0);
+			this->Reset(0);
 			_value = std::move(move._value);
 			_numElements = move._numElements;
 
 			move._numElements = 0;
 		}
 
-		return self;
+		return *this;
 	}
 
 	/** Produces an Array of the concatenation of an Array and an initializer-list. */
