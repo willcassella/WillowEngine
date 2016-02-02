@@ -63,6 +63,8 @@
     <ClInclude Include="include\Core\Memory\PointerBase.h" />
     <ClInclude Include="include\Core\Memory\Ptr.h" />
     <ClInclude Include="include\Core\Memory\UniquePtr.h" />
+    <ClInclude Include="include\Core\Misc\SerializeableObject.h" />
+    <ClInclude Include="include\Core\Misc\SerializeableStruct.h" />
     <ClInclude Include="include\Core\Misc\Signature.h" />
     <ClInclude Include="include\Core\Misc\TimeStamp.h" />
     <ClInclude Include="include\Core\Object.h" />

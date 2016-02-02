@@ -294,6 +294,12 @@
     <ClInclude Include="include\Core\Operations\FailableOperation.h">
       <Filter>include\Operations</Filter>
     </ClInclude>
+    <ClInclude Include="include\Core\Misc\SerializeableObject.h">
+      <Filter>include\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Misc\SerializeableStruct.h">
+      <Filter>include\Misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Object.cpp">

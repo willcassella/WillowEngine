@@ -2,6 +2,7 @@
 #pragma once
 
 #include <memory>
+#include <Core/Misc/SerializeableObject.h>
 #include <Core/Containers/Queue.h>
 #include "Forwards/Physics.h"
 #include "Component.h"
@@ -10,7 +11,7 @@
 ///   Types   ///
 
 /* World class contains all game objects and world information */
-class ENGINE_API World final : public Object
+class ENGINE_API World final : public Object, public SerializeableObject<World>
 {
 	///////////////////////
 	///   Information   ///
@@ -37,10 +38,6 @@ public:
 	///////////////////
 	///   Methods   ///
 public:
-
-	void ToArchive(ArchiveWriter& writer) const;
-
-	void FromArchive(const ArchiveReader& reader);
 
 	/** Updates the state of this World by one time step. */
 	void Update();

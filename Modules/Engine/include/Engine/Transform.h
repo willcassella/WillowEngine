@@ -4,7 +4,7 @@
 #include <Core/Math/Mat4.h>
 #include "config.h"
 
-struct ENGINE_API Transform final
+struct ENGINE_API Transform final : SerializeableStruct<Transform>
 {
 	///////////////////////
 	///   Information   ///
@@ -15,16 +15,6 @@ public:
 		///////////////////
 		///   Methods   ///
 public:
-
-	void ToArchive(ArchiveWriter& writer) const
-	{
-		Operations::Default::ToArchive(*this, writer);
-	}
-
-	void FromArchive(const ArchiveReader& reader)
-	{
-		Operations::Default::FromArchive(*this, reader);
-	}
 
 	/** Returns the transformation matrix for this Transform. */
 	Mat4 GetMatrix() const;
