@@ -5,7 +5,7 @@
 #include <type_traits>
 #include "../Utility/View.h"
 
-enum class EnumeratorControl
+enum class EnumeratorResult : byte
 {
 	/** Continues the enumeration. */
 	Continue,
@@ -23,22 +23,17 @@ public:
 
 	template <typename F>
 	EnumeratorView(F&& func)
-		: _hasBroken(false)
 	{
+		static_assert(std::is_same<EnumeratorResult, std::result_of_t<F(T)>>::value || std::is_void<std::result_of_t<F(T)>>::value,
+			"Enumerator functions must return either 'void' or 'EnumeratorResult'");
+
 		Setup(func);
+		_lastResult = EnumeratorResult::Continue;
 	}
 
-    EnumeratorView(EnumeratorView&& move) = default;
-	EnumeratorView(EnumeratorView& copy)
-        : View(copy), _hasBroken(copy._hasBroken), _func(copy._func), _invoker(copy._invoker)
-    {
-        // TODO: Default this once MSVC supports multiple defaulted copy-constructors (Clang and GCC already do)
-    }
-	EnumeratorView(const EnumeratorView& copy)
-		: View(copy), _hasBroken(copy._hasBroken), _func(copy._func), _invoker(copy._invoker)
-	{
-		// TODO: Default this once MSVC supports multiple defaulted copy - constructors(Clang and GCC already do)
-	}
+    EnumeratorView(EnumeratorView&& move) = delete;
+	EnumeratorView(EnumeratorView& copy) = delete;
+	EnumeratorView(const EnumeratorView& copy) = delete;
 
 	///////////////////
 	///   Methods   ///
@@ -48,17 +43,43 @@ public:
 	* but checking this can save you the trouble of trying. */
 	FORCEINLINE bool HasBroken() const
 	{
-		return _hasBroken;
+		return _lastResult == EnumeratorResult::Break;
+	}
+
+	/** Invokes the enumerator on a single value, if the enumerator has not yet broken. */
+	EnumeratorResult Invoke(T value) const
+	{
+		if (!HasBroken())
+		{
+			_lastResult = _invoker(_func, std::forward<T>(value));
+		}
+
+		return _lastResult;
+	}
+
+	/** Invokes the enumerator on an enumerable object, if the enumerator has not yet broken. */
+	template <typename E>
+	EnumeratorResult Enumerate(E&& enumerable) const
+	{
+		for (T i : enumerable)
+		{
+			if (this->Invoke(std::forward<T>(i)) == EnumeratorResult::Break)
+			{
+				break;
+			}
+		}
+
+		return _lastResult;
 	}
 
 private:
 
 	/** Creates an invoker that decides whether to continue or not. */
 	template <typename F>
-	auto Setup(F&& func) -> std::enable_if_t<std::is_same<EnumeratorControl, std::result_of_t<F(T)>>::value>
+	auto Setup(F&& func) -> std::enable_if_t<std::is_same<EnumeratorResult, std::result_of_t<F(T)>>::value>
 	{
 		_func = &func;
-		_invoker = [](void* f, T value) -> EnumeratorControl
+		_invoker = [](void* f, T value) -> EnumeratorResult
 		{
 			return (*static_cast<std::decay_t<F>*>(f))(std::forward<T>(value));
 		};
@@ -69,10 +90,10 @@ private:
 	auto Setup(F&& func) -> std::enable_if_t<std::is_void<std::result_of_t<F(T)>>::value>
 	{
 		_func = &func;
-		_invoker = [](void* f, T value) -> EnumeratorControl
+		_invoker = [](void* f, T value) -> EnumeratorResult
 		{
 			(*static_cast<std::decay_t<F>*>(f))(std::forward<T>(value));
-			return EnumeratorControl::Continue;
+			return EnumeratorResult::Continue;
 		};
 	}
 
@@ -80,30 +101,17 @@ private:
 	///   Operators   ///
 public:
 
-	/** Enumerates over the given enumerable object, if the enumerator has not yet broken. */
-	template <typename E>
-	void operator()(E&& enumerable)
+	/** Invokes the enumerator on a single value, if the enumerator has not yet broken. */
+	EnumeratorResult operator()(T value) const
 	{
-		if (!_hasBroken)
-		{
-			for (T i : enumerable)
-			{
-				auto result = _invoker(_func, std::forward<T>(i));
-
-				if (result == EnumeratorControl::Break)
-				{
-					_hasBroken = true;
-					break;
-				}
-			}
-		}
+		return this->Invoke(std::forward<T>(value));
 	}
 
 	////////////////
 	///   Data   ///
 private:
 
-	bool _hasBroken;
 	void* _func;
-	EnumeratorControl(*_invoker)(void*, T);
+	EnumeratorResult(*_invoker)(void*, T);
+	mutable EnumeratorResult _lastResult;
 };
