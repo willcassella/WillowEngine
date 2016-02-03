@@ -58,7 +58,15 @@ public:
 	FORCEINLINE Vec2 Normalize() const
 	{
 		auto length = Length();
-		return Vec2(X / length, Y / length);
+		
+		if (length != 0)
+		{
+			return Vec2(X / length, Y / length);
+		}
+		else
+		{
+			return Vec2(0, 0);
+		}
 	}
 	
 	/** Returns the dot product of two vectors */

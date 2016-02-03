@@ -63,8 +63,16 @@ public:
 	/** Returns the normalized version of this vector */
 	FORCEINLINE Vec3 Normalize() const
 	{
-		Scalar length = Length();
-		return Vec3(X / length, Y / length, Z / length);
+		auto length = Length();
+
+		if (length != 0)
+		{
+			return Vec3(X / length, Y / length, Z / length);
+		}
+		else
+		{
+			return Vec3(0, 0, 0);
+		}
 	}
 
 	/** Returns the dot product of two vectors */

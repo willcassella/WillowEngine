@@ -85,7 +85,15 @@ public:
 	FORCEINLINE Vec4 Normalize() const
 	{
 		auto length = Length();
-		return Vec4(X / length, Y / length, Z / length, W / length);
+
+		if (length != 0)
+		{
+			return Vec4(X / length, Y / length, Z / length, W / length);
+		}
+		else
+		{
+			return Vec4(0, 0, 0, 0);
+		}
 	}
 
 	/** Returns the dot product of two Vec4s */
