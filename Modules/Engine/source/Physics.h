@@ -18,13 +18,13 @@ public:
 
 	PhysicsWorld()
 	{
-		// Spawn physics configuration
+		// Initialize physics configuration
 		_broadPhaseInterface = std::make_unique<btDbvtBroadphase>();
 		_collisionConfiguration = std::make_unique<btDefaultCollisionConfiguration>();
 		_dispatcher = std::make_unique<btCollisionDispatcher>(_collisionConfiguration.get());
 		btGImpactCollisionAlgorithm::registerAlgorithm(_dispatcher.get());
 
-		// Spawn the physics world
+		// Initialize the physics world
 		_dynamicsWorld = std::make_unique<btDiscreteDynamicsWorld>(_dispatcher.get(), _broadPhaseInterface.get(), _constraintSolver.get(), _collisionConfiguration.get());
 		_dynamicsWorld->setGravity(btVector3(0, -10, 0));
 	}
