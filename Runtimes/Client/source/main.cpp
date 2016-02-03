@@ -10,7 +10,7 @@ void EventLoop(Window& window, World& world, IRenderer& renderer)
 {
 	Console::WriteLine("Entering event loop...");
 
-	double previous = glfwGetTime();
+	double previous = Window::GetCurrentTime();
 	double lastTime = previous;
 	double lag = 0.0;
 	uint32 numFrames = 0;
@@ -20,7 +20,7 @@ void EventLoop(Window& window, World& world, IRenderer& renderer)
 	// Begin the event loop
 	while (!window.ShouldClose() && !shouldExit)
 	{
-		double currentTime = glfwGetTime();
+		double currentTime = Window::GetCurrentTime();
 		lag += currentTime - previous;
 		previous = currentTime;
 		numFrames++;

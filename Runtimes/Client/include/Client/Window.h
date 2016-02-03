@@ -23,6 +23,9 @@ public:
 
 	/** Polls for GLFW events. */
 	static void PollEvents();
+
+	/** Returns the current system time. */
+	static double GetCurrentTime();
 	
 	/** Returns the width of this window. */
 	uint32 GetWidth() const;

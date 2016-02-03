@@ -80,6 +80,11 @@ void Window::PollEvents()
 	glfwPollEvents();
 }
 
+double Window::GetCurrentTime()
+{
+	return glfwGetTime();
+}
+
 uint32 Window::GetWidth() const
 {
 	int32 width;
