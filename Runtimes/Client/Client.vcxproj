@@ -204,11 +204,13 @@ xcopy "$(SolutionDir)packages\glfw3\$(Platform)\glfw3.dll" "$(SolutionDir)bin\" 
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\logo.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Client\Window.h" />
     <ClInclude Include="resources\resource.h" />
   </ItemGroup>
   <ItemGroup>

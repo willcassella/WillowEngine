@@ -7,9 +7,15 @@
     <Filter Include="resources">
       <UniqueIdentifier>{149cc7d6-ab9d-4ac4-b325-7764af76e6da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{5fd376a6-a51f-45d0-8b05-9d05ec94230f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\main.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Window.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -21,6 +27,9 @@
   <ItemGroup>
     <ClInclude Include="resources\resource.h">
       <Filter>resources</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Client\Window.h">
+      <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
