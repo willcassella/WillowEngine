@@ -18,6 +18,9 @@ using BufferID = uint32;
 /** Represents a value returned by an OpenGL function. */
 using GLValue = uint32;
 
+/** Represents an OpenGL Integer. */
+using GLInteger = int32;
+
 /** Base for OpenGL primitives (shaders, texture, materials, meshes, etc.) */
 struct GLRENDER_API GLPrimitive
 {

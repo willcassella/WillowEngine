@@ -13,15 +13,15 @@ GLShader::GLShader(GLRenderer& renderer, const Shader& shader)
 	String type = shader.GetPath().GetFileExtension();
 	if (type == "vert")
 	{
-		this->_id = glCreateShader(GL_VERTEX_SHADER);
+		_id = glCreateShader(GL_VERTEX_SHADER);
 	}
 	else if (type == "frag")
 	{
-		this->_id = glCreateShader(GL_FRAGMENT_SHADER);
+		_id = glCreateShader(GL_FRAGMENT_SHADER);
 	}
 	else if (type == "geom")
 	{
-		this->_id = glCreateShader(GL_GEOMETRY_SHADER);
+		_id = glCreateShader(GL_GEOMETRY_SHADER);
 	}
 
 	// Compile the shader

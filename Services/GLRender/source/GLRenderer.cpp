@@ -7,22 +7,29 @@
 #include "../include/GLRender/GLRenderer.h"
 
 static_assert(!std::is_same<Scalar, long double>::value, "The renderer does not yet support 'long double' as a Scalar type.");
+static_assert(std::is_same<BufferID, GLuint>::value, "BufferID does not match GLuint.");
+static_assert(std::is_same<GLValue, GLuint>::value, "GLValue does not match GLuint.");
+static_assert(std::is_same<GLInteger, GLint>::value, "GLInteger does not match GLint.");
 
 ////////////////////////
 ///   Constructors   ///
 
 GLRenderer::GLRenderer(uint32 width, uint32 height)
 {
-	// Spawn GLEW
+	// Initialize GLEW
 	glewExperimental = GL_TRUE;
 	glewInit();
+	glGetError(); // Sometimes GLEW initialization generates an error, get rid of it.
 
-	// Spawn OpenGL
+	// Initialize OpenGL
 	glClearColor(0, 0, 0, 1);
 	glClearDepth(1.f);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glDisable(GL_STENCIL_TEST);
+
+	// Get the default framebuffer
+	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_defaultFrameBuffer);
 
 	// Create a framebuffer for deferred rendering (GBuffer)
 	glGenFramebuffers(1, &_gBuffer);
@@ -107,40 +114,48 @@ GLRenderer::GLRenderer(uint32 width, uint32 height)
 	{
 		Console::WriteLine("Error creating the GBuffer");
 	}
-//
-//	// Create a VAO for screen quad
-//	glGenVertexArrays(1, &screenQuadVAO);
-//	glBindVertexArray(screenQuadVAO);
-//
-//	// Create and upload a VBO for screen quad
-//	glGenBuffers(1, &screenQuadVBO);
-//	glBindBuffer(GL_ARRAY_BUFFER, screenQuadVBO);
-//	float screenQuadData[] = {
-//		-1.f, 1.f, 0.f, 1.f, // Top-left point
-//		-1.f, -1.f, 0.f, 0.f, // Bottom-left point
-//		1.f, -1.f, 1.f, 0.f, // Bottom-right point
-//		1.f, 1.f, 1.f, 1.f // Top-right point
-//	};
-//	glBufferData(GL_ARRAY_BUFFER, sizeof(screenQuadData), screenQuadData, GL_STATIC_DRAW);
-//
-//	// Create and upload a shader program for the screen quad
-//	GLShader vShader("data/viewport.vert");
-//	GLShader fShader("data/viewport.frag");
-//	screenQuadProgram = glCreateProgram();
-//	glAttachShader(screenQuadProgram, vShader.GetID());
-//	glAttachShader(screenQuadProgram, fShader.GetID());
-//	glLinkProgram(screenQuadProgram);
-//	glUseProgram(screenQuadProgram);
-//
-//	// Specify shader data
-//	GLint positionAttrib = glGetAttribLocation(screenQuadProgram, "position");
-//	glEnableVertexAttribArray(positionAttrib);
-//	glVertexAttribPointer(positionAttrib, 2, GL_FLOAT, false, sizeof(float)*4, 0);
-//
-//	GLint coordinateAttrib = glGetAttribLocation(screenQuadProgram, "vTexCoord");
-//	glEnableVertexAttribArray(coordinateAttrib);
-//	glVertexAttribPointer(coordinateAttrib, 2, GL_FLOAT, false, sizeof(float)*4, (void*)(sizeof(float)*2));
-//
+
+	// Create a VAO for screen quad
+	glGenVertexArrays(1, &_screenQuadVAO);
+	glBindVertexArray(_screenQuadVAO);
+
+	// Create and upload a VBO for screen quad
+	glGenBuffers(1, &_screenQuadVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, _screenQuadVBO);
+	float screenQuadData[] = {
+		-1.f, 1.f, 0.f, 1.f, // Top-left point
+		-1.f, -1.f, 0.f, 0.f, // Bottom-left point
+		1.f, -1.f, 1.f, 0.f, // Bottom-right point
+		1.f, 1.f, 1.f, 1.f // Top-right point
+	};
+	glBufferData(GL_ARRAY_BUFFER, sizeof(screenQuadData), screenQuadData, GL_STATIC_DRAW);
+
+	// Create and upload a shader program for the screen quad
+	Shader vShader("Content/Shaders/viewport.vert");
+	Shader fShader("Content/Shaders/viewport.frag");
+	GLShader glVShader(*this, vShader);
+	GLShader glFShader(*this, fShader);
+	_screenQuadProgram = glCreateProgram();
+	glAttachShader(_screenQuadProgram, glVShader.GetID());
+	glAttachShader(_screenQuadProgram, glFShader.GetID());
+	glLinkProgram(_screenQuadProgram);
+	glUseProgram(_screenQuadProgram);
+
+	// Specify shader data
+	GLint positionAttrib = glGetAttribLocation(_screenQuadProgram, "vPosition");
+	glEnableVertexAttribArray(positionAttrib);
+	glVertexAttribPointer(positionAttrib, 2, GL_FLOAT, false, sizeof(float)*4, nullptr);
+
+	GLint coordinateAttrib = glGetAttribLocation(_screenQuadProgram, "vTexCoord");
+	glEnableVertexAttribArray(coordinateAttrib);
+	glVertexAttribPointer(coordinateAttrib, 2, GL_FLOAT, false, sizeof(float)*4, (void*)(sizeof(float)*2));
+
+	auto error = glGetError();
+	if (error != 0)
+	{
+		Console::WriteLine("An error occurred during startup: @", error);
+	}
+
 //	float lightPos[] = { 0.f, 1.f, 0.f };
 //	glUniform1i(glGetUniformLocation(screenQuadProgram, "positionBuffer"), 0);
 //	glUniform1i(glGetUniformLocation(screenQuadProgram, "diffuseBuffer"), 1);

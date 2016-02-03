@@ -61,7 +61,11 @@ private:
 	Table<AssetID, GLTexture> _textures;
 	Table<AssetID, GLMaterial> _materials;
 	Table<AssetID, GLStaticMesh> _staticMeshes;
-	/*BufferID _defaultFrameBuffer;*/
+	
+	// The default framebuffer
+	GLInteger _defaultFrameBuffer;
+	
+	// GBuffer layers
 	BufferID _gBuffer;
 	BufferID _depthBuffer;
 	BufferID _positionBuffer;
@@ -70,4 +74,9 @@ private:
 	BufferID _specularBuffer;
 	BufferID _metallicBuffer;
 	BufferID _roughnessBuffer;
+
+	// Screen quad buffers
+	BufferID _screenQuadVAO;
+	BufferID _screenQuadVBO;
+	BufferID _screenQuadProgram;
 };
