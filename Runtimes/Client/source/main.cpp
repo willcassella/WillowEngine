@@ -205,17 +205,9 @@ void eventLoop(GLFWwindow* window, World& world, IRenderer& renderer)
 			{
 				moveAccum.X -= 1;
 			}
-			if (glfwGetKey(window, GLFW_KEY_SPACE))
-			{
-				world.Events.DispatchEvent("Poof");
-			}
 			if (glfwGetKey(window, GLFW_KEY_ESCAPE))
 			{
 				exit = true;
-			}
-			if (glfwGetKey(window, GLFW_KEY_Q))
-			{
-				world.Events.DispatchEvent("Spin", 0.5f);
 			}
 			if (moveAccum != Vec2(0, 0))
 			{
