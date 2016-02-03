@@ -3,6 +3,7 @@ build/
 packages/
 .idea/workspace.xml
 .idea/tasks.xml
+*.iml
 *.opensdf
 *.opendb
 *.sdf
