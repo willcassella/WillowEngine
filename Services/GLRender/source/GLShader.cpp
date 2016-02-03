@@ -59,5 +59,5 @@ GLShader::GLShader(GLShader&& move)
 
 GLShader::~GLShader()
 {
-	glDeleteShader(this->_id);
+	glDeleteShader(_id);
 }

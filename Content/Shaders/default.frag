@@ -7,9 +7,12 @@ in vec3 fPosition;
 in vec3 fNormal;
 in vec2 fCoord;
 
-out vec4 outColor;
+layout (location = 0) out vec3 outPosition;
+layout (location = 1) out vec4 outDiffuse;
+layout (location = 2) out vec3 outNormal;
+layout (location = 3) out vec4 outSpecular;
 
 void main()
 {
-    outColor = texture(diffuse, fCoord);
+    outDiffuse = texture(diffuse, fCoord);
 }

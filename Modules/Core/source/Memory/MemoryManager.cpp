@@ -38,9 +38,7 @@ void MemoryManager::Sweep()
 	{
 		if (block->GetStatus() == MemoryBlockValueStatus::Destroyed)
 		{
-			const auto& refCounter = block->GetRefCounter();
-
-			if (refCounter.GetTotalRefs() == 0)
+			if (block->GetRefCounter().GetTotalRefs() == 0)
 			{
 				free(block);
 				block = nullptr;

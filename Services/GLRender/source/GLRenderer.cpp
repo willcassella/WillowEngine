@@ -139,7 +139,8 @@ GLRenderer::GLRenderer(uint32 width, uint32 height)
 	glAttachShader(_screenQuadProgram, glVShader.GetID());
 	glAttachShader(_screenQuadProgram, glFShader.GetID());
 	glLinkProgram(_screenQuadProgram);
-	glUseProgram(_screenQuadProgram);
+	glDetachShader(_screenQuadProgram, glVShader.GetID());
+	glDetachShader(_screenQuadProgram, glFShader.GetID());
 
 	// Specify shader data
 	GLint positionAttrib = glGetAttribLocation(_screenQuadProgram, "vPosition");
@@ -150,18 +151,20 @@ GLRenderer::GLRenderer(uint32 width, uint32 height)
 	glEnableVertexAttribArray(coordinateAttrib);
 	glVertexAttribPointer(coordinateAttrib, 2, GL_FLOAT, false, sizeof(float)*4, (void*)(sizeof(float)*2));
 
+	glUseProgram(_screenQuadProgram);
+	glUniform1i(glGetUniformLocation(_screenQuadProgram, "positionBuffer"), 0);
+	glUniform1i(glGetUniformLocation(_screenQuadProgram, "diffuseBuffer"), 1);
+	glUniform1i(glGetUniformLocation(_screenQuadProgram, "normalBuffer"), 2);
+	glUniform1i(glGetUniformLocation(_screenQuadProgram, "specularBuffer"), 3);
+
 	auto error = glGetError();
 	if (error != 0)
 	{
 		Console::WriteLine("An error occurred during startup: @", error);
 	}
 
-//	float lightPos[] = { 0.f, 1.f, 0.f };
-//	glUniform1i(glGetUniformLocation(screenQuadProgram, "positionBuffer"), 0);
-//	glUniform1i(glGetUniformLocation(screenQuadProgram, "diffuseBuffer"), 1);
-//	glUniform1i(glGetUniformLocation(screenQuadProgram, "normalBuffer"), 2);
-//	glUniform1i(glGetUniformLocation(screenQuadProgram, "specularBuffer"), 3);
-//	glUniform3fv(glGetUniformLocation(screenQuadProgram, "lightPos"), 1, lightPos);
+	//float lightPos[] = { 0.f, 1.f, 0.f };
+	//glUniform3fv(glGetUniformLocation(screenQuadProgram, "lightPos"), 1, lightPos);
 }
 
 GLRenderer::~GLRenderer()
@@ -174,8 +177,14 @@ GLRenderer::~GLRenderer()
 
 void GLRenderer::RenderWorld(const World& world)
 {
-	// Clear color and depth buffer
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	// Bind the GBuffer and its sub-buffers for drawing
+	glBindFramebuffer(GL_FRAMEBUFFER, _gBuffer);
+	GLuint drawBuffers[] = { GL_COLOR_ATTACHMENT0 /*position*/, GL_COLOR_ATTACHMENT1 /*diffuse*/, GL_COLOR_ATTACHMENT2 /*normal*/, GL_COLOR_ATTACHMENT3 /*specular*/ };
+	glDrawBuffers(4, drawBuffers);
+
+	// Clear the GBuffer
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	// Get first camera in the World
@@ -208,6 +217,32 @@ void GLRenderer::RenderWorld(const World& world)
 
 		glDrawElements(GL_TRIANGLES, mesh.GetNumElements(), GL_UNSIGNED_INT, nullptr);
 	}
+
+	// Bind the default framebuffer for drawing
+	glBindFramebuffer(GL_FRAMEBUFFER, _defaultFrameBuffer);
+
+	// Clear the frame
+	glEnable(GL_BLEND);
+	glDisable(GL_DEPTH_TEST);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	// Bind the screen quad
+	glBindVertexArray(_screenQuadVAO);
+	glUseProgram(_screenQuadProgram);
+
+	// Bind the GBuffer's sub-buffers as textures for reading
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, _positionBuffer);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, _diffuseBuffer);
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, _normalBuffer);
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, _specularBuffer);
+
+	// Draw the screen quad
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
 GLShader& GLRenderer::FindShader(const Shader& asset)
