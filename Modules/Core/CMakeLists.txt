@@ -1,6 +1,6 @@
 # Core project cmake file
-cmake_minimum_required(VERSION 3.2.2)
-project(Core LANGUAGES CXX)
+cmake_minimum_required(VERSION 2.8)
+project(Core CXX)
 
 # Private
 file(GLOB_RECURSE SOURCE_FILES "${PROJECT_SOURCE_DIR}/source/*.cpp")
