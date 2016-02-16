@@ -1,0 +1,10 @@
+# Travis CI configuration file
+os: linux
+language: c++
+compiler:
+    - clang
+    - gcc
+script: cmake
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y libglfw3-dev libfreeimage-dev libpugixml-dev libglew-dev libbullet-dev xorg-dev libglu1-mesa-dev
