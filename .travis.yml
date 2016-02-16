@@ -6,12 +6,25 @@ compiler:
 sudo: required
 dist: trusty
 script: cmake
+addons:
+    apt:
+        sources:
+            - llvm-toolchain-trusty
+            - ubuntu-toolchain-r-test
+        packages:
+            - clang-3.7
+            - g++-5
+            - libfreeimage-dev
+            - libpugixml-dev
+            - libglew-dev
+            - libbullet-dev
+install:
+    # Set default compiler to updated version
+    - if [ "$CXX" = "g++" ]; then export CXX="g++-5"; fi
+    - if [ "$CXX" = "clang++" ]; then export CXX="clang++-3.7"; fi
 before_install:
-    # Update apt-get and download engine dependencies
-    - sudo apt-get -qq update
-    - sudo apt-get install -y -qq libfreeimage-dev libpugixml-dev libglew-dev libbullet-dev
     # Download and compile GLFW, since it's not available in a Ubuntu repository on 14.04
     - sudo apt-get install -y -qq xorg-dev libglu1-mesa-dev
     - wget https://github.com/glfw/glfw/archive/3.1.2.tar.gz
     - tar -xzvf 3.1.2.tar.gz
-    - cd glfw-3.1.2 && cmake ./ && make && sudo make install
+    - cd glfw-3.1.2 && cmake -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_BUILD_DOCS=OFF ./ && make && sudo make install
