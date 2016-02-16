@@ -7,18 +7,24 @@ sudo: required
 dist: trusty
 before_install:
     # Download and install G++5 if we're compiling for gcc, Clang-3.7 if we're compiling for clang
-    - if [ "$CXX" = "g++" ] 
+    - if (( "$CC" == "gcc" && "$CXX" == "g++" ))
     - then
     -   sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
     -   sudo apt-get update -q
+    -   sudo apt-get install gcc-5 -y
     -   sudo apt-get install g++-5 -y
+    -   export CC=gcc-5
     -   export CXX=g++-5
-    - elif [ "$CXX" = "clang++" ]
+    - elif (( "$CC" == "clang" && "$CXX" == "clang++" ))
     - then
     -   sudo add-apt-repository llvm-toolchain-trusty -y
     -   sudo apt-get update -q
     -   sudo apt-get install clang-3.7
+    -   export CC=clang-3.7
     -   export CXX=clang++-3.7
+    - else
+    -   echo "Unknown compiler configuration"
+    -   exit 1
     - fi
 install:
     # Download engine dependencies
