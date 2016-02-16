@@ -1,5 +1,4 @@
 # Travis CI configuration file
-os: linux
 language: c++
 compiler:
     - clang
