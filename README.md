@@ -1,3 +1,4 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/kjyfj7a0i02kdnhe?svg=true)](https://ci.appveyor.com/project/willcassella/willowengine)
 # Willow Engine
 
 Willow Engine is a game engine in development by Will Cassella.
