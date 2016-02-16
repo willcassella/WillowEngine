@@ -7,5 +7,10 @@ sudo: required
 dist: trusty
 script: cmake
 before_install:
-  - sudo apt-get -qq update
-  - sudo apt-get install -y libglfw3-dev libfreeimage-dev libpugixml-dev libglew-dev libbullet-dev xorg-dev libglu1-mesa-dev
+    # Update apt-get and download engine dependencies
+    - sudo apt-get -qq update
+    - sudo apt-get install -y -qq libfreeimage-dev libpugixml-dev libglew-dev libbullet-dev
+    # Compile GLFW3, since it's not available in a Ubuntu repository on 14.04
+    - sudo apt-get install -y -qq xorg-dev libglu1-mesa-dev
+    - git clone https://github.com/glfw/glfw3.git && cd glfw3
+    - cmake . && make install
