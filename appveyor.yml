@@ -15,5 +15,5 @@ build:
   verbosity: minimal
 artifacts:
   path: bin
-  name: 'Willow Engine {version} {platform} {configuration}'
+  name: 'Willow Engine $(APPVEYOR_BUILD_VERSION) $(PLATFORM) $(CONFIGURATION)'
   
