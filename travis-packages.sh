@@ -2,15 +2,17 @@
 set -e
 
 # If we're compiling for GCC, download and install latest version
-if ["$CC" = "gcc"]
+if ["${CC}" == "gcc"]
 then
     sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
     sudo apt-get update -q
     sudo apt-get install gcc-5 -y -qq
     sudo apt-get install g++-5 -y -qq
+# If we're compiling for Clang, download and install latest version
 else
-    # Clang has everything it needs, but we still need to update the APT package list
+    sudo add-apt-repository "deb http://llvm.org/apt/trusty/ llvm-toolchain-trusty-3.7 main"
     sudo apt-get update -q
+    sudo apt-get install clang-3.7 -y -qq
 fi
 
 # Download engine dependencies

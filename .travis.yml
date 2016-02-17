@@ -1,15 +1,16 @@
 # Travis CI configuration file
 language: c++
 compiler:
-#    - clang Waiting until I can figure out how to get clang to work
+    - clang
     - gcc
 sudo: required
 dist: trusty
 install:
     # Set up dependencies
     - ./travis-packages.sh
-    # If on GCC, set to latest version
-    - if ["$CC" = "gcc"]; then export CC=gcc-5 && export CXX=g++-5; fi
+    # Set compilers to latest version
+    - if ["${CC}" == "gcc"]; then export CC=gcc-5 && export CXX=g++-5; fi
+    - if ["${CC}" == "clang"]; then export CC=clang-3.7 && export CXX=clang++-3.7; fi
 script: 
     - mkdir build && cd build
     - cmake ../
