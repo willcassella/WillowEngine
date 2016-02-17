@@ -2,7 +2,7 @@
 set -e
 
 # If we're compiling for GCC, download and install latest version
-if ["${CC}" == "gcc"]
+if [ "$CC" == "gcc" ]
 then
     sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
     sudo apt-get update -q
@@ -11,6 +11,7 @@ then
 # If we're compiling for Clang, download and install latest version
 else
     sudo add-apt-repository "deb http://llvm.org/apt/trusty/ llvm-toolchain-trusty-3.7 main"
+    wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key | sudo apt-key add -
     sudo apt-get update -q
     sudo apt-get install clang-3.7 -y -qq
 fi
