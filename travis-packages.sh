@@ -10,6 +10,9 @@ then
     sudo apt-get install g++-5 -y -qq
     export CC=gcc-5
     export CXX=g++-5
+else
+    # Clang has everything it needs, but we still need to update the APT package list
+    sudo apt-get update -q
 fi
 
 # Download engine dependencies
@@ -20,3 +23,4 @@ sudo apt-get install -y -qq xorg-dev libglu1-mesa-dev
 wget https://github.com/glfw/glfw/archive/3.1.2.tar.gz
 tar -xzvf 3.1.2.tar.gz
 cd glfw-3.1.2 && cmake -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_BUILD_DOCS=OFF ./ && make && sudo make install
+cd ../
