@@ -6,7 +6,7 @@ compiler:
 sudo: required
 dist: trusty
 install:
-    - ./travis-packages.sh
+    - source ./travis-packages.sh
 script: 
     - mkdir build && cd build
     - cmake ../

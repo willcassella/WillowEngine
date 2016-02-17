@@ -10,18 +10,6 @@ then
     sudo apt-get install g++-5 -y -qq
     export CC=gcc-5
     export CXX=g++-5
-# Do the same for Clang
-elif [ "$CC" == "clang" ] && [ "$CXX" == "clang++" ]
-then
-    sudo add-apt-repository llvm-toolchain-trusty -y
-    sudo apt-get update -q
-    sudo apt-get install clang-3.7
-    export CC=clang-3.7
-    export CXX=clang++-3.7
-# We're neither compiling for GCC or Clang, not sure what happened
-else
-    echo "Unknown compiler configuration"
-    exit 1
 fi
 
 # Download engine dependencies
