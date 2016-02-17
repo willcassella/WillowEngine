@@ -9,11 +9,15 @@ then
     sudo apt-get install gcc-5 -y -qq
     sudo apt-get install g++-5 -y -qq
 # If we're compiling for Clang, download and install latest version
-else
+elif [ "$CC" == "clang" ]
+then
     sudo add-apt-repository "deb http://llvm.org/apt/trusty/ llvm-toolchain-trusty-3.7 main"
     wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key | sudo apt-key add -
     sudo apt-get update -q
     sudo apt-get install clang-3.7 -y -qq
+else
+    echo "Unknown compiler"
+    exit 1
 fi
 
 # Download engine dependencies

@@ -2,7 +2,7 @@
 language: c++
 compiler:
     - clang
-    - gcc
+#    - gcc TODO: Figure out why Clang A) Uses GCC's headers and B) errors out on them
 sudo: required
 dist: trusty
 install:
