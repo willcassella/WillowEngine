@@ -6,7 +6,10 @@ compiler:
 sudo: required
 dist: trusty
 install:
-    - source ./travis-packages.sh
+    # Set up dependencies
+    - ./travis-packages.sh
+    # If on GCC, set to latest version
+    - if "$CC" == "gcc"; then export CC=gcc-5 && export CXX=g++-5; fi
 script: 
     - mkdir build && cd build
     - cmake ../

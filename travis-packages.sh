@@ -2,14 +2,12 @@
 set -e
 
 # If we're compiling for GCC, download and install latest version
-if [ "$CC" == "gcc" ] && [ "$CXX" == "g++" ]
+if [ "$CC" == "gcc" ]
 then
     sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
     sudo apt-get update -q
     sudo apt-get install gcc-5 -y -qq
     sudo apt-get install g++-5 -y -qq
-    export CC=gcc-5
-    export CXX=g++-5
 else
     # Clang has everything it needs, but we still need to update the APT package list
     sudo apt-get update -q
