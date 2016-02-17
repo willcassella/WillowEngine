@@ -2,6 +2,8 @@
 set -e
 
 # If we're compiling for GCC, download and install latest version
+echo $CXX
+echo $CC
 if (( "$CC" == "gcc" && "$CXX" == "g++" ))
 then
     sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
