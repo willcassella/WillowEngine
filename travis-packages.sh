@@ -2,7 +2,7 @@
 set -e
 
 # If we're compiling for GCC, download and install latest version
-if [ "$CC" == "gcc" ]
+if ["$CC" = "gcc"]
 then
     sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
     sudo apt-get update -q
@@ -21,4 +21,3 @@ sudo apt-get install -y -qq xorg-dev libglu1-mesa-dev
 wget https://github.com/glfw/glfw/archive/3.1.2.tar.gz
 tar -xzvf 3.1.2.tar.gz
 cd glfw-3.1.2 && cmake -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_BUILD_DOCS=OFF ./ && make && sudo make install
-cd ../
