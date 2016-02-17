@@ -2,9 +2,9 @@
 set -e
 
 # If we're compiling for GCC, download and install latest version
-echo $CXX
-echo $CC
-if (( "$CC" == "gcc" && "$CXX" == "g++" ))
+# Note: I used to have another comparison for the CXX variable, but I could not for the life of me get
+# Bash to equate "g++" to "g++".
+if [ "$CC" == "gcc" ]
 then
     sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
     sudo apt-get update -q
@@ -13,7 +13,7 @@ then
     export CC=gcc-5
     export CXX=g++-5
 # Do the same for Clang
-elif (( "$CC" == "clang" && "$CXX" == "clang++" ))
+elif [ "$CC" == "clang" ]
 then
     sudo add-apt-repository llvm-toolchain-trusty -y
     sudo apt-get update -q
@@ -22,7 +22,7 @@ then
     export CXX=clang++-3.7
 # We're neither compiling for GCC or Clang, not sure what happened
 else
-    echo "Unknown compiler configuration"
+    echo "Unknown compiler."
     exit 1
 fi
 
