@@ -1,14 +1,18 @@
 # AppVeyor CI configuration file
 version: '{build}'
 os: Visual Studio 2015
-configuration: Release
-platform: x64
+configuration: 
+  - Release
+  - Debug
+platform: 
+  - x64
+  - Win32
 install:
   cmd: C:\Python35-x64\python.exe packages.py
 build:
   project: WillowEngine.sln
   parallel: true
-  verbosity: minimal
+  verbosity: normal
 artifacts:
   path: bin
-  name: x64 Release
+  
