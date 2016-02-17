@@ -4,10 +4,11 @@ os: Visual Studio 2015
 configuration: Release
 platform: x64
 install:
-- cmd: C:\Python35-x64\python.exe packages.py
+  cmd: C:\Python35-x64\python.exe packages.py
 build:
   project: WillowEngine.sln
   parallel: true
   verbosity: minimal
 artifacts:
-- path: bin
+  path: bin
+  name: x64 Release
