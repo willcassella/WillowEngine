@@ -8,7 +8,7 @@
 ///   Constructors   ///
 
 DynamicBuffer::DynamicBuffer()
-	: _size(0), _value(nullptr)
+	: _value(nullptr), _size(0)
 {
 	// All done
 }

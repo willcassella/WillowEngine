@@ -17,7 +17,7 @@ public:
 
 	REFLECTABLE_STRUCT
 
-	template <typename T>
+	template <typename F>
 	friend struct Weak;
 
 	////////////////////////

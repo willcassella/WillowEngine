@@ -251,7 +251,7 @@ namespace Operations
 			}
 		}
 
-		static constexpr bool Supported = stde::meta::and<ToArchive<T>::Supported...>();
+		static constexpr bool Supported = stde::meta::constexpr_and<ToArchive<T>::Supported...>();
 	};
 }
 

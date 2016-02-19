@@ -49,7 +49,7 @@ void UnionTest(WTest::Context& context)
 
 void EnumerationViewTest(WTest::Context& context)
 {
-	auto func = [](EnumeratorView<int> enumerator)
+	auto func = [](const EnumeratorView<int>& enumerator)
 	{
 		Array<int> collectionA = { 1, 2, 3, 4 };
 		Queue<int> collectionB = { 5, 6, 7, 8 };

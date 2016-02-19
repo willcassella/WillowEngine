@@ -2,7 +2,7 @@
 #pragma once
 
 #include "../../Application.h"
-#include "../../Reflection/TypeInfo.h"
+#include "../../Reflection/StructInfo.h"
 
 /////////////////
 ///   Types   ///
@@ -369,10 +369,11 @@ namespace Operations
 			}
 			else
 			{
-				reader.GetFirstChild([&](const ArchiveReader& child)
-				{
-					auto type = Application::FindType(child.GetName());
-				});
+				// TODO
+				//reader.GetFirstChild([&](const ArchiveReader& child)
+				//{
+				//	auto type = Application::FindType(child.GetName());
+				//});
 			}
 		}
 

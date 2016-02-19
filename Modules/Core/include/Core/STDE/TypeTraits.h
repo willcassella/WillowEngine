@@ -361,7 +361,7 @@ namespace stde
 		/** Returns 'true' if all boolean constants in the given sequence are true. 
 		* NOTE: This should be deprecated once fold expressions become a thing. */
 		template <bool First>
-		constexpr bool and(std::integer_sequence<bool, First>)
+		constexpr bool constexpr_and(std::integer_sequence<bool, First>)
 		{
 			return First;
 		}
@@ -369,23 +369,23 @@ namespace stde
 		/** Returns 'true' if all boolean constants in the given sequence are true.
 		* NOTE: This should be deprecated once fold expressions become a thing. */
 		template <bool First, bool Second, bool ... Rest>
-		constexpr bool and(std::integer_sequence<bool, First, Second, Rest...>)
+		constexpr bool constexpr_and(std::integer_sequence<bool, First, Second, Rest...>)
 		{
-			return First && meta::and(std::integer_sequence<bool, Second, Rest...>());
+			return First && constexpr_and(std::integer_sequence<bool, Second, Rest...>());
 		}
 
 		/** Returns 'true' if all boolean constants in the given sequence are true.
 		* NOTE: This should be deprecated once fold expressions become a thing. */
 		template <bool First, bool ... Rest>
-		constexpr bool and()
+		constexpr bool constexpr_and()
 		{
-			return meta::and(std::integer_sequence<bool, First, Rest...>());
+			return constexpr_and(std::integer_sequence<bool, First, Rest...>());
 		}
 
 		/** Returns 'true' if any of the boolean constants in the given sequence are true.
 		* NOTE: This should be deprecated once fold expressions become a thing. */
 		template <bool First>
-		constexpr bool or(std::integer_sequence<bool, First>)
+		constexpr bool constexpr_or(std::integer_sequence<bool, First>)
 		{
 			return First;
 		}
@@ -393,17 +393,17 @@ namespace stde
 		/** Returns 'true' if any of the boolean constants in the given sequence are true.
 		* NOTE: This should be deprecated once fold expressions become a thing. */
 		template <bool First, bool Second, bool ... Rest>
-		constexpr bool or(std::integer_sequence<bool, First, Second, Rest...>)
+		constexpr bool constexpr_or(std::integer_sequence<bool, First, Second, Rest...>)
 		{
-			return First || meta::or(std::integer_sequence<bool, Second, Rest...>());
+			return First || constexpr_or(std::integer_sequence<bool, Second, Rest...>());
 		}
 
 		/** Returns 'true' if any of the boolean constants in the given sequence are true.
 		* NOTE: This should be deprecated once fold expressions become a thing. */
 		template <bool First, bool ... Rest>
-		constexpr bool or()
+		constexpr bool constexpr_or()
 		{
-			return meta::or(std::integer_sequence<bool, First, Rest...>());
+			return constexpr_or(std::integer_sequence<bool, First, Rest...>());
 		}
 	}
 }

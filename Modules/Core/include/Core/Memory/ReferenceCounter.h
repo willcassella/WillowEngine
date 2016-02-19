@@ -18,7 +18,11 @@ public:
 	///   Constructors   ///
 private:
 
-	ReferenceCounter() = default;
+	ReferenceCounter()
+		: _numBorrows(0), _numWeakRefs(0)
+	{
+		// All done
+	}
 
 	///////////////////
 	///   Methods   ///
@@ -100,6 +104,6 @@ public:
 private:
 
 	bool _destroyed = false;
-	std::atomic<uint32> _numBorrows = 0;
-	std::atomic<uint32> _numWeakRefs = 0;
+	std::atomic<uint32> _numBorrows;
+	std::atomic<uint32> _numWeakRefs;
 };

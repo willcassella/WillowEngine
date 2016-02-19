@@ -5,7 +5,7 @@
 ///////////////////
 ///   Statics   ///
 
-std::atomic<AssetID> _lastID = 0;
+std::atomic<AssetID> _lastID(0);
 
 //////////////////////
 ///   Reflection   ///

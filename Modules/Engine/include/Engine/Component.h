@@ -24,7 +24,7 @@ public:
 	///   Methods   ///
 public:
 
-	void ToArchive(ArchiveWriter& writer) const;
+	void ToArchive(ArchiveWriter& writer) const override;
 
 	FORCEINLINE World& GetWorld() final override
 	{

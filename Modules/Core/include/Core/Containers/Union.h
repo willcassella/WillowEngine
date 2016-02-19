@@ -2,6 +2,7 @@
 #pragma once
 
 #include <limits>
+#include <algorithm>
 #include "../STDE/TypeTraits.h"
 #include "../Memory/Buffers/StaticBuffer.h"
 
