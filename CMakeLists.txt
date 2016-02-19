@@ -7,7 +7,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
 # Set linux options
 if(${UNIX})
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wall -Wextra -Wpedantic")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wall -Wextra -Wpedantic -fvisibility=hidden")
     set(CMAKE_INSTALL_RPATH "$ORIGIN")
     set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
     find_package(PkgConfig REQUIRED)
