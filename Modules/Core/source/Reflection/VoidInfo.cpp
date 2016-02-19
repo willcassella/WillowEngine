@@ -22,6 +22,7 @@ TypeInfoBuilder<void, TypeInfo>::TypeInfoBuilder()
 	_data.rawName = "void";
 
 	_data.size = 0;
+	_data.alignment = 0;
 	_data.isCompound = false;
 	_data.isAbstract = false;
 	_data.isPolymorphic = false;

@@ -6,7 +6,6 @@
 #include "../Containers/String.h"
 #include "../Reflection/Reflection.h"
 #include "../Misc/SerializeableStruct.h"
-#include "Math.h"
 
 struct CORE_API Vec2 final : SerializeableStruct<Vec2>
 {

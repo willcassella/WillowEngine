@@ -36,11 +36,11 @@ public:
 
 	Table() = default;
 	Table(const std::initializer_list<PairT>& init)
-		: _values(static_cast<uint32>(init.size()))
+		: _values(init.size())
 	{
 		for (const auto& value : init)
 		{
-			self[value.First] = value.Second;
+			(*this)[value.First] = value.Second;
 		}
 	}
 
@@ -49,7 +49,7 @@ public:
 public:
 
 	/** Returns the number of key-value pairs in this table */
-	FORCEINLINE uint32 Size() const
+	FORCEINLINE std::size_t Size() const
 	{
 		return _values.Size();
 	}
@@ -191,7 +191,7 @@ public:
 	* Returns whether the key-value pair was found and removed. */
 	bool Remove(const KeyT& key)
 	{
-		for (uint32 i = 0; i < _values.Size(); ++i)
+		for (std::size_t i = 0; i < _values.Size(); ++i)
 		{
 			if (_values[i].First == key)
 			{
@@ -237,7 +237,7 @@ public:
 
 		for (const auto& value : init)
 		{
-			self[value.First] == value.Second;
+			(*this)[value.First] == value.Second;
 		}
 	}
 	friend bool operator==(const Table& lhs, const Table& rhs)

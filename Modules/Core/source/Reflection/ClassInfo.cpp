@@ -23,7 +23,7 @@ TypeInfoBuilder<Object, ClassInfo>::TypeInfoBuilder()
 bool ClassInfo::IsCastableTo(const TypeInfo& type) const
 {
 	// If the given type is this type
-	if (type == self)
+	if (type == *this)
 	{
 		return true;
 	}

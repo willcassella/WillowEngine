@@ -124,6 +124,16 @@ public:
 
 	///////////////////
 	///   Methods   ///
+public:
+
+	template <typename RetT, typename ArgT>
+	auto& Handler(
+		CString /*name*/,
+		RetT (ClassT::*/*handler*/)(ArgT))
+	{
+		return this->AsMostSpecificTypeInfoBuilder();
+	}
+
 private:
 
 	/** Adds all the interfaces within "type_sequence<...>" to this class's collection of implemented interfaces. */

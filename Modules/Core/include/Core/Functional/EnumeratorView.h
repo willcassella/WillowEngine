@@ -31,9 +31,9 @@ public:
 		_lastResult = EnumeratorResult::Continue;
 	}
 
-    EnumeratorView(EnumeratorView&& move) = default;
-	EnumeratorView(EnumeratorView& copy) = delete;
 	EnumeratorView(const EnumeratorView& copy) = delete;
+	EnumeratorView(EnumeratorView& copy) = delete;
+    EnumeratorView(EnumeratorView&& move) = delete;
 
 	///////////////////
 	///   Methods   ///

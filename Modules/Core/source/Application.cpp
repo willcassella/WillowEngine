@@ -15,11 +15,6 @@ Application::Application()
 	std::ios_base::Init initializer;
 }
 
-Application::~Application()
-{
-	GetMemoryManager().Sweep();
-}
-
 ///////////////////
 ///   Methods   ///
 

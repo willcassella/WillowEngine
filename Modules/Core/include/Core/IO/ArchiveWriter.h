@@ -2,7 +2,7 @@
 #pragma once
 
 #include "../config.h"
-#include "../Forwards/Containers.h"
+#include "../Forwards/Operations.h"
 #include "../Functional/FunctionView.h"
 
 /////////////////
@@ -60,6 +60,9 @@ public:
 	/** Sets the value of this node as the given String value. */
 	virtual void SetValue(const String& value) = 0;
 
+	/** Sets the value of this node to null. */
+	virtual void SetValue(std::nullptr_t) = 0;
+
 	/** Adds a new node with the given name as a child of this node, and runs the given function on that node. */
 	virtual void AddChild(const String& name, FunctionView<void, ArchiveWriter&> function) = 0;
 
@@ -67,6 +70,9 @@ public:
 	template <typename T>
 	void PushValue(const String& name, const T& value)
 	{
-		this->AddChild(name, [&value](auto& writer) { ::ToArchive(value, writer); });
+		this->AddChild(name, [&](auto& writer)
+		{
+			ToArchive(value, writer);
+		});
 	}
 };

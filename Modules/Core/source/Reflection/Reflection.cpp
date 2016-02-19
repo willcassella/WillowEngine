@@ -34,17 +34,17 @@ namespace Implementation
 	/** Register TypeInfo for int16 */
 	const PrimitiveInfo TypeOf<int16>::StaticTypeInfo = TypeInfoBuilder<int16>("int16");
 
-	/** Register TypeInfo for int32 */
-	const PrimitiveInfo TypeOf<int32>::StaticTypeInfo = TypeInfoBuilder<int32>("int32");
-
-	/** Register TypeInfo for int64 */
-	const PrimitiveInfo TypeOf<int64>::StaticTypeInfo = TypeInfoBuilder<int64>("int64");
-
 	/** Register TypeInfo for uint16 */
 	const PrimitiveInfo TypeOf<uint16>::StaticTypeInfo = TypeInfoBuilder<uint16>("uint16");
 
+	/** Register TypeInfo for int32 */
+	const PrimitiveInfo TypeOf<int32>::StaticTypeInfo = TypeInfoBuilder<int32>("int32");
+
 	/** Register TypeInfo for uint32 */
 	const PrimitiveInfo TypeOf<uint32>::StaticTypeInfo = TypeInfoBuilder<uint32>("uint32");
+
+	/** Register TypeInfo for int64 */
+	const PrimitiveInfo TypeOf<int64>::StaticTypeInfo = TypeInfoBuilder<int64>("int64");
 
 	/** Register TypeInfo for uint64 */
 	const PrimitiveInfo TypeOf<uint64>::StaticTypeInfo = TypeInfoBuilder<uint64>("uint64");

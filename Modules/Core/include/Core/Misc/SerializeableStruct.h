@@ -1,8 +1,8 @@
 // SerializeableStruct.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
+#include <type_traits>
 #include "../Forwards/Operations.h"
-#include "../STDE/TypeTraits.h"
 
 /** Convenience class for serializeable structs to inherit. If you don't want to/can't use this,
 * you can just implement the 'ToArchive' and 'FromArchive' member functions yourself. */

@@ -24,8 +24,6 @@
     <ClInclude Include="include\Core\config.h" />
     <ClInclude Include="include\Core\Containers\Array.h" />
     <ClInclude Include="include\Core\Containers\Nullable.h" />
-    <ClInclude Include="include\Core\Containers\StaticBuffer.h" />
-    <ClInclude Include="include\Core\Containers\DynamicBuffer.h" />
     <ClInclude Include="include\Core\Containers\List.h" />
     <ClInclude Include="include\Core\Containers\Pair.h" />
     <ClInclude Include="include\Core\Containers\Queue.h" />
@@ -34,7 +32,6 @@
     <ClInclude Include="include\Core\Containers\Table.h" />
     <ClInclude Include="include\Core\Containers\Tuple.h" />
     <ClInclude Include="include\Core\Containers\Union.h" />
-    <ClInclude Include="include\Core\Core.h" />
     <ClInclude Include="include\Core\Event\Event.h" />
     <ClInclude Include="include\Core\Event\EventHandler.h" />
     <ClInclude Include="include\Core\Event\EventManager.h" />
@@ -52,17 +49,18 @@
     <ClInclude Include="include\Core\IO\Console.h" />
     <ClInclude Include="include\Core\Math\Angle.h" />
     <ClInclude Include="include\Core\Math\Mat4.h" />
-    <ClInclude Include="include\Core\Math\Math.h" />
     <ClInclude Include="include\Core\Math\Quat.h" />
     <ClInclude Include="include\Core\Math\Vec2.h" />
     <ClInclude Include="include\Core\Math\Vec3.h" />
     <ClInclude Include="include\Core\Math\Vec4.h" />
-    <ClInclude Include="include\Core\Memory\MemoryBlock.h" />
+    <ClInclude Include="include\Core\Memory\Buffers\DynamicBuffer.h" />
+    <ClInclude Include="include\Core\Memory\Buffers\StaticBuffer.h" />
+    <ClInclude Include="include\Core\Memory\Pointers\Borrowed.h" />
+    <ClInclude Include="include\Core\Memory\ReferenceCounter.h" />
     <ClInclude Include="include\Core\Memory\MemoryManager.h" />
     <ClInclude Include="include\Core\Memory\New.h" />
-    <ClInclude Include="include\Core\Memory\PointerBase.h" />
-    <ClInclude Include="include\Core\Memory\Ptr.h" />
-    <ClInclude Include="include\Core\Memory\UniquePtr.h" />
+    <ClInclude Include="include\Core\Memory\Pointers\Weak.h" />
+    <ClInclude Include="include\Core\Memory\Pointers\Owned.h" />
     <ClInclude Include="include\Core\Misc\SerializeableObject.h" />
     <ClInclude Include="include\Core\Misc\SerializeableStruct.h" />
     <ClInclude Include="include\Core\Misc\Signature.h" />
@@ -92,11 +90,12 @@
     <ClInclude Include="include\Core\STDE\TypeTraits.h" />
     <ClInclude Include="include\Core\STDE\Utility.h" />
     <ClInclude Include="include\Core\Test\Test.h" />
+    <ClInclude Include="include\Core\Umbrellas\Containers.h" />
+    <ClInclude Include="include\Core\Umbrellas\Reflection.h" />
     <ClInclude Include="include\Core\Utility\View.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Application.cpp" />
-    <ClCompile Include="source\Containers\DynamicBuffer.cpp" />
     <ClCompile Include="source\Containers\String.cpp" />
     <ClCompile Include="source\Event\Event.cpp" />
     <ClCompile Include="source\Event\EventHandler.cpp" />
@@ -107,9 +106,8 @@
     <ClCompile Include="source\Math\Vec2.cpp" />
     <ClCompile Include="source\Math\Vec3.cpp" />
     <ClCompile Include="source\Math\Vec4.cpp" />
-    <ClCompile Include="source\Memory\MemoryBlock.cpp" />
-    <ClCompile Include="source\Memory\MemoryManager.cpp" />
-    <ClCompile Include="source\Memory\UniquePtr.cpp" />
+    <ClCompile Include="source\Memory\Buffers\DynamicBuffer.cpp" />
+    <ClCompile Include="source\Memory\Pointers\Owned.cpp" />
     <ClCompile Include="source\Misc\TimeStamp.cpp" />
     <ClCompile Include="source\Object.cpp" />
     <ClCompile Include="source\Operations\FromArchive.cpp" />
@@ -209,8 +207,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;CORE_BUILD;WINDOWS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;CORE_BUILD;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -227,8 +225,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;CORE_BUILD;WINDOWS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;CORE_BUILD;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
       <MinimalRebuild>false</MinimalRebuild>
@@ -248,8 +246,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;CORE_BUILD;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;CORE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -272,8 +270,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;CORE_BUILD;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;CORE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>

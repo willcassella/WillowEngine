@@ -13,7 +13,7 @@ namespace Operations
 	{
 		value = 0;
 
-		for (uint32 i = 0; i < string.Length(); ++i)
+		for (std::size_t i = 0; i < string.Length(); ++i)
 		{
 			switch (string[i])
 			{
@@ -127,23 +127,23 @@ namespace Operations
 
 	void FromString<float>::Function(String& out, float& value, const String& string)
 	{
-		size_t remainder;
+		std::size_t remainder;
 		value = std::stof(string.Cstr(), &remainder);
-		out = string.SubString(static_cast<uint32>(remainder));
+		out = string.SubString(remainder);
 	}
 
 	void FromString<double>::Function(String& out, double& value, const String& string)
 	{
-		size_t remainder;
+		std::size_t remainder;
 		value = std::stod(string.Cstr(), &remainder);
-		out = string.SubString(static_cast<uint32>(remainder));
+		out = string.SubString(remainder);
 	}
 
 	void FromString<long double>::Function(String& out, long double& value, const String& string)
 	{
-		size_t remainder;
+		std::size_t remainder;
 		value = std::stold(string.Cstr(), &remainder);
-		out = string.SubString(static_cast<uint32>(remainder));
+		out = string.SubString(remainder);
 	}
 
 	////////////////////////
@@ -153,7 +153,7 @@ namespace Operations
 	{
 		if (string.StartsWith('"'))
 		{
-			for (uint32 i = 1; i < string.Length(); ++i)
+			for (std::size_t i = 1; i < string.Length(); ++i)
 			{
 				if (string[i] == '"')
 				{

@@ -12,7 +12,7 @@ enum PropertyFlags : byte
 	PF_None = 0,				/** No special considerations need to be made for this property. */
 	PF_EditorOnly = (1 << 0)	/** This property should only be exposed to the editor. */
 };
-REFLECTABLE_ENUM(PropertyFlags)
+REFLECTABLE_ENUM(CORE_API, PropertyFlags)
 
 /** A class representing information for a Property (part of the public API for a compound). */
 struct CORE_API PropertyInfo final

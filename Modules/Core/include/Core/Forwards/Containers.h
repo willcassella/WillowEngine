@@ -1,20 +1,11 @@
 // Containers.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "../env.h"
-
 /////////////////
 ///   Types   ///
 
 /** Defined in 'Containers/String.h' */
 struct String;
-
-/** Defined in 'Containers/DynamicBuffer.h' */
-struct DynamicBuffer;
-
-/** Defined in 'Containers/StaticBuffer.h' */
-template <uint32 Size>
-struct StaticBuffer;
 
 /** Defined in 'Containers/Array.h' */
 template <typename T>

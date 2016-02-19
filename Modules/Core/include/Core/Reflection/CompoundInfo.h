@@ -1,11 +1,11 @@
 // CompoundInfo.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "../Containers/StaticBuffer.h"
+#include "../Memory/Buffers/StaticBuffer.h"
 #include "../Containers/Table.h"
 #include "../Functional/EnumeratorView.h"
 #include "../IO/Console.h"
-#include "TypeInfo.h"
+#include "PrimitiveInfo.h"
 #include "DataInfo.h"
 #include "PropertyInfo.h"
 
@@ -71,9 +71,9 @@ private:
 
 	struct Data
 	{
-		Table<String, uint32> PropertyTable;
+		Table<String, std::size_t> PropertyTable;
 		Array<PropertyInfo> Properties;
-		Table<String, uint32> DataTable;
+		Table<String, std::size_t> DataTable;
 		Array<DataInfo> DataMembers;
 	} _data;
 };
@@ -128,7 +128,7 @@ public:
 		dataInfo._offset = GetFieldOffset(field);
 
 		_data.DataTable[name] = _data.DataMembers.Add(std::move(dataInfo));
-		return this->SelfAsMostSpecificTypeInfoBuilder();
+		return this->AsMostSpecificTypeInfoBuilder();
 	}
 
 	/** Registers a field member in the default category with a default description. */
@@ -179,7 +179,7 @@ public:
 		ImplementPropertyFromArchive(propInfo, field);
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(propInfo));
-		return this->SelfAsMostSpecificTypeInfoBuilder();
+		return this->AsMostSpecificTypeInfoBuilder();
 	}
 
 	/** Adds a readonly property with a field getter, in the default category with a default description. */
@@ -229,7 +229,7 @@ public:
 		propInfo._fromArchive = nullptr;
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(propInfo));
-		return this->SelfAsMostSpecificTypeInfoBuilder();
+		return this->AsMostSpecificTypeInfoBuilder();
 	}
 
 	/** Adds a field property with a custom setter, in the default category with a default description. */
@@ -281,7 +281,7 @@ public:
 		ImplementPropertyFromArchive(propInfo, field, setter);
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(propInfo));
-		return this->SelfAsMostSpecificTypeInfoBuilder();
+		return this->AsMostSpecificTypeInfoBuilder();
 	}
 
 	/** Adds a read-only property with a custom getter, in the default category with a default description. */
@@ -331,7 +331,7 @@ public:
 		propInfo._fromArchive = nullptr;
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(propInfo));
-		return this->SelfAsMostSpecificTypeInfoBuilder();
+		return this->AsMostSpecificTypeInfoBuilder();
 	}
 
 	/** Adds a property with a custom getter and setter, in the default category with a default desciption. */
@@ -382,7 +382,7 @@ public:
 		ImplementPropertyFromArchive(propInfo, getter, setter);
 
 		_data.PropertyTable[name] = _data.Properties.Add(std::move(propInfo));
-		return this->SelfAsMostSpecificTypeInfoBuilder();
+		return this->AsMostSpecificTypeInfoBuilder();
 	}
 
 private:
@@ -573,7 +573,7 @@ private:
 
 		// Bit of a hack, but necessary. If this becomes problematic, I can replace the field offset with a getter/setter std::function pair or something.
 		// Though that would be much less performant.
-		StaticBuffer<sizeof(CompoundT)> fake; // Create a fake object to dereference this field from
+		StaticBufferFor<CompoundT> fake; // Create a fake object to dereference this field from
 		FieldT* member = &(fake.template GetPointer<CompoundT>()->*field);
 		
 		return reinterpret_cast<byte*>(member) - fake.GetPointer(); // Calculate the offset of the field from the base
@@ -625,7 +625,7 @@ private:
 	static void GetterSetterAsserts()
 	{
 		static_assert(std::is_same<std::decay_t<GetT>, std::decay_t<SetT>>::value, "The setter must accept the same type as the getter.");
-		static_assert(std::is_object<SetT>::value || stde::is_const_reference<SetT>::value, "The setter must either accept by value or const-reference.");
+		static_assert(std::is_object<SetT>::value || stde::is_reference_to_const<SetT>::value, "The setter must either accept by value or const-reference.");
 	}
 
 	////////////////

@@ -8,7 +8,7 @@
 #include <initializer_list>
 #include "../STDE/TypeTraits.h"
 #include "../Operations/TypeOps.h"
-#include "DynamicBuffer.h"
+#include "../Memory/Buffers/DynamicBuffer.h"
 
 /** A linear, contiguous array. Replacement for 'std::vector'.
 * Pros:
@@ -29,11 +29,9 @@ struct Array final
 	///   Information   ///
 public:
 
-	static_assert(!std::is_reference<T>::value,
-		"You can't create an 'Array' of references, dumbass");
+	static_assert(!std::is_reference<T>::value, "You can't create an 'Array' of references, dumbass");
 
-	static_assert(Operations::MoveConstruct<T>::Supported,
-		"T must be move-constructible.");
+	static_assert(Operations::MoveConstruct<T>::Supported, "T must be move-constructible.");
 
 	/** Array's copy-constructor is only supported if T's copy-constructor is supported. */
 	static constexpr bool CopyConstructorSupported = Operations::CopyConstruct<T>::Supported;
@@ -127,15 +125,15 @@ public:
 
 	/** Default-constructs an Array. */
 	Array()
-		: _value(), _numElements(0)
+		: _buffer(), _numElements(0)
 	{
 		// All done
 	}
 
 	/** Constructs a new Array.
 	* 'size' - the starting size of the array. */
-	Array(uint32 size)
-		: _value(size * sizeof(T)), _numElements(0)
+	Array(std::size_t size)
+		: _buffer(sizeof(T) * size), _numElements(0)
 	{
 		// All done
 	}
@@ -152,53 +150,85 @@ public:
 
 	/** Constructs a new Array by moving an existing Array. */
 	Array(Array&& move)
-		: _value(std::move(move._value)), _numElements(move._numElements)
+		: _buffer(std::move(move._buffer)), _numElements(move._numElements)
 	{
 		move._numElements = 0;
 	}
 	
-	/** Constructs a new Array from a c-style array of related types. */
-	template <typename RelatedT, WHERE(std::is_constructible<T, const RelatedT&>::value)>
-	Array(const RelatedT cArray[], uint32 size)
+	/** Constructs a new Array by copying a C-style array. */
+	template <typename F, std::size_t Size>
+	Array(const F (&cArray)[Size])
+		: Array(cArray, Size)
+	{
+		// All done
+	}
+
+	/** Constructs a new Array by copying a C-style array. */
+	template <typename F>
+	Array(const F cArray[], std::size_t size)
 		: Array(size)
 	{
-		for (uint32 i = 0; i < size; ++i)
+		static_assert(Operations::Construct<T, const F&>::Supported, "The given C-style array cannot be used to initialize this Array.");
+
+		for (std::size_t i = 0; i < size; ++i)
 		{
 			this->FastAdd(cArray[i]);
 		}
 	}
 
-	/** Constructs a new Array from an initializer-list of related types. */
-	template <typename RelatedT, WHERE(std::is_constructible<T, const RelatedT&>::value)>
-	Array(const std::initializer_list<RelatedT>& init)
-		: Array(static_cast<uint32>(init.size()))
+	/** Constructs a new Array by moving a C-style array. */
+	template <typename F, std::size_t Size>
+	Array(F (&&cArray)[Size])
+		: Array(Size)
 	{
+		static_assert(Operations::Construct<T, F&&>::Supported, "The given C-style array cannot be used to intiailize this Array.");
+
+		for (std::size_t i = 0; i < Size; ++i)
+		{
+			this->FastAdd(std::move(cArray[i]));
+		}
+	}
+
+	/** Constructs a new Array from a std::initializer_list. */
+	template <typename F>
+	Array(const std::initializer_list<F>& init)
+		: Array(init.size())
+	{
+		static_assert(Operations::Construct<T, const F&>::Supported, "The given 'std::initializer_list' cannot be used to initialize this Array.");
+
 		for (const auto& value : init)
 		{
 			this->FastAdd(value);
 		}
 	}
 
-	/** Constructs a new Array from an Array of related types. */
-	template <typename RelatedT, WHERE(std::is_constructible<T, const RelatedT&>::value)>
-	Array(const Array<RelatedT>& copy)
+	/** Constructs a new Array by copying an existing Array of different types. */
+	template <typename F>
+	Array(const Array<F>& copy)
 		: Array(copy.Size())
 	{
+		static_assert(Operations::Construct<T, const F&>::Supported, "The given Array cannot be used to initialize this Array.");
+
 		for (const auto& value : copy)
 		{
 			this->FastAdd(value);
 		}
 	}
 
-	/** Constructs an array from an existing array of compatible types. */
-	template <typename CompatibleT, WHERE(std::is_convertible<CompatibleT*, T*>::value && sizeof(CompatibleT) == sizeof(T))>
-	Array(Array<CompatibleT>&& move)
-		: _value(std::move(move._value)), _numElements(move._numElements)
+	/** Constructs a new Array by moving an existing Array of different types. */
+	template <typename F>
+	Array(Array<F>&& move)
+		: Array(move.Size())
 	{
-		move._numElements = 0;
+		static_assert(Operations::Construct<T, F&&>::Supported, "The given Array cannot be used to initialize this Array.");
+
+		for (auto& value : move)
+		{
+			this->FastAdd(std::move(value));
+		}
 	}
 
-	/** Destroys an Array. */
+	/** Destroys this Array. */
 	~Array()
 	{
 		this->Clear();
@@ -209,15 +239,15 @@ public:
 public:
 
 	/** Returns the number of elements in this Array. */
-	FORCEINLINE uint32 Size() const
+	FORCEINLINE std::size_t Size() const
 	{
 		return _numElements;
 	}
 
-	/** Returns the number of elements that can be put into this Array before needing to re-allocate. */
-	FORCEINLINE uint32 Capacity() const
+	/** Returns the number of elements that can be put into this Array before requring reallocation. */
+	FORCEINLINE std::size_t Capacity() const
 	{
-		return _value.GetSize() / sizeof(T);
+		return _buffer.GetSize() / sizeof(T);
 	}
 
 	/** Returns whether this Array is empty. */
@@ -229,13 +259,13 @@ public:
 	/** Returns a pointer to the start of this Array. */
 	FORCEINLINE T* CArray()
 	{
-		return reinterpret_cast<T*>(_value.GetValue());
+		return _buffer.GetPointer<T>();
 	}
 
 	/** Returns a pointer to the start of this Array. */
 	FORCEINLINE const T* CArray() const
 	{
-		return reinterpret_cast<const T*>(_value.GetValue());
+		return _buffer.GetPointer<T>();
 	}
 
 	/** Returns whether a copy of the given value exists in this Array. */
@@ -254,7 +284,7 @@ public:
 
 	/** Appends a new element to the end of this Array, returning the new element's index. */
 	template <typename UT>
-	uint32 Add(UT&& value)
+	std::size_t Add(UT&& value)
 	{
 		if (this->Size() >= this->Capacity())
 		{
@@ -274,7 +304,7 @@ public:
 	/** Insert the given value at the given index, returning the index of the new element
 	* (which may be different from the given index). */
 	template <typename UT>
-	uint32 Insert(UT&& value, uint32 index)
+	std::size_t Insert(UT&& value, std::size_t index)
 	{
 		// If our insert index is beyond the size of the array
 		if (index > this->Size())
@@ -293,7 +323,7 @@ public:
 		new(this->CArray() + this->Size()) T(std::move(this->FastGet(this->Size() - 1)));
 
 		// Move all proceeding elements up an index
-		for (uint32 i = this->Size() - 1; i > index; --i)
+		for (auto i = this->Size() - 1; i > index; --i)
 		{
 			this->FastGet(i) = std::move(this->FastGet(i - 1));
 		}
@@ -306,7 +336,7 @@ public:
 
 	/** Returns a reference to the element at the given index.
 	* WARNING: Make sure the index exists in this Array. */
-	FORCEINLINE T& Get(uint32 index)
+	FORCEINLINE T& Get(std::size_t index)
 	{
 		assert(index < this->Size());
 		return this->FastGet(index);
@@ -314,7 +344,7 @@ public:
 
 	/** Returns an immutable reference to the element at the given index.
 	* WARNING: Make sure the index exists in this Array. */
-	FORCEINLINE const T& Get(uint32 index) const
+	FORCEINLINE const T& Get(std::size_t index) const
 	{
 		assert(index < this->Size());
 		return this->FastGet(index);
@@ -375,13 +405,13 @@ public:
 	}
 		
 	/** Returns a portion of this Array from the given index to the end. */
-	FORCEINLINE Array Slice(uint32 start) const
+	FORCEINLINE Array Slice(std::size_t start) const
 	{
 		return this->Slice(start, this->Size());
 	}
 
 	/** Returns a portion of this Array, starting at the 'start' index and ending at the 'end' index. */
-	Array Slice(uint32 start, uint32 end) const
+	Array Slice(std::size_t start, std::size_t end) const
 	{
 		end = std::min(end, this->Size());
 
@@ -394,11 +424,11 @@ public:
 	}
 
 	/** Returns the indices at which a copy of the given value occurs in this Array. */
-	Array<uint32> OccurrencesOf(const T& value) const
+	Array<std::size_t> OccurrencesOf(const T& value) const
 	{
-		Array<uint32> occurrences;
+		Array<std::size_t> occurrences;
 
-		for (uint32 i = 0; i < this->Size(); ++i)
+		for (std::size_t i = 0; i < this->Size(); ++i)
 		{
 			if (value == this->FastGet(i))
 			{
@@ -411,9 +441,9 @@ public:
 
 	/** Deletes the value stored at the specified index in this Array.
 	* NOTE: This may offset the index of every proceeding element by -1. */
-	void DeleteAt(uint32 index)
+	void DeleteAt(std::size_t index)
 	{
-		for (uint32 i = index; i < this->Size() - 1; ++i)
+		for (auto i = index; i < this->Size() - 1; ++i)
 		{
 			this->FastGet(i) = std::move(this->FastGet(i + 1));
 		}
@@ -424,7 +454,7 @@ public:
 	* NOTE: This may offset the index of every proceeding element by -1. */
 	void DeleteFirst(const T& value)
 	{
-		for (uint32 i = 0; i < this->Size(); ++i)
+		for (std::size_t i = 0; i < this->Size(); ++i)
 		{
 			if (value == this->FastGet(i))
 			{
@@ -438,7 +468,7 @@ public:
 	* NOTE: This may offset the index of every proceeding element by -1. */
 	void DeleteLast(const T& value)
 	{
-		for (uint32 i = this->Size(); i > 0; --i)
+		for (auto i = this->Size(); i > 0; --i)
 		{
 			if (value == this->FastGet(i - 1))
 			{
@@ -452,9 +482,9 @@ public:
 	* NOTE: This offsets the index of every proceeding element where a deletion occurs. */
 	void DeleteAll(const T& value)
 	{
-		uint32 x = 0;
+		std::size_t x = 0;
 
-		for (uint32 i = 0; i < this->Size(); ++i)
+		for (std::size_t i = 0; i < this->Size(); ++i)
 		{
 			// If we've found a match
 			if (value == this->FastGet(i))
@@ -467,7 +497,7 @@ public:
 		}
 
 		// Adjust size
-		uint32 oldSize = _numElements;
+		std::size_t oldSize = _numElements;
 		_numElements = x;
 
 		// Destroy remaining elements
@@ -480,7 +510,7 @@ public:
 	/** Extracts the value stored at the given index before deleting it.
 	* WARNING: Make sure the given index exists in this Array.
 	* NOTE: This offsets the index of every proceeding element by -1. */
-	T RemoveAt(uint32 index)
+	T RemoveAt(std::size_t index)
 	{
 		T value = std::move(this->Get(index));
 		this->DeleteAt(index);
@@ -488,7 +518,7 @@ public:
 	}
 
 	/** Ensures that 'Capacity' is at least as big as the value specified in 'size'. */
-	void Reserve(uint32 size)
+	void Reserve(std::size_t size)
 	{
 		if (this->Capacity() < size)
 		{
@@ -497,27 +527,27 @@ public:
 	}
 
 	/** Ensures that 'Capacity' is at least as big as 'Size' + 'size'. */
-	void ReserveAdditional(uint32 size)
+	void ReserveAdditional(std::size_t size)
 	{
 		this->Resize(this->Size() + size);
 	}
 
 	/** Reallocates the internal array with more (or less) space, moving existing elements into the new array.
 	* NOTE: To prevent loss of data, ensure that the given size is greater than the current size of the array. */
-	void Resize(uint32 size)
+	void Resize(std::size_t size)
 	{
-		auto newBuff = DynamicBuffer(size * sizeof(T));
+		DynamicBuffer newBuff(size * sizeof(T));
 
-		uint32 i;
-		for (i = 0; i < size && i < this->Size(); ++i)
+		std::size_t i = 0;
+		for (; i < size && i < this->Size(); ++i)
 		{
 			// Move all elements below 'size' into new array
 			T& value = this->FastGet(i);
-			new(newBuff.GetValueAs<T>() + i) T(std::move(value));
+			new (newBuff.GetPointer<T>() + i) T(std::move(value));
 			value.~T();
 		}
 
-		_value = std::move(newBuff);
+		_buffer = std::move(newBuff);
 		_numElements = i;
 	}
 
@@ -530,7 +560,7 @@ public:
 	/** Quickly deletes all values from this Array, preserving size. */
 	FORCEINLINE void Clear()
 	{
-		for (uint32 i = 0; i < this->Size(); ++i)
+		for (std::size_t i = 0; i < this->Size(); ++i)
 		{
 			this->FastGet(i).~T();
 		}
@@ -538,10 +568,10 @@ public:
 	}
 
 	/** Deletes all values from this Array, resetting size. */
-	void Reset(uint32 size)
+	void Reset(std::size_t size)
 	{
 		this->Clear();
-		_value.Reset(size);
+		_buffer.Reset(size);
 	}
 
 	/* Iteration methods */
@@ -566,14 +596,14 @@ private:
 
 	/** Returns a reference to the element at the given index.
 	* WARNING: Only use this if you KNOW (algorithmically) that the index exists in this Array. */
-	FORCEINLINE T& FastGet(uint32 index)
+	FORCEINLINE T& FastGet(std::size_t index)
 	{
 		return this->CArray()[index];
 	}
 
 	/** Returns an immutable reference to the element at the given index.
 	* WARNING: Only use this if you KNOW (algorithmically) that the index exists in this Array. */
-	FORCEINLINE const T& FastGet(uint32 index) const
+	FORCEINLINE const T& FastGet(std::size_t index) const
 	{
 		return this->CArray()[index];
 	}
@@ -581,9 +611,10 @@ private:
 	/** Adds an element to the end of this Array without checking for available space.
 	* Returns the index of the new element.
 	* WARNING: Only use this if you KNOW (algorithmically) that there is enough space. */
-	FORCEINLINE uint32 FastAdd(T value)
+	template <typename UT>
+	FORCEINLINE std::size_t FastAdd(UT&& value)
 	{
-		new(this->CArray() + this->Size()) T(std::move(value));
+		new (this->CArray() + this->Size()) T(std::forward<UT>(value));
 		return _numElements++;
 	}
 
@@ -591,11 +622,11 @@ private:
 	///   Operators   ///
 public:
 
-	FORCEINLINE T& operator[](uint32 index)
+	FORCEINLINE T& operator[](std::size_t index)
 	{
 		return this->Get(index);
 	}
-	FORCEINLINE const T& operator[](uint32 index) const
+	FORCEINLINE const T& operator[](std::size_t index) const
 	{
 		return this->Get(index);
 	}
@@ -610,7 +641,7 @@ public:
 			return false;
 		}
 
-		for (uint32 i = 0; i < lhs.Size(); ++i)
+		for (std::size_t i = 0; i < lhs.Size(); ++i)
 		{
 			if (lhs.FastGet(i) != rhs.FastGet(i))
 			{
@@ -644,7 +675,7 @@ public:
 		{
 			this->Reset(0);
 			
-			_value = std::move(move._value);
+			_buffer = std::move(move._buffer);
 			_numElements = move._numElements;
 
 			move._numElements = 0;
@@ -691,7 +722,7 @@ public:
 		if (this != &move)
 		{
 			this->Reset(0);
-			_value = std::move(move._value);
+			_buffer = std::move(move._buffer);
 			_numElements = move._numElements;
 
 			move._numElements = 0;
@@ -765,17 +796,10 @@ public:
 		return lhs;
 	}
 
-	/** Converts this Array to another Array by reference. */
-	template <typename CompatibleT, WHERE(std::is_convertible<T*, const CompatibleT*>::value && sizeof(T) == sizeof(CompatibleT))>
-	explicit operator const Array<CompatibleT>&() const
-	{
-		return reinterpret_cast<const Array<CompatibleT>&>(self);
-	}
-
 	////////////////
 	///   Data   ///
 private:
 	
-	DynamicBuffer _value;
-	uint32 _numElements;
+	DynamicBuffer _buffer;
+	std::size_t _numElements;
 };

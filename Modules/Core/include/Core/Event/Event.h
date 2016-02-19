@@ -2,7 +2,7 @@
 #pragma once
 
 #include "../Containers/String.h"
-#include "../Memory/UniquePtr.h"
+#include "../Memory/New.h"
 #include "../Reflection/Variant.h"
 #include "../Reflection/VoidInfo.h"
 
@@ -49,7 +49,7 @@ public:
 	{
 		if (_value)
 		{
-			return _value.GetValueType();
+			return *_value.GetManagedType();
 		}
 		else
 		{
@@ -75,5 +75,5 @@ public:
 private:
 
 	String _name;
-	UniquePtr<void> _value;
+	Owned<void> _value;
 };

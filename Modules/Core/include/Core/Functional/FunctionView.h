@@ -23,7 +23,6 @@ public:
 		};
 	}
 
-	FunctionView(FunctionView&& move) = default;
 	FunctionView(FunctionView& copy)
 		: View(copy), _func(copy._func), _invoker(copy._invoker)
 	{
@@ -34,6 +33,7 @@ public:
 	{
 		// All done TODO: Default this once MSVC doesn't suck
 	}
+	FunctionView(FunctionView&& move) = default;
 
 	/////////////////////
 	///   Operators   ///

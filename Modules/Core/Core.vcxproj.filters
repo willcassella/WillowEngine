@@ -37,9 +37,6 @@
     <Filter Include="include\Memory">
       <UniqueIdentifier>{1aebb451-f788-4d3a-9270-95bae9daab9d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\Forwards">
-      <UniqueIdentifier>{0b780da5-afb7-46cb-8d61-2ee263c9a423}</UniqueIdentifier>
-    </Filter>
     <Filter Include="source\Memory">
       <UniqueIdentifier>{f385ed7c-d2b3-4e5f-9e63-205e0a0b6745}</UniqueIdentifier>
     </Filter>
@@ -75,6 +72,24 @@
     </Filter>
     <Filter Include="include\Functional">
       <UniqueIdentifier>{1eb5aede-b9ed-4b9f-9e39-47c88945d167}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Memory\Pointers">
+      <UniqueIdentifier>{1d13428f-c8e4-4cb3-8f73-e01710d410b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Memory\Buffers">
+      <UniqueIdentifier>{51f1623a-cfb9-41bf-b301-5be8ea241e28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Memory\Buffers">
+      <UniqueIdentifier>{ef57c014-1173-44a6-8a8e-dd35d670e842}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Memory\Pointers">
+      <UniqueIdentifier>{f5a0eb1d-f137-466f-905e-980372ef155f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Forwards">
+      <UniqueIdentifier>{0b780da5-afb7-46cb-8d61-2ee263c9a423}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Umbrellas">
+      <UniqueIdentifier>{f568fef5-10a8-40ec-bf4a-d9c4b679e291}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -150,9 +165,6 @@
     <ClInclude Include="include\Core\Operations\FromString.h">
       <Filter>include\Operations</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Core.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Event\Event.h">
       <Filter>include\Event</Filter>
     </ClInclude>
@@ -186,12 +198,6 @@
     <ClInclude Include="include\Core\Forwards\Core.h">
       <Filter>include\Forwards</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Containers\DynamicBuffer.h">
-      <Filter>include\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Core\Containers\StaticBuffer.h">
-      <Filter>include\Containers</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Operations\TypeOps.h">
       <Filter>include\Operations</Filter>
     </ClInclude>
@@ -199,9 +205,6 @@
       <Filter>include\Forwards</Filter>
     </ClInclude>
     <ClInclude Include="include\Core\Math\Mat4.h">
-      <Filter>include\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Core\Math\Math.h">
       <Filter>include\Math</Filter>
     </ClInclude>
     <ClInclude Include="include\Core\Math\Quat.h">
@@ -219,9 +222,6 @@
     <ClInclude Include="include\Core\Reflection\TypePtr.h">
       <Filter>include\Reflection</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Memory\UniquePtr.h">
-      <Filter>include\Memory</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Operations\ToArchive.h">
       <Filter>include\Operations</Filter>
     </ClInclude>
@@ -230,12 +230,6 @@
     </ClInclude>
     <ClInclude Include="include\Core\Reflection\DataInfo.h">
       <Filter>include\Reflection</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Core\Memory\MemoryBlock.h">
-      <Filter>include\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Core\Memory\Ptr.h">
-      <Filter>include\Memory</Filter>
     </ClInclude>
     <ClInclude Include="include\Core\Memory\MemoryManager.h">
       <Filter>include\Memory</Filter>
@@ -248,9 +242,6 @@
     </ClInclude>
     <ClInclude Include="include\Core\Containers\Union.h">
       <Filter>include\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Core\Memory\PointerBase.h">
-      <Filter>include\Memory</Filter>
     </ClInclude>
     <ClInclude Include="include\Core\Math\Angle.h">
       <Filter>include\Math</Filter>
@@ -299,6 +290,30 @@
     </ClInclude>
     <ClInclude Include="include\Core\Misc\SerializeableStruct.h">
       <Filter>include\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Memory\Pointers\Weak.h">
+      <Filter>include\Memory\Pointers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Memory\Buffers\DynamicBuffer.h">
+      <Filter>include\Memory\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Memory\Buffers\StaticBuffer.h">
+      <Filter>include\Memory\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Memory\ReferenceCounter.h">
+      <Filter>include\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Umbrellas\Reflection.h">
+      <Filter>include\Umbrellas</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Memory\Pointers\Owned.h">
+      <Filter>include\Memory\Pointers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Memory\Pointers\Borrowed.h">
+      <Filter>include\Memory\Pointers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Umbrellas\Containers.h">
+      <Filter>include\Umbrellas</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -359,9 +374,6 @@
     <ClCompile Include="source\Event\EventManager.cpp">
       <Filter>source\Event</Filter>
     </ClCompile>
-    <ClCompile Include="source\Containers\DynamicBuffer.cpp">
-      <Filter>source\Containers</Filter>
-    </ClCompile>
     <ClCompile Include="source\Math\Mat4.cpp">
       <Filter>source\Math</Filter>
     </ClCompile>
@@ -383,12 +395,6 @@
     <ClCompile Include="source\Reflection\DataInfo.cpp">
       <Filter>source\Reflection</Filter>
     </ClCompile>
-    <ClCompile Include="source\Memory\MemoryManager.cpp">
-      <Filter>source\Memory</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Memory\MemoryBlock.cpp">
-      <Filter>source\Memory</Filter>
-    </ClCompile>
     <ClCompile Include="source\Testing\Test.cpp">
       <Filter>source\Test</Filter>
     </ClCompile>
@@ -398,14 +404,17 @@
     <ClCompile Include="source\IO\Console.cpp">
       <Filter>source\IO</Filter>
     </ClCompile>
-    <ClCompile Include="source\Memory\UniquePtr.cpp">
-      <Filter>source\Memory</Filter>
-    </ClCompile>
     <ClCompile Include="source\Operations\ToArchive.cpp">
       <Filter>source\Operations</Filter>
     </ClCompile>
     <ClCompile Include="source\Operations\FromArchive.cpp">
       <Filter>source\Operations</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Memory\Buffers\DynamicBuffer.cpp">
+      <Filter>source\Memory\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Memory\Pointers\Owned.cpp">
+      <Filter>source\Memory\Pointers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

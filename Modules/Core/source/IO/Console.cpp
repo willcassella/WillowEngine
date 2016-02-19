@@ -3,7 +3,7 @@
 #include <iostream>
 #include "../../include/Core/IO/Console.h"
 
-constexpr uint32 MaxInput = 256; // Max number of characters retrieved from one line of input
+constexpr std::size_t MaxInput = 256; // Max number of characters retrieved from one line of input
 constexpr CString WarningPrefix = "WARNING: "; // String printed before every warning
 constexpr CString ErrorPrefix = "ERROR: "; // String printed before every error
 constexpr CString PromptPrefix = "> "; // String printed before every input

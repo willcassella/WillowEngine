@@ -61,11 +61,26 @@ public:
 	/** Gets a String value out of this node. */
 	virtual void GetValue(String& value) const = 0;
 
+	/** Returns whether the value of this node is null. */
+	virtual bool IsNull() const = 0;
+
+	/** Calls the given function on the first child of this node, if it exists.
+	* Returns 'false' if this node does not have any children. 
+	* NOTE: This is equivelant to calling "GetChild(0, function)". */
+	virtual bool GetFirstChild(FunctionView<void, const ArchiveReader&> function) const = 0;
+
+	/** Calls the given function on the zero-based index of the children of this node, if it exists.
+	* Returns 'false' if the indexed node does not exists. */
+	virtual bool GetChild(uint32 index, FunctionView<void, const ArchiveReader&> function) const = 0;
+
 	/** Searches for the first child node of this node with the given name.
 	* Calls the given function if the node was found, and returns 'true'.
 	* Returns 'false' if the node was not found. */
 	virtual bool GetChild(const String& name, FunctionView<void, const ArchiveReader&> function) const = 0;
 
 	/** Iterates over all child nodes of this node. */
-	virtual void EnumerateChildren(EnumeratorView<const ArchiveReader&> enumerator) const = 0;
+	virtual void EnumerateChildren(const EnumeratorView<const ArchiveReader&>& enumerator) const = 0;
+
+	/** Iterates over all child nodes of this node with the given name. */
+	virtual void EnumerateChildren(const String& name, const EnumeratorView<const ArchiveReader&>& reader) const = 0;
 };

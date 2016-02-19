@@ -26,7 +26,7 @@ public:
 private:
 
 	Application();
-	~Application();
+	~Application() = default;
 
 	///////////////////
 	///   Methods   ///
@@ -35,7 +35,7 @@ public:
 	/** Performs start-up procedures for the Application. This should be the first function called in 'main'. */
 	static void Initialize();
 
-	/** Performs shutdown procedure for the Applicaion. This should be the last function called in 'main'. */
+	/** Performs shutdown procedure for the Application. This should be the last function called in 'main'. */
 	static void Terminate(int code = 0);
 
 	/** Returns the default memory manager for this Application. */
@@ -58,13 +58,6 @@ private:
 
 	/** Returns the instance of the Application singleton. */
 	static Application& Instance();
-
-	/////////////////////
-	///   Operators   ///
-public:
-
-	Application& operator=(const Application& copy) = delete;
-	Application& operator=(Application&& move) = delete;
 
 	////////////////
 	///   Data   ///

@@ -2,6 +2,7 @@
 /** All macros for determining compiler and build environment go here */
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
 
 /////////////////////////////
@@ -14,16 +15,22 @@
 #	define EXPORT
 #else
 	/** Modules are being linked dynamically (as .dll or .so files) */
-#	if defined WINDOWS
-		/** The engine is being compiled on Windows */
+#	if defined _MSC_VER
+		/** The engine is being compiled on MSVC. */
 #		define IMPORT __declspec(dllimport)
 #		define EXPORT __declspec(dllexport)
-#	else
-		/** We're on OSX or Linux or something, so __declspec(blah blah) isn't needed */
+#	elif defined __clang__ || __GNUC__
+		/** The engine is being compiled on OSX or Linux. */
 #		define IMPORT
-#		define EXPORT
+#		define EXPORT __attribute__((visibility("default")))
+#	else
+		/** Unknown compiler, cannot proceed. */
+#		error Non-static linking used on unknown compiler
 #	endif
 #endif
+
+/** Macro useful for macros that expect to be given an API specification, but can't be given one. */
+#define NO_API
 
 //////////////////////
 ///   Primitives   ///
@@ -32,10 +39,10 @@
 // char is still char (ONLY used for characters, prefer 'Char')
 using byte = std::uint8_t;
 using int16 = std::int16_t;
-using int32 = std::int32_t;
-using int64 = std::int64_t;
 using uint16 = std::uint16_t;
+using int32 = std::int32_t;
 using uint32 = std::uint32_t;
+using int64 = std::int64_t;
 using uint64 = std::uint64_t;
 // float is still float (prefer 'Scalar')
 // double is still double (prefer 'Scalar')
@@ -70,13 +77,3 @@ using CString = const Char*;
 	/** We're on some unknown compiler, so just use normal inline */
 #	define FORCEINLINE inline
 #endif
-
-/** Macro that makes it easier to call const overloads on a non-const object. */
-#define const_this static_cast<const std::remove_pointer_t<decltype(this)>*>(this)
-
-/** Shortcut for dereferencing 'this', useful for calling operators on self and returning reference to self in a clean way.
-* Still, you should prefer using 'this' over 'self'. */
-#define self (*this)
-
-/** This is to 'self' what 'const_this' is to 'this'. */
-#define const_self (*const_this)

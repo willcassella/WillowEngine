@@ -1,18 +1,23 @@
 // Object.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "Forwards/IO.h"
-#include "STDE/Utility.h"
-#include "Containers/Array.h"
 #include "Reflection/Reflection.h"
-#include "Memory/MemoryBlock.h"
+#include "Memory/ReferenceCounter.h"
 
-/////////////////
-///   Types   ///
-
-/** Base of every polymorphic type in the engine. */
+/** Base of any polymorphic type that has to act within a larger system.
+* May be referenced with 'Weak<T>' and 'Borrowed<T>' smart pointers. */
 class CORE_API Object
 {
+	///////////////////////
+	///   Inner Types   ///
+protected:
+
+	/** Flags for constructing Objects. */
+	enum ObjectConstructionFlags
+	{
+		NoReferenceCount
+	};
+
 	///////////////////////
 	///   Information   ///
 public:
@@ -20,43 +25,37 @@ public:
 	REFLECTION_DECL(ClassInfo)
 	IMPLEMENTS()
 
-	/** Ptr needs to be able to add and remove itself from the "_references" Array. */
-	template <class ObjectT>
-	friend struct Ptr;
-
 	////////////////////////
 	///   Constructors   ///
 public:
 
-	Object() = default;
+	/** Constructs an Object with a reference counter. */
+	Object();
+	
+	/** Constructs an Object without a reference counter. */
+	explicit Object(ObjectConstructionFlags flags);
+
 	Object(const Object& copy) = delete;
 	Object(Object&& move) = delete;
+	
+	/** Marks Object as being destroyed (if it's refcounted). */
 	virtual ~Object();
 
 	///////////////////
 	///   Methods   ///
 public:
 
-	/** Returns a pointer to the block header for this Object.
-	* NOTE: Returns 'null' if this Object is not managed (or if it is still being constructed). */
-	FORCEINLINE const MemoryBlockController* GetBlockController() const
+	/** Returns whether this Object is reference counted. */
+	FORCEINLINE bool IsReferenceCounted() const
 	{
-		if (_managedWithBlockController)
-		{
-			// MemoryBlockControllers are always constructed immediately before the value they control, so we just use some pointer arithmetic.
-			return reinterpret_cast<const MemoryBlockController*>(this) - 1;
-		}
-		else
-		{
-			return nullptr;
-		}
+		return _referenceCounter != nullptr;
 	}
 
-	/** Returns a pointer to the block controller for this Object.
-	* NOTE: Returns 'null' if this Object is not managed (or if it is still being constructed). */
-	FORCEINLINE MemoryBlockController* GetBlockController()
+	/** Returns a pointer to the reference counter for this Object.
+	* NOTE: Returns 'null' if this Object is not reference counted. */
+	FORCEINLINE ReferenceCounter* GetReferenceCounter() const
 	{
-		return const_cast<MemoryBlockController*>(stde::as_const(*this).GetBlockController());
+		return _referenceCounter;
 	}
 
 	/** Returns the type information for this Object. */
@@ -76,9 +75,5 @@ public:
 	///   Data   ///
 private:
 
-	/** Whether this object is managed. If it is, you may access its block controller via 'GetBlockController()'. */
-	bool _managedWithBlockController = false;
-
-	// @TODO: Remove this in favor of externally managed references
-	mutable Array<void*> _references;
+	ReferenceCounter* _referenceCounter;
 };

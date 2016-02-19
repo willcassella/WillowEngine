@@ -2,7 +2,7 @@
 
 #include <cstdlib>
 #include <cstring>
-#include "../../include/Core/Containers/DynamicBuffer.h"
+#include "../../../include/Core/Memory/Buffers/DynamicBuffer.h"
 
 ////////////////////////
 ///   Constructors   ///
@@ -13,7 +13,7 @@ DynamicBuffer::DynamicBuffer()
 	// All done
 }
 
-DynamicBuffer::DynamicBuffer(uint32 size)
+DynamicBuffer::DynamicBuffer(std::size_t size)
 {
 	_size = size;
 	_value = static_cast<byte*>(malloc(size));
@@ -42,13 +42,13 @@ DynamicBuffer::~DynamicBuffer()
 ///////////////////
 ///   Methods   ///
 
-void DynamicBuffer::Resize(uint32 newSize)
+void DynamicBuffer::Resize(std::size_t newSize)
 {
 	_size = newSize;
 	_value = static_cast<byte*>(realloc(_value, newSize));
 }
 
-void DynamicBuffer::Reset(uint32 newSize)
+void DynamicBuffer::Reset(std::size_t newSize)
 {
 	free(_value);
 
@@ -63,11 +63,11 @@ DynamicBuffer& DynamicBuffer::operator=(const DynamicBuffer& copy)
 {
 	if (this != &copy)
 	{
-		Reset(copy._size);
+		this->Reset(copy._size);
 		memcpy(_value, copy._value, copy._size);
 	}
 
-	return self;
+	return *this;
 }
 
 DynamicBuffer& DynamicBuffer::operator=(DynamicBuffer&& move)
@@ -83,5 +83,5 @@ DynamicBuffer& DynamicBuffer::operator=(DynamicBuffer&& move)
 		move._value = nullptr;
 	}
 
-	return self;
+	return *this;
 }

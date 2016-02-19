@@ -3,14 +3,7 @@
 
 #include <cstdlib>
 #include <cstring>
-#include "../Forwards/Operations.h"
-#include "../Containers/Array.h"
-#include "../Containers/List.h"
-#include "../Containers/Queue.h"
-#include "../Containers/Stack.h"
-#include "../Containers/Table.h"
-#include "../Containers/Pair.h"
-#include "../Containers/String.h"
+#include "../Umbrellas/Containers.h"
 
 namespace Operations
 {
@@ -96,24 +89,6 @@ namespace Operations
 		static constexpr bool Supported = true;
 	};
 
-	/** Implementation of 'ToString' for int32 */
-	template <>
-	struct CORE_API ToString < int32 > final
-	{
-		static void Function(String& out, int32 value);
-
-		static constexpr bool Supported = true;
-	};
-
-	/** Implementation of 'ToString' for int64 */
-	template <>
-	struct CORE_API ToString < int64 > final
-	{
-		static void Function(String& out, int64 value);
-
-		static constexpr bool Supported = true;
-	};
-
 	/** Implementation of 'ToString' for uint16 */
 	template <>
 	struct CORE_API ToString < uint16 > final
@@ -123,11 +98,29 @@ namespace Operations
 		static constexpr bool Supported = true;
 	};
 
+	/** Implementation of 'ToString' for int32 */
+	template <>
+	struct CORE_API ToString < int32 > final
+	{
+		static void Function(String& out, int32 value);
+
+		static constexpr bool Supported = true;
+	};
+
 	/** Implementation of 'ToString' for uint32 */
 	template <>
 	struct CORE_API ToString < uint32 > final
 	{
 		static void Function(String& out, uint32 value);
+
+		static constexpr bool Supported = true;
+	};
+
+	/** Implementation of 'ToString' for int64 */
+	template <>
+	struct CORE_API ToString < int64 > final
+	{
+		static void Function(String& out, int64 value);
 
 		static constexpr bool Supported = true;
 	};
@@ -442,7 +435,7 @@ FORCEINLINE String ToString(const T& value)
 template <typename T>
 String Format(const String& format, const T& value)
 {
-	for (uint32 i = 0; i < format.Length(); ++i)
+	for (std::size_t i = 0; i < format.Length(); ++i)
 	{
 		if (format[i] == '@')
 		{
@@ -459,7 +452,7 @@ String Format(const String& format, const T& value)
 template <typename T, typename ... MoreT>
 String Format(const String& format, const T& value, const MoreT& ... more)
 {
-	for (uint32 i = 0; i < format.Length(); ++i)
+	for (std::size_t i = 0; i < format.Length(); ++i)
 	{
 		if (format[i] == '@')
 		{
@@ -480,19 +473,18 @@ String fFormat(const String& format, const T& ... values)
     String strs[] = { ToString(values)... };
     
     // Determine how large our stack buffer for the resultant string must be
-    uint32 bufferSize = (format.Length() + 1) * sizeof(Char);
+    auto bufferSize = format.Length() + 1;
     for (const auto& str : strs)
     {
-        bufferSize += str.Length() * sizeof(Char);
+        bufferSize += str.Length();
     }
     
     // The start of our stack buffer for the string
-    auto buffStart = (Char*)malloc(bufferSize);
-    memset(buffStart, 0, bufferSize);
+    auto buffStart = static_cast<Char*>(std::calloc(bufferSize, sizeof(Char)));
     auto buff = buffStart;
     
     // Iterate over the format string
-    for (uint32 formatIndex = 0, valueIndex = 0; formatIndex < format.Length(); ++formatIndex)
+    for (std::size_t formatIndex = 0, valueIndex = 0; formatIndex < format.Length(); ++formatIndex)
     {
         // Get the current character from the format string
         Char c = format[formatIndex];
@@ -501,7 +493,7 @@ String fFormat(const String& format, const T& ... values)
         if (c == '@' && valueIndex < sizeof...(values))
         {
             const String& vString = strs[valueIndex];
-            memcpy(buff, vString.Cstr(), vString.Length());
+            std::memcpy(buff, vString.Cstr(), vString.Length());
             
             buff += vString.Length();
             valueIndex++;
@@ -514,7 +506,7 @@ String fFormat(const String& format, const T& ... values)
     }
     
     // Create string from result, and free buffer
-    String result = buffStart;
-    free(buffStart);
+    String result(buffStart);
+    std::free(buffStart);
     return result;
 }

@@ -1,8 +1,4 @@
 // Operations.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
-/** "Operations" are a collection of generic functions that can be performed on polymorphic and non-polymorphic types.
-* These functions can see through polymorphism (using the reflection system), so even if the visible type doesn't implement 
-* the desired function, it can still be called if the derived type does. */
-#pragma once
 
 #include "IO.h"
 #include "Containers.h"

@@ -76,7 +76,7 @@ public:
 	/** Constructs this TypeInfo object from the given builder, and registers with the Application. */
 	template <typename T>
 	TypeInfo(const TypeInfoBuilder<T, TypeInfo>& builder)
-		: _data(std::move(builder._data))
+		: Base(NoReferenceCount), _data(std::move(builder._data))
 	{
 		this->RegisterWithApplication();
 	}
@@ -108,10 +108,16 @@ public:
 		return _name;
 	}
 
-	/** Returns the static size of this type */
-	FORCEINLINE uint32 GetSize() const
+	/** Returns the size of this type. */
+	FORCEINLINE std::size_t GetSize() const
 	{
 		return _data.size;
+	}
+
+	/** Returns the alignment of this type. */
+	FORCEINLINE std::size_t GetAlignment() const
+	{
+		return _data.alignment;
 	}
 
 	/** Returns whether this type is a compound type.
@@ -258,25 +264,29 @@ public:
 		return _data.moveAssignmentOperator;
 	}
 
-	/** Returns the implementation of 'ToString' for this type. */
+	/** Returns the implementation of 'ToString' for this type. 
+	* NOTE: Returns 'null' if this type does not support the 'ToString' operation. */
 	FORCEINLINE ToStringImplementation GetToStringImplementation() const
 	{
 		return _data.toStringImplementation;
 	}
 
-	/** Returns the implementation of 'FromString' for this type. */
+	/** Returns the implementation of 'FromString' for this type. 
+	* NOTE: Returns 'null' if this type does not support the 'FromString' operation. */
 	FORCEINLINE FromStringImplementation GetFromStringImplementation() const
 	{
 		return _data.fromStringImplementation;
 	}
 
-	/** Returns the implementation of 'ToArchive' for this type. */
+	/** Returns the implementation of 'ToArchive' for this type. 
+	* NOTE: Returns 'null' if this type does not support the 'ToArchive' operation. */
 	FORCEINLINE ToArchiveImplementation GetToArchiveImplementation() const
 	{
 		return _data.toArchiveImplementation;
 	}
 
-	/** Returns the implementation of 'FromArchive' for this type. */
+	/** Returns the implementation of 'FromArchive' for this type. 
+	* NOTE: Returns 'null' if this type does not support the 'FromArchive' operation. */
 	FORCEINLINE FromArchiveImplementation GetFromArchiveImplementation() const
 	{
 		return _data.fromArchiveImplementation;
@@ -336,7 +346,8 @@ private:
 		FromStringImplementation fromStringImplementation = nullptr;
 		ToArchiveImplementation toArchiveImplementation = nullptr;
 		FromArchiveImplementation fromArchiveImplementation = nullptr;
-		uint32 size = 0;
+		std::size_t size = 0;
+		std::size_t alignment = 0;
 		bool isCompound = false;
 		bool isAbstract = false;
 		bool isPolymorphic = false;
@@ -477,6 +488,7 @@ public:
 		}
 
 		_data.size = sizeof(T);
+		_data.alignment = alignof(T&); // Have to use reference here, since MSVC errors out when using plain 'T'
 		_data.isCompound = std::is_class<T>::value;
 		_data.isAbstract = std::is_abstract<T>::value;
 		_data.isPolymorphic = std::is_polymorphic<T>::value;
@@ -489,7 +501,7 @@ protected:
 
 	/** Since TypeInfoBuilders use the builder pattern, you can use this to return yourself after each build method, 
 	* without losing compmile-time info. */
-	auto& SelfAsMostSpecificTypeInfoBuilder()
+	auto& AsMostSpecificTypeInfoBuilder()
 	{
 		return static_cast<TypeInfoBuilder<T>&>(*this);
 	}
@@ -556,4 +568,4 @@ FORCEINLINE const TargetT* Cast(const T& value)
 #define BUILD_REFLECTION(T) const T::TypeInfoType T::StaticTypeInfo = ::TypeInfoBuilder<T>(#T)
 
 // TODO: Documentation
-#define BUILD_TEMPLATE_REFLECTION(T, ...) const typename T<__VA_ARGS__>::TypeInfoType T<__VA_ARGS__>::StaticTypeInfo = ::TypeInfoBuilder<T<__VA_ARGS__>>(#T) 
+#define BUILD_TEMPLATE_REFLECTION(T, ...) const typename T<__VA_ARGS__>::TypeInfoType T<__VA_ARGS__>::StaticTypeInfo = ::TypeInfoBuilder<T<__VA_ARGS__>>(#T)

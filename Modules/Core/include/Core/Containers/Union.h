@@ -2,9 +2,8 @@
 #pragma once
 
 #include <limits>
-#include "../Forwards/Reflection.h"
-#include "../Math/Math.h"
-#include "Nullable.h"
+#include "../STDE/TypeTraits.h"
+#include "../Memory/Buffers/StaticBuffer.h"
 
 template <typename ... T>
 struct Union final
@@ -25,7 +24,16 @@ private:
 	///   Constructors   ///
 public:
 
-	Union() = default;
+	Union()
+		: _index(0)
+	{
+		// All done
+	}
+	Union(Union& copy)
+		: Union()
+	{
+		*this = copy;
+	}
 	Union(const Union& copy)
 		: Union()
 	{
@@ -38,14 +46,14 @@ public:
 	}
 	~Union()
 	{
-		Nullify();
+		this->Nullify();
 	}
 
-	template <typename F, WHERE(!std::is_same<std::decay_t<F>, Union>::value)>
+	template <typename F>
 	Union(F&& value)
 		: Union()
 	{
-		Set(std::forward<F>(value));
+		this->SetValue(std::forward<F>(value));
 	}
 
 	///////////////////
@@ -55,131 +63,224 @@ public:
 	/** Returns whether this Union is currently holding a value. */
 	FORCEINLINE bool HasValue() const
 	{
-		return _index.HasValue();
+		return _index != 0;
 	}
 
-	/** Returns the type of the currently held value.
-	* NOTE: Returns 'null' if this Union is not currently holding a value. */
-	const TypeInfo* GetCurrentType() const
+	template <typename F>
+	bool GetValue(F& out) &
 	{
-		if (_index.HasValue())
+		if (_index == IndexOf<F>())
 		{
-			return Invoke<const TypeInfo*>([](const auto& a) { return &TypeOf(a); });
+			out = this->FastGet<F>();
+			return true;
 		}
 		else
 		{
-			return nullptr;
+			return false;
+		}
+	}
+
+	template <typename F>
+	bool GetValue(F& out) const &
+	{
+		if (_index == IndexOf<F>())
+		{
+			out = this->FastGet<F>();
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	template <typename F>
+	bool GetValue(F& out) &&
+	{
+		if (_index == IndexOf<F>())
+		{
+			out = std::move(this->FastGet<F>());
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/** Gets the current value of this Union as the given type.
+	* WARNING: This function will fail if this Variant is not currently holding a value of the given type. */
+	template <typename F>
+	F& GetValue() &
+	{
+		assert(_index == IndexOf<F>());
+		return this->FastGet<F>();
+	}
+
+	/** Gets the current value of this Union as the given type.
+	* WARNING: This function will fail if this Variant is not currently holding a value of the given type. */
+	template <typename F>
+	const F& GetValue() const &
+	{
+		assert(_index == IndexOf<F>());
+		return this->FastGet<F>();
+	}
+
+	/** Since this is a temporary object, you couldn't have possibly checked if it contains a value. */
+	template <typename F>
+	F&& GetValue() && = delete;
+
+	/** Sets the current value of this Union. */
+	template <typename F>
+	void SetValue(F&& value)
+	{
+		using DecayF = std::decay_t<F>;
+		constexpr auto newIndex = IndexOf<DecayF>();
+
+		// If we have a currently loaded value
+		if (this->HasValue())
+		{
+			// If the currently loaded value is of the same type as the new value
+			if (_index == newIndex)
+			{
+				// Just assign directly
+				this->FastGet<DecayF>() = std::forward<F>(value);
+				return;
+			}
+			else
+			{
+				// Delete current value
+				this->Nullify();
+			}
+		}
+
+		_buffer.template Emplace<DecayF>(std::forward<F>(value));
+		_index = newIndex;
+	}
+
+	/** Invokes the given function on the current value.
+	* Returns whether the given function was invoked. */
+	template <typename FuncT>
+	bool Invoke(FuncT&& func) &
+	{
+		using Invoker = void(void*, FuncT&&);
+		Invoker* const invokers[] = { CreateNoOpInvoker<void*, FuncT>(), CreateInvoker<T&, void*, FuncT>()... };
+
+		invokers[_index](_buffer.GetPointer(), std::forward<FuncT>(func));
+		return this->HasValue();
+	}
+
+	/** Invokes the given function on the current value.
+	* Returns whether the given function was invoked. */
+	template <typename FuncT>
+	bool Invoke(FuncT&& func) const &
+	{
+		using Invoker = void(const void*, FuncT&&);
+		Invoker* const invokers[] = { CreateNoOpInvoker<const void*, FuncT>(), CreateInvoker<const T&, const void*, FuncT>()... };
+
+		invokers[_index](_buffer.GetPointer(), std::forward<FuncT>(func));
+		return this->HasValue();
+	}
+
+	/** Invokes the given function on the current value.
+	* Returns whether the given function was invoked. */
+	template <typename FuncT>
+	bool Invoke(FuncT&& func) &&
+	{
+		using Invoker = void(void*, FuncT&&);
+		Invoker* const invokers[] = { CreateNoOpInvoker<void*, FuncT>(), CreateInvoker<T&&, void*, FuncT>()... };
+
+		invokers[_index](_buffer.GetPointer(), std::forward<FuncT>(func));
+		return this->HasValue();
+	}
+
+	/** Invokes the given function on the currently held instance of 'F', if it exists.
+	* Returns whether the given function was invoked. */
+	template <typename F, typename FuncT>
+	bool InvokeFor(FuncT&& func) &
+	{
+		if (_index == IndexOf<F>())
+		{
+			std::forward<FuncT>(func)(this->FastGet<F>());
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/** Invokes the given function on the currently held instance of 'F', if it exists.
+	* Returns whether the given function was invoked. */
+	template <typename F, typename FuncT>
+	bool InvokeFor(FuncT&& func) const &
+	{
+		if (_index == IndexOf<F>())
+		{
+			std::forward<FuncT>(func)(this->FastGet<F>());
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/** Invokes the given function on the currently held instance of 'F', if it exists.
+	* Returns whether the given function was invoked. */
+	template <typename F, typename FuncT>
+	bool InvokeFor(FuncT&& func) &&
+	{
+		if (_index == IndexOf<F>())
+		{
+			std::forward<FuncT>(func)(std::move(this->FastGet<F>()));
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 
 	/** Destroys the currently held value. */
 	void Nullify()
 	{
-		if (HasValue())
+		// Invoke the destructor
+		this->Invoke([](auto& v)
 		{
-			// Destroy the value
-			Invoke([](auto& v) -> void
-			{
-				using F = std::decay_t<decltype(v)>;
-				v.~F();
-			});
-			_index.Nullify();
-		}
-	}
-
-	/** Returns the current value as a Variant. 
-	* WARNING: This function will fail if this Union is not currently holding a value. */
-	Variant Get();
-
-	/** Returns the current value as an ImmutableVariant. 
-	* WARNING: This function will fail if this Union is not currently holding a value. */
-	ImmutableVariant Get() const;
-
-	/** Sets the current value of this Union. */
-	template <typename F>
-	void Set(F&& value)
-	{
-		using DecayF = std::decay_t<F>;
-		Index newIndex = IndexOf<DecayF>();
-
-		// If we have a currently loaded value
-		if (_index.HasValue())
-		{
-			// If the currently loaded value is of the same type as the new value
-			if (_index.GetValue() == newIndex)
-			{
-				// Just assign directly
-				Get<DecayF>() = std::forward<F>(value);
-				return;
-			}
-			else
-			{
-				// Delete current value
-				Nullify();
-			}
-		}
-
-		_value.template Emplace<DecayF>(std::forward<F>(value));
-		_index = newIndex;
-	}
-
-	/** Gets the current value of this Union as the given type.
-	* WARNING: This function will fail if this Variant is not currently holding a value of the given type. */
-	template <typename F>
-	F& Get()
-	{
-		assert(HasValue() && _index.GetValue() == IndexOf<F>());
-		return *_value.template GetPointer<F>();
-	}
-
-	/** Gets the current value of this Union as the given type.
-	* WARNING: This function will fail if this Variant is not currently holding a value of the given type. */
-	template <typename F>
-	const F& Get() const
-	{
-		assert(_index.HasValue() && _index.GetValue() == IndexOf<F>());
-		return *_value.template GetPointer<F>();
-	}
-
-	/** Invokes the given function on the current value.
-	* WARNING: If this Union is not holding a value, this function will fail. */
-	template <typename R = void, typename Func>
-	R Invoke(const Func& func)
-	{
-		using Invoker = R (void*, const Func&);	
-		Invoker* funcs[] = { CreateInvoker<T, R, Func>()... };
-		
-		assert(HasValue());
-		return funcs[_index.GetValue()](_value.GetPointer(), func);
-	}
-
-	/** Invokes the given function on the current value.
-	* WARNING: If this Union is not holding a value, this function will fail. */
-	template <typename R = void, typename Func>
-	R Invoke(const Func& func) const
-	{
-		using Invoker = R (const void*, const Func&);
-		Invoker* funcs[] = { CreateInvoker<T, R, Func>()... };
-
-		assert(HasValue());
-		return funcs[_index.GetValue()](_value.GetPointer(), func);
+			using F = std::decay_t<decltype(v)>;
+			v.~F();
+		});
+		_index = 0;
 	}
 
 private:
+
+	template <typename F>
+	FORCEINLINE F& FastGet()
+	{
+		return *_buffer.template GetPointer<F>();
+	}
+
+	template <typename F>
+	FORCEINLINE const F& FastGet() const
+	{
+		return *_buffer.template GetPointer<F>();
+	}
 
 	/** Returns the index of the given type. */
 	template <typename S>
 	static constexpr Index IndexOf()
 	{
 		static_assert(Seq::template contains<S>(), "The given type does not exist in this Union.");
-		return IndexOf<S>(0, Seq{});
+		return IndexOf<S>(1, Seq());
 	}
 
 	/** Recursively finds the index of the given type. */
 	template <typename S, typename C, typename ... F>
 	static constexpr Index IndexOf(Index current, stde::type_sequence<C, F...>)
 	{
-		return std::is_same<S, C>::value ? current : IndexOf<S>(current + 1, stde::type_sequence<F...>{});
+		return std::is_same<S, C>::value ? current : IndexOf<S>(current + 1, stde::type_sequence<F...>());
 	}
 
 	/** End case, never actually reached. */
@@ -189,41 +290,39 @@ private:
 		return 0;
 	}
 
-	/** Creates a function that invokes a function of the given type ("Func") on a type-erased
-	* instance of "F", returning an instance of "R".
+	/** Creates a function that invokes a function of the given type ("Func") on a type-erased instance of "F".
 	* Used by the "Invoke" method. */
-	template <typename F, typename R, typename Func>
-	/*MSVCS: constexpr*/ auto CreateInvoker()
+	template <typename F, typename EraseT, typename FuncT>
+	static auto CreateInvoker()
 	{
-		return [](void* arg, const Func& func) -> R
+		return [](EraseT arg, FuncT&& func)
 		{
-			return func(*static_cast<F*>(arg));
+			std::forward<FuncT>(func)(std::forward<F>(*static_cast<std::remove_reference_t<F>*>(arg)));
 		};
 	}
 
-	/** Creates a function that invokes a function of the given type ("Func") on a type-erased
-	* instance of "F", returning an instance of "R".
+	/** Creates a function that does nothing with its arguments.
 	* Used by the "Invoke" method. */
-	template <typename F, typename R, typename Func>
-	/*MSVCS: constexpr*/ auto CreateInvoker() const
+	template <typename EraseT, typename FuncT>
+	static auto CreateNoOpInvoker()
 	{
-		return [](const void* arg, const Func& func) -> R
+		return [](EraseT /*arg*/, FuncT&& /*func*/)
 		{
-			return func(*static_cast<const F*>(arg));
+			// Do nothing
 		};
 	}
 
 	/** Returns the size of the largest type among the types suppored by this Union. */
 	static constexpr std::size_t GetMaxSize()
 	{
-		return GetMaxSize(Seq{});
+		return GetMaxSize(Seq());
 	}
 
 	/** Returns the size of the largest type among the types suppored by this Union. */
 	template <typename F, typename ... MoreF>
 	static constexpr std::size_t GetMaxSize(stde::type_sequence<F, MoreF...>)
 	{
-		return Max(sizeof(F), GetMaxSize(stde::type_sequence<MoreF...>{}));
+		return std::max(sizeof(F), GetMaxSize(stde::type_sequence<MoreF...>{}));
 	}
 
 	/** Returns the size of the largest type among the types suppored by this Union. */
@@ -232,10 +331,49 @@ private:
 		return 0;
 	}
 
+	/** Returns the maximum alignment among the types supported by this Union. */
+	static constexpr std::size_t GetMaxAlignment()
+	{
+		return GetMaxAlignment(Seq());
+	}
+
+	/** Returns the maximum alignment among the types supported by this Union. */
+	template <typename F, typename ... MoreF>
+	static constexpr std::size_t GetMaxAlignment(stde::type_sequence<F, MoreF...>)
+	{
+		return std::max(alignof(F), GetMaxAlignment(stde::type_sequence<MoreF...>{}));
+	}
+
+	/** Returns the maximum alignment among the types supported by this Union. */
+	static constexpr std::size_t GetMaxAlignment(stde::type_sequence<>)
+	{
+		return 0;
+	}
+
 	/////////////////////
 	///   Operators   ///
 public:
 
+	Union& operator=(Union& copy)
+	{
+		if (this != &copy)
+		{
+			if (copy.HasValue())
+			{
+				// Copy the value
+				copy.Invoke([this](auto& value)
+				{
+					this->SetValue(value);
+				});
+			}
+			else
+			{
+				this->Nullify();
+			}
+		}
+
+		return *this;
+	}
 	Union& operator=(const Union& copy)
 	{
 		if (this != &copy)
@@ -243,14 +381,14 @@ public:
 			if (copy.HasValue())
 			{
 				// Copy the value
-				copy.Invoke([this](const auto& v) -> void
+				copy.Invoke([this](const auto& value)
 				{
-					this->Set(v);
+					this->SetValue(value);
 				});
 			}
 			else
 			{
-				Nullify();
+				this->Nullify();
 			}
 		}
 
@@ -263,25 +401,24 @@ public:
 			if (move.HasValue())
 			{
 				// Move the value
-				move.Invoke([this](auto& v) -> void
+				std::move(move).Invoke([this](auto&& value) -> void
 				{
-					this->Set(std::move(v));
+					this->SetValue(std::move(value));
 				});
-				move.Nullify();
 			}
 			else
 			{
-				Nullify();
+				this->Nullify();
 			}
 		}
 
 		return *this;
 	}
 
-	template <typename F, WHERE(!std::is_same<std::decay_t<F>, Union>::value)>
+	template <typename F>
 	Union& operator=(F&& value)
 	{
-		Set(std::forward<F>(value));
+		this->SetValue(std::forward<F>(value));
 		return *this;
 	}
 
@@ -289,10 +426,11 @@ public:
 	///   Data   ///
 private:
 
-	Nullable<Index> _index;
-
-	// For some reason, again ONLY ON MSVC, I have to store this as a static constexpr variable,
+	// For some reason, ONLY ON MSVC< I have to store this as a static constexpr variable,
 	// rather than just putting "GetMaxSize()" into the StaticBuffer size
 	static constexpr std::size_t Size = GetMaxSize();
-	StaticBuffer<Size> _value;
+	static constexpr std::size_t Alignment = GetMaxAlignment();
+
+	Index _index;
+	StaticBuffer<Size, Alignment> _buffer;
 };

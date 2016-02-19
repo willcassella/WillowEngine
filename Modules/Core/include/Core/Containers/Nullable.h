@@ -3,7 +3,7 @@
 
 #include <cassert>
 #include "../STDE/TypeTraits.h"
-#include "StaticBuffer.h"
+#include "../Memory/Buffers/StaticBuffer.h"
 
 template <typename T>
 struct Nullable final
@@ -23,6 +23,17 @@ public:
 		: _hasValue(false)
 	{
 		// All done
+	}
+	Nullable(Nullable& copy)
+	{
+		if (copy.HasValue())
+		{
+			this->PlaceValue(copy.FastGet());
+		}
+		else
+		{
+			_hasValue = false;
+		}
 	}
 	Nullable(const Nullable& copy)
 	{
@@ -55,6 +66,19 @@ public:
 	}
 
 	template <typename F>
+	Nullable(Nullable<F>& copy)
+	{
+		if (copy.HasValue())
+		{
+			this->PlaceValue(copy.FastGet());
+		}
+		else
+		{
+			_hasValue = false;
+		}
+	}
+
+	template <typename F>
 	Nullable(const Nullable<F>& copy)
 	{
 		if (copy.HasValue())
@@ -80,7 +104,7 @@ public:
 		}
 	}
 
-	template <typename F, WHERE(!std::is_same<F, Nullable>::value)>
+	template <typename F>
 	Nullable(F&& value)
 	{
 		this->PlaceValue(std::forward<F>(value));
@@ -102,7 +126,7 @@ public:
 	T& GetValue() &
 	{
 		assert(_hasValue);
-		return FastGet();
+		return this->FastGet();
 	}
 
 	/** Returns the currently held value.
@@ -110,19 +134,19 @@ public:
 	const T& GetValue() const &
 	{
 		assert(_hasValue);
-		return FastGet();
+		return this->FastGet();
 	}
 
 	/** Since this is a temporary object, you couldn't have possibly checked if it contains a value. */
 	T&& GetValue() && = delete;
 
-	/** Sets the given receptor to the currently held value, if it exists.
-	* Returns whether the receptor was set or not. */
-	bool GetValue(T& receptor) const &
+	/** Sets 'out' to the currently held value, if it exists.
+	* Returns whether 'out' was set. */
+	bool GetValue(T& out) &
 	{
-		if (_hasValue)
+		if (this->HasValue())
 		{
-			receptor = FastGet();
+			out = this->FastGet();
 			return true;
 		}
 		else
@@ -131,13 +155,28 @@ public:
 		}
 	}
 
-	/** Sets the given receptor to the currently held value, if it exists.
-	* Returns whether the receptor was set or not. */
-	bool GetValue(T& receptor) &&
+	/** Sets 'out' to the currently held value, if it exists.
+	* Returns whether 'out' was set. */
+	bool GetValue(T& out) const &
 	{
-		if (_hasValue)
+		if (this->HasValue())
 		{
-			receptor = std::move(FastGet());
+			out = this->FastGet();
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/** Sets 'out' to the currently held value, if it exists.
+	* Returns whether 'out' was set. */
+	bool GetValue(T& out) &&
+	{
+		if (this->HasValue())
+		{
+			out = std::move(this->FastGet());
 			return true;
 		}
 		else
@@ -148,12 +187,12 @@ public:
 
 	/** Invokes the given function object on the contained value, if it exists. Otherwise does nothing.
 	* Returns whether the given function was executed. */
-	template <typename Func>
-	bool Invoke(const Func& func) &
+	template <typename FuncT>
+	bool Invoke(FuncT&& func) &
 	{
 		if (this->HasValue())
 		{
-			func(this->FastGet());
+			std::forward<FuncT>(func)(this->FastGet());
 			return true;
 		}
 		else
@@ -164,12 +203,12 @@ public:
 
 	/** Invokes the given function object on the contained value, if it exists. Otherwise does nothing.
 	* Returns whether the given function was executed. */
-	template <typename Func>
-	bool Invoke(const Func& func) const &
+	template <typename FuncT>
+	bool Invoke(FuncT&& func) const &
 	{
 		if (this->HasValue())
 		{
-			func(this->FastGet());
+			std::forward<FuncT>(func)(this->FastGet());
 			return true;
 		}
 		else
@@ -180,12 +219,12 @@ public:
 
 	/** Invokes the given function object on the contained value, if it exists. Otherwise does nothing.
 	* Returns whether the given function was executed. */
-	template <typename Func>
-	bool Invoke(const Func& func) &&
+	template <typename FuncT>
+	bool Invoke(FuncT&& func) &&
 	{
 		if (this->HasValue())
 		{
-			func(std::move(this->FastGet()));
+			std::forward<FuncT>(func)(std::move(this->FastGet()));
 			return true;
 		}
 		else
@@ -199,7 +238,7 @@ public:
 	{
 		if (_hasValue)
 		{
-			FastGet().~T();
+			this->FastGet().~T();
 			_hasValue = false;
 		}
 	}
@@ -207,20 +246,20 @@ public:
 private:
 
 	/** Returns a reference to the value, without checking whether one exists. */
-	T& FastGet()
+	FORCEINLINE T& FastGet()
 	{
 		return *_buffer.template GetPointer<T>();
 	}
 
 	/** Returns a reference to the value, without checking whether one exists. */
-	const T& FastGet() const
+	FORCEINLINE const T& FastGet() const
 	{
 		return *_buffer.template GetPointer<T>();
 	}
-	
+
 	/** Constructs an instance of 'T' with the given value, without checking whether a current value exists. */
 	template <typename F>
-	void PlaceValue(F&& value)
+	FORCEINLINE void PlaceValue(F&& value)
 	{
 		_buffer.template Emplace<T>(std::forward<F>(value));
 		_hasValue = true;
@@ -230,6 +269,22 @@ private:
 	///   Operators   ///
 public:
 
+	Nullable& operator=(Nullable& copy)
+	{
+		if (this != &copy)
+		{
+			if (copy.HasValue())
+			{
+				*this = copy.FastGet();
+			}
+			else
+			{
+				this->Nullify();
+			}
+		}
+
+		return *this;
+	}
 	Nullable& operator=(const Nullable& copy)
 	{
 		if (this != &copy)
@@ -240,7 +295,7 @@ public:
 			}
 			else
 			{
-				Nullify();
+				this->Nullify();
 			}
 		}
 
@@ -256,8 +311,23 @@ public:
 			}
 			else
 			{
-				Nullify();
+				this->Nullify();
 			}
+		}
+
+		return *this;
+	}
+
+	template <typename F>
+	Nullable& operator=(Nullable<F>& copy)
+	{
+		if (copy.HasValue())
+		{
+			*this = copy.FastGet();
+		}
+		else
+		{
+			this->Nullify();
 		}
 
 		return *this;
@@ -272,7 +342,7 @@ public:
 		}
 		else
 		{
-			Nullify();
+			this->Nullify();
 		}
 
 		return *this;
@@ -287,22 +357,22 @@ public:
 		}
 		else
 		{
-			Nullify();
+			this->Nullify();
 		}
 
 		return *this;
 	}
 
-	template <typename F, WHERE(!std::is_same<F, Nullable>::value)>
+	template <typename F>
 	Nullable& operator=(F&& value)
 	{
-		if (_hasValue)
+		if (this->HasValue())
 		{
-			FastGet() = std::forward<F>(value);
+			this->FastGet() = std::forward<F>(value);
 		}
 		else
 		{
-			PlaceValue(std::forward<F>(value));
+			this->PlaceValue(std::forward<F>(value));
 		}
 
 		return *this;
@@ -312,6 +382,6 @@ public:
 	///   Data   ///
 private:
 
-	StaticBuffer<sizeof(T)> _buffer;
 	bool _hasValue;
+	StaticBufferFor<T> _buffer;
 };

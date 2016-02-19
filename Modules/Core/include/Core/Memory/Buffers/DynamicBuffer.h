@@ -1,7 +1,7 @@
 // DynamicBuffer.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "../config.h"
+#include "../../config.h"
 
 struct CORE_API DynamicBuffer final
 {
@@ -10,7 +10,7 @@ struct CORE_API DynamicBuffer final
 public:
 
 	DynamicBuffer();
-	explicit DynamicBuffer(uint32 size);
+	explicit DynamicBuffer(std::size_t size);
 	DynamicBuffer(const DynamicBuffer& copy);
 	DynamicBuffer(DynamicBuffer&& move);
 	~DynamicBuffer();
@@ -20,42 +20,36 @@ public:
 public:
 
 	/** Returns the size of this DynamicBuffer. */
-	FORCEINLINE uint32 GetSize() const
+	FORCEINLINE std::size_t GetSize() const
 	{
 		return _size;
 	}
 
-	/** Returns a pointer to the start of this DynamicBuffer. */
-	FORCEINLINE byte* GetValue()
+	/** Returns the alignment of this DynamicBuffer. */
+	static constexpr std::size_t GetAlignment()
 	{
-		return _value;
+		return alignof(std::max_align_t);
 	}
 
 	/** Returns a pointer to the start of this DynamicBuffer. */
-	FORCEINLINE const byte* GetValue() const
-	{
-		return _value;
-	}
-
-	/** Resizes this DynamicBuffer, copying existing data. */
-	void Resize(uint32 newSize);
-
-	/** Resizes this DynamicBuffer, erasing existing data. */
-	void Reset(uint32 newSize);
-
-	/** Returns a pointer to the start of this DynamicBuffer, as the given type. */
-	template <typename T>
-	FORCEINLINE T* GetValueAs()
+	template <typename T = byte>
+	FORCEINLINE T* GetPointer() &
 	{
 		return reinterpret_cast<T*>(_value);
 	}
 
-	/** Returns a pointer to the start of this DynamicBuffer, as the given type. */
-	template <typename T>
-	FORCEINLINE const T* GetValueAs() const
+	/** Returns a pointer to the start of this DynamicBuffer. */
+	template <typename T = byte>
+	FORCEINLINE const T* GetPointer() const &
 	{
 		return reinterpret_cast<const T*>(_value);
 	}
+
+	/** Resizes this DynamicBuffer, copying existing data. */
+	void Resize(std::size_t newSize);
+
+	/** Resizes this DynamicBuffer, erasing existing data. */
+	void Reset(std::size_t newSize);
 
 	/////////////////////
 	///   Operators   ///
@@ -68,6 +62,6 @@ public:
 	///   Data   ///
 private:
 
-	uint32 _size;
 	byte* _value;
+	std::size_t _size;
 };

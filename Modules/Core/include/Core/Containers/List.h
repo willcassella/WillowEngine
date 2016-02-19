@@ -60,7 +60,7 @@ public:
 		FORCEINLINE Iterator& operator++()
 		{
 			_node = _node->Next;
-			return self;
+			return *this;
 		}
 		FORCEINLINE T& operator*()
 		{
@@ -97,7 +97,7 @@ public:
 		FORCEINLINE ConstIterator& operator++()
 		{
 			_node = _node->Next;
-			return self;
+			return *this;
 		}
 		FORCEINLINE const T& operator*() const
 		{
@@ -127,10 +127,10 @@ public:
 	}
 
 	/** Constructs a new List from a c-style Array */
-	List(const T cArray[], uint32 size)
+	List(const T cArray[], std::size_t size)
 		: List()
 	{
-		for (uint32 i = 0; i < size; ++i)
+		for (std::size_t i = 0; i < size; ++i)
 		{
 			Add(cArray[i]);
 		}
@@ -169,7 +169,7 @@ public:
 public:
 
 	/** Returns the number of elements in this List */
-	FORCEINLINE uint32 Size() const
+	FORCEINLINE std::size_t Size() const
 	{
 		return _numElements;
 	}
@@ -183,7 +183,7 @@ public:
 	/** Returns whether a copy of the given value exists in this List */
 	bool Contains(const T& value) const
 	{
-		for (const auto& element : self)
+		for (const auto& element : *this)
 		{
 			if (value == element)
 			{
@@ -245,12 +245,12 @@ public:
 	}
 
 	/** Returns the indices at which a copy of value occurs in this List */
-	Array<uint32> OccurrencesOf(const T& value) const
+	Array<std::size_t> OccurrencesOf(const T& value) const
 	{
-		Array<uint32> occurrences;
+		Array<std::size_t> occurrences;
 
-		uint32 index = 0;
-		for (const auto& element : self)
+		std::size_t index = 0;
+		for (const auto& element : *this)
 		{
 			if (element == value)
 			{
@@ -264,13 +264,13 @@ public:
 	}
 
 	/** Returns a portion of this List from the given index to the end */
-	FORCEINLINE List Slice(uint32 start)
+	FORCEINLINE List Slice(std::size_t start)
 	{
 		return Slice(start, Size());
 	}
 
 	/** Returns the portion of this List between the given 'start' and 'end' indices */
-	List Slice(uint32 start, uint32 end)
+	List Slice(std::size_t start, std::size_t end)
 	{
 		List result;
 
@@ -279,9 +279,9 @@ public:
 			return result;
 		}
 
-		uint32 i = 0;
+		std::size_t i = 0;
 
-		for (const auto& element : self)
+		for (const auto& element : *this)
 		{
 			if (i >= start)
 			{
@@ -296,7 +296,7 @@ public:
 
 	/** Deletes the element stored at the specified index in this List
 	* NOTE: This may offset the index of every proceeding element by -1 */
-	void DeleteAt(uint32 index)
+	void DeleteAt(std::size_t index)
 	{
 		if (index >= Size())
 		{
@@ -306,7 +306,7 @@ public:
 		Node* target = _first;
 		Node* prev = nullptr;
 
-		for (uint32 i = 0; i <= index; ++i)
+		for (std::size_t i = 0; i <= index; ++i)
 		{
 			prev = target;
 			target = target->Next;
@@ -373,8 +373,8 @@ public:
 		Node* target = _first;
 		Node* prev = nullptr;
 
-		uint32 size = Size();
-		for (uint32 i = 0; i < size; ++i)
+		std::size_t size = Size();
+		for (std::size_t i = 0; i < size; ++i)
 		{
 			if (target->Value == value)
 			{
@@ -393,14 +393,14 @@ public:
 	/** Deletes the element stored at the specified index in this List
 	* WARNING: Make sure the given index exists in this Array
 	* NOTE: This offsets the index of every proceeding element by -1 */
-	T RemoveAt(uint32 index)
+	T RemoveAt(std::size_t index)
 	{
 		assert(index < Size());
 
 		Node* target = _first;
 		Node* prev = nullptr;
 
-		for (uint32 i = 0; i < index; ++i)
+		for (std::size_t i = 0; i < index; ++i)
 		{
 			prev = target;
 			target = target->Next;
@@ -482,7 +482,7 @@ public:
 			Add(value);
 		}
 
-		return self;
+		return *this;
 	}
 	List& operator=(const List& copy)
 	{
@@ -496,7 +496,7 @@ public:
 			}
 		}
 
-		return self;
+		return *this;
 	}
 	List& operator=(List&& move)
 	{
@@ -513,26 +513,26 @@ public:
 			move._numElements = 0;
 		}
 
-		return self;
+		return *this;
 	}
-	T& operator[](uint32 index)
+	T& operator[](std::size_t index)
 	{
 		assert(index < Size());
 
 		Node* target = _first;
-		for (uint32 i = 0; i < index; ++i)
+		for (std::size_t i = 0; i < index; ++i)
 		{
 			target = target->Next;
 		}
 
 		return target->Value;
 	}
-	const T& operator[](uint32 index) const
+	const T& operator[](std::size_t index) const
 	{
 		assert(index < Size());
 
 		Node* target = _first;
-		for (uint32 i = 0; i < index; ++i)
+		for (std::size_t i = 0; i < index; ++i)
 		{
 			target = target->Next;
 		}
@@ -563,7 +563,7 @@ public:
 		Node* lCurrent = lhs._first;
 		Node* rCurrent = rhs._first;
 
-		for (uint32 i = 0; i < lhs.Size(); ++i)
+		for (std::size_t i = 0; i < lhs.Size(); ++i)
 		{
 			if (lCurrent->Value != rCurrent->Value)
 			{
@@ -587,5 +587,5 @@ private:
 
 	Node* _first;
 	Node* _last;
-	uint32 _numElements;
+	std::size_t _numElements;
 };

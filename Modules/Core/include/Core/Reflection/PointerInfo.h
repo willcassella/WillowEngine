@@ -100,7 +100,7 @@ private:
 
 // TODO: Documentation
 template <>
-struct TypeInfoBuilder < std::nullptr_t, PointerInfo > final : TypeInfoBuilderBase<std::nullptr_t, PointerInfo>
+struct CORE_API TypeInfoBuilder < std::nullptr_t, PointerInfo > final : TypeInfoBuilderBase<std::nullptr_t, PointerInfo>
 {
 	///////////////////////
 	///   Information   ///

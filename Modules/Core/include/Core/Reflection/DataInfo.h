@@ -11,6 +11,7 @@ enum DataFlags : byte
 	DF_None = 0,
 	DF_Transient = (1 << 0)
 };
+REFLECTABLE_ENUM(CORE_API, DataFlags)
 
 /** Class representing the information for a data member (part of the private interface of a compound). */
 struct CORE_API DataInfo final
@@ -98,8 +99,3 @@ private:
 	std::size_t _offset;
 	DataFlags _flags;
 };
-
-//////////////////////
-///   Reflection   ///
-
-REFLECTABLE_ENUM(DataFlags)

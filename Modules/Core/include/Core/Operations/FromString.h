@@ -78,24 +78,6 @@ namespace Operations
 		static constexpr bool Supported = true;
 	};
 
-	/** Implementation of 'FromString' for int32 */
-	template <>
-	struct CORE_API FromString < int32 > final
-	{
-		static void Function(String& out, int32& value, const String& string);
-
-		static constexpr bool Supported = true;
-	};
-
-	/** Implementation of 'FromString' for int64 */
-	template <>
-	struct CORE_API FromString < int64 > final
-	{
-		static void Function(String& out, int64& value, const String& string);
-
-		static constexpr bool Supported = true;
-	};
-
 	/** Implementation of 'FromString' for uint16 */
 	template <>
 	struct CORE_API FromString < uint16 > final
@@ -105,11 +87,29 @@ namespace Operations
 		static constexpr bool Supported = true;
 	};
 
+	/** Implementation of 'FromString' for int32 */
+	template <>
+	struct CORE_API FromString < int32 > final
+	{
+		static void Function(String& out, int32& value, const String& string);
+
+		static constexpr bool Supported = true;
+	};
+
 	/** Implementation of 'FromString' for uint32 */
 	template <>
 	struct CORE_API FromString < uint32 > final
 	{
 		static void Function(String& out, uint32& value, const String& string);
+
+		static constexpr bool Supported = true;
+	};
+
+	/** Implementation of 'FromString' for int64 */
+	template <>
+	struct CORE_API FromString < int64 > final
+	{
+		static void Function(String& out, int64& value, const String& string);
 
 		static constexpr bool Supported = true;
 	};
@@ -207,7 +207,7 @@ FORCEINLINE String FromString(T& value, const String& string)
 template <typename T>
 String Parse(const String& string, const String& format, T& value)
 {
-	for (uint32 i = 0; i < format.Length(); ++i)
+	for (std::size_t i = 0; i < format.Length(); ++i)
 	{
 		if (format[i] == '@')
 		{
@@ -224,7 +224,7 @@ String Parse(const String& string, const String& format, T& value)
 template <typename T, typename ... MoreT>
 String Parse(const String& string, const String& format, T& value, MoreT& ... moreValues)
 {
-	for (uint32 i = 0; i < format.Length(); ++i)
+	for (std::size_t i = 0; i < format.Length(); ++i)
 	{
 		if (format[i] == '@')
 		{

@@ -86,7 +86,7 @@ public:
 	const auto& IsStable()
 	{
 		_data.isStable = true;
-		return this->SelfAsMostSpecificTypeInfoBuilder();
+		return this->AsMostSpecificTypeInfoBuilder();
 	}
 
 	////////////////

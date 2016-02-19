@@ -10,11 +10,30 @@ const ClassInfo Object::StaticTypeInfo = TypeInfoBuilder<Object>();
 ////////////////////////
 ///   Constructors   ///
 
+Object::Object()
+	: _referenceCounter(new ReferenceCounter())
+{
+	// All done
+}
+
+Object::Object(ObjectConstructionFlags flags)
+{
+	if (flags & NoReferenceCount)
+	{
+		_referenceCounter = nullptr;
+	}
+	else
+	{
+		_referenceCounter = new ReferenceCounter();
+	}
+}
+
 Object::~Object()
 {
-	for (auto ref : _references)
+	if (this->IsReferenceCounted())
 	{
-		memset(ref, 0, sizeof(Object*));
+		// Tell the reference counter that we've been destroyed
+		_referenceCounter->SetDestroyed();
 	}
 }
 

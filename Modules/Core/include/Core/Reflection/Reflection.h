@@ -4,6 +4,7 @@
 #include <initializer_list>
 #include "../config.h"
 #include "../Forwards/Containers.h"
+#include "../Forwards/Memory.h"
 #include "../Forwards/Reflection.h"
 #include "../STDE/TypeTraits.h"
 
@@ -26,7 +27,7 @@ namespace Implementation
 
 			CommonAsserts<TypeInfoT>();
 				
-			static_assert(stde::is_const_object<StorageT>::value,
+			static_assert(std::is_const<StorageT>::value && std::is_object<StorageT>::value,
 				"The 'StaticTypeInfo' static object must be a const value.");
 
 			return T::StaticTypeInfo;
@@ -39,7 +40,7 @@ namespace Implementation
 
 			CommonAsserts<TypeInfoT>();
 
-			static_assert(stde::is_const_reference<ReturnT>::value,
+			static_assert(stde::is_reference_to_const<ReturnT>::value,
 				"The 'GetType()' member function must return an immutable reference");
 			
 			return value.GetType();
@@ -166,42 +167,6 @@ namespace Implementation
 		}
 	};
 
-	/** Implementation of 'TypeOf' for int32 */
-	template <>
-	struct CORE_API TypeOf < int32 > final
-	{
-		/** Defined in 'Reflection/Reflection.cpp' */
-		static const PrimitiveInfo StaticTypeInfo;
-
-		FORCEINLINE static const PrimitiveInfo& Function()
-		{
-			return StaticTypeInfo;
-		}
-
-		FORCEINLINE static const PrimitiveInfo& Function(int32 /*value*/)
-		{
-			return StaticTypeInfo;
-		}
-	};
-
-	/** Implementation of 'TypeOf' for int64 */
-	template <>
-	struct CORE_API TypeOf < int64 > final
-	{
-		/** Defined in 'Reflection/Reflection.cpp' */
-		static const PrimitiveInfo StaticTypeInfo;
-
-		FORCEINLINE static const PrimitiveInfo& Function()
-		{
-			return StaticTypeInfo;
-		}
-
-		FORCEINLINE static const PrimitiveInfo& Function(int64 /*value*/)
-		{
-			return StaticTypeInfo;
-		}
-	};
-
 	/** Implementation of 'TypeOf' for uint16 */
 	template <>
 	struct CORE_API TypeOf < uint16 > final
@@ -220,6 +185,24 @@ namespace Implementation
 		}
 	};
 
+	/** Implementation of 'TypeOf' for int32 */
+	template <>
+	struct CORE_API TypeOf < int32 > final
+	{
+		/** Defined in 'Reflection/Reflection.cpp' */
+		static const PrimitiveInfo StaticTypeInfo;
+
+		FORCEINLINE static const PrimitiveInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const PrimitiveInfo& Function(int32 /*value*/)
+		{
+			return StaticTypeInfo;
+		}
+	};
+
 	/** Implementation of 'TypeOf' for uint32 */
 	template <>
 	struct CORE_API TypeOf < uint32 > final
@@ -233,6 +216,24 @@ namespace Implementation
 		}
 
 		FORCEINLINE static const PrimitiveInfo& Function(uint32 /*value*/)
+		{
+			return StaticTypeInfo;
+		}
+	};
+
+	/** Implementation of 'TypeOf' for int64 */
+	template <>
+	struct CORE_API TypeOf < int64 > final
+	{
+		/** Defined in 'Reflection/Reflection.cpp' */
+		static const PrimitiveInfo StaticTypeInfo;
+
+		FORCEINLINE static const PrimitiveInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		FORCEINLINE static const PrimitiveInfo& Function(int64 /*value*/)
 		{
 			return StaticTypeInfo;
 		}
@@ -568,11 +569,11 @@ public:														\
 * NOTE: This macro MUST be put in the global namespace. 
 * NOTE: Any use of this macro must have a corresponding 'BUILD_ENUM_REFLECTION(e)' macro in an source file
 * somewhere in the same module. */
-#define REFLECTABLE_ENUM(E)									\
+#define REFLECTABLE_ENUM(API, E)							\
 namespace Implementation									\
 {															\
 	template <>												\
-	struct THIS_MODULE_API TypeOf < E >	final				\
+	struct API TypeOf < E >	final							\
 	{														\
 		REFLECTION_DECL(::EnumInfo)							\
 															\

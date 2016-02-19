@@ -44,7 +44,7 @@ public:
 public:
 
 	/** Returns the number of elements in this Queue */
-	FORCEINLINE uint32 Size() const
+	FORCEINLINE std::size_t Size() const
 	{
 		return _values.Size();
 	}
@@ -120,7 +120,7 @@ public:
 			Push(value);
 		}
 
-		return self;
+		return *this;
 	}
 	friend FORCEINLINE bool operator==(const Queue& lhs, const Queue& rhs)
 	{

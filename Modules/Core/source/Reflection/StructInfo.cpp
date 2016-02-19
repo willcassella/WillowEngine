@@ -16,7 +16,7 @@ BUILD_REFLECTION(StructInfo)
 bool StructInfo::IsCastableTo(const TypeInfo& type) const
 {
 	// Structs are never castable to anything other than themselves
-	return type == self;
+	return type == *this;
 }
 
 bool StructInfo::IsStable() const

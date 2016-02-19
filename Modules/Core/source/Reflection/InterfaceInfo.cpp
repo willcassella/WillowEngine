@@ -13,5 +13,5 @@ BUILD_REFLECTION(InterfaceInfo);
 
 bool InterfaceInfo::IsCastableTo(const TypeInfo& type) const
 {
-	return type == self || type == TypeOf<Object>();
+	return type == *this || type == TypeOf<Object>();
 }

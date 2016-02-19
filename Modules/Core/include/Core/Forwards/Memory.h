@@ -4,27 +4,27 @@
 /////////////////
 ///   Types   ///
 
-/** Defined in 'Memory/MemoryBlockController.h' */
-struct MemoryBlockController;
-
 /** Defined in 'Memory/MemoryManager.h' */
 struct MemoryManager;
 
-/** Defined in 'Memory/New.h' */
-template <typename T>
-struct NewPtr;
+/** Defined in 'Memory/ReferenceCounter.h' */
+struct ReferenceCounter;
 
-/** Defined in 'Memory/UniquePtr.h' */
+/** Defined in 'Memory/Pointers/Owned.h' */
 template <typename T>
-struct UniquePtr;
+struct Owned;
 
-/** Defined in 'Memory/Ptr.h' */
+/** Defined in 'Memory/Pointers/Weak.h' */
 template <class T>
-struct Ptr;
+struct Weak;
+
+/** Defined in 'Memory/Pointers/Borrowed.h' */
+template <class T>
+struct Borrowed;
 
 /////////////////////
 ///   Functions   ///
 
 /** Defined in 'Memory/New.h' */
 template <typename T, typename ... Arg>
-NewPtr<T> New(Arg&& ... args);
+Owned<T> New(Arg&& ... args);

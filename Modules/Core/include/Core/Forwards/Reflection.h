@@ -65,6 +65,6 @@ TargetT* Cast(T& value);
 template <typename TargetT, typename T>
 const TargetT* Cast(const T& value);
 
-/** r-value references cannot be safely casted */
+/** r-value references cannot be safely casted. */
 template <typename TargetT, typename T>
-TargetT* Cast(T&& value) = delete;
+TargetT* Cast(const T&& value) = delete;

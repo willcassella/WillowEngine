@@ -27,7 +27,7 @@ BUILD_REFLECTION(TypeInfo)
 ///   Constructors   ///
 
 TypeInfo::TypeInfo(TypeInfo&& move)
-	: _data(std::move(move._data))
+	: Base(NoReferenceCount), _data(std::move(move._data))
 {
 	this->RegisterWithApplication();
 	// So basically with this, the compiler only has to THINK that TypeInfo objects are move-constructible (which I guess they are, but whatever).

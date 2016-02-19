@@ -108,7 +108,7 @@ public:
 	auto& IsBitFlag()
 	{
 		_data.isBitFlag = true;
-		return this->SelfAsMostSpecificTypeInfoBuilder();
+		return this->AsMostSpecificTypeInfoBuilder();
 	}
 
 	/** Adds a value for this enum, with a default description. */
@@ -121,7 +121,7 @@ public:
 	auto& Value(CString name, EnumT value, CString /*description*/)
 	{
 		_data.values.Insert(name, static_cast<std::underlying_type_t<EnumT>>(value));
-		return this->SelfAsMostSpecificTypeInfoBuilder();
+		return this->AsMostSpecificTypeInfoBuilder();
 	}
 
 	////////////////

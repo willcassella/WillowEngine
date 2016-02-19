@@ -1,7 +1,7 @@
 // TypeOps.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "../STDE/Utility.h"
+#include <type_traits>
 #include "../Forwards/Operations.h"
 #include "../env.h"
 

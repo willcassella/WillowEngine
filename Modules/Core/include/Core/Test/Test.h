@@ -165,13 +165,6 @@ namespace WTest
 
 		void AssertionFailure(CString assertion, const String& expected, const String& result);
 
-		/////////////////////
-		///   Operators   ///
-	public:
-
-		Context& operator=(const Context& copy) = delete;
-		Context& operator=(Context&& move) = delete;
-
 		////////////////
 		///   Data   ///
 	private:

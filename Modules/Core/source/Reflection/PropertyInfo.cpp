@@ -55,13 +55,13 @@ ImmutableProperty::ImmutableProperty(const PropertyInfo& info, const void* owner
 Property PropertyInfo::GetFromOwner(Variant owner) const
 {
 	assert(owner.GetType().IsCastableTo(*_ownerType));
-	return Property(self, owner.GetValue());
+	return Property(*this, owner.GetValue());
 }
 
 ImmutableProperty PropertyInfo::GetFromOwner(ImmutableVariant owner) const
 {
 	assert(owner.GetType().IsCastableTo(*_ownerType));
-	return ImmutableProperty(self, owner.GetValue());
+	return ImmutableProperty(*this, owner.GetValue());
 }
 
 bool Property::HasToStringImplementation() const

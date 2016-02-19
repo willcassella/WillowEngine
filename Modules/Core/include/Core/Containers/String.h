@@ -53,7 +53,7 @@ public:
 	}
 
 	/** Returns the number of characters in this String */
-	FORCEINLINE uint32 Length() const
+	FORCEINLINE std::size_t Length() const
 	{
 		return _value.Size() - 1;
 	}
@@ -65,21 +65,21 @@ public:
 	}
 
 	/** Returns the character at the given index in this String. */
-	FORCEINLINE Char CharAt(uint32 index) const
+	FORCEINLINE Char CharAt(std::size_t index) const
 	{
 		return _value[index];
 	}
 
 	/** Returns a substring from the character at the start index to the end of this String
 	* Returns an empty String if start is greater than the length of this String */
-	FORCEINLINE String SubString(uint32 start) const
+	FORCEINLINE String SubString(std::size_t start) const
 	{
 		return this->SubString(start, this->Length());
 	}
 
 	/** Returns a substring from the character at the start index to the character and the end index
 	* Returns an empty String if 'start' is greater than 'end' or 'start' is greater than the length of this String */
-	String SubString(uint32 start, uint32 end) const;
+	String SubString(std::size_t start, std::size_t end) const;
 
 	/** Returns a copy of this String with all upper-case characters */
 	String ToUpper() const;
@@ -99,13 +99,13 @@ public:
 	static String RemovePadding(const String& string, bool front = true, bool back = true);
 
 	/** Returns an Array of the starting indices at which the given String appears in this String */
-	Array<uint32> OccurencesOf(const String& string) const;
+	Array<std::size_t> OccurencesOf(const String& string) const;
 
 	/** Returns the characters of the String in opposite order */
 	String Reverse() const;
 
 	/** Returns the length of a c-style string (not including null character) */
-	static uint32 Length(CString string);
+	static std::size_t Length(CString string);
 
 	/** Compares two Strings
 	* 'caseSensitive' : Whether to consider character case when comparing the given Strings
@@ -121,7 +121,7 @@ public:
 
 	String& operator=(CString rhs);
 	String& operator=(Char rhs);
-	FORCEINLINE Char operator[](uint32 index) const
+	FORCEINLINE Char operator[](std::size_t index) const
 	{
 		return _value[index];
 	}

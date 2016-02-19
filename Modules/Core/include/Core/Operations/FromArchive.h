@@ -1,7 +1,6 @@
 // FromArchive.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "../Forwards/Operations.h"
 #include "../STDE/TypeTraits.h"
 #include "../IO/ArchiveReader.h"
 #include "TypeOps.h"

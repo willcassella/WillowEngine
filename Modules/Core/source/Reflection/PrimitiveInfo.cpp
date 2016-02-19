@@ -13,7 +13,7 @@ BUILD_REFLECTION(PrimitiveInfo);
 
 bool PrimitiveInfo::IsCastableTo(const TypeInfo& type) const
 {
-	return type == self; // Primitives are not castable to anything other than themselves
+	return type == *this; // Primitives are not castable to anything other than themselves
 }
 
 bool PrimitiveInfo::IsStable() const

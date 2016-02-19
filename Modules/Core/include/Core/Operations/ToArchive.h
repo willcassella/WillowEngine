@@ -1,7 +1,10 @@
 // ToArchive.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
+#include "../Forwards/Containers.h"
 #include "../Forwards/Operations.h"
+#include "../Forwards/Reflection.h"
+#include "../STDE/TypeTraits.h"
 #include "../IO/ArchiveWriter.h"
 
 namespace Operations
@@ -227,6 +230,28 @@ namespace Operations
 		}
 
 		static constexpr bool Supported = ToArchive<KeyT>::Supported && ToArchive<ValueT>::Supported;
+	};
+
+	/** Implementation of 'ToArchive' for Union. */
+	template <typename ... T>
+	struct ToArchive < Union<T...> > final
+	{
+		static void Function(const Union<T...>& value, ArchiveWriter& writer)
+		{
+			if (value.HasValue())
+			{
+				value.Invoke([&](const auto& v)
+				{
+					writer.PushValue(::TypeOf(v).GetName(), v);
+				});
+			}
+			else
+			{
+				writer.SetValue(nullptr);
+			}
+		}
+
+		static constexpr bool Supported = stde::meta::and<ToArchive<T>::Supported...>();
 	};
 }
 

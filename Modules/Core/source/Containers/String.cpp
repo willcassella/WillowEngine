@@ -7,7 +7,7 @@
 ///////////////////
 ///   Methods   ///
 
-String String::SubString(uint32 start, uint32 end) const
+String String::SubString(std::size_t start, std::size_t end) const
 {
 	if (start >= end || start >= this->Length())
 	{
@@ -21,7 +21,7 @@ String String::ToUpper() const
 {
 	auto result = Array<Char>(this->Length());
 
-	for (uint32 i = 0; i < this->Length(); ++i)
+	for (std::size_t i = 0; i < this->Length(); ++i)
 	{
 		result.Add(std::toupper(this->CharAt(i), std::locale()));
 	}
@@ -33,7 +33,7 @@ String String::ToLower() const
 {
 	auto result = Array<Char>(this->Length());
 
-	for (uint32 i = 0; i < this->Length(); ++i)
+	for (std::size_t i = 0; i < this->Length(); ++i)
 	{
 		result.Add(std::tolower(this->CharAt(i), std::locale()));
 	}
@@ -43,7 +43,7 @@ String String::ToLower() const
 
 bool String::StartsWith(const String& string) const
 {
-	for (uint32 i = 0; i < string.Length(); ++i)
+	for (std::size_t i = 0; i < string.Length(); ++i)
 	{
 		if (this->CharAt(i) != string.CharAt(i))
 		{
@@ -56,7 +56,7 @@ bool String::StartsWith(const String& string) const
 
 bool String::EndsWith(const String& string) const
 {
-	for (uint32 i = 1; i <= string.Length(); ++i)
+	for (std::size_t i = 1; i <= string.Length(); ++i)
 	{
 		if (this->CharAt(this->Length() - i) != string.CharAt(string.Length() - i))
 		{
@@ -69,7 +69,7 @@ bool String::EndsWith(const String& string) const
 
 String String::RemovePadding(const String& string, bool front, bool back)
 {
-	uint32 start = 0;
+	std::size_t start = 0;
 	if (front)
 	{
 		while (string[start] == ' ')
@@ -78,7 +78,7 @@ String String::RemovePadding(const String& string, bool front, bool back)
 		}
 	}
 
-	uint32 end = string.Length() - 1;
+	auto end = string.Length() - 1;
 	if (back)
 	{
 		while (string[end] == ' ')
@@ -90,11 +90,11 @@ String String::RemovePadding(const String& string, bool front, bool back)
 	return string.SubString(start, end + 1);
 }
 
-Array<uint32> String::OccurencesOf(const String& string) const
+Array<std::size_t> String::OccurencesOf(const String& string) const
 {
-	Array<uint32> occurences;
+	Array<std::size_t> occurences;
 
-	for (uint32 i = 0; i < this->Length(); ++i)
+	for (std::size_t i = 0; i < this->Length(); ++i)
 	{
 		String comp = SubString(i, i + string.Length());
 		if (comp == string)
@@ -110,7 +110,7 @@ String String::Reverse() const
 {
 	Array<Char> result;
 
-	for (int32 i = this->Length(); i > 0; --i)
+	for (auto i = this->Length(); i > 0; --i)
 	{
 		result.Add(this->CharAt(i - 1));
 	}
@@ -118,9 +118,9 @@ String String::Reverse() const
 	return String(result);
 }
 
-uint32 String::Length(CString string)
+std::size_t String::Length(CString string)
 {
-	return static_cast<uint32>(strlen(string));
+	return strlen(string);
 }
 
 int32 String::Compare(const String& stringA, const String& stringB, bool caseSensitive)
