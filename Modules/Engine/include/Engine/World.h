@@ -4,6 +4,7 @@
 #include <memory>
 #include <Core/Misc/SerializeableObject.h>
 #include <Core/Containers/Queue.h>
+#include <Core/Event/EventManager.h>
 #include "Forwards/Physics.h"
 #include "Component.h"
 
@@ -46,7 +47,7 @@ public:
 	template <class T>
 	std::enable_if_t<std::is_base_of<Entity, T>::value, T&> Spawn()
 	{
-		auto& entity = this->InitializeGameObject(unique<T>(New<T>()));
+		auto& entity = this->InitializeGameObject(New<T>());
 		entity._world = this;
 		entity.Spawn();
 
@@ -135,7 +136,7 @@ public:
 	* NOTE: This does not call "GameObject::Spawn()". 
 	* That is the caller's responsibility. */
 	template <class T>
-	T& InitializeGameObject(unique<T> object)
+	T& InitializeGameObject(Owned<T> object)
 	{
 		auto& ref = *object;
 		ref.Initialize(_nextGameObjectID++);
@@ -158,7 +159,7 @@ public:
 private:
 
 	GameObject::ID _nextGameObjectID;
-	Table<GameObject::ID, unique<GameObject>> _gameObjects;
+	Table<GameObject::ID, Owned<GameObject>> _gameObjects;
 	Queue<GameObject*> _destroyedObjects;
 	
 	Table<GameObject::ID, Entity*> _entities;
@@ -192,7 +193,7 @@ T& Entity::Connect()
 	static_assert(std::is_base_of<Component, T>::value, "You can only connect Component types");
 
 	// Construct and initialize component
-	auto& component = this->GetWorld().InitializeGameObject(unique<T>(New<T>()));
+	auto& component = this->GetWorld().InitializeGameObject(New<T>());
 
 	// Connect component
 	component._entity = this;

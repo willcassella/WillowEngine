@@ -1,6 +1,7 @@
 // Transform.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
+#include <Core/Umbrellas/Reflection.h>
 #include <Core/Math/Mat4.h>
 #include "config.h"
 

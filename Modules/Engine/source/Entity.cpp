@@ -9,9 +9,9 @@
 BUILD_REFLECTION(Entity)
 .Data("Name", &Entity::_name)
 .Data("Transform", &Entity::_transform)
-.Data("Parent", &Entity::_parent)
-.Data("Children", &Entity::_children)
-.Data("Components", &Entity::_components)
+.Data("Parent", &Entity::_parent, DF_Transient)
+.Data("Children", &Entity::_children, DF_Transient)
+.Data("Components", &Entity::_components, DF_Transient)
 .Property("Name", &Entity::GetName, &Entity::Editor_SetName, "The name of this Entity", PF_EditorOnly);
 
 ////////////////////////
@@ -25,6 +25,28 @@ Entity::Entity()
 
 ///////////////////
 ///   Methods   ///
+
+void Entity::ToArchive(ArchiveWriter& writer) const
+{
+	Base::ToArchive(writer);
+
+	if (_parent)
+	{
+		writer.PushValue("Parent", _parent->GetID());
+	}
+	else
+	{
+		writer.PushValue("Parent", 0);
+	}
+
+	writer.AddChild("Components", [&](ArchiveWriter& child)
+	{
+		for (auto component : _components)
+		{
+			child.PushValue("ID", component->GetID());
+		}
+	});
+}
 
 bool Entity::IsActor() const
 {

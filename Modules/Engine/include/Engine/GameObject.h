@@ -1,6 +1,7 @@
 // GameObject.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
+#include <Core/Object.h>
 #include <Core/Math/Vec3.h>
 #include <Core/Math/Quat.h>
 #include <Core/Math/Mat4.h>
@@ -182,4 +183,4 @@ private:
 	State _state = State::Uninitialized;
 };
 
-REFLECTABLE_ENUM(GameObject::State)
+REFLECTABLE_ENUM(ENGINE_API, GameObject::State)

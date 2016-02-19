@@ -22,7 +22,7 @@ enum class PhysicsMode : byte
 	/* This object both affects, and is affected by the physics simulation. */
 	Dynamic
 };
-REFLECTABLE_ENUM(PhysicsMode)
+REFLECTABLE_ENUM(ENGINE_API, PhysicsMode)
 
 class ENGINE_API PhysicalComponent : public Component
 {

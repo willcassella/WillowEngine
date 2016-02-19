@@ -111,14 +111,14 @@
     <TargetExt>.dll</TargetExt>
     <TargetName>$(ProjectName)</TargetName>
     <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)packages\Bullet\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)packages\Bullet\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)packages\Bullet\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetExt>.dll</TargetExt>
     <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)packages\Bullet\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)packages\Bullet\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)packages\Bullet\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
     <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -127,7 +127,7 @@
     <TargetExt>.dll</TargetExt>
     <TargetName>$(ProjectName)</TargetName>
     <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)packages\Bullet\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)packages\Bullet\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)packages\Bullet\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>bin\</OutDir>
@@ -135,15 +135,15 @@
     <TargetExt>.dll</TargetExt>
     <TargetName>$(ProjectName)</TargetName>
     <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)packages\Bullet\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)packages\Bullet\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)packages\Bullet\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>ENGINE_BUILD;WINDOWS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521</DisableSpecificWarnings>
+      <PreprocessorDefinitions>ENGINE_BUILD;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -166,8 +166,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>ENGINE_BUILD;WINDOWS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521</DisableSpecificWarnings>
+      <PreprocessorDefinitions>ENGINE_BUILD;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -192,8 +192,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>ENGINE_BUILD;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521</DisableSpecificWarnings>
+      <PreprocessorDefinitions>ENGINE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
@@ -222,8 +222,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>ENGINE_BUILD;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521</DisableSpecificWarnings>
+      <PreprocessorDefinitions>ENGINE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>

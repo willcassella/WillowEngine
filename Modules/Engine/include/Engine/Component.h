@@ -24,6 +24,8 @@ public:
 	///   Methods   ///
 public:
 
+	void ToArchive(ArchiveWriter& writer) const;
+
 	FORCEINLINE World& GetWorld() final override
 	{
 		return this->GetEntity().GetWorld();
