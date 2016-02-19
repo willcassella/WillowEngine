@@ -51,11 +51,11 @@ namespace stde
 
 	/** Evaluates to 'true' if the given type is not const. */
 	template <typename T>
-	using is_mutable = std::bool_constant<std::is_object<T>::value && !std::is_const<T>::value>;
+	using is_mutable = bool_constant<std::is_object<T>::value && !std::is_const<T>::value>;
 
 	/** Evaluates to 'true' if the given type is a reference to const. */
 	template <typename T>
-	using is_reference_to_const = std::bool_constant<std::is_reference<T>::value && std::is_const<std::remove_reference_t<T>>::value>;
+	using is_reference_to_const = bool_constant<std::is_reference<T>::value && std::is_const<std::remove_reference_t<T>>::value>;
 
 	/** Evaluates to 'true' if the given type is a reference to non-const. */
 	template <typename T>
