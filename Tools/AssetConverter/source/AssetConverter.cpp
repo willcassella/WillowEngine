@@ -156,7 +156,7 @@ bool AssetConverter::ParseOBJFile(const Path& path, Array<StaticMesh::Vertex>& o
 				else
 				{
 					outVertices.Add(vertex);
-					outElements.Add(outVertices.Size() - 1);
+					outElements.Add(static_cast<uint32>(outVertices.Size() - 1));
 				}
 			}
 		}
@@ -171,8 +171,8 @@ bool AssetConverter::ParseOBJFile(const Path& path, Array<StaticMesh::Vertex>& o
 bool AssetConverter::WriteStaticMesh(const Path& name, const Array<StaticMesh::Vertex>& vertices, const Array<uint32>& elements)
 {
 	// Get the size of each array
-	uint32 numVerts = vertices.Size();
-	uint32 numElements = elements.Size();
+	uint32 numVerts = static_cast<uint32>(vertices.Size());
+	uint32 numElements = static_cast<uint32>(elements.Size());
 
 	// Write it to a file
 	// TODO: Change this to a normal std::ofstream. For some reason anything other than std::basic_fstream<char> is unreasonably slow

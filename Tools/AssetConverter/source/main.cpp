@@ -1,5 +1,6 @@
 // main.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
+#include <Core/Application.h>
 #include <Core/IO/Console.h>
 #include "../include/AssetConverter/AssetConverter.h"
 
