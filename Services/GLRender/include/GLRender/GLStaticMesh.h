@@ -41,7 +41,7 @@ public:
 	}
 
 	/** Returns the number of elements in this Mesh. */
-	FORCEINLINE uint32 GetNumElements()
+	FORCEINLINE std::size_t GetNumElements() const
 	{
 		return _numElements;
 	}
@@ -53,5 +53,5 @@ private:
 	BufferID _vao;
 	BufferID _vbo;
 	BufferID _ebo;
-	uint32 _numElements;
+	std::size_t _numElements;
 };

@@ -215,7 +215,7 @@ void GLRenderer::RenderWorld(const World& world)
 		glUniformMatrix4fv(1, 1, false, (const float*)&view);
 		glUniformMatrix4fv(2, 1, false, (const float*)&proj);
 
-		glDrawElements(GL_TRIANGLES, mesh.GetNumElements(), GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh.GetNumElements()), GL_UNSIGNED_INT, nullptr);
 	}
 
 	// Bind the default framebuffer for drawing
@@ -292,51 +292,3 @@ GLStaticMesh& GLRenderer::FindStaticMesh(const StaticMesh& asset)
 		return _staticMeshes.Insert(asset.GetID(), GLStaticMesh(*this, asset));
 	}
 }
-
-//void BeginFrame()
-//{
-//	glEnable(GL_DEPTH_TEST);
-//
-//	// Bind the GBuffer and its sub-buffers for drawing
-//	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _gBuffer);
-//	BufferID drawBuffers[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4, GL_COLOR_ATTACHMENT5 };
-//	glDrawBuffers(6, drawBuffers);
-//
-//	// Clear the GBuffer
-//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//}
-//
-//void EndFrame(const Vec3& camPos)
-//{
-//	// Bind the default framebuffer for drawing
-//	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-//
-//	// Clear the frame
-//	glDisable(GL_DEPTH_TEST);
-//	glClear(GL_COLOR_BUFFER_BIT);
-//
-//	// Bind the screen quad
-//	glBindVertexArray(screenQuadVAO);
-//	glBindBuffer(GL_ARRAY_BUFFER, screenQuadVBO);
-//	glUseProgram(screenQuadProgram);
-//
-//	// Upload the camera's position
-//	float cam[] = { camPos.X, camPos.Y, camPos.Z };
-//	glUniform3fv(glGetUniformLocation(screenQuadProgram, "camPos"), 1, cam);
-//
-//	// Bind the GBuffer's sub-buffers as textures for reading
-//	glActiveTexture(GL_TEXTURE0);
-//	glBindTexture(GL_TEXTURE_2D, _positionBuffer);
-//	
-//	glActiveTexture(GL_TEXTURE1);
-//	glBindTexture(GL_TEXTURE_2D, _diffuseBuffer);
-//	
-//	glActiveTexture(GL_TEXTURE2);
-//	glBindTexture(GL_TEXTURE_2D, _normalBuffer);
-//
-//	glActiveTexture(GL_TEXTURE3);
-//	glBindTexture(GL_TEXTURE_2D, _specularBuffer);
-//
-//	// Draw the screen quad
-//	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-//}

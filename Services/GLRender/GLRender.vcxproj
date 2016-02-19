@@ -89,16 +89,16 @@
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetName>$(ProjectName)</TargetName>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Engine\bin;$(SolutionDir)packages\glew-1.11.0\$(Platform);C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)packages\glew-1.11.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Engine\bin;$(SolutionDir)packages\glew-1.13.0\lib\$(Platform);C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)packages\glew-1.13.0\include;$(IncludePath)</IncludePath>
     <TargetExt>.dll</TargetExt>
     <Linkage-glew>static</Linkage-glew>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Engine\bin;$(SolutionDir)packages\glew-1.11.0\$(Platform);C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)packages\glew-1.11.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Engine\bin;$(SolutionDir)packages\glew-1.13.0\lib\$(Platform);C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)packages\glew-1.13.0\include;$(IncludePath)</IncludePath>
     <TargetExt>.dll</TargetExt>
     <TargetName>$(ProjectName)</TargetName>
     <Linkage-glew>static</Linkage-glew>
@@ -107,8 +107,8 @@
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetName>$(ProjectName)</TargetName>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Engine\bin;$(SolutionDir)packages\glew-1.11.0\$(Platform);$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)packages\glew-1.11.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Engine\bin;$(SolutionDir)packages\glew-1.13.0\lib\$(Platform);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)packages\glew-1.13.0\include;$(IncludePath)</IncludePath>
     <TargetExt>.dll</TargetExt>
     <Linkage-glew>static</Linkage-glew>
   </PropertyGroup>
@@ -116,8 +116,8 @@
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetName>$(ProjectName)</TargetName>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Engine\bin;$(SolutionDir)packages\glew-1.11.0\$(Platform);$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)packages\glew-1.11.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Engine\bin;$(SolutionDir)packages\glew-1.13.0\lib\$(Platform);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)packages\glew-1.13.0\include;$(IncludePath)</IncludePath>
     <TargetExt>.dll</TargetExt>
     <Linkage-glew>static</Linkage-glew>
   </PropertyGroup>
@@ -126,8 +126,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>GLRENDER_BUILD;WINDOWS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521</DisableSpecificWarnings>
+      <PreprocessorDefinitions>GLRENDER_BUILD;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
@@ -149,8 +149,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>GLRENDER_BUILD;WINDOWS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521</DisableSpecificWarnings>
+      <PreprocessorDefinitions>GLRENDER_BUILD;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
@@ -174,8 +174,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>GLRENDER_BUILD;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521</DisableSpecificWarnings>
+      <PreprocessorDefinitions>GLRENDER_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
@@ -203,8 +203,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>GLRENDER_BUILD;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521</DisableSpecificWarnings>
+      <PreprocessorDefinitions>GLRENDER_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
