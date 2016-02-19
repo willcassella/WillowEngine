@@ -1,6 +1,8 @@
 // main.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
 #include <Core/IO/Console.h>
+#include <Resource/Archives/XMLArchive.h>
+#include <Engine/Components/StaticMeshComponent.h>
 #include <GLRender/GLRenderer.h>
 #include <ExampleGame/FPSCharacter.h>
 #include "../include/Client/Window.h"
@@ -78,9 +80,6 @@ void EventLoop(Window& window, World& world, IRenderer& renderer)
 		// Render the frame
 		renderer.RenderWorld(world);
 		window.SwapBuffers();
-
-		// Free memory
-		Application::GetMemoryManager().Sweep();
 	}
 
 	Console::WriteLine("Leaving event loop...");
@@ -104,19 +103,19 @@ int main(int32 /*argc*/, char** /*argv*/)
 
 		Console::WriteLine("Creating world...");
 
-		UniquePtr<World> world = New<World>();
+		World world;
 
-		auto& sponza = world->Spawn<StaticMeshComponent>("Sponza");
+		auto& sponza = world.Spawn<StaticMeshComponent>("Sponza");
 		sponza.SetScale({ 0.6f, 0.6f, 0.6f });
 		sponza.Mesh = "Content/Models/sponza_new.wmesh"_p;
 		sponza.Material = "Content/Materials/Sponza.mat"_p;
 		sponza.InstanceParams["diffuse"] = AssetPtr<Texture>("Content/Textures/sponza_new_tex.png"_p);
 
-		auto& player = world->Spawn<FPSCharacter>("Player");
+		auto& player = world.Spawn<FPSCharacter>("Player");
 		player.Translate({ 0, 3, 0 });
 
 		// Enter main event loop
-		EventLoop(window, *world, renderer);
+		EventLoop(window, world, renderer);
 	}
 	
 	Application::Terminate();
