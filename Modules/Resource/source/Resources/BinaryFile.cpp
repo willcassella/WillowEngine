@@ -28,7 +28,7 @@ BinaryFile::BinaryFile(const Path& path)
 	_data.Reset(this->GetSize());
 
 	// Read the contents of the file into the buffer
-	file.read(_data.GetValueAs<char>(), this->GetSize());
+	file.read(_data.GetPointer<char>(), this->GetSize());
 
 	// Make sure the contents were read correctly
 	if (file.gcount() != this->GetSize())
@@ -45,5 +45,5 @@ BinaryFile::BinaryFile(const Path& path)
 
 const byte* BinaryFile::GetData() const
 {
-	return _data.GetValue();
+	return _data.GetPointer();
 }

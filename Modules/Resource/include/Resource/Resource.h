@@ -1,7 +1,7 @@
 // Resource.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "config.h"
+#include <Core/Reflection/ClassInfo.h>
 #include "Forwards/Resource.h"
 #include "Path.h"
 
@@ -32,7 +32,7 @@ public:
 	}
 
 	/** Returns the size of this Resource on disk. */
-	FORCEINLINE uint32 GetSize() const
+	FORCEINLINE std::size_t GetSize() const
 	{
 		return _size;
 	}
@@ -42,5 +42,5 @@ public:
 private:
 
 	Path _path;
-	uint32 _size;
+	std::size_t _size;
 };

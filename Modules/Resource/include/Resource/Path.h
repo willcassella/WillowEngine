@@ -1,6 +1,7 @@
 // Path.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
+#include <Core/Reflection/StructInfo.h>
 #include "config.h"
 
 struct RESOURCE_API Path final
@@ -19,12 +20,12 @@ public:
 	Path(CString path)
 		: _path(path)
 	{
-		Sanitize();
+		this->Sanitize();
 	}
 	Path(String path)
 		: _path(std::move(path))
 	{
-		Sanitize();
+		this->Sanitize();
 	}
 
 	///////////////////
@@ -55,16 +56,16 @@ public:
 	Path& operator=(CString path)
 	{
 		_path = path;
-		Sanitize();
+		this->Sanitize();
 
-		return self;
+		return *this;
 	}
 	Path& operator=(String path)
 	{
 		_path = std::move(path);
-		Sanitize();
+		this->Sanitize();
 
-		return self;
+		return *this;
 	}
 	operator const String&() const
 	{

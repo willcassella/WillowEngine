@@ -47,6 +47,7 @@
     <ProjectGuid>{BFD70EB7-B841-46D3-872F-E71BFBA95A58}</ProjectGuid>
     <RootNamespace>Resource</RootNamespace>
     <ProjectName>Resource</ProjectName>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -93,7 +94,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)packages\FreeImage\include;$(SolutionDir)packages\pugixml\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)packages\FreeImage\$(Platform)\;$(SolutionDir)packages\pugixml\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)packages\FreeImage\lib\$(Platform)\;$(SolutionDir)packages\pugixml\lib\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetName>$(ProjectName)</TargetName>
@@ -101,7 +102,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)packages\FreeImage\include;$(SolutionDir)packages\pugixml\include;$(ProjectDir)thirdParty\FreeImage\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)packages\FreeImage\$(Platform)\;$(SolutionDir)packages\pugixml\$(Platform)\$(Configuration)\;$(ProjectDir)thirdParty\FreeImage\$(Platform);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)packages\FreeImage\lib\$(Platform)\;$(SolutionDir)packages\pugixml\lib\$(Platform)\$(Configuration)\;$(ProjectDir)thirdParty\FreeImage\$(Platform);$(LibraryPath)</LibraryPath>
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetName>$(ProjectName)</TargetName>
@@ -109,7 +110,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)packages\FreeImage\include;$(SolutionDir)packages\pugixml\include;$(ProjectDir)thirdParty\FreeImage\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)packages\FreeImage\$(Platform)\;$(SolutionDir)packages\pugixml\$(Platform)\$(Configuration)\;$(ProjectDir)thirdParty\FreeImage\$(Platform);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)packages\FreeImage\lib\$(Platform)\;$(SolutionDir)packages\pugixml\lib\$(Platform)\$(Configuration)\;$(ProjectDir)thirdParty\FreeImage\$(Platform);$(LibraryPath)</LibraryPath>
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetName>$(ProjectName)</TargetName>
@@ -117,7 +118,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)packages\FreeImage\include;$(SolutionDir)packages\pugixml\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)packages\FreeImage\$(Platform)\;$(SolutionDir)packages\pugixml\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)packages\FreeImage\lib\$(Platform)\;$(SolutionDir)packages\pugixml\lib\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
     <OutDir>bin\</OutDir>
     <IntDir>build\</IntDir>
     <TargetName>$(ProjectName)</TargetName>
@@ -128,8 +129,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;RESOURCE_BUILD;WINDOWS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;RESOURCE_BUILD;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
       <MinimalRebuild>false</MinimalRebuild>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -140,7 +141,7 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y
-xcopy "$(SolutionDir)packages\FreeImage\$(Platform)\*.dll" "$(SolutionDir)bin\" /d /y</Command>
+xcopy "$(SolutionDir)packages\FreeImage\lib\$(Platform)\*.dll" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -148,8 +149,8 @@ xcopy "$(SolutionDir)packages\FreeImage\$(Platform)\*.dll" "$(SolutionDir)bin\" 
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;RESOURCE_BUILD;WINDOWS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;RESOURCE_BUILD;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
       <MinimalRebuild>false</MinimalRebuild>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -160,7 +161,7 @@ xcopy "$(SolutionDir)packages\FreeImage\$(Platform)\*.dll" "$(SolutionDir)bin\" 
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y
-xcopy "$(SolutionDir)packages\FreeImage\$(Platform)\*.dll" "$(SolutionDir)bin\" /d /y</Command>
+xcopy "$(SolutionDir)packages\FreeImage\lib\$(Platform)\*.dll" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -170,8 +171,8 @@ xcopy "$(SolutionDir)packages\FreeImage\$(Platform)\*.dll" "$(SolutionDir)bin\" 
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;RESOURCE_BUILD;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;RESOURCE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
@@ -186,7 +187,7 @@ xcopy "$(SolutionDir)packages\FreeImage\$(Platform)\*.dll" "$(SolutionDir)bin\" 
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y
-xcopy "$(SolutionDir)packages\FreeImage\$(Platform)\*.dll" "$(SolutionDir)bin\" /d /y</Command>
+xcopy "$(SolutionDir)packages\FreeImage\lib\$(Platform)\*.dll" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -196,8 +197,8 @@ xcopy "$(SolutionDir)packages\FreeImage\$(Platform)\*.dll" "$(SolutionDir)bin\" 
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;RESOURCE_BUILD;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;RESOURCE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
@@ -212,7 +213,7 @@ xcopy "$(SolutionDir)packages\FreeImage\$(Platform)\*.dll" "$(SolutionDir)bin\" 
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y
-xcopy "$(SolutionDir)packages\FreeImage\$(Platform)\*.dll" "$(SolutionDir)bin\" /d /y</Command>
+xcopy "$(SolutionDir)packages\FreeImage\lib\$(Platform)\*.dll" "$(SolutionDir)bin\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

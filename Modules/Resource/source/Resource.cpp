@@ -26,5 +26,5 @@ Resource::Resource(Path path)
 		return;
 	}
 
-	_size = uint32(fileStats.st_size);
+	_size = static_cast<std::size_t>(fileStats.st_size);
 }

@@ -99,6 +99,47 @@ public:
 		value = Node.first_attribute().value();
 	}
 
+	bool IsNull() const override
+	{
+		return Node.attribute("null") != nullptr;
+	}
+
+	bool GetFirstChild(FunctionView<void, const ArchiveReader&> function) const override
+	{
+		auto child = Node.first_child();
+
+		if (child != nullptr)
+		{
+			XMLNode node(child);
+			function(node);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	bool GetChild(uint32 index, FunctionView<void, const ArchiveReader&> function) const override
+	{
+		uint32 i = 0;
+		for (auto child : Node.children())
+		{
+			if (i == index)
+			{
+				XMLNode node(child);
+				function(node);
+				return true;
+			}
+			else
+			{
+				++i;
+			}
+		}
+
+		return false;
+	}
+
 	bool GetChild(const String& name, FunctionView<void, const ArchiveReader&> function) const override
 	{
 		auto child = Node.child(name.Cstr());
@@ -115,12 +156,21 @@ public:
 		}
 	}
 
-	void EnumerateChildren(EnumeratorView<const ArchiveReader&> enumerator) const override
+	void EnumerateChildren(const EnumeratorView<const ArchiveReader&>& enumerator) const override
 	{
-		for (auto node : Node)
+		for (auto child : Node.children())
 		{
-			XMLNode child(node);
-			enumerator.Invoke(child);
+			XMLNode node(child);
+			enumerator.Invoke(node);
+		}
+	}
+
+	void EnumerateChildren(const String& name, const EnumeratorView<const ArchiveReader&>& enumerator) const override
+	{
+		for (auto child : Node.children(name.Cstr()))
+		{
+			XMLNode node(child);
+			enumerator(node);
 		}
 	}
 
@@ -187,6 +237,11 @@ public:
 	void SetValue(const String& value) override
 	{
 		Node.append_attribute("value") = value.Cstr();
+	}
+
+	void SetValue(std::nullptr_t) override
+	{
+		Node.append_attribute("null");
 	}
 
 	void AddChild(const String& name, FunctionView<void, ArchiveWriter&> function) override

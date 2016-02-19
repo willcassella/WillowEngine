@@ -2,6 +2,7 @@
 #pragma once
 
 #include <Core/Containers/Table.h>
+#include <Core/Memory/New.h>
 #include "Path.h"
 #include "Asset.h"
 
@@ -35,7 +36,7 @@ public:
 public:
 
 	/** The requested asset (null until loaded). */
-	UniquePtr<class Asset> Asset;
+	Owned<class Asset> Asset;
 
 	/** The maximum requested urgency of loading the asset.  */
 	AssetLoadMode LoadMode = AssetLoadMode::None;
@@ -81,11 +82,11 @@ private:
 		else
 		{
 			// Create a new asset
-			UniquePtr<AssetT> asset = New<AssetT>(path);
-			auto pAsset = asset.Get();
+			auto asset = New<AssetT>(path);
+			auto pAsset = asset.GetPointer();
 
 			// Add it to the table
-			Instance()._requestedAssets[path] = asset.Transfer();
+			Instance()._requestedAssets[path] = std::move(asset);
 
 			return pAsset;
 		}
@@ -104,5 +105,5 @@ public:
 	///   Data   ///
 private:
 
-	Table<Path, UniquePtr<Asset>> _requestedAssets;
+	Table<Path, Owned<Asset>> _requestedAssets;
 };

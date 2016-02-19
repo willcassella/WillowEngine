@@ -100,7 +100,7 @@ public:
 	AssetPtr& operator=(const Path& path)
 	{
 		_asset = AssetManager::FindAsset<AssetT>(path);
-		return self;
+		return *this;
 	}
 	
 	////////////////
