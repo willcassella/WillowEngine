@@ -17,8 +17,8 @@ void FPSCharacter::OnSpawn()
 {
 	Base::OnSpawn();
 
-	Capsule = &this->Connect<CapsuleComponent>();
-	View = &this->Attach<CameraComponent>();
+	Capsule = this->Connect<CapsuleComponent>();
+	View = this->Attach<CameraComponent>();
 
 	GetWorld().Events.Bind("Move", *this, &FPSCharacter::Move);
 	GetWorld().Events.Bind("Look", *this, &FPSCharacter::Look);

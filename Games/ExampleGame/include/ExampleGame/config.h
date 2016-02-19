@@ -1,6 +1,7 @@
 // config.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
+#pragma once
 
-#include <Core/Core.h>
+#include <Core/env.h>
 
 ///////////////////////////////
 ///   Build Configuration   ///
@@ -10,9 +11,3 @@
 #else
 	#define EXAMPLEGAME_API IMPORT
 #endif
-
-#if defined THIS_MODULE_API
-#	undef THIS_MODULE_API
-#endif
-
-#define THIS_MODULE_API EXAMPLEGAME_API

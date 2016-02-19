@@ -1,10 +1,9 @@
 // FPSCharacter.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <Core/Memory/PointerBase.h>
+#include <Core/Memory/Pointers/Weak.h>
 #include <Engine/Components/CameraComponent.h>
 #include <Engine/Components/CapsuleComponent.h>
-#include <Engine/Components/StaticMeshComponent.h>
 #include "config.h"
 
 class EXAMPLEGAME_API FPSCharacter : public Entity
@@ -20,8 +19,8 @@ public:
 	///   Components   ///
 public:
 
-	weak_ptr<CameraComponent> View;
-	weak_ptr<CapsuleComponent> Capsule;
+	Weak<CameraComponent> View;
+	Weak<CapsuleComponent> Capsule;
 
 	///////////////////
 	///   Methods   ///
