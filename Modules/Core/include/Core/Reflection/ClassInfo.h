@@ -129,7 +129,7 @@ public:
 	template <typename RetT, typename ArgT>
 	auto& Handler(
 		CString /*name*/,
-		RetT (ClassT::*/*handler*/)(ArgT))
+		RetT (ClassT::* /*handler*/)(ArgT))
 	{
 		return this->AsMostSpecificTypeInfoBuilder();
 	}
