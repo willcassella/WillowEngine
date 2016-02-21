@@ -1,7 +1,6 @@
 // TypeTraits.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <utility>
 #include <type_traits>
 
 namespace stde
@@ -49,9 +48,13 @@ namespace stde
 	template <typename T>
 	using is_primitive = bool_constant<std::is_arithmetic<T>::value || std::is_pointer<T>::value || std::is_enum<T>::value>;
 
-	/** Evaluates to 'true' if the given type is not const. */
+	/** Evaluates to 'true' if the given type is a non-const object. */
 	template <typename T>
 	using is_mutable = bool_constant<std::is_object<T>::value && !std::is_const<T>::value>;
+
+	/** Evaluates to 'true' if the given type is a non-volatile object. */
+	template <typename T>
+	using is_non_volatile = bool_constant<std::is_object<T>::value && !std::is_volatile<T>::value>;
 
 	/** Evaluates to 'true' if the given type is a reference to const. */
 	template <typename T>
@@ -61,6 +64,14 @@ namespace stde
 	template <typename T>
 	using is_reference_to_mutable = bool_constant<std::is_reference<T>::value && is_mutable<std::remove_reference_t<T>>::value>;
 
+	/** Evaluates to 'true' if the given type is a reference to volatile. */
+	template <typename T>
+	using is_reference_to_volatile = bool_constant<std::is_reference<T>::value && std::is_volatile<std::remove_reference_t<T>>::value>;
+
+	/** Evaluates to 'true' if the given type is a reference to non-volatile. */
+	template <typename T>
+	using is_reference_to_non_volatile = bool_constant<std::is_reference<T>::value && is_non_volatile<std::remove_reference_t<T>>::value>;
+
 	/** Evaluates to 'true' if the given type is const, or a reference to const. */
 	template <typename T>
 	using has_const = bool_constant<std::is_const<T>::value || is_reference_to_const<T>::value>;
@@ -69,24 +80,150 @@ namespace stde
 	template <typename T>
 	using has_mutable = bool_constant<is_mutable<T>::value || is_reference_to_mutable<T>::value>;
 
+	/** Evaluates to 'true' if the given type is volatile, or a reference to volatile. */
+	template <typename T>
+	using has_volatile = bool_constant<std::is_volatile<T>::value || is_reference_to_volatile<T>::value>;
+
+	/** Evaluates to 'true' if the given type is non-volatile, or a reference to non-volatile. */
+	template <typename T>
+	using has_non_volatile = bool_constant<is_non_volatile<T>::value || is_reference_to_non_volatile<T>::value>;
+
 	///////////////////////////
 	///   Transformations   ///
 
-	/** Removes the r-value reference qualifier from a type, decaying it to an lvalue-rference or an object. */
+	/** Aliases 'type' to 'TrueT' if the given predicate is true, 'FalseT' otherwise. */
+	template <bool Predicate, typename TrueT, typename FalseT>
+	struct conditional_type final
+	{
+		using type = FalseT;
+	};
+
+	/** Aliases 'type' to 'TrueT' if the given predicate is true, 'FalseT' otherwise. */
+	template <typename True, typename False>
+	struct conditional_type < true, True, False > final
+	{
+		using type = True;
+	};
+
+	/** Aliases 'type' to 'TrueT' if the given predicate is true, 'FalseT' otherwise. */
+	template <bool Predicate, typename True, typename False>
+	using conditional_type_t = typename conditional_type<Predicate, True, False>::type;
+
+	/** Turns a mutable object into a 'const' object, and a reference to mutable into a reference to 'const'. */
+	template <typename T>
+	struct inject_const final
+	{
+		using type = std::add_const_t<T>;
+	};
+
+	/** Turns a mutable object into a 'const' object, and a reference to mutable into a reference to 'const'. */
+	template <typename T>
+	struct inject_const < T& > final
+	{
+		using type = std::add_const_t<T>&;
+	};
+
+	/** Turns a mutable object into a 'const' object, and a reference to mutable into a reference to 'const'. */
+	template <typename T>
+	struct inject_const < T&& > final
+	{
+		using type = std::add_const_t<T>&&;
+	};
+
+	/** Turns a mutable object into a 'const' object, and a reference to mutable into a reference to 'const'. */
+	template <typename T>
+	using inject_const_t = typename inject_const<T>::type;
+
+	/** Turns a 'const' object into a mutable object, and a reference to 'const' into a reference to mutable. */
+	template <typename T>
+	struct strip_const final
+	{
+		using type = std::remove_const_t<T>;
+	};
+
+	/** Turns a 'const' object into a mutable object, and a reference to 'const' into a reference to mutable. */
+	template <typename T>
+	struct strip_const < T& > final
+	{
+		using type = std::remove_const_t<T>&;
+	};
+
+	/** Turns a 'const' object into a mutable object, and a reference to 'const' into a reference to mutable. */
+	template <typename T>
+	struct strip_const < T&& > final
+	{
+		using type = std::remove_const_t<T>&&;
+	};
+
+	/** Turns a 'const' object into a mutable object, and a reference to 'const' into a reference to mutable. */
+	template <typename T>
+	using strip_const_t = typename strip_const<T>::type;
+
+	/** Turns a non-volatile object into a 'volatile' object, and a reference to non-volatile into a reference to 'volatile'. */
+	template <typename T>
+	struct inject_volatile final
+	{
+		using type = std::add_volatile_t<T>;
+	};
+
+	/** Turns a non-volatile object into a 'volatile' object, and a reference to non-volatile into a reference to 'volatile'. */
+	template <typename T>
+	struct inject_volatile < T& > final
+	{
+		using type = std::add_volatile_t<T>&;
+	};
+
+	/** Turns a non-volatile object into a 'volatile' object, and a reference to non-volatile into a reference to 'volatile'. */
+	template <typename T>
+	struct inject_volatile < T&& > final
+	{
+		using type = std::add_volatile_t<T>&&;
+	};
+
+	/** Turns a non-volatile object into a 'volatile' object, and a reference to non-volatile into a reference to 'volatile'. */
+	template <typename T>
+	using inject_volatile_t = typename inject_volatile<T>::type;
+
+	/** Turns a 'volatile' object into a non-volatile object, and a reference to 'volatile' into a reference to non-volatile. */
+	template <typename T>
+	struct strip_volatile final
+	{
+		using type = std::remove_volatile_t<T>;
+	};
+
+	/** Turns a 'volatile' object into a non-volatile object, and a reference to 'volatile' into a reference to non-volatile. */
+	template <typename T>
+	struct strip_volatile < T& > final
+	{
+		using type = std::remove_volatile_t<T>&;
+	};
+
+	/** Turns a 'volatile' object into a non-volatile object, and a reference to 'volatile' into a reference to non-volatile. */
+	template <typename T>
+	struct strip_volatile < T&& > final
+	{
+		using type = std::remove_volatile_t<T>&&;
+	};
+
+	/** Turns a 'volatile' object into a non-volatile object, and a reference to 'volatile' into a reference to non-volatile. */
+	template <typename T>
+	using strip_volatile_t = typename strip_volatile<T>::type;
+
+	/** Removes the r-value reference qualifier from a type, decaying it to an lvalue-rference or keeping it as an object. */
 	template <typename T>
 	struct remove_rvalue_reference final
 	{
 		using type = T;
 	};
 
-	/** Removes the r-value reference qualifier from a type, decaying it to an lvalue-rference or an object. */
+	/** Removes the r-value reference qualifier from a type, decaying it to an lvalue-rference or keeping it as an object. */
 	template <typename T>
 	struct remove_rvalue_reference < T&& > final
 	{
 		using type = T&;
 	};
 	
-	/** Removes the r-value reference qualifier from a type, decaying it to an lvalue-rference or an object. */
+	/** Removes the r-value reference qualifier from a type, decaying it to an lvalue-rference or keeping it as an object. */
 	template <typename T>
 	using remove_rvalue_reference_t = typename remove_rvalue_reference<T>::type;
 
@@ -94,28 +231,7 @@ namespace stde
 	template <typename From, typename To>
 	struct copy_const final
 	{
-		using type = std::remove_const_t<To>;
-	};
-
-	/** Copies const qualifier from 'From' to 'In'. */
-	template <typename From, typename To>
-	struct copy_const < const From, To > final
-	{
-		using type = std::add_const_t<To>;
-	};
-
-	/** Copies const qualifier from 'From' to 'In'. */
-	template <typename From, typename To>
-	struct copy_const < const From&, To > final
-	{
-		using type = std::add_const_t<To>;
-	};
-
-	/** Copies const qualifier from 'From' to 'In'. */
-	template <typename From, typename To>
-	struct copy_const < const From&&, To > final
-	{
-		using type = std::add_const_t<To>;
+		using type = conditional_type_t<has_const<From>::value, inject_const_t<To>, strip_const_t<To>>;
 	};
 
 	/** Copies const qualifier from 'From' to 'To'. */
@@ -126,14 +242,7 @@ namespace stde
 	template <typename From, typename To>
 	struct copy_volatile final
 	{
-		using type = std::remove_volatile_t<To>;
-	};
-
-	/** Copies const qualifier from 'From' to 'To'. */
-	template <typename From, typename To>
-	struct copy_volatile < volatile From, To > final
-	{
-		using type = std::add_volatile_t<To>;
+		using type = conditional_type_t<has_volatile<From>::value, inject_volatile_t<To>, strip_volatile_t<To>>;
 	};
 
 	/** Copies const qualifier from 'From' to 'To'. */
@@ -169,7 +278,7 @@ namespace stde
 	template <typename From, typename To>
 	struct copy_ref < From&&, To > final
 	{
-		using type = std::add_rvalue_reference_t<To>;
+		using type = std::add_rvalue_reference_t<std::remove_reference_t<To>>;
 	};
 
 	/** Copies lvalue/rvalue ref qualifiers from 'From' to 'To'. */
@@ -191,14 +300,7 @@ namespace stde
 	template <typename Min, typename T>
 	struct minimum_const final
 	{
-		using type = T;
-	};
-
-	/** Makes 'T' at least as const as 'Min'. */
-	template <typename Min, typename T>
-	struct minimum_const < const Min, T >
-	{
-		using type = std::add_const_t<T>;
+		using type = conditional_type_t<has_const<Min>::value, inject_const_t<T>, T>;
 	};
 
 	/** Makes 'T' at least as const as 'Min'. */
@@ -209,14 +311,7 @@ namespace stde
 	template <typename Min, typename T>
 	struct minimum_volatile final
 	{
-		using type = T;
-	};
-
-	/** Makes 'T' at least as volatile as 'Min'. */
-	template <typename Min, typename T>
-	struct minimum_volatile < volatile Min, T > final
-	{
-		using type = std::add_volatile_t<T>;
+		using type = conditional_type_t<has_volatile<Min>::value, inject_volatile_t<T>, T>;
 	};
 
 	/** Makes 'T' at least as const as 'Min'. */
@@ -252,7 +347,7 @@ namespace stde
 	template <typename Min, typename T>
 	struct minimum_ref < Min&&, T > final
 	{
-		using type = std::add_rvalue_reference_t<T>;
+		using type = std::add_rvalue_reference_t<std::remove_reference_t<T>>;
 	};
 
 	/** Gives 'T' at least as many ref-qualifiers as 'Min'. */
@@ -274,14 +369,7 @@ namespace stde
 	template <typename Max, typename T>
 	struct maximum_const final
 	{
-		using type = std::remove_const_t<T>;
-	};
-
-	/** Makes 'T' at most as const as 'Max'. */
-	template <typename Max, typename T>
-	struct maximum_const < const Max, T > final
-	{
-		using type = T;
+		using type = conditional_type_t<has_mutable<Max>::value, strip_const_t<T>, T>;
 	};
 
 	/** Makes 'T' at most as const as 'Max'. */
@@ -292,14 +380,7 @@ namespace stde
 	template <typename Max, typename T>
 	struct maximum_volatile final
 	{
-		using type = std::remove_volatile_t<T>;
-	};
-
-	/** Makes 'T' at most as volatile as 'Max'. */
-	template <typename Max, typename T>
-	struct maximum_volatile < volatile Max, T > final
-	{
-		using type = T;
+		using type = conditional_type_t<has_non_volatile<Max>::value, strip_volatile_t<T>, T>;
 	};
 
 	/** Makes 'T' at most as volatile as 'Max'. */

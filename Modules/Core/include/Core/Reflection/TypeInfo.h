@@ -532,30 +532,18 @@ namespace Operations
 /** Safely casts from a reference of one type to the target class/interface/type.
 * NOTE: Returns a null pointer if the cast is invalid (value does not legally translate to the given type). */
 template <typename TargetT, typename T>
-FORCEINLINE TargetT* Cast(T& value)
+FORCEINLINE auto* Cast(T& value)
 {
-	if (std::is_base_of<TargetT, T>::value || TypeOf(value).IsCastableTo(TypeOf<TargetT>()))
-	{
-		return reinterpret_cast<TargetT*>(&value);
-	}
-	else
-	{
-		return nullptr;
-	}
-}
+	using ResultT = stde::minimum_cv_t<T, TargetT>*;
 
-/** Safely casts from an immutable reference of one type to the target class/interface/type.
-* NOTE: Returns a null pointer if the cast is invalid (value does not legally translate to the given type). */
-template <typename TargetT, typename T>
-FORCEINLINE const TargetT* Cast(const T& value)
-{	
+	// Perform a compile-time and run-time check of the validity of this cast
 	if (std::is_base_of<TargetT, T>::value || TypeOf(value).IsCastableTo(TypeOf<TargetT>()))
 	{
-		return reinterpret_cast<const TargetT*>(&value);
+		return reinterpret_cast<ResultT>(&value);
 	}
 	else
 	{
-		return nullptr;
+		return ResultT(nullptr);
 	}
 }
 

@@ -5,7 +5,6 @@
 #include <cassert>
 #include <utility>
 #include <algorithm>
-#include <initializer_list>
 #include "../STDE/TypeTraits.h"
 #include "../Operations/TypeOps.h"
 #include "../Memory/Buffers/DynamicBuffer.h"

@@ -59,12 +59,8 @@ const auto& TypeOf(const T& value);
 
 /** Defined in 'TypeInfo.h' */
 template <typename TargetT, typename T>
-TargetT* Cast(T& value);
-
-/** Defined in 'TypeInfo.h' */
-template <typename TargetT, typename T>
-const TargetT* Cast(const T& value);
+auto* Cast(T& value);
 
 /** r-value references cannot be safely casted. */
 template <typename TargetT, typename T>
-TargetT* Cast(const T&& value) = delete;
+void Cast(const T&& value) = delete;

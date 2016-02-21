@@ -42,4 +42,19 @@ namespace stde
 	{
 		Implementation::conditionally_execute(bool_constant<Predicate>{}, std::forward<F>(function), std::forward<Args>(args)...);
 	}
+
+	/** Performs a static_cast of the given pointer to the given reference type. */
+	template <typename TargetT, typename T>
+	auto&& static_ptr_to_ref(T* ptr)
+	{
+		using ResultT = minimum_cv_t<T, TargetT>;
+		return std::forward<ResultT>(*static_cast<std::remove_reference_t<ResultT>*>(ptr));
+	}
+
+	/** Forwards 'F' as if you were forwarding 'T' (useful for forwarding members of objects). */
+	template <typename T, typename F>
+	auto&& forward_like(F&& value)
+	{
+		return std::forward<minimum_qualifiers_t<T, F>>(value);
+	}
 }

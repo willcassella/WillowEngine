@@ -3,7 +3,7 @@
 
 #include <limits>
 #include <algorithm>
-#include "../STDE/TypeTraits.h"
+#include "../STDE/Utility.h"
 #include "../Memory/Buffers/StaticBuffer.h"
 
 template <typename ... T>
@@ -67,46 +67,36 @@ public:
 		return _index != 0;
 	}
 
+	/** Returns whether the currently held value is an instance of the given type. */
+	template <typename F>
+	bool HasInstanceOf() const
+	{
+		// TODO: If 'F' is not a member of this Union, this will fail to compile. It's arguable that a better solution would be to return 'false'.
+		return _index == IndexOf<F>();
+	}
+
 	template <typename F>
 	bool GetValue(F& out) &
 	{
-		if (_index == IndexOf<F>())
-		{
-			out = this->FastGet<F>();
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return Union::GetValueImpl(*this, out);
 	}
 
 	template <typename F>
 	bool GetValue(F& out) const &
 	{
-		if (_index == IndexOf<F>())
-		{
-			out = this->FastGet<F>();
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return Union::GetValueImpl(*this, out);
 	}
 
 	template <typename F>
 	bool GetValue(F& out) &&
 	{
-		if (_index == IndexOf<F>())
-		{
-			out = std::move(this->FastGet<F>());
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return Union::GetValueImpl(std::move(*this), out);
+	}
+
+	template <typename F>
+	bool GetValue(F& out) const &&
+	{
+		return Union::GetValueImpl(std::move(*this), out);
 	}
 
 	/** Gets the current value of this Union as the given type.
@@ -129,14 +119,18 @@ public:
 
 	/** Since this is a temporary object, you couldn't have possibly checked if it contains a value. */
 	template <typename F>
-	F&& GetValue() && = delete;
+	void GetValue() && = delete;
+
+	/** Since this is a temporary object, you couldn't have possibly checked if it contains a value. */
+	template <typename F>
+	void GetValue() const && = delete;
 
 	/** Sets the current value of this Union. */
 	template <typename F>
 	void SetValue(F&& value)
 	{
 		using DecayF = std::decay_t<F>;
-		constexpr auto newIndex = IndexOf<DecayF>();
+		constexpr auto newIndex = Union::IndexOf<DecayF>();
 
 		// If we have a currently loaded value
 		if (this->HasValue())
@@ -164,11 +158,7 @@ public:
 	template <typename FuncT>
 	bool Invoke(FuncT&& func) &
 	{
-		using Invoker = void(void*, FuncT&&);
-		Invoker* const invokers[] = { CreateNoOpInvoker<void*, FuncT>(), CreateInvoker<T&, void*, FuncT>()... };
-
-		invokers[_index](_buffer.GetPointer(), std::forward<FuncT>(func));
-		return this->HasValue();
+		return Union::InvokeImpl(*this, std::forward<FuncT>(func));
 	}
 
 	/** Invokes the given function on the current value.
@@ -176,11 +166,7 @@ public:
 	template <typename FuncT>
 	bool Invoke(FuncT&& func) const &
 	{
-		using Invoker = void(const void*, FuncT&&);
-		Invoker* const invokers[] = { CreateNoOpInvoker<const void*, FuncT>(), CreateInvoker<const T&, const void*, FuncT>()... };
-
-		invokers[_index](_buffer.GetPointer(), std::forward<FuncT>(func));
-		return this->HasValue();
+		return Union::InvokeImpl(*this, std::forward<FuncT>(func));
 	}
 
 	/** Invokes the given function on the current value.
@@ -188,11 +174,15 @@ public:
 	template <typename FuncT>
 	bool Invoke(FuncT&& func) &&
 	{
-		using Invoker = void(void*, FuncT&&);
-		Invoker* const invokers[] = { CreateNoOpInvoker<void*, FuncT>(), CreateInvoker<T&&, void*, FuncT>()... };
+		return Union::InvokeImpl(std::move(*this), std::forward<FuncT>(func));
+	}
 
-		invokers[_index](_buffer.GetPointer(), std::forward<FuncT>(func));
-		return this->HasValue();
+	/** Invokes the given function on the current value.
+	* Returns whether the given function was invoked. */
+	template <typename FuncT>
+	bool Invoke(FuncT&& funct) const &&
+	{
+		return Union::InvokeImpl(std::move(*this), std::forward<FuncT>(func));
 	}
 
 	/** Invokes the given function on the currently held instance of 'F', if it exists.
@@ -200,15 +190,7 @@ public:
 	template <typename F, typename FuncT>
 	bool InvokeFor(FuncT&& func) &
 	{
-		if (_index == IndexOf<F>())
-		{
-			std::forward<FuncT>(func)(this->FastGet<F>());
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return Union::InvokeForImpl(*this, std::forward<FuncT>(func));
 	}
 
 	/** Invokes the given function on the currently held instance of 'F', if it exists.
@@ -216,15 +198,7 @@ public:
 	template <typename F, typename FuncT>
 	bool InvokeFor(FuncT&& func) const &
 	{
-		if (_index == IndexOf<F>())
-		{
-			std::forward<FuncT>(func)(this->FastGet<F>());
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return Union::InvokeForImpl(*this, std::forward<FuncT>(func));
 	}
 
 	/** Invokes the given function on the currently held instance of 'F', if it exists.
@@ -232,15 +206,15 @@ public:
 	template <typename F, typename FuncT>
 	bool InvokeFor(FuncT&& func) &&
 	{
-		if (_index == IndexOf<F>())
-		{
-			std::forward<FuncT>(func)(std::move(this->FastGet<F>()));
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return Union::Invoke(std::move(*this), std::forward<FuncT>(func));
+	}
+
+	/** Invokes the given function on the currently held instance of 'F', if it exists.
+	* Returns whether the given function was invoked. */
+	template <typename F, typename FuncT>
+	bool InvokeFor(FuncT&& func) const &&
+	{
+		return Union::Invoke(std::move(*this), std::forward<FuncT>(func));
 	}
 
 	/** Destroys the currently held value. */
@@ -269,6 +243,69 @@ private:
 		return *_buffer.template GetPointer<F>();
 	}
 
+	/** Implements the 'GetValue' method for various types of 'this'. */
+	template <typename ThisT, typename F>
+	static bool GetValueImpl(ThisT&& self, F& out)
+	{
+		if (self._index == Union::IndexOf<F>())
+		{
+			out = stde::forward_like<ThisT>(self.template FastGet<F>());
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/** Implements the 'Invoke' method for various types of 'this'. */
+	template <typename ThisT, typename FuncT>
+	static bool InvokeImpl(ThisT&& self, FuncT&& func)
+	{
+		using Invoker = void(stde::copy_cv_t<ThisT, void>*, FuncT&&);
+		Invoker* const invokers[] = { Union::CreateNoOpInvoker<FuncT>(), Union::CreateInvoker<stde::minimum_qualifiers_t<ThisT&&, T>, FuncT>()... };
+
+		invokers[self._index](self._buffer.GetPointer(), std::forward<FuncT>(func));
+		return self.HasValue();
+	}
+
+	/** Implements the 'InvokeFor' method for various types of 'this'. */
+	template <typename ThisT, typename F, typename FuncT>
+	static bool InvokeForImpl(ThisT&& self, FuncT&& func)
+	{
+		if (self.template HasInstanceOf<F>())
+		{
+			std::forward<FuncT>(func)(stde::forward_like<ThisT>(self.template FastGet<F>()));
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/** Creates a function that invokes a function of the given type ("Func") on a type-erased instance of "F".
+	* Used by the "Invoke" method. */
+	template <typename F, typename FuncT>
+	static auto CreateInvoker()
+	{
+		return [](auto arg, FuncT&& func)
+		{
+			std::forward<FuncT>(func)(stde::static_ptr_to_ref<F>(arg));
+		};
+	}
+
+	/** Creates a function that does nothing with its arguments.
+	* Used by the "Invoke" method. */
+	template <typename FuncT>
+	static auto CreateNoOpInvoker()
+	{
+		return [](auto /*arg*/, FuncT&& /*func*/)
+		{
+			// Do nothing
+		};
+	}
+
 	/** Returns the index of the given type. */
 	template <typename S>
 	static constexpr Index IndexOf()
@@ -291,39 +328,17 @@ private:
 		return 0;
 	}
 
-	/** Creates a function that invokes a function of the given type ("Func") on a type-erased instance of "F".
-	* Used by the "Invoke" method. */
-	template <typename F, typename EraseT, typename FuncT>
-	static auto CreateInvoker()
-	{
-		return [](EraseT arg, FuncT&& func)
-		{
-			std::forward<FuncT>(func)(std::forward<F>(*static_cast<std::remove_reference_t<F>*>(arg)));
-		};
-	}
-
-	/** Creates a function that does nothing with its arguments.
-	* Used by the "Invoke" method. */
-	template <typename EraseT, typename FuncT>
-	static auto CreateNoOpInvoker()
-	{
-		return [](EraseT /*arg*/, FuncT&& /*func*/)
-		{
-			// Do nothing
-		};
-	}
-
 	/** Returns the size of the largest type among the types suppored by this Union. */
 	static constexpr std::size_t GetMaxSize()
 	{
-		return GetMaxSize(Seq());
+		return Union::GetMaxSize(Seq());
 	}
 
 	/** Returns the size of the largest type among the types suppored by this Union. */
 	template <typename F, typename ... MoreF>
 	static constexpr std::size_t GetMaxSize(stde::type_sequence<F, MoreF...>)
 	{
-		return std::max(sizeof(F), GetMaxSize(stde::type_sequence<MoreF...>{}));
+		return std::max(sizeof(F), Union::GetMaxSize(stde::type_sequence<MoreF...>{}));
 	}
 
 	/** Returns the size of the largest type among the types suppored by this Union. */
@@ -335,14 +350,14 @@ private:
 	/** Returns the maximum alignment among the types supported by this Union. */
 	static constexpr std::size_t GetMaxAlignment()
 	{
-		return GetMaxAlignment(Seq());
+		return Union::GetMaxAlignment(Seq());
 	}
 
 	/** Returns the maximum alignment among the types supported by this Union. */
 	template <typename F, typename ... MoreF>
 	static constexpr std::size_t GetMaxAlignment(stde::type_sequence<F, MoreF...>)
 	{
-		return std::max(alignof(F), GetMaxAlignment(stde::type_sequence<MoreF...>{}));
+		return std::max(alignof(F), Union::GetMaxAlignment(stde::type_sequence<MoreF...>{}));
 	}
 
 	/** Returns the maximum alignment among the types supported by this Union. */
@@ -427,8 +442,8 @@ public:
 	///   Data   ///
 private:
 
-	// For some reason, ONLY ON MSVC< I have to store this as a static constexpr variable,
-	// rather than just putting "GetMaxSize()" into the StaticBuffer size
+	// For some reason, ONLY ON MSVC, I have to store these as a static constexpr variable,
+	// rather than just putting the function call directly into the template
 	static constexpr std::size_t Size = GetMaxSize();
 	static constexpr std::size_t Alignment = GetMaxAlignment();
 
