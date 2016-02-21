@@ -180,7 +180,7 @@ public:
 	/** Invokes the given function on the current value.
 	* Returns whether the given function was invoked. */
 	template <typename FuncT>
-	bool Invoke(FuncT&& funct) const &&
+	bool Invoke(FuncT&& func) const &&
 	{
 		return Union::InvokeImpl(std::move(*this), std::forward<FuncT>(func));
 	}
