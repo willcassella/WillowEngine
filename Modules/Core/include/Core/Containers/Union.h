@@ -76,7 +76,6 @@ public:
 	template <typename F>
 	bool HasInstanceOf() const
 	{
-		// TODO: If 'F' is not a member of this Union, this will fail to compile. It's arguable that a better solution would be to return 'false'.
 		return _index == Union::IndexOf<F>();
 	}
 
@@ -130,8 +129,8 @@ public:
 	template <typename F>
 	void SetValue(F&& value)
 	{
-		using DecayF = std::decay_t<F>;
-		constexpr auto newIndex = Union::IndexOf<DecayF>();
+		using DecayedF = std::decay_t<F>;
+		constexpr auto newIndex = Union::IndexOf<F>();
 
 		// If we have a currently loaded value
 		if (this->HasValue())
@@ -140,7 +139,7 @@ public:
 			if (_index == newIndex)
 			{
 				// Just assign directly
-				this->FastGet<DecayF>() = std::forward<F>(value);
+				this->FastGet<DecayedF>() = std::forward<F>(value);
 				return;
 			}
 			else
@@ -150,7 +149,7 @@ public:
 			}
 		}
 
-		_buffer.template Emplace<DecayF>(std::forward<F>(value));
+		_buffer.template Emplace<DecayedF>(std::forward<F>(value));
 		_index = newIndex;
 	}
 
@@ -250,7 +249,7 @@ private:
 	{
 		if (self._index == Union::IndexOf<F>())
 		{
-			out = stde::forward_like<ThisT>(self.template FastGet<F>());
+			out = stde::forward_like<ThisT>(self.template FastGet<std::decay_t<F>>());
 			return true;
 		}
 		else
@@ -316,8 +315,7 @@ private:
 	template <typename S>
 	static constexpr Index IndexOf()
 	{
-		static_assert(Seq::template contains<S>(), "The given type does not exist in this Union.");
-		return IndexOf<S>(1, Seq());
+		return IndexOf<std::decay_t<S>>(1, Seq{});
 	}
 
 	/** Recursively finds the index of the given type. */
@@ -380,15 +378,7 @@ public:
 	{
 		if (this != &copy)
 		{
-			if (copy.HasValue())
-			{
-				// Copy the value
-				copy.Invoke([this](auto& value)
-				{
-					this->SetValue(value);
-				});
-			}
-			else
+			if (!copy.Invoke([this](auto& value) { this->SetValue(value); }))
 			{
 				this->Nullify();
 			}
@@ -400,15 +390,7 @@ public:
 	{
 		if (this != &copy)
 		{
-			if (copy.HasValue())
-			{
-				// Copy the value
-				copy.Invoke([this](const auto& value)
-				{
-					this->SetValue(value);
-				});
-			}
-			else
+			if (!copy.Invoke([this](const auto& value) { this->SetValue(value); }))
 			{
 				this->Nullify();
 			}
@@ -420,15 +402,19 @@ public:
 	{
 		if (this != &move)
 		{
-			if (move.HasValue())
+			if (!std::move(move).Invoke([this](auto&& value) { this->SetValue(std::move(value)); }))
 			{
-				// Move the value
-				std::move(move).Invoke([this](auto&& value) -> void
-				{
-					this->SetValue(std::move(value));
-				});
+				this->Nullify();
 			}
-			else
+		}
+
+		return *this;
+	}
+	Union& operator=(const Union&& move)
+	{
+		if (this != &move)
+		{
+			if (!std::move(move).Invoke([this](const auto&& value) { this->SetValue(std::move(value)); }))
 			{
 				this->Nullify();
 			}
