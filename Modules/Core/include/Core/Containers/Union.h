@@ -45,6 +45,11 @@ public:
 	{
 		*this = std::move(move);
 	}
+	Union(const Union&& move)
+		: Union()
+	{
+		*this = std::move(move);
+	}
 	~Union()
 	{
 		this->Nullify();
@@ -72,7 +77,7 @@ public:
 	bool HasInstanceOf() const
 	{
 		// TODO: If 'F' is not a member of this Union, this will fail to compile. It's arguable that a better solution would be to return 'false'.
-		return _index == IndexOf<F>();
+		return _index == Union::IndexOf<F>();
 	}
 
 	template <typename F>
@@ -104,7 +109,7 @@ public:
 	template <typename F>
 	F& GetValue() &
 	{
-		assert(_index == IndexOf<F>());
+		assert(_index == Union::IndexOf<F>());
 		return this->FastGet<F>();
 	}
 
@@ -113,13 +118,9 @@ public:
 	template <typename F>
 	const F& GetValue() const &
 	{
-		assert(_index == IndexOf<F>());
+		assert(_index == Union::IndexOf<F>());
 		return this->FastGet<F>();
 	}
-
-	/** Since this is a temporary object, you couldn't have possibly checked if it contains a value. */
-	template <typename F>
-	void GetValue() && = delete;
 
 	/** Since this is a temporary object, you couldn't have possibly checked if it contains a value. */
 	template <typename F>
@@ -262,8 +263,9 @@ private:
 	template <typename ThisT, typename FuncT>
 	static bool InvokeImpl(ThisT&& self, FuncT&& func)
 	{
-		using Invoker = void(stde::copy_cv_t<ThisT, void>*, FuncT&&);
-		Invoker* const invokers[] = { Union::CreateNoOpInvoker<FuncT>(), Union::CreateInvoker<stde::minimum_qualifiers_t<ThisT&&, T>, FuncT>()... };
+		using VoidT = stde::copy_cv_t<ThisT, void>*;
+		using Invoker = void(VoidT, FuncT&&);
+		Invoker* const invokers[] = { Union::CreateNoOpInvoker<VoidT, FuncT>(), Union::CreateInvoker<VoidT, FuncT, stde::copy_qualifiers_t<ThisT&&, T>>()... };
 
 		invokers[self._index](self._buffer.GetPointer(), std::forward<FuncT>(func));
 		return self.HasValue();
@@ -286,10 +288,14 @@ private:
 
 	/** Creates a function that invokes a function of the given type ("Func") on a type-erased instance of "F".
 	* Used by the "Invoke" method. */
-	template <typename F, typename FuncT>
+	template <typename VoidT, typename FuncT, typename F>
 	static auto CreateInvoker()
 	{
-		return [](auto arg, FuncT&& func)
+		// COMPILER NOTE: I would have made this a generic lambda, but for whatever reason (still trying to figure it out) most compilers just CANNOT handle
+		// Passing generic lambdas around in the way I'd like to. Even worse, support seems to be extremely sporadic (works on Clang 3.6, but not 3.7)
+		// If it had been supported, the template signature for this funtion would be 'template <typename F>', and the signature for this lambda would be
+		// (auto arg, auto&& func).
+		return [](VoidT arg, FuncT&& func)
 		{
 			std::forward<FuncT>(func)(stde::static_ptr_to_ref<F>(arg));
 		};
@@ -297,10 +303,10 @@ private:
 
 	/** Creates a function that does nothing with its arguments.
 	* Used by the "Invoke" method. */
-	template <typename FuncT>
+	template <typename VoidT, typename FuncT>
 	static auto CreateNoOpInvoker()
 	{
-		return [](auto /*arg*/, FuncT&& /*func*/)
+		return [](VoidT /*arg*/, FuncT&& /*func*/)
 		{
 			// Do nothing
 		};

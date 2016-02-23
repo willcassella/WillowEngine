@@ -129,9 +129,25 @@ public:
 	{
 		return lhs._value == rhs._value;
 	}
+	friend FORCEINLINE bool operator==(const String& lhs, CString rhs)
+	{
+		return lhs == String(rhs);
+	}
+	friend FORCEINLINE bool operator==(CString lhs, const String& rhs)
+	{
+		return String(lhs) == rhs;
+	}
 	friend FORCEINLINE bool operator!=(const String& lhs, const String& rhs)
 	{
 		return lhs._value != rhs._value;
+	}
+	friend FORCEINLINE bool operator!=(const String& lhs, CString rhs)
+	{
+		return lhs != String(rhs);
+	}
+	friend FORCEINLINE bool operator!=(CString lhs, const String& rhs)
+	{
+		return String(lhs) != rhs;
 	}
 	friend CORE_API bool operator>(const String& lhs, const String& rhs);
 	friend FORCEINLINE bool operator>=(const String& lhs, const String& rhs)
