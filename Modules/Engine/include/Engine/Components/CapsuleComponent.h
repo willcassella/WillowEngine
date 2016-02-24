@@ -3,17 +3,19 @@
 
 #include "PhysicalComponent.h"
 
-class ENGINE_API CapsuleComponent : public PhysicalComponent
+namespace Willow
 {
-	///////////////////////
-	///   Information   ///
-public:
+	class ENGINE_API CapsuleComponent : public PhysicalComponent
+	{
+		///////////////////////
+		///   Information   ///
+	public:
 
-	REFLECTABLE_CLASS
-	EXTENDS(PhysicalComponent)
+		REFLECTABLE_CLASS
+		EXTENDS(PhysicalComponent)
 
-	////////////////////////
-	///   Constructors   ///
+		////////////////////////
+		///   Constructors   ///
 public:
 
 	CapsuleComponent();
@@ -44,4 +46,5 @@ private:
 private:
 
 	std::unique_ptr<btCapsuleShape> _shape;
-};
+	};
+}

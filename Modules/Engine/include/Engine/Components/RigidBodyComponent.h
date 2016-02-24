@@ -3,18 +3,21 @@
 
 #include "PhysicalComponent.h"
 
-class ENGINE_API RigidBodyComponent final : public PhysicalComponent
+namespace Willow
 {
-	///////////////////////
-	///   Information   ///
-public:
+	class ENGINE_API RigidBodyComponent final : public PhysicalComponent
+	{
+		///////////////////////
+		///   Information   ///
+	public:
 
-	REFLECTABLE_CLASS
-	EXTENDS(Component)
+		REFLECTABLE_CLASS
+		EXTENDS(Component)
 
-	///////////////////
-	///   Methods   ///
-protected:
+		///////////////////
+		///   Methods   ///
+	protected:
 
-	void OnSpawn() override;
-};
+		void OnSpawn() override;
+	};
+}

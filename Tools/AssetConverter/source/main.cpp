@@ -2,16 +2,17 @@
 
 #include <Core/Application.h>
 #include <Core/IO/Console.h>
-#include "../include/AssetConverter/AssetConverter.h"
+#include "../include/AssetConverter/AssetConversion.h"
 
 int main(int32 argCount, char** args)
 {
+	using namespace Willow;
 	Application::Initialize();
 
 	// If files were passed in via the command line
 	if (argCount > 1)
 	{
-		AssetConverter::Convert(args[1], Array<String>());
+		AssetConversion::Convert(args[1], Array<String>());
 		return 0;
 	}
 
@@ -30,7 +31,7 @@ int main(int32 argCount, char** args)
 		}
 
 		// @TODO: Parse options (setting compression level, renaming output)
-		AssetConverter::Convert(path, Array<String>());
+		AssetConversion::Convert(path, Array<String>());
 	}
 
 	Application::Terminate();

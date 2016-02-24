@@ -8,77 +8,82 @@
 /////////////////
 ///   Types   ///
 
-enum class PhysicsMode : byte
+namespace Willow
 {
-	/* This object does not participate in the physics simulation at all. */
-	Transient,
-
-	/** This object can detect collisions, but does not otherwise participate in the physics simulation. */
-	Ghost,
-	
-	/* This object affects the physics simulation, but is not affected by it. */
-	Kinematic,
-	
-	/* This object both affects, and is affected by the physics simulation. */
-	Dynamic
-};
-REFLECTABLE_ENUM(ENGINE_API, PhysicsMode)
-
-class ENGINE_API PhysicalComponent : public Component
-{
-	///////////////////////
-	///   Information   ///
-public:
-
-	REFLECTABLE_CLASS
-	EXTENDS(Component)
-
-	////////////////////////
-	///   Constructors   ///
-public:
-
-	PhysicalComponent();
-	~PhysicalComponent() override;
-
-	///////////////////
-	///   Methods   ///
-public:
-
-	/** Returns the mass of this PhysicalComponent. */
-	FORCEINLINE Scalar GetMass() const
+	enum class PhysicsMode : byte
 	{
-		return _mass;
-	}
+		/* This object does not participate in the physics simulation at all. */
+		Transient,
 
-	/** Sets the mass of this PhysicalComponent. */
-	void SetMass(Scalar value);
+		/** This object can detect collisions, but does not otherwise participate in the physics simulation. */
+		Ghost,
 
-	/** Returns the physics mode of this PhysicalComponent. */
-	FORCEINLINE PhysicsMode GetPhysicsMode() const
+		/* This object affects the physics simulation, but is not affected by it. */
+		Kinematic,
+
+		/* This object both affects, and is affected by the physics simulation. */
+		Dynamic
+	};
+
+	class ENGINE_API PhysicalComponent : public Component
 	{
-		return _physicsMode;
-	}
+		///////////////////////
+		///   Information   ///
+	public:
 
-	/** Sets the physics mode of this PhysicalComponent. */
-	void SetPhysicsMode(PhysicsMode mode);
+		REFLECTABLE_CLASS
+		EXTENDS(Component)
 
-protected:
+		////////////////////////
+		///   Constructors   ///
+	public:
 
-	virtual btCollisionShape* GetShape() = 0;
+		PhysicalComponent();
+		~PhysicalComponent() override;
 
-	void OnSpawn() override;
+		///////////////////
+		///   Methods   ///
+	public:
 
-private:
+		/** Returns the mass of this PhysicalComponent. */
+		FORCEINLINE Scalar GetMass() const
+		{
+			return _mass;
+		}
 
-	void SetupPhysics();
+		/** Sets the mass of this PhysicalComponent. */
+		void SetMass(Scalar value);
 
-	void DestroyPhysics();
+		/** Returns the physics mode of this PhysicalComponent. */
+		FORCEINLINE PhysicsMode GetPhysicsMode() const
+		{
+			return _physicsMode;
+		}
 
-	////////////////
-	///   Data   ///
-private:
+		/** Sets the physics mode of this PhysicalComponent. */
+		void SetPhysicsMode(PhysicsMode mode);
 
-	std::unique_ptr<PhysicsState> _physicsState;
-	PhysicsMode _physicsMode = PhysicsMode::Transient;
-	Scalar _mass = 1;
-};
+	protected:
+
+		virtual btCollisionShape* GetShape() = 0;
+
+		void OnSpawn() override;
+
+	private:
+
+		void SetupPhysics();
+
+		void DestroyPhysics();
+
+		////////////////
+		///   Data   ///
+	private:
+
+		std::unique_ptr<PhysicsState> _physicsState;
+		PhysicsMode _physicsMode = PhysicsMode::Transient;
+		Scalar _mass = 1;
+	};
+}
+
+REFLECTABLE_ENUM(ENGINE_API, Willow::PhysicsMode)
+

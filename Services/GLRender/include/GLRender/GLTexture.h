@@ -4,30 +4,33 @@
 #include <Engine/Assets/Texture.h>
 #include "GLPrimitive.h"
 
-struct GLRENDER_API GLTexture final : GLPrimitive
+namespace Willow
 {
-	////////////////////////
-	///   Constructors   ///
-public:
-
-	/** Creates an OpenGL texture from the corresponding Texture asset. */
-	GLTexture(GLRenderer& renderer, const Texture& texture);
-
-	GLTexture(GLTexture&& move);
-	~GLTexture();
-
-	///////////////////
-	///   Methods   ///
-public:
-
-	FORCEINLINE BufferID GetID() const
+	struct GLRENDER_API GLTexture final : GLPrimitive
 	{
-		return _id;
-	}
+		////////////////////////
+		///   Constructors   ///
+	public:
 
-	////////////////
-	///   Data   ///
-private:
+		/** Creates an OpenGL texture from the corresponding Texture asset. */
+		GLTexture(GLRenderer& renderer, const Texture& texture);
 
-	BufferID _id;
-};
+		GLTexture(GLTexture&& move);
+		~GLTexture();
+
+		///////////////////
+		///   Methods   ///
+	public:
+
+		FORCEINLINE BufferID GetID() const
+		{
+			return _id;
+		}
+
+		////////////////
+		///   Data   ///
+	private:
+
+		BufferID _id;
+	};
+}

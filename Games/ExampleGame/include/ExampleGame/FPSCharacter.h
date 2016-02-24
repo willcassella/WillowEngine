@@ -6,33 +6,36 @@
 #include <Engine/Components/CapsuleComponent.h>
 #include "config.h"
 
-class EXAMPLEGAME_API FPSCharacter : public Entity
+namespace ExampleGame
 {
-	///////////////////////
-	///   Information   ///
-public:
+	class EXAMPLEGAME_API FPSCharacter : public Willow::Entity
+	{
+		///////////////////////
+		///   Information   ///
+	public:
 
-	REFLECTABLE_CLASS
-	EXTENDS(Entity)
+		REFLECTABLE_CLASS
+		EXTENDS(Willow::Entity)
 
-	//////////////////////
-	///   Components   ///
-public:
+		//////////////////////
+		///   Components   ///
+	public:
 
-	Weak<CameraComponent> View;
-	Weak<CapsuleComponent> Capsule;
+		Weak<Willow::CameraComponent> View;
+		Weak<Willow::CapsuleComponent> Capsule;
 
-	///////////////////
-	///   Methods   ///
-protected:
+		///////////////////
+		///   Methods   ///
+	protected:
 
-	void OnSpawn() override;
+		void OnSpawn() override;
 
-	///////////////////
-	///   Actions   ///
-public:
+		///////////////////
+		///   Actions   ///
+	public:
 
-	void Move(Vec2 direction);
-	void Look(Vec2 direction);
-	void Fire();
-};
+		void Move(Vec2 direction);
+		void Look(Vec2 direction);
+		void Fire();
+	};
+}

@@ -6,8 +6,8 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(CameraComponent)
-.Field("HFov", &CameraComponent::HFov, "The horizontal field of view of the camera.")
-.Field("VFov", &CameraComponent::VFov, "The vertical field of view of the camera.")
+BUILD_REFLECTION(Willow::CameraComponent)
+.Field("HFov", &CameraComponent::Fov, "The horizontal field of view of the camera.")
+.Field("VFov", &CameraComponent::ScreenRatio, "The screen ratio of this camera.")
 .Field("ZMin", &CameraComponent::ZMin, "The distance to the near clipping plane.")
 .Field("ZMax", &CameraComponent::ZMax, "The distance to the far clipping plane.");

@@ -6,7 +6,7 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(GameObject)
+BUILD_REFLECTION(Willow::GameObject)
 .Data("ID", &GameObject::_id)
 .Data("State", &GameObject::_state, DF_Transient)
 .Property("ID", &GameObject::GetID, nullptr, "Unique ID")
@@ -17,55 +17,58 @@ BUILD_REFLECTION(GameObject)
 .Property("World Rotation", &GameObject::GetWorldRotation, &GameObject::SetWorldRotation, "Rotation in world space", "Transform")
 .Property("Scale", &GameObject::GetScale, &GameObject::SetScale, "Scale", "Transform");
 
-BUILD_ENUM_REFLECTION(GameObject::State)
-.Value("Uninitialized", GameObject::State::Uninitialized)
-.Value("Initialized", GameObject::State::Initialized)
-.Value("Spawning", GameObject::State::Spawning)
-.Value("Spawned", GameObject::State::Spawned)
-.Value("Destroyed", GameObject::State::Destroyed);
+BUILD_ENUM_REFLECTION(Willow::GameObject::State)
+.Value("Uninitialized", Willow::GameObject::State::Uninitialized)
+.Value("Initialized", Willow::GameObject::State::Initialized)
+.Value("Spawning", Willow::GameObject::State::Spawning)
+.Value("Spawned", Willow::GameObject::State::Spawned)
+.Value("Destroyed", Willow::GameObject::State::Destroyed);
 
-///////////////////
-///   Methods   ///
-
-void GameObject::Destroy()
+namespace Willow
 {
-	assert(this->GetState() >= State::Spawned);
+	///////////////////
+	///   Methods   ///
 
-	if (this->GetState() == State::Destroyed)
+	void GameObject::Destroy()
 	{
-		// We've already run the destruction procedure
-		return;
+		assert(this->GetState() >= State::Spawned);
+
+		if (this->GetState() == State::Destroyed)
+		{
+			// We've already run the destruction procedure
+			return;
+		}
+		else
+		{
+			_state = State::Destroyed;
+			this->OnDestroy();
+		}
 	}
-	else
+
+	void GameObject::OnSpawn()
 	{
-		_state = State::Destroyed;
-		this->OnDestroy();
+		// Do nothing
 	}
-}
 
-void GameObject::OnSpawn()
-{
-	// Do nothing
-}
+	void GameObject::OnDestroy()
+	{
+		// Do nothing
+	}
 
-void GameObject::OnDestroy()
-{
-	// Do nothing
-}
+	void GameObject::Initialize(ID id)
+	{
+		assert(this->GetState() == State::Uninitialized);
 
-void GameObject::Initialize(ID id)
-{
-	assert(this->GetState() == State::Uninitialized);
+		_id = id;
+		_state = State::Initialized;
+	}
 
-	_id = id;
-	_state = State::Initialized;
-}
+	void GameObject::Spawn()
+	{
+		assert(this->GetState() == State::Initialized);
 
-void GameObject::Spawn()
-{
-	assert(this->GetState() == State::Initialized);
-
-	_state = State::Spawning;
-	this->OnSpawn();
-	_state = State::Spawned;
+		_state = State::Spawning;
+		this->OnSpawn();
+		_state = State::Spawned;
+	}
 }

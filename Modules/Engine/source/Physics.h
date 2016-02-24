@@ -66,7 +66,7 @@ class PhysicsState final : public btMotionState
 	///   Constructors   ///
 public:
 
-	PhysicsState(PhysicalComponent& owner)
+	PhysicsState(Willow::PhysicalComponent& owner)
 		: _owner(&owner)
 	{
 		// All done
@@ -105,5 +105,5 @@ public:
 	///   Data   ///
 private:
 
-	PhysicalComponent* _owner;
+	Willow::PhysicalComponent* _owner;
 };

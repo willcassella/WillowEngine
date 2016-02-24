@@ -8,7 +8,7 @@
 #include "../include/Client/Window.h"
 
 /** Main program loop. */
-void EventLoop(Window& window, World& world, IRenderer& renderer)
+void EventLoop(Window& window, Willow::World& world, Willow::IRenderer& renderer)
 {
 	Console::WriteLine("Entering event loop...");
 
@@ -95,7 +95,7 @@ int main(int32 /*argc*/, char** /*argv*/)
 	{
 		Console::WriteLine("Initializing subsystems...");
 		Window window("Willow Engine", 1280, 720);
-		GLRenderer renderer(window.GetWidth(), window.GetHeight());
+		Willow::GLRenderer renderer(window.GetWidth(), window.GetHeight());
 
 		///////////////////////////////
 		///   Setting up a simple   ///
@@ -103,15 +103,20 @@ int main(int32 /*argc*/, char** /*argv*/)
 
 		Console::WriteLine("Creating world...");
 
-		World world;
+		Willow::World world;
 
-		auto& sponza = world.Spawn<StaticMeshComponent>("Sponza");
+		auto& sponza = world.Spawn<Willow::StaticMeshComponent>("Sponza");
 		sponza.SetScale({ 0.6f, 0.6f, 0.6f });
 		sponza.Mesh = "Content/Models/sponza_new.wmesh"_p;
 		sponza.Material = "Content/Materials/Sponza.mat"_p;
-		sponza.InstanceParams["diffuse"] = AssetPtr<Texture>("Content/Textures/sponza_new_tex.png"_p);
+		sponza.InstanceParams["diffuse"] = AssetPtr<Willow::Texture>("Content/Textures/sponza_new_tex.png"_p);
 
-		auto& player = world.Spawn<FPSCharacter>("Player");
+		auto& test = world.Spawn<Willow::StaticMeshComponent>("test");
+		test.Mesh = "Content/Models/test.wmesh"_p;
+		test.Material = "Content/Materials/Sponza.mat"_p;
+		test.InstanceParams["diffuse"] = AssetPtr<Willow::Texture>("Content/Textures/sponza_new_tex.png"_p);
+
+		auto& player = world.Spawn<ExampleGame::FPSCharacter>("Player");
 		player.Translate({ 0, 3, 0 });
 
 		// Enter main event loop

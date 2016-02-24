@@ -7,26 +7,29 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(CapsuleComponent);
+BUILD_REFLECTION(Willow::CapsuleComponent);
 
 ////////////////////////
 ///   Constructors   ///
 
-CapsuleComponent::CapsuleComponent()
+namespace Willow
 {
-	_shape = std::make_unique<btCapsuleShape>(Scalar{ 5 }, Scalar{ 5 });
-}
+	CapsuleComponent::CapsuleComponent()
+	{
+		_shape = std::make_unique<btCapsuleShape>(Scalar{ 5 }, Scalar{ 5 });
+	}
 
-CapsuleComponent::~CapsuleComponent()
-{
-	// All done
-}
+	CapsuleComponent::~CapsuleComponent()
+	{
+		// All done
+	}
 
-///////////////////
-///   Methods   ///
+	///////////////////
+	///   Methods   ///
 
-btCollisionShape* CapsuleComponent::GetShape()
-{
-	// Create capsule shape
-	return _shape.get();
+	btCollisionShape* CapsuleComponent::GetShape()
+	{
+		// Create capsule shape
+		return _shape.get();
+	}
 }

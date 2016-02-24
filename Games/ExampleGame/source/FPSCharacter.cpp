@@ -6,40 +6,43 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(FPSCharacter)
+BUILD_REFLECTION(ExampleGame::FPSCharacter)
 .Field("View", &FPSCharacter::View)
 .Field("Capsule", &FPSCharacter::Capsule);
 
-///////////////////
-///   Methods   ///
-
-void FPSCharacter::OnSpawn()
+namespace ExampleGame
 {
-	Base::OnSpawn();
+	///////////////////
+	///   Methods   ///
 
-	Capsule = this->Connect<CapsuleComponent>();
-	View = this->Attach<CameraComponent>();
+	void FPSCharacter::OnSpawn()
+	{
+		Base::OnSpawn();
 
-	GetWorld().Events.Bind("Move", *this, &FPSCharacter::Move);
-	GetWorld().Events.Bind("Look", *this, &FPSCharacter::Look);
-	GetWorld().Events.Bind("Click", *this, &FPSCharacter::Fire);
-}
+		Capsule = this->Connect<Willow::CapsuleComponent>();
+		View = this->Attach<Willow::CameraComponent>();
 
-///////////////////
-///   Actions   ///
+		GetWorld().Events.Bind("Move", *this, &FPSCharacter::Move);
+		GetWorld().Events.Bind("Look", *this, &FPSCharacter::Look);
+		GetWorld().Events.Bind("Click", *this, &FPSCharacter::Fire);
+	}
 
-void FPSCharacter::Move(Vec2 direction)
-{
-	this->Translate(Vec3(direction.X, 0, -direction.Y)/10);
-}
+	///////////////////
+	///   Actions   ///
 
-void FPSCharacter::Look(Vec2 direction)
-{
-	this->RotateGlobal(Vec3::Up, direction.X);
-	this->Rotate(Vec3::Right, direction.Y);
-}
+	void FPSCharacter::Move(Vec2 direction)
+	{
+		this->Translate(Vec3(direction.X, 0, -direction.Y) / 10);
+	}
 
-void FPSCharacter::Fire()
-{
-	// Spawn something
+	void FPSCharacter::Look(Vec2 direction)
+	{
+		this->RotateGlobal(Vec3::Up, direction.X);
+		this->Rotate(Vec3::Right, direction.Y);
+	}
+
+	void FPSCharacter::Fire()
+	{
+		// Spawn something
+	}
 }

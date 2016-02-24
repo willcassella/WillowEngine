@@ -6,13 +6,16 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Shader);
+BUILD_REFLECTION(Willow::Shader);
 
-////////////////////////
-///   Constructors   ///
-
-Shader::Shader(const Path& path)
-	: Base(path)
+namespace Willow
 {
-	_source = TextFile(path).DumpLines();
+	////////////////////////
+	///   Constructors   ///
+
+	Shader::Shader(const Path& path)
+		: Base(path)
+	{
+		_source = TextFile(path).DumpLines();
+	}
 }

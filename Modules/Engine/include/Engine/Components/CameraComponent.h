@@ -4,43 +4,41 @@
 #include <Core/Math/Mat4.h>
 #include "../Component.h"
 
-class ENGINE_API CameraComponent : public Component
+namespace Willow
 {
-	///////////////////////
-	///   Information   ///
-public:
-
-	REFLECTABLE_CLASS
-	EXTENDS(Component)
-
-	//////////////////
-	///   Fields   ///
-public:
-
-	Scalar HFov = 90.f;
-	Scalar VFov = 59.f;
-	Scalar ZMin = 0.1f;
-	Scalar ZMax = 100.f;
-
-	///////////////////
-	///   Methods   ///
-public:
-
-	/** Generate a perspective projection matrix for this CameraComponent */
-	FORCEINLINE Mat4 GetPerspective() const
+	class ENGINE_API CameraComponent : public Component
 	{
-		return Mat4::Perspective(HFov, VFov, ZMin, ZMax);
-	}
+		///////////////////////
+		///   Information   ///
+	public:
 
-	/** Sets the horizontal field of view with respect to the given vertical field of view and aspect ratio */
-	FORCEINLINE void SetHFOV(Scalar /*vFOV*/, Scalar /*aspectRatio*/)
-	{
-		// @TODO: Implement this
-	}
+		REFLECTABLE_CLASS
+		EXTENDS(Component)
 
-	/** Sets the vertical field of view with respect to the given horizontal field of view and aspect ratio */
-	FORCEINLINE void SetVFOV(Scalar /*hFOV*/, Scalar /*aspectRatio*/)
-	{
-		// @TODO: Implement this
-	}
-};
+		//////////////////
+		///   Fields   ///
+	public:
+
+		/** The horizontal field of view of this Camera. */
+		Angle Fov = 90.f;
+
+		/** The screen ratio of this Camera. */
+		float ScreenRatio = 16.f / 9;
+		
+		/** The distance to the near clipping plane. */
+		float ZMin = 0.1f;
+
+		/** The distance to the far clipping plane. */
+		float ZMax = 100.f;
+
+		///////////////////
+		///   Methods   ///
+	public:
+
+		/** Generate a perspective projection matrix for this CameraComponent */
+		FORCEINLINE Mat4 GetPerspective() const
+		{
+			return Mat4::PerspectiveHFOV(Fov, ScreenRatio, ZMin, ZMax);
+		}
+	};
+}

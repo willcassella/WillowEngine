@@ -4,22 +4,25 @@
 #include <Core/Math/Vec3.h>
 #include "../Component.h"
 
-class ENGINE_API LightComponent : public Component
+namespace Willow
 {
-	///////////////////////
-	///   Information   ///
-public:
+	class ENGINE_API LightComponent : public Component
+	{
+		///////////////////////
+		///   Information   ///
+	public:
 
-	REFLECTABLE_CLASS
-	EXTENDS(Component)
+		REFLECTABLE_CLASS
+		EXTENDS(Component)
 
-	//////////////////
-	///   Fields   ///
-public:
+		//////////////////
+		///   Fields   ///
+	public:
 
-	/** The color of the light. */
-	Vec3 Color = Vec3(1.f, 1.f, 1.f);
+		/** The color of the light. */
+		Vec3 Color = Vec3(1.f, 1.f, 1.f);
 
-	/** The intensity of this light. */
-	float Intensity = 1.f;
-};
+		/** The intensity of this light. */
+		float Intensity = 1.f;
+	};
+}

@@ -5,7 +5,7 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Transform)
+BUILD_REFLECTION(Willow::Transform)
 .Data("Location", &Transform::_location)
 .Data("Rotation", &Transform::_rotation)
 .Data("Scale", &Transform::_scale)
@@ -14,10 +14,13 @@ BUILD_REFLECTION(Transform)
 .Property("Scale", &Transform::GetScale, &Transform::SetScale, "The scale of this Transform.")
 .Property("Matrix", &Transform::GetMatrix, nullptr, "Matrix representation of this Transform.");
 
-///////////////////
-///   Methods   ///
-
-Mat4 Transform::GetMatrix() const
+namespace Willow
 {
-	return Mat4::Translate(_location) * Mat4::Scale(_scale) * Mat4::Rotate(_rotation);
+	///////////////////
+	///   Methods   ///
+
+	Mat4 Transform::GetMatrix() const
+	{
+		return Mat4::Translate(_location) * Mat4::Scale(_scale) * Mat4::Rotate(_rotation);
+	}
 }

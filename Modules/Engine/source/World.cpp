@@ -9,7 +9,7 @@ static_assert(std::is_same<Scalar, btScalar>::value, "The engine is not configur
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(World)
+BUILD_REFLECTION(Willow::World)
 .Data("GameObjects", &World::_gameObjects)
 .Data("Entities", &World::_entities)
 .Data("Components", &World::_components)
@@ -19,35 +19,38 @@ BUILD_REFLECTION(World)
 .Field("TimeDilation", &World::TimeDilation, "The time dilation of the world. Default is 1.")
 .Field("TimeStep", &World::TimeStep, "The amount of time (ms) that each update of the world represents.");
 
-////////////////////////
-///   Constructors   ///
-
-World::World()
+namespace Willow
 {
-	_physicsWorld = std::make_unique<PhysicsWorld>();
-	_nextGameObjectID = 1;
-}
+	////////////////////////
+	///   Constructors   ///
 
-World::~World()
-{
-	// Do nothing
-}
-
-///////////////////
-///   Methods   ///
-
-void World::Update()
-{
-	Events.DispatchEvent("Update", this->TimeDilation);
-	Events.Flush();
-
-	// Remove stale objects
-	while (!_destroyedObjects.IsEmpty())
+	World::World()
 	{
-		auto object = _destroyedObjects.Pop();
-		_gameObjects.Remove(object->GetID());
+		_physicsWorld = std::make_unique<PhysicsWorld>();
+		_nextGameObjectID = 1;
 	}
 
-	// Simulate physics
-	_physicsWorld->GetDynamicsWorld().stepSimulation(TimeStep, 10);
+	World::~World()
+	{
+		// Do nothing
+	}
+
+	///////////////////
+	///   Methods   ///
+
+	void World::Update()
+	{
+		Events.DispatchEvent("Update", this->TimeDilation);
+		Events.Flush();
+
+		// Remove stale objects
+		while (!_destroyedObjects.IsEmpty())
+		{
+			auto object = _destroyedObjects.Pop();
+			_gameObjects.Remove(object->GetID());
+		}
+
+		// Simulate physics
+		_physicsWorld->GetDynamicsWorld().stepSimulation(TimeStep, 10);
+	}
 }

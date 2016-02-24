@@ -6,7 +6,7 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(StaticMeshComponent)
+BUILD_REFLECTION(Willow::StaticMeshComponent)
 .Field("Visible", &StaticMeshComponent::Visible)
 .Field("Mesh", &StaticMeshComponent::Mesh)
 .Field("Material", &StaticMeshComponent::Material);

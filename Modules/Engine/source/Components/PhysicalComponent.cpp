@@ -8,99 +8,102 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(PhysicalComponent)
+BUILD_REFLECTION(Willow::PhysicalComponent)
 .Property("Mass", &PhysicalComponent::GetMass, &PhysicalComponent::SetMass, "The mass of this object.");
 
-BUILD_ENUM_REFLECTION(PhysicsMode);
+BUILD_ENUM_REFLECTION(Willow::PhysicsMode);
 
-////////////////////////
-///   Constructors   ///
-
-PhysicalComponent::PhysicalComponent()
+namespace Willow
 {
-	_physicsState = std::make_unique<PhysicsState>(*this);
-}
+	////////////////////////
+	///   Constructors   ///
 
-PhysicalComponent::~PhysicalComponent()
-{
-	DestroyPhysics();
-}
-
-///////////////////
-///   Methods   ///
-
-void PhysicalComponent::SetMass(Scalar)
-{
-	// TODO
-}
-
-void PhysicalComponent::SetPhysicsMode(PhysicsMode mode)
-{
-	// If we are already in this mode
-	if (mode == _physicsMode)
+	PhysicalComponent::PhysicalComponent()
 	{
-		return;
+		_physicsState = std::make_unique<PhysicsState>(*this);
 	}
 
-	if (_physicsState->Body != nullptr)
+	PhysicalComponent::~PhysicalComponent()
 	{
 		DestroyPhysics();
 	}
 
-	_physicsMode = mode;
-	SetupPhysics();
-}
+	///////////////////
+	///   Methods   ///
 
-void PhysicalComponent::OnSpawn()
-{
-	Base::OnSpawn();
-	SetupPhysics();
-}
-
-void PhysicalComponent::SetupPhysics()
-{
-	// If the current physics mode is to have no physics
-	if (GetPhysicsMode() == PhysicsMode::Transient)
+	void PhysicalComponent::SetMass(Scalar)
 	{
-		return;
+		// TODO
 	}
 
-	auto* shape = this->GetShape();
-	
-	if (GetPhysicsMode() == PhysicsMode::Ghost)
+	void PhysicalComponent::SetPhysicsMode(PhysicsMode mode)
 	{
-		_physicsState->Body = std::make_unique<btGhostObject>();
-		_physicsState->Body->setCollisionShape(shape);
-		GetWorld().GetPhysicsWorld().GetDynamicsWorld().addCollisionObject(_physicsState->Body.get());
-	}
-	else
-	{
-		btVector3 localInertia;
-		shape->calculateLocalInertia(this->GetMass(), localInertia);
+		// If we are already in this mode
+		if (mode == _physicsMode)
+		{
+			return;
+		}
 
-		_physicsState->Body = std::make_unique<btRigidBody>(this->GetMass(), _physicsState.get(), shape, localInertia);
-		GetWorld().GetPhysicsWorld().GetDynamicsWorld().addRigidBody(static_cast<btRigidBody*>(_physicsState->Body.get()));
+		if (_physicsState->Body != nullptr)
+		{
+			DestroyPhysics();
+		}
+
+		_physicsMode = mode;
+		SetupPhysics();
 	}
 
-	if (GetPhysicsMode() == PhysicsMode::Kinematic)
+	void PhysicalComponent::OnSpawn()
 	{
-		_physicsState->Body->setCollisionFlags(_physicsState->Body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+		Base::OnSpawn();
+		SetupPhysics();
 	}
-}
 
-void PhysicalComponent::DestroyPhysics()
-{
-	if (GetPhysicsMode() == PhysicsMode::Transient)
+	void PhysicalComponent::SetupPhysics()
 	{
-		return;
+		// If the current physics mode is to have no physics
+		if (GetPhysicsMode() == PhysicsMode::Transient)
+		{
+			return;
+		}
+
+		auto* shape = this->GetShape();
+
+		if (GetPhysicsMode() == PhysicsMode::Ghost)
+		{
+			_physicsState->Body = std::make_unique<btGhostObject>();
+			_physicsState->Body->setCollisionShape(shape);
+			GetWorld().GetPhysicsWorld().GetDynamicsWorld().addCollisionObject(_physicsState->Body.get());
+		}
+		else
+		{
+			btVector3 localInertia;
+			shape->calculateLocalInertia(this->GetMass(), localInertia);
+
+			_physicsState->Body = std::make_unique<btRigidBody>(this->GetMass(), _physicsState.get(), shape, localInertia);
+			GetWorld().GetPhysicsWorld().GetDynamicsWorld().addRigidBody(static_cast<btRigidBody*>(_physicsState->Body.get()));
+		}
+
+		if (GetPhysicsMode() == PhysicsMode::Kinematic)
+		{
+			_physicsState->Body->setCollisionFlags(_physicsState->Body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+		}
 	}
-	else if (GetPhysicsMode() == PhysicsMode::Ghost)
+
+	void PhysicalComponent::DestroyPhysics()
 	{
-		GetWorld().GetPhysicsWorld().GetDynamicsWorld().removeCollisionObject(_physicsState->Body.get());
-	}
-	else
-	{
-		GetWorld().GetPhysicsWorld().GetDynamicsWorld().removeRigidBody(static_cast<btRigidBody*>(_physicsState->Body.get()));
-		_physicsState->Body = nullptr;
+		if (GetPhysicsMode() == PhysicsMode::Transient)
+		{
+			return;
+		}
+		else if (GetPhysicsMode() == PhysicsMode::Ghost)
+		{
+			GetWorld().GetPhysicsWorld().GetDynamicsWorld().removeCollisionObject(_physicsState->Body.get());
+		}
+		else
+		{
+			GetWorld().GetPhysicsWorld().GetDynamicsWorld().removeRigidBody(static_cast<btRigidBody*>(_physicsState->Body.get()));
+			_physicsState->Body = nullptr;
+		}
 	}
 }

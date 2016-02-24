@@ -4,34 +4,37 @@
 #include <Resource/Asset.h>
 #include "../config.h"
 
-class ENGINE_API Shader final : public Asset
+namespace Willow
 {
-	///////////////////////
-	///   Information   ///
-public:
-
-	REFLECTABLE_CLASS
-	EXTENDS(Asset)
-
-	////////////////////////
-	///   Constructors   ///
-public:
-
-	Shader(const Path& path);
-
-	///////////////////
-	///   Methods   ///
-public:
-
-	/** Returns the source code for this Shader. */
-	FORCEINLINE const String& GetSource() const
+	class ENGINE_API Shader final : public Asset
 	{
-		return _source;
-	}
+		///////////////////////
+		///   Information   ///
+	public:
 
-	////////////////
-	///   Data   ///
-private:
+		REFLECTABLE_CLASS
+		EXTENDS(Asset)
 
-	String _source;
-};
+		////////////////////////
+		///   Constructors   ///
+	public:
+
+		Shader(const Path& path);
+
+		///////////////////
+		///   Methods   ///
+	public:
+
+		/** Returns the source code for this Shader. */
+		FORCEINLINE const String& GetSource() const
+		{
+			return _source;
+		}
+
+		////////////////
+		///   Data   ///
+	private:
+
+		String _source;
+	};
+}

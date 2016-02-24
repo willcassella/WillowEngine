@@ -4,54 +4,50 @@
 #include <Engine/Assets/StaticMesh.h>
 #include "GLPrimitive.h"
 
-struct GLRENDER_API GLStaticMesh final : GLPrimitive
+namespace Willow
 {
-	////////////////////////
-	///   Constructors   ///
-public:
-
-	/** Uploads the given Mesh asset to the GPU. */
-	GLStaticMesh(GLRenderer& renderer, const StaticMesh& mesh);
-
-	GLStaticMesh(GLStaticMesh&& move);
-	~GLStaticMesh();
-
-	///////////////////
-	///   Methods   ///
-public:
-
-	void Bind() const;
-
-	/** Returns the ID of the Vertex Array Object for this StaticMesh. */
-	FORCEINLINE BufferID GetVao() const
+	struct GLRENDER_API GLStaticMesh final : GLPrimitive
 	{
-		return _vao;
-	}
+		////////////////////////
+		///   Constructors   ///
+	public:
 
-	/** Returns the Vertex Buffer Object for this StaticMesh. */
-	FORCEINLINE BufferID GetVBO() const
-	{
-		return _vbo;
-	}
+		/** Uploads the given Mesh asset to the GPU. */
+		GLStaticMesh(GLRenderer& renderer, const StaticMesh& mesh);
 
-	/** Returns the Element Buffer Object for this StaticMesh. */
-	FORCEINLINE BufferID GetEBO() const
-	{
-		return _ebo;
-	}
+		GLStaticMesh(GLStaticMesh&& move);
+		~GLStaticMesh();
 
-	/** Returns the number of elements in this Mesh. */
-	FORCEINLINE std::size_t GetNumElements() const
-	{
-		return _numElements;
-	}
+		///////////////////
+		///   Methods   ///
+	public:
 
-	////////////////
-	///   Data   ///
-private:
+		void Bind() const;
 
-	BufferID _vao;
-	BufferID _vbo;
-	BufferID _ebo;
-	std::size_t _numElements;
-};
+		/** Returns the ID of the Vertex Array Object for this StaticMesh. */
+		FORCEINLINE BufferID GetVao() const
+		{
+			return _vao;
+		}
+
+		/** Returns the Vertex Buffer Object for this StaticMesh. */
+		FORCEINLINE BufferID GetVBO() const
+		{
+			return _vbo;
+		}
+
+		/** Returns the number of vertices in this Mesh. */
+		FORCEINLINE GLInteger GetNumVertices() const
+		{
+			return _numVertices;
+		}
+
+		////////////////
+		///   Data   ///
+	private:
+
+		BufferID _vao;
+		BufferID _vbo;
+		GLInteger _numVertices;
+	};
+}

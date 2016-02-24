@@ -1,28 +1,30 @@
 // Component.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
 #include "../include/Engine/Component.h"
-#include "../include/Engine/World.h"
 
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Component)
+BUILD_REFLECTION(Willow::Component)
 .Data("Entity", &Component::_entity, DF_Transient);
 
-////////////////////////
-///   Constructors   ///
-
-Component::Component()
+namespace Willow
 {
-	_entity = nullptr;
-}
+	////////////////////////
+	///   Constructors   ///
 
-///////////////////
-///   Methods   ///
+	Component::Component()
+	{
+		_entity = nullptr;
+	}
 
-void Component::ToArchive(ArchiveWriter& writer) const
-{
-	Base::ToArchive(writer);
+	///////////////////
+	///   Methods   ///
 
-	writer.PushValue("EntityID", _entity->GetID());
+	void Component::ToArchive(ArchiveWriter& writer) const
+	{
+		Base::ToArchive(writer);
+
+		writer.PushValue("EntityID", _entity->GetID());
+	}
 }

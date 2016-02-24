@@ -4,17 +4,20 @@
 /////////////////
 ///   Types   ///
 
-/** Defined in "Transform.h" */
-struct Transform;
+namespace Willow
+{
+	/** Defined in "Transform.h" */
+	struct Transform;
 
-/** Defined in "World.h" */
-class World;
+	/** Defined in "World.h" */
+	class World;
 
-/** Defined in "GameObject.h" */
-class GameObject;
+	/** Defined in "GameObject.h" */
+	class GameObject;
 
-/** Defined in "Entity.h" */
-class Entity;
+	/** Defined in "Entity.h" */
+	class Entity;
 
-/** Defined in "Component.h" */
-class Component;
+	/** Defined in "Component.h" */
+	class Component;
+}

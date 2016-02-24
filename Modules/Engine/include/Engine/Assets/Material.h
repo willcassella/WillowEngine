@@ -7,38 +7,41 @@
 #include "Texture.h"
 #include "Shader.h"
 
-class ENGINE_API Material final : public Asset
+namespace Willow
 {
-	///////////////////////
-	///   Inner Types   ///
-public:
+	class ENGINE_API Material final : public Asset
+	{
+		///////////////////////
+		///   Inner Types   ///
+	public:
 
-	/** A material parameter may either be a Scalars, Vec2, Vec3, Vec4, or texture. */
-	using Param = Union<Scalar, Vec2, Vec3, Vec4, AssetPtr<Texture>>;
+		/** A material parameter may either be a Scalars, Vec2, Vec3, Vec4, or texture. */
+		using Param = Union<Scalar, Vec2, Vec3, Vec4, AssetPtr<Texture>>;
 
-	///////////////////////
-	///   Information   ///
-public:
+		///////////////////////
+		///   Information   ///
+	public:
 
-	REFLECTABLE_CLASS
-	EXTENDS(Asset)
+		REFLECTABLE_CLASS
+		EXTENDS(Asset)
 
-	////////////////////////
-	///   Constructors   ///
-public:
+		////////////////////////
+		///   Constructors   ///
+	public:
 
-	Material(const Path& path);
-	
-	//////////////////
-	///   Fields   ///
-public:
+		Material(const Path& path);
 
-	/** The vertex shader for this Material. */
-	AssetPtr<Shader> VertexShader;
+		//////////////////
+		///   Fields   ///
+	public:
 
-	/** The fragment shader for this Material. */
-	AssetPtr<Shader> FragmentShader;
+		/** The vertex shader for this Material. */
+		AssetPtr<Shader> VertexShader;
 
-	/** The default parameters for this material. */
-	Table<String, Param> DefaultParams;
-};
+		/** The fragment shader for this Material. */
+		AssetPtr<Shader> FragmentShader;
+
+		/** The default parameters for this material. */
+		Table<String, Param> DefaultParams;
+	};
+}

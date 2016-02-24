@@ -6,28 +6,31 @@
 #include "../Assets/StaticMesh.h"
 #include "../Assets/Material.h"
 
-class ENGINE_API StaticMeshComponent final : public Component
+namespace Willow
 {
-	///////////////////////
-	///   Information   ///
-public:
+	class ENGINE_API StaticMeshComponent final : public Component
+	{
+		///////////////////////
+		///   Information   ///
+	public:
 
 	REFLECTABLE_CLASS
 	EXTENDS(Component)
 
-	//////////////////
-	///   Fields   ///
-public:
+		//////////////////
+		///   Fields   ///
+	public:
 
-	/** Whether this mesh is visible. */
-	bool Visible = true;
+		/** Whether this mesh is visible. */
+		bool Visible = true;
 
-	/** The Static Mesh used. */
-	AssetPtr<StaticMesh> Mesh;
+		/** The Static Mesh used. */
+		AssetPtr<StaticMesh> Mesh;
 
-	/** The material applied to the StaticMesh. */
-	AssetPtr<class Material> Material;
+		/** The material applied to the StaticMesh. */
+		AssetPtr<class Material> Material;
 
-	/** The material parameters specific to this instance. */
-	Table<String, ::Material::Param> InstanceParams;
-};
+		/** The material parameters specific to this instance. */
+		Table<String, Willow::Material::Param> InstanceParams;
+	};
+}

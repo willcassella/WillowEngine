@@ -5,126 +5,129 @@
 #include "../include/GLRender/GLMaterial.h"
 #include "../include/GLRender/GLRenderer.h"
 
-////////////////////////
-///   Constructors   ///
-
-GLMaterial::GLMaterial(GLRenderer& renderer, const Material& mat)
-	: GLPrimitive(renderer), _params(mat.DefaultParams)
+namespace Willow
 {
-	_id = glCreateProgram();
+	////////////////////////
+	///   Constructors   ///
 
-	BufferID vShader = GetRenderer().FindShader(*mat.VertexShader).GetID();
-	BufferID fShader = GetRenderer().FindShader(*mat.FragmentShader).GetID();
-
-	glAttachShader(_id, vShader);
-	glAttachShader(_id, fShader);
-	glBindAttribLocation(_id, 0, "vPosition");
-	glBindAttribLocation(_id, 1, "vTexCoord");
-	glBindAttribLocation(_id, 2, "vNormal");
-	glLinkProgram(_id);
-
-	// Make sure program successfully linked
-	GLint linked;
-	glGetProgramiv(_id, GL_LINK_STATUS, &linked);
-	if (!linked)
+	GLMaterial::GLMaterial(GLRenderer& renderer, const Material& mat)
+		: GLPrimitive(renderer), _params(mat.DefaultParams)
 	{
-		GLsizei length;
-		glGetProgramiv(_id, GL_INFO_LOG_LENGTH, &length);
+		_id = glCreateProgram();
 
-		GLchar* log = new GLchar[length + 1];
-		glGetProgramInfoLog(_id, length, &length, log);
-		Console::WriteLine("Material compilation failed: \"@\"", log);
-		delete[] log;
-	}
+		BufferID vShader = GetRenderer().FindShader(*mat.VertexShader).GetID();
+		BufferID fShader = GetRenderer().FindShader(*mat.FragmentShader).GetID();
 
-	_model = glGetUniformLocation(_id, "model");
-	_view = glGetUniformLocation(_id, "view");
-	_projection = glGetUniformLocation(_id, "projection");
+		glAttachShader(_id, vShader);
+		glAttachShader(_id, fShader);
+		glBindAttribLocation(_id, 0, "vPosition");
+		glBindAttribLocation(_id, 1, "vTexCoord");
+		glBindAttribLocation(_id, 2, "vNormal");
+		glLinkProgram(_id);
 
-	glDetachShader(_id, vShader);
-	glDetachShader(_id, fShader);
-}
-
-GLMaterial::GLMaterial(GLMaterial&& move)
-	: GLPrimitive(move.GetRenderer()), _params(std::move(move._params))
-{
-	_id = move._id;
-	_model = move._model;
-	_view = move._view;
-	_projection = move._projection;
-
-	move._id = 0;
-}
-
-GLMaterial::~GLMaterial()
-{
-	glDeleteProgram(_id);
-}
-
-///////////////////
-///   Methods   ///
-
-void GLMaterial::Bind(const Table<String, Material::Param>& instanceParams)
-{
-	uint32 texIndex = 0;
-	glUseProgram(_id);
-	UploadParams(_params, texIndex);
-	UploadParams(instanceParams, texIndex);
-}
-
-void GLMaterial::UploadParams(const Table<String, Material::Param>& params, uint32& texIndex)
-{
-	for (const auto& param : params)
-	{
-		// Handles parameter binding in a generic way
-		auto bindHandler = [&](const auto& value)
+		// Make sure program successfully linked
+		GLint linked;
+		glGetProgramiv(_id, GL_LINK_STATUS, &linked);
+		if (!linked)
 		{
-			using T = std::decay_t<decltype(value)>;
+			GLsizei length;
+			glGetProgramiv(_id, GL_INFO_LOG_LENGTH, &length);
 
-			// Get param location
-			auto location = glGetUniformLocation(_id, param.First.Cstr());
+			GLchar* log = new GLchar[length + 1];
+			glGetProgramInfoLog(_id, length, &length, log);
+			Console::WriteLine("Material compilation failed: \"@\"", log);
+			delete[] log;
+		}
 
-			// Handle texture case
-			if (std::is_same<AssetPtr<Texture>, T>::value)
-			{
-				const auto& texValue = reinterpret_cast<const AssetPtr<Texture>&>(value);
+		_model = glGetUniformLocation(_id, "model");
+		_view = glGetUniformLocation(_id, "view");
+		_projection = glGetUniformLocation(_id, "projection");
 
-				// Set active texture, and upload
-				glActiveTexture(GL_TEXTURE0 + texIndex);
-				glBindTexture(GL_TEXTURE_2D, this->GetRenderer().FindTexture(*texValue).GetID());
-				glUniform1i(location, texIndex);
-				++texIndex;
-			}
-
-			// Upload the parameter
-			this->UploadParam(location, value);
-		};
-
-		param.Second.Invoke(bindHandler);
+		glDetachShader(_id, vShader);
+		glDetachShader(_id, fShader);
 	}
-}
 
-void GLMaterial::UploadParam(int32 location, float value) const
-{
-	glUniform1f(location, value);
-}
+	GLMaterial::GLMaterial(GLMaterial&& move)
+		: GLPrimitive(move.GetRenderer()), _params(std::move(move._params))
+	{
+		_id = move._id;
+		_model = move._model;
+		_view = move._view;
+		_projection = move._projection;
 
-void GLMaterial::UploadParam(int32 location, Vec2 value) const
-{
-	glUniform1fv(location, 2, (const GLfloat*)&value);
-}
+		move._id = 0;
+	}
 
-void GLMaterial::UploadParam(int32 location, Vec3 value) const
-{
-	glUniform1fv(location, 3, (const GLfloat*)&value);
-}
+	GLMaterial::~GLMaterial()
+	{
+		glDeleteProgram(_id);
+	}
 
-void GLMaterial::UploadParam(int32 location, Vec4 value) const
-{
-	glUniform1fv(location, 4, (const GLfloat*)&value);
-}
+	///////////////////
+	///   Methods   ///
 
-void GLMaterial::UploadParam(int32 /*location*/, const AssetPtr<Texture>& /*value*/)
-{
-	// Do nothing, uploading performed in bind handler
+	void GLMaterial::Bind(const Table<String, Material::Param>& instanceParams)
+	{
+		uint32 texIndex = 0;
+		glUseProgram(_id);
+		UploadParams(_params, texIndex);
+		UploadParams(instanceParams, texIndex);
+	}
+
+	void GLMaterial::UploadParams(const Table<String, Material::Param>& params, uint32& texIndex)
+	{
+		for (const auto& param : params)
+		{
+			// Handles parameter binding in a generic way
+			auto bindHandler = [&](const auto& value)
+			{
+				using T = std::decay_t<decltype(value)>;
+
+				// Get param location
+				auto location = glGetUniformLocation(_id, param.First.Cstr());
+
+				// Handle texture case
+				if (std::is_same<AssetPtr<Texture>, T>::value)
+				{
+					const auto& texValue = reinterpret_cast<const AssetPtr<Texture>&>(value);
+
+					// Set active texture, and upload
+					glActiveTexture(GL_TEXTURE0 + texIndex);
+					glBindTexture(GL_TEXTURE_2D, this->GetRenderer().FindTexture(*texValue).GetID());
+					glUniform1i(location, texIndex);
+					++texIndex;
+				}
+
+				// Upload the parameter
+				this->UploadParam(location, value);
+			};
+
+			param.Second.Invoke(bindHandler);
+		}
+	}
+
+	void GLMaterial::UploadParam(int32 location, float value) const
+	{
+		glUniform1f(location, value);
+	}
+
+	void GLMaterial::UploadParam(int32 location, Vec2 value) const
+	{
+		glUniform1fv(location, 2, (const GLfloat*)&value);
+	}
+
+	void GLMaterial::UploadParam(int32 location, Vec3 value) const
+	{
+		glUniform1fv(location, 3, (const GLfloat*)&value);
+	}
+
+	void GLMaterial::UploadParam(int32 location, Vec4 value) const
+	{
+		glUniform1fv(location, 4, (const GLfloat*)&value);
+	}
+
+	void GLMaterial::UploadParam(int32 /*location*/, const AssetPtr<Texture>& /*value*/)
+	{
+		// Do nothing, uploading performed in bind handler
+	}
 }

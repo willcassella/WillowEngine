@@ -5,13 +5,16 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Texture);
+BUILD_REFLECTION(Willow::Texture);
 
-////////////////////////
-///   Constructors   ///
-
-Texture::Texture(const Path& path)
-	: Base(path), _image(path)
+namespace Willow
 {
-	// All done
+	////////////////////////
+	///   Constructors   ///
+
+	Texture::Texture(const Path& path)
+		: Base(path), _image(path)
+	{
+		// All done
+	}
 }

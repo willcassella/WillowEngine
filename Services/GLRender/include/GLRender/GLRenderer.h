@@ -13,70 +13,70 @@
 #include "GLMaterial.h"
 #include "GLStaticMesh.h"
 
-/////////////////
-///   Types   ///
-
-class GLRENDER_API GLRenderer final : public IRenderer
+namespace Willow
 {
-	////////////////////////
-	///   Constructors   ///
-public:
+	class GLRENDER_API GLRenderer final : public IRenderer
+	{
+		////////////////////////
+		///   Constructors   ///
+	public:
 
-	GLRenderer(uint32 width, uint32 height);
-	GLRenderer(const GLRenderer& copy) = delete;
-	GLRenderer(GLRenderer&& move) = delete;
-	~GLRenderer() override;
+		GLRenderer(uint32 width, uint32 height);
+		GLRenderer(const GLRenderer& copy) = delete;
+		GLRenderer(GLRenderer&& move) = delete;
+		~GLRenderer() override;
 
-	///////////////////
-	///   Methods   ///
-public:
+		///////////////////
+		///   Methods   ///
+	public:
 
-	/** Renders the given World. */
-	void RenderWorld(const World& world) override;
+		/** Renders the given World. */
+		void RenderWorld(const World& world) override;
 
-	/** Finds or loads a GLShader from the given Shader asset. */
-	GLShader& FindShader(const Shader& asset);
+		/** Finds or loads a GLShader from the given Shader asset. */
+		GLShader& FindShader(const Shader& asset);
 
-	/** Finds or loads a GLTexture based on the given Texture asset. */
-	GLTexture& FindTexture(const Texture& asset);
+		/** Finds or loads a GLTexture based on the given Texture asset. */
+		GLTexture& FindTexture(const Texture& asset);
 
-	/** Finds or loads a GLMaterial based on the given Texture asset. */
-	GLMaterial& FindMaterial(const Material& asset);
+		/** Finds or loads a GLMaterial based on the given Texture asset. */
+		GLMaterial& FindMaterial(const Material& asset);
 
-	/** Finds or loads a GLMaterial based on the given Static Mesh asset. */
-	GLStaticMesh& FindStaticMesh(const StaticMesh& asset);
+		/** Finds or loads a GLMaterial based on the given Static Mesh asset. */
+		GLStaticMesh& FindStaticMesh(const StaticMesh& asset);
 
-	/////////////////////
-	///   Operators   ///
-public:
+		/////////////////////
+		///   Operators   ///
+	public:
 
-	GLRenderer& operator=(const GLRenderer& copy) = delete;
-	GLRenderer& operator=(GLRenderer&& move) = delete;
+		GLRenderer& operator=(const GLRenderer& copy) = delete;
+		GLRenderer& operator=(GLRenderer&& move) = delete;
 
-	////////////////
-	///   Data   ///
-private:
+		////////////////
+		///   Data   ///
+	private:
 
-	Table<AssetID, GLShader> _shaders;
-	Table<AssetID, GLTexture> _textures;
-	Table<AssetID, GLMaterial> _materials;
-	Table<AssetID, GLStaticMesh> _staticMeshes;
-	
-	// The default framebuffer
-	GLInteger _defaultFrameBuffer;
-	
-	// GBuffer layers
-	BufferID _gBuffer;
-	BufferID _depthBuffer;
-	BufferID _positionBuffer;
-	BufferID _diffuseBuffer;
-	BufferID _normalBuffer;
-	BufferID _specularBuffer;
-	BufferID _metallicBuffer;
-	BufferID _roughnessBuffer;
+		Table<AssetID, GLShader> _shaders;
+		Table<AssetID, GLTexture> _textures;
+		Table<AssetID, GLMaterial> _materials;
+		Table<AssetID, GLStaticMesh> _staticMeshes;
 
-	// Screen quad buffers
-	BufferID _screenQuadVAO;
-	BufferID _screenQuadVBO;
-	BufferID _screenQuadProgram;
-};
+		// The default framebuffer
+		GLInteger _defaultFrameBuffer;
+
+		// GBuffer layers
+		BufferID _gBuffer;
+		BufferID _depthBuffer;
+		BufferID _positionBuffer;
+		BufferID _diffuseBuffer;
+		BufferID _normalBuffer;
+		BufferID _specularBuffer;
+		BufferID _metallicBuffer;
+		BufferID _roughnessBuffer;
+
+		// Screen quad buffers
+		BufferID _screenQuadVAO;
+		BufferID _screenQuadVBO;
+		BufferID _screenQuadProgram;
+	};
+}

@@ -19,11 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\AssetConverter.cpp" />
+    <ClCompile Include="source\AssetConversion.cpp" />
     <ClCompile Include="source\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\AssetConverter\AssetConverter.h" />
+    <ClInclude Include="include\AssetConverter\AssetConversion.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{4700682C-35A0-4338-9860-7330D1341505}</ProjectGuid>

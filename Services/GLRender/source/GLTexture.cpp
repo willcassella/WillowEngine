@@ -3,35 +3,38 @@
 #include "glew.h"
 #include "../include/GLRender/GLTexture.h"
 
-////////////////////////
-///   Constructors   ///
-
-GLTexture::GLTexture(GLRenderer& renderer, const Texture& image)
-	: GLPrimitive(renderer)
+namespace Willow
 {
-	// Create and bind the buffer
-	glGenTextures(1, &_id);
-	glBindTexture(GL_TEXTURE_2D, _id);
+	////////////////////////
+	///   Constructors   ///
 
-	// Set wrapping parameters to repeat
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	GLTexture::GLTexture(GLRenderer& renderer, const Texture& image)
+		: GLPrimitive(renderer)
+	{
+		// Create and bind the buffer
+		glGenTextures(1, &_id);
+		glBindTexture(GL_TEXTURE_2D, _id);
 
-	// Set filtering parameters, I should learn more about this
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		// Set wrapping parameters to repeat
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.GetWidth(), image.GetHeight(), 0, GL_BGRA, GL_UNSIGNED_BYTE, image.GetBitmap());
-}
+		// Set filtering parameters, I should learn more about this
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-GLTexture::GLTexture(GLTexture&& move)
-	: GLPrimitive(move.GetRenderer())
-{
-	_id = move._id;
-	move._id = 0;
-}
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.GetWidth(), image.GetHeight(), 0, GL_BGRA, GL_UNSIGNED_BYTE, image.GetBitmap());
+	}
 
-GLTexture::~GLTexture()
-{
-	glDeleteTextures(1, &_id);
+	GLTexture::GLTexture(GLTexture&& move)
+		: GLPrimitive(move.GetRenderer())
+	{
+		_id = move._id;
+		move._id = 0;
+	}
+
+	GLTexture::~GLTexture()
+	{
+		glDeleteTextures(1, &_id);
+	}
 }
