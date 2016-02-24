@@ -128,6 +128,8 @@ namespace Willow
 
 						Vec3 normal = normals[normalIndex[i] - 1];
 						vertex.Normal = normal;
+
+						outVertices.Add(vertex);
 					}
 				}
 			}
