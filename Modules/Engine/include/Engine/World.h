@@ -14,7 +14,7 @@
 namespace Willow
 {
 	/* World class contains all game objects and world information */
-	class ENGINE_API World final : public Object, public SerializeableObject<World>
+	class ENGINE_API World final : public Object
 	{
 		///////////////////////
 		///   Information   ///
@@ -41,6 +41,10 @@ namespace Willow
 		///////////////////
 		///   Methods   ///
 	public:
+
+		void ToArchive(ArchiveWriter& writer) const;
+
+		void FromArchive(const ArchiveReader& reader);
 
 		/** Updates the state of this World by one time step. */
 		void Update();

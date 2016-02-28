@@ -153,8 +153,62 @@ namespace Operations
 		static constexpr bool Supported = true;
 	};
 
+	/** Implementation of 'ToArchive' for pointer types. */
+	template <typename T>
+	struct ToArchive < T* > final
+	{
+		static void Function(T* value, ArchiveWriter& writer)
+		{
+			writer.SetValue(value);
+		}
+
+		static constexpr bool Supported = true;
+	};
+
 	////////////////////////
 	///   String Types   ///
+	
+	/** Implementation of 'ToArchive' for C-style strings. */
+	template <>
+	struct CORE_API ToArchive < char* > final
+	{
+		static void Function(const char* value, ArchiveWriter& writer);
+
+		static constexpr bool Supported = true;
+	};
+
+	/** Implementation of 'ToArchive' for C-style strings. */
+	template <>
+	struct CORE_API ToArchive < const char* > final
+	{
+		static void Function(const char* value, ArchiveWriter& writer);
+
+		static constexpr bool Supported = true;
+	};
+
+	/** Implementation of 'ToArchive' for C-style strings. */
+	template <std::size_t Size>
+	struct ToArchive < char[Size] > final
+	{
+		static void Function(const char value[Size], ArchiveWriter& writer)
+		{
+			writer.SetValue(value);
+		}
+
+		static constexpr bool Supported = true;
+	};
+
+	/** Implementation of 'ToArchive' for C-style strings. */
+	template <std::size_t Size>
+	struct ToArchive < const char[Size] > final
+	{
+		static void Function(const char value[Size], ArchiveWriter& writer)
+		{
+			writer.SetValue(value);
+		}
+
+		static constexpr bool Supported = true;
+	};
 
 	/** Implementation of 'ToArchive' for String. */
 	template <>

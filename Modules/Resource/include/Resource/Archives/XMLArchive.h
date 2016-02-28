@@ -4,39 +4,42 @@
 #include <memory>
 #include "../Archive.h"
 
-class RESOURCE_API XMLArchive final : public Archive
+namespace Willow
 {
-	///////////////////////
-	///   Information   ///
-public:
+	class RESOURCE_API XMLArchive final : public Archive
+	{
+		///////////////////////
+		///   Information   ///
+	public:
 
-	REFLECTABLE_CLASS
-	EXTENDS(Archive)
+		REFLECTABLE_CLASS
+		EXTENDS(Archive)
 
-	////////////////////////
-	///   Constructors   ///
-public:
+		////////////////////////
+		///   Constructors   ///
+	public:
 
-	XMLArchive();
-	~XMLArchive();
+		XMLArchive();
+		~XMLArchive();
 
-	///////////////////
-	///   Methods   ///
-public:
+		///////////////////
+		///   Methods   ///
+	public:
 
-	bool Load(const Path& path) override;
+		bool Load(const Path& path) override;
 
-	bool Save(const Path& path) const override;
+		bool Save(const Path& path) const override;
 
-private:
+	private:
 
-	void AddRoot(FunctionView<void, ArchiveWriter&> handler) override;
+		void AddRoot(FunctionView<void, ArchiveWriter&> handler) override;
 
-	void GetRoot(FunctionView<void, const ArchiveReader&> handler) const override;
+		void GetRoot(FunctionView<void, const ArchiveReader&> handler) const override;
 
-	////////////////
-	///   Data   ///
-private:
+		////////////////
+		///   Data   ///
+	private:
 
-	std::unique_ptr<struct XMLDoc> _doc;
-};
+		std::unique_ptr<struct XMLDoc> _doc;
+	};
+}

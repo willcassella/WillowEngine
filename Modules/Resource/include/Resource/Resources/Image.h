@@ -3,36 +3,39 @@
 
 #include "../Resource.h"
 
-class RESOURCE_API Image final : public Resource
+namespace Willow
 {
-	///////////////////////
-	///   Information   ///
-public:
+	class RESOURCE_API Image final : public Resource
+	{
+		///////////////////////
+		///   Information   ///
+	public:
 
-	REFLECTABLE_CLASS
-	EXTENDS(Resource)
+		REFLECTABLE_CLASS
+		EXTENDS(Resource)
 
-	////////////////////////
-	///   Constructors   ///
-public:
+		////////////////////////
+		///   Constructors   ///
+	public:
 
-	Image(const Path& path);
-	~Image() override;
+		Image(const Path& path);
+		~Image() override;
 
-	///////////////////
-	///   Methods   ///
-public:
+		///////////////////
+		///   Methods   ///
+	public:
 
-	uint32 GetWidth() const;
-	uint32 GetHeight() const;
-	const byte* GetBitmap() const;
+		uint32 GetWidth() const;
+		uint32 GetHeight() const;
+		const byte* GetBitmap() const;
 
-	////////////////
-	///   Data   ///
-private:
+		////////////////
+		///   Data   ///
+	private:
 
-	const byte* _bitmap;
-	uint32 _width;
-	uint32 _height;
-	void* _image;
-};
+		const byte* _bitmap;
+		uint32 _width;
+		uint32 _height;
+		void* _image;
+	};
+}

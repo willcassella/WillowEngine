@@ -3,30 +3,33 @@
 
 #include "../Resource.h"
 
-class RESOURCE_API BinaryFile final : public Resource
+namespace Willow
 {
-	///////////////////////
-	///   Information   ///
-public:
+	class RESOURCE_API BinaryFile final : public Resource
+	{
+		///////////////////////
+		///   Information   ///
+	public:
 
-	REFLECTABLE_CLASS
-	EXTENDS(Resource)
+		REFLECTABLE_CLASS
+		EXTENDS(Resource)
 
-	////////////////////////
-	///   Constructors   ///
-public:
+		////////////////////////
+		///   Constructors   ///
+	public:
 
-	BinaryFile(const Path& path);
+		BinaryFile(const Path& path);
 
-	///////////////////
-	///   Methods   ///
-public:
+		///////////////////
+		///   Methods   ///
+	public:
 
-	const byte* GetData() const;
+		const byte* GetData() const;
 
-	/////////////////
-	///   Data   ///
-private:
+		/////////////////
+		///   Data   ///
+	private:
 
-	DynamicBuffer _data;
-};
+		DynamicBuffer _data;
+	};
+}

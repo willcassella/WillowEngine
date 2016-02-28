@@ -2,16 +2,18 @@
 
 #include "../include/Engine/Entity.h"
 #include "../include/Engine/Component.h"
+#include "../include/Engine/World.h"
 
 //////////////////////
 ///   Reflection   ///
 
 BUILD_REFLECTION(Willow::Entity)
 .Data("Name", &Entity::_name)
-.Data("Transform", &Entity::_transform)
-.Data("Parent", &Entity::_parent, DF_Transient)
-.Data("Children", &Entity::_children, DF_Transient)
+.Data("World", &Entity::_world)
 .Data("Components", &Entity::_components, DF_Transient)
+.Data("Transform", &Entity::_transform)
+.Data("Parent", &Entity::_parent)
+.Data("Children", &Entity::_children, DF_Transient)
 .Property("Name", &Entity::GetName, &Entity::Editor_SetName, "The name of this Entity", PF_EditorOnly);
 
 namespace Willow
@@ -28,26 +30,14 @@ namespace Willow
 	///////////////////
 	///   Methods   ///
 
-	void Entity::ToArchive(ArchiveWriter& writer) const
+	void Entity::FromArchive(const ArchiveReader& reader)
 	{
-		Base::ToArchive(writer);
+		Base::FromArchive(reader);
 
 		if (_parent)
 		{
-			writer.PushValue("Parent", _parent->GetID());
+			_parent->_children.Add(this);
 		}
-		else
-		{
-			writer.PushValue("Parent", 0);
-		}
-
-		writer.AddChild("Components", [&](ArchiveWriter& child)
-		{
-			for (auto component : _components)
-			{
-				child.PushValue("ID", component->GetID());
-			}
-		});
 	}
 
 	bool Entity::IsActor() const

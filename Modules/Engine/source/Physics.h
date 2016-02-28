@@ -77,6 +77,7 @@ public:
 public:
 
 	std::unique_ptr<btCollisionObject> Body;
+	std::unique_ptr<btCompoundShape> Shape;
 
 	///////////////////
 	///   Methods   ///
@@ -86,12 +87,12 @@ public:
 	{
 		// Set the world location
 		Vec3 wLocation = _owner->GetWorldLocation();
-		btVector3 btLocation = { wLocation.X, wLocation.Y, wLocation.Z };
+		btVector3 btLocation{ wLocation.X, wLocation.Y, wLocation.Z };
 		worldTransform.setOrigin(btLocation);
 
 		// Set the world rotation
 		Quat wRotation = _owner->GetWorldRotation();
-		btQuaternion btRotation = { wRotation.X, wRotation.Y, wRotation.Z, wRotation.W };
+		btQuaternion btRotation{ wRotation.X, wRotation.Y, wRotation.Z, wRotation.W };
 		worldTransform.setRotation(btRotation);
 	}
 

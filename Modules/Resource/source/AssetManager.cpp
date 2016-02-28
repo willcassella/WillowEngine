@@ -2,11 +2,14 @@
 
 #include "../include/Resource/AssetManager.h"
 
-///////////////////
-///   Methods   ///
-
-AssetManager& AssetManager::Instance()
+namespace Willow
 {
-	static AssetManager instance;
-	return instance;
+	///////////////////
+	///   Methods   ///
+
+	AssetManager& AssetManager::Instance()
+	{
+		static AssetManager instance;
+		return instance;
+	}
 }

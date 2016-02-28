@@ -4,110 +4,113 @@
 #include <Core/Reflection/StructInfo.h>
 #include "config.h"
 
-struct RESOURCE_API Path final
+namespace Willow
 {
-	///////////////////////
-	///   Information   ///
-public:
-
-	REFLECTABLE_STRUCT
-
-	////////////////////////
-	///   Constructors   ///
-public:
-
-	Path() = default;
-	Path(CString path)
-		: _path(path)
+	struct RESOURCE_API Path final
 	{
-		this->Sanitize();
-	}
-	Path(String path)
-		: _path(std::move(path))
-	{
-		this->Sanitize();
-	}
+		///////////////////////
+		///   Information   ///
+	public:
 
-	///////////////////
-	///   Methods   ///
-public:
+		REFLECTABLE_STRUCT
 
-	/** If the given String represents a path to a file, this parses and returns the file extension */
-	String GetFileExtension() const;
+			////////////////////////
+			///   Constructors   ///
+	public:
 
-	/** If the given String represents a path to a file, this parses and returns the name of the file */
-	String GetFileName() const;
+		Path() = default;
+		Path(CString path)
+			: _path(path)
+		{
+			this->Sanitize();
+		}
+		Path(String path)
+			: _path(std::move(path))
+		{
+			this->Sanitize();
+		}
 
-	/** Returns this Path as a String. */
-	const String& ToString() const
-	{
-		return _path;
-	}
+		///////////////////
+		///   Methods   ///
+	public:
 
-private:
+		/** If the given String represents a path to a file, this parses and returns the file extension */
+		String GetFileExtension() const;
 
-	/** Makes sure this path has a valid scope. */
-	void Sanitize();
+		/** If the given String represents a path to a file, this parses and returns the name of the file */
+		String GetFileName() const;
 
-	/////////////////////
-	///   Operators   ///
-public:
+		/** Returns this Path as a String. */
+		const String& ToString() const
+		{
+			return _path;
+		}
 
-	Path& operator=(CString path)
-	{
-		_path = path;
-		this->Sanitize();
+	private:
 
-		return *this;
-	}
-	Path& operator=(String path)
-	{
-		_path = std::move(path);
-		this->Sanitize();
+		/** Makes sure this path has a valid scope. */
+		void Sanitize();
 
-		return *this;
-	}
-	operator const String&() const
-	{
-		return _path;
-	}
-	friend FORCEINLINE bool operator==(const Path& lhs, const Path& rhs)
-	{
-		return lhs._path == rhs._path;
-	}
-	friend FORCEINLINE bool operator==(const Path& lhs, const String& rhs)
-	{
-		return lhs._path == rhs;
-	}
-	friend FORCEINLINE bool operator==(const String& lhs, const Path& rhs)
-	{
-		return rhs == lhs;
-	}
-	friend FORCEINLINE bool operator!=(const Path& lhs, const Path& rhs)
-	{
-		return lhs._path != rhs._path;
-	}
-	friend FORCEINLINE bool operator!=(const Path& lhs, const String& rhs)
-	{
-		return !(lhs == rhs);
-	}
-	friend FORCEINLINE bool operator!=(const String& lhs, const Path& rhs)
-	{
-		return rhs != lhs;
-	}
+		/////////////////////
+		///   Operators   ///
+	public:
 
-	////////////////
-	///   Data   ///
-private:
+		Path& operator=(CString path)
+		{
+			_path = path;
+			this->Sanitize();
 
-	String _path;
-};
+			return *this;
+		}
+		Path& operator=(String path)
+		{
+			_path = std::move(path);
+			this->Sanitize();
+
+			return *this;
+		}
+		operator const String&() const
+		{
+			return _path;
+		}
+		friend FORCEINLINE bool operator==(const Path& lhs, const Path& rhs)
+		{
+			return lhs._path == rhs._path;
+		}
+		friend FORCEINLINE bool operator==(const Path& lhs, const String& rhs)
+		{
+			return lhs._path == rhs;
+		}
+		friend FORCEINLINE bool operator==(const String& lhs, const Path& rhs)
+		{
+			return rhs == lhs;
+		}
+		friend FORCEINLINE bool operator!=(const Path& lhs, const Path& rhs)
+		{
+			return lhs._path != rhs._path;
+		}
+		friend FORCEINLINE bool operator!=(const Path& lhs, const String& rhs)
+		{
+			return !(lhs == rhs);
+		}
+		friend FORCEINLINE bool operator!=(const String& lhs, const Path& rhs)
+		{
+			return rhs != lhs;
+		}
+
+		////////////////
+		///   Data   ///
+	private:
+
+		String _path;
+	};
+}
 
 /////////////////////
 ///   Functions   ///
 
 /** Custom operator for String literals. */
-FORCEINLINE Path operator"" _p(CString string, std::size_t /*size*/)
+inline Willow::Path operator"" _p(CString string, std::size_t /*size*/)
 {
-	return Path(string);
+	return Willow::Path{ string };
 }

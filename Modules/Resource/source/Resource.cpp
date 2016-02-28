@@ -6,25 +6,28 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Resource)
+BUILD_REFLECTION(Willow::Resource)
 .Data("Path", &Resource::_path)
 .Data("Size", &Resource::_size)
 .Property("Path", &Resource::GetPath, nullptr, "The path to the Resource.")
 .Property("Size", &Resource::GetSize, nullptr, "The size of the Resource.");
 
-////////////////////////
-///   Constructors   ///
-
-Resource::Resource(Path path)
-	: _path(std::move(path))
+namespace Willow
 {
-	struct stat fileStats;
+	////////////////////////
+	///   Constructors   ///
 
-	if (stat(_path.ToString().Cstr(), &fileStats) == -1)
+	Resource::Resource(Path path)
+		: _path(std::move(path))
 	{
-		Console::Warning("Resource '@' could not be found.", _path);
-		return;
-	}
+		struct stat fileStats;
 
-	_size = static_cast<std::size_t>(fileStats.st_size);
+		if (stat(_path.ToString().Cstr(), &fileStats) == -1)
+		{
+			Console::Warning("Resource '@' could not be found.", _path);
+			return;
+		}
+
+		_size = static_cast<std::size_t>(fileStats.st_size);
+	}
 }

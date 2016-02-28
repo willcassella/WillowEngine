@@ -1,6 +1,9 @@
 // FromArchive.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
+#include "../Forwards/Containers.h"
+#include "../Forwards/Operations.h"
+#include "../Forwards/Reflection.h"
 #include "../STDE/TypeTraits.h"
 #include "../IO/ArchiveReader.h"
 #include "TypeOps.h"
@@ -155,6 +158,18 @@ namespace Operations
 		static constexpr bool Supported = true;
 	};
 
+	/** Implementation of 'FromArchive' for pointers. */
+	template <typename T>
+	struct FromArchive < T* > final
+	{
+		static void Function(T*& value, const ArchiveReader& reader)
+		{
+			reader.GetValue(value);
+		}
+
+		static constexpr bool Supported = true;
+	};
+
 	////////////////////////
 	///   String Types   ///
 
@@ -275,6 +290,54 @@ namespace Operations
 			DefaultConstruct<ValueT>::Supported && 
 			FromArchive<KeyT>::Supported &&
 			FromArchive<ValueT>::Supported;
+	};
+
+	/** Implementation of 'FromArchive' for Union. */
+	template <typename ... T>
+	struct FromArchive < Union<T...> > final
+	{
+		using UnionT = Union<T...>;
+
+	private:
+
+		template <typename C, typename ... R>
+		static void Recurse(stde::type_sequence<C, R...>, const String& type, UnionT& value, const ArchiveReader& reader)
+		{
+			if (::TypeOf<C>().GetName() == type)
+			{
+				// Set the value to an instance of this type
+				value.SetValue(C{});
+				::FromArchive(value.template GetValue<C>(), reader);
+			}
+			else
+			{
+				FromArchive::Recurse(stde::type_sequence<R...>{}, type, value, reader);
+			}
+		}
+
+		static void Recurse(stde::type_sequence<>, const String& /*type*/, UnionT& /*value*/, const ArchiveReader& /*reader*/)
+		{
+			// Type not found, do nothing
+		}
+
+	public:
+
+		static void Function(UnionT& value, const ArchiveReader& reader)
+		{
+			if (reader.IsNull())
+			{
+				value.Nullify();
+			}
+			else
+			{
+				reader.GetFirstChild([&](const auto& child)
+				{
+					FromArchive::Recurse(stde::type_sequence<T...>{}, child.GetName(), value, child);
+				});
+			}
+		}
+
+		static constexpr bool Supported = stde::meta::constexpr_and<FromArchive<T>::Supported...>();
 	};
 }
 

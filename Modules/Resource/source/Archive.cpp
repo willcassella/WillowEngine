@@ -5,4 +5,4 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Archive);
+BUILD_REFLECTION(Willow::Archive);

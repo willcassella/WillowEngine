@@ -26,6 +26,9 @@ public:
 	/** Union of all possible underlying enum types. */
 	using GenericEnum = Union<byte, int16, uint16, int32, uint32, int64, uint64>;
 
+	/** Data held by each entry in this Enum's table of values (value, description). */
+	using ValueEntry = Pair<GenericEnum, CString>;
+
 	////////////////////////
 	///   Constructors   ///
 public:
@@ -46,30 +49,30 @@ public:
 	/** Returns whether this enum represents a bit flag. */
 	FORCEINLINE bool IsBitFlag() const
 	{
-		return _data.isBitFlag;
+		return _data.IsBitFlag;
 	}
 
 	/** Returns the underlying type of this enum */
 	FORCEINLINE const PrimitiveInfo& GetUnderlyingType() const
 	{
-		return *_data.underlyingType;
+		return *_data.UnderlyingType;
 	}
 
 	/** Returns all the values for this enum. */
-	FORCEINLINE const Table<String, GenericEnum>& GetValues() const
+	FORCEINLINE const Table<String, ValueEntry>& GetValues() const
 	{
-		return _data.values;
+		return _data.Values;
 	}
 
 	////////////////
 	///   Data   ///
 private:
 
-	struct Data
+	const struct Data
 	{
-		const PrimitiveInfo* underlyingType;
-		Table<String, GenericEnum> values;
-		bool isBitFlag = false;
+		const PrimitiveInfo* UnderlyingType;
+		Table<String, ValueEntry> Values;
+		bool IsBitFlag = false;
 	} _data;
 };
 
@@ -97,7 +100,7 @@ public:
 	TypeInfoBuilder(CString name)
 		: TypeInfoBuilderBase<EnumT, EnumInfo>(name)
 	{
-		_data.underlyingType = &TypeOf<std::underlying_type_t<EnumT>>();
+		_data.UnderlyingType = &TypeOf<std::underlying_type_t<EnumT>>();
 	}
 
 	///////////////////
@@ -107,7 +110,7 @@ public:
 	/** Indicates that this enum represents a bit flag. */
 	auto& IsBitFlag()
 	{
-		_data.isBitFlag = true;
+		_data.IsBitFlag = true;
 		return this->AsMostSpecificTypeInfoBuilder();
 	}
 
@@ -118,9 +121,9 @@ public:
 	}
 
 	/** Adds a value for this enum. */
-	auto& Value(CString name, EnumT value, CString /*description*/)
+	auto& Value(CString name, EnumT value, CString description)
 	{
-		_data.values.Insert(name, static_cast<std::underlying_type_t<EnumT>>(value));
+		_data.Values.Insert(name, EnumInfo::ValueEntry{ static_cast<std::underlying_type_t<EnumT>>(value), description });
 		return this->AsMostSpecificTypeInfoBuilder();
 	}
 

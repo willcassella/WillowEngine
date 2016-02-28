@@ -10,9 +10,9 @@ static_assert(std::is_same<Scalar, btScalar>::value, "The engine is not configur
 ///   Reflection   ///
 
 BUILD_REFLECTION(Willow::World)
-.Data("GameObjects", &World::_gameObjects)
-.Data("Entities", &World::_entities)
-.Data("Components", &World::_components)
+.Data("GameObjects", &World::_gameObjects, DF_Transient)
+.Data("Entities", &World::_entities, DF_Transient)
+.Data("Components", &World::_components, DF_Transient)
 .Data("Destroyed", &World::_destroyedObjects, DF_Transient)
 .Data("NextGameObjectID", &World::_nextGameObjectID)
 .Field("Events", &World::Events)
@@ -37,6 +37,85 @@ namespace Willow
 
 	///////////////////
 	///   Methods   ///
+	
+	void World::ToArchive(ArchiveWriter& writer) const
+	{
+		writer.SetID(this);
+		writer.PushValue("TimeDilation", this->TimeDilation);
+		writer.PushValue("TimeStep", this->TimeStep);
+		writer.PushValue("NextID", _nextGameObjectID);
+		
+		// Save all entites/components
+		writer.AddChild("GameObjects", [this](auto& child)
+		{
+			for (const auto& kv : this->_gameObjects)
+			{
+				// Push the given value into this archive, wrapping it in a Node containing its type name and address
+				child.PushValueWithID(kv.Second->GetType().GetName(), *kv.Second);
+			}
+		});
+	}
+
+	void World::FromArchive(const ArchiveReader& reader)
+	{
+		reader.MapID(this);
+		reader.PullValue("TimeDilation", this->TimeDilation);
+		reader.PullValue("TimeStep", this->TimeStep);
+		reader.PullValue("NextID", _nextGameObjectID);
+		
+		// Load all entities/components
+		reader.GetChild("GameObjects", [&](auto& child)
+		{
+			Queue<Owned<GameObject>> unloadedObjects;
+
+			// Do a first pass, instantiate everything
+			child.EnumerateChildren([&](auto& gameobject)
+			{
+				// Find the type of GameObject that this node is referring to
+				auto type = Application::FindType(gameobject.GetName());
+				
+				if (!type || !type->IsCastableTo(TypeOf<GameObject>()))
+				{
+					// Type isn't a GameObject type, go to next object
+					gameobject.MapID(nullptr);
+					unloadedObjects.Push(nullptr);
+				}
+				else
+				{
+					// Instantiate it
+					auto object = StaticPointerCast<GameObject>(DynamicNew(*type));
+
+					// Map the address of the new instantiation to the address in the archive
+					gameobject.MapID(object.GetManagedPointer());
+					unloadedObjects.Push(std::move(object));
+				}
+			});
+
+			// Do a second pass, deserialize everything
+			child.EnumerateChildren([&](auto& gameobject)
+			{
+				// If the object is not null, deserialize it
+				if (auto object = unloadedObjects.Pop())
+				{
+					object->FromArchive(gameobject);
+					
+					// If it's an Entity, add it to the Entities table
+					if (auto entity = Cast<Entity>(*object))
+					{
+						_entities[entity->GetID()] = entity;
+					}
+					else
+					{
+						// Otherwise, add it to the components table
+						_components[object->GetID()] = static_cast<Component*>(object.GetManagedPointer());
+					}
+
+					// Add it to the scene
+					_gameObjects[object->GetID()] = std::move(object);
+				}
+			});
+		});
+	}
 
 	void World::Update()
 	{

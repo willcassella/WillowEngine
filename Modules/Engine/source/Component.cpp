@@ -6,7 +6,7 @@
 ///   Reflection   ///
 
 BUILD_REFLECTION(Willow::Component)
-.Data("Entity", &Component::_entity, DF_Transient);
+.Data("Entity", &Component::_entity);
 
 namespace Willow
 {
@@ -21,10 +21,9 @@ namespace Willow
 	///////////////////
 	///   Methods   ///
 
-	void Component::ToArchive(ArchiveWriter& writer) const
+	void Component::FromArchive(const ArchiveReader& reader)
 	{
-		Base::ToArchive(writer);
-
-		writer.PushValue("EntityID", _entity->GetID());
+		Base::FromArchive(reader);
+		_entity->_components.Add(this);
 	}
 }

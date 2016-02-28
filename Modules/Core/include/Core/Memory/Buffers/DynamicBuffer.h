@@ -35,14 +35,14 @@ public:
 	template <typename T = byte>
 	FORCEINLINE T* GetPointer() &
 	{
-		return reinterpret_cast<T*>(_value);
+		return reinterpret_cast<T*>(_buffer);
 	}
 
 	/** Returns a pointer to the start of this DynamicBuffer. */
 	template <typename T = byte>
 	FORCEINLINE const T* GetPointer() const &
 	{
-		return reinterpret_cast<const T*>(_value);
+		return reinterpret_cast<const T*>(_buffer);
 	}
 
 	/** Resizes this DynamicBuffer, copying existing data. */
@@ -50,6 +50,10 @@ public:
 
 	/** Resizes this DynamicBuffer, erasing existing data. */
 	void Reset(std::size_t newSize);
+
+	/** Ensures that this Buffer has at least as much space as the given size.
+	* NOTE: If this buffer has less space, this uses "Resize" to acquire more. */
+	void Reserve(std::size_t size);
 
 	/////////////////////
 	///   Operators   ///
@@ -62,6 +66,6 @@ public:
 	///   Data   ///
 private:
 
-	byte* _value;
+	byte* _buffer;
 	std::size_t _size;
 };

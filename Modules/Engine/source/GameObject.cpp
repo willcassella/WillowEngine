@@ -29,6 +29,12 @@ namespace Willow
 	///////////////////
 	///   Methods   ///
 
+	void GameObject::FromArchive(const ArchiveReader& reader)
+	{
+		SerializeableObject<GameObject>::FromArchive(reader);
+		_state = State::Spawned;
+	}
+
 	void GameObject::Destroy()
 	{
 		assert(this->GetState() >= State::Spawned);

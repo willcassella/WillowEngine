@@ -521,7 +521,7 @@ namespace Operations
 		template <typename T>
 		FORCEINLINE String ToString(const T& value)
 		{
-			return ::TypeOf(value).GetName();
+			return Format("{instance of @}", ::TypeOf(value));
 		}
 	}
 }
@@ -529,7 +529,15 @@ namespace Operations
 /////////////////////
 ///   Functions   ///
 
-/** Safely casts from a reference of one type to the target class/interface/type.
+/** Returns whether the given object is castable to the given type.
+* NOTE: This is the predicate used by the 'Cast' function. */
+template <typename TargetT, typename T>
+bool IsCastableTo(T& value)
+{
+	return std::is_base_of<TargetT, T>::value || TypeOf(value).IsCastableTo(TypeOf<TargetT>());
+}
+
+/** Safely casts from a reference of one type to the target type.
 * NOTE: Returns a null pointer if the cast is invalid (value does not legally translate to the given type). */
 template <typename TargetT, typename T>
 FORCEINLINE auto* Cast(T& value)
@@ -537,13 +545,13 @@ FORCEINLINE auto* Cast(T& value)
 	using ResultT = stde::minimum_cv_t<T, TargetT>*;
 
 	// Perform a compile-time and run-time check of the validity of this cast
-	if (std::is_base_of<TargetT, T>::value || TypeOf(value).IsCastableTo(TypeOf<TargetT>()))
+	if (IsCastableTo<TargetT>(value))
 	{
 		return reinterpret_cast<ResultT>(&value);
 	}
 	else
 	{
-		return ResultT(nullptr);
+		return ResultT{ nullptr };
 	}
 }
 

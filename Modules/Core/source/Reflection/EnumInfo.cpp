@@ -13,5 +13,5 @@ BUILD_REFLECTION(EnumInfo);
 
 bool EnumInfo::IsCastableTo(const TypeInfo& type) const
 {
-	return type == *this || type == *_data.underlyingType;
+	return type == *this || type == this->GetUnderlyingType();
 }

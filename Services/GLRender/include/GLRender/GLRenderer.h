@@ -56,10 +56,10 @@ namespace Willow
 		///   Data   ///
 	private:
 
-		Table<AssetID, GLShader> _shaders;
-		Table<AssetID, GLTexture> _textures;
-		Table<AssetID, GLMaterial> _materials;
-		Table<AssetID, GLStaticMesh> _staticMeshes;
+		Table<Asset::ID, GLShader> _shaders;
+		Table<Asset::ID, GLTexture> _textures;
+		Table<Asset::ID, GLMaterial> _materials;
+		Table<Asset::ID, GLStaticMesh> _staticMeshes;
 
 		// The default framebuffer
 		GLInteger _defaultFrameBuffer;

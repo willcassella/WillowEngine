@@ -9,4 +9,5 @@
 BUILD_REFLECTION(Willow::StaticMeshComponent)
 .Field("Visible", &StaticMeshComponent::Visible)
 .Field("Mesh", &StaticMeshComponent::Mesh)
-.Field("Material", &StaticMeshComponent::Material);
+.Field("Material", &StaticMeshComponent::Material)
+.Field("InstanceParams", &StaticMeshComponent::InstanceParams);

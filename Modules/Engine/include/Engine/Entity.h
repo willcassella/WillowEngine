@@ -21,6 +21,7 @@ namespace Willow
 		REFLECTABLE_CLASS
 		EXTENDS(GameObject)
 		friend class World;
+		friend class Component;
 
 		////////////////////////
 		///   Constructors   ///
@@ -32,7 +33,7 @@ namespace Willow
 		///   Methods   ///
 	public:
 
-		void ToArchive(ArchiveWriter& writer) const override;
+		void FromArchive(const ArchiveReader& reader) override;
 
 		FORCEINLINE World& GetWorld() final override
 		{

@@ -6,44 +6,47 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(BinaryFile);
+BUILD_REFLECTION(Willow::BinaryFile);
 
-////////////////////////
-///   Constructors   ///
-
-BinaryFile::BinaryFile(const Path& path)
-	: Base(path)
+namespace Willow
 {
-	// Open the file
-	std::ifstream file;
-	file.open(path.ToString().Cstr(), std::ios::in | std::ios::binary);
+	////////////////////////
+	///   Constructors   ///
 
-	// Make sure the file opened correctly
-	if (!file.is_open())
+	BinaryFile::BinaryFile(const Path& path)
+		: Base(path)
 	{
-		return;
+		// Open the file
+		std::ifstream file;
+		file.open(path.ToString().Cstr(), std::ios::in | std::ios::binary);
+
+		// Make sure the file opened correctly
+		if (!file.is_open())
+		{
+			return;
+		}
+
+		// Resize the buffer to hold the file
+		_data.Reset(this->GetSize());
+
+		// Read the contents of the file into the buffer
+		file.read(_data.GetPointer<char>(), this->GetSize());
+
+		// Make sure the contents were read correctly
+		if (static_cast<std::size_t>(file.gcount()) != this->GetSize())
+		{
+			Console::WriteLine("An error occurred while reading the binary file '@'.", path);
+		}
+
+		// Close the file
+		file.close();
 	}
 
-	// Resize the buffer to hold the file
-	_data.Reset(this->GetSize());
+	///////////////////
+	///   Methods   ///
 
-	// Read the contents of the file into the buffer
-	file.read(_data.GetPointer<char>(), this->GetSize());
-
-	// Make sure the contents were read correctly
-	if (static_cast<std::size_t>(file.gcount()) != this->GetSize())
+	const byte* BinaryFile::GetData() const
 	{
-		Console::WriteLine("An error occurred while reading the binary file '@'.", path);
+		return _data.GetPointer();
 	}
-
-	// Close the file
-	file.close();
-}
-
-///////////////////
-///   Methods   ///
-
-const byte* BinaryFile::GetData() const
-{
-	return _data.GetPointer();
 }

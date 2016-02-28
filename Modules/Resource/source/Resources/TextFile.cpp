@@ -8,44 +8,47 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(TextFile);
+BUILD_REFLECTION(Willow::TextFile);
 
-////////////////////////
-///   Constructors   ///
-
-TextFile::TextFile(const Path& path)
-	: Base(path)
+namespace Willow
 {
-	std::ifstream file(path.ToString().Cstr(), std::ios::in);
-	std::string line;
+	////////////////////////
+	///   Constructors   ///
 
-	if (!file.is_open())
+	TextFile::TextFile(const Path& path)
+		: Base(path)
 	{
-		Console::Warning("'@' could not be opened", path);
+		std::ifstream file(path.ToString().Cstr(), std::ios::in);
+		std::string line;
+
+		if (!file.is_open())
+		{
+			Console::Warning("'@' could not be opened", path);
+			file.close();
+			return;
+		}
+
+		while (std::getline(file, line))
+		{
+			_lines.Add(line.c_str());
+		}
+
 		file.close();
-		return;
+		Console::WriteLine("'@' loaded successfully", path);
 	}
 
-	while (std::getline(file, line))
+	///////////////////
+	///   Methods   ///
+
+	String TextFile::DumpLines() const
 	{
-		_lines.Add(line.c_str());
+		String result;
+
+		for (const String& line : _lines)
+		{
+			result += line + '\n';
+		}
+
+		return result;
 	}
-
-	file.close();
-	Console::WriteLine("'@' loaded successfully", path);
-}
-
-///////////////////
-///   Methods   ///
-
-String TextFile::DumpLines() const
-{
-	String result;
-
-	for (const String& line : _lines)
-	{
-		result += line + '\n';
-	}
-
-	return result;
 }

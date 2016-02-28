@@ -19,6 +19,25 @@ public:
 	///   Methods   ///
 public:
 
+	/** Maps the given ID to the given pointer. */
+	virtual void MapID(std::uintptr_t, void* pointer) const = 0;
+
+	/** Maps the ID of this node (if it has one) to the given pointer. */
+	void MapID(void* pointer) const
+	{
+		auto id = this->GetID();
+
+		if (id != 0)
+		{
+			this->MapID(id, pointer);
+		}
+	}
+
+	/** Returns the ID of this node.
+	* NOTE: If this node does not have an ID, this returns null.
+	* NOTE: The returned pointer is identical to the pointer passed into 'SetID' when this node was written, so it may no longer be a valid pointer. */
+	virtual std::uintptr_t GetID() const = 0;
+
 	/** Returns the name of this node. */
 	virtual String GetName() const = 0;
 
@@ -61,6 +80,18 @@ public:
 	/** Gets a String value out of this node. */
 	virtual void GetValue(String& value) const = 0;
 
+	/** Gets a pointer value out of this node. */
+	virtual void GetValue(void*& value) const = 0;
+
+	/** Gets a typed pointer value out of this node. */
+	template <typename T>
+	void GetValue(T*& value) const
+	{
+		void* pointer = nullptr;
+		this->GetValue(pointer);
+		value = reinterpret_cast<T*>(pointer);
+	}
+
 	/** Returns whether the value of this node is null. */
 	virtual bool IsNull() const = 0;
 
@@ -83,4 +114,25 @@ public:
 
 	/** Iterates over all child nodes of this node with the given name. */
 	virtual void EnumerateChildren(const String& name, const EnumeratorView<const ArchiveReader&>& reader) const = 0;
+
+	/** Pulls the given value from the first child node of this node with the given name. */
+	template <typename T>
+	bool PullValue(const String& name, T& value) const
+	{
+		return this->GetChild(name, [&](auto& child)
+		{
+			FromArchive(value, child);
+		});
+	}
+
+	/** Pulls the given value from the first child node of this node with the given name, and maps its ID to the address of the given value. */
+	template <typename T>
+	bool PullValueWithID(const String& name, T& value) const
+	{
+		return this->GetChild(name, [&](auto& child)
+		{
+			FromArchive(child, value);
+			child.MapID(&value);
+		});
+	}
 };

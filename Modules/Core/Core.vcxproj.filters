@@ -416,6 +416,9 @@
     <ClCompile Include="source\Memory\Pointers\Owned.cpp">
       <Filter>source\Memory\Pointers</Filter>
     </ClCompile>
+    <ClCompile Include="source\Memory\New.cpp">
+      <Filter>source\Memory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\Core\Operations\ToString.h">

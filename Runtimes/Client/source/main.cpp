@@ -105,17 +105,11 @@ int main(int32 /*argc*/, char** /*argv*/)
 
 		Willow::World world;
 
-		auto& sponza = world.Spawn<Willow::StaticMeshComponent>("Sponza");
-		sponza.SetScale({ 0.6f, 0.6f, 0.6f });
-		sponza.Mesh = "Content/Models/sponza_new.wmesh"_p;
-		sponza.Material = "Content/Materials/Sponza.mat"_p;
-		sponza.InstanceParams["diffuse"] = AssetPtr<Willow::Texture>("Content/Textures/sponza_new_tex.png"_p);
+		Willow::XMLArchive archive;
+		archive.Load("test.xml");
+		archive.Deserialize(world);
 
-		auto& test = world.Spawn<Willow::StaticMeshComponent>("test");
-		test.Mesh = "Content/Models/test.wmesh"_p;
-		test.Material = "Content/Materials/Sponza.mat"_p;
-		test.InstanceParams["diffuse"] = AssetPtr<Willow::Texture>("Content/Textures/sponza_new_tex.png"_p);
-
+		// Add a player so we can see what's happening
 		auto& player = world.Spawn<ExampleGame::FPSCharacter>("Player");
 		player.Translate({ 0, 3, 0 });
 

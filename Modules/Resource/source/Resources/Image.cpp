@@ -7,58 +7,61 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Image);
+BUILD_REFLECTION(Willow::Image);
 
-////////////////////////
-///   Constructors   ///
-
-Image::Image(const Path& path)
-	: Base(path), _bitmap(nullptr), _width(0), _height(0), _image(nullptr)
+namespace Willow
 {
-	// Open the file
-	FREE_IMAGE_FORMAT format = FreeImage_GetFileType(path.ToString().Cstr());
-	FIBITMAP* image = FreeImage_Load(format, path.ToString().Cstr(), 0);
+	////////////////////////
+	///   Constructors   ///
 
-	if (!image)
+	Image::Image(const Path& path)
+		: Base(path), _bitmap(nullptr), _width(0), _height(0), _image(nullptr)
 	{
-		Console::Warning("'@' could not be opened", path);
-		return;
+		// Open the file
+		FREE_IMAGE_FORMAT format = FreeImage_GetFileType(path.ToString().Cstr());
+		FIBITMAP* image = FreeImage_Load(format, path.ToString().Cstr(), 0);
+
+		if (!image)
+		{
+			Console::Warning("'@' could not be opened", path);
+			return;
+		}
+
+		// Convert the image to 32 bits
+		{
+			FIBITMAP* temp = image;
+			image = FreeImage_ConvertTo32Bits(image);
+			FreeImage_Unload(temp);
+		}
+
+		_bitmap = FreeImage_GetBits(image);
+		_width = FreeImage_GetWidth(image);
+		_height = FreeImage_GetHeight(image);
+		_image = image;
+
+		Console::WriteLine("'@' loaded successfully", path);
 	}
 
-	// Convert the image to 32 bits
+	Image::~Image()
 	{
-		FIBITMAP* temp = image;
-		image = FreeImage_ConvertTo32Bits(image);
-		FreeImage_Unload(temp);
+		FreeImage_Unload(static_cast<FIBITMAP*>(_image));
 	}
 
-	_bitmap = FreeImage_GetBits(image);
-	_width = FreeImage_GetWidth(image);
-	_height = FreeImage_GetHeight(image);
-	_image = image;
+	///////////////////
+	///   Methods   ///
 
-	Console::WriteLine("'@' loaded successfully", path);
-}
+	uint32 Image::GetWidth() const
+	{
+		return _width;
+	}
 
-Image::~Image()
-{
-	FreeImage_Unload(static_cast<FIBITMAP*>(_image));
-}
+	uint32 Image::GetHeight() const
+	{
+		return _height;
+	}
 
-///////////////////
-///   Methods   ///
-
-uint32 Image::GetWidth() const
-{
-	return _width;
-}
-
-uint32 Image::GetHeight() const
-{
-	return _height;
-}
-
-const byte* Image::GetBitmap() const
-{
-	return _bitmap;
+	const byte* Image::GetBitmap() const
+	{
+		return _bitmap;
+	}
 }

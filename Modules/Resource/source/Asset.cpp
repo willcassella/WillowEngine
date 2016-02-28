@@ -5,18 +5,21 @@
 ///////////////////
 ///   Statics   ///
 
-std::atomic<AssetID> _lastID(0);
+std::atomic<Willow::Asset::ID> _lastID(0);
 
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Asset);
+BUILD_REFLECTION(Willow::Asset);
 
-////////////////////////
-///   Constructors   ///
-
-Asset::Asset(const Path& path)
-	: _path(path)
+namespace Willow
 {
-	_id = ++_lastID;
+	////////////////////////
+	///   Constructors   ///
+
+	Asset::Asset(const Path& path)
+		: _path(path)
+	{
+		_id = ++_lastID;
+	}
 }

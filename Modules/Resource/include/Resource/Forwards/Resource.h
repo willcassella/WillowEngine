@@ -1,21 +1,24 @@
 // Resource.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-/////////////////
-///   Types   ///
+namespace Willow
+{
+	/////////////////
+	///   Types   ///
 
-/** Defined in 'Path.h' */
-struct Path;
+	/** Defined in 'Path.h' */
+	struct Path;
 
-/** Defined in 'Resource.h' */
-class Resource;
+	/** Defined in 'Resource.h' */
+	class Resource;
 
-/** Defined in 'Asset.h' */
-class Asset;
+	/** Defined in 'Asset.h' */
+	class Asset;
 
-/** Defined in 'AssetManager.h' */
-struct AssetManager;
+	/** Defined in 'AssetManager.h' */
+	struct AssetManager;
 
-/** Defined in 'AssetPtr.h' */
-template <class AssetT>
-struct AssetPtr;
+	/** Defined in 'AssetPtr.h' */
+	template <class AssetT>
+	struct AssetPtr;
+}

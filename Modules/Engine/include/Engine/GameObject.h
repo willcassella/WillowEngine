@@ -66,6 +66,8 @@ namespace Willow
 		///   Methods   ///
 	public:
 
+		void FromArchive(const ArchiveReader& reader) override;
+
 		/** Returns the ID of this GameObject. */
 		FORCEINLINE ID GetID() const
 		{

@@ -25,6 +25,7 @@ namespace Willow
 		Dynamic
 	};
 
+	/** Base for all Components that have a physical representation in the World. */
 	class ENGINE_API PhysicalComponent : public Component
 	{
 		///////////////////////

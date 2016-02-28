@@ -5,64 +5,67 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Path);
+BUILD_REFLECTION(Willow::Path);
 
-///////////////////
-///   Methods   ///
-
-String Path::GetFileExtension() const
+namespace Willow
 {
-	auto occurences = _path.OccurencesOf('.');
-	if (!occurences.IsEmpty())
-	{
-		return _path.SubString(occurences.Last() + 1);
-	}
-	else
-	{
-		return "";
-	}
-}
+	///////////////////
+	///   Methods   ///
 
-String Path::GetFileName() const
-{
-	String name = _path;
-
-	auto forwardSlashes = name.OccurencesOf("/");
-	auto backSlashes = name.OccurencesOf("\\");
-
-	if (!forwardSlashes.IsEmpty())
+	String Path::GetFileExtension() const
 	{
-		if (!backSlashes.IsEmpty())
+		auto occurences = _path.OccurencesOf('.');
+		if (!occurences.IsEmpty())
 		{
-			if (forwardSlashes.Last() >= backSlashes.Last())
-			{
-				name = name.SubString(forwardSlashes.Last());
-			}
-			else
-			{
-				name = name.SubString(backSlashes.Last());
-			}
+			return _path.SubString(occurences.Last() + 1);
 		}
 		else
 		{
-			name = name.SubString(forwardSlashes.Last());
+			return "";
 		}
 	}
-	else if (!backSlashes.IsEmpty())
+
+	String Path::GetFileName() const
 	{
-		name = name.SubString(backSlashes.Last());
+		String name = _path;
+
+		auto forwardSlashes = name.OccurencesOf("/");
+		auto backSlashes = name.OccurencesOf("\\");
+
+		if (!forwardSlashes.IsEmpty())
+		{
+			if (!backSlashes.IsEmpty())
+			{
+				if (forwardSlashes.Last() >= backSlashes.Last())
+				{
+					name = name.SubString(forwardSlashes.Last());
+				}
+				else
+				{
+					name = name.SubString(backSlashes.Last());
+				}
+			}
+			else
+			{
+				name = name.SubString(forwardSlashes.Last());
+			}
+		}
+		else if (!backSlashes.IsEmpty())
+		{
+			name = name.SubString(backSlashes.Last());
+		}
+
+		auto dots = name.OccurencesOf(".");
+		if (!dots.IsEmpty())
+		{
+			return name.SubString(0, dots.Last());
+		}
+
+		return name;
 	}
 
-	auto dots = name.OccurencesOf(".");
-	if (!dots.IsEmpty())
+	void Path::Sanitize()
 	{
-		return name.SubString(0, dots.Last());
+		// TODO: This
 	}
-
-	return name;
-}
-
-void Path::Sanitize()
-{
-	// TODO: This
 }

@@ -4,6 +4,7 @@
 #include "../config.h"
 #include "../Forwards/Operations.h"
 #include "../Functional/FunctionView.h"
+#include "../Containers/String.h"
 
 /////////////////
 ///   Types   ///
@@ -20,6 +21,9 @@ public:
 	///////////////////
 	///   Methods   ///
 public:
+
+	/** Sets the ID of this node to the value of the given pointer. */
+	virtual void SetID(const void* id) = 0;
 
 	/** Sets the value of this node as the given boolean value. */
 	virtual void SetValue(bool value) = 0;
@@ -57,11 +61,33 @@ public:
 	/** Sets the value of this node as the given long double value. */
 	virtual void SetValue(long double value) = 0;
 
+	/** Sets the value of this node as the given c-style string value. */
+	virtual void SetValue(const char* value) = 0;
+
+	/** Sets the value of this node as the given c-style string value. */
+	void SetValue(char* value)
+	{
+		this->SetValue(static_cast<const char*>(value));
+	}
+
 	/** Sets the value of this node as the given String value. */
-	virtual void SetValue(const String& value) = 0;
+	void SetValue(const String& value)
+	{
+		this->SetValue(value.Cstr());
+	}
 
 	/** Sets the value of this node to null. */
-	virtual void SetValue(std::nullptr_t) = 0;
+	void SetValue(std::nullptr_t)
+	{
+		this->SetValue(std::uintptr_t{ 0 });
+	}
+
+	/** Sets the value of this node as the given pointer. */
+	template <typename T>
+	void SetValue(T* value)
+	{
+		this->SetValue(reinterpret_cast<std::uintptr_t>(value));
+	}
 
 	/** Adds a new node with the given name as a child of this node, and runs the given function on that node. */
 	virtual void AddChild(const String& name, FunctionView<void, ArchiveWriter&> function) = 0;
@@ -73,6 +99,17 @@ public:
 		this->AddChild(name, [&](auto& writer)
 		{
 			ToArchive(value, writer);
+		});
+	}
+
+	/** Pushes a new node with the given name and ID of the given value into this Archive, and serializes the given value to that node. */
+	template <typename T>
+	void PushValueWithID(const String& name, const T& value)
+	{
+		this->AddChild(name, [&](auto& writer)
+		{
+			ToArchive(value, writer);
+			writer.SetID(&value);
 		});
 	}
 };

@@ -4,114 +4,117 @@
 #include "Asset.h"
 #include "AssetManager.h"
 
-/////////////////
-///   Types   ///
-
-template <class AssetT>
-struct AssetPtr final
+namespace Willow
 {
-	///////////////////////
-	///   Information   ///
-public:
+	/////////////////
+	///   Types   ///
 
-	REFLECTABLE_STRUCT
-
-	////////////////////////
-	///   Constructors   ///
-public:
-
-	AssetPtr()
-		: _asset(nullptr)
+	template <class AssetT>
+	struct AssetPtr final
 	{
-		// All done
-	}
-	AssetPtr(const Path& path)
-	{
-		_asset = AssetManager::FindAsset<AssetT>(path);
-	}
+		///////////////////////
+		///   Information   ///
+	public:
 
-	///////////////////
-	///   Methods   ///
-public:
+		REFLECTABLE_STRUCT
 
-	String ToString() const
-	{
-		if (_asset)
-		{
-			return _asset->GetPath();
-		}
-		else
-		{
-			return "null";
-		}
-	}
+		////////////////////////
+		///   Constructors   ///
+	public:
 
-	void ToArchive(ArchiveWriter& writer) const
-	{
-		if (_asset)
+		AssetPtr()
+			: _asset(nullptr)
 		{
-			writer.SetValue(_asset->GetPath());
+			// All done
 		}
-		else
-		{
-			writer.SetValue("null"_s);
-		}
-	}
-
-	void FromArchive(const ArchiveReader& reader)
-	{
-		String path;
-		reader.GetValue(path);
-
-		if (path == "null")
-		{
-			_asset = nullptr;
-		}
-		else
+		AssetPtr(const Path& path)
 		{
 			_asset = AssetManager::FindAsset<AssetT>(path);
 		}
-	}
 
-	/////////////////////
-	///   Operators   ///
-public:
+		///////////////////
+		///   Methods   ///
+	public:
 
-	const AssetT& operator*() const
-	{
-		return *_asset;
-	}
-	const AssetT* operator->() const
-	{
-		return _asset;
-	}
-	bool operator==(std::nullptr_t)
-	{
-		return _asset == nullptr;
-	}
-	bool operator!=(std::nullptr_t)
-	{
-		return _asset != nullptr;
-	}
-	operator bool() const
-	{
-		return _asset != nullptr;
-	}
-	AssetPtr& operator=(const Path& path)
-	{
-		_asset = AssetManager::FindAsset<AssetT>(path);
-		return *this;
-	}
-	
-	////////////////
-	///   Data   ///
-private:
+		String ToString() const
+		{
+			if (_asset)
+			{
+				return _asset->GetPath();
+			}
+			else
+			{
+				return "null";
+			}
+		}
 
-	const AssetT* _asset;
-};
+		void ToArchive(ArchiveWriter& writer) const
+		{
+			if (_asset)
+			{
+				writer.SetValue(_asset->GetPath());
+			}
+			else
+			{
+				writer.SetValue("null"_s);
+			}
+		}
+
+		void FromArchive(const ArchiveReader& reader)
+		{
+			String path;
+			reader.GetValue(path);
+
+			if (path == "null")
+			{
+				_asset = nullptr;
+			}
+			else
+			{
+				_asset = AssetManager::FindAsset<AssetT>(path);
+			}
+		}
+
+		/////////////////////
+		///   Operators   ///
+	public:
+
+		const AssetT& operator*() const
+		{
+			return *_asset;
+		}
+		const AssetT* operator->() const
+		{
+			return _asset;
+		}
+		bool operator==(std::nullptr_t)
+		{
+			return _asset == nullptr;
+		}
+		bool operator!=(std::nullptr_t)
+		{
+			return _asset != nullptr;
+		}
+		operator bool() const
+		{
+			return _asset != nullptr;
+		}
+		AssetPtr& operator=(const Path& path)
+		{
+			_asset = AssetManager::FindAsset<AssetT>(path);
+			return *this;
+		}
+
+		////////////////
+		///   Data   ///
+	private:
+
+		const AssetT* _asset;
+	};
+}
 
 //////////////////////
 ///   Reflection   ///
 
 template <class AssetT>
-BUILD_TEMPLATE_REFLECTION(AssetPtr, AssetT);
+BUILD_TEMPLATE_REFLECTION(Willow::AssetPtr, AssetT);

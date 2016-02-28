@@ -52,3 +52,10 @@ public:
 		return lhs.First != rhs.First || lhs.Second != rhs.Second;
 	}
 };
+
+/** Constructs a pair of the given values. */
+template <typename A, typename B>
+Pair<std::remove_reference_t<A>, std::remove_reference_t<B>> MakePair(A&& a, B&& b)
+{
+	return{ std::forward<A>(a), std::forward<B>(b) };
+}

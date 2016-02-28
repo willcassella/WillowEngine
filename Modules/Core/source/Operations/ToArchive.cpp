@@ -67,6 +67,16 @@ namespace Operations
 		writer.SetValue(value);
 	}
 
+	void ToArchive<char*>::Function(const char* value, ArchiveWriter& writer)
+	{
+		writer.SetValue(value);
+	}
+
+	void ToArchive<const char*>::Function(const char* value, ArchiveWriter& writer)
+	{
+		writer.SetValue(value);
+	}
+
 	////////////////////////
 	///   String Types   ///
 
