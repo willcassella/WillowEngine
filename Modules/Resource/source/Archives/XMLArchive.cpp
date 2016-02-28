@@ -219,7 +219,7 @@ namespace Willow
 		void SetID(const void* id) override
 		{
 			auto value = reinterpret_cast<std::uintptr_t>(id);
-			this->Node.append_attribute("id") = value;
+			this->Node.append_attribute("id") = ToString(value).Cstr();
 		}
 
 		void SetValue(bool value) override
