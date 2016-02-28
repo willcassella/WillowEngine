@@ -1,76 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
   
-  <!-- Core -->
-  
-  <Type Name="String">
-    <DisplayString Condition="_value._value._value == 0xcccccccccccccccc">uninitialized</DisplayString>
-    <DisplayString>{(const char*)_value._value._value,s}</DisplayString>
-    <StringView>(const char*)_value._value._value,s</StringView>
-  </Type>
-  
-  <!-- Memory -->
-  
-  <Type Name="OwnerPtr&lt;*&gt;">
-    <DisplayString Condition="_value == 0">null</DisplayString>
-    <DisplayString Condition="_value == 0xcccccccccccccccc">uninitialized</DisplayString>
-    <DisplayString>{*_value}</DisplayString>
-    <Expand>
-      <ExpandedItem Condition="_value != 0">_value</ExpandedItem>
-    </Expand>
-  </Type>
-  
-  <Type Name="OwnerPtr&lt;void&gt;">
-    <DisplayString Condition="_value == 0">OwnerPtr {{null}}</DisplayString>
-    <DisplayString Condition="_value == 0xcccccccccccccccc">OwnerPtr {{uninitialized}}</DisplayString>
-    <DisplayString>OwnerPtr {*_value}</DisplayString>
-    <Expand>
-      <ExpandedItem>_value</ExpandedItem>
-    </Expand>
-  </Type>
-  
-  <Type Name="Ptr&lt;*&gt;">
-    <DisplayString Condition="_value == 0">null</DisplayString>
-    <DisplayString Condition="_value == 0xcccccccccccccccc">uninitialized</DisplayString>
-    <Expand>
-      <ExpandedItem>_value</ExpandedItem>
-    </Expand>
-  </Type>
-  
   <!-- Containers -->
   
-  <Type Name="StaticBuffer&lt;*&gt;">
-    <Expand>
-      <Item Name="Size">sizeof(_value)</Item>
-      <ArrayItems>
-        <Size>sizeof(_value)</Size>
-        <ValuePointer>_value</ValuePointer>
-      </ArrayItems>
-    </Expand>
-  </Type>
-  
-  <Type Name="DynamicBuffer">
-    <DisplayString Condition="_value == 0xcccccccccccccccc">uninitialized</DisplayString>
-    <DisplayString Condition="_value == 0">empty</DisplayString>
-    <DisplayString>Size={_size}</DisplayString>
-    <Expand>
-      <Item Name="Size">_size</Item>
-      <ArrayItems>
-        <Size>_size</Size>
-        <ValuePointer>_value</ValuePointer>
-      </ArrayItems>
-    </Expand>
+   <Type Name="String">
+    <DisplayString Condition="_value._buffer._buffer == 0xcccccccccccccccc">uninitialized</DisplayString>
+    <DisplayString>{(const char*)_value._buffer._buffer,s}</DisplayString>
+    <StringView>(const char*)_value._buffer._buffer,s</StringView>
   </Type>
 
   <Type Name="Array&lt;*&gt;">
-    <DisplayString Condition="_value._value == 0xcccccccccccccccc">uninitialized</DisplayString>
+    <DisplayString Condition="_buffer._buffer == 0xcccccccccccccccc">uninitialized</DisplayString>
     <DisplayString Condition="_numElements == 0">empty</DisplayString>
       <Expand>
         <Item Name="Size">_numElements</Item>
-        <Item Name="Capacity">_value._size/sizeof($T1)</Item>
+        <Item Name="Capacity">_buffer._size/sizeof($T1)</Item>
         <ArrayItems>
           <Size>_numElements</Size>
-          <ValuePointer>($T1*)_value._value</ValuePointer>
+          <ValuePointer>($T1*)_buffer._buffer</ValuePointer>
         </ArrayItems>
       </Expand>
   </Type>
@@ -80,7 +27,7 @@
   </Type>
   
   <Type Name="Table&lt;*,*&gt;">
-    <DisplayString Condition="_values._value._value == 0xcccccccccccccccc">uninitialized</DisplayString>
+    <DisplayString Condition="_values._buffer._buffer == 0xcccccccccccccccc">uninitialized</DisplayString>
     <DisplayString Condition="_values._numElements == 0">empty</DisplayString>
     <Expand>
       <ExpandedItem>_values</ExpandedItem>
@@ -129,6 +76,74 @@
       <Item Name="Polymorphic">_isPolymorphic</Item>
       <Item Name="RequiresCopy">_requiresCopy</Item>
     </Expand>
+  </Type>
+  
+  <!-- Memory -->
+  
+    <Type Name="StaticBuffer&lt;*&gt;">
+    <Expand>
+      <Item Name="Size">sizeof(_buffer)</Item>
+      <ArrayItems>
+        <Size>sizeof(_buffer)</Size>
+        <ValuePointer>_buffer</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  
+  <Type Name="DynamicBuffer">
+    <DisplayString Condition="_buffer == 0xcccccccccccccccc">uninitialized</DisplayString>
+    <DisplayString Condition="_buffer == 0">empty</DisplayString>
+    <DisplayString>Size={_size}</DisplayString>
+    <Expand>
+      <Item Name="Size">_size</Item>
+      <ArrayItems>
+        <Size>_size</Size>
+        <ValuePointer>_value</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  
+    <Type Name="Owned&lt;*&gt;">
+    <DisplayString Condition="_value == 0">null</DisplayString>
+    <DisplayString Condition="_value == 0xcccccccccccccccc">uninitialized</DisplayString>
+    <DisplayString>{*_value}</DisplayString>
+    <Expand>
+      <ExpandedItem Condition="_value != 0">_value</ExpandedItem>
+    </Expand>
+  </Type>
+  
+  <Type Name="Weak&lt;*&gt;">
+    <DisplayString Condition="_value == 0">null</DisplayString>
+    <DisplayString Condition="_value == 0xcccccccccccccccc">uninitialized</DisplayString>
+    <Expand>
+      <ExpandedItem>_value</ExpandedItem>
+    </Expand>
+  </Type>
+  
+  <Type Name="Borrowed&lt;*&gt;">
+    <DisplayString Condition="_value == 0">null</DisplayString>
+    <DisplayString Condition="_value == 0xcccccccccccccccc">uninitialized</DisplayString>
+    <Expand>
+      <ExpandedItem>_value</ExpandedItem>
+    </Expand>
+  </Type>
+  
+  <!-- Math -->
+
+  <Type Name="Vec2">
+	  <DisplayString>&lt;{X}, {Y}&gt;</DisplayString>
+  </Type>
+  
+  <Type Name="Vec3">
+    <DisplayString>&lt;{X}, {Y}, {Z}&gt;</DisplayString>
+  </Type>
+  
+  <Type Name="Vec4">
+	  <DisplayString>&lt;{X}, {Y}, {Z}, {W}&gt;</DisplayString>
+  </Type>
+  
+  <Type Name="Quat">
+	  <DisplayString>&lt;{X}, {Y}, {Z}, {W}&gt;</DisplayString>
   </Type>
 
 </AutoVisualizer>
