@@ -73,7 +73,7 @@ Window::Window(CString name, uint32 width, uint32 height)
 	glfwSetWindowFocusCallback(_window, [](GLFWwindow* window, int hasFocus)
 	{
 		// Reset the cursor position if the window has gained focus
-		if (hasFocus == GLFW_TRUE)
+		if (hasFocus)
 		{
 			WindowTable[window]->CenterCursor();
 		}
@@ -116,7 +116,7 @@ double Window::GetCurrentTime()
 
 bool Window::HasFocus() const
 {
-	return glfwGetWindowAttrib(_window, GLFW_FOCUSED) == GLFW_TRUE;
+	return glfwGetWindowAttrib(_window, GLFW_FOCUSED);
 }
 
 uint32 Window::GetWidth() const
