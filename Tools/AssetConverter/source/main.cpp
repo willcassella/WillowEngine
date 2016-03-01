@@ -4,7 +4,7 @@
 #include <Core/IO/Console.h>
 #include "../include/AssetConverter/AssetConversion.h"
 
-int main(int32 argCount, char** args)
+int main(int argCount, char** args)
 {
 	using namespace Willow;
 	Application::Initialize();
