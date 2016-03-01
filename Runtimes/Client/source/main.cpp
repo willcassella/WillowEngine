@@ -2,16 +2,12 @@
 
 #include <Core/IO/Console.h>
 #include <Resource/Archives/XMLArchive.h>
-#include <Engine/Components/StaticMeshComponent.h>
 #include <GLRender/GLRenderer.h>
-#include <ExampleGame/FPSCharacter.h>
 #include "../include/Client/Window.h"
 
 /** Main program loop. */
 void EventLoop(Window& window, Willow::World& world, Willow::IRenderer& renderer)
 {
-	Console::WriteLine("Entering event loop...");
-
 	double previous = Window::GetCurrentTime();
 	double lastTime = previous;
 	double lag = 0.0;
@@ -81,39 +77,43 @@ void EventLoop(Window& window, Willow::World& world, Willow::IRenderer& renderer
 		renderer.RenderWorld(world);
 		window.SwapBuffers();
 	}
-
-	Console::WriteLine("Leaving event loop...");
 }
 
 /** Application entry point. */
-int main(int32 /*argc*/, char** /*argv*/)
+int main(int argc, char* argv[])
 {
 	// Initialize Application
 	Application::Initialize();
 
-	// Create a window, the renderer, and world to simulate
+	// Make sure command line arguments are correct
+	if (argc < 3)
 	{
+		Console::Error("Game module and starting scene not specified. Usage: 'Runtime [game module] [world]'");
+		Application::Terminate(EXIT_FAILURE);
+	}
+	
+	// Start up engine
+	{
+		// Load game module
+		Console::WriteLine("Loading module: '@'...", argv[1]);
+		Application::LoadModule(argv[1]);
+
+		// Load world
+		Console::WriteLine("Loading world: '@'...", argv[2]);
+		Willow::World world;
+		{
+			Willow::XMLArchive archive;
+			archive.Load(argv[2]);
+			archive.Deserialize(world);
+		}
+
+		// Load up subsystems
 		Console::WriteLine("Initializing subsystems...");
 		Window window("Willow Engine", 1280, 720);
 		Willow::GLRenderer renderer(window.GetWidth(), window.GetHeight());
 
-		///////////////////////////////
-		///   Setting up a simple   ///
-		///          scene          ///
-
-		Console::WriteLine("Creating world...");
-
-		Willow::World world;
-
-		Willow::XMLArchive archive;
-		archive.Load("test.xml");
-		archive.Deserialize(world);
-
-		// Add a player so we can see what's happening
-		auto& player = world.Spawn<ExampleGame::FPSCharacter>("Player");
-		player.Translate({ 0, 3, 0 });
-
 		// Enter main event loop
+		Console::WriteLine("Entering event loop...");
 		EventLoop(window, world, renderer);
 	}
 	
