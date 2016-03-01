@@ -29,6 +29,7 @@
     <ProjectGuid>{4700682C-35A0-4338-9860-7330D1341505}</ProjectGuid>
     <RootNamespace>OBJConvert</RootNamespace>
     <ProjectName>AssetConverter</ProjectName>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -74,28 +75,28 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IntDir>build\</IntDir>
-    <OutDir>bin\</OutDir>
+    <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Engine\bin;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Engine\bin\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IntDir>build\</IntDir>
-    <OutDir>bin\</OutDir>
+    <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Engine\bin;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Engine\bin\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IntDir>build\</IntDir>
-    <OutDir>bin\</OutDir>
+    <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Engine\bin;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Engine\bin\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IntDir>build\</IntDir>
-    <OutDir>bin\</OutDir>
+    <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Engine\bin;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Engine\bin\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -103,7 +104,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
-      <PreprocessorDefinitions>BITS_32;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
@@ -112,7 +113,7 @@
       <AdditionalDependencies>Core.lib;Resource.lib;Engine.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -130,7 +131,7 @@
       <AdditionalDependencies>Core.lib;Resource.lib;Engine.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -141,7 +142,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
-      <PreprocessorDefinitions>BITS_32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
@@ -154,7 +155,7 @@
       <AdditionalDependencies>Core.lib;Resource.lib;Engine.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -178,7 +179,7 @@
       <AdditionalDependencies>Core.lib;Resource.lib;Engine.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

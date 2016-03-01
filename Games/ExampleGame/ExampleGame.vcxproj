@@ -21,6 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{CC0E3BAE-4927-47E9-835E-4A83BE0FEBE9}</ProjectGuid>
     <RootNamespace>ExampleGame</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -66,32 +67,32 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>bin\</OutDir>
-    <IntDir>build\</IntDir>
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <TargetExt>.dll</TargetExt>
     <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Engine\bin;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Engine\bin\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>bin\</OutDir>
-    <IntDir>build\</IntDir>
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <TargetExt>.dll</TargetExt>
     <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Engine\bin;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Engine\bin\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>bin\</OutDir>
-    <IntDir>build\</IntDir>
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <TargetExt>.dll</TargetExt>
     <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Engine\bin;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Engine\bin\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>bin\</OutDir>
-    <IntDir>build\</IntDir>
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <TargetExt>.dll</TargetExt>
     <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Engine\bin;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Engine\bin\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

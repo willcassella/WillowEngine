@@ -21,6 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{006360EA-43D5-4C0F-87E2-86DB46E096E2}</ProjectGuid>
     <RootNamespace>WillowEngine</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -65,79 +66,75 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)Services\GLRender\include;$(SolutionDir)Games\ExampleGame\include;$(SolutionDir)packages\glfw-3.2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Engine\bin;$(SolutionDir)Services\GLRender\bin;$(SolutionDir)Games\ExampleGame\bin;$(SolutionDir)packages\glfw-3.2\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
-    <OutDir>bin\</OutDir>
-    <IntDir>build\</IntDir>
-    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)Services\GLRender\include;$(SolutionDir)packages\glfw-3.2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Engine\bin\$(Platform)\$(Configuration);$(SolutionDir)Services\GLRender\bin\$(Platform)\$(Configuration);$(SolutionDir)packages\glfw-3.2\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <Linkage-glfw>
     </Linkage-glfw>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)Services\GLRender\include;$(SolutionDir)Games\ExampleGame\include;$(SolutionDir)packages\glfw-3.2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Engine\bin;$(SolutionDir)Services\GLRender\bin;$(SolutionDir)Games\ExampleGame\bin;$(SolutionDir)packages\glfw-3.2\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
-    <OutDir>bin\</OutDir>
-    <IntDir>build\</IntDir>
+    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)Services\GLRender\include;$(SolutionDir)packages\glfw-3.2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Engine\bin\$(Platform)\$(Configuration);$(SolutionDir)Services\GLRender\bin\$(Platform)\$(Configuration);$(SolutionDir)packages\glfw-3.2\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <Linkage-glfw>
     </Linkage-glfw>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)Services\GLRender\include;$(SolutionDir)Games\ExampleGame\include;$(SolutionDir)packages\glfw-3.2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Engine\bin;$(SolutionDir)Services\GLRender\bin;$(SolutionDir)Games\ExampleGame\bin;$(SolutionDir)packages\glfw-3.2\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
-    <OutDir>bin\</OutDir>
-    <IntDir>build\</IntDir>
-    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)Services\GLRender\include;$(SolutionDir)packages\glfw-3.2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Engine\bin\$(Platform)\$(Configuration);$(SolutionDir)Services\GLRender\bin\$(Platform)\$(Configuration);$(SolutionDir)packages\glfw-3.2\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <Linkage-glfw>
     </Linkage-glfw>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)Services\GLRender\include;$(SolutionDir)Games\ExampleGame\include;$(SolutionDir)packages\glfw-3.2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin;$(SolutionDir)Modules\Resource\bin;$(SolutionDir)Modules\Engine\bin;$(SolutionDir)Services\GLRender\bin;$(SolutionDir)Games\ExampleGame\bin;$(SolutionDir)packages\glfw-3.2\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
-    <OutDir>bin\</OutDir>
-    <IntDir>build\</IntDir>
+    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)Services\GLRender\include;$(SolutionDir)packages\glfw-3.2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Engine\bin\$(Platform)\$(Configuration);$(SolutionDir)Services\GLRender\bin\$(Platform)\$(Configuration);$(SolutionDir)packages\glfw-3.2\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <Linkage-glfw>
     </Linkage-glfw>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Core.lib;Resource.lib;Engine.lib;GLRender.lib;ExampleGame.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Core.lib;Resource.lib;Engine.lib;GLRender.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <Profile>true</Profile>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y</Command>
-      <Message>Copy dependancies into output</Message>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
+      <Message>
+      </Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Core.lib;Resource.lib;Engine.lib;GLRender.lib;ExampleGame.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Core.lib;Resource.lib;Engine.lib;GLRender.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <Profile>true</Profile>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
     </PostBuildEvent>
     <PostBuildEvent>
-      <Message>Copy dependancies into output</Message>
+      <Message>
+      </Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -155,18 +152,17 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Core.lib;Resource.lib;Engine.lib;GLRender.lib;ExampleGame.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Core.lib;Resource.lib;Engine.lib;GLRender.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <EntryPointSymbol>
       </EntryPointSymbol>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
     </PostBuildEvent>
     <PostBuildEvent>
-      <Message>Copy dependancies into output</Message>
+      <Message>
+      </Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -184,18 +180,17 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Core.lib;Resource.lib;Engine.lib;GLRender.lib;ExampleGame.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Core.lib;Resource.lib;Engine.lib;GLRender.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
     </PostBuildEvent>
     <PostBuildEvent>
-      <Message>Copy dependancies into output</Message>
+      <Message>
+      </Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
