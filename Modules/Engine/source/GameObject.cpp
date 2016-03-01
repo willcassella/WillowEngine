@@ -8,9 +8,7 @@
 
 BUILD_REFLECTION(Willow::GameObject)
 .Data("ID", &GameObject::_id)
-.Data("State", &GameObject::_state, DF_Transient)
 .Property("ID", &GameObject::GetID, nullptr, "Unique ID")
-.Property("State", &GameObject::GetState, nullptr, "State of GameObject")
 .Property("Location", &GameObject::GetLocation, &GameObject::SetLocation, "Location in local space", "Transform")
 .Property("World Location", &GameObject::GetWorldLocation, &GameObject::SetWorldLocation, "Location in world space", "Transform")
 .Property("Rotation", &GameObject::GetRotation, &GameObject::SetRotation, "Rotation in local space", "Transform")
@@ -19,8 +17,6 @@ BUILD_REFLECTION(Willow::GameObject)
 
 BUILD_ENUM_REFLECTION(Willow::GameObject::State)
 .Value("Uninitialized", Willow::GameObject::State::Uninitialized)
-.Value("Initialized", Willow::GameObject::State::Initialized)
-.Value("Spawning", Willow::GameObject::State::Spawning)
 .Value("Spawned", Willow::GameObject::State::Spawned)
 .Value("Destroyed", Willow::GameObject::State::Destroyed);
 
@@ -29,17 +25,11 @@ namespace Willow
 	///////////////////
 	///   Methods   ///
 
-	void GameObject::FromArchive(const ArchiveReader& reader)
-	{
-		SerializeableObject<GameObject>::FromArchive(reader);
-		_state = State::Spawned;
-	}
-
 	void GameObject::Destroy()
 	{
-		assert(this->GetState() >= State::Spawned);
+		assert(_state >= State::Spawned);
 
-		if (this->GetState() == State::Destroyed)
+		if (this->IsDestroyed())
 		{
 			// We've already run the destruction procedure
 			return;
@@ -59,22 +49,5 @@ namespace Willow
 	void GameObject::OnDestroy()
 	{
 		// Do nothing
-	}
-
-	void GameObject::Initialize(ID id)
-	{
-		assert(this->GetState() == State::Uninitialized);
-
-		_id = id;
-		_state = State::Initialized;
-	}
-
-	void GameObject::Spawn()
-	{
-		assert(this->GetState() == State::Initialized);
-
-		_state = State::Spawning;
-		this->OnSpawn();
-		_state = State::Spawned;
 	}
 }

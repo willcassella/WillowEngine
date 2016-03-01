@@ -6,6 +6,8 @@
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include "../include/Engine/Components/PhysicalComponent.h"
 
+static_assert(std::is_same<Scalar, btScalar>::value, "The engine is not configured to use the same Scalar type as Bullet.");
+
 /////////////////
 ///   Types   ///
 

@@ -2,8 +2,6 @@
 #pragma once
 
 #include <Core/Object.h>
-#include <Core/Math/Vec3.h>
-#include <Core/Math/Quat.h>
 #include <Core/Math/Mat4.h>
 #include <Core/Misc/SerializeableObject.h>
 #include "config.h"
@@ -49,12 +47,6 @@ namespace Willow
 			/** This GameObject has just been constructed, and has not been initialized yet. */
 			Uninitialized,
 
-			/** This GameObject has been initialized, but has not been spawned yet. */
-			Initialized,
-
-			/** This GameObject is in the process of spawning. */
-			Spawning,
-
 			/** This GameObject has been successfully spawned. */
 			Spawned,
 
@@ -66,30 +58,22 @@ namespace Willow
 		///   Methods   ///
 	public:
 
-		void FromArchive(const ArchiveReader& reader) override;
-
 		/** Returns the ID of this GameObject. */
 		FORCEINLINE ID GetID() const
 		{
 			return _id;
 		}
 
-		/** Returns the state of this GameObject. */
-		FORCEINLINE State GetState() const
-		{
-			return _state;
-		}
-
 		/** Returns whether this GameObject has completed its spawning procedure. */
 		FORCEINLINE bool HasSpawned() const
 		{
-			return this->GetState() >= State::Spawned;
+			return _state >= State::Spawned;
 		}
 
 		/** Returns whether this GameObject has been destroyed. */
 		FORCEINLINE bool IsDestroyed() const
 		{
-			return this->GetState() >= State::Destroyed;
+			return _state >= State::Destroyed;
 		}
 
 		/** Returns a reference to the World that this GameObject belongs to. */
@@ -160,9 +144,6 @@ namespace Willow
 		/** Returns a matrix of the world transformation for this GameObject. */
 		virtual Mat4 GetTransformationMatrix() const = 0;
 
-		/** Performs spawning procedure. */
-		void Spawn();
-
 		/** Destroys this GameObject. TODO: Add delay */
 		void Destroy();
 
@@ -173,11 +154,6 @@ namespace Willow
 
 		/** Handles destruction procedure. */
 		virtual void OnDestroy();
-
-	private:
-
-		/** Performs initialization procedure. */
-		void Initialize(ID id);
 
 		////////////////
 		///   Data   ///

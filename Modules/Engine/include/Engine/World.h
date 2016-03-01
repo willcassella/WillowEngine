@@ -2,7 +2,6 @@
 #pragma once
 
 #include <memory>
-#include <Core/Misc/SerializeableObject.h>
 #include <Core/Containers/Queue.h>
 #include <Core/Event/EventManager.h>
 #include "Forwards/Physics.h"
@@ -51,35 +50,47 @@ namespace Willow
 
 		/** Spawns a new instance of the given type into the World. */
 		template <class T>
-		std::enable_if_t<std::is_base_of<Entity, T>::value, T&> Spawn()
+		auto Spawn() -> std::enable_if_t<std::is_base_of<Entity, T>::value, T&>
 		{
-			auto& entity = this->InitializeGameObject(New<T>());
+			// Create a new entity
+			auto owner = New<T>();
+			auto& entity = *owner;
+			
+			// Initialize it
 			entity._world = this;
-			entity.Spawn();
 
+			// Spawn it
+			this->SpawnGameObject(std::move(owner));
 			return entity;
 		}
 
 		/** Spawns a new instance of the given type into the World. */
 		template <class T>
-		std::enable_if_t<std::is_base_of<Component, T>::value, T&> Spawn()
+		auto Spawn() -> std::enable_if_t<std::is_base_of<Component, T>::value, T&>
 		{
 			return this->Spawn<Entity>().Connect<T>();
 		}
 
 		/** Spawns a new instance of the given type with the given name into the World. */
 		template <class T>
-		std::enable_if_t<std::is_base_of<Entity, T>::value, T&> Spawn(String name)
+		auto Spawn(String name) -> std::enable_if_t<std::is_base_of<Entity, T>::value, T&>
 		{
-			auto& entity = this->Spawn<T>();
+			// Create a new entity
+			auto owner = New<T>();
+			auto& entity = *owner;
+
+			// Initialize it
+			entity._world = this;
 			entity._name = std::move(name);
 
+			// Spawn it
+			this->SpawnGameObject(std::move(owner));
 			return entity;
 		}
 
 		/** Spawns a new instance of the given type with the given name into the World. */
 		template <class T>
-		std::enable_if_t<std::is_base_of<Component, T>::value, T&> Spawn(String name)
+		auto Spawn(String name) -> std::enable_if_t<std::is_base_of<Component, T>::value, T&>
 		{
 			return this->Spawn<Entity>(std::move(name)).Connect<T>();
 		}
@@ -138,27 +149,9 @@ namespace Willow
 			return *_physicsWorld;
 		}
 
-		/** Initializes the given GameObject in this World.
-		* NOTE: This does not call "GameObject::Spawn()".
-		* That is the caller's responsibility. */
-		template <class T>
-		T& InitializeGameObject(Owned<T> object)
-		{
-			auto& ref = *object;
-			ref.Initialize(_nextGameObjectID++);
-			_gameObjects[ref.GetID()] = std::move(object);
-
-			if (std::is_base_of<Entity, T>::value)
-			{
-				_entities[ref.GetID()] = reinterpret_cast<Entity*>(&ref);
-			}
-			else if (std::is_base_of<Component, T>::value)
-			{
-				_components[ref.GetID()] = reinterpret_cast<Component*>(&ref);
-			}
-
-			return ref;
-		}
+		/** Spawns the given GameObject into this World.
+		* NOTE: The caller is responsible for initializing all state of this GameObject other than the ID. */
+		void SpawnGameObject(Owned<GameObject> owner);
 
 		////////////////
 		///   Data   ///
@@ -196,16 +189,18 @@ namespace Willow
 	template <class T>
 	T& Entity::Connect()
 	{
-		static_assert(std::is_base_of<Component, T>::value, "You can only connect Component types");
+		static_assert(std::is_base_of<Component, T>::value, "You can only connect Component types to Entities.");
 
-		// Construct and initialize component
-		auto& component = this->GetWorld().InitializeGameObject(New<T>());
+		// Construct the Component
+		auto owner = New<T>();
+		auto& component = *owner;
 
-		// Connect component
+		// Register the Component with this Entity
 		component._entity = this;
-		_components.Add(&component);
-		component.Spawn();
+		this->_components.Add(&component);
 
+		// Spawn it into the world
+		this->GetWorld().SpawnGameObject(std::move(owner));
 		return component;
 	}
 }

@@ -4,8 +4,6 @@
 #include "../include/Engine/ServiceInterfaces/IRenderer.h"
 #include "Physics.h"
 
-static_assert(std::is_same<Scalar, btScalar>::value, "The engine is not configured to use the same Scalar type as Bullet.");
-
 //////////////////////
 ///   Reflection   ///
 
@@ -98,23 +96,10 @@ namespace Willow
 				if (auto object = unloadedObjects.Pop())
 				{
 					object->FromArchive(gameobject);
-					
-					// If it's an Entity, add it to the Entities table
-					if (auto entity = Cast<Entity>(*object))
-					{
-						_entities[entity->GetID()] = entity;
-					}
-					else
-					{
-						// Otherwise, add it to the components table
-						_components[object->GetID()] = static_cast<Component*>(object.GetManagedPointer());
-					}
-
-					// Add it to the scene
-					_gameObjects[object->GetID()] = std::move(object);
+					this->SpawnGameObject(std::move(object));
 				}
 			});
-		});
+		});	
 	}
 
 	void World::Update()
@@ -131,5 +116,30 @@ namespace Willow
 
 		// Simulate physics
 		_physicsWorld->GetDynamicsWorld().stepSimulation(TimeStep, 10);
+	}
+
+	void World::SpawnGameObject(Owned<GameObject> owner)
+	{
+		auto& object = *owner;
+		
+		// Give the object an ID
+		assert(object._state == GameObject::State::Uninitialized);
+		object._id = _nextGameObjectID++;
+		
+		// Add it to the world
+		_gameObjects[object.GetID()] = std::move(owner);
+		
+		if (auto entity = Cast<Entity>(object))
+		{
+			_entities[object.GetID()] = entity;
+		}
+		else if (auto component = Cast<Component>(object))
+		{
+			_components[object.GetID()] = component;
+		}
+
+		// Spawn it
+		object.OnSpawn();
+		object._state = GameObject::State::Spawned;
 	}
 }
