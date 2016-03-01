@@ -5,6 +5,29 @@
 #include <cstddef>
 #include <cstdint>
 
+////////////////////////////
+///   Operating System   ///
+
+/** Detect Unix (OSX/Linux) */
+#if defined(unix) || defined(__unix__) || defined(__unix)
+#	define OS_UNIX
+#endif
+
+/** Detect Linux. */
+#if defined (__linux__)
+#	define OS_LINUX
+#endif
+
+/** Detect OSX. */
+#if defined (__APPLE__)
+#	defined OS_OSX
+#endif
+
+/** Detect Windows. */
+#if defined (_WIN32)
+#	define OS_WINDOWS
+#endif
+
 /////////////////////////////
 ///   Build Information   ///
 
@@ -28,9 +51,6 @@
 #		error Non-static linking used on unknown compiler
 #	endif
 #endif
-
-/** Macro useful for macros that expect to be given an API specification, but can't be given one. */
-#define NO_API
 
 //////////////////////
 ///   Primitives   ///
@@ -77,3 +97,6 @@ using CString = const Char*;
 	/** We're on some unknown compiler, so just use normal inline */
 #	define FORCEINLINE inline
 #endif
+
+/** Macro useful for macros that expect to be given an API specification, but can't be given one. */
+#define NO_API

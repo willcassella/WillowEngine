@@ -36,7 +36,7 @@ public:
 	static void Initialize();
 
 	/** Performs shutdown procedure for the Application. This should be the last function called in 'main'. */
-	static void Terminate(int code = 0);
+	static void Terminate(int code = EXIT_SUCCESS);
 
 	/** Returns the default memory manager for this Application. */
 	FORCEINLINE static MemoryManager& GetMemoryManager()
@@ -54,10 +54,17 @@ public:
 	* NOTE: Returns a null pointer if the type was not found. */
 	static const TypeInfo* FindType(const String& name);
 
+	/** Loads the given module, if it hasn't already been loaded. */
+	static bool LoadModule(const String& name);
+
 private:
 
 	/** Returns the instance of the Application singleton. */
 	static Application& Instance();
+
+	/** Initializes all uninitialized types.
+	* Called during "Application::Initialize" and when loading modules. */
+	static void InitializeTypes();
 
 	////////////////
 	///   Data   ///
@@ -65,4 +72,5 @@ private:
 
 	MemoryManager _memoryManager;
 	Array<const TypeInfo*> _types;
+	Array<const TypeInfo*> _uninitializedTypes;
 };
