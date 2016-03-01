@@ -1,19 +1,38 @@
 // Window.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
+#include <Core/Containers/Table.h>
 #include <Core/IO/Console.h>
 #include <Core/Application.h>
 #include "../include/Client/Window.h"
+
+////////////////////////////
+///   Static Variables   ///
+
+/** Whether GLFW has been initialized. */
+bool GLFWInitialized = false;
+
+/** Table mapping GLFW windows to wrapper Windows, useful for callbacks. */
+Table<GLFWwindow*, Window*> WindowTable;
 
 ////////////////////////
 ///   Constructors   ///
 
 Window::Window(CString name, uint32 width, uint32 height)
 {
-	// Initialize GLFW
-	if (!glfwInit())
+	// Initialize GLFW if this is the first window created
+	if (!GLFWInitialized)
 	{
-		Console::WriteLine("GLFW Initialization failure");
-		Application::Terminate(EXIT_FAILURE);
+		if (!glfwInit())
+		{
+			Console::Error("GLFW could not be initialized.");
+			Application::Terminate(EXIT_FAILURE);
+		}
+		else
+		{
+			// Indicate that GLFW has been initialized, and add deinitialize function to run at program exit
+			GLFWInitialized = true;
+			std::atexit([] { glfwTerminate(); });
+		}
 	}
 
 	// Get the primary monitor
@@ -21,7 +40,6 @@ Window::Window(CString name, uint32 width, uint32 height)
 	if (!monitor)
 	{
 		Console::WriteLine("GLFW failed to get primary monitor.");
-		glfwTerminate();
 		Application::Terminate(EXIT_FAILURE);
 	}
 
@@ -30,7 +48,6 @@ Window::Window(CString name, uint32 width, uint32 height)
 	if (!videoMode)
 	{
 		Console::WriteLine("GLFW failed to get primary monitor video mode.");
-		glfwTerminate();
 		Application::Terminate(EXIT_FAILURE);
 	}
 
@@ -46,9 +63,21 @@ Window::Window(CString name, uint32 width, uint32 height)
 	if (!_window)
 	{
 		Console::WriteLine("GLFW failed to create window.");
-		glfwTerminate();
 		Application::Terminate(EXIT_FAILURE);
 	}
+
+	// Register this window with the window table
+	WindowTable[_window] = this;
+
+	// Set the window gain/lose focus function
+	glfwSetWindowFocusCallback(_window, [](GLFWwindow* window, int hasFocus)
+	{
+		// Reset the cursor position if the window has gained focus
+		if (hasFocus == GLFW_TRUE)
+		{
+			WindowTable[window]->CenterCursor();
+		}
+	});
 
 	// Center the window in the screen
 	int32 centerX = (videoMode->width - this->GetWidth()) / 2;
@@ -69,7 +98,7 @@ Window::Window(CString name, uint32 width, uint32 height)
 Window::~Window()
 {
 	glfwDestroyWindow(_window);
-	glfwTerminate();
+	WindowTable.Remove(_window);
 }
 
 ///////////////////
@@ -83,6 +112,11 @@ void Window::PollEvents()
 double Window::GetCurrentTime()
 {
 	return glfwGetTime();
+}
+
+bool Window::HasFocus() const
+{
+	return glfwGetWindowAttrib(_window, GLFW_FOCUSED) == GLFW_TRUE;
 }
 
 uint32 Window::GetWidth() const
@@ -101,6 +135,12 @@ uint32 Window::GetHeight() const
 
 Vec2 Window::GetCursorPosition() const
 {
+	// Make sure the window has focus
+	if (!this->HasFocus())
+	{
+		return Vec2::Zero;
+	}
+
 	double x;
 	double y;
 	glfwGetCursorPos(_window, &x, &y);

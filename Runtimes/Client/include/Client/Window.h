@@ -27,6 +27,9 @@ public:
 	/** Returns the current system time. */
 	static double GetCurrentTime();
 	
+	/** Returns whether this Window has mouse and keyboard focus. */
+	bool HasFocus() const;
+
 	/** Returns the width of this window. */
 	uint32 GetWidth() const;
 
@@ -52,5 +55,5 @@ public:
 	///   Data   ///
 private:
 
-	GLFWwindow* _window;
+	GLFWwindow* _window = nullptr;
 };
