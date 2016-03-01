@@ -19,9 +19,6 @@ namespace ExampleGame
 	{
 		Base::OnSpawn();
 
-		Capsule = this->Connect<Willow::CapsuleComponent>();
-		View = this->Attach<Willow::CameraComponent>();
-
 		GetWorld().Events.Bind("Move", *this, &FPSCharacter::Move);
 		GetWorld().Events.Bind("Look", *this, &FPSCharacter::Look);
 		GetWorld().Events.Bind("Click", *this, &FPSCharacter::Fire);
