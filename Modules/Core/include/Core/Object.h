@@ -15,6 +15,7 @@ protected:
 	/** Flags for constructing Objects. */
 	enum ObjectConstructionFlags
 	{
+		/** This object is constructed without a reference count block. */
 		NoReferenceCount
 	};
 
