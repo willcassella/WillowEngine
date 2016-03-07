@@ -100,7 +100,7 @@ Use the following macro in same header as the enum, at global scope:
 ```
 REFLECTABLE_ENUM(api, e)
 ```
-Where 'api' is the API macro for the module the enum is part of, and 'e' is the enum to be reflected. If the enum is part of a template (and therefor has no canonical 'module'), you may use the NO_API macro. In the source file for the enum (or any source file in the same module, or the header file in the case of template enums), use the following macro:
+Where 'api' is the API macro for the module the enum is part of, and 'e' is the enum to be reflected. If the enum is part of a template (and therefore has no canonical 'module'), you may use the NO_API macro. In the source file for the enum (or any source file in the same module, or the header file in the case of template enums), use the following macro:
 ```
 BUILD_ENUM_REFLECTION(e)
 // Describe the enum here
