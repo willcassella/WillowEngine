@@ -14,19 +14,19 @@ struct Union final
 private:
 
 	/** Honestly if you need a Union of more than 255 types you're doing something wrong. */
-	using Index = byte;
+	using Descriminant = byte;
 
 	/** Aliasis a type_sequence holding the types supported by this Union. */
 	using Seq = stde::type_sequence<T...>;
 
-	static_assert(sizeof...(T) <= std::numeric_limits<Index>::max(), "You have too many types in this Union.");
+	static_assert(sizeof...(T) <= std::numeric_limits<Descriminant>::max(), "You have too many types in this Union.");
 
 	////////////////////////
 	///   Constructors   ///
 public:
 
 	Union()
-		: _index(0)
+		: _descriminant(0)
 	{
 		// All done
 	}
@@ -69,14 +69,14 @@ public:
 	/** Returns whether this Union is currently holding a value. */
 	FORCEINLINE bool HasValue() const
 	{
-		return _index != 0;
+		return _descriminant != 0;
 	}
 
 	/** Returns whether the currently held value is an instance of the given type. */
 	template <typename F>
 	bool HasInstanceOf() const
 	{
-		return _index == Union::IndexOf<F>();
+		return this->HasValue() && _descriminant == Union::DescriminantOf<F>();
 	}
 
 	template <typename F>
@@ -108,7 +108,7 @@ public:
 	template <typename F>
 	F& GetValue() &
 	{
-		assert(_index == Union::IndexOf<F>());
+		assert(this->HasValue() && _descriminant == Union::DescriminantOf<F>());
 		return this->FastGet<F>();
 	}
 
@@ -117,7 +117,7 @@ public:
 	template <typename F>
 	const F& GetValue() const &
 	{
-		assert(_index == Union::IndexOf<F>());
+		assert(this->HasValue() && _descriminant == Union::DescriminantOf<F>());
 		return this->FastGet<F>();
 	}
 
@@ -130,13 +130,14 @@ public:
 	void SetValue(F&& value)
 	{
 		using DecayedF = std::decay_t<F>;
-		constexpr auto newIndex = Union::IndexOf<F>();
+		constexpr auto newDescriminant = Union::DescriminantOf<F>();
+		static_assert(newDescriminant != 0, "The given type does not exist in this Union.");
 
 		// If we have a currently loaded value
 		if (this->HasValue())
 		{
 			// If the currently loaded value is of the same type as the new value
-			if (_index == newIndex)
+			if (_descriminant == newDescriminant)
 			{
 				// Just assign directly
 				this->FastGet<DecayedF>() = std::forward<F>(value);
@@ -150,7 +151,7 @@ public:
 		}
 
 		_buffer.template Emplace<DecayedF>(std::forward<F>(value));
-		_index = newIndex;
+		_descriminant = newDescriminant;
 	}
 
 	/** Invokes the given function on the current value.
@@ -226,7 +227,7 @@ public:
 			using F = std::decay_t<decltype(v)>;
 			v.~F();
 		});
-		_index = 0;
+		_descriminant = 0;
 	}
 
 private:
@@ -247,7 +248,7 @@ private:
 	template <typename ThisT, typename F>
 	static bool GetValueImpl(ThisT&& self, F& out)
 	{
-		if (self._index == Union::IndexOf<F>())
+		if (self.HasValue() && self._descriminant == Union::DescriminantOf<F>())
 		{
 			out = stde::forward_like<ThisT>(self.template FastGet<std::decay_t<F>>());
 			return true;
@@ -266,7 +267,7 @@ private:
 		using Invoker = void(VoidT, FuncT&&);
 		Invoker* const invokers[] = { Union::CreateNoOpInvoker<VoidT, FuncT>(), Union::CreateInvoker<VoidT, FuncT, stde::copy_qualifiers_t<ThisT&&, T>>()... };
 
-		invokers[self._index](self._buffer.GetPointer(), std::forward<FuncT>(func));
+		invokers[self._descriminant](self._buffer.GetPointer(), std::forward<FuncT>(func));
 		return self.HasValue();
 	}
 
@@ -311,31 +312,25 @@ private:
 		};
 	}
 
-	/** Returns the index of the given type. */
+	/** Returns the descriminant for the given type. */
 	template <typename S>
-	static constexpr Index IndexOf()
+	static constexpr Descriminant DescriminantOf()
 	{
-		return IndexOf<std::decay_t<S>>(1, Seq{});
+		return Union::DescriminantOf<std::decay_t<S>>(1, Seq{});
 	}
 
-	/** Recursively finds the index of the given type. */
+	/** Recursively finds the descriminant for the given type. */
 	template <typename S, typename C, typename ... F>
-	static constexpr Index IndexOf(Index current, stde::type_sequence<C, F...>)
+	static constexpr Descriminant DescriminantOf(Descriminant current, stde::type_sequence<C, F...>)
 	{
-		return std::is_same<S, C>::value ? current : IndexOf<S>(current + 1, stde::type_sequence<F...>());
+		return std::is_same<S, C>::value ? current : Union::DescriminantOf<S>(current + 1, stde::type_sequence<F...>{});
 	}
 
-	/** End case, never actually reached. */
+	/** End case, type does not exist in this Union. */
 	template <typename S>
-	static constexpr Index IndexOf(Index /*current*/, stde::type_sequence<>)
+	static constexpr Descriminant DescriminantOf(Descriminant /*current*/, stde::type_sequence<>)
 	{
 		return 0;
-	}
-
-	/** Returns the size of the largest type among the types suppored by this Union. */
-	static constexpr std::size_t GetMaxSize()
-	{
-		return Union::GetMaxSize(Seq());
 	}
 
 	/** Returns the size of the largest type among the types suppored by this Union. */
@@ -352,16 +347,10 @@ private:
 	}
 
 	/** Returns the maximum alignment among the types supported by this Union. */
-	static constexpr std::size_t GetMaxAlignment()
-	{
-		return Union::GetMaxAlignment(Seq());
-	}
-
-	/** Returns the maximum alignment among the types supported by this Union. */
 	template <typename F, typename ... MoreF>
 	static constexpr std::size_t GetMaxAlignment(stde::type_sequence<F, MoreF...>)
 	{
-		return std::max(alignof(F), Union::GetMaxAlignment(stde::type_sequence<MoreF...>{}));
+		return std::max(alignof(F&), Union::GetMaxAlignment(stde::type_sequence<MoreF...>{}));
 	}
 
 	/** Returns the maximum alignment among the types supported by this Union. */
@@ -430,15 +419,53 @@ public:
 		return *this;
 	}
 
+	/** Performs an equality comparison on two Unions.
+	* NOTE: If the two Unions contain different types, this returns 'false'. */
+	friend bool operator==(const Union& lhs, const Union& rhs)
+	{
+		bool result = false;
+
+		// Invoke the comparison operator if both unions contain the same type.
+		// Note that we don't have to check for the null descriminant, since the function will not be invoked at all in that case
+		if (lhs._descriminant == rhs._descriminant)
+		{
+			lhs.Invoke([&](const auto& value)
+			{
+				result = (value == rhs.GetValue<decltype(value)>());
+			});
+		}
+
+		return result;
+	}
+
+	/** Performs an inequality comparison on two Unions.
+	* NOTE: If the two Unions contain different types, this returns 'false'. */
+	friend bool operator!=(const Union& lhs, const Union& rhs)
+	{
+		bool result = false;
+
+		// Invoke the comparison operator if both unions contain the same type.
+		// Note that we don't have to check for the null descriminant, since the function will not be invoked at all in that cases
+		if (lhs._descriminant == rhs._descriminant)
+		{
+			lhs.Invoke([&](const auto& value)
+			{
+				result = (value != rhs.GetValue<decltype(value)>());
+			});
+		}
+
+		return result;
+	}
+
 	////////////////
 	///   Data   ///
 private:
 
 	// For some reason, ONLY ON MSVC, I have to store these as a static constexpr variable,
 	// rather than just putting the function call directly into the template
-	static constexpr std::size_t Size = GetMaxSize();
-	static constexpr std::size_t Alignment = GetMaxAlignment();
+	static constexpr std::size_t Size = GetMaxSize(Seq{});
+	static constexpr std::size_t Alignment = GetMaxAlignment(Seq{});
 
-	Index _index;
+	Descriminant _descriminant;
 	StaticBuffer<Size, Alignment> _buffer;
 };
