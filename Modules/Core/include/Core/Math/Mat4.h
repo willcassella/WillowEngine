@@ -146,11 +146,11 @@ public:
 		z = rot.Z;
 		w = rot.W;
 
-		return Mat4(
+		return Mat4{
 			1 - 2 * y*y - 2 * z*z, 2 * x*y + 2 * z*w, 2 * x*z - 2 * y*w, 0,
 			2 * x*y - 2 * z*w, 1 - 2 * x*x - 2 * z*z, 2 * y*z + 2 * x*w, 0,
 			2 * x*z + 2 * y*w, 2 * y*z - 2 * x*w, 1 - 2 * x*x - 2 * y*y, 0,
-			0, 0, 0, 1);
+			0, 0, 0, 1 };
 	}
 
 	/** Gets the value at the specified column and row */

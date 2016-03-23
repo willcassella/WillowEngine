@@ -46,6 +46,9 @@ private:
 		move._value = nullptr;
 		move._refCounter = nullptr;
 	}
+
+public:
+
 	~Borrowed()
 	{
 		if (_refCounter)

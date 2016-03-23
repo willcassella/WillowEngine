@@ -22,19 +22,26 @@ public:
 		// All done
 	}
 
+	/** Performs a component-wise initialization of this Quat. */
+	Quat(float x, float y, float z, float w)
+		: X(x), Y(y), Z(z), W(w)
+	{
+		// All done
+	}
+
 	/** Constructs a new Quaternion
 	* 'axis' - The axis about which this rotation represents
 	* 'angle' - The amount to rotate about 'axis' */
 	Quat(const Vec3& axis, Angle angle)
 	{
 		// Make sure the axis vector is normalized
-		Vec3 normAxis = axis.Normalize();
-		Scalar sinHalfAngle = std::sin(angle * Scalar(0.5));
+		auto normAxis = axis.Normalize();
+		Scalar sinHalfAngle = std::sin(angle * Scalar{ 0.5 });
 
-		X = normAxis.X * sinHalfAngle;
-		Y = normAxis.Y * sinHalfAngle;
-		Z = normAxis.Z * sinHalfAngle;
-		W = std::cos(angle * Scalar(0.5));
+		this->X = normAxis.X * sinHalfAngle;
+		this->Y = normAxis.Y * sinHalfAngle;
+		this->Z = normAxis.Z * sinHalfAngle;
+		this->W = std::cos(angle * Scalar(0.5));
 	}
 
 	//////////////////

@@ -134,7 +134,7 @@ public:
 
 	Borrowed<T> Borrow() const
 	{
-		return Borrow(_value, _refCounter);
+		return{ _value, _refCounter };
 	}
 
 private:
@@ -316,6 +316,39 @@ private:
 	T* _value;
 	ReferenceCounter* _refCounter;
 };
+
+//////////////////////
+///   Operations   ///
+
+namespace Operations
+{
+	/** Implementation of 'ToArchive' for Weak */
+	template <typename T>
+	struct ToArchive < Weak<T> > final
+	{
+		static void Function(const Weak<T>& value, ArchiveWriter& writer)
+		{
+			writer.SetValue(value.GetPointer());
+		}
+
+		static constexpr bool Supported = true;
+	};
+
+	/** Implementation of 'FromArchive' for Weak */
+	template <typename T>
+	struct FromArchive < Weak<T> > final
+	{
+		static void Function(Weak<T>& value, const ArchiveReader& reader)
+		{
+			T* pointer;
+			reader.GetValue(pointer);
+
+			value = pointer;
+		}
+
+		static constexpr bool Supported = true;
+	};
+}
 
 //////////////////////
 ///   Reflection   ///
