@@ -3,7 +3,6 @@
 
 #include <Core/Object.h>
 #include <Core/Math/Mat4.h>
-#include <Core/Misc/SerializeableObject.h>
 #include "config.h"
 #include "Forwards/Engine.h"
 
@@ -24,7 +23,7 @@ namespace Willow
 	};
 
 	/** Base for all "Objects" in the game (Entities, Components, Actors, etc). */
-	class ENGINE_API GameObject : public Object, public SerializeableObject<GameObject>
+	class ENGINE_API GameObject : public Object
 	{
 		///////////////////////
 		///   Information   ///
@@ -34,8 +33,8 @@ namespace Willow
 		EXTENDS(Object)
 		friend class World;
 
-		///////////////////////
-		///   Inner Types   ///
+		/////////////////
+		///   Types   ///
 	public:
 
 		/** Unique identifier for GameObjects. */
@@ -44,13 +43,21 @@ namespace Willow
 		/** The possible states for a GameObject to exist in, in order. */
 		enum class State : byte
 		{
-			/** This GameObject has just been constructed, and has not been initialized yet. */
+			/** This GameObject has just been constructed, but has not been initialized yet. You may not make any assertions about the
+			* validity of its state at this point in time. */
 			Uninitialized,
 
-			/** This GameObject has been successfully spawned. */
+			/** This GameObject has been initialized. It has an ID and exists in a World. All of its properties have been set,
+			* and it only has left to run its 'OnSpawn' handler. */
+			Initialized,
+
+			/** This GameObject is currently executing its 'OnSpawn' handler. */
+			Spawning,
+
+			/** This GameObject has been successfully spawned, you may now consider it a fully-active GameObject. */
 			Spawned,
 
-			/** This GameObject has been destroyed. */
+			/** This GameObject has been destroyed, and will be deconstructed at the end of the frame. */
 			Destroyed
 		};
 
@@ -58,22 +65,44 @@ namespace Willow
 		///   Methods   ///
 	public:
 
+		virtual void ToArchive(ArchiveWriter& writer) const;
+
+		virtual void FromArchive(const ArchiveReader& reader);
+
 		/** Returns the ID of this GameObject. */
 		FORCEINLINE ID GetID() const
 		{
 			return _id;
 		}
 
+		/** Returns the current state of this GameObject. */
+		FORCEINLINE State GetState() const
+		{
+			return _state;
+		}
+
+		/** Returns whether this GameObject has been initialized. */
+		FORCEINLINE bool IsInitialized() const
+		{
+			return this->GetState() >= State::Initialized;
+		}
+
+		/** Return whether this GameObject is currently spawning. */
+		FORCEINLINE bool IsSpawning() const
+		{
+			return this->GetState() == State::Spawning;
+		}
+
 		/** Returns whether this GameObject has completed its spawning procedure. */
 		FORCEINLINE bool HasSpawned() const
 		{
-			return _state >= State::Spawned;
+			return this->GetState() >= State::Spawned;
 		}
 
 		/** Returns whether this GameObject has been destroyed. */
 		FORCEINLINE bool IsDestroyed() const
 		{
-			return _state >= State::Destroyed;
+			return this->GetState() == State::Destroyed;
 		}
 
 		/** Returns a reference to the World that this GameObject belongs to. */
@@ -95,6 +124,12 @@ namespace Willow
 		/** Returns the parent of this GameObject.
 		* NOTE: Returns 'null' if this GameObject has no parent. */
 		virtual const GameObject* GetParent() const = 0;
+		 
+		/** Returns whether this GameObject is the root of a parent-child hierarchy. */
+		FORCEINLINE bool IsRoot() const
+		{
+			return this->GetParent() == nullptr;
+		}
 
 		/** Returns the location of this GameObject in local space. */
 		virtual Vec3 GetLocation() const = 0;
@@ -106,7 +141,7 @@ namespace Willow
 		virtual void SetLocation(const Vec3& location) = 0;
 
 		/** Sets the location of this GameObject in world space. */
-		virtual void SetWorldLocation(const Vec3& lcoation) = 0;
+		virtual void SetWorldLocation(const Vec3& location) = 0;
 
 		/** Translates this GameObject along the given vector in local space. */
 		virtual void Translate(const Vec3& vec) = 0;
@@ -144,6 +179,10 @@ namespace Willow
 		/** Returns a matrix of the world transformation for this GameObject. */
 		virtual Mat4 GetTransformationMatrix() const = 0;
 
+		/** Clones this GameObject, returning a new instance in the 'Initialized' state.
+		* 'world' - The world to clone this GameObject into. */
+		Owned<GameObject> Clone(World& world) const;
+
 		/** Destroys this GameObject. TODO: Add delay */
 		void Destroy();
 
@@ -151,6 +190,8 @@ namespace Willow
 
 		/** Handles spawning procedure. */
 		virtual void OnSpawn();
+
+		virtual void OnClone(GameObject& clone, World& world);
 
 		/** Handles destruction procedure. */
 		virtual void OnDestroy();

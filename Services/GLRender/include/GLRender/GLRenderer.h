@@ -3,7 +3,7 @@
 
 #include <Core/Math/Vec3.h>
 #include <Engine/World.h>
-#include <Engine/ServiceInterfaces/IRenderer.h>
+#include <Engine/Systems/RenderSystem.h>
 #include <Engine/Assets/Shader.h>
 #include <Engine/Assets/Texture.h>
 #include <Engine/Assets/Material.h>
@@ -15,13 +15,13 @@
 
 namespace Willow
 {
-	class GLRENDER_API GLRenderer final : public IRenderer
+	class GLRENDER_API GLRenderer final : public RenderSystem
 	{
 		////////////////////////
 		///   Constructors   ///
 	public:
 
-		GLRenderer(uint32 width, uint32 height);
+		GLRenderer(World& world, uint32 width, uint32 height);
 		GLRenderer(const GLRenderer& copy) = delete;
 		GLRenderer(GLRenderer&& move) = delete;
 		~GLRenderer() override;

@@ -1,7 +1,8 @@
 // Entity.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "Forwards/Engine.h"
+#include <memory>
+#include "Forwards/Physics.h"
 #include "GameObject.h"
 #include "Transform.h"
 
@@ -23,11 +24,32 @@ namespace Willow
 		friend class World;
 		friend class Component;
 
+		/////////////////
+		///   Types   ///
+	public:
+
+		/** The different physics modes an Entity can be in. */
+		enum class PhysicsMode : byte
+		{
+			/* This object does not participate in the physics simulation at all. */
+			Transient,
+
+			/** This object can detect collisions, but does not otherwise participate in the physics simulation. */
+			Sensor,
+
+			/* This object affects the physics simulation, but is not affected by it. */
+			Kinematic,
+
+			/* This object both affects, and is affected by the physics simulation. */
+			Dynamic
+		};
+
 		////////////////////////
 		///   Constructors   ///
 	public:
 
 		Entity();
+		~Entity() override;
 
 		///////////////////
 		///   Methods   ///
@@ -197,24 +219,82 @@ namespace Willow
 			return result;
 		}
 
+		/** Returns the current PhysicsMode of this Entity. */
+		PhysicsMode GetPhysicsMode() const;
+
+		/** Sets the current PhysicsMode of this Entity. */
+		void SetPhysicsMode(PhysicsMode mode);
+
+		/** Returns the mass of this Entity. */
+		float GetMass() const;
+
+		/** Sets the mass of this Entity. */
+		void SetMass(float mass);
+
+		/** Applys the given force to this Entity. 
+		* NOTE: If this Entity's physics mode is not 'PhysicsMode::Dynamic', this does nothing. */
+		void ApplyForce(const Vec3& force, const Vec3& offset = Vec3::Zero);
+
+		/** Applys the given impulse to this Entity.
+		* NOTE: If this Entity's physics mode is not 'PhysicsMode::Dynamic', this does nothing. */
+		void ApplyImpulse(const Vec3& impulse, const Vec3& offset = Vec3::Zero);
+
+		/** Applys the given torque to this Entity.
+		* NOTE: If this Entity's physics mode is not 'PhysicsMode::Dynamic', this does nothing. */
+		void ApplyTorque(const Vec3& torque);
+
+		/** Applys the given torque impulse to this Entity.
+		* NOTE: If this Entity's physics mode is not 'PhysicsMode::Dynamic', this does nothing. */
+		void ApplyTorqueImpulse(const Vec3& torque);
+
+		/** Updates this Entities Inertia and Mass.
+		* NOTE: This method is for internal use only. */
+		void INTERNAL_UpdateInertia();
+
+		/** Returns a pointer to the collider for this Entity.
+		* NOTE: This method is for internal use only. */
+		EntityCollider* INTERNAL_GetCollider();
+
+		/** Returns a pointer to the collider for this Entity.
+		* NOTE: This method is for internal use only. */
+		const EntityCollider* INTERNAL_GetCollider() const;
+
 	protected:
+
+		void OnSpawn() override;
 
 		void OnDestroy() override;
 
 	private:
 
-		void Editor_SetName(String name);
+		void EDITOR_SetName(String name);
+
+		/** Initializes this Entity's physics state. */
+		void InitializePhysics();
+
+		/** Destroys this Entity's physics state. */
+		void DestroyPhysics();
 
 		////////////////
 		///   Data   ///
 	private:
 
+		/** Entity data */
 		String _name;
 		World* _world;
 		Array<Component*> _components;
 
+		/** Spatial data */
 		Transform _transform;
 		Entity* _parent;
 		Array<Entity*> _children;
+
+		/** Physics data */
+		std::unique_ptr<PhysicsBody> _physicsBody;
+		std::unique_ptr<EntityCollider> _collider;
+		float _cachedMass = 1.f;
+		PhysicsMode _physicsMode = PhysicsMode::Transient;
 	};
 }
+
+REFLECTABLE_ENUM(ENGINE_API, Willow::Entity::PhysicsMode)

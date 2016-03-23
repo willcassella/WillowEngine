@@ -116,7 +116,7 @@ double Window::GetCurrentTime()
 
 bool Window::HasFocus() const
 {
-	return glfwGetWindowAttrib(_window, GLFW_FOCUSED);
+	return glfwGetWindowAttrib(_window, GLFW_FOCUSED) == 1;
 }
 
 uint32 Window::GetWidth() const

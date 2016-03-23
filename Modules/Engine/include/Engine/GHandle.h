@@ -19,9 +19,9 @@ namespace Willow
 			// All done
 		}
 		GHandle(T& value)
-			: _id(value.GetID())
+			: _id(value.GameObject::GetID())
 		{
-			assert(_id != 0 /** You may not add create a handle to an Object that does not exist within the world. */);
+			assert(_id != 0 /** You may not add create a handle to a GameObject that has not been initialized. */);
 		}
 		GHandle(std::nullptr_t)
 			: GHandle()

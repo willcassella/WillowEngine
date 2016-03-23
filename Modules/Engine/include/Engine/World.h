@@ -1,11 +1,10 @@
 // World.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <memory>
 #include <Core/Containers/Queue.h>
 #include <Core/Event/EventManager.h>
-#include "Forwards/Physics.h"
 #include "Component.h"
+#include "System.h"
 
 /////////////////
 ///   Types   ///
@@ -33,6 +32,7 @@ namespace Willow
 		///   Fields   ///
 	public:
 
+		/** World update settings. */
 		EventManager Events;
 		float TimeDilation = 1.f;
 		float TimeStep = 1.f / 60;
@@ -137,21 +137,40 @@ namespace Willow
 			return result;
 		}
 
-		/** Returns the physics world for this World. */
-		FORCEINLINE PhysicsWorld& GetPhysicsWorld()
-		{
-			return *_physicsWorld;
-		}
-
-		/** Returns the physics world for this World. */
-		FORCEINLINE const PhysicsWorld& GetPhysicsWorld() const
-		{
-			return *_physicsWorld;
-		}
+		/** Destroys the given GameObject at the end of the frame. */
+		void DestroyGameObject(GameObject& object);
 
 		/** Spawns the given GameObject into this World.
 		* NOTE: The caller is responsible for initializing all state of this GameObject other than the ID. */
 		void SpawnGameObject(Owned<GameObject> owner);
+
+		/** Adds the given system to this World. */
+		template <typename T>
+		T& AddSystem()
+		{
+			auto owner = New<T>(*this);
+			auto& system = *owner;
+
+			_systems.Add(std::move(owner));
+			return system;
+		}
+
+		/** Returns the current gravity in this World. */
+		Vec3 GetGravity() const
+		{
+			return _gravity;
+		}
+
+		/** Sets the gravity in this World. */
+		void SetGravity(const Vec3& gravity);
+
+		/** Returns the physics world for this World. 
+		* NOTE: This method is for internal use only. */
+		PhysicsWorld& INTERNAL_GetPhysicsWorld();
+
+		/** Returns the physics world for this World. 
+		* NOTE: This method is for internal use only. */
+		const PhysicsWorld& INTERNAL_GetPhysicsWorld() const;
 
 		////////////////
 		///   Data   ///
@@ -163,7 +182,10 @@ namespace Willow
 
 		Table<GameObject::ID, Entity*> _entities;
 		Table<Component::ID, Component*> _components;
+		Array<Owned<System>> _systems;
 
+		/** Physics state. */
+		Vec3 _gravity;
 		std::unique_ptr<PhysicsWorld> _physicsWorld;
 	};
 

@@ -1,8 +1,9 @@
 // GLRender.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
 #include <Core/IO/Console.h>
-#include <Engine/Components/StaticMeshComponent.h>
-#include <Engine/Components/CameraComponent.h>
+#include <Engine/Components/Rendering/StaticMeshComponent.h>
+#include <Engine/Components/Rendering/CameraComponent.h>
+#include <Engine/Components/Rendering/LineStructureComponent.h>
 #include "glew.h"
 #include "../include/GLRender/GLRenderer.h"
 
@@ -13,10 +14,15 @@ namespace Willow
 	static_assert(std::is_same<GLValue, GLuint>::value, "GLValue does not match GLuint.");
 	static_assert(std::is_same<GLInteger, GLint>::value, "GLInteger does not match GLint.");
 
+	BufferID lineBuffer;
+	BufferID lineVAO;
+	BufferID lineProgram;
+
 	////////////////////////
 	///   Constructors   ///
 
-	GLRenderer::GLRenderer(uint32 width, uint32 height)
+	GLRenderer::GLRenderer(World& world, uint32 width, uint32 height)
+		: RenderSystem(world)
 	{
 		// Initialize GLEW
 		glewExperimental = GL_TRUE;
@@ -29,6 +35,7 @@ namespace Willow
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		glDisable(GL_STENCIL_TEST);
+		glLineWidth(1.5f);
 
 		// Get the default framebuffer
 		glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_defaultFrameBuffer);
@@ -164,6 +171,22 @@ namespace Willow
 		{
 			Console::WriteLine("An error occurred during startup: @", error);
 		}
+
+		/// DEBUG DRAW CODE
+		glGenVertexArrays(1, &lineVAO);
+		glBindVertexArray(lineVAO);
+		
+		glGenBuffers(1, &lineBuffer);
+		Shader lineVShader{ "Content/Shaders/line.vert" };
+		Shader lineFShader{ "Content/Shaders/line.frag" };
+		GLShader glLineVShader{ *this, lineVShader };
+		GLShader glLineFShader{ *this, lineFShader };
+		lineProgram = glCreateProgram();
+		glAttachShader(lineProgram, glLineVShader.GetID());
+		glAttachShader(lineProgram, glLineFShader.GetID());
+		glLinkProgram(lineProgram);
+		glDetachShader(lineProgram, glLineVShader.GetID());
+		glDetachShader(lineProgram, glLineFShader.GetID());
 	}
 
 	GLRenderer::~GLRenderer()
@@ -218,6 +241,39 @@ namespace Willow
 			// I'm gonna be using GLDrawArrays for now, instead of GLDrawElements.
 			// Luckily, I wasn't actually taking advantage of GLDrawElements before, so all the old mesh files still work
 			glDrawArrays(GL_TRIANGLES, 0, mesh.GetNumVertices());
+		}
+
+		// Render each LineStructureComponent in the world
+		glBindVertexArray(lineVAO);
+		glUseProgram(lineProgram);
+		glBindBuffer(GL_ARRAY_BUFFER, lineBuffer);
+		for (auto lineStructure : world.Enumerate<LineStructureComponent>())
+		{
+			Array<Vec3> points(lineStructure->Lines.Size() * 2);
+
+			for (const auto& line : lineStructure->Lines)
+			{
+				points.Add(line.Start);
+				points.Add(line.Color);
+				points.Add(line.End);
+				points.Add(line.Color);
+			}
+
+			if (!points.IsEmpty())
+			{
+				auto linePos = glGetAttribLocation(lineProgram, "vPosition");
+				glEnableVertexAttribArray(linePos);
+				glVertexAttribPointer(linePos, 3, GL_FLOAT, GL_FALSE, sizeof(Vec3) * 2, nullptr);
+
+				auto lineColor = glGetAttribLocation(lineProgram, "vColor");
+				glEnableVertexAttribArray(lineColor);
+				glVertexAttribPointer(lineColor, 3, GL_FLOAT, GL_FALSE, sizeof(Vec3) * 2, (void*)sizeof(Vec3));
+
+				glUniformMatrix4fv(0, 1, false, (const float*)&view);
+				glUniformMatrix4fv(1, 1, false, (const float*)&proj);
+				glBufferData(GL_ARRAY_BUFFER, points.Size() * sizeof(Vec3), points.CArray(), GL_DYNAMIC_DRAW);
+				glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(points.Size()));
+			}
 		}
 
 		// Bind the default framebuffer for drawing

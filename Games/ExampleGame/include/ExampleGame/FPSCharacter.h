@@ -2,8 +2,8 @@
 #pragma once
 
 #include <Core/Memory/Pointers/Weak.h>
-#include <Engine/Components/CameraComponent.h>
-#include <Engine/Components/CapsuleComponent.h>
+#include <Engine/Components/Rendering/CameraComponent.h>
+#include <Engine/Components/Physics/CapsuleColliderComponent.h>
 #include "config.h"
 
 namespace ExampleGame
@@ -22,7 +22,7 @@ namespace ExampleGame
 	public:
 
 		Weak<Willow::CameraComponent> View;
-		Weak<Willow::CapsuleComponent> Capsule;
+		Weak<Willow::CapsuleColliderComponent> Capsule;
 
 		///////////////////
 		///   Methods   ///
@@ -37,5 +37,6 @@ namespace ExampleGame
 		void Move(Vec2 direction);
 		void Look(Vec2 direction);
 		void Fire();
+		void Jump();
 	};
 }

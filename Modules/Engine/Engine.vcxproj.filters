@@ -20,11 +20,26 @@
     <Filter Include="source\Components">
       <UniqueIdentifier>{30595b4a-e14f-4fc3-ac79-50b01dee0520}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\ServiceInterfaces">
-      <UniqueIdentifier>{52017b75-ea13-45c3-aec8-8736b670de11}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\Forwards">
       <UniqueIdentifier>{4dc7fded-fff2-4fb0-9045-870ca456cf4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Systems">
+      <UniqueIdentifier>{52017b75-ea13-45c3-aec8-8736b670de11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Physics">
+      <UniqueIdentifier>{7da680cb-a893-4372-a594-bfe92d12f90b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Components\Physics">
+      <UniqueIdentifier>{e2f6c33d-62c7-4a3c-ab5a-50064873671d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Components\Rendering">
+      <UniqueIdentifier>{8fcc8259-1325-4071-aec7-ba094be31b6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Components\Rendering">
+      <UniqueIdentifier>{0efa7680-8d0f-4ed4-89b8-8d6d67b340fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Components\Physics">
+      <UniqueIdentifier>{5de3a82a-935d-4fc5-a04f-65a8b855aa3d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -49,26 +64,38 @@
     <ClCompile Include="source\World.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="source\Components\CameraComponent.cpp">
-      <Filter>source\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Components\CapsuleComponent.cpp">
-      <Filter>source\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Components\LightComponent.cpp">
-      <Filter>source\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Components\PhysicalComponent.cpp">
-      <Filter>source\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Components\StaticMeshComponent.cpp">
-      <Filter>source\Components</Filter>
-    </ClCompile>
     <ClCompile Include="source\Entity.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="source\GameObject.cpp">
       <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\System.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Components\Physics\CapsuleColliderComponent.cpp">
+      <Filter>source\Components\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Components\Physics\ColliderComponent.cpp">
+      <Filter>source\Components\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Components\Physics\SphereComponent.cpp">
+      <Filter>source\Components\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Components\Physics\StaticMeshStaticColliderComponent.cpp">
+      <Filter>source\Components\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Components\Rendering\CameraComponent.cpp">
+      <Filter>source\Components\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Components\Rendering\LightComponent.cpp">
+      <Filter>source\Components\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Components\Rendering\LineStructureComponent.cpp">
+      <Filter>source\Components\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Components\Rendering\StaticMeshComponent.cpp">
+      <Filter>source\Components\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -84,26 +111,8 @@
     <ClInclude Include="include\Engine\Assets\StaticMesh.h">
       <Filter>include\Assets</Filter>
     </ClInclude>
-    <ClInclude Include="include\Engine\ServiceInterfaces\IRenderer.h">
-      <Filter>include\ServiceInterfaces</Filter>
-    </ClInclude>
     <ClInclude Include="include\Engine\Forwards\Engine.h">
       <Filter>include\Forwards</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engine\Components\CameraComponent.h">
-      <Filter>include\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engine\Components\CapsuleComponent.h">
-      <Filter>include\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engine\Components\LightComponent.h">
-      <Filter>include\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engine\Components\PhysicalComponent.h">
-      <Filter>include\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engine\Components\StaticMeshComponent.h">
-      <Filter>include\Components</Filter>
     </ClInclude>
     <ClInclude Include="include\Engine\Forwards\Physics.h">
       <Filter>include\Forwards</Filter>
@@ -129,11 +138,50 @@
     <ClInclude Include="include\Engine\GameObject.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="source\Physics.h">
-      <Filter>source</Filter>
+    <ClInclude Include="include\Engine\System.h">
+      <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Engine\Components\RigidBodyComponent.h">
-      <Filter>include\Components</Filter>
+    <ClInclude Include="include\Engine\Systems\RenderSystem.h">
+      <Filter>include\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Physics\PhysicsBody.h">
+      <Filter>source\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Physics\Physics.h">
+      <Filter>source\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Physics\PhysicsWorld.h">
+      <Filter>source\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Physics\BulletTriangleMesh.h">
+      <Filter>source\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Components\Rendering\CameraComponent.h">
+      <Filter>include\Components\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Components\Rendering\LightComponent.h">
+      <Filter>include\Components\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Components\Rendering\LineStructureComponent.h">
+      <Filter>include\Components\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Components\Rendering\StaticMeshComponent.h">
+      <Filter>include\Components\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Components\Physics\CapsuleColliderComponent.h">
+      <Filter>include\Components\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Components\Physics\ColliderComponent.h">
+      <Filter>include\Components\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Components\Physics\SphereColliderComponent.h">
+      <Filter>include\Components\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Components\Physics\StaticMeshStaticColliderComponent.h">
+      <Filter>include\Components\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Physics\EntityCollider.h">
+      <Filter>source\Physics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,6 +1,6 @@
 // LightComponent.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
-#include "../../include/Engine/Components/LightComponent.h"
+#include "../../../include/Engine/Components/Rendering/LightComponent.h"
 
 //////////////////////
 ///   Reflection   ///

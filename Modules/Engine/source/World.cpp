@@ -1,8 +1,9 @@
 // World.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
 #include "../include/Engine/World.h"
-#include "../include/Engine/ServiceInterfaces/IRenderer.h"
-#include "Physics.h"
+#include "../include/Engine/Components/Rendering/LineStructureComponent.h"
+#include "../include/Engine/Systems/RenderSystem.h"
+#include "Physics/PhysicsWorld.h"
 
 //////////////////////
 ///   Reflection   ///
@@ -17,6 +18,45 @@ BUILD_REFLECTION(Willow::World)
 .Field("TimeDilation", &World::TimeDilation, "The time dilation of the world. Default is 1.")
 .Field("TimeStep", &World::TimeStep, "The amount of time (ms) that each update of the world represents.");
 
+Willow::LineStructureComponent* lineStructure;
+
+class DebugDraw : public btIDebugDraw
+{
+	void drawLine(const btVector3& from, const btVector3& to, const btVector3& color) override
+	{
+		Willow::LineStructureComponent::Line line;
+		line.Start = Willow::ConvertFromBullet(from);
+		line.End = Willow::ConvertFromBullet(to);
+		line.Color = Willow::ConvertFromBullet(color);
+		lineStructure->Lines.Add(line);
+	}
+
+	void drawContactPoint(const btVector3& /*PointOnB*/, const btVector3& /*normalOnB*/, btScalar /*distance*/, int /*lifeTime*/, const btVector3& /*color*/) override
+	{
+		// Do nothing
+	}
+
+	void reportErrorWarning(const char* warningString) override
+	{
+		Console::Warning("Bullet: @", warningString);
+	}
+
+	void draw3dText(const btVector3& /*location*/, const char* /*textString*/) override
+	{
+		// Do nothing
+	}
+
+	void setDebugMode(int /*debugMode*/) override
+	{
+		// Do nothing
+	}
+
+	int	getDebugMode() const override
+	{
+		return DBG_DrawWireframe | DBG_DrawAabb;
+	}
+};
+
 namespace Willow
 {
 	////////////////////////
@@ -26,6 +66,7 @@ namespace Willow
 	{
 		_physicsWorld = std::make_unique<PhysicsWorld>();
 		_nextGameObjectID = 1;
+		_physicsWorld->GetDynamicsWorld().setDebugDrawer(new DebugDraw{});
 	}
 
 	World::~World()
@@ -99,11 +140,15 @@ namespace Willow
 					this->SpawnGameObject(std::move(object));
 				}
 			});
-		});	
+		});
+
+		lineStructure = &this->Spawn<LineStructureComponent>();
 	}
 
 	void World::Update()
 	{
+		auto quat = btQuaternion::getIdentity();
+
 		Events.DispatchEvent("Update", this->TimeDilation);
 		Events.Flush();
 
@@ -111,11 +156,28 @@ namespace Willow
 		while (!_destroyedObjects.IsEmpty())
 		{
 			auto object = _destroyedObjects.Pop();
+			_entities.Remove(object->GetID());
+			_components.Remove(object->GetID());
 			_gameObjects.Remove(object->GetID());
 		}
 
 		// Simulate physics
 		_physicsWorld->GetDynamicsWorld().stepSimulation(TimeStep, 10);
+		
+		lineStructure->Lines.Clear();
+		_physicsWorld->GetDynamicsWorld().debugDrawWorld();
+	}
+
+	void World::DestroyGameObject(GameObject& object)
+	{
+		assert(object._state >= GameObject::State::Spawned);
+
+		if (object._state != GameObject::State::Destroyed)
+		{
+			object._state = GameObject::State::Destroyed;
+			_destroyedObjects.Push(&object);
+			object.OnDestroy();
+		}
 	}
 
 	void World::SpawnGameObject(Owned<GameObject> owner)
@@ -125,6 +187,7 @@ namespace Willow
 		// Give the object an ID
 		assert(object._state == GameObject::State::Uninitialized);
 		object._id = _nextGameObjectID++;
+		object._state = GameObject::State::Initialized;
 		
 		// Add it to the world
 		_gameObjects[object.GetID()] = std::move(owner);
@@ -139,7 +202,18 @@ namespace Willow
 		}
 
 		// Spawn it
+		object._state = GameObject::State::Spawning;
 		object.OnSpawn();
 		object._state = GameObject::State::Spawned;
+	}
+
+	PhysicsWorld& World::INTERNAL_GetPhysicsWorld()
+	{
+		return *_physicsWorld;
+	}
+
+	const PhysicsWorld& World::INTERNAL_GetPhysicsWorld() const
+	{
+		return *_physicsWorld;
 	}
 }

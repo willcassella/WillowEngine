@@ -60,7 +60,7 @@ namespace Willow
 		///   Methods   ///
 	public:
 
-		/** Returns the lengths of a bounding box containing this StaticMesh; */
+		/** Returns the lengths of a bounding box containing this StaticMesh. */
 		Vec3 GetBoundingBox() const;
 	};
 }

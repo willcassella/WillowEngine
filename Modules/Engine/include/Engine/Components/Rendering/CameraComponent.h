@@ -2,7 +2,7 @@
 #pragma once
 
 #include <Core/Math/Mat4.h>
-#include "../Component.h"
+#include "../../Component.h"
 
 namespace Willow
 {

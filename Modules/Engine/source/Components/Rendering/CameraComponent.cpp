@@ -1,7 +1,7 @@
 // CameraComponent.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
-#include "../../include/Engine/World.h"
-#include "../../include/Engine/Components/CameraComponent.h"
+#include "../../../include/Engine/World.h"
+#include "../../../include/Engine/Components/Rendering/CameraComponent.h"
 
 //////////////////////
 ///   Reflection   ///

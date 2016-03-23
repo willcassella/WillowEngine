@@ -2,9 +2,9 @@
 #pragma once
 
 #include <Resource/AssetPtr.h>
-#include "../Component.h"
-#include "../Assets/StaticMesh.h"
-#include "../Assets/Material.h"
+#include "../../Component.h"
+#include "../../Assets/StaticMesh.h"
+#include "../../Assets/Material.h"
 
 namespace Willow
 {

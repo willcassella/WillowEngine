@@ -3,10 +3,11 @@
 #include <Core/IO/Console.h>
 #include <Resource/Archives/XMLArchive.h>
 #include <GLRender/GLRenderer.h>
+#include <Engine/Components/Rendering/StaticMeshComponent.h>
 #include "../include/Client/Window.h"
 
 /** Main program loop. */
-void EventLoop(Window& window, Willow::World& world, Willow::IRenderer& renderer)
+void EventLoop(Window& window, Willow::World& world, Willow::RenderSystem& renderer)
 {
 	double previous = Window::GetCurrentTime();
 	double lastTime = previous;
@@ -27,6 +28,7 @@ void EventLoop(Window& window, Willow::World& world, Willow::IRenderer& renderer
 		{
 			Console::WriteLine("@ ms/frame = @ fps", 1000.0 / numFrames, numFrames);
 			Console::WriteLine("@ updates/second", numUpdates);
+			Console::WriteLine("Drawing @ static meshes", world.Enumerate<Willow::StaticMeshComponent>().Size());
 			numFrames = 0;
 			numUpdates = 0;
 			lastTime = currentTime;
@@ -59,6 +61,14 @@ void EventLoop(Window& window, Willow::World& world, Willow::IRenderer& renderer
 			if (window.GetKey(GLFW_KEY_ESCAPE))
 			{
 				shouldExit = true;
+			}
+			if (window.GetKey(GLFW_KEY_SPACE))
+			{
+				world.Events.DispatchEvent("Jump");
+			}
+			if (window.GetKey(GLFW_KEY_F))
+			{
+				world.Events.DispatchEvent("Fire");
 			}
 
 			// Dispatch events
@@ -110,7 +120,7 @@ int main(int argc, char* argv[])
 		// Load up subsystems
 		Console::WriteLine("Initializing subsystems...");
 		Window window("Willow Engine", 1280, 720);
-		Willow::GLRenderer renderer(window.GetWidth(), window.GetHeight());
+		Willow::GLRenderer renderer(world, window.GetWidth(), window.GetHeight());
 
 		// Enter main event loop
 		Console::WriteLine("Entering event loop...");
