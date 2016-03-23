@@ -11,6 +11,11 @@ BUILD_REFLECTION(Willow::SphereColliderComponent)
 
 namespace Willow
 {
+	/////////////////////
+	///   Constants   ///
+
+	constexpr float SphereColliderComponent::DefaultRadius;
+
 	////////////////////////
 	///   Constructors   ///
 

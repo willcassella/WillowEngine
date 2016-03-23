@@ -14,6 +14,15 @@ BUILD_REFLECTION(Willow::CapsuleColliderComponent)
 
 namespace Willow
 {
+	/////////////////////
+	///   Constants   ///
+
+	constexpr float CapsuleColliderComponent::DefaultRadius;
+
+	constexpr float CapsuleColliderComponent::DefaultHeight;
+
+	constexpr ColliderComponent::Axis CapsuleColliderComponent::DefaultAxis;
+
 	////////////////////////
 	///   Constructors   ///
 
