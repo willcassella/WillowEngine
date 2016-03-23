@@ -147,8 +147,6 @@ namespace Willow
 
 	void World::Update()
 	{
-		auto quat = btQuaternion::getIdentity();
-
 		Events.DispatchEvent("Update", this->TimeDilation);
 		Events.Flush();
 
