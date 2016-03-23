@@ -47,7 +47,7 @@ namespace Willow
 		// Do nothing
 	}
 
-	void GameObject::OnClone(GameObject& clone, World& world)
+	void GameObject::OnClone(GameObject& /*clone*/, World& /*world*/)
 	{
 		// Do nothing
 	}
@@ -57,7 +57,7 @@ namespace Willow
 		// Do nothing
 	}
 
-	Owned<GameObject> GameObject::Clone(World& world) const
+	Owned<GameObject> GameObject::Clone(World& /*world*/) const
 	{
 		return nullptr; // TODO: Implement this
 	}

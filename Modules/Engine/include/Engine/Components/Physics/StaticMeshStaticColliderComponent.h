@@ -27,9 +27,9 @@ namespace Willow
 		///   Methods   ///
 	public:
 
-		void ToArchive(ArchiveWriter& writer) const;
+		void ToArchive(ArchiveWriter& writer) const override;
 
-		void FromArchive(const ArchiveReader& reader);
+		void FromArchive(const ArchiveReader& reader) override;
 
 		/** Returns the mesh currently used a collider. */
 		AssetPtr<StaticMesh> GetMesh() const;
