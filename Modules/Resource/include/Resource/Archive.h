@@ -21,7 +21,7 @@ namespace Willow
 	public:
 
 		// TODO: Figure out a better way of doing this
-		mutable Table<std::uintptr_t, void*> RefTable;
+		mutable Table<ArchivePointerT, void*> RefTable;
 
 		///////////////////
 		///   Methods   ///

@@ -27,6 +27,11 @@ namespace Willow
 		{
 			// All done
 		}
+		AssetPtr(std::nullptr_t)
+			: AssetPtr{}
+		{
+			// All done
+		}
 		AssetPtr(const Path& path)
 		{
 			_asset = AssetManager::FindAsset<AssetT>(path);
@@ -86,6 +91,14 @@ namespace Willow
 		const AssetT* operator->() const
 		{
 			return _asset;
+		}
+		friend bool operator==(const AssetPtr& lhs, const AssetPtr& rhs)
+		{
+			return lhs._asset == rhs._asset;
+		}
+		friend bool operator!=(const AssetPtr& lhs, const AssetPtr& rhs)
+		{
+			return lhs._asset != rhs._asset;
 		}
 		bool operator==(std::nullptr_t)
 		{

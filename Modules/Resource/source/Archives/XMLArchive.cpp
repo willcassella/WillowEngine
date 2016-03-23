@@ -32,15 +32,15 @@ namespace Willow
 		///   Methods   ///
 	public:
 
-		void MapID(std::uintptr_t id, void* pointer) const override
+		void MapID(ArchivePointerT id, void* pointer) const override
 		{
 			this->Archive->RefTable[id] = pointer;
 		}
 
-		std::uintptr_t GetID() const override
+		ArchivePointerT GetID() const override
 		{
 			auto idAttr = this->Node.attribute("id");
-			uintptr_t value = 0;
+			ArchivePointerT value = 0;
 
 			if (idAttr)
 			{
@@ -122,28 +122,24 @@ namespace Willow
 
 		void GetValue(void*& value) const override
 		{
-			std::uintptr_t key = 0;
-			this->GetValue(key);
-
-			if (key != 0)
-			{
-				auto result = this->Archive->RefTable.Find(key);
-				assert(result != nullptr);
-
-				value = *result;
-			}
-			else
+			if (this->IsNull())
 			{
 				value = nullptr;
+				return;
 			}
+
+			ArchivePointerT key = 0;
+			FromString(key, this->Node.attribute("ref").value());
+
+			auto result = this->Archive->RefTable.Find(key);
+			assert(result != nullptr);
+
+			value = *result;
 		}
 
 		bool IsNull() const override
 		{
-			std::uintptr_t value = 0;
-			this->GetValue(value);
-
-			return value != 0;
+			return this->Node.attribute("ref").value() == "null"_s;
 		}
 
 		bool GetFirstChild(FunctionView<void, const ArchiveReader&> function) const override
@@ -285,6 +281,16 @@ namespace Willow
 		void SetValue(const char* value) override
 		{
 			this->Node.append_attribute("value") = value;
+		}
+
+		void SetValue(const void* value) override
+		{
+			this->Node.append_attribute("ref") = ToString(reinterpret_cast<ArchivePointerT>(value)).Cstr();
+		}
+
+		void SetValue(std::nullptr_t) override
+		{
+			this->Node.append_attribute("ref") = "null";
 		}
 
 		void AddChild(const String& name, FunctionView<void, ArchiveWriter&> function) override
