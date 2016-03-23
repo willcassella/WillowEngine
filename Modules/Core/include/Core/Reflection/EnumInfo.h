@@ -134,6 +134,41 @@ private:
 	mutable EnumInfo::Data _data;
 };
 
+//////////////////////
+///   Operations   ///
+
+namespace Operations
+{
+	namespace Default
+	{
+		template <typename E>
+		String EnumToString(E e)
+		{
+			static_assert(std::is_enum<E>::value, "'EnumToString' may only be used on enums.");
+
+			const auto& type = ::TypeOf(e);
+			const auto& values = type.GetValues();
+
+
+
+			// ToString for bitflag enums
+			if (type.IsBitFlag())
+			{
+				String result;
+
+				while (e != E{})
+				{
+					for (const auto& pair : values)
+					{
+						auto value = static_cast<E>(pair.Second.template Get<std::underlying_type_t<E>>());
+						
+					}
+				}
+			}
+		}
+	}
+}
+
 //////////////////
 ///   Macros   ///
 

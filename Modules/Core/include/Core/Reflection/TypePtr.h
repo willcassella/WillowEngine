@@ -23,7 +23,7 @@ public:
 public:
 
 	/** Constructs a TypePtr to the given type. */
-	TypePtr(const TypeInfoT& type)
+	explicit TypePtr(const TypeInfoT& type)
 		: _type(&type)
 	{
 		static_assert(std::is_base_of<TypeInfo, TypeInfoT>::value, "'TypeInfoT' must be a TypeInfo type.");
