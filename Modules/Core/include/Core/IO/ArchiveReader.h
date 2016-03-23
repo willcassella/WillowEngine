@@ -1,10 +1,22 @@
 // ArchiveReader.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
+#include <limits>
 #include "../config.h"
 #include "../Forwards/Containers.h"
 #include "../Functional/FunctionView.h"
 #include "../Functional/EnumeratorView.h"
+
+/////////////////
+///   Types   ///
+
+/** 64-bit unsigned integers are used as the archive format for integers, regardless of architecture.
+* This is done as opposed to using 'std::uintptr_t', to prevent issues like integer overflow when deserializing a 64-bit archive on a 32-bit build. */
+using ArchivePointerT = uint64;
+
+/** Chect that using 'ArchivePointerT' is safe on the current platform. */
+static_assert(std::numeric_limits<ArchivePointerT>::max() >= std::numeric_limits<std::uintptr_t>::max(),
+	"The current platform uses 128-bit pointers or something.");
 
 /** Represents access to a node in an Archive that may have data read from it. */
 class CORE_API ArchiveReader
@@ -20,7 +32,7 @@ public:
 public:
 
 	/** Maps the given ID to the given pointer. */
-	virtual void MapID(std::uintptr_t, void* pointer) const = 0;
+	virtual void MapID(ArchivePointerT id, void* pointer) const = 0;
 
 	/** Maps the ID of this node (if it has one) to the given pointer. */
 	void MapID(void* pointer) const
@@ -36,7 +48,7 @@ public:
 	/** Returns the ID of this node.
 	* NOTE: If this node does not have an ID, this returns null.
 	* NOTE: The returned pointer is identical to the pointer passed into 'SetID' when this node was written, so it may no longer be a valid pointer. */
-	virtual std::uintptr_t GetID() const = 0;
+	virtual ArchivePointerT GetID() const = 0;
 
 	/** Returns the name of this node. */
 	virtual String GetName() const = 0;
@@ -92,7 +104,8 @@ public:
 		value = reinterpret_cast<T*>(pointer);
 	}
 
-	/** Returns whether the value of this node is null. */
+	/** Returns whether the value of this node is null. 
+	* NOTE: Null values are distinguishable from normal values. */
 	virtual bool IsNull() const = 0;
 
 	/** Calls the given function on the first child of this node, if it exists.

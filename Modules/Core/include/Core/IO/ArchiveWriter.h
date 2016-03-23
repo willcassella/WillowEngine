@@ -6,9 +6,6 @@
 #include "../Functional/FunctionView.h"
 #include "../Containers/String.h"
 
-/////////////////
-///   Types   ///
-
 /** Represents access to an Archive node that may have data set or pushed into it. */
 class CORE_API ArchiveWriter
 {
@@ -77,17 +74,10 @@ public:
 	}
 
 	/** Sets the value of this node to null. */
-	void SetValue(std::nullptr_t)
-	{
-		this->SetValue(std::uintptr_t{ 0 });
-	}
+	virtual void SetValue(std::nullptr_t) = 0;
 
 	/** Sets the value of this node as the given pointer. */
-	template <typename T>
-	void SetValue(T* value)
-	{
-		this->SetValue(reinterpret_cast<std::uintptr_t>(value));
-	}
+	virtual void SetValue(const void* value) = 0;
 
 	/** Adds a new node with the given name as a child of this node, and runs the given function on that node. */
 	virtual void AddChild(const String& name, FunctionView<void, ArchiveWriter&> function) = 0;
