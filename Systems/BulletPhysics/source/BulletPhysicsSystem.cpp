@@ -54,6 +54,9 @@ namespace Willow
 		data->Parent = parent;
 		data->Transform = &transform;
 
+		// Set the entitie's collider scaling
+		data->Collider.setLocalScaling(ConvertToBullet(transform.Scale));
+
 		// If the entity is at least a ghost
 		if (mode >= Entity::PhysicsMode::Ghost)
 		{
@@ -95,6 +98,8 @@ namespace Willow
 	{
 		_entityDataTable.Find(entity, [&](EntityPhysicsData* data)
 		{
+			data->Collider.setLocalScaling(ConvertToBullet(data->Transform->Scale));
+
 			btTransform transform{ ConvertToBullet(data->Transform->Rotation), ConvertToBullet(data->Transform->Location) };
 
 			// If we have a GhostBody

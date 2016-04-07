@@ -31,6 +31,7 @@
     <ClCompile Include="source\Components\Rendering\CameraComponent.cpp" />
     <ClCompile Include="source\Components\Rendering\LightComponent.cpp" />
     <ClCompile Include="source\Components\Rendering\StaticMeshComponent.cpp" />
+    <ClCompile Include="source\Entities\DebugCamera.cpp" />
     <ClCompile Include="source\Entity.cpp" />
     <ClCompile Include="source\GameObject.cpp" />
     <ClCompile Include="source\System.cpp" />
@@ -54,6 +55,7 @@
     <ClInclude Include="include\Engine\Components\Rendering\StaticMeshComponent.h" />
     <ClInclude Include="include\Engine\config.h" />
     <ClInclude Include="include\Engine\Containers\GTable.h" />
+    <ClInclude Include="include\Engine\Entities\DebugCamera.h" />
     <ClInclude Include="include\Engine\Entity.h" />
     <ClInclude Include="include\Engine\Forwards\Components.h" />
     <ClInclude Include="include\Engine\Forwards\Engine.h" />

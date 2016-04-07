@@ -44,6 +44,12 @@
     <Filter Include="include\Containers">
       <UniqueIdentifier>{74868f65-ea7a-4478-bbdf-4041f84188e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\Entities">
+      <UniqueIdentifier>{e42cf151-9532-4bb5-8e35-353ea440f851}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Entities">
+      <UniqueIdentifier>{1ee382cc-3e79-45f8-a4ff-d29e42b0d2ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Transform.cpp">
@@ -102,6 +108,9 @@
     </ClCompile>
     <ClCompile Include="source\Systems\RenderSystem.cpp">
       <Filter>source\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Entities\DebugCamera.cpp">
+      <Filter>source\Entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -179,6 +188,9 @@
     </ClInclude>
     <ClInclude Include="include\Engine\Forwards\Systems.h">
       <Filter>include\Forwards</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Entities\DebugCamera.h">
+      <Filter>include\Entities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

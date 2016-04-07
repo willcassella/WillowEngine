@@ -9,7 +9,7 @@
 
 BUILD_REFLECTION(Willow::GameObject)
 .Data("ID", &GameObject::_id)
-.Data("World", &GameObject::_world)
+.Data("World", &GameObject::_world, DF_Transient)
 .Property("ID", &GameObject::GetID, nullptr)
 .Property("State", &GameObject::GetState, nullptr)
 .Property("Location", &GameObject::GetLocation, &GameObject::SetLocation, "Location in local space", "Transform")

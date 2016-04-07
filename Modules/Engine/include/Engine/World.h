@@ -43,6 +43,7 @@ namespace Willow
 
 		void ToArchive(ArchiveWriter& writer) const;
 
+		/** Sets the state of this world from the given archive. */
 		void FromArchive(const ArchiveReader& reader);
 
 		/** Updates the state of this World by one time step. */
@@ -193,10 +194,6 @@ namespace Willow
 		/** Destroys the given GameObject at the end of the frame. */
 		void DestroyGameObject(GameObject& object);
 
-		/** Spawns the given GameObject into this World.
-		* NOTE: The caller is responsible for initializing all state of this GameObject other than the ID. */
-		void SpawnGameObject(Owned<GameObject> owner);
-
 		template <class T>
 		void Require()
 		{
@@ -209,6 +206,8 @@ namespace Willow
 			_systems.Add(&system);
 		}
 
+		/** Retreives the specified type of System from this world.
+		* NOTE: Returns 'null' if the given type of System has not been added to this World. */
 		template <class T>
 		T* GetSystem() const
 		{
@@ -231,6 +230,12 @@ namespace Willow
 
 		/** Sets the gravity in this World. */
 		void SetGravity(const Vec3& gravity);
+
+	private:
+
+		/** Spawns the given GameObject into this World.
+		* NOTE: The caller is responsible for initializing all state of this GameObject other than the ID. */
+		void SpawnGameObject(Owned<GameObject> owner);
 
 		////////////////
 		///   Data   ///

@@ -16,6 +16,7 @@ void EventLoop(Window& window, Willow::World& world, Willow::RenderSystem& rende
 	uint32 numFrames = 0;
 	uint32 numUpdates = 0;
 	bool shouldExit = false;
+	bool drawPhysics = false;
 
 	// Begin the event loop
 	while (!window.ShouldClose() && !shouldExit)
@@ -84,8 +85,18 @@ void EventLoop(Window& window, Willow::World& world, Willow::RenderSystem& rende
 			numUpdates++;
 		}
 
+		// Press f1 to debug draw physics
+		if (window.GetKey(GLFW_KEY_F1))
+		{
+			drawPhysics = !drawPhysics;
+		}
+
 		// Render the frame
-		//physics.DebugDraw(renderer);
+		if (drawPhysics)
+		{
+			physics.DebugDraw(renderer);
+		}
+
 		renderer.RenderWorld(world);
 		window.SwapBuffers();
 	}

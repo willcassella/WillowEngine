@@ -35,7 +35,6 @@ namespace Willow
 	
 	void World::ToArchive(ArchiveWriter& writer) const
 	{
-		writer.SetRefID(this);
 		writer.PushValue("TimeDilation", this->TimeDilation);
 		writer.PushValue("TimeStep", this->TimeStep);
 		writer.PushValue("NextID", _nextGameObjectID);
@@ -53,7 +52,6 @@ namespace Willow
 
 	void World::FromArchive(const ArchiveReader& reader)
 	{
-		reader.MapRefID(this);
 		reader.PullValue("TimeDilation", this->TimeDilation);
 		reader.PullValue("TimeStep", this->TimeStep);
 		reader.PullValue("NextID", _nextGameObjectID);
@@ -84,6 +82,7 @@ namespace Willow
 				{
 					// Instantiate it
 					auto object = StaticPointerCast<GameObject>(DynamicNew(*type));
+					object->_world = this;
 
 					// Map the address of the new instantiation to the address in the archive
 					gameobject.MapRefID(object.GetManagedPointer());
