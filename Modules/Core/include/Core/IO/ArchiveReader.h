@@ -2,21 +2,30 @@
 #pragma once
 
 #include <limits>
-#include "../config.h"
-#include "../Forwards/Containers.h"
+#include "../Exception.h"
 #include "../Functional/FunctionView.h"
 #include "../Functional/EnumeratorView.h"
 
 /////////////////
 ///   Types   ///
 
-/** 64-bit unsigned integers are used as the archive format for integers, regardless of architecture.
+/** 64-bit unsigned integers are used as the archive format for references, regardless of architecture.
 * This is done as opposed to using 'std::uintptr_t', to prevent issues like integer overflow when deserializing a 64-bit archive on a 32-bit build. */
-using ArchivePointerT = uint64;
+using ArchiveRefID = uint64;
 
-/** Chect that using 'ArchivePointerT' is safe on the current platform. */
-static_assert(std::numeric_limits<ArchivePointerT>::max() >= std::numeric_limits<std::uintptr_t>::max(),
+/** Chect that using 'ArchiveRefID' is safe on the current platform. */
+static_assert(std::numeric_limits<ArchiveRefID>::max() >= std::numeric_limits<std::uintptr_t>::max(),
 	"The current platform uses 128-bit pointers or something.");
+
+/** Exception thrown when a reference in an Archive (via 'GetValue(pointer)') could not be resolved. */
+class CORE_API UnresolvedArchiveReferenceException : public Exception
+{
+	////////////////////////
+	///   Constructors   ///
+public:
+
+	UnresolvedArchiveReferenceException(ArchiveRefID refID);
+};
 
 /** Represents access to a node in an Archive that may have data read from it. */
 class CORE_API ArchiveReader
@@ -31,24 +40,24 @@ public:
 	///   Methods   ///
 public:
 
-	/** Maps the given ID to the given pointer. */
-	virtual void MapID(ArchivePointerT id, void* pointer) const = 0;
+	/** Maps the given RefID to the given pointer. */
+	virtual void MapRefID(ArchiveRefID refID, void* pointer) const = 0;
 
-	/** Maps the ID of this node (if it has one) to the given pointer. */
-	void MapID(void* pointer) const
+	/** Maps the RefID of this node (if it has one) to the given pointer. */
+	void MapRefID(void* pointer) const
 	{
-		auto id = this->GetID();
+		auto refID = this->GetRefID();
 
-		if (id != 0)
+		if (refID != 0)
 		{
-			this->MapID(id, pointer);
+			this->MapRefID(refID, pointer);
 		}
 	}
 
-	/** Returns the ID of this node.
+	/** Returns the RefID of this node.
 	* NOTE: If this node does not have an ID, this returns null.
 	* NOTE: The returned pointer is identical to the pointer passed into 'SetID' when this node was written, so it may no longer be a valid pointer. */
-	virtual ArchivePointerT GetID() const = 0;
+	virtual ArchiveRefID GetRefID() const = 0;
 
 	/** Returns the name of this node. */
 	virtual String GetName() const = 0;
@@ -104,7 +113,7 @@ public:
 		value = reinterpret_cast<T*>(pointer);
 	}
 
-	/** Returns whether the value of this node is null. 
+	/** Returns whether the ref for this node is null. 
 	* NOTE: Null values are distinguishable from normal values. */
 	virtual bool IsNull() const = 0;
 
@@ -138,14 +147,14 @@ public:
 		});
 	}
 
-	/** Pulls the given value from the first child node of this node with the given name, and maps its ID to the address of the given value. */
+	/** Pulls the given value from the first child node of this node with the given name, and maps its RefID to the address of the given value. */
 	template <typename T>
-	bool PullValueWithID(const String& name, T& value) const
+	bool PullReferencedValue(const String& name, T& value) const
 	{
 		return this->GetChild(name, [&](auto& child)
 		{
 			FromArchive(child, value);
-			child.MapID(&value);
+			child.MapRefID(&value);
 		});
 	}
 };

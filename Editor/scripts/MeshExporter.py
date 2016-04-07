@@ -3,6 +3,9 @@ import bmesh
 import struct
 import array
 
+# Target file to save to
+target = "C:/Users/Will/Source/WillowEngine/bin/Content/Maps/Sactuary.wmesh"
+
 # Get the active object
 active = bpy.context.object
 active.update_from_editmode()
@@ -30,7 +33,7 @@ for face in mesh.faces:
             vertices.append(item)
 
 # Open a file to write to
-with open("C:/Users/Will/Downloads/test.wmesh", 'wb') as file:
+with open(target, 'wb') as file:
     # Write out vertices
     file.write(struct.pack('I', len(vertices) // 8))
     vertices.tofile(file)

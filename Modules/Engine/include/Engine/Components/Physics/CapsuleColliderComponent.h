@@ -14,18 +14,22 @@ namespace Willow
 		REFLECTABLE_CLASS
 		EXTENDS(ColliderComponent)
 
-		/////////////////////
-		///   Constants   ///
+		/////////////////
+		///   Types   ///
 	public:
 
-		/** The default radius for CapsuleColliders. */
-		static constexpr float DefaultRadius = 1.f;
+		/** Information about a capsule collider's shape. */
+		struct Shape final
+		{
+			/** The radius of the Capsule. */
+			float Radius = 1.f;
 
-		/** The default height for CapsuleColliders. */
-		static constexpr float DefaultHeight = 3.f;
+			/** The height of the Capsule. */
+			float Height = 3.f;
 
-		/** The default Axis for CapsuleColliders. */
-		static constexpr Axis DefaultAxis = Axis::Y;
+			/** The axis of the Capsule. */
+			ShapeAxis Axis = ShapeAxis::Y;
+		};
 
 		////////////////////////
 		///   Constructors   ///
@@ -43,46 +47,59 @@ namespace Willow
 		void FromArchive(const ArchiveReader& reader) override;
 
 		/** Returns the radius of this CapsuleComponent. */
-		float GetRadius() const;
+		FORCEINLINE float GetRadius() const
+		{
+			return _shape.Radius;
+		}
 
 		/** Sets the radius of this CapsuleComponent.
-		* NOTE: If you're going to set the radius, height, and axis, prefer to use 'Set'. */
-		void SetRadius(float radius, UpdateEntityColliderOptions updateOptions = UpdateAll);
+		* NOTE: If you're going to set the radius, height, and axis, prefer to use 'SetShape'. */
+		void SetRadius(float radius);
 
 		/** Returns the height of this capsule. */
-		float GetHeight() const;
+		FORCEINLINE float GetHeight() const
+		{
+			return _shape.Height;
+		}
 
 		/** Sets the height of this CapsuleComponent.
-		* NOTE: If you're going to set the radius, height, and axis, prefer to use 'Set'. */
-		void SetHeight(float height, UpdateEntityColliderOptions updateOptions = UpdateAll);
+		* NOTE: If you're going to set the radius, height, and axis, prefer to use 'SetShape'. */
+		void SetHeight(float height);
 
 		/** Returns the axis that this CapsuleComponent is aligned along. */
-		Axis GetAxis() const;
+		FORCEINLINE ShapeAxis GetAxis() const
+		{
+			return _shape.Axis;
+		}
 
 		/** Sets the axis that this CapsuleComponent is aligned along. */
-		void SetAxis(Axis axis, UpdateEntityColliderOptions updateOptions = UpdateAll);
+		void SetAxis(ShapeAxis axis);
 
-		/** Sets the radius and height of this Capsule. */
-		void Set(float radius, float height, Axis axis, UpdateEntityColliderOptions = UpdateAll);
+		/** Returns the whole shape of this Collider. */
+		FORCEINLINE Shape GetShape() const
+		{
+			return _shape;
+		}
+
+		/** Sets the whole shape of this Collider. */
+		void SetShape(Shape shape);
 
 	protected:
 
-		void OnSpawn() override;
+		void OnUpdateColliderTransform() override;
+
+		bool OnActivate() override;
+
+		void OnDeactivate() override;
 
 	private:
 
-		btCollisionShape* GetCollisionShape() const override;
-
-		void EDITOR_SetRadius(float radius);
-
-		void EDITOR_SetHeight(float height);
-
-		void EDITOR_SetAxis(Axis axis);
+		void UpdateShape();
 
 		////////////////
 		///   Data   ///
 	private:
 
-		std::unique_ptr<btCapsuleShape> _shape;
+		Shape _shape;
 	};
 }

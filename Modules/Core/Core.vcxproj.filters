@@ -315,6 +315,12 @@
     <ClInclude Include="include\Core\Umbrellas\Containers.h">
       <Filter>include\Umbrellas</Filter>
     </ClInclude>
+    <ClInclude Include="include\Core\Exception.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Memory\Buffers\TLinkedBuffer.h">
+      <Filter>include\Memory\Buffers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Object.cpp">
@@ -418,6 +424,12 @@
     </ClCompile>
     <ClCompile Include="source\Memory\New.cpp">
       <Filter>source\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="source\IO\ArchiveReader.cpp">
+      <Filter>source\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Exception.cpp">
+      <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

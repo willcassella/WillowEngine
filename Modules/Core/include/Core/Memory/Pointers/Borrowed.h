@@ -22,16 +22,8 @@ public:
 
 	////////////////////////
 	///   Constructors   ///
-private:
+public:
 
-	Borrowed(T* value, ReferenceCounter* refCounter)
-		: _value(value), _refCounter(refCounter)
-	{
-		if (refCounter)
-		{
-			refCounter->AddBorrow();
-		}
-	}
 	Borrowed(const Borrowed& copy)
 		: _value(copy._value), _refCounter(copy._refCounter)
 	{
@@ -46,9 +38,6 @@ private:
 		move._value = nullptr;
 		move._refCounter = nullptr;
 	}
-
-public:
-
 	~Borrowed()
 	{
 		if (_refCounter)
@@ -78,6 +67,17 @@ public:
 		if (_refCounter)
 		{
 			_refCounter->AddBorrow();
+		}
+	}
+
+private:
+
+	Borrowed(T* value, ReferenceCounter* refCounter)
+		: _value(value), _refCounter(refCounter)
+	{
+		if (refCounter)
+		{
+			refCounter->AddBorrow();
 		}
 	}
 

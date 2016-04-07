@@ -5,14 +5,15 @@
 #include <Core/Event/EventManager.h>
 #include "Component.h"
 #include "System.h"
+#include "GHandle.h"
 
 /////////////////
 ///   Types   ///
 
 namespace Willow
 {
-	/* World class contains all game objects and world information */
-	class ENGINE_API World final : public Object
+	/** World class contains all game objects and world information */
+	class ENGINE_API World : public Object
 	{
 		///////////////////////
 		///   Information   ///
@@ -32,7 +33,6 @@ namespace Willow
 		///   Fields   ///
 	public:
 
-		/** World update settings. */
 		EventManager Events;
 		float TimeDilation = 1.f;
 		float TimeStep = 1.f / 60;
@@ -63,12 +63,30 @@ namespace Willow
 			this->SpawnGameObject(std::move(owner));
 			return entity;
 		}
-
-		/** Spawns a new instance of the given type into the World. */
+		
+		/** Spawns a new instance of the given type of Component into the World. */
 		template <class T>
 		auto Spawn() -> std::enable_if_t<std::is_base_of<Component, T>::value, T&>
 		{
-			return this->Spawn<Entity>().Connect<T>();
+			auto& entity = this->Spawn<Entity>();
+			return this->Spawn<T>(entity);
+		}
+
+		template <class T>
+		auto Spawn(Entity& entity) -> std::enable_if_t<std::is_base_of<Component, T>::value, T&>
+		{
+			// Create a new Component
+			auto owner = New<T>();
+			auto& component = *owner;
+
+			// Initialize it
+			component._world = this;
+			component._entity = &entity;
+			entity._components.Add(&component);
+
+			// Spawn it
+			this->SpawnGameObject(std::move(owner));
+			return component;
 		}
 
 		/** Spawns a new instance of the given type with the given name into the World. */
@@ -92,7 +110,42 @@ namespace Willow
 		template <class T>
 		auto Spawn(String name) -> std::enable_if_t<std::is_base_of<Component, T>::value, T&>
 		{
-			return this->Spawn<Entity>(std::move(name)).Connect<T>();
+			auto& entity = this->Spawn<Entity>(std::move(name));
+			return this->Spawn<T>(entity);
+		}
+
+		/** Clones the contents of the given World into this World.
+		* This includes Entities, Components, but not Systems.
+		* root - Where in this World the given World's center should be considered. */
+		void Clone(const World& world, const Transform& root);
+
+		/** Clones the given Entity, and all Components connected to it.
+		* NOTE: If you want to clone the enetity's Children, use 'CloneTree'. */
+		template <class T>
+		auto Clone(const T& entity) -> std::enable_if_t<std::is_base_of<Entity, T>::value, T&>
+		{
+
+		}
+
+		/** Clones the given Component, attatching it to a new Entity. */
+		template <class T>
+		auto Clone(const T& component) -> std::enable_if_t<std::is_base_of<Component, T>::value, T&>
+		{
+
+		}
+
+		/** Clones the given Compnent, attaching it to the given Entity. */
+		template <class T>
+		auto Clone(const T& component, Entity& entity) -> std::enable_if_t<std::is_base_of<Component, T>::value, T&>
+		{
+
+		}
+
+		/** Clones the given Entity, all Components connected to it, as well as recursively cloning its children. */
+		template <class T>
+		auto CloneTree(const T& entity) -> std::enable_if_t<std::is_base_of<Entity, T>::value, T&>
+		{
+
 		}
 
 		/** Returns an enumeration of the given types of objects in this World. */
@@ -144,15 +197,30 @@ namespace Willow
 		* NOTE: The caller is responsible for initializing all state of this GameObject other than the ID. */
 		void SpawnGameObject(Owned<GameObject> owner);
 
-		/** Adds the given system to this World. */
-		template <typename T>
-		T& AddSystem()
+		template <class T>
+		void Require()
 		{
-			auto owner = New<T>(*this);
-			auto& system = *owner;
+			assert(this->GetSystem<T>() != nullptr);
+		}
 
-			_systems.Add(std::move(owner));
-			return system;
+		/** Adds the given system to this World. */
+		void AddSystem(System& system)
+		{
+			_systems.Add(&system);
+		}
+
+		template <class T>
+		T* GetSystem() const
+		{
+			for (auto system : _systems)
+			{
+				if (auto pSystem = Cast<T>(*system))
+				{
+					return pSystem;
+				}
+			}
+
+			return nullptr;
 		}
 
 		/** Returns the current gravity in this World. */
@@ -164,29 +232,21 @@ namespace Willow
 		/** Sets the gravity in this World. */
 		void SetGravity(const Vec3& gravity);
 
-		/** Returns the physics world for this World. 
-		* NOTE: This method is for internal use only. */
-		PhysicsWorld& INTERNAL_GetPhysicsWorld();
-
-		/** Returns the physics world for this World. 
-		* NOTE: This method is for internal use only. */
-		const PhysicsWorld& INTERNAL_GetPhysicsWorld() const;
-
 		////////////////
 		///   Data   ///
 	private:
 
+		/** World Data */
 		GameObject::ID _nextGameObjectID;
 		Table<GameObject::ID, Owned<GameObject>> _gameObjects;
 		Queue<GameObject*> _destroyedObjects;
 
 		Table<GameObject::ID, Entity*> _entities;
 		Table<Component::ID, Component*> _components;
-		Array<Owned<System>> _systems;
+		Array<System*> _systems; // TODO: Make this weak
 
-		/** Physics state. */
+		/** Physics data */
 		Vec3 _gravity;
-		std::unique_ptr<PhysicsWorld> _physicsWorld;
 	};
 
 	///////////////////
@@ -211,18 +271,6 @@ namespace Willow
 	template <class T>
 	T& Entity::Connect()
 	{
-		static_assert(std::is_base_of<Component, T>::value, "You can only connect Component types to Entities.");
-
-		// Construct the Component
-		auto owner = New<T>();
-		auto& component = *owner;
-
-		// Register the Component with this Entity
-		component._entity = this;
-		this->_components.Add(&component);
-
-		// Spawn it into the world
-		this->GetWorld().SpawnGameObject(std::move(owner));
-		return component;
+		return this->GetWorld().Spawn<T>(*this);
 	}
 }

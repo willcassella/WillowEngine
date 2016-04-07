@@ -17,6 +17,9 @@ namespace Willow
 
 		/** A material parameter may either be a Scalars, Vec2, Vec3, Vec4, or texture. */
 		using Param = Union<Scalar, Vec2, Vec3, Vec4, AssetPtr<Texture>>;
+		
+		/** A table mapping parameter names to parameter values. */
+		using ParamTable = Table<String, Param>;
 
 		///////////////////////
 		///   Information   ///
@@ -42,6 +45,6 @@ namespace Willow
 		AssetPtr<Shader> FragmentShader;
 
 		/** The default parameters for this material. */
-		Table<String, Param> DefaultParams;
+		ParamTable DefaultParams;
 	};
 }

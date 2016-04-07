@@ -21,7 +21,7 @@ namespace Willow
 	public:
 
 		// TODO: Figure out a better way of doing this
-		mutable Table<ArchivePointerT, void*> RefTable;
+		mutable Table<ArchiveRefID, void*> RefTable;
 
 		///////////////////
 		///   Methods   ///

@@ -26,15 +26,16 @@
     <ClCompile Include="source\Component.cpp" />
     <ClCompile Include="source\Components\Physics\CapsuleColliderComponent.cpp" />
     <ClCompile Include="source\Components\Physics\ColliderComponent.cpp" />
-    <ClCompile Include="source\Components\Physics\SphereComponent.cpp" />
-    <ClCompile Include="source\Components\Physics\StaticMeshStaticColliderComponent.cpp" />
+    <ClCompile Include="source\Components\Physics\SphereColliderComponent.cpp" />
+    <ClCompile Include="source\Components\Physics\StaticMeshColliderComponent.cpp" />
     <ClCompile Include="source\Components\Rendering\CameraComponent.cpp" />
     <ClCompile Include="source\Components\Rendering\LightComponent.cpp" />
-    <ClCompile Include="source\Components\Rendering\LineStructureComponent.cpp" />
     <ClCompile Include="source\Components\Rendering\StaticMeshComponent.cpp" />
     <ClCompile Include="source\Entity.cpp" />
     <ClCompile Include="source\GameObject.cpp" />
     <ClCompile Include="source\System.cpp" />
+    <ClCompile Include="source\Systems\PhysicsSystem.cpp" />
+    <ClCompile Include="source\Systems\RenderSystem.cpp" />
     <ClCompile Include="source\World.cpp" />
     <ClCompile Include="source\Transform.cpp" />
   </ItemGroup>
@@ -47,26 +48,23 @@
     <ClInclude Include="include\Engine\Components\Physics\CapsuleColliderComponent.h" />
     <ClInclude Include="include\Engine\Components\Physics\ColliderComponent.h" />
     <ClInclude Include="include\Engine\Components\Physics\SphereColliderComponent.h" />
-    <ClInclude Include="include\Engine\Components\Physics\StaticMeshStaticColliderComponent.h" />
+    <ClInclude Include="include\Engine\Components\Physics\StaticMeshColliderComponent.h" />
     <ClInclude Include="include\Engine\Components\Rendering\CameraComponent.h" />
     <ClInclude Include="include\Engine\Components\Rendering\LightComponent.h" />
-    <ClInclude Include="include\Engine\Components\Rendering\LineStructureComponent.h" />
     <ClInclude Include="include\Engine\Components\Rendering\StaticMeshComponent.h" />
     <ClInclude Include="include\Engine\config.h" />
+    <ClInclude Include="include\Engine\Containers\GTable.h" />
     <ClInclude Include="include\Engine\Entity.h" />
+    <ClInclude Include="include\Engine\Forwards\Components.h" />
     <ClInclude Include="include\Engine\Forwards\Engine.h" />
-    <ClInclude Include="include\Engine\Forwards\Physics.h" />
+    <ClInclude Include="include\Engine\Forwards\Systems.h" />
     <ClInclude Include="include\Engine\GameObject.h" />
     <ClInclude Include="include\Engine\GHandle.h" />
     <ClInclude Include="include\Engine\System.h" />
+    <ClInclude Include="include\Engine\Systems\PhysicsSystem.h" />
     <ClInclude Include="include\Engine\Systems\RenderSystem.h" />
     <ClInclude Include="include\Engine\Transform.h" />
     <ClInclude Include="include\Engine\World.h" />
-    <ClInclude Include="source\Physics\Physics.h" />
-    <ClInclude Include="source\Physics\PhysicsBody.h" />
-    <ClInclude Include="source\Physics\EntityCollider.h" />
-    <ClInclude Include="source\Physics\PhysicsWorld.h" />
-    <ClInclude Include="source\Physics\BulletTriangleMesh.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C257E175-629A-42F3-A52A-CEC2D0DBBCF2}</ProjectGuid>
@@ -121,29 +119,29 @@
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <TargetExt>.dll</TargetExt>
-    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)packages\Bullet\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(SolutionDir)packages\Bullet\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <TargetExt>.dll</TargetExt>
-    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)packages\Bullet\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(SolutionDir)packages\Bullet\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <TargetExt>.dll</TargetExt>
-    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)packages\Bullet\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(SolutionDir)packages\Bullet\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <TargetExt>.dll</TargetExt>
-    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)packages\Bullet\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(SolutionDir)packages\Bullet\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -158,7 +156,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Core.lib;Resource.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Core.lib;Resource.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib />
     <Lib />
@@ -182,7 +180,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Core.lib;Resource.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Core.lib;Resource.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib />
     <Lib />
@@ -212,7 +210,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Core.lib;Resource.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Core.lib;Resource.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib />
     <Lib />
@@ -242,7 +240,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Core.lib;Resource.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Core.lib;Resource.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib />
     <Lib />

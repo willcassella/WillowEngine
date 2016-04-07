@@ -13,7 +13,7 @@ namespace Willow
 
 		REFLECTABLE_CLASS
 		EXTENDS(GameObject)
-		friend class Entity;
+		friend class World;
 
 		////////////////////////
 		///   Constructors   ///
@@ -27,16 +27,6 @@ namespace Willow
 	public:
 
 		void FromArchive(const ArchiveReader& reader) override;
-
-		FORCEINLINE World& GetWorld() final override
-		{
-			return this->GetEntity().GetWorld();
-		}
-
-		FORCEINLINE const World& GetWorld() const final override
-		{
-			return this->GetEntity().GetWorld();
-		}
 
 		FORCEINLINE Vec3 GetLocation() const final override
 		{

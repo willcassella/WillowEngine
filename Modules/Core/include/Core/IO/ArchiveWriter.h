@@ -19,8 +19,8 @@ public:
 	///   Methods   ///
 public:
 
-	/** Sets the ID of this node to the value of the given pointer. */
-	virtual void SetID(const void* id) = 0;
+	/** Sets the ref ID of this node to the value of the given pointer. */
+	virtual void SetRefID(const void* refID) = 0;
 
 	/** Sets the value of this node as the given boolean value. */
 	virtual void SetValue(bool value) = 0;
@@ -92,14 +92,15 @@ public:
 		});
 	}
 
-	/** Pushes a new node with the given name and ID of the given value into this Archive, and serializes the given value to that node. */
+	/** Pushes a new node with the given name into this Archive, and sets its RefID to the address of the given value, as well as serializes
+	* the given value to that node. */
 	template <typename T>
-	void PushValueWithID(const String& name, const T& value)
+	void PushReferencedValue(const String& name, const T& value)
 	{
 		this->AddChild(name, [&](auto& writer)
 		{
 			ToArchive(value, writer);
-			writer.SetID(&value);
+			writer.SetRefID(&value);
 		});
 	}
 };

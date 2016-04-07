@@ -1,13 +1,22 @@
 // Entity.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <memory>
-#include "Forwards/Physics.h"
 #include "GameObject.h"
 #include "Transform.h"
 
 namespace Willow
 {
+	/////////////////
+	///   Types   ///
+
+	enum SetPhysicsModeMode
+	{
+		/** This Entity's physics state will be destroyed  */
+		SPM_DestroyPhysicsState,
+		SPM_ResetPhysicsState,
+		SPM_KeepPhysicsState,
+	};
+
 	/** An 'Entity' is a collection of Components that should be together thought of as a single object.
 	* Components can be added and removed ("connected" and "disconnected") from an Entity, but they cannot be moved between Entities.
 	* Components are always connected to a single Entity.
@@ -35,13 +44,26 @@ namespace Willow
 			Transient,
 
 			/** This object can detect collisions, but does not otherwise participate in the physics simulation. */
-			Sensor,
+			Ghost,
 
 			/* This object affects the physics simulation, but is not affected by it. */
 			Kinematic,
 
 			/* This object both affects, and is affected by the physics simulation. */
 			Dynamic
+		};
+
+		struct PhysicsState final
+		{
+			float Mass = 1.f;
+
+			Vec3 LinearMotionFactor = { 1.f, 1.f, 1.f };
+
+			Vec3 AngularMotionFactor = { 1.f, 1.f, 1.f, };
+
+			float Friction = 0.5f;
+
+			float RollingFriction = 0.f;
 		};
 
 		////////////////////////
@@ -55,17 +77,9 @@ namespace Willow
 		///   Methods   ///
 	public:
 
+		void ToArchive(ArchiveWriter& writer) const override;
+
 		void FromArchive(const ArchiveReader& reader) override;
-
-		FORCEINLINE World& GetWorld() final override
-		{
-			return *_world;
-		}
-
-		FORCEINLINE const World& GetWorld() const final override
-		{
-			return *_world;
-		}
 
 		Vec3 GetLocation() const final override;
 
@@ -98,6 +112,11 @@ namespace Willow
 		void Scale(const Vec3& vec) final override;
 
 		Mat4 GetTransformationMatrix() const final override;
+
+		const Transform& GetTransform() const
+		{
+			return _transform;
+		}
 
 		FORCEINLINE Entity* GetParent() final override
 		{
@@ -220,16 +239,84 @@ namespace Willow
 		}
 
 		/** Returns the current PhysicsMode of this Entity. */
-		PhysicsMode GetPhysicsMode() const;
+		FORCEINLINE PhysicsMode GetPhysicsMode() const
+		{
+			return _physicsMode;
+		}
 
 		/** Sets the current PhysicsMode of this Entity. */
 		void SetPhysicsMode(PhysicsMode mode);
 
+		/** Returns whether this Entity is physically dynamic. */
+		FORCEINLINE bool IsDynamic() const
+		{
+			return this->GetPhysicsMode() == PhysicsMode::Dynamic;
+		}
+
 		/** Returns the mass of this Entity. */
-		float GetMass() const;
+		FORCEINLINE float GetMass() const
+		{
+			return _physicsState.Mass;
+		}
 
 		/** Sets the mass of this Entity. */
 		void SetMass(float mass);
+
+		/** Gets the linear motion factor for this Entity.
+		* NOTE: This property is only relevant for Dynamic entities. */
+		FORCEINLINE Vec3 GetLinearMotionFactor() const
+		{
+			return _physicsState.LinearMotionFactor;
+		}
+
+		/** Sets the linear motion factor for this Entity.
+		* NOTE: This property is only relevant for Dynamic entities. */
+		void SetLinearMotionFactor(const Vec3& factor);
+
+		/** Gets the angular motion factor for this Entity.
+		* NOTE: This property is only relevant for Dynamic entities. */
+		FORCEINLINE Vec3 GetAngularMotionFactor() const
+		{
+			return _physicsState.AngularMotionFactor;
+		}
+
+		/** Sets the angular motion factor for this Entity.
+		* NOTE: This property is only relevant for Dynamic entities. */
+		void SetAngularMotionFactor(const Vec3& factor);
+
+		/** Gets the friction for this Entity. */
+		FORCEINLINE float GetFriction() const
+		{
+			return _physicsState.Friction;
+		}
+
+		/** Sets the friction for this Entity. */
+		void SetFriction(float friction);
+
+		/** Gets the rolling friction for this Entity. */
+		FORCEINLINE float GetRollingFriction() const
+		{
+			return _physicsState.RollingFriction;
+		}
+
+		/** Sets the rolling friction for this Entity. */
+		void SetRollingFriction(float rollingFriction);
+
+		/** Gets the linear velocity of this Entity.
+		* NOTE: For non-dynamic Entities, this will be zero. */
+		Vec3 GetLinearVelocity() const;
+
+		/** Sets the linear velocity of this Entity.
+		* NOTE: For non-dynamic Entities, this will have no effect. */
+		void SetLinearVelocity(const Vec3& linearVelocity);
+
+		/** Gets the angular velocity of this Entity.
+		* NOTE: For non-dynamic Entities, this will be zero. */
+		Vec3 GetAngularVelocity() const;
+
+		/** Sets the angular velocity of this Entity.
+		* NOTE: For non-dynamic Entities, this will have no effect. */
+		void SetAngularVelocity(const Vec3& angularVelocity);
 
 		/** Applys the given force to this Entity. 
 		* NOTE: If this Entity's physics mode is not 'PhysicsMode::Dynamic', this does nothing. */
@@ -247,18 +334,6 @@ namespace Willow
 		* NOTE: If this Entity's physics mode is not 'PhysicsMode::Dynamic', this does nothing. */
 		void ApplyTorqueImpulse(const Vec3& torque);
 
-		/** Updates this Entities Inertia and Mass.
-		* NOTE: This method is for internal use only. */
-		void INTERNAL_UpdateInertia();
-
-		/** Returns a pointer to the collider for this Entity.
-		* NOTE: This method is for internal use only. */
-		EntityCollider* INTERNAL_GetCollider();
-
-		/** Returns a pointer to the collider for this Entity.
-		* NOTE: This method is for internal use only. */
-		const EntityCollider* INTERNAL_GetCollider() const;
-
 	protected:
 
 		void OnSpawn() override;
@@ -269,11 +344,11 @@ namespace Willow
 
 		void EDITOR_SetName(String name);
 
-		/** Initializes this Entity's physics state. */
-		void InitializePhysics();
+		void UpdatePhysicsMode();
 
-		/** Destroys this Entity's physics state. */
-		void DestroyPhysics();
+		void UpdatePhysicsState();
+
+		void UpdatePhysicsTransform();
 
 		////////////////
 		///   Data   ///
@@ -281,7 +356,6 @@ namespace Willow
 
 		/** Entity data */
 		String _name;
-		World* _world;
 		Array<Component*> _components;
 
 		/** Spatial data */
@@ -290,10 +364,8 @@ namespace Willow
 		Array<Entity*> _children;
 
 		/** Physics data */
-		std::unique_ptr<PhysicsBody> _physicsBody;
-		std::unique_ptr<EntityCollider> _collider;
-		float _cachedMass = 1.f;
-		PhysicsMode _physicsMode = PhysicsMode::Transient;
+		PhysicsState _physicsState;
+		PhysicsMode _physicsMode;
 	};
 }
 

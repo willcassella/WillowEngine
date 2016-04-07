@@ -18,7 +18,12 @@ namespace Willow
 		{
 			// All done
 		}
-		GHandle(T& value)
+		GHandle(const T* value)
+			: _id{ value ? value->GameObject::GetID() : 0 }
+		{
+			assert(!value || _id != 0 /** You may not add create a handle to a GameObject that has not been initialized. */);
+		}
+		GHandle(const T& value)
 			: _id(value.GameObject::GetID())
 		{
 			assert(_id != 0 /** You may not add create a handle to a GameObject that has not been initialized. */);
@@ -79,4 +84,10 @@ namespace Willow
 
 		GameObject::ID _id;
 	};
+
+	/** Convenient alias for Entity handles. */
+	using EntityHandle = GHandle<Entity>;
+
+	/** Convenient alias for Component handles. */
+	using ComponentHandle = GHandle<Component>;
 }

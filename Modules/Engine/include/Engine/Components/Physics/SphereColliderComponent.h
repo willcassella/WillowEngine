@@ -14,12 +14,16 @@ namespace Willow
 		REFLECTABLE_CLASS
 		EXTENDS(ColliderComponent)
 
-		/////////////////////
-		///   Constants   ///
+		/////////////////
+		///   Types   ///
 	public:
 
-		/** The default radius for SphereColliders. */
-		static constexpr float DefaultRadius = 1.f;
+		/** Information about a sphere collider's shape. */
+		struct Shape final
+		{
+			/** The radius of this Sphere. */
+			float Radius = 1.f;
+		};
 
 		////////////////////////
 		///   Constructors   ///
@@ -36,24 +40,36 @@ namespace Willow
 
 		void FromArchive(const ArchiveReader& reader) override;
 
-		float GetRadius() const;
+		FORCEINLINE float GetRadius() const
+		{
+			return _shape.Radius;
+		}
 
-		void SetRadius(float radius, UpdateEntityColliderOptions updateOptions = UpdateAll);
+		void SetRadius(float radius);
+
+		FORCEINLINE Shape GetShape() const
+		{
+			return _shape;
+		}
+
+		void SetShape(Shape shape);
 
 	protected:
 
-		void OnSpawn() override;
+		void OnUpdateColliderTransform() override;
+
+		bool OnActivate() override;
+
+		void OnDeactivate() override;
 
 	private:
 
-		btCollisionShape* GetCollisionShape() const override;
-
-		void EDITOR_SetRadius(float radius);
+		void UpdateShape();
 
 		////////////////
 		///   Data   ///
 	private:
 
-		std::unique_ptr<btSphereShape> _shape;
+		Shape _shape;
 	};
 }

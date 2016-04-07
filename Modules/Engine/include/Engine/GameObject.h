@@ -47,8 +47,8 @@ namespace Willow
 			* validity of its state at this point in time. */
 			Uninitialized,
 
-			/** This GameObject has been initialized. It has an ID and exists in a World. All of its properties have been set,
-			* and it only has left to run its 'OnSpawn' handler. */
+			/** This GameObject has been initialized. It has an ID and exists in a World, and is hooked up to the required systems.
+			* However, it may not have had its starting properties set yet. */
 			Initialized,
 
 			/** This GameObject is currently executing its 'OnSpawn' handler. */
@@ -60,6 +60,12 @@ namespace Willow
 			/** This GameObject has been destroyed, and will be deconstructed at the end of the frame. */
 			Destroyed
 		};
+
+		////////////////////////
+		///   Constructors   ///
+	public:
+
+		GameObject();
 
 		///////////////////
 		///   Methods   ///
@@ -79,6 +85,18 @@ namespace Willow
 		FORCEINLINE State GetState() const
 		{
 			return _state;
+		}
+
+		/** Returns a reference to the World that this GameObject belongs to. */
+		FORCEINLINE World& GetWorld()
+		{
+			return *_world;
+		}
+
+		/** Returns a reference to the World that this GameObject belongs to. */
+		FORCEINLINE const World& GetWorld() const
+		{
+			return *_world;
 		}
 
 		/** Returns whether this GameObject has been initialized. */
@@ -104,12 +122,6 @@ namespace Willow
 		{
 			return this->GetState() == State::Destroyed;
 		}
-
-		/** Returns a reference to the World that this GameObject belongs to. */
-		virtual World& GetWorld() = 0;
-
-		/** Returns a reference to the World that this GameObject belongs to. */
-		virtual const World& GetWorld() const = 0;
 
 		/** Returns whether this GameObject has a parent. */
 		FORCEINLINE bool HasParent() const
@@ -188,20 +200,30 @@ namespace Willow
 
 	protected:
 
+		/** Handles initialization procedure. */
+		virtual void OnInitialize();
+
 		/** Handles spawning procedure. */
 		virtual void OnSpawn();
 
-		virtual void OnClone(GameObject& clone, World& world);
-
 		/** Handles destruction procedure. */
 		virtual void OnDestroy();
+
+		virtual void OnClone(const GameObject& old);
+
+		/////////////////////
+		///   Operators   ///
+	public:
+
+		GameObject& operator=(const GameObject& copy);
 
 		////////////////
 		///   Data   ///
 	private:
 
-		ID _id = 0;
-		State _state = State::Uninitialized;
+		ID _id;
+		World* _world;
+		State _state;
 	};
 }
 

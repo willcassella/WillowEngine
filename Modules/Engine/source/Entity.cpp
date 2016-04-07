@@ -1,29 +1,24 @@
 // Entity.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
-#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include "../include/Engine/Entity.h"
 #include "../include/Engine/Components/Physics/ColliderComponent.h"
 #include "../include/Engine/World.h"
-#include "Physics/PhysicsWorld.h"
-#include "Physics/PhysicsBody.h"
-#include "Physics/EntityCollider.h"
+#include "../include/Engine/Systems/PhysicsSystem.h"
 
 //////////////////////
 ///   Reflection   ///
 
 BUILD_REFLECTION(Willow::Entity)
 .Data("Name", &Entity::_name)
-.Data("World", &Entity::_world)
 .Data("Components", &Entity::_components, DF_Transient)
 .Data("Transform", &Entity::_transform)
 .Data("Parent", &Entity::_parent)
 .Data("Children", &Entity::_children, DF_Transient)
-.Data("Mass", &Entity::_cachedMass)
 .Property("Name", &Entity::GetName, &Entity::EDITOR_SetName, "The name of this Entity", PF_EditorOnly);
 
 BUILD_ENUM_REFLECTION(Willow::Entity::PhysicsMode)
 .Value("Transient", Willow::Entity::PhysicsMode::Transient)
-.Value("Sensor", Willow::Entity::PhysicsMode::Sensor)
+.Value("Ghost", Willow::Entity::PhysicsMode::Ghost)
 .Value("Kinematic", Willow::Entity::PhysicsMode::Kinematic)
 .Value("Dynamic", Willow::Entity::PhysicsMode::Dynamic);
 
@@ -33,9 +28,8 @@ namespace Willow
 	///   Constructors   ///
 
 	Entity::Entity()
-		: _collider{ std::make_unique<EntityCollider>() }
+		: _physicsMode{ PhysicsMode::Transient }
 	{
-		_world = nullptr;
 		_parent = nullptr;
 	}
 
@@ -47,6 +41,38 @@ namespace Willow
 	///////////////////
 	///   Methods   ///
 
+	void Entity::ToArchive(ArchiveWriter& writer) const
+	{
+		Base::ToArchive(writer);
+
+		// Serialize physics mode
+		switch (_physicsMode)
+		{
+		case PhysicsMode::Transient:
+			writer.PushValue("PhysicsMode", "Transient");
+			break;
+		case PhysicsMode::Ghost:
+			writer.PushValue("PhysicsMode", "Ghost");
+			break;
+		case PhysicsMode::Kinematic:
+			writer.PushValue("PhysicsMode", "Kinematic");
+			break;
+		case PhysicsMode::Dynamic:
+			writer.PushValue("PhsyicsMode", "Dynamic");
+			break;
+		}
+
+		// Serialize physics state
+		writer.AddChild("PhysicsState", [this](ArchiveWriter& child)
+		{
+			child.PushValue("Mass", this->GetMass());
+			child.PushValue("LinearMotionFactor", this->GetLinearMotionFactor());
+			child.PushValue("AngularMotionFactor", this->GetAngularMotionFactor());
+			child.PushValue("Friction", this->GetFriction());
+			child.PushValue("RollingFriction", this->GetRollingFriction());
+		});
+	}
+
 	void Entity::FromArchive(const ArchiveReader& reader)
 	{
 		Base::FromArchive(reader);
@@ -55,6 +81,40 @@ namespace Willow
 		{
 			_parent->_children.Add(this);
 		}
+
+		// Deserialize physics mode
+		reader.GetChild("PhysicsMode", [this](const ArchiveReader& child)
+		{
+			String value;
+			child.GetValue(value);
+
+			if (value == "Transient")
+			{
+				this->SetPhysicsMode(PhysicsMode::Transient);
+			}
+			else if (value == "Ghost")
+			{
+				this->SetPhysicsMode(PhysicsMode::Ghost);
+			}
+			else if (value == "Kinematic")
+			{
+				this->SetPhysicsMode(PhysicsMode::Kinematic);
+			}
+			else if (value == "Dynamic")
+			{
+				this->SetPhysicsMode(PhysicsMode::Dynamic);
+			}
+		});
+
+		// Deserialize physics state
+		reader.GetChild("PhysicsState", [this](const ArchiveReader& child)
+		{
+			child.PullValue("Mass", this->_physicsState.Mass);
+			child.PullValue("LinearMotionFactor", this->_physicsState.LinearMotionFactor);
+			child.PullValue("AngularMotionFactor", this->_physicsState.AngularMotionFactor);
+			child.PullValue("Friction", this->_physicsState.Friction);
+			child.PullValue("RollingFriction", this->_physicsState.RollingFriction);
+		});
 	}
 
 	bool Entity::IsActor() const
@@ -134,7 +194,7 @@ namespace Willow
 
 	Vec3 Entity::GetLocation() const
 	{
-		return _transform.GetLocation();
+		return _transform.Location;
 	}
 
 	Vec3 Entity::GetWorldLocation() const
@@ -151,7 +211,8 @@ namespace Willow
 
 	void Entity::SetLocation(const Vec3& location)
 	{
-		_transform.SetLocation(location);
+		_transform.Location = location;
+		this->UpdatePhysicsTransform();
 	}
 
 	void Entity::SetWorldLocation(const Vec3& location)
@@ -163,7 +224,8 @@ namespace Willow
 	void Entity::Translate(const Vec3& vec)
 	{
 		Vec3 newVec = Mat4::Rotate(this->GetWorldRotation()) * vec;
-		_transform.SetLocation(_transform.GetLocation() + newVec);
+		_transform.Location = _transform.Location + newVec;
+		this->UpdatePhysicsTransform();
 	}
 
 	void Entity::TranslateGlobal(const Vec3&)
@@ -173,18 +235,18 @@ namespace Willow
 
 	Quat Entity::GetRotation() const
 	{
-		return _transform.GetRotation();
+		return _transform.Rotation;
 	}
 
 	Quat Entity::GetWorldRotation() const
 	{
 		if (this->HasParent())
 		{
-			return this->GetParent()->GetWorldRotation() * _transform.GetRotation();
+			return this->GetParent()->GetWorldRotation() * _transform.Rotation;
 		}
 		else
 		{
-			return _transform.GetRotation();
+			return _transform.Rotation;
 		}
 	}
 
@@ -196,37 +258,37 @@ namespace Willow
 	void Entity::SetWorldRotation(const Quat& rot)
 	{
 		// TODO
-		_transform.SetRotation(rot);
+		_transform.Rotation = rot;
+		this->UpdatePhysicsTransform();
 	}
 
 	void Entity::Rotate(const Vec3& axis, Angle angle)
 	{
-		auto rotation = _transform.GetRotation();
-		rotation.RotateByAxisAngle(axis, angle, true);
-		_transform.SetRotation(rotation);
+		_transform.Rotation.RotateByAxisAngle(axis, angle, true);
+		this->UpdatePhysicsTransform();
 	}
 
 	void Entity::RotateGlobal(const Vec3& axis, Angle angle)
 	{
-		auto rotation = _transform.GetRotation();
-		rotation.RotateByAxisAngle(axis, angle, false);
-		_transform.SetRotation(rotation);
+		_transform.Rotation.RotateByAxisAngle(axis, angle, false);
+		this->UpdatePhysicsTransform();
 	}
 
 	Vec3 Entity::GetScale() const
 	{
-		return _transform.GetScale();
+		return _transform.Scale;
 	}
 
 	void Entity::SetScale(const Vec3& scale)
 	{
-		_transform.SetScale(scale);
+		_transform.Scale = scale;
+		this->UpdatePhysicsTransform();
 	}
 
 	void Entity::Scale(const Vec3& vec)
 	{
-		auto newScale = _transform.GetScale() + vec;
-		_transform.SetScale(newScale);
+		_transform.Scale = _transform.Scale + vec;
+		this->UpdatePhysicsTransform();
 	}
 
 	Mat4 Entity::GetTransformationMatrix() const
@@ -246,11 +308,6 @@ namespace Willow
 		}
 	}
 
-	Entity::PhysicsMode Entity::GetPhysicsMode() const
-	{
-		return _physicsMode;
-	}
-
 	void Entity::SetPhysicsMode(PhysicsMode mode)
 	{
 		// If we're already in this mode
@@ -259,135 +316,97 @@ namespace Willow
 			return;
 		}
 
+		_physicsMode = mode;
+
 		// If the object hasn't spawned yet
 		if (this->GetState() == State::Uninitialized)
 		{
-			// Set the mode, initialize it later
-			_physicsMode = mode;
+			// Initialize it later
 			return;
 		}
 
-		// If we're kinematic and we want to be dynamic
-		if (this->GetPhysicsMode() == PhysicsMode::Kinematic && mode == PhysicsMode::Dynamic)
-		{
-			_physicsMode = mode;
-
-			// Calculate inertia
-			btVector3 inertia;
-			_collider->calculateLocalInertia(_cachedMass, inertia);
-			static_cast<btRigidBody*>(_physicsBody->Body.get())->setMassProps(_cachedMass, inertia);
-
-			// Disable kinematic flag
-			_physicsBody->Body->setCollisionFlags(_physicsBody->Body->getCollisionFlags() & ~btCollisionObject::CF_KINEMATIC_OBJECT);
-
-			// Set normal activation
-			_physicsBody->Body->setActivationState(ACTIVE_TAG);
-			return;
-		}
-
-		// If we're dynamic and we want to be kinematic
-		if (this->GetPhysicsMode() == PhysicsMode::Dynamic && mode == PhysicsMode::Kinematic)
-		{
-			_physicsMode = mode;
-			
-			// Set mass and inertia to '0'
-			static_cast<btRigidBody*>(_physicsBody->Body.get())->setMassProps(0, { 0, 0, 0 });
-			
-			// Add kinematic flag 
-			_physicsBody->Body->setCollisionFlags(_physicsBody->Body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
-			
-			// Diable deactivation
-			_physicsBody->Body->setActivationState(DISABLE_DEACTIVATION);
-			return;
-		}
-
-		// Change is more complex, destroy and rebuild physics state
-		this->DestroyPhysics();
-		_physicsMode = mode;
-		this->InitializePhysics();
-	}
-
-	float Entity::GetMass() const
-	{
-		return _cachedMass;
+		this->UpdatePhysicsMode();
 	}
 
 	void Entity::SetMass(float mass)
 	{
-		_cachedMass = mass;
-		this->INTERNAL_UpdateInertia();
+		_physicsState.Mass = mass;
+		this->UpdatePhysicsState();
 	}
 
-	void Entity::INTERNAL_UpdateInertia()
+	void Entity::SetRollingFriction(float rollingFriction)
 	{
-		if (this->GetPhysicsMode() == PhysicsMode::Dynamic)
-		{
-			btVector3 inertia;
-			_collider->calculateLocalInertia(_cachedMass, inertia);
-			static_cast<btRigidBody*>(_physicsBody->Body.get())->setMassProps(_cachedMass, inertia);
-		}
-
-		if (_parent)
-		{
-			_parent->INTERNAL_UpdateInertia();
-		}
+		_physicsState.RollingFriction = rollingFriction;
+		this->UpdatePhysicsState();
 	}
 
-	EntityCollider* Entity::INTERNAL_GetCollider()
+	Vec3 Entity::GetLinearVelocity() const
 	{
-		return _collider.get();
+		Vec3 linearVelocity;
+		this->GetWorld().GetSystem<PhysicsSystem>()->GetEntityLinearVelocity(linearVelocity, *this);
+		return linearVelocity;
 	}
 
-	const EntityCollider* Entity::INTERNAL_GetCollider() const
+	void Entity::SetLinearVelocity(const Vec3& linearVelocity)
 	{
-		return _collider.get();
+		this->GetWorld().GetSystem<PhysicsSystem>()->SetEntityLinearVelocity(*this, linearVelocity);
+	}
+
+	Vec3 Entity::GetAngularVelocity() const
+	{
+		Vec3 angularVelocity;
+		this->GetWorld().GetSystem<PhysicsSystem>()->GetEntityAngularVelocity(angularVelocity, *this);
+		return angularVelocity;
+	}
+
+	void Entity::SetAngularVelocity(const Vec3& angularVelocity)
+	{
+		this->GetWorld().GetSystem<PhysicsSystem>()->SetEntityAngularVelocity(*this, angularVelocity);
 	}
 
 	void Entity::ApplyForce(const Vec3& force, const Vec3& offset)
 	{
-		if (this->GetPhysicsMode() == PhysicsMode::Dynamic)
-		{
-			auto body = static_cast<btRigidBody*>(_physicsBody->Body.get());
-			body->setActivationState(ACTIVE_TAG);
-			body->applyForce(ConvertToBullet(force), ConvertToBullet(offset));
-		}
+		this->GetWorld().GetSystem<PhysicsSystem>()->ApplyForce(*this, force, offset);
 	}
 
 	void Entity::ApplyImpulse(const Vec3& impulse, const Vec3& offset)
 	{
-		if (this->GetPhysicsMode() == PhysicsMode::Dynamic)
-		{
-			auto body = static_cast<btRigidBody*>(_physicsBody->Body.get());
-			body->setActivationState(ACTIVE_TAG);
-			body->applyImpulse(ConvertToBullet(impulse), ConvertToBullet(offset));
-		}
+		this->GetWorld().GetSystem<PhysicsSystem>()->ApplyImpulse(*this, impulse, offset);
 	}
 
 	void Entity::ApplyTorque(const Vec3& torque)
 	{
-		if (this->GetPhysicsMode() == PhysicsMode::Dynamic)
-		{
-			auto body = static_cast<btRigidBody*>(_physicsBody->Body.get());
-			body->setActivationState(ACTIVE_TAG);
-			body->applyTorque(ConvertToBullet(torque));
-		}
+		this->GetWorld().GetSystem<PhysicsSystem>()->ApplyTorque(*this, torque);
 	}
 
 	void Entity::ApplyTorqueImpulse(const Vec3& torque)
 	{
-		if (this->GetPhysicsMode() == PhysicsMode::Dynamic)
-		{
-			auto body = static_cast<btRigidBody*>(_physicsBody->Body.get());
-			body->setActivationState(ACTIVE_TAG);
-			body->applyTorqueImpulse(ConvertToBullet(torque));
-		}
+		this->GetWorld().GetSystem<PhysicsSystem>()->ApplyTorqueImpulse(*this, torque);
+	}
+
+	void Entity::SetLinearMotionFactor(const Vec3& factor)
+	{
+		_physicsState.LinearMotionFactor = factor;
+		this->UpdatePhysicsState();
+	}
+
+	void Entity::SetAngularMotionFactor(const Vec3& factor)
+	{
+		_physicsState.AngularMotionFactor = factor;
+		this->UpdatePhysicsState();
+	}
+
+	void Entity::SetFriction(float friction)
+	{
+		_physicsState.Friction = friction;
+		this->UpdatePhysicsState();
 	}
 
 	void Entity::OnSpawn()
 	{
-		if (_physicsBody == nullptr)
+		if (auto phys = this->GetWorld().GetSystem<PhysicsSystem>())
 		{
-			this->InitializePhysics();
+			phys->CreateEntity(*this, this->GetParent(), _transform, _physicsMode, _physicsState);
 		}
 	}
 
@@ -403,7 +422,10 @@ namespace Willow
 			component->Destroy();
 		}
 
-		this->DestroyPhysics();
+		if (auto phys = this->GetWorld().GetSystem<PhysicsSystem>())
+		{
+			phys->DestroyEntity(*this);
+		}
 	}
 
 	void Entity::EDITOR_SetName(String name)
@@ -411,78 +433,27 @@ namespace Willow
 		_name = std::move(name);
 	}
 
-	void Entity::InitializePhysics()
+	void Entity::UpdatePhysicsMode()
 	{
-		// If the physics mode is transient, we don't have to do anything
-		if (_physicsMode == PhysicsMode::Transient)
+		if (auto phys = this->GetWorld().GetSystem<PhysicsSystem>())
 		{
-			return;
-		}
-
-		// Create physics state
-		_physicsBody = std::make_unique<PhysicsBody>(*this);
-
-		// If this object is a sensor
-		if (_physicsMode == PhysicsMode::Sensor)
-		{
-			// Create ghost object
-			_physicsBody->Body = std::make_unique<btGhostObject>();
-			_physicsBody->Body->setCollisionShape(_collider.get());
-			
-			// Add it to the world
-			this->GetWorld().INTERNAL_GetPhysicsWorld().GetDynamicsWorld().addCollisionObject(_physicsBody->Body.get());
-		}
-		// Otherwise, it must be Kinematic or Dynamic
-		else
-		{	
-			float mass = 0;
-			btVector3 inertia{ 0, 0, 0 };
-
-			// If it's a dynamic object, we need to calculate mass and inertia
-			if (_physicsMode == PhysicsMode::Dynamic)
-			{
-				mass = _cachedMass;
-				_collider->calculateLocalInertia(mass, inertia);
-			}
-
-			// Create a btRigidBody
-			auto rigidBody = std::make_unique<btRigidBody>(mass, _physicsBody.get(), _collider.get(), inertia);
-
-			// If it's kinematic, set Kinematic flag
-			if (_physicsMode == PhysicsMode::Kinematic)
-			{
-				rigidBody->setCollisionFlags(rigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
-				rigidBody->setActivationState(DISABLE_DEACTIVATION);
-			}
-
-			// Add it to the world
-			this->GetWorld().INTERNAL_GetPhysicsWorld().GetDynamicsWorld().addRigidBody(rigidBody.get());
-
-			// Add it to the physics state
-			_physicsBody->Body = std::move(rigidBody);
+			phys->SetEntityPhysicsMode(*this, _physicsMode);
 		}
 	}
 
-	void Entity::DestroyPhysics()
+	void Entity::UpdatePhysicsState()
 	{
-		if (_physicsMode == PhysicsMode::Transient)
+		if (auto phys = this->GetWorld().GetSystem<PhysicsSystem>())
 		{
-			// We don't have to do anything
-			return;
+			phys->SetEntityPhysicsState(*this, _physicsState);
 		}
+	}
 
-		if (_physicsMode == PhysicsMode::Sensor)
+	void Entity::UpdatePhysicsTransform()
+	{
+		if (auto phys = this->GetWorld().GetSystem<PhysicsSystem>())
 		{
-			// Remove it as a normal CollisionObject
-			this->GetWorld().INTERNAL_GetPhysicsWorld().GetDynamicsWorld().removeCollisionObject(_physicsBody->Body.get());
+			phys->UpdateEntityTransform(*this);
 		}
-		else
-		{
-			this->GetWorld().INTERNAL_GetPhysicsWorld().GetDynamicsWorld().removeRigidBody(static_cast<btRigidBody*>(_physicsBody->Body.get()));
-		}
-
-		// Object no longer participates in simulation
-		_physicsBody = nullptr;
-		_physicsMode = PhysicsMode::Transient;
 	}
 }

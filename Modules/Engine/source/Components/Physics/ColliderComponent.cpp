@@ -1,7 +1,8 @@
 // ColliderComponent.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
 #include "../../../include/Engine/Components/Physics/ColliderComponent.h"
-#include "../../Physics/EntityCollider.h"
+#include "../../../include/Engine/World.h"
+#include "../../../include/Engine/Systems/PhysicsSystem.h"
 
 //////////////////////
 ///   Reflection   ///
@@ -10,14 +11,14 @@ BUILD_REFLECTION(Willow::ColliderComponent)
 .Data("IsActive", &ColliderComponent::_isActive)
 .Data("ColliderTransform", &ColliderComponent::_colliderTransform)
 .Property("IsActive", &ColliderComponent::IsActive, &ColliderComponent::EDITOR_SetActive, "", "Collider", PF_EditorOnly)
-.Property("Location", &ColliderComponent::GetColliderLocation, &ColliderComponent::EDITOR_SetColliderLocation, "", "Collider")
-.Property("Rotation", &ColliderComponent::GetColliderRotation, &ColliderComponent::EDITOR_SetColliderRotation, "", "Collider")
-.Property("Scale", &ColliderComponent::GetColliderScale, &ColliderComponent::EDITOR_SetColliderScale, "", "Collider");
+.Property("Location", &ColliderComponent::GetColliderLocation, &ColliderComponent::SetColliderLocation, "", "Collider")
+.Property("Rotation", &ColliderComponent::GetColliderRotation, &ColliderComponent::SetColliderRotation, "", "Collider")
+.Property("Scale", &ColliderComponent::GetColliderScale, &ColliderComponent::SetColliderScale, "", "Collider");
 
-BUILD_ENUM_REFLECTION(Willow::ColliderComponent::Axis)
-.Value("X", Willow::ColliderComponent::Axis::X)
-.Value("Y", Willow::ColliderComponent::Axis::Y)
-.Value("Z", Willow::ColliderComponent::Axis::Z);
+BUILD_ENUM_REFLECTION(Willow::ColliderComponent::ShapeAxis)
+.Value("X", Willow::ColliderComponent::ShapeAxis::X)
+.Value("Y", Willow::ColliderComponent::ShapeAxis::Y)
+.Value("Z", Willow::ColliderComponent::ShapeAxis::Z);
 
 namespace Willow
 {
@@ -33,7 +34,7 @@ namespace Willow
 	///////////////////
 	///   Methods   ///
 
-	void ColliderComponent::ActivateCollider(UpdateEntityColliderOptions updateOptions)
+	void ColliderComponent::ActivateCollider()
 	{
 		if (this->IsActive())
 		{
@@ -41,28 +42,18 @@ namespace Willow
 			return;
 		}
 
-		_isActive = true;
-
 		if (!this->HasSpawned() || this->IsDestroyed())
 		{
-			// We'll add the shape once we're spawning
+			// We'll activate once we spawn
+			_isActive = true;
 			return;
 		}
 
-		auto shape = this->GetCollisionShape();
-		if (!shape)
-		{
-			// The shape doesn't exist, so it can't be activated
-			_isActive = false;
-			return;
-		}
-
-		// Add the shape and update the EntityCollider
-		this->GetEntity().INTERNAL_GetCollider()->AddChild(*shape, this->GetColliderLocation(), this->GetColliderRotation());
-		this->UpdateEntityCollider(updateOptions);
+		// Attempt to activate
+		_isActive = this->OnActivate();
 	}
 
-	void ColliderComponent::DeactivateCollider(UpdateEntityColliderOptions updateOptions)
+	void ColliderComponent::DeactivateCollider()
 	{
 		if (!this->IsActive())
 		{
@@ -70,124 +61,70 @@ namespace Willow
 			return;
 		}
 
-		_isActive = false;
-
 		if (!this->HasSpawned() || this->IsDestroyed())
 		{
+			// We haven't spawned yet, so nothing to undo
+			_isActive = false;
 			return;
 		}
 
-		this->GetEntity().INTERNAL_GetCollider()->RemoveChild(*this->GetCollisionShape());
-		this->UpdateEntityCollider(updateOptions);
+		this->OnDeactivate();
 	}
 
-	void ColliderComponent::SetColliderTransform(const Transform& transform, UpdateEntityColliderOptions updateOptions)
+	void ColliderComponent::SetColliderTransform(const Transform& transform)
 	{
 		_colliderTransform = transform;
-
-		// If we're not spawned or activated
-		if (!this->HasSpawned() || !this->IsActive())
-		{
-			return;
-		}
-
-		auto& shape = *this->GetCollisionShape();
-		shape.setLocalScaling(ConvertToBullet(transform.GetScale()));
-		this->GetEntity().INTERNAL_GetCollider()->UpdateChildLocationRotation(shape, transform.GetLocation(), transform.GetRotation());
-		this->UpdateEntityCollider(updateOptions);
+		this->UpdateColliderTransform();
 	}
 
-	void ColliderComponent::SetColliderLocation(const Vec3& location, UpdateEntityColliderOptions updateOptions)
+	void ColliderComponent::SetColliderLocation(const Vec3& location)
 	{
-		_colliderTransform.SetLocation(location);
-
-		// If we're not spawned or activated
-		if (!this->IsInitialized() || !this->IsActive())
-		{
-			return;
-		}
-
-		this->GetEntity().INTERNAL_GetCollider()->UpdateChildLocationRotation(*this->GetCollisionShape(), location, this->GetColliderRotation());
-		this->UpdateEntityCollider(updateOptions);
+		_colliderTransform.Location = location;
+		this->UpdateColliderTransform();
 	}
 
-	void ColliderComponent::SetColliderRotation(const Quat& rotation, UpdateEntityColliderOptions updateOptions)
+	void ColliderComponent::SetColliderRotation(const Quat& rotation)
 	{
-		_colliderTransform.SetRotation(rotation);
-
-		// If we're not spawned or activated
-		if (!this->HasSpawned() || !this->IsActive())
-		{
-			return;
-		}
-
-		this->GetEntity().INTERNAL_GetCollider()->UpdateChildLocationRotation(*this->GetCollisionShape(), this->GetColliderLocation(), rotation);
-		this->UpdateEntityCollider(updateOptions);
+		_colliderTransform.Rotation = rotation;
+		this->UpdateColliderTransform();
 	}
 
-	void ColliderComponent::SetColliderScale(const Vec3& scale, UpdateEntityColliderOptions updateOptions)
+	void ColliderComponent::SetColliderScale(const Vec3& scale)
 	{
-		_colliderTransform.SetScale(scale);
-
-		// If we're not spawned, or activated
-		if (!this->HasSpawned() || !this->IsActive())
-		{
-			return;
-		}
-
-		this->GetCollisionShape()->setLocalScaling(ConvertToBullet(scale));
-		this->UpdateEntityCollider(updateOptions);
+		_colliderTransform.Scale = scale;
+		this->UpdateColliderTransform();
 	}
 
-	void ColliderComponent::UpdateEntityCollider(UpdateEntityColliderOptions updateOptions)
+	void ColliderComponent::OnInitialize()
 	{
-		if (updateOptions == UpdateNothing)
-		{
-			return;
-		}
-
-		auto& entity = this->GetEntity();
-
-		if (updateOptions & UpdateAABB)
-		{
-			entity.INTERNAL_GetCollider()->recalculateLocalAabb();
-		}
-
-		if (updateOptions & UpdateInertia)
-		{
-			entity.INTERNAL_UpdateInertia();
-		}
+		this->GetWorld().Require<PhysicsSystem>();
 	}
 
 	void ColliderComponent::OnSpawn()
 	{
-		Base::OnSpawn();
-		
-		if (_isActive)
+		this->Base::OnSpawn();
+
+		if (this->IsActive())
 		{
-			auto shape = this->GetCollisionShape();
-
-			if (!shape)
-			{
-				// The shape doesn't exist, so we can't be activated
-				_isActive = false;
-				return;
-			}
-
-			shape->setLocalScaling(ConvertToBullet(this->GetColliderScale()));
-			this->GetEntity().INTERNAL_GetCollider()->AddChild(*shape, this->GetColliderLocation(), this->GetColliderRotation());
-			this->UpdateEntityCollider(UpdateAll);
+			_isActive = this->OnActivate();
 		}
 	}
 
 	void ColliderComponent::OnDestroy()
 	{
-		Base::OnDestroy();
+		this->Base::OnDestroy();
 
-		if (_isActive)
+		if (this->IsActive())
 		{
-			this->GetEntity().INTERNAL_GetCollider()->RemoveChild(*this->GetCollisionShape());
-			_isActive = false;
+			this->OnDeactivate();
+		}
+	}
+
+	void ColliderComponent::UpdateColliderTransform()
+	{
+		if (this->IsActive() && this->HasSpawned())
+		{
+			this->OnUpdateColliderTransform();
 		}
 	}
 
@@ -195,26 +132,11 @@ namespace Willow
 	{
 		if (enabled)
 		{
-			this->ActivateCollider(UpdateAll);
+			this->ActivateCollider();
 		}
 		else
 		{
-			this->DeactivateCollider(UpdateAll);
+			this->DeactivateCollider();
 		}
-	}
-
-	void ColliderComponent::EDITOR_SetColliderLocation(const Vec3& location)
-	{
-		this->SetColliderLocation(location, UpdateAll);
-	}
-
-	void ColliderComponent::EDITOR_SetColliderRotation(const Quat& rotation)
-	{
-		this->SetColliderRotation(rotation, UpdateAll);
-	}
-
-	void ColliderComponent::EDITOR_SetColliderScale(const Vec3& scale)
-	{
-		this->SetColliderScale(scale, UpdateAll);
 	}
 }

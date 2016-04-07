@@ -31,6 +31,6 @@ namespace Willow
 		AssetPtr<class Material> Material;
 
 		/** The material parameters specific to this instance. */
-		Table<String, Willow::Material::Param> InstanceParams;
+		Material::ParamTable InstanceParams;
 	};
 }

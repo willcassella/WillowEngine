@@ -2,12 +2,13 @@
 
 #include <Core/IO/Console.h>
 #include <Resource/Archives/XMLArchive.h>
-#include <GLRender/GLRenderer.h>
 #include <Engine/Components/Rendering/StaticMeshComponent.h>
+#include <BulletPhysics/BulletPhysicsSystem.h>
+#include <GLRender/GLRenderSystem.h>
 #include "../include/Client/Window.h"
 
 /** Main program loop. */
-void EventLoop(Window& window, Willow::World& world, Willow::RenderSystem& renderer)
+void EventLoop(Window& window, Willow::World& world, Willow::RenderSystem& renderer, Willow::PhysicsSystem& physics)
 {
 	double previous = Window::GetCurrentTime();
 	double lastTime = previous;
@@ -84,6 +85,7 @@ void EventLoop(Window& window, Willow::World& world, Willow::RenderSystem& rende
 		}
 
 		// Render the frame
+		//physics.DebugDraw(renderer);
 		renderer.RenderWorld(world);
 		window.SwapBuffers();
 	}
@@ -108,23 +110,39 @@ int main(int argc, char* argv[])
 		Console::WriteLine("Loading module: '@'...", argv[1]);
 		Application::LoadModule(argv[1]);
 
-		// Load world
+		// Create world
 		Console::WriteLine("Loading world: '@'...", argv[2]);
 		Willow::World world;
+		
+		// Create physcs system
+		Willow::BulletPhysicsSystem physics;
+		world.AddSystem(physics);
+
+		// Deserialize it
 		{
 			Willow::XMLArchive archive;
 			archive.Load(argv[2]);
-			archive.Deserialize(world);
+
+			try
+			{
+				archive.Deserialize(world);
+			}
+			catch (Exception& e)
+			{
+				Console::Error("Could not load scene, error during deserialization: @", e);
+				Application::Terminate(EXIT_FAILURE);
+			}
 		}
 
 		// Load up subsystems
 		Console::WriteLine("Initializing subsystems...");
 		Window window("Willow Engine", 1280, 720);
-		Willow::GLRenderer renderer(world, window.GetWidth(), window.GetHeight());
+		Willow::GLRenderSystem renderer(window.GetWidth(), window.GetHeight());
+		world.AddSystem(renderer);
 
 		// Enter main event loop
 		Console::WriteLine("Entering event loop...");
-		EventLoop(window, world, renderer);
+		EventLoop(window, world, renderer, physics);
 	}
 	
 	Application::Terminate();

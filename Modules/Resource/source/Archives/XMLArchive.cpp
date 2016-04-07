@@ -32,15 +32,15 @@ namespace Willow
 		///   Methods   ///
 	public:
 
-		void MapID(ArchivePointerT id, void* pointer) const override
+		void MapRefID(ArchiveRefID refID, void* pointer) const override
 		{
-			this->Archive->RefTable[id] = pointer;
+			this->Archive->RefTable[refID] = pointer;
 		}
 
-		ArchivePointerT GetID() const override
+		ArchiveRefID GetRefID() const override
 		{
-			auto idAttr = this->Node.attribute("id");
-			ArchivePointerT value = 0;
+			auto idAttr = this->Node.attribute("refID");
+			ArchiveRefID value = 0;
 
 			if (idAttr)
 			{
@@ -128,11 +128,16 @@ namespace Willow
 				return;
 			}
 
-			ArchivePointerT key = 0;
-			FromString(key, this->Node.attribute("ref").value());
-
-			auto result = this->Archive->RefTable.Find(key);
-			assert(result != nullptr);
+			// Find the ref in the table
+			ArchiveRefID ref = 0;
+			FromString(ref, this->Node.attribute("ref").value());
+			auto result = this->Archive->RefTable.Find(ref);
+			
+			// If the key does not exist in the reftable, this ref cannot be resolved
+			if (!result)
+			{
+				throw UnresolvedArchiveReferenceException{ ref };
+			}
 
 			value = *result;
 		}
@@ -212,10 +217,10 @@ namespace Willow
 			}
 		}
 
-		void SetID(const void* id) override
+		void SetRefID(const void* refID) override
 		{
-			auto value = reinterpret_cast<std::uintptr_t>(id);
-			this->Node.append_attribute("id") = ToString(value).Cstr();
+			auto value = reinterpret_cast<ArchiveRefID>(refID);
+			this->Node.append_attribute("refID") = ToString(value).Cstr();
 		}
 
 		void SetValue(bool value) override
@@ -285,7 +290,7 @@ namespace Willow
 
 		void SetValue(const void* value) override
 		{
-			this->Node.append_attribute("ref") = ToString(reinterpret_cast<ArchivePointerT>(value)).Cstr();
+			this->Node.append_attribute("ref") = ToString(reinterpret_cast<ArchiveRefID>(value)).Cstr();
 		}
 
 		void SetValue(std::nullptr_t) override

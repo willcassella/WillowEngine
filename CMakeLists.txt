@@ -29,8 +29,8 @@ add_subdirectory(Tools/AssetConverter)
 # Add GLRender project
 add_subdirectory(Services/GLRender)
 
-# Add ExampleGame project
-add_subdirectory(Games/ExampleGame)
-
 # Add Client project
 add_subdirectory(Runtimes/Client)
+
+# Add ExampleGame project
+add_subdirectory(Games/ExampleGame)

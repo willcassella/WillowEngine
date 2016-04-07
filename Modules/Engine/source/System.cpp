@@ -10,24 +10,15 @@ BUILD_REFLECTION(Willow::System);
 
 namespace Willow
 {
-	////////////////////////
-	///   Constructors   ///
-
-	System::System(World& world)
-		: _world(&world)
-	{
-		// All done
-	}
-
 	///////////////////
 	///   Methods   ///
 
-	void System::Update()
+	void System::Update(const World& /*world*/)
 	{
 		// Do nothing
 	}
 
-	void System::PostUpdate()
+	void System::PostUpdate(World& /*world*/)
 	{
 		// Do nothing
 	}

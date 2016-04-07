@@ -16,38 +16,20 @@ namespace Willow
 		REFLECTABLE_CLASS
 		EXTENDS(Object)
 
-		////////////////////////
-		///   Constructors   ///
-	public:
-
-		System(World& world);
-
 		///////////////////
 		///   Methods   ///
 	public:
 
-		/** Returns the World that this System is attached to. */
-		FORCEINLINE World& GetWorld()
-		{
-			return *_world;
-		}
+		/** Runs the asynchronous update procedure on this System.
+		* 'world' - the World that this System is attached to.
+		* NOTE: This procedure is run asynchronously among the Systems objects attached to the World.
+		* NOTE: This procedure is run prior to the synchronous 'PostUpdate' procedure. */
+		virtual void Update(const World& world);
 
-		/** Returns the World that this System is attached to. */
-		FORCEINLINE const World& GetWorld() const
-		{
-			return *_world;
-		}
-
-		/** Runs update procedure on this System. */
-		virtual void Update();
-
-		/** Runs post-update procedure on this System. */
-		virtual void PostUpdate();
-
-		////////////////
-		///   Data   ///
-	public:
-
-		World* _world;
+		/** Runs the synchronous post-update procedure on this System. 
+		* 'world' - the World that is being updated. 
+		* NOTE: This procedure is run synchronously among the System objects attatched to the World.
+		* NOTE: This procedure is run after the asynchronous 'Update' procedure. */
+		virtual void PostUpdate(World& world);
 	};
 }

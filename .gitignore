@@ -10,3 +10,4 @@ packages/
 *.suo
 *.user
 *.aps
+*.db

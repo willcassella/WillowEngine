@@ -18,34 +18,17 @@ namespace Willow
 		///   Types   ///
 	public:
 
-		/** Some collider types may be aligned on different Axis (Capsules, Cones, Boxes, Cylindars). */
-		enum class Axis : int
+		/** Some collider shapes may be aligned on different Axis (Capsules, Cones, Boxes, Cylinders). */
+		enum class ShapeAxis : byte
 		{
 			/** This Collider is aligned along the X-axis. */
-			X = 0,
-			
+			X,
+
 			/** This Collider is aligned along the Y-axis. */
-			Y = 1,
-			
+			Y,
+
 			/** This Collider is aligned along the Z-axis. */
-			Z = 2
-		};
-
-		/** Options for handling changes to the owning Entity's collider.
-		* For efficiency reasons, you should avoid updating inertia and AABB of an Entity until you're done with all modifications to its colliders. */
-		enum UpdateEntityColliderOptions
-		{
-			/** Do nothing. */
-			UpdateNothing = 0,
-
-			/** Update the inertia of the owning Entity. */
-			UpdateInertia = 1 << 0,
-
-			/** Update the Entity's AABB. */
-			UpdateAABB = 1 << 1,
-
-			/** Update both the inertia and the AABB. */
-			UpdateAll = UpdateInertia | UpdateAABB
+			Z
 		};
 
 		////////////////////////
@@ -65,10 +48,10 @@ namespace Willow
 		}
 
 		/** Activates this ColliderComponent. */
-		void ActivateCollider(UpdateEntityColliderOptions updateOptions = UpdateAll);
+		void ActivateCollider();
 
 		/** Deactivates this ColliderComponent. */
-		void DeactivateCollider(UpdateEntityColliderOptions updateOptions = UpdateAll);
+		void DeactivateCollider();
 
 		/** Returns the local transform of this Collider. */
 		FORCEINLINE const Transform& GetColliderTransform() const
@@ -77,62 +60,60 @@ namespace Willow
 		}
 
 		/** Set the local transform of this Collider. */
-		void SetColliderTransform(const Transform& transform, UpdateEntityColliderOptions updateOptions = UpdateAll);
+		void SetColliderTransform(const Transform& transform);
 
 		/** Returns the local location of this Collider. */
 		FORCEINLINE const Vec3& GetColliderLocation() const
 		{
-			return _colliderTransform.GetLocation();
+			return _colliderTransform.Location;
 		}
 
 		/** Sets the local location of this Collider. 
 		* NOTE: If you're going to set more than one component of the local transform,
 		* consider using 'SetColliderTransform'. */
-		void SetColliderLocation(const Vec3& location, UpdateEntityColliderOptions updateOptions = UpdateAll);
+		void SetColliderLocation(const Vec3& location);
 
 		/** Returns the local rotation of this Collider. */
 		FORCEINLINE const Quat& GetColliderRotation() const
 		{
-			return _colliderTransform.GetRotation();
+			return _colliderTransform.Rotation;
 		}
 
 		/** Sets the local rotation of this Collider. 
 		* NOTE: If you're going to set more than one component of the local transform,
 		* consider using 'SetColliderTransform'. */
-		void SetColliderRotation(const Quat& rotation, UpdateEntityColliderOptions updateOptions = UpdateAll);
+		void SetColliderRotation(const Quat& rotation);
 
 		/** Returns the local scale of this Collider. */
 		FORCEINLINE const Vec3& GetColliderScale() const
 		{
-			return _colliderTransform.GetScale();
+			return _colliderTransform.Scale;
 		}
 
 		/** Sets the local scale of this Collider. 
 		* NOTE: If you're going to set more than one component of the local transform,
 		* consider using 'SetColliderTransform'. */
-		void SetColliderScale(const Vec3& scale, UpdateEntityColliderOptions updateOptions = UpdateAll);
-
-		/** Updates the entity's collider.
-		* NOTE: This should be called after any modifications to child colliders, if it has not been already. */
-		void UpdateEntityCollider(UpdateEntityColliderOptions updateOptions = UpdateAll);
+		void SetColliderScale(const Vec3& scale);
 
 	protected:
 
-		void OnSpawn() override;
+		void OnInitialize() final override;
 
-		void OnDestroy() override;
+		void OnSpawn() final override;
+
+		void OnDestroy() final override;
+
+		virtual void OnUpdateColliderTransform() = 0;
+
+		virtual bool OnActivate() = 0;
+
+		virtual void OnDeactivate() = 0;
 
 	private:
 
-		virtual btCollisionShape* GetCollisionShape() const = 0;
+		void UpdateColliderTransform();
 
 		void EDITOR_SetActive(bool enabled);
-
-		void EDITOR_SetColliderLocation(const Vec3& location);
-
-		void EDITOR_SetColliderRotation(const Quat& rotation);
-
-		void EDITOR_SetColliderScale(const Vec3& scale);
 
 		////////////////
 		///   Data   ///
@@ -143,4 +124,4 @@ namespace Willow
 	};
 }
 
-REFLECTABLE_ENUM(ENGINE_API, Willow::ColliderComponent::Axis)
+REFLECTABLE_ENUM(ENGINE_API, Willow::ColliderComponent::ShapeAxis)

@@ -26,9 +26,6 @@
     <Filter Include="include\Systems">
       <UniqueIdentifier>{52017b75-ea13-45c3-aec8-8736b670de11}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\Physics">
-      <UniqueIdentifier>{7da680cb-a893-4372-a594-bfe92d12f90b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\Components\Physics">
       <UniqueIdentifier>{e2f6c33d-62c7-4a3c-ab5a-50064873671d}</UniqueIdentifier>
     </Filter>
@@ -40,6 +37,12 @@
     </Filter>
     <Filter Include="source\Components\Physics">
       <UniqueIdentifier>{5de3a82a-935d-4fc5-a04f-65a8b855aa3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Systems">
+      <UniqueIdentifier>{8a54aab5-ddf4-4ee6-89a1-07acf3ef8822}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Containers">
+      <UniqueIdentifier>{74868f65-ea7a-4478-bbdf-4041f84188e1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -79,23 +82,26 @@
     <ClCompile Include="source\Components\Physics\ColliderComponent.cpp">
       <Filter>source\Components\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="source\Components\Physics\SphereComponent.cpp">
-      <Filter>source\Components\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Components\Physics\StaticMeshStaticColliderComponent.cpp">
-      <Filter>source\Components\Physics</Filter>
-    </ClCompile>
     <ClCompile Include="source\Components\Rendering\CameraComponent.cpp">
       <Filter>source\Components\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="source\Components\Rendering\LightComponent.cpp">
       <Filter>source\Components\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="source\Components\Rendering\LineStructureComponent.cpp">
-      <Filter>source\Components\Rendering</Filter>
-    </ClCompile>
     <ClCompile Include="source\Components\Rendering\StaticMeshComponent.cpp">
       <Filter>source\Components\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Components\Physics\SphereColliderComponent.cpp">
+      <Filter>source\Components\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Systems\PhysicsSystem.cpp">
+      <Filter>source\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Components\Physics\StaticMeshColliderComponent.cpp">
+      <Filter>source\Components\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Systems\RenderSystem.cpp">
+      <Filter>source\Systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -112,9 +118,6 @@
       <Filter>include\Assets</Filter>
     </ClInclude>
     <ClInclude Include="include\Engine\Forwards\Engine.h">
-      <Filter>include\Forwards</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engine\Forwards\Physics.h">
       <Filter>include\Forwards</Filter>
     </ClInclude>
     <ClInclude Include="include\Engine\Component.h">
@@ -144,25 +147,10 @@
     <ClInclude Include="include\Engine\Systems\RenderSystem.h">
       <Filter>include\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="source\Physics\PhysicsBody.h">
-      <Filter>source\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Physics\Physics.h">
-      <Filter>source\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Physics\PhysicsWorld.h">
-      <Filter>source\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Physics\BulletTriangleMesh.h">
-      <Filter>source\Physics</Filter>
-    </ClInclude>
     <ClInclude Include="include\Engine\Components\Rendering\CameraComponent.h">
       <Filter>include\Components\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="include\Engine\Components\Rendering\LightComponent.h">
-      <Filter>include\Components\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engine\Components\Rendering\LineStructureComponent.h">
       <Filter>include\Components\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="include\Engine\Components\Rendering\StaticMeshComponent.h">
@@ -177,11 +165,20 @@
     <ClInclude Include="include\Engine\Components\Physics\SphereColliderComponent.h">
       <Filter>include\Components\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Engine\Components\Physics\StaticMeshStaticColliderComponent.h">
+    <ClInclude Include="include\Engine\Systems\PhysicsSystem.h">
+      <Filter>include\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Forwards\Components.h">
+      <Filter>include\Forwards</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Containers\GTable.h">
+      <Filter>include\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Components\Physics\StaticMeshColliderComponent.h">
       <Filter>include\Components\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="source\Physics\EntityCollider.h">
-      <Filter>source\Physics</Filter>
+    <ClInclude Include="include\Engine\Forwards\Systems.h">
+      <Filter>include\Forwards</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

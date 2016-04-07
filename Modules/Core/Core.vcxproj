@@ -35,6 +35,7 @@
     <ClInclude Include="include\Core\Event\Event.h" />
     <ClInclude Include="include\Core\Event\EventHandler.h" />
     <ClInclude Include="include\Core\Event\EventManager.h" />
+    <ClInclude Include="include\Core\Exception.h" />
     <ClInclude Include="include\Core\Forwards\Containers.h" />
     <ClInclude Include="include\Core\Forwards\Core.h" />
     <ClInclude Include="include\Core\Forwards\IO.h" />
@@ -54,6 +55,7 @@
     <ClInclude Include="include\Core\Math\Vec3.h" />
     <ClInclude Include="include\Core\Math\Vec4.h" />
     <ClInclude Include="include\Core\Memory\Buffers\DynamicBuffer.h" />
+    <ClInclude Include="include\Core\Memory\Buffers\TLinkedBuffer.h" />
     <ClInclude Include="include\Core\Memory\Buffers\StaticBuffer.h" />
     <ClInclude Include="include\Core\Memory\Pointers\Borrowed.h" />
     <ClInclude Include="include\Core\Memory\ReferenceCounter.h" />
@@ -100,6 +102,8 @@
     <ClCompile Include="source\Event\Event.cpp" />
     <ClCompile Include="source\Event\EventHandler.cpp" />
     <ClCompile Include="source\Event\EventManager.cpp" />
+    <ClCompile Include="source\Exception.cpp" />
+    <ClCompile Include="source\IO\ArchiveReader.cpp" />
     <ClCompile Include="source\IO\Console.cpp" />
     <ClCompile Include="source\Math\Mat4.cpp" />
     <ClCompile Include="source\Math\Quat.cpp" />

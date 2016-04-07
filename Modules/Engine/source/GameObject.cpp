@@ -9,7 +9,9 @@
 
 BUILD_REFLECTION(Willow::GameObject)
 .Data("ID", &GameObject::_id)
-.Property("ID", &GameObject::GetID, nullptr, "Unique ID")
+.Data("World", &GameObject::_world)
+.Property("ID", &GameObject::GetID, nullptr)
+.Property("State", &GameObject::GetState, nullptr)
 .Property("Location", &GameObject::GetLocation, &GameObject::SetLocation, "Location in local space", "Transform")
 .Property("World Location", &GameObject::GetWorldLocation, &GameObject::SetWorldLocation, "Location in world space", "Transform")
 .Property("Rotation", &GameObject::GetRotation, &GameObject::SetRotation, "Rotation in local space", "Transform")
@@ -24,6 +26,17 @@ BUILD_ENUM_REFLECTION(Willow::GameObject::State)
 
 namespace Willow
 {
+	////////////////////////
+	///   Constructors   ///
+
+	GameObject::GameObject()
+		: _id{ 0 }, 
+		_world{ nullptr },
+		_state { State::Uninitialized }
+	{
+		// All done
+	}
+
 	///////////////////
 	///   Methods   ///
 
@@ -42,12 +55,17 @@ namespace Willow
 		this->GetWorld().DestroyGameObject(*this);
 	}
 
+	void GameObject::OnInitialize()
+	{
+		// Do nothing
+	}
+
 	void GameObject::OnSpawn()
 	{
 		// Do nothing
 	}
 
-	void GameObject::OnClone(GameObject& /*clone*/, World& /*world*/)
+	void GameObject::OnClone(const GameObject& /*old*/)
 	{
 		// Do nothing
 	}
@@ -57,8 +75,12 @@ namespace Willow
 		// Do nothing
 	}
 
-	Owned<GameObject> GameObject::Clone(World& /*world*/) const
+	/////////////////////
+	///   Operators   ///
+
+	GameObject& GameObject::operator=(const GameObject& copy)
 	{
-		return nullptr; // TODO: Implement this
+		// Do nothing (ID and State are not copied)
+		return *this;
 	}
 }
