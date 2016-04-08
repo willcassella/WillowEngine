@@ -3,12 +3,11 @@
 
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include <Engine/GHandle.h>
-#include "RigidBody.h"
 #include "EntityCollider.h"
 
 namespace Willow
 {
-	struct EntityPhysicsData final
+	struct EntityPhysicsData final : btMotionState
 	{
 		//////////////////
 		///   Fields   ///
@@ -26,7 +25,7 @@ namespace Willow
 		* NOTE: This will exist if:
 		* - The Entity is in the 'Kinematic' or 'Dynamic' modes.
 		* - The Entity has any constraints attached to it. */
-		RigidBody* RigidBody = nullptr;
+		Willow::RigidBody* RigidBody = nullptr;
 
 		/** The PhysicsState of this Entity. */
 		Entity::PhysicsState State;
@@ -39,20 +38,25 @@ namespace Willow
 
 		/** The Transform for this Entity. */
 		Willow::Transform* Transform = nullptr;
-	};
 
-	inline void UpdateInertia(EntityPhysicsData& data)
-	{
-		if (data.RigidBody && data.Mode == Entity::PhysicsMode::Dynamic)
+		///////////////////
+		///   Methods   ///
+	public:
+
+		void getWorldTransform(btTransform& worldTrans) const override
 		{
-			const auto mass = data.State.Mass;
-			btVector3 inertia;
-
-			// Calculate inertia
-			data.Collider.calculateLocalInertia(mass, inertia);
-
-			// Apply it
-			data.RigidBody->setMassProps(mass, inertia);
+			worldTrans.setOrigin(ConvertToBullet(Transform->Location));
+			worldTrans.setRotation(ConvertToBullet(Transform->Rotation));
 		}
-	}
+
+		void setWorldTransform(const btTransform& worldTrans) override
+		{
+			// Use temporaries, makes debugging easier
+			const auto newLocation = ConvertFromBullet(worldTrans.getOrigin());
+			const auto newRotation = ConvertFromBullet(worldTrans.getRotation());
+
+			Transform->Location = newLocation;
+			Transform->Rotation = newRotation;
+		}
+	};
 }

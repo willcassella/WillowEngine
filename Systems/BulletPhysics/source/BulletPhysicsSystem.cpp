@@ -5,7 +5,7 @@
 #include "../include/BulletPhysics/BulletPhysicsSystem.h"
 #include "DebugDrawer.h"
 #include "PhysicsWorld.h"
-#include "EntityPhysicsData.h"
+#include "RigidBody.h"
 #include "BulletTriangleMesh.h"
 
 //////////////////////
@@ -69,7 +69,7 @@ namespace Willow
 		// If the entity is at least kinematic
 		if (mode >= Entity::PhysicsMode::Kinematic)
 		{
-			auto* rigidBody = _rigidBodies.New(state, transform, data->Collider);
+			auto* rigidBody = _rigidBodies.New(*data);
 			_physicsWorld->GetDynamicsWorld().addRigidBody(rigidBody);
 			data->GhostBody->setIgnoreCollisionCheck(rigidBody, true);
 			data->RigidBody = rigidBody;
@@ -84,12 +84,12 @@ namespace Willow
 		}
 	}
 
-	void BulletPhysicsSystem::DestroyEntity(EntityHandle entity)
+	void BulletPhysicsSystem::DestroyEntity(EntityHandle /*entity*/)
 	{
 		// TODO
 	}
 
-	void BulletPhysicsSystem::SetEntityParent(EntityHandle entity, EntityHandle parent)
+	void BulletPhysicsSystem::SetEntityParent(EntityHandle /*entity*/, EntityHandle /*parent*/)
 	{
 		// TODO
 	}
@@ -99,7 +99,6 @@ namespace Willow
 		_entityDataTable.Find(entity, [&](EntityPhysicsData* data)
 		{
 			data->Collider.setLocalScaling(ConvertToBullet(data->Transform->Scale));
-
 			btTransform transform{ ConvertToBullet(data->Transform->Rotation), ConvertToBullet(data->Transform->Location) };
 
 			// If we have a GhostBody
@@ -151,7 +150,7 @@ namespace Willow
 				if (mode >= Entity::PhysicsMode::Kinematic)
 				{
 					// Create one
-					auto* rigidBody = _rigidBodies.New(data->State, *data->Transform, data->Collider);
+					auto* rigidBody = _rigidBodies.New(*data);
 					_physicsWorld->GetDynamicsWorld().addRigidBody(rigidBody);
 					data->RigidBody = rigidBody;
 
@@ -400,7 +399,7 @@ namespace Willow
 		_capsuleColliders.Destroy(collider);
 	}
 
-	void BulletPhysicsSystem::DestroyCollider(GHandle<StaticMeshColliderComponent> component)
+	void BulletPhysicsSystem::DestroyCollider(GHandle<StaticMeshColliderComponent> /*component*/)
 	{
 		// TODO
 	}
@@ -425,17 +424,14 @@ namespace Willow
 		});
 	}
 
-	void BulletPhysicsSystem::SetColliderTransform(GHandle<StaticMeshColliderComponent> component, const Transform& transform)
+	void BulletPhysicsSystem::SetColliderTransform(GHandle<StaticMeshColliderComponent> /*component*/, const Transform& /*transform*/)
 	{
 		// TODO
 	}
 
-	void BulletPhysicsSystem::SetColliderShape(GHandle<SphereColliderComponent> component, SphereColliderComponent::Shape shape)
+	void BulletPhysicsSystem::SetColliderShape(GHandle<SphereColliderComponent> component, SphereColliderComponent::Shape /*shape*/)
 	{
-		_sphereColliderTable.Find(component, [&](auto* collider)
-		{
-			
-		});
+		// TODO
 	}
 
 	void BulletPhysicsSystem::SetColliderShape(GHandle<CapsuleColliderComponent> component, CapsuleColliderComponent::Shape shape)

@@ -78,7 +78,7 @@ namespace Willow
 	/////////////////////
 	///   Operators   ///
 
-	GameObject& GameObject::operator=(const GameObject& copy)
+	GameObject& GameObject::operator=(const GameObject& /*copy*/)
 	{
 		// Do nothing (ID and State are not copied)
 		return *this;

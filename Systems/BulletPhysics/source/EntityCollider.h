@@ -25,6 +25,7 @@ namespace Willow
 		void AddChild(btCollisionShape& child, const Vec3& location, const Quat& rotation)
 		{
 			const btTransform transform{ ConvertToBullet(rotation), ConvertToBullet(location) };
+			child.setLocalScaling(this->getLocalScaling());
 			this->addChildShape(transform, &child);
 		}
 

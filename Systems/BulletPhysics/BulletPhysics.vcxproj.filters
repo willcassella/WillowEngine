@@ -26,9 +26,6 @@
     <ClInclude Include="include\BulletPhysics\config.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="source\MotionState.h">
-      <Filter>source</Filter>
-    </ClInclude>
     <ClInclude Include="source\Common.h">
       <Filter>source</Filter>
     </ClInclude>

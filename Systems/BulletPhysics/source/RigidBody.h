@@ -2,12 +2,12 @@
 #pragma once
 
 #include <Engine/Entity.h>
-#include "EntityCollider.h"
-#include "MotionState.h"
+#include "EntityPhysicsData.h"
 
 namespace Willow
 {
-	static btDefaultMotionState DefaultMotionState;
+	/////////////////
+	///   Types   ///
 
 	class RigidBody final : public btRigidBody
 	{
@@ -15,30 +15,39 @@ namespace Willow
 		///   Constructors   ///
 	public:
 
-		RigidBody(const Entity::PhysicsState& state, Transform& transform, EntityCollider& collider)
-			: btRigidBody{ state.Mass, &DefaultMotionState, &collider }, _motionState{ transform }
+		RigidBody(EntityPhysicsData& entityData)
+			: btRigidBody{ entityData.State.Mass, &entityData, &entityData.Collider }
 		{
-			// Set the motion state
-			this->setMotionState(&_motionState);
-
 			// Set the mass and inertia
 			btVector3 inertia;
-			collider.calculateLocalInertia(state.Mass, inertia);
-			this->setMassProps(state.Mass, inertia);
+			entityData.Collider.calculateLocalInertia(entityData.State.Mass, inertia);
+			this->setMassProps(entityData.State.Mass, inertia);
 
 			// Set other properties
-			this->setLinearFactor(ConvertToBullet(state.LinearMotionFactor));
-			this->setAngularFactor(ConvertToBullet(state.AngularMotionFactor));
-			this->setFriction(state.Friction);
-			this->setRollingFriction(state.RollingFriction);
+			this->setLinearFactor(ConvertToBullet(entityData.State.LinearMotionFactor));
+			this->setAngularFactor(ConvertToBullet(entityData.State.AngularMotionFactor));
+			this->setFriction(entityData.State.Friction);
+			this->setRollingFriction(entityData.State.RollingFriction);
 		}
 		RigidBody(const RigidBody& copy) = delete;
 		RigidBody(RigidBody&& move) = delete;
-
-		////////////////
-		///   Data   ///
-	private:
-
-		MotionState _motionState;
 	};
+
+	/////////////////////
+	///   Functions   ///
+
+	inline void UpdateInertia(EntityPhysicsData& data)
+	{
+		if (data.RigidBody && data.Mode == Entity::PhysicsMode::Dynamic)
+		{
+			const auto mass = data.State.Mass;
+			btVector3 inertia;
+
+			// Calculate inertia
+			data.Collider.calculateLocalInertia(mass, inertia);
+
+			// Apply it
+			data.RigidBody->setMassProps(mass, inertia);
+		}
+	}
 }

@@ -175,7 +175,6 @@
     <ClInclude Include="source\DebugDrawer.h" />
     <ClInclude Include="source\EntityCollider.h" />
     <ClInclude Include="source\EntityPhysicsData.h" />
-    <ClInclude Include="source\MotionState.h" />
     <ClInclude Include="source\Common.h" />
     <ClInclude Include="source\RigidBody.h" />
     <ClInclude Include="source\PhysicsWorld.h" />
