@@ -161,6 +161,12 @@ namespace Willow
 		}
 	}
 
+	void World::SetGravity(const Vec3& gravity)
+	{
+		_gravity = gravity;
+		// TODO: Update this with PhysicsSystem
+	}
+
 	void World::SpawnGameObject(Owned<GameObject> owner)
 	{
 		auto& object = *owner;

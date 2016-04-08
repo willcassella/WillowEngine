@@ -115,40 +115,6 @@ namespace Willow
 			return this->Spawn<T>(entity);
 		}
 
-		/** Clones the contents of the given World into this World.
-		* This includes Entities, Components, but not Systems.
-		* root - Where in this World the given World's center should be considered. */
-		void Clone(const World& world, const Transform& root);
-
-		/** Clones the given Entity, and all Components connected to it.
-		* NOTE: If you want to clone the enetity's Children, use 'CloneTree'. */
-		template <class T>
-		auto Clone(const T& entity) -> std::enable_if_t<std::is_base_of<Entity, T>::value, T&>
-		{
-
-		}
-
-		/** Clones the given Component, attatching it to a new Entity. */
-		template <class T>
-		auto Clone(const T& component) -> std::enable_if_t<std::is_base_of<Component, T>::value, T&>
-		{
-
-		}
-
-		/** Clones the given Compnent, attaching it to the given Entity. */
-		template <class T>
-		auto Clone(const T& component, Entity& entity) -> std::enable_if_t<std::is_base_of<Component, T>::value, T&>
-		{
-
-		}
-
-		/** Clones the given Entity, all Components connected to it, as well as recursively cloning its children. */
-		template <class T>
-		auto CloneTree(const T& entity) -> std::enable_if_t<std::is_base_of<Entity, T>::value, T&>
-		{
-
-		}
-
 		/** Returns an enumeration of the given types of objects in this World. */
 		template <typename T>
 		auto Enumerate() const
