@@ -112,8 +112,11 @@ for obj in bpy.data.objects:
         
         # If we haven't exported its mesh yet
         if meshPath not in exportedMeshes:
-            export_mesh(obj.data, meshPath)
+            # Apply mesh modifiers on the object and export it
+            mesh = obj.to_mesh(bpy.context.scene, True, 'PREVIEW')
+            export_mesh(mesh, meshPath)
             exportedMeshes.append(meshPath)
+            bpy.data.meshes.remove(mesh)
         
         # Create a node for the StaticMeshComponent
         staticMeshID = nextID
