@@ -429,17 +429,17 @@ namespace Willow
 		// TODO
 	}
 
-	void BulletPhysicsSystem::SetColliderShape(GHandle<SphereColliderComponent> component, SphereColliderComponent::Shape /*shape*/)
+	void BulletPhysicsSystem::SetColliderShape(GHandle<SphereColliderComponent> /*component*/, SphereColliderComponent::Shape /*shape*/)
 	{
 		// TODO
 	}
 
-	void BulletPhysicsSystem::SetColliderShape(GHandle<CapsuleColliderComponent> component, CapsuleColliderComponent::Shape shape)
+	void BulletPhysicsSystem::SetColliderShape(GHandle<CapsuleColliderComponent> /*component*/, CapsuleColliderComponent::Shape /*shape*/)
 	{
 		// TODO
 	}
 
-	void BulletPhysicsSystem::SetColliderShape(GHandle<StaticMeshColliderComponent> component, StaticMeshColliderComponent::Shape shape)
+	void BulletPhysicsSystem::SetColliderShape(GHandle<StaticMeshColliderComponent> /*component*/, StaticMeshColliderComponent::Shape /*shape*/)
 	{
 		// TODO
 	}
