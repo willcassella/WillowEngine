@@ -27,7 +27,10 @@ add_subdirectory(Modules/Engine)
 add_subdirectory(Tools/AssetConverter)
 
 # Add GLRender project
-add_subdirectory(Services/GLRender)
+add_subdirectory(Systems/GLRender)
+
+# Add BulletPhysics project
+add_subdirectory(Systems/BulletPhysics)
 
 # Add Client project
 add_subdirectory(Runtimes/Client)
