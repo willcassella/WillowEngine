@@ -35,13 +35,13 @@ public:
 	Quat(const Vec3& axis, Angle angle)
 	{
 		// Make sure the axis vector is normalized
-		auto normAxis = axis.Normalize();
-		Scalar sinHalfAngle = std::sin(angle * Scalar{ 0.5 });
+		const auto normAxis = axis.Normalize();
+		const auto sinHalfAngle = std::sin(angle * Scalar{ 0.5 });
 
 		this->X = normAxis.X * sinHalfAngle;
 		this->Y = normAxis.Y * sinHalfAngle;
 		this->Z = normAxis.Z * sinHalfAngle;
-		this->W = std::cos(angle * Scalar(0.5));
+		this->W = std::cos(angle * Scalar { 0.5 });
 	}
 
 	//////////////////

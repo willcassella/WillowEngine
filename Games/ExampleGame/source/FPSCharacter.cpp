@@ -10,7 +10,8 @@
 
 BUILD_REFLECTION(ExampleGame::FPSCharacter)
 .Field("View", &FPSCharacter::View)
-.Field("Capsule", &FPSCharacter::Capsule);
+.Field("Capsule", &FPSCharacter::Capsule)
+.Field("CharacterMovement", &FPSCharacter::CharacterMovement);
 
 namespace ExampleGame
 {
@@ -32,7 +33,9 @@ namespace ExampleGame
 
 	void FPSCharacter::Move(Vec2 direction)
 	{
-		this->ApplyImpulse(Mat4::Rotate(View.Borrow()->GetWorldRotation()) * Vec3{ direction.X, 0, -direction.Y } * 10);
+		//this->ApplyImpulse(Mat4::Rotate(View.Borrow()->GetWorldRotation()) * Vec3{ direction.X, 0, -direction.Y } * 10);
+		Vec3 dir = Mat4::Rotate(View.Borrow()->GetWorldRotation()) * Vec3 { direction.X, 0, -direction.Y };
+		this->CharacterMovement.Borrow()->Walk(Vec2{ dir.X, dir.Z } / 5);
 	}
 
 	void FPSCharacter::Look(Vec2 direction)
@@ -49,7 +52,10 @@ namespace ExampleGame
 		projectile.Material = "Content/Materials/Sponza.mat";
 		projectile.InstanceParams["diffuse"] = Willow::AssetPtr<Willow::Texture>("Content/Textures/monkey.png");
 
-		projectile.SetWorldLocation(this->GetWorldLocation() + Vec3{ 3, 0, 0 });
+		projectile.SetWorldLocation(View.Borrow()->GetWorldLocation() + Vec3{ 3, 0, 0 });
+		projectile.SetWorldRotation(View.Borrow()->GetWorldRotation());
+		projectile.Translate({ 0, 0, -1 });
+		
 		auto& sphere = projectile.GetEntity().Connect<Willow::SphereColliderComponent>();
 		projectile.GetEntity().SetPhysicsMode(PhysicsMode::Dynamic);
 		sphere.SetRadius(0.7f);
@@ -57,6 +63,7 @@ namespace ExampleGame
 
 	void FPSCharacter::Jump()
 	{
-		this->ApplyImpulse({ 0, 100, 0 });
+		//this->ApplyImpulse({ 0, 100, 0 });
+		this->CharacterMovement.Borrow()->Jump();
 	}
 }

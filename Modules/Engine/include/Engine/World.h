@@ -43,7 +43,8 @@ namespace Willow
 
 		void ToArchive(ArchiveWriter& writer) const;
 
-		/** Sets the state of this world from the given archive. */
+		/** Sets the state of this world from the given archive. 
+		* NOTE: This resets the state of the World. */
 		void FromArchive(const ArchiveReader& reader);
 
 		/** Updates the state of this World by one time step. */

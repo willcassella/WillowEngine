@@ -3,12 +3,20 @@
 
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include <Engine/GHandle.h>
+#include <Engine/Entity.h>
 #include "EntityCollider.h"
 
 namespace Willow
 {
-	struct EntityPhysicsData final : btMotionState
+	class EntityPhysicsData final : public btMotionState
 	{
+		////////////////////////
+		///   Constructors   ///
+	public:
+
+		EntityPhysicsData(const Entity::PhysicsState& state, Entity::PhysicsMode mode, EntityHandle parent, Transform& transform);
+		EntityPhysicsData(const EntityPhysicsData& copy) = delete;
+
 		//////////////////
 		///   Fields   ///
 	public:
@@ -19,13 +27,13 @@ namespace Willow
 		/** GhostBody for this Entity.
 		* NOTE: This will exist if:
 		* - The Entity is in the 'Ghost', 'Kinematic', or 'Dynamic' modes. */
-		btGhostObject* GhostBody = nullptr;
+		class GhostBody* GhostBody = nullptr;
 
 		/** RigidBody for this Entity.
 		* NOTE: This will exist if:
 		* - The Entity is in the 'Kinematic' or 'Dynamic' modes.
 		* - The Entity has any constraints attached to it. */
-		Willow::RigidBody* RigidBody = nullptr;
+		class RigidBody* RigidBody = nullptr;
 
 		/** The PhysicsState of this Entity. */
 		Entity::PhysicsState State;
@@ -37,26 +45,14 @@ namespace Willow
 		EntityHandle Parent;
 
 		/** The Transform for this Entity. */
-		Willow::Transform* Transform = nullptr;
+		Willow::Transform* Transform;
 
 		///////////////////
 		///   Methods   ///
 	public:
 
-		void getWorldTransform(btTransform& worldTrans) const override
-		{
-			worldTrans.setOrigin(ConvertToBullet(Transform->Location));
-			worldTrans.setRotation(ConvertToBullet(Transform->Rotation));
-		}
+		void getWorldTransform(btTransform& worldTrans) const override;
 
-		void setWorldTransform(const btTransform& worldTrans) override
-		{
-			// Use temporaries, makes debugging easier
-			const auto newLocation = ConvertFromBullet(worldTrans.getOrigin());
-			const auto newRotation = ConvertFromBullet(worldTrans.getRotation());
-
-			Transform->Location = newLocation;
-			Transform->Rotation = newRotation;
-		}
+		void setWorldTransform(const btTransform& worldTrans) override;
 	};
 }

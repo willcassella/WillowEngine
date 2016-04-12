@@ -103,7 +103,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>BULLETPHYSICS_BUILD;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4521;4522;4814</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalDependencies>Core.lib;Resource.lib;Engine.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -119,7 +119,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>BULLETPHYSICS_BUILD;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4521;4522;4814</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalDependencies>Core.lib;Resource.lib;Engine.lib;LinearMath.lib;BulletCollision.lib;BulletDynamics.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -137,7 +137,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>BULLETPHYSICS_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4521;4522;4814</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -157,7 +157,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>BULLETPHYSICS_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4521;4522;4814</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -171,16 +171,22 @@
   <ItemGroup>
     <ClInclude Include="include\BulletPhysics\BulletPhysicsSystem.h" />
     <ClInclude Include="include\BulletPhysics\config.h" />
-    <ClInclude Include="source\BulletTriangleMesh.h" />
-    <ClInclude Include="source\DebugDrawer.h" />
-    <ClInclude Include="source\EntityCollider.h" />
-    <ClInclude Include="source\EntityPhysicsData.h" />
-    <ClInclude Include="source\Common.h" />
-    <ClInclude Include="source\RigidBody.h" />
-    <ClInclude Include="source\PhysicsWorld.h" />
+    <ClInclude Include="private\BulletTriangleMesh.h" />
+    <ClInclude Include="private\CharacterController.h" />
+    <ClInclude Include="private\Common.h" />
+    <ClInclude Include="private\DebugDrawer.h" />
+    <ClInclude Include="private\EntityCollider.h" />
+    <ClInclude Include="private\EntityPhysicsData.h" />
+    <ClInclude Include="private\GhostBody.h" />
+    <ClInclude Include="private\PhysicsWorld.h" />
+    <ClInclude Include="private\RigidBody.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\BulletPhysicsSystem.cpp" />
+    <ClCompile Include="source\CharacterController.cpp" />
+    <ClCompile Include="source\EntityPhysicsData.cpp" />
+    <ClCompile Include="source\GhostBody.cpp" />
+    <ClCompile Include="source\RigidBody.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

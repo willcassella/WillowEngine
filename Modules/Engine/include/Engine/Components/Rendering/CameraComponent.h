@@ -20,7 +20,7 @@ namespace Willow
 	public:
 
 		/** The horizontal field of view of this Camera. */
-		Angle Fov = 90.f;
+		Angle Fov = Degrees(90.f);
 
 		/** The screen ratio of this Camera. */
 		float ScreenRatio = 16.f / 9;

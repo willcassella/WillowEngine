@@ -7,13 +7,44 @@
 #include <Engine/Containers/GTable.h>
 #include "config.h"
 
-class btGhostObject;
+////////////////////
+///   Forwards   ///
+
+/** Defined in a Bullet header. */
 class btSphereShape;
+
+/** Defined in a Bullet header. */
 class btCapsuleShape;
+
+/** Defined in a Bullet header. */
 class btBvhTriangleMeshShape;
 
 namespace Willow
 {
+	/** Defined in 'private/PhysicsWorld.h' */
+	class PhysicsWorld;
+
+	/** Defined in 'private/EntityPhysicsData.h' */
+	class EntityPhysicsData;
+
+	/** Defined in 'private/EntityCollider.h' */
+	class EntityCollider;
+
+	/** Defined in 'private/RigidBody.h' */
+	class RigidBody;
+
+	/** Defined in 'private/GhostBody.h' */
+	class GhostBody;
+
+	/** Defined in 'private/CharacterController.h' */
+	class CharacterController;
+
+	/** Defined in 'private/BulletTriangleMesh.h' */
+	class BulletTriangleMesh;
+
+	/////////////////
+	///   Types   ///
+
 	class BULLETPHYSICS_API BulletPhysicsSystem final : public PhysicsSystem
 	{
 		///////////////////////
@@ -90,21 +121,37 @@ namespace Willow
 
 		void SetColliderShape(GHandle<StaticMeshColliderComponent> component, StaticMeshColliderComponent::Shape shape) override;
 
+		void CreateCharacterController(
+			GHandle<CharacterControllerComponent> component,
+			EntityHandle entity,
+			GHandle<PrimitiveColliderComponent> collider,
+			CharacterControllerComponent::Settings settings) override;
+
+		void CharacterControllerJump(GHandle<CharacterControllerComponent> component) override;
+
+		void CharacterControllerOnGround(GHandle<CharacterControllerComponent> component, bool& out) override;
+
+		void CharacterControllerWalk(GHandle<CharacterControllerComponent> component, const Vec2& direction) override;
+
 		////////////////
 		///   Data   ///
 	private:
 		
 		// Physics world and configuration
-		std::unique_ptr<class PhysicsWorld> _physicsWorld;
+		std::unique_ptr<PhysicsWorld> _physicsWorld;
 		
+		// Entity physics objects
+		TLinkedBuffer<EntityCollider> _entityColliders;
+		TLinkedBuffer<RigidBody> _rigidBodies;
+		TLinkedBuffer<GhostBody> _ghostBodies;
+
 		// Entity data
-		TLinkedBuffer<struct EntityPhysicsData> _entityPhysicsData;
+		TLinkedBuffer<EntityPhysicsData> _entityPhysicsData;
 		GTable<Entity, EntityPhysicsData*> _entityDataTable;
 
-		// Entity physics objects
-		TLinkedBuffer<class EntityCollider> _entityColliders;
-		TLinkedBuffer<class RigidBody> _rigidBodies;
-		TLinkedBuffer<btGhostObject> _ghostBodies;
+		// Character controllers
+		TLinkedBuffer<CharacterController> _characterControllers;
+		GTable<CharacterControllerComponent, CharacterController*> _characterControllerTable;
 
 		// Sphere colliders
 		TLinkedBuffer<btSphereShape> _sphereColliders;
@@ -115,7 +162,7 @@ namespace Willow
 		GTable<CapsuleColliderComponent, btCapsuleShape*> _capsuleColliderTable;
 
 		// Static mesh colliders
-		Table<AssetPtr<StaticMesh>, std::unique_ptr<class BulletTriangleMesh>> _triangleMeshes;
+		Table<AssetPtr<StaticMesh>, std::unique_ptr<BulletTriangleMesh>> _triangleMeshes;
 		TLinkedBuffer<btBvhTriangleMeshShape> _staticMeshColliders;
 		GTable<StaticMeshColliderComponent, btBvhTriangleMeshShape*> _staticMeshColliderTable;
 	};

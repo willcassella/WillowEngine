@@ -9,38 +9,59 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="private">
+      <UniqueIdentifier>{a461fd0e-8a8f-4a6d-94df-5e203b5ee0e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\BulletPhysics\BulletPhysicsSystem.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="source\BulletTriangleMesh.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="source\EntityCollider.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="source\PhysicsWorld.h">
-      <Filter>source</Filter>
-    </ClInclude>
     <ClInclude Include="include\BulletPhysics\config.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="source\Common.h">
-      <Filter>source</Filter>
+    <ClInclude Include="private\BulletTriangleMesh.h">
+      <Filter>private</Filter>
     </ClInclude>
-    <ClInclude Include="source\RigidBody.h">
-      <Filter>source</Filter>
+    <ClInclude Include="private\CharacterController.h">
+      <Filter>private</Filter>
     </ClInclude>
-    <ClInclude Include="source\DebugDrawer.h">
-      <Filter>source</Filter>
+    <ClInclude Include="private\Common.h">
+      <Filter>private</Filter>
     </ClInclude>
-    <ClInclude Include="source\EntityPhysicsData.h">
-      <Filter>source</Filter>
+    <ClInclude Include="private\DebugDrawer.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\EntityCollider.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\EntityPhysicsData.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\GhostBody.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\PhysicsWorld.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\RigidBody.h">
+      <Filter>private</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\BulletPhysicsSystem.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\RigidBody.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GhostBody.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\EntityPhysicsData.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CharacterController.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

@@ -52,6 +52,13 @@ namespace Willow
 
 	void World::FromArchive(const ArchiveReader& reader)
 	{
+		// Reset state
+		_gameObjects.Clear();
+		_destroyedObjects.Clear();
+		_entities.Clear();
+		_components.Clear();
+
+		// Begin deserialization
 		reader.PullValue("TimeDilation", this->TimeDilation);
 		reader.PullValue("TimeStep", this->TimeStep);
 		reader.PullValue("NextID", _nextGameObjectID);

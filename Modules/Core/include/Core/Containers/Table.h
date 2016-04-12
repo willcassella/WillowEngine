@@ -36,7 +36,7 @@ public:
 
 	Table() = default;
 	Table(const std::initializer_list<PairT>& init)
-		: _values(init.size())
+		: _values{ init.size() }
 	{
 		for (const auto& value : init)
 		{
@@ -82,9 +82,27 @@ public:
 		return nullptr;
 	}
 
+	/** Searches for the value associated with the given key in this Table.
+	* Returns whether the key was found. If it was, 'outValue' will have been assigned to with the corresponding value. */
+	template <typename T, WHERE(Operations::Assign<T, const ValueT&>::Supported)>
+	bool Find(const KeyT& key, T& outValue) const
+	{
+		auto* value = this->Find(key);
+
+		if (value)
+		{
+			outValue = *value;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	/** Searches for the value associated with the given key in this table, and calls the given function if it's found. 
 	* Returns if the key was found and the function was called. */
-	template <typename F>
+	template <typename F, WHERE(!Operations::Assign<F, const ValueT&>::Supported)>
 	bool Find(const KeyT& key, F func)
 	{
 		auto value = Find(key);
@@ -101,7 +119,7 @@ public:
 
 	/** Searches for the value associated with the given key in this table, and calls the given function if it's found.
 	* Returns if the key was found and the function was called. */
-	template <typename F>
+	template <typename F, WHERE(!Operations::Assign<F, const ValueT&>::Supported)>
 	bool Find(const KeyT& key, F func) const
 	{
 		auto value = Find(key);

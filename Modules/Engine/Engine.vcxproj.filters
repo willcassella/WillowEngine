@@ -50,6 +50,12 @@
     <Filter Include="source\Entities">
       <UniqueIdentifier>{1ee382cc-3e79-45f8-a4ff-d29e42b0d2ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\Components\Gameplay">
+      <UniqueIdentifier>{36cbe3c2-be6f-4f9b-8b66-2076d233459d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Components\Gameplay">
+      <UniqueIdentifier>{22a0785f-e3af-410b-bdb3-cadb03307fee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Transform.cpp">
@@ -112,6 +118,12 @@
     <ClCompile Include="source\Entities\DebugCamera.cpp">
       <Filter>source\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="source\Components\Gameplay\CharacterControllerComponent.cpp">
+      <Filter>source\Components\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Components\Physics\PrimitiveColliderComponent.cpp">
+      <Filter>source\Components\Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Engine\Assets\Material.h">
@@ -136,9 +148,6 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Engine\Entity.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engine\GHandle.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Engine\Transform.h">
@@ -191,6 +200,15 @@
     </ClInclude>
     <ClInclude Include="include\Engine\Entities\DebugCamera.h">
       <Filter>include\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Components\Physics\PrimitiveColliderComponent.h">
+      <Filter>include\Components\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Components\Gameplay\CharacterControllerComponent.h">
+      <Filter>include\Components\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\GHandle.h">
+      <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

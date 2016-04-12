@@ -321,6 +321,9 @@
     <ClInclude Include="include\Core\Memory\Buffers\TLinkedBuffer.h">
       <Filter>include\Memory\Buffers</Filter>
     </ClInclude>
+    <ClInclude Include="include\Core\Misc\ArithmeticAlias.h">
+      <Filter>include\Misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Object.cpp">

@@ -1,18 +1,18 @@
 // CapsuleColliderComponent.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "ColliderComponent.h"
+#include "PrimitiveColliderComponent.h"
 
 namespace Willow
 {
-	class ENGINE_API CapsuleColliderComponent final : public ColliderComponent
+	class ENGINE_API CapsuleColliderComponent final : public PrimitiveColliderComponent
 	{
 		///////////////////////
 		///   Information   ///
 	public:
 
 		REFLECTABLE_CLASS
-		EXTENDS(ColliderComponent)
+		EXTENDS(PrimitiveColliderComponent)
 
 		/////////////////
 		///   Types   ///

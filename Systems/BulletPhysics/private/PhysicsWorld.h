@@ -25,6 +25,10 @@ namespace Willow
 			// Initialize the physics world
 			_dynamicsWorld = std::make_unique<btDiscreteDynamicsWorld>(_dispatcher.get(), _broadPhaseInterface.get(), _constraintSolver.get(), _collisionConfiguration.get());
 			_dynamicsWorld->setGravity(btVector3{ 0, -10, 0 });
+
+			// I have to do this for some reason
+			_callback = std::make_unique<btGhostPairCallback>();
+			_dynamicsWorld->getPairCache()->setInternalGhostPairCallback(_callback.get());
 		}
 
 		///////////////////
@@ -52,6 +56,7 @@ namespace Willow
 		std::unique_ptr<btCollisionConfiguration> _collisionConfiguration;
 		std::unique_ptr<btCollisionDispatcher> _dispatcher;
 		std::unique_ptr<btConstraintSolver> _constraintSolver;
+		std::unique_ptr<btGhostPairCallback> _callback;
 
 		// Physics world
 		std::unique_ptr<btDynamicsWorld> _dynamicsWorld;

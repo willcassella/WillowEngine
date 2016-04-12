@@ -60,21 +60,17 @@ public:
 	Mat4 Inverse() const;
 
 	/** Generates a perspective projection matrix with the given properties */
-	FORCEINLINE static Mat4 Perspective(Scalar hFOV, Scalar vFOV, Scalar zMin, Scalar zMax)
+	FORCEINLINE static Mat4 Perspective(Angle hFOV, Angle vFOV, Scalar zMin, Scalar zMax)
 	{
-		// Convert vertical and horizontal FOV to radians
-		Scalar RadHFOV = hFOV * Deg2Rad;
-		Scalar RadVFOV = vFOV * Deg2Rad;
+		const auto xMax = std::tan(hFOV * 0.5f) * zMin;
+		const auto xMin = -xMax;
 
-		Scalar xMax = std::tan(RadHFOV * 0.5f) * zMin;
-		Scalar xMin = -xMax;
+		const auto yMax = std::tan(vFOV * 0.5f) * zMin;
+		const auto yMin = -yMax;
 
-		Scalar yMax = std::tan(RadVFOV * 0.5f) * zMin;
-		Scalar yMin = -yMax;
-
-		Scalar width = xMax - xMin;
-		Scalar height = yMax - yMin;
-		Scalar depth = zMax - zMin;
+		const auto width = xMax - xMin;
+		const auto height = yMax - yMin;
+		const auto depth = zMax - zMin;
 
 		return Mat4(
 			2*zMin/width,	0,				(xMax+xMin)/width,	0,
@@ -84,31 +80,27 @@ public:
 	}
 
 	/** Generates a perspective projection matrix with the following horizontal FOV */
-	FORCEINLINE static Mat4 PerspectiveHFOV(Scalar hFOV, Scalar ratio, Scalar zMin, Scalar zMax)
+	FORCEINLINE static Mat4 PerspectiveHFOV(Angle hFOV, Scalar ratio, Scalar zMin, Scalar zMax)
 	{
-		// Convert hFOV to radians
-		Scalar RadHFOV = hFOV * Deg2Rad;
-		Scalar vFOV = Rad2Deg * 2 * atan(tan(RadHFOV * 0.5f) * 1 / ratio);
-
+		// Calculate vertical field of view
+		const Angle vFOV = 2 * std::atan(std::tan(hFOV * 0.5f) * 1 / ratio);
 		return Perspective(hFOV, vFOV, zMin, zMax);
 	}
 
 	/** Generates a perspective projection matrix with the following vertical FOV */
-	FORCEINLINE static Mat4 PerspectiveVFOV(Scalar vFOV, Scalar ratio, Scalar zMin, Scalar zMax)
+	FORCEINLINE static Mat4 PerspectiveVFOV(Angle vFOV, Scalar ratio, Scalar zMin, Scalar zMax)
 	{
-		// Convert the vFOV to radians
-		Scalar RadVFOV = vFOV * Deg2Rad;
-		Scalar hFOV = Rad2Deg * 2 * std::atan(std::tan(RadVFOV * 0.5f) * ratio);
-
+		// Calculate horizontal field of view
+		const Angle hFOV = 2 * std::atan(std::tan(vFOV* 0.5f) * ratio);
 		return Perspective(hFOV, vFOV, zMin, zMax);
 	}
 
 	/** Generates an orthographic projection matrix with the given properties */
 	FORCEINLINE static Mat4 Orthographic(Scalar xMin, Scalar xMax, Scalar yMin, Scalar yMax, Scalar zMin, Scalar zMax)
 	{
-		Scalar width = xMax - xMin;
-		Scalar height = yMax - yMin;
-		Scalar depth = zMax - zMin;
+		const auto width = xMax - xMin;
+		const auto height = yMax - yMin;
+		const auto depth = zMax - zMin;
 
 		return Mat4(
 			2 / width, 0, 0, -(xMax + xMin) / width,

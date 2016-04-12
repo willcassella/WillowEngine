@@ -3,10 +3,11 @@
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include <Engine/World.h>
 #include "../include/BulletPhysics/BulletPhysicsSystem.h"
-#include "DebugDrawer.h"
-#include "PhysicsWorld.h"
-#include "RigidBody.h"
-#include "BulletTriangleMesh.h"
+#include "../private/DebugDrawer.h"
+#include "../private/PhysicsWorld.h"
+#include "../private/RigidBody.h"
+#include "../private/CharacterController.h"
+#include "../private/BulletTriangleMesh.h"
 
 //////////////////////
 ///   Reflection   ///
@@ -25,7 +26,8 @@ namespace Willow
 
 	BulletPhysicsSystem::~BulletPhysicsSystem()
 	{
-		_physicsWorld = nullptr;
+		// _physicsWorld must be destroyed first
+		_physicsWorld.release();
 	}
 
 	///////////////////
@@ -44,42 +46,36 @@ namespace Willow
 		_physicsWorld->GetDynamicsWorld().setDebugDrawer(nullptr);
 	}
 
-	void BulletPhysicsSystem::CreateEntity(EntityHandle entity, EntityHandle parent, Transform& transform, Entity::PhysicsMode mode, Entity::PhysicsState state)
+	void BulletPhysicsSystem::CreateEntity(
+		EntityHandle entity, 
+		EntityHandle parent, 
+		Transform& transform, 
+		Entity::PhysicsMode mode, 
+		Entity::PhysicsState state)
 	{
 		// Create the physics data for this Entity
-		auto* data = _entityPhysicsData.New();
+		auto* data = _entityPhysicsData.New(state, mode, parent, transform);
 		_entityDataTable[entity] = data;
-		data->State = state;
-		data->Mode = mode;
-		data->Parent = parent;
-		data->Transform = &transform;
-
-		// Set the entitie's collider scaling
-		data->Collider.setLocalScaling(ConvertToBullet(transform.Scale));
 
 		// If the entity is at least a ghost
 		if (mode >= Entity::PhysicsMode::Ghost)
 		{
-			auto* ghost = _ghostBodies.New();
-			ghost->setCollisionShape(&data->Collider);
-			//_physicsWorld->GetDynamicsWorld().addCollisionObject(ghost);
-			data->GhostBody = ghost;
+			data->GhostBody = _ghostBodies.New(*data);
+			_physicsWorld->GetDynamicsWorld().addCollisionObject(data->GhostBody);
 		}
 
 		// If the entity is at least kinematic
 		if (mode >= Entity::PhysicsMode::Kinematic)
 		{
-			auto* rigidBody = _rigidBodies.New(*data);
-			_physicsWorld->GetDynamicsWorld().addRigidBody(rigidBody);
-			data->GhostBody->setIgnoreCollisionCheck(rigidBody, true);
-			data->RigidBody = rigidBody;
+			data->RigidBody = _rigidBodies.New(*data);
+			_physicsWorld->GetDynamicsWorld().addRigidBody(data->RigidBody);
 
 			// If the entity IS kinematic
 			if (mode == Entity::PhysicsMode::Kinematic)
 			{
-				rigidBody->setMassProps(0, { 0, 0, 0 });
-				rigidBody->setActivationState(DISABLE_DEACTIVATION);
-				rigidBody->setCollisionFlags(rigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+				data->RigidBody->setMassProps(0, { 0, 0, 0 });
+				data->RigidBody->setActivationState(DISABLE_DEACTIVATION);
+				data->RigidBody->setCollisionFlags(data->RigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
 			}
 		}
 	}
@@ -133,6 +129,7 @@ namespace Willow
 					{
 						// Destroy it
 						_physicsWorld->GetDynamicsWorld().removeRigidBody(data->RigidBody);
+						data->RigidBody->Disable(*data);
 						_rigidBodies.Destroy(data->RigidBody);
 						data->RigidBody = nullptr;
 					}
@@ -140,7 +137,10 @@ namespace Willow
 					{
 						// Set it up purely for constraints
 						data->RigidBody->setCollisionShape(nullptr);
-						data->RigidBody->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
+						data->RigidBody->setCollisionFlags(
+							data->RigidBody->getCollisionFlags() |
+							btCollisionObject::CF_KINEMATIC_OBJECT |
+							btCollisionObject::CF_NO_CONTACT_RESPONSE);
 					}
 				}
 			}
@@ -150,15 +150,14 @@ namespace Willow
 				if (mode >= Entity::PhysicsMode::Kinematic)
 				{
 					// Create one
-					auto* rigidBody = _rigidBodies.New(*data);
-					_physicsWorld->GetDynamicsWorld().addRigidBody(rigidBody);
-					data->RigidBody = rigidBody;
-
+					data->RigidBody = _rigidBodies.New(*data);
+					_physicsWorld->GetDynamicsWorld().addRigidBody(data->RigidBody);
+					
 					if (mode == Entity::PhysicsMode::Kinematic)
 					{
-						rigidBody->setMassProps(0, { 0, 0, 0 });
-						rigidBody->setActivationState(DISABLE_DEACTIVATION);
-						rigidBody->setCollisionFlags(rigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+						data->RigidBody->setMassProps(0, { 0, 0, 0 });
+						data->RigidBody->setActivationState(DISABLE_DEACTIVATION);
+						data->RigidBody->setCollisionFlags(data->RigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
 					}
 				}
 			}
@@ -180,16 +179,8 @@ namespace Willow
 				// If we want to have a GhostBody
 				if (mode >= Entity::PhysicsMode::Ghost)
 				{
-					auto* ghost = _ghostBodies.New();
-					ghost->setCollisionShape(&data->Collider);
-					//_physicsWorld->GetDynamicsWorld().addCollisionObject(ghost);
-					data->GhostBody = ghost;
-
-					// If we have a RigidBody
-					if (data->RigidBody)
-					{
-						ghost->setIgnoreCollisionCheck(data->RigidBody, true);
-					}
+					auto* ghost = _ghostBodies.New(*data);
+					_physicsWorld->GetDynamicsWorld().addCollisionObject(ghost);
 				}
 			}
 		});
@@ -442,5 +433,44 @@ namespace Willow
 	void BulletPhysicsSystem::SetColliderShape(GHandle<StaticMeshColliderComponent> /*component*/, StaticMeshColliderComponent::Shape /*shape*/)
 	{
 		// TODO
+	}
+
+	void BulletPhysicsSystem::CreateCharacterController(
+		GHandle<CharacterControllerComponent> component, 
+		EntityHandle entity, 
+		GHandle<PrimitiveColliderComponent> collider, 
+		CharacterControllerComponent::Settings settings)
+	{
+		auto* entityData = _entityDataTable[entity];
+
+		// Find collider
+		btConvexShape* bCollider = nullptr;
+		_capsuleColliderTable.Find(collider.CastTo<CapsuleColliderComponent>(), bCollider);
+		_sphereColliderTable.Find(collider.CastTo<SphereColliderComponent>(), bCollider);
+
+		// Create the controller
+		auto* controller = _characterControllers.New(*entityData, *bCollider, settings);
+		_characterControllerTable[component] = controller;
+
+		// Add it to the world
+		_physicsWorld->GetDynamicsWorld().addAction(controller);
+	}
+
+	void BulletPhysicsSystem::CharacterControllerJump(GHandle<CharacterControllerComponent> component)
+	{
+		auto* controller = _characterControllerTable[component];
+		controller->jump();
+	}
+
+	void BulletPhysicsSystem::CharacterControllerOnGround(GHandle<CharacterControllerComponent> component, bool& out)
+	{
+		auto* controller = _characterControllerTable[component];
+		out = controller->onGround();
+	}
+
+	void BulletPhysicsSystem::CharacterControllerWalk(GHandle<CharacterControllerComponent> component, const Vec2& direction)
+	{
+		auto* controller = _characterControllerTable[component];
+		controller->setWalkDirection(btVector3{ direction.X, 0, direction.Y });
 	}
 }

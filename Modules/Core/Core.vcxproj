@@ -63,6 +63,7 @@
     <ClInclude Include="include\Core\Memory\New.h" />
     <ClInclude Include="include\Core\Memory\Pointers\Weak.h" />
     <ClInclude Include="include\Core\Memory\Pointers\Owned.h" />
+    <ClInclude Include="include\Core\Misc\ArithmeticAlias.h" />
     <ClInclude Include="include\Core\Misc\SerializeableObject.h" />
     <ClInclude Include="include\Core\Misc\SerializeableStruct.h" />
     <ClInclude Include="include\Core\Misc\Signature.h" />
@@ -213,7 +214,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;CORE_BUILD;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4521;4522;4814</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -232,7 +233,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;CORE_BUILD;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4521;4522;4814</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
       <MinimalRebuild>false</MinimalRebuild>
@@ -254,7 +255,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;CORE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4521;4522;4814</DisableSpecificWarnings>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -278,7 +279,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;CORE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4521;4522;4814</DisableSpecificWarnings>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>

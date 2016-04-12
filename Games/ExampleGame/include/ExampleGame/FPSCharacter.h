@@ -4,6 +4,7 @@
 #include <Core/Memory/Pointers/Weak.h>
 #include <Engine/Components/Rendering/CameraComponent.h>
 #include <Engine/Components/Physics/CapsuleColliderComponent.h>
+#include <Engine/Components/Gameplay/CharacterControllerComponent.h>
 #include "config.h"
 
 namespace ExampleGame
@@ -23,6 +24,7 @@ namespace ExampleGame
 
 		Weak<Willow::CameraComponent> View;
 		Weak<Willow::CapsuleColliderComponent> Capsule;
+		Weak<Willow::CharacterControllerComponent> CharacterMovement;
 
 		///////////////////
 		///   Methods   ///

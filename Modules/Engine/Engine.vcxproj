@@ -24,8 +24,10 @@
     <ClCompile Include="source\Assets\Shader.cpp" />
     <ClCompile Include="source\Assets\Texture.cpp" />
     <ClCompile Include="source\Component.cpp" />
+    <ClCompile Include="source\Components\Gameplay\CharacterControllerComponent.cpp" />
     <ClCompile Include="source\Components\Physics\CapsuleColliderComponent.cpp" />
     <ClCompile Include="source\Components\Physics\ColliderComponent.cpp" />
+    <ClCompile Include="source\Components\Physics\PrimitiveColliderComponent.cpp" />
     <ClCompile Include="source\Components\Physics\SphereColliderComponent.cpp" />
     <ClCompile Include="source\Components\Physics\StaticMeshColliderComponent.cpp" />
     <ClCompile Include="source\Components\Rendering\CameraComponent.cpp" />
@@ -46,8 +48,10 @@
     <ClInclude Include="include\Engine\Assets\Shader.h" />
     <ClInclude Include="include\Engine\Assets\Texture.h" />
     <ClInclude Include="include\Engine\Component.h" />
+    <ClInclude Include="include\Engine\Components\Gameplay\CharacterControllerComponent.h" />
     <ClInclude Include="include\Engine\Components\Physics\CapsuleColliderComponent.h" />
     <ClInclude Include="include\Engine\Components\Physics\ColliderComponent.h" />
+    <ClInclude Include="include\Engine\Components\Physics\PrimitiveColliderComponent.h" />
     <ClInclude Include="include\Engine\Components\Physics\SphereColliderComponent.h" />
     <ClInclude Include="include\Engine\Components\Physics\StaticMeshColliderComponent.h" />
     <ClInclude Include="include\Engine\Components\Rendering\CameraComponent.h" />
@@ -151,7 +155,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>ENGINE_BUILD;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4521;4522;4814</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -175,7 +179,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>ENGINE_BUILD;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4521;4522;4814</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -201,7 +205,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>ENGINE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4521;4522;4814</DisableSpecificWarnings>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
@@ -231,7 +235,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>ENGINE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521;4522</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4521;4522;4814</DisableSpecificWarnings>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
