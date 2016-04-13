@@ -16,7 +16,9 @@ namespace Willow
 
 		///////////////////
 		///   Methods   ///
-	public:
+	protected:
+
+		void OnInitialize() override;
 
 		void OnSpawn() override;
 

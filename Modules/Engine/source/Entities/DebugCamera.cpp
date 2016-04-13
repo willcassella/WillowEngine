@@ -14,10 +14,17 @@ BUILD_REFLECTION(Willow::DebugCamera);
 
 namespace Willow
 {
-	void DebugCamera::OnSpawn()
+	void DebugCamera::OnInitialize()
 	{
+		this->Base::OnInitialize();
 		this->GetWorld().Events.Bind("Move", *this, &DebugCamera::Move);
 		this->GetWorld().Events.Bind("Look", *this, &DebugCamera::Look);
+	}
+
+	void DebugCamera::OnSpawn()
+	{
+		this->Base::OnSpawn();
+		this->GetWorld().Spawn<CameraComponent>(*this);
 	}
 
 	void DebugCamera::Move(Vec2 dir)
