@@ -18,14 +18,19 @@ namespace ExampleGame
 	///////////////////
 	///   Methods   ///
 
-	void FPSCharacter::OnSpawn()
+	void FPSCharacter::OnInitialize()
 	{
-		Base::OnSpawn();
-		
+		this->Base::OnInitialize();
+
 		this->GetWorld().Events.Bind("Move", *this, &FPSCharacter::Move);
 		this->GetWorld().Events.Bind("Look", *this, &FPSCharacter::Look);
 		this->GetWorld().Events.Bind("Fire", *this, &FPSCharacter::Fire);
 		this->GetWorld().Events.Bind("Jump", *this, &FPSCharacter::Jump);
+	}
+
+	void FPSCharacter::OnSpawn()
+	{
+		// TODO
 	}
 
 	///////////////////
@@ -33,14 +38,13 @@ namespace ExampleGame
 
 	void FPSCharacter::Move(Vec2 direction)
 	{
-		//this->ApplyImpulse(Mat4::Rotate(View.Borrow()->GetWorldRotation()) * Vec3{ direction.X, 0, -direction.Y } * 10);
-		Vec3 dir = Mat4::Rotate(View.Borrow()->GetWorldRotation()) * Vec3 { direction.X, 0, -direction.Y };
-		this->CharacterMovement.Borrow()->Walk(Vec2{ dir.X, dir.Z } / 5);
+		Vec3 dir = Mat4::Rotate(GetWorld().Get(View)->GetWorldRotation()) * Vec3 { direction.X, 0, -direction.Y };
+		GetWorld().Get(CharacterMovement)->Walk(Vec2{ dir.X, dir.Z } / 5);
 	}
 
 	void FPSCharacter::Look(Vec2 direction)
 	{
-		auto view = this->View.Borrow();
+		auto view = GetWorld().Get(View);
 		view->RotateGlobal(Vec3::Up, direction.X);
 		view->Rotate(Vec3::Right, direction.Y);
 	}
@@ -52,8 +56,9 @@ namespace ExampleGame
 		projectile.Material = "Content/Materials/Sponza.mat";
 		projectile.InstanceParams["diffuse"] = Willow::AssetPtr<Willow::Texture>("Content/Textures/monkey.png");
 
-		projectile.SetWorldLocation(View.Borrow()->GetWorldLocation() + Vec3{ 3, 0, 0 });
-		projectile.SetWorldRotation(View.Borrow()->GetWorldRotation());
+		auto view = GetWorld().Get(View);
+		projectile.SetWorldLocation(view->GetWorldLocation() + Vec3{ 3, 0, 0 });
+		projectile.SetWorldRotation(view->GetWorldRotation());
 		projectile.Translate({ 0, 0, -1 });
 		
 		auto& sphere = projectile.GetEntity().Connect<Willow::SphereColliderComponent>();
@@ -63,7 +68,6 @@ namespace ExampleGame
 
 	void FPSCharacter::Jump()
 	{
-		//this->ApplyImpulse({ 0, 100, 0 });
-		this->CharacterMovement.Borrow()->Jump();
+		GetWorld().Get(CharacterMovement)->Jump();
 	}
 }

@@ -1,7 +1,6 @@
 // FPSCharacter.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <Core/Memory/Pointers/Weak.h>
 #include <Engine/Components/Rendering/CameraComponent.h>
 #include <Engine/Components/Physics/CapsuleColliderComponent.h>
 #include <Engine/Components/Gameplay/CharacterControllerComponent.h>
@@ -22,13 +21,15 @@ namespace ExampleGame
 		///   Components   ///
 	public:
 
-		Weak<Willow::CameraComponent> View;
-		Weak<Willow::CapsuleColliderComponent> Capsule;
-		Weak<Willow::CharacterControllerComponent> CharacterMovement;
+		Willow::Handle<Willow::CameraComponent> View;
+		Willow::Handle<Willow::CapsuleColliderComponent> Capsule;
+		Willow::Handle<Willow::CharacterControllerComponent> CharacterMovement;
 
 		///////////////////
 		///   Methods   ///
 	protected:
+
+		void OnInitialize() override;
 
 		void OnSpawn() override;
 

@@ -2,11 +2,11 @@
 #pragma once
 
 #include <Core/Containers/Table.h>
-#include "../GHandle.h"
+#include "../Handle.h"
 
 namespace Willow
 {
 	/** A GTable is a table mapping instance IDs for GameObject types to values. */
 	template <class KeyT, class ValueT>
-	using GTable = Table<GHandle<KeyT>, ValueT>;
+	using GTable = Table<Handle<KeyT>, ValueT>;
 }

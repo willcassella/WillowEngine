@@ -402,8 +402,10 @@ namespace Willow
 		this->UpdatePhysicsState();
 	}
 
-	void Entity::OnSpawn()
+	void Entity::OnInitialize()
 	{
+		this->Base::OnInitialize();
+
 		if (auto phys = this->GetWorld().GetSystem<PhysicsSystem>())
 		{
 			phys->CreateEntity(*this, this->GetParent(), _transform, _physicsMode, _physicsState);
@@ -412,6 +414,8 @@ namespace Willow
 
 	void Entity::OnDestroy()
 	{
+		this->Base::OnDestroy();
+
 		for (auto child : _children)
 		{
 			child->Destroy();

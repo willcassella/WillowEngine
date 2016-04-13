@@ -97,11 +97,6 @@ namespace Willow
 
 	void ColliderComponent::OnInitialize()
 	{
-		this->GetWorld().Require<PhysicsSystem>();
-	}
-
-	void ColliderComponent::OnSpawn()
-	{
 		this->Base::OnSpawn();
 
 		if (this->IsActive())

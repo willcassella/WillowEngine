@@ -45,9 +45,9 @@ namespace Willow
 		// TODO: Notify physics system
 	}
 	
-	void CharacterControllerComponent::OnSpawn()
+	void CharacterControllerComponent::OnInitialize()
 	{
-		this->Base::OnSpawn();
+		this->Base::OnInitialize();
 		this->Create();
 	}
 

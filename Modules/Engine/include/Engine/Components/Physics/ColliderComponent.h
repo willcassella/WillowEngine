@@ -99,8 +99,6 @@ namespace Willow
 
 		void OnInitialize() final override;
 
-		void OnSpawn() final override;
-
 		void OnDestroy() final override;
 
 		virtual void OnUpdateColliderTransform() = 0;

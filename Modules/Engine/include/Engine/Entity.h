@@ -336,7 +336,7 @@ namespace Willow
 
 	protected:
 
-		void OnSpawn() override;
+		void OnInitialize() override;
 
 		void OnDestroy() override;
 

@@ -1,4 +1,4 @@
-// GHandle.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
+// Handle.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
 #include "GameObject.h"
@@ -7,16 +7,16 @@ namespace Willow
 {
 	/** Handle that can reference an object in a World, independent of frame. */
 	template <class T>
-	struct GHandle final
+	struct Handle final
 	{
 		///////////////////////
 		///   Information   ///
 	public:
 
-		/** Different instantiations of GHandle
+		/** Different instantiations of Handle
 		* need to access eachother's members. */
 		template <typename F>
-		friend struct GHandle;
+		friend struct Handle;
 
 		REFLECTABLE_STRUCT
 
@@ -24,29 +24,29 @@ namespace Willow
 			///   Constructors   ///
 	public:
 
-		GHandle()
+		Handle()
 			: _id{ 0 }
 		{
 			// All done
 		}
-		GHandle(const T* value)
+		Handle(const T* value)
 			: _id{ value ? value->GameObject::GetID() : 0 }
 		{
 			assert(!value || _id != 0 /** You may not add create a handle to a GameObject that has not been initialized. */);
 		}
-		GHandle(const T& value)
+		Handle(const T& value)
 			: _id{ value.GameObject::GetID() }
 		{
 			assert(_id != 0 /** You may not add create a handle to a GameObject that has not been initialized. */);
 		}
-		GHandle(std::nullptr_t)
-			: GHandle{}
+		Handle(std::nullptr_t)
+			: Handle{}
 		{
 			// All done
 		}
 
 		template <class F>
-		explicit GHandle(GHandle<F> copy)
+		explicit Handle(Handle<F> copy)
 			: _id{ copy.GetID() }
 		{
 			static_assert(std::is_base_of<T, F>::value, "Incompatible handle type.");
@@ -80,9 +80,9 @@ namespace Willow
 
 		/** Explicitly casts this handle to a handle of the given type. */
 		template <class F>
-		GHandle<F> CastTo() const
+		Handle<F> CastTo() const
 		{
-			GHandle<F> result;
+			Handle<F> result;
 			result._id = _id;
 			return result;
 		}
@@ -92,19 +92,19 @@ namespace Willow
 	public:
 
 		/** Comparison operators. */
-		friend bool operator==(GHandle lhs, GHandle rhs)
+		friend bool operator==(Handle lhs, Handle rhs)
 		{
 			return lhs.GetID() == rhs.GetID();
 		}
-		friend bool operator!=(GHandle lhs, GHandle rhs)
+		friend bool operator!=(Handle lhs, Handle rhs)
 		{
 			return lhs.GetID() != rhs.GetID();
 		}
-		friend bool operator==(GHandle lhs, std::nullptr_t)
+		friend bool operator==(Handle lhs, std::nullptr_t)
 		{
 			return lhs.GetID() == 0;
 		}
-		friend bool operator!=(GHandle lhs, std::nullptr_t)
+		friend bool operator!=(Handle lhs, std::nullptr_t)
 		{
 			return lhs.GetID() != 0;
 		}
@@ -117,11 +117,11 @@ namespace Willow
 	};
 
 	/** Convenient alias for Entity handles. */
-	using EntityHandle = GHandle<Entity>;
+	using EntityHandle = Handle<Entity>;
 
 	/** Convenient alias for Component handles. */
-	using ComponentHandle = GHandle<Component>;
+	using ComponentHandle = Handle<Component>;
 
 	template <class T>
-	BUILD_TEMPLATE_REFLECTION(GHandle, T);
+	BUILD_TEMPLATE_REFLECTION(Handle, T);
 }

@@ -57,6 +57,7 @@ namespace Willow
 		_destroyedObjects.Clear();
 		_entities.Clear();
 		_components.Clear();
+		_nextGameObjectID = 1;
 
 		// Begin deserialization
 		reader.PullValue("TimeDilation", this->TimeDilation);
@@ -64,8 +65,8 @@ namespace Willow
 		reader.PullValue("NextID", _nextGameObjectID);
 		
 		// Queue of GameObjects that still need to be spawned
-		Queue<Owned<GameObject>> unspawnedEntities;
-		Queue<Owned<GameObject>> unspawnedComponents;
+		Queue<Owned<GameObject>> uninitialized_entities;
+		Queue<Owned<GameObject>> unititialized_component;
 		
 		// Load all entities/components
 		reader.GetChild("GameObjects", [&](auto& child)
@@ -89,7 +90,6 @@ namespace Willow
 				{
 					// Instantiate it
 					auto object = StaticPointerCast<GameObject>(DynamicNew(*type));
-					object->_world = this;
 
 					// Map the address of the new instantiation to the address in the archive
 					gameobject.MapRefID(object.GetManagedPointer());
@@ -107,26 +107,34 @@ namespace Willow
 
 					if (object->GetType().IsCastableTo(TypeOf<Entity>()))
 					{
-						unspawnedEntities.Push(std::move(object));
+						uninitialized_entities.Push(std::move(object));
 					}
 					else
 					{
-						unspawnedComponents.Push(std::move(object));
+						unititialized_component.Push(std::move(object));
 					}
 				}
 			});
 		});
 
 		// Spawn all Entities
-		for (auto& entity : unspawnedEntities)
+		for (auto& owner : uninitialized_entities)
 		{
-			this->SpawnGameObject(std::move(entity));
+			auto& entity = *owner;
+			this->InitializeGameobject(std::move(owner), entity._id);
+			
+			// Serialized entities do not get their 'OnSpawn' handler called
+			entity._state = GameObject::State::Spawned;
 		}
 
 		// Spawn all Components
-		for (auto& component : unspawnedComponents)
+		for (auto& owner : unititialized_component)
 		{
-			this->SpawnGameObject(std::move(component));
+			auto& component = *owner;
+			this->InitializeGameobject(std::move(owner), component._id);
+			
+			// Serialized entities do not get their 'OnSpawn' handler called
+			component._state = GameObject::State::Spawned;
 		}
 	}
 
@@ -174,28 +182,33 @@ namespace Willow
 		// TODO: Update this with PhysicsSystem
 	}
 
-	void World::SpawnGameObject(Owned<GameObject> owner)
-	{
+	void World::InitializeGameobject(Owned<GameObject> owner, GameObject::ID id)
+	{	
 		auto& object = *owner;
-		
-		// Give the object an ID
 		assert(object._state == GameObject::State::Uninitialized);
-		object._id = _nextGameObjectID++;
-		object._state = GameObject::State::Initialized;
-		
+
 		// Add it to the world
-		_gameObjects[object.GetID()] = std::move(owner);
-		
+		_gameObjects[id] = std::move(owner);
 		if (auto entity = Cast<Entity>(object))
 		{
-			_entities[object.GetID()] = entity;
+			_entities[id] = entity;
 		}
 		else if (auto component = Cast<Component>(object))
 		{
-			_components[object.GetID()] = component;
+			_components[id] = component;
 		}
 
-		// Spawn it
+		// Initialize the object
+		object._id = id;
+		object._world = this;
+		object._state = GameObject::State::Initialized;
+		object.OnInitialize();
+	}
+
+	void World::SpawnGameObject(GameObject& object)
+	{
+		// Spawn the object
+		assert(object._state == GameObject::State::Initialized);
 		object._state = GameObject::State::Spawning;
 		object.OnSpawn();
 		object._state = GameObject::State::Spawned;

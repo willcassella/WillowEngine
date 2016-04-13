@@ -4,7 +4,7 @@
 #include "../Forwards/Systems.h"
 #include "../System.h"
 #include "../Entity.h"
-#include "../GHandle.h"
+#include "../Handle.h"
 #include "../Components/Physics/SphereColliderComponent.h"
 #include "../Components/Physics/CapsuleColliderComponent.h"
 #include "../Components/Physics/StaticMeshColliderComponent.h"
@@ -78,62 +78,62 @@ namespace Willow
 
 		/** Creates a SphereCollider for the given component. */
 		virtual void CreateCollider(
-			GHandle<SphereColliderComponent> component, 
+			Handle<SphereColliderComponent> component, 
 			EntityHandle entity, 
 			const Transform& transform, 
 			SphereColliderComponent::Shape shape) = 0;
 
 		/** Creates a CapsuleCollider for the given component. */
 		virtual void CreateCollider(
-			GHandle<CapsuleColliderComponent> component, 
+			Handle<CapsuleColliderComponent> component, 
 			EntityHandle entity, 
 			const Transform& transform, 
 			CapsuleColliderComponent::Shape shape) = 0;
 
 		/** Creates a StaticMeshCollider for the given component. */
 		virtual void CreateCollider(
-			GHandle<StaticMeshColliderComponent> component, 
+			Handle<StaticMeshColliderComponent> component, 
 			EntityHandle entity, 
 			const Transform& transform, 
 			StaticMeshColliderComponent::Shape shape) = 0;
 
 		/** Destroys the SphereCollider for the given component. */
-		virtual void DestroyCollider(GHandle<SphereColliderComponent> component) = 0;
+		virtual void DestroyCollider(Handle<SphereColliderComponent> component) = 0;
 
 		/** Destroys the CapsuleCollider for the given component. */
-		virtual void DestroyCollider(GHandle<CapsuleColliderComponent> component) = 0;
+		virtual void DestroyCollider(Handle<CapsuleColliderComponent> component) = 0;
 
 		/** Destroys the StaticMeshCollider for the given component. */
-		virtual void DestroyCollider(GHandle<StaticMeshColliderComponent> component) = 0;
+		virtual void DestroyCollider(Handle<StaticMeshColliderComponent> component) = 0;
 
 		/** Sets the transform for the given component. */
-		virtual void SetColliderTransform(GHandle<SphereColliderComponent> component, const Transform& transform) = 0;
+		virtual void SetColliderTransform(Handle<SphereColliderComponent> component, const Transform& transform) = 0;
 
 		/** Sets the transform for the given component. */
-		virtual void SetColliderTransform(GHandle<CapsuleColliderComponent> component, const Transform& transform) = 0;
+		virtual void SetColliderTransform(Handle<CapsuleColliderComponent> component, const Transform& transform) = 0;
 
 		/** Sets the transform for the given component. */
-		virtual void SetColliderTransform(GHandle<StaticMeshColliderComponent> component, const Transform& transform) = 0;
+		virtual void SetColliderTransform(Handle<StaticMeshColliderComponent> component, const Transform& transform) = 0;
 
 		/** Sets the shape for the given component. */
-		virtual void SetColliderShape(GHandle<SphereColliderComponent> component, SphereColliderComponent::Shape shape) = 0;
+		virtual void SetColliderShape(Handle<SphereColliderComponent> component, SphereColliderComponent::Shape shape) = 0;
 
 		/** Sets the shape for the given component. */
-		virtual void SetColliderShape(GHandle<CapsuleColliderComponent> component, CapsuleColliderComponent::Shape shape) = 0;
+		virtual void SetColliderShape(Handle<CapsuleColliderComponent> component, CapsuleColliderComponent::Shape shape) = 0;
 
 		/** Sets the shape for the given component. */
-		virtual void SetColliderShape(GHandle<StaticMeshColliderComponent> component, StaticMeshColliderComponent::Shape shape) = 0;
+		virtual void SetColliderShape(Handle<StaticMeshColliderComponent> component, StaticMeshColliderComponent::Shape shape) = 0;
 
 		virtual void CreateCharacterController(
-			GHandle<CharacterControllerComponent> component, 
+			Handle<CharacterControllerComponent> component, 
 			EntityHandle entity, 
-			GHandle<PrimitiveColliderComponent> collider, 
+			Handle<PrimitiveColliderComponent> collider, 
 			CharacterControllerComponent::Settings settings) = 0;
 
-		virtual void CharacterControllerJump(GHandle<CharacterControllerComponent> component) = 0;
+		virtual void CharacterControllerJump(Handle<CharacterControllerComponent> component) = 0;
 
-		virtual void CharacterControllerOnGround(GHandle<CharacterControllerComponent> component, bool& out) = 0;
+		virtual void CharacterControllerOnGround(Handle<CharacterControllerComponent> component, bool& out) = 0;
 
-		virtual void CharacterControllerWalk(GHandle<CharacterControllerComponent> component, const Vec2& direction) = 0;
+		virtual void CharacterControllerWalk(Handle<CharacterControllerComponent> component, const Vec2& direction) = 0;
 	};
 }

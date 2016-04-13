@@ -3,7 +3,7 @@
 
 #include <Core/Memory/Pointers/Weak.h>
 #include "../Physics/PrimitiveColliderComponent.h"
-#include "../../GHandle.h"
+#include "../../Handle.h"
 
 namespace Willow
 {
@@ -42,7 +42,7 @@ namespace Willow
 		void Walk(const Vec2& direction);
 
 		/** Returns the collider this CharacterController is using. */
-		FORCEINLINE GHandle<PrimitiveColliderComponent> GetCollider() const
+		FORCEINLINE Handle<PrimitiveColliderComponent> GetCollider() const
 		{
 			return _collider;
 		}
@@ -53,7 +53,7 @@ namespace Willow
 
 	protected:
 
-		void OnSpawn() override;
+		void OnInitialize() override;
 
 	private:
 
@@ -63,7 +63,7 @@ namespace Willow
 		///   Data   ///
 	private:
 
-		GHandle<PrimitiveColliderComponent> _collider;
+		Handle<PrimitiveColliderComponent> _collider;
 		Settings _settings;
 	};
 }

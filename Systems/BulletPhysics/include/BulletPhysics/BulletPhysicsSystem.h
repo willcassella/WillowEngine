@@ -97,41 +97,41 @@ namespace Willow
 
 		void ApplyTorqueImpulse(EntityHandle entity, const Vec3& torque) override;
 
-		void CreateCollider(GHandle<SphereColliderComponent> component, EntityHandle entity, const Transform& transform, SphereColliderComponent::Shape shape) override;
+		void CreateCollider(Handle<SphereColliderComponent> component, EntityHandle entity, const Transform& transform, SphereColliderComponent::Shape shape) override;
 
-		void CreateCollider(GHandle<CapsuleColliderComponent> component, EntityHandle entity, const Transform& transform, CapsuleColliderComponent::Shape shape) override;
+		void CreateCollider(Handle<CapsuleColliderComponent> component, EntityHandle entity, const Transform& transform, CapsuleColliderComponent::Shape shape) override;
 
-		void CreateCollider(GHandle<StaticMeshColliderComponent> component, EntityHandle entity, const Transform& transform, StaticMeshColliderComponent::Shape shape) override;
+		void CreateCollider(Handle<StaticMeshColliderComponent> component, EntityHandle entity, const Transform& transform, StaticMeshColliderComponent::Shape shape) override;
 
-		void DestroyCollider(GHandle<SphereColliderComponent> component) override;
+		void DestroyCollider(Handle<SphereColliderComponent> component) override;
 
-		void DestroyCollider(GHandle<CapsuleColliderComponent> component) override;
+		void DestroyCollider(Handle<CapsuleColliderComponent> component) override;
 
-		void DestroyCollider(GHandle<StaticMeshColliderComponent> component) override;
+		void DestroyCollider(Handle<StaticMeshColliderComponent> component) override;
 
-		void SetColliderTransform(GHandle<SphereColliderComponent> component, const Transform& transform) override;
+		void SetColliderTransform(Handle<SphereColliderComponent> component, const Transform& transform) override;
 
-		void SetColliderTransform(GHandle<CapsuleColliderComponent> component, const Transform& transform) override;
+		void SetColliderTransform(Handle<CapsuleColliderComponent> component, const Transform& transform) override;
 
-		void SetColliderTransform(GHandle<StaticMeshColliderComponent> component, const Transform& transform) override;
+		void SetColliderTransform(Handle<StaticMeshColliderComponent> component, const Transform& transform) override;
 
-		void SetColliderShape(GHandle<SphereColliderComponent> component, SphereColliderComponent::Shape shape) override;
+		void SetColliderShape(Handle<SphereColliderComponent> component, SphereColliderComponent::Shape shape) override;
 
-		void SetColliderShape(GHandle<CapsuleColliderComponent> component, CapsuleColliderComponent::Shape shape) override;
+		void SetColliderShape(Handle<CapsuleColliderComponent> component, CapsuleColliderComponent::Shape shape) override;
 
-		void SetColliderShape(GHandle<StaticMeshColliderComponent> component, StaticMeshColliderComponent::Shape shape) override;
+		void SetColliderShape(Handle<StaticMeshColliderComponent> component, StaticMeshColliderComponent::Shape shape) override;
 
 		void CreateCharacterController(
-			GHandle<CharacterControllerComponent> component,
+			Handle<CharacterControllerComponent> component,
 			EntityHandle entity,
-			GHandle<PrimitiveColliderComponent> collider,
+			Handle<PrimitiveColliderComponent> collider,
 			CharacterControllerComponent::Settings settings) override;
 
-		void CharacterControllerJump(GHandle<CharacterControllerComponent> component) override;
+		void CharacterControllerJump(Handle<CharacterControllerComponent> component) override;
 
-		void CharacterControllerOnGround(GHandle<CharacterControllerComponent> component, bool& out) override;
+		void CharacterControllerOnGround(Handle<CharacterControllerComponent> component, bool& out) override;
 
-		void CharacterControllerWalk(GHandle<CharacterControllerComponent> component, const Vec2& direction) override;
+		void CharacterControllerWalk(Handle<CharacterControllerComponent> component, const Vec2& direction) override;
 
 		////////////////
 		///   Data   ///

@@ -5,7 +5,7 @@
 #include <Core/Event/EventManager.h>
 #include "Component.h"
 #include "System.h"
-#include "GHandle.h"
+#include "Handle.h"
 
 /////////////////
 ///   Types   ///
@@ -59,10 +59,10 @@ namespace Willow
 			auto& entity = *owner;
 			
 			// Initialize it
-			entity._world = this;
+			this->InitializeGameobject(std::move(owner), _nextGameObjectID++);
 
 			// Spawn it
-			this->SpawnGameObject(std::move(owner));
+			this->SpawnGameObject(entity);
 			return entity;
 		}
 		
@@ -82,12 +82,12 @@ namespace Willow
 			auto& component = *owner;
 
 			// Initialize it
-			component._world = this;
 			component._entity = &entity;
 			entity._components.Add(&component);
+			this->InitializeGameobject(std::move(owner), _nextGameObjectID++);
 
 			// Spawn it
-			this->SpawnGameObject(std::move(owner));
+			this->SpawnGameObject(component);
 			return component;
 		}
 
@@ -100,11 +100,11 @@ namespace Willow
 			auto& entity = *owner;
 
 			// Initialize it
-			entity._world = this;
 			entity._name = std::move(name);
+			this->InitializeGameobject(std::move(owner), _nextGameObjectID++);
 
 			// Spawn it
-			this->SpawnGameObject(std::move(owner));
+			this->SpawnGameObject(entity);
 			return entity;
 		}
 
@@ -198,11 +198,37 @@ namespace Willow
 		/** Sets the gravity in this World. */
 		void SetGravity(const Vec3& gravity);
 
+		/** Returns a pointer to the object referred to by the given handle. 
+		* NOTE: Returns 'null' if the object in question no longer exists. */
+		template <class T>
+		T* Get(Handle<T> handle)
+		{
+			return const_cast<T*>(stde::as_const(*this).Get(handle));
+		}
+
+		/** Returns a pointer to the object referred to by the given handle. 
+		* NOTE: Returns 'null' if the object in question no longer exists. */
+		template <class T>
+		const T* Get(Handle<T> handle) const
+		{
+			const T* result = nullptr;
+			_gameObjects.Find(handle.GetID(), [&result](const auto& object)
+			{
+				result = static_cast<const T*>(object.GetManagedPointer());
+			});
+
+			return result;
+		}
+
 	private:
 
+		/** Initializes the given GameObject in this World. 
+		* Note: The caller is responsible for initialize all state of this GameObject other than the ID. */
+		void InitializeGameobject(Owned<GameObject> object, GameObject::ID id);
+
 		/** Spawns the given GameObject into this World.
-		* NOTE: The caller is responsible for initializing all state of this GameObject other than the ID. */
-		void SpawnGameObject(Owned<GameObject> owner);
+		* NOTE: The caller is responsible for having previously initialized the given GameObject in this World. */
+		void SpawnGameObject(GameObject& object);
 
 		////////////////
 		///   Data   ///

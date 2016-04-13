@@ -207,7 +207,10 @@
     <ClInclude Include="include\Engine\Components\Gameplay\CharacterControllerComponent.h">
       <Filter>include\Components\Gameplay</Filter>
     </ClInclude>
-    <ClInclude Include="include\Engine\GHandle.h">
+    <ClInclude Include="include\Engine\Handle.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Instance.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

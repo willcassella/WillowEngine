@@ -78,6 +78,9 @@ namespace Willow
 
 	void StaticMeshColliderComponent::UpdateShape()
 	{
-		this->GetWorld().GetSystem<PhysicsSystem>()->SetColliderShape(*this, _shape);
+		if (this->IsInitialized())
+		{
+			this->GetWorld().GetSystem<PhysicsSystem>()->SetColliderShape(*this, _shape);
+		}
 	}
 }

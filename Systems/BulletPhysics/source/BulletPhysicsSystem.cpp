@@ -296,7 +296,7 @@ namespace Willow
 		});
 	}
 
-	void BulletPhysicsSystem::CreateCollider(GHandle<SphereColliderComponent> component, EntityHandle entity, const Transform& transform, SphereColliderComponent::Shape shape)
+	void BulletPhysicsSystem::CreateCollider(Handle<SphereColliderComponent> component, EntityHandle entity, const Transform& transform, SphereColliderComponent::Shape shape)
 	{
 		auto* entityData = _entityDataTable[entity];
 
@@ -313,7 +313,7 @@ namespace Willow
 		_sphereColliderTable[component] = collider;
 	}
 
-	void BulletPhysicsSystem::CreateCollider(GHandle<CapsuleColliderComponent> component, EntityHandle entity, const Transform& transform, CapsuleColliderComponent::Shape shape)
+	void BulletPhysicsSystem::CreateCollider(Handle<CapsuleColliderComponent> component, EntityHandle entity, const Transform& transform, CapsuleColliderComponent::Shape shape)
 	{
 		auto* entityData = _entityDataTable[entity];
 
@@ -342,7 +342,7 @@ namespace Willow
 		_capsuleColliderTable[component] = collider;
 	}
 
-	void BulletPhysicsSystem::CreateCollider(GHandle<StaticMeshColliderComponent> component, EntityHandle entity, const Transform& transform, StaticMeshColliderComponent::Shape shape)
+	void BulletPhysicsSystem::CreateCollider(Handle<StaticMeshColliderComponent> component, EntityHandle entity, const Transform& transform, StaticMeshColliderComponent::Shape shape)
 	{
 		auto* entityData = _entityDataTable[entity];
 
@@ -366,7 +366,7 @@ namespace Willow
 		_staticMeshColliderTable[component] = collider;
 	}
 
-	void BulletPhysicsSystem::DestroyCollider(GHandle<SphereColliderComponent> component)
+	void BulletPhysicsSystem::DestroyCollider(Handle<SphereColliderComponent> component)
 	{
 		// Get the collider and its compound
 		auto* collider = _sphereColliderTable[component];
@@ -378,7 +378,7 @@ namespace Willow
 		_sphereColliderTable.Remove(component);
 	}
 
-	void BulletPhysicsSystem::DestroyCollider(GHandle<CapsuleColliderComponent> component)
+	void BulletPhysicsSystem::DestroyCollider(Handle<CapsuleColliderComponent> component)
 	{
 		// Get the collider and its compound
 		auto* collider = _capsuleColliderTable[component];
@@ -390,12 +390,12 @@ namespace Willow
 		_capsuleColliders.Destroy(collider);
 	}
 
-	void BulletPhysicsSystem::DestroyCollider(GHandle<StaticMeshColliderComponent> /*component*/)
+	void BulletPhysicsSystem::DestroyCollider(Handle<StaticMeshColliderComponent> /*component*/)
 	{
 		// TODO
 	}
 
-	void BulletPhysicsSystem::SetColliderTransform(GHandle<SphereColliderComponent> component, const Transform& transform)
+	void BulletPhysicsSystem::SetColliderTransform(Handle<SphereColliderComponent> component, const Transform& transform)
 	{
 		_sphereColliderTable.Find(component, [&](auto* collider)
 		{
@@ -405,7 +405,7 @@ namespace Willow
 		});
 	}
 
-	void BulletPhysicsSystem::SetColliderTransform(GHandle<CapsuleColliderComponent> component, const Transform& transform)
+	void BulletPhysicsSystem::SetColliderTransform(Handle<CapsuleColliderComponent> component, const Transform& transform)
 	{
 		_capsuleColliderTable.Find(component, [&](auto* collider)
 		{
@@ -415,30 +415,30 @@ namespace Willow
 		});
 	}
 
-	void BulletPhysicsSystem::SetColliderTransform(GHandle<StaticMeshColliderComponent> /*component*/, const Transform& /*transform*/)
+	void BulletPhysicsSystem::SetColliderTransform(Handle<StaticMeshColliderComponent> /*component*/, const Transform& /*transform*/)
 	{
 		// TODO
 	}
 
-	void BulletPhysicsSystem::SetColliderShape(GHandle<SphereColliderComponent> /*component*/, SphereColliderComponent::Shape /*shape*/)
+	void BulletPhysicsSystem::SetColliderShape(Handle<SphereColliderComponent> /*component*/, SphereColliderComponent::Shape /*shape*/)
 	{
 		// TODO
 	}
 
-	void BulletPhysicsSystem::SetColliderShape(GHandle<CapsuleColliderComponent> /*component*/, CapsuleColliderComponent::Shape /*shape*/)
+	void BulletPhysicsSystem::SetColliderShape(Handle<CapsuleColliderComponent> /*component*/, CapsuleColliderComponent::Shape /*shape*/)
 	{
 		// TODO
 	}
 
-	void BulletPhysicsSystem::SetColliderShape(GHandle<StaticMeshColliderComponent> /*component*/, StaticMeshColliderComponent::Shape /*shape*/)
+	void BulletPhysicsSystem::SetColliderShape(Handle<StaticMeshColliderComponent> /*component*/, StaticMeshColliderComponent::Shape /*shape*/)
 	{
 		// TODO
 	}
 
 	void BulletPhysicsSystem::CreateCharacterController(
-		GHandle<CharacterControllerComponent> component, 
+		Handle<CharacterControllerComponent> component, 
 		EntityHandle entity, 
-		GHandle<PrimitiveColliderComponent> collider, 
+		Handle<PrimitiveColliderComponent> collider, 
 		CharacterControllerComponent::Settings settings)
 	{
 		auto* entityData = _entityDataTable[entity];
@@ -456,19 +456,19 @@ namespace Willow
 		_physicsWorld->GetDynamicsWorld().addAction(controller);
 	}
 
-	void BulletPhysicsSystem::CharacterControllerJump(GHandle<CharacterControllerComponent> component)
+	void BulletPhysicsSystem::CharacterControllerJump(Handle<CharacterControllerComponent> component)
 	{
 		auto* controller = _characterControllerTable[component];
 		controller->jump();
 	}
 
-	void BulletPhysicsSystem::CharacterControllerOnGround(GHandle<CharacterControllerComponent> component, bool& out)
+	void BulletPhysicsSystem::CharacterControllerOnGround(Handle<CharacterControllerComponent> component, bool& out)
 	{
 		auto* controller = _characterControllerTable[component];
 		out = controller->onGround();
 	}
 
-	void BulletPhysicsSystem::CharacterControllerWalk(GHandle<CharacterControllerComponent> component, const Vec2& direction)
+	void BulletPhysicsSystem::CharacterControllerWalk(Handle<CharacterControllerComponent> component, const Vec2& direction)
 	{
 		auto* controller = _characterControllerTable[component];
 		controller->setWalkDirection(btVector3{ direction.X, 0, direction.Y });

@@ -2,7 +2,7 @@
 #pragma once
 
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
-#include <Engine/GHandle.h>
+#include <Engine/Handle.h>
 #include <Engine/Entity.h>
 #include "EntityCollider.h"
 
