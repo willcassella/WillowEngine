@@ -279,7 +279,7 @@ public:
 			}
 		}
 
-		_values.Add(PairT{ std::forward<RelatedKeyT>(key) });
+		_values.Add(PairT{ std::forward<RelatedKeyT>(key), ValueT{} });
 		return _values.Last().Second;
 	}
 

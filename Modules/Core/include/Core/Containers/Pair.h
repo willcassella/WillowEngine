@@ -13,21 +13,28 @@ struct Pair final
 public:
 
 	Pair()
-		: First(), Second()
-	{
-		// All done
-	}
-
-	template <typename UA>
-	Pair(UA&& first)
-		: First(std::forward<UA>(first)), Second()
+		: First{}, Second{}
 	{
 		// All done
 	}
 
 	template <typename UA, typename UB>
 	Pair(UA&& first, UB&& second)
-		: First(std::forward<UA>(first)), Second(std::forward<UB>(second))
+		: First{ std::forward<UA>(first) }, Second{ std::forward<UB>(second) }
+	{
+		// All done
+	}
+
+	template <typename PA, typename PB>
+	Pair(const Pair<PA, PB>& pair)
+		: First{ pair.First }, Second{ pair.Second }
+	{
+		// All done
+	}
+
+	template <typename PA, typename PB>
+	Pair(Pair<PA, PB>&& pair)
+		: First{ std::move(pair.First) }, Second{ std::move(pair.Second) }
 	{
 		// All done
 	}
