@@ -22,6 +22,9 @@ namespace Willow
 
 	GLRenderSystem::GLRenderSystem(uint32 width, uint32 height)
 	{
+		_width = width;
+		_height = height;
+
 		// Initialize GLEW
 		glewExperimental = GL_TRUE;
 		glewInit();
@@ -208,73 +211,85 @@ namespace Willow
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Get first camera in the World
-		const auto* cam = world.Enumerate<CameraComponent>().FirstOrDefault();
+		auto cameras = world.Enumerate<CameraComponent>();
 
 		// We can't render the World without a camera
-		if (!cam)
+		if (cameras.IsEmpty())
+		{
 			return;
-
-		Mat4 view = cam->GetTransformationMatrix().Inverse();
-		Mat4 proj = cam->GetPerspective();
-
-		// Render each StaticMeshComponent in the World
-		for (auto staticMesh : world.Enumerate<StaticMeshComponent>())
-		{
-			if (!staticMesh->Visible)
-				continue;
-
-			Mat4 model = staticMesh->GetTransformationMatrix();
-
-			// Bind the mesh and material
-			auto& mesh = FindStaticMesh(*staticMesh->Mesh);
-			mesh.Bind();
-			FindMaterial(*staticMesh->Material).Bind(staticMesh->InstanceParams);
-
-			// Upload transformation matrices
-			glUniformMatrix4fv(0, 1, false, (const float*)&model);
-			glUniformMatrix4fv(1, 1, false, (const float*)&view);
-			glUniformMatrix4fv(2, 1, false, (const float*)&proj);
-
-			// Note: Because I kind of messed up my StaticMesh structure (ie, vertices are tied to specific UV coordinates)
-			// I'm gonna be using GLDrawArrays for now, instead of GLDrawElements.
-			// Luckily, I wasn't actually taking advantage of GLDrawElements before, so all the old mesh files still work
-			glDrawArrays(GL_TRIANGLES, 0, mesh.GetNumVertices());
 		}
 
-		// Render debug lines
-		glBindVertexArray(lineVAO);
-		glUseProgram(lineProgram);
-		glBindBuffer(GL_ARRAY_BUFFER, lineBuffer);
-		
-		{
-			Array<Vec3> points(_debugLines.Size() * 2);
+		const uint32 frameHeight = _height / cameras.Size();
 
-			for (const auto& line : _debugLines)
+		// Render each camera
+		for (std::size_t i = 0; i < cameras.Size(); ++i)
+		{
+			glViewport(0, frameHeight * i, _width, frameHeight * i + frameHeight);
+
+			Mat4 view = cameras[i]->GetTransformationMatrix().Inverse();
+			Mat4 proj = cameras[i]->GetPerspective();
+
+			// Render each StaticMeshComponent in the World
+			for (auto staticMesh : world.Enumerate<StaticMeshComponent>())
 			{
-				points.Add(line.Start);
-				points.Add(line.Color);
-				points.Add(line.End);
-				points.Add(line.Color);
+				if (!staticMesh->Visible)
+					continue;
+
+				Mat4 model = staticMesh->GetTransformationMatrix();
+
+				// Bind the mesh and material
+				auto& mesh = FindStaticMesh(*staticMesh->Mesh);
+				mesh.Bind();
+				FindMaterial(*staticMesh->Material).Bind(staticMesh->InstanceParams);
+
+				// Upload transformation matrices
+				glUniformMatrix4fv(0, 1, false, (const float*)&model);
+				glUniformMatrix4fv(1, 1, false, (const float*)&view);
+				glUniformMatrix4fv(2, 1, false, (const float*)&proj);
+
+				// Note: Because I kind of messed up my StaticMesh structure (ie, vertices are tied to specific UV coordinates)
+				// I'm gonna be using GLDrawArrays for now, instead of GLDrawElements.
+				// Luckily, I wasn't actually taking advantage of GLDrawElements before, so all the old mesh files still work
+				glDrawArrays(GL_TRIANGLES, 0, mesh.GetNumVertices());
 			}
 
-			_debugLines.Clear();
+			// Render debug lines
+			glBindVertexArray(lineVAO);
+			glUseProgram(lineProgram);
+			glBindBuffer(GL_ARRAY_BUFFER, lineBuffer);
 
-			if (!points.IsEmpty())
 			{
-				auto linePos = glGetAttribLocation(lineProgram, "vPosition");
-				glEnableVertexAttribArray(linePos);
-				glVertexAttribPointer(linePos, 3, GL_FLOAT, GL_FALSE, sizeof(Vec3) * 2, nullptr);
+				Array<Vec3> points(_debugLines.Size() * 2);
 
-				auto lineColor = glGetAttribLocation(lineProgram, "vColor");
-				glEnableVertexAttribArray(lineColor);
-				glVertexAttribPointer(lineColor, 3, GL_FLOAT, GL_FALSE, sizeof(Vec3) * 2, (void*)sizeof(Vec3));
+				for (const auto& line : _debugLines)
+				{
+					points.Add(line.Start);
+					points.Add(line.Color);
+					points.Add(line.End);
+					points.Add(line.Color);
+				}
 
-				glUniformMatrix4fv(0, 1, false, (const float*)&view);
-				glUniformMatrix4fv(1, 1, false, (const float*)&proj);
-				glBufferData(GL_ARRAY_BUFFER, points.Size() * sizeof(Vec3), points.CArray(), GL_DYNAMIC_DRAW);
-				glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(points.Size()));
+				_debugLines.Clear();
+
+				if (!points.IsEmpty())
+				{
+					auto linePos = glGetAttribLocation(lineProgram, "vPosition");
+					glEnableVertexAttribArray(linePos);
+					glVertexAttribPointer(linePos, 3, GL_FLOAT, GL_FALSE, sizeof(Vec3) * 2, nullptr);
+
+					auto lineColor = glGetAttribLocation(lineProgram, "vColor");
+					glEnableVertexAttribArray(lineColor);
+					glVertexAttribPointer(lineColor, 3, GL_FLOAT, GL_FALSE, sizeof(Vec3) * 2, (void*)sizeof(Vec3));
+
+					glUniformMatrix4fv(0, 1, false, (const float*)&view);
+					glUniformMatrix4fv(1, 1, false, (const float*)&proj);
+					glBufferData(GL_ARRAY_BUFFER, points.Size() * sizeof(Vec3), points.CArray(), GL_DYNAMIC_DRAW);
+					glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(points.Size()));
+				}
 			}
 		}
+
+		glViewport(0, 0, _width, _height);
 
 		// Bind the default framebuffer for drawing
 		glBindFramebuffer(GL_FRAMEBUFFER, _defaultFrameBuffer);

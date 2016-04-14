@@ -66,6 +66,10 @@ namespace Willow
 		BufferID _metallicBuffer;
 		BufferID _roughnessBuffer;
 
+		// Screen data
+		uint32 _width;
+		uint32 _height;
+
 		// Screen quad buffers
 		BufferID _screenQuadVAO;
 		BufferID _screenQuadVBO;

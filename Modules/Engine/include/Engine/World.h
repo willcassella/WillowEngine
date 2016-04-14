@@ -162,7 +162,7 @@ namespace Willow
 		void DestroyGameObject(GameObject& object);
 
 		template <class T>
-		void Require()
+		void Require() const
 		{
 			assert(this->GetSystem<T>() != nullptr);
 		}
