@@ -21,27 +21,23 @@
   <ItemGroup>
     <ClInclude Include="include\Resource\Archive.h" />
     <ClInclude Include="include\Resource\Archives\XMLArchive.h" />
-    <ClInclude Include="include\Resource\AssetManager.h" />
+    <ClInclude Include="include\Resource\ResourceManager.h" />
     <ClInclude Include="include\Resource\config.h" />
     <ClInclude Include="include\Resource\Forwards\Resource.h" />
     <ClInclude Include="include\Resource\Path.h" />
-    <ClInclude Include="include\Resource\Resource.h" />
-    <ClInclude Include="include\Resource\Asset.h" />
-    <ClInclude Include="include\Resource\AssetPtr.h" />
-    <ClInclude Include="include\Resource\Resources\BinaryFile.h" />
+    <ClInclude Include="include\Resource\ResourceHandle.h" />
+    <ClInclude Include="include\Resource\Resources\BinaryData.h" />
     <ClInclude Include="include\Resource\Resources\Image.h" />
-    <ClInclude Include="include\Resource\Resources\TextFile.h" />
+    <ClInclude Include="include\Resource\Resources\TextData.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Archive.cpp" />
     <ClCompile Include="source\Archives\XMLArchive.cpp" />
-    <ClCompile Include="source\AssetManager.cpp" />
+    <ClCompile Include="source\ResourceManager.cpp" />
     <ClCompile Include="source\Path.cpp" />
-    <ClCompile Include="source\Resource.cpp" />
-    <ClCompile Include="source\Asset.cpp" />
-    <ClCompile Include="source\Resources\BinaryFile.cpp" />
+    <ClCompile Include="source\Resources\BinaryData.cpp" />
     <ClCompile Include="source\Resources\Image.cpp" />
-    <ClCompile Include="source\Resources\TextFile.cpp" />
+    <ClCompile Include="source\Resources\TextData.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BFD70EB7-B841-46D3-872F-E71BFBA95A58}</ProjectGuid>

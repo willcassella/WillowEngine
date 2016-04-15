@@ -27,29 +27,11 @@
     <ClInclude Include="include\Resource\config.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Resource\AssetPtr.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Resource\Asset.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Resource\Resource.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Resource\Resources\BinaryFile.h">
-      <Filter>include\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="include\Resource\Resources\Image.h">
-      <Filter>include\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Resource\Resources\TextFile.h">
       <Filter>include\Resources</Filter>
     </ClInclude>
     <ClInclude Include="include\Resource\Forwards\Resource.h">
       <Filter>include\Forwards</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Resource\AssetManager.h">
-      <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Resource\Path.h">
       <Filter>include</Filter>
@@ -60,33 +42,39 @@
     <ClInclude Include="include\Resource\Archive.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\Resource\ResourceManager.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Resource\ResourceHandle.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Resource\Resources\TextData.h">
+      <Filter>include\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Resource\Resources\BinaryData.h">
+      <Filter>include\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\Resource.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Asset.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Resources\BinaryFile.cpp">
-      <Filter>source\Resources</Filter>
-    </ClCompile>
     <ClCompile Include="source\Resources\Image.cpp">
       <Filter>source\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="source\Resources\TextFile.cpp">
-      <Filter>source\Resources</Filter>
-    </ClCompile>
     <ClCompile Include="source\Path.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\AssetManager.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="source\Archives\XMLArchive.cpp">
       <Filter>source\Archives</Filter>
     </ClCompile>
     <ClCompile Include="source\Archive.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Resources\TextData.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Resources\BinaryData.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ResourceManager.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

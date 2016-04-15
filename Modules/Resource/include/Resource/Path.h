@@ -4,7 +4,7 @@
 #include <Core/Reflection/StructInfo.h>
 #include "config.h"
 
-namespace Willow
+namespace willow
 {
 	struct RESOURCE_API Path final
 	{
@@ -14,31 +14,25 @@ namespace Willow
 
 		REFLECTABLE_STRUCT
 
-			////////////////////////
-			///   Constructors   ///
+		////////////////////////
+		///   Constructors   ///
 	public:
 
 		Path() = default;
 		Path(CString path)
-			: _path(path)
+			: _path{ path }
 		{
-			this->Sanitize();
+			this->sanitize();
 		}
 		Path(String path)
-			: _path(std::move(path))
+			: _path{ std::move(path) }
 		{
-			this->Sanitize();
+			this->sanitize();
 		}
 
 		///////////////////
 		///   Methods   ///
 	public:
-
-		/** If the given String represents a path to a file, this parses and returns the file extension */
-		String GetFileExtension() const;
-
-		/** If the given String represents a path to a file, this parses and returns the name of the file */
-		String GetFileName() const;
 
 		/** Returns this Path as a String. */
 		const String& ToString() const
@@ -46,29 +40,39 @@ namespace Willow
 			return _path;
 		}
 
+		/** Serializes the state of this Path to an archive. */
+		void ToArchive(ArchiveWriter& writer) const;
+
+		/** Sets the state of this Path from the given archive. */
+		void FromArchive(const ArchiveReader& reader);
+
+		/** Returns this path as a c-string. */
+		CString c_str() const &
+		{
+			return this->_path.Cstr();
+		}
+
+		/** If the given String represents a path to a file, this parses and returns the file extension */
+		String get_file_extension() const;
+
+		/** If the given String represents a path to a file, this parses and returns the name of the file */
+		String get_file_name() const;
+
+		/** Returns whether this Path is empty. */
+		bool is_empty() const;
+
+		/** Returns whether this Path actually points to a file. */
+		bool points_to_file() const;
+
 	private:
 
 		/** Makes sure this path has a valid scope. */
-		void Sanitize();
+		void sanitize();
 
 		/////////////////////
 		///   Operators   ///
 	public:
 
-		Path& operator=(CString path)
-		{
-			_path = path;
-			this->Sanitize();
-
-			return *this;
-		}
-		Path& operator=(String path)
-		{
-			_path = std::move(path);
-			this->Sanitize();
-
-			return *this;
-		}
 		operator const String&() const
 		{
 			return _path;
@@ -110,7 +114,7 @@ namespace Willow
 ///   Functions   ///
 
 /** Custom operator for String literals. */
-inline Willow::Path operator"" _p(CString string, std::size_t /*size*/)
+inline willow::Path operator"" _p(CString string, std::size_t /*size*/)
 {
-	return Willow::Path{ string };
+	return{ string };
 }

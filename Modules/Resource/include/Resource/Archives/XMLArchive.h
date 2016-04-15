@@ -4,7 +4,7 @@
 #include <memory>
 #include "../Archive.h"
 
-namespace Willow
+namespace willow
 {
 	class RESOURCE_API XMLArchive final : public Archive
 	{
@@ -26,15 +26,15 @@ namespace Willow
 		///   Methods   ///
 	public:
 
-		bool Load(const Path& path) override;
+		bool load(const Path& path) override;
 
-		bool Save(const Path& path) const override;
+		bool save(const Path& path) const override;
 
 	private:
 
-		void AddRoot(FunctionView<void, ArchiveWriter&> handler) override;
+		void add_root(FunctionView<void, ArchiveWriter&> handler) override;
 
-		void GetRoot(FunctionView<void, const ArchiveReader&> handler) const override;
+		void get_root(FunctionView<void, const ArchiveReader&> handler) const override;
 
 		////////////////
 		///   Data   ///

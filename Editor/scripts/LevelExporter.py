@@ -43,14 +43,9 @@ def export_mesh(data, path):
         file.write(struct.pack('I', len(vertices) // 8))
         vertices.tofile(file)
 
-# First, apply modifiers to all objects
-for obj in bpy.data.objects:
-    for mod in obj.modifiers:
-        bpy.ops.object.modifier_apply(modifier=mod.name, apply_as='DATA')
-
 # XML root element
 root = XML.Element("root")
-gameObjects = XML.SubElement(root, "GameObjects")
+gameObjects = XML.SubElement(root, "objects")
 nextID = 1
 
 # List of previously exported meshes
@@ -66,43 +61,43 @@ for obj in bpy.data.objects:
     # Create a node for the entity
     entityID = nextID
     nextID += 1
-    entity = XML.SubElement(gameObjects, obj.get('TYPE', "Willow::Entity"))
-    entity.set("refID", str(entityID))
+    entity = XML.SubElement(gameObjects, obj.get('TYPE', "willow::Entity"))
+    entity.set("ref_id", str(entityID))
     
     # Serialize its id, and name
-    XML.SubElement(entity, "ID").set("value", str(entityID))
-    XML.SubElement(entity, "Name").set("value", obj.name)
+    XML.SubElement(entity, "id").set("value", str(entityID))
+    XML.SubElement(entity, "name").set("value", obj.name)
     
     # Serialize its transform
-    transformNode = XML.SubElement(entity, "Transform")
+    transformNode = XML.SubElement(entity, "transform")
     
     # Serialize location (swizzled)
-    locationNode = XML.SubElement(transformNode, "Location")
+    locationNode = XML.SubElement(transformNode, "location")
     XML.SubElement(locationNode, "X").set("value", str(obj.location[1]))
     XML.SubElement(locationNode, "Y").set("value", str(obj.location[2]))
     XML.SubElement(locationNode, "Z").set("value", str(obj.location[0]))
     
     # Serialize rotation (swizzled)
     obj.rotation_mode = 'QUATERNION'
-    rotationNode = XML.SubElement(transformNode, "Rotation")
+    rotationNode = XML.SubElement(transformNode, "rotation")
     XML.SubElement(rotationNode, "W").set("value", str(obj.rotation_quaternion[0]))
     XML.SubElement(rotationNode, "X").set("value", str(-obj.rotation_quaternion[2]))
     XML.SubElement(rotationNode, "Y").set("value", str(obj.rotation_quaternion[3]))
     XML.SubElement(rotationNode, "Z").set("value", str(obj.rotation_quaternion[1]))
     
     # Serialize scale (swizzled)
-    scaleNode = XML.SubElement(transformNode, "Scale")
+    scaleNode = XML.SubElement(transformNode, "scale")
     XML.SubElement(scaleNode, "X").set("value", str(obj.scale[1]))
     XML.SubElement(scaleNode, "Y").set("value", str(obj.scale[2]))
     XML.SubElement(scaleNode, "Z").set("value", str(obj.scale[0]))
     
     # Serialize physics mode
     if obj.game.physics_type == 'SENSOR':
-        XML.SubElement(entity, "PhysicsMode").set("value", "Ghost")
+        XML.SubElement(entity, "physics_mode").set("value", "Ghost")
     elif obj.game.physics_type == 'STATIC':
-        XML.SubElement(entity, "PhysicsMode").set("value", "Kinematic")
+        XML.SubElement(entity, "physics_mode").set("value", "Kinematic")
     elif obj.game.physics_type == 'RIGID_BODY':
-        XML.SubElement(entity, "PhysicsMode").set("value", "Dynamic")
+        XML.SubElement(entity, "physics_mode").set("value", "Dynamic")
     
     # If the object is a mesh
     if obj.type == 'MESH':
@@ -121,36 +116,36 @@ for obj in bpy.data.objects:
         # Create a node for the StaticMeshComponent
         staticMeshID = nextID
         nextID += 1
-        staticMesh = XML.SubElement(gameObjects, "Willow::StaticMeshComponent")
-        staticMesh.set("refID", str(staticMeshID))
+        staticMesh = XML.SubElement(gameObjects, "willow::StaticMeshComponent")
+        staticMesh.set("ref_id", str(staticMeshID))
         
         # Serialize its ID, and entity reference
-        XML.SubElement(staticMesh, "ID").set("value", str(staticMeshID))
-        XML.SubElement(staticMesh, "Entity").set("ref", str(entityID))
+        XML.SubElement(staticMesh, "id").set("value", str(staticMeshID))
+        XML.SubElement(staticMesh, "entity").set("ref", str(entityID))
         
         # Serialize its mesh and material
-        XML.SubElement(staticMesh, "Mesh").set("value", meshPath)
-        XML.SubElement(staticMesh, "Material").set("value", "Content/Materials/Sponza.mat")
+        XML.SubElement(staticMesh, "mesh").set("value", meshPath)
+        XML.SubElement(staticMesh, "material").set("value", "Content/Materials/Sponza.mat")
         
         # Serialize its instance params
-        instanceParams = XML.SubElement(staticMesh, "InstanceParams")
+        instanceParams = XML.SubElement(staticMesh, "instance_params")
         itemNode = XML.SubElement(instanceParams, "item")
         XML.SubElement(itemNode, "key").set("value", "diffuse")
         valueNode = XML.SubElement(itemNode, "value")
-        XML.SubElement(valueNode, "Willow::AssetPtr").set("value", obj.active_material.active_texture.image.filepath[2:])
+        XML.SubElement(valueNode, "willow::ResourceHandle").set("value", obj.active_material.active_texture.image.filepath[2:])
         
         # Create a node for the StaticMeshColliderComponent
         staticMeshColliderID = nextID
         nextID += 1
-        staticMeshCollider = XML.SubElement(gameObjects, "Willow::StaticMeshColliderComponent")
-        staticMeshCollider.set("refID", str(staticMeshColliderID))
+        staticMeshCollider = XML.SubElement(gameObjects, "willow::StaticMeshColliderComponent")
+        staticMeshCollider.set("ref_id", str(staticMeshColliderID))
         
         # Serialize its ID, and entity reference
-        XML.SubElement(staticMeshCollider, "ID").set("value", str(staticMeshColliderID))
-        XML.SubElement(staticMeshCollider, "Entity").set("ref", str(entityID))
+        XML.SubElement(staticMeshCollider, "id").set("value", str(staticMeshColliderID))
+        XML.SubElement(staticMeshCollider, "entity").set("ref", str(entityID))
         
         # Serialize its mesh
-        XML.SubElement(staticMeshCollider, "Mesh").set("value", meshPath)
+        XML.SubElement(staticMeshCollider, "mesh").set("value", meshPath)
         
     # If the object is a Camera
     if obj.type == 'CAMERA':
@@ -158,15 +153,15 @@ for obj in bpy.data.objects:
         # Create a node for the CameraComponent
         cameraID = nextID
         nextID += 1
-        camera = XML.SubElement(gameObjects, obj.data.get('TYPE', "Willow::CameraComponent"))
-        camera.set("refID", str(cameraID))
+        camera = XML.SubElement(gameObjects, obj.data.get('TYPE', "willow::CameraComponent"))
+        camera.set("ref_id", str(cameraID))
         
         # Serialize ID and entity reference
-        XML.SubElement(camera, "ID").set("value", str(cameraID))
-        XML.SubElement(camera, "Entity").set("ref", str(entityID))
+        XML.SubElement(camera, "id").set("value", str(cameraID))
+        XML.SubElement(camera, "entity").set("ref", str(entityID))
 
 # Write next world id
-XML.SubElement(root, "NextID").set("value", str(nextID))
+XML.SubElement(root, "next_object_id").set("value", str(nextID))
 
 # Output result
 tree = XML.ElementTree(root)

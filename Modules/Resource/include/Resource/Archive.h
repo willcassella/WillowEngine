@@ -1,9 +1,11 @@
 // Archive.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "Resource.h"
+#include <Core/Object.h>
+#include <Core/Operations/FromArchive.h>
+#include "Path.h"
 
-namespace Willow
+namespace willow
 {
 	/** Represents an Archive as a whole.
 	* TODO: Make this extend "Resource" */
@@ -27,23 +29,23 @@ namespace Willow
 		///   Methods   ///
 	public:
 
-		virtual bool Load(const Path& path) = 0;
+		virtual bool load(const Path& path) = 0;
 
-		virtual bool Save(const Path& path) const = 0;
+		virtual bool save(const Path& path) const = 0;
 
 		template <typename T>
-		void Serialize(const T& value)
+		void serialize(const T& value)
 		{
-			this->AddRoot([&value](ArchiveWriter& writer)
+			this->add_root([&value](ArchiveWriter& writer)
 			{
 				::ToArchive(value, writer);
 			});
 		}
 
 		template <typename T>
-		void Deserialize(T& value)
+		void deserialize(T& value)
 		{
-			this->GetRoot([&value](const ArchiveReader& reader)
+			this->get_root([&value](const ArchiveReader& reader)
 			{
 				::FromArchive(value, reader);
 			});
@@ -51,8 +53,8 @@ namespace Willow
 
 	private:
 
-		virtual void AddRoot(FunctionView<void, ArchiveWriter&> handler) = 0;
+		virtual void add_root(FunctionView<void, ArchiveWriter&> handler) = 0;
 
-		virtual void GetRoot(FunctionView<void, const ArchiveReader&> handler) const = 0;
+		virtual void get_root(FunctionView<void, const ArchiveReader&> handler) const = 0;
 	};
 }

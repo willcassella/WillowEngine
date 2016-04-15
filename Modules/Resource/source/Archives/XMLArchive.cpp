@@ -1,9 +1,10 @@
 // XMLArchive.cpp
 
 #include <pugixml.hpp>
+#include <Core/Reflection/ClassInfo.h>
 #include "../../include/Resource/Archives/XMLArchive.h"
 
-namespace Willow
+namespace willow
 {
 	/////////////////
 	///   Types   ///
@@ -16,7 +17,7 @@ namespace Willow
 	public:
 
 		XMLNode(const Archive& archive, pugi::xml_node node)
-			: Archive(&archive), Node(std::move(node))
+			: archive(&archive), node(std::move(node))
 		{
 			// All done
 		}
@@ -25,8 +26,8 @@ namespace Willow
 		///   Fields   ///
 	public:
 
-		const Willow::Archive* Archive;
-		pugi::xml_node Node;
+		const Archive* archive;
+		pugi::xml_node node;
 
 		///////////////////
 		///   Methods   ///
@@ -34,12 +35,12 @@ namespace Willow
 
 		void MapRefID(ArchiveRefID refID, void* pointer) const override
 		{
-			this->Archive->RefTable[refID] = pointer;
+			this->archive->RefTable[refID] = pointer;
 		}
 
 		ArchiveRefID GetRefID() const override
 		{
-			auto idAttr = this->Node.attribute("refID");
+			auto idAttr = this->node.attribute("ref_id");
 			ArchiveRefID value = 0;
 
 			if (idAttr)
@@ -52,72 +53,72 @@ namespace Willow
 
 		String GetName() const override
 		{
-			return this->Node.name();
+			return this->node.name();
 		}
 
 		void GetValue(bool& value) const override
 		{
-			value = this->Node.attribute("value").as_bool(value);
+			value = this->node.attribute("value").as_bool(value);
 		}
 
 		void GetValue(char& value) const override
 		{
-			value = static_cast<char>(this->Node.attribute("value").as_int(value));
+			value = static_cast<char>(this->node.attribute("value").as_int(value));
 		}
 
 		void GetValue(byte& value) const override
 		{
-			value = static_cast<byte>(this->Node.attribute("value").as_uint(value));
+			value = static_cast<byte>(this->node.attribute("value").as_uint(value));
 		}
 
 		void GetValue(int16& value) const override
 		{
-			value = static_cast<int16>(this->Node.attribute("value").as_int(value));
+			value = static_cast<int16>(this->node.attribute("value").as_int(value));
 		}
 
 		void GetValue(uint16& value) const override
 		{
-			value = static_cast<uint16>(this->Node.attribute("value").as_uint(value));
+			value = static_cast<uint16>(this->node.attribute("value").as_uint(value));
 		}
 
 		void GetValue(int32& value) const override
 		{
-			value = static_cast<int32>(this->Node.attribute("value").as_int(value));
+			value = static_cast<int32>(this->node.attribute("value").as_int(value));
 		}
 
 		void GetValue(uint32& value) const override
 		{
-			value = static_cast<uint32>(this->Node.attribute("value").as_uint(value));
+			value = static_cast<uint32>(this->node.attribute("value").as_uint(value));
 		}
 
 		void GetValue(int64& value) const override
 		{
-			FromString(value, this->Node.attribute("value").value());
+			FromString(value, this->node.attribute("value").value());
 		}
 
 		void GetValue(uint64& value) const override
 		{
-			FromString(value, this->Node.attribute("value").value());
+			FromString(value, this->node.attribute("value").value());
 		}
 
 		void GetValue(float& value) const override
 		{
-			value = this->Node.attribute("value").as_float(value);
+			value = this->node.attribute("value").as_float(value);
 		}
 
 		void GetValue(double& value) const override
 		{
-			value = this->Node.attribute("value").as_double(value);
+			value = this->node.attribute("value").as_double(value);
 		}
 
 		void GetValue(long double& value) const override
 		{
-			FromString(value, this->Node.attribute("value").value());
+			FromString(value, this->node.attribute("value").value());
 		}
 
 		void GetValue(String& value) const override
 		{
-			value = this->Node.attribute("value").value();
+			value = this->node.attribute("value").value();
 		}
 
 		void GetValue(void*& value) const override
@@ -130,8 +131,8 @@ namespace Willow
 
 			// Find the ref in the table
 			ArchiveRefID ref = 0;
-			FromString(ref, this->Node.attribute("ref").value());
-			auto result = this->Archive->RefTable.Find(ref);
+			FromString(ref, this->node.attribute("ref").value());
+			auto result = this->archive->RefTable.Find(ref);
 			
 			// If the key does not exist in the reftable, this ref cannot be resolved
 			if (!result)
@@ -144,16 +145,16 @@ namespace Willow
 
 		bool IsNull() const override
 		{
-			return this->Node.attribute("ref").value() == "null"_s;
+			return this->node.attribute("ref").value() == "null"_s;
 		}
 
 		bool GetFirstChild(FunctionView<void, const ArchiveReader&> function) const override
 		{
-			auto child = this->Node.first_child();
+			auto child = this->node.first_child();
 
 			if (child != nullptr)
 			{
-				XMLNode node(*this->Archive, child);
+				XMLNode node(*this->archive, child);
 				function(node);
 				return true;
 			}
@@ -166,11 +167,11 @@ namespace Willow
 		bool GetChild(uint32 index, FunctionView<void, const ArchiveReader&> function) const override
 		{
 			uint32 i = 0;
-			for (auto child : this->Node.children())
+			for (auto child : this->node.children())
 			{
 				if (i == index)
 				{
-					XMLNode node(*this->Archive, child);
+					XMLNode node(*this->archive, child);
 					function(node);
 					return true;
 				}
@@ -185,11 +186,11 @@ namespace Willow
 
 		bool GetChild(const String& name, FunctionView<void, const ArchiveReader&> function) const override
 		{
-			auto child = this->Node.child(name.Cstr());
+			auto child = this->node.child(name.Cstr());
 
 			if (!child.empty())
 			{
-				XMLNode node(*this->Archive, child);
+				XMLNode node(*this->archive, child);
 				function(node);
 				return true;
 			}
@@ -201,18 +202,18 @@ namespace Willow
 
 		void EnumerateChildren(const EnumeratorView<const ArchiveReader&>& enumerator) const override
 		{
-			for (auto child : this->Node.children())
+			for (auto child : this->node.children())
 			{
-				XMLNode node(*this->Archive, child);
+				XMLNode node(*this->archive, child);
 				enumerator.Invoke(node);
 			}
 		}
 
 		void EnumerateChildren(const String& name, const EnumeratorView<const ArchiveReader&>& enumerator) const override
 		{
-			for (auto child : this->Node.children(name.Cstr()))
+			for (auto child : this->node.children(name.Cstr()))
 			{
-				XMLNode node(*this->Archive, child);
+				XMLNode node(*this->archive, child);
 				enumerator(node);
 			}
 		}
@@ -220,87 +221,87 @@ namespace Willow
 		void SetRefID(const void* refID) override
 		{
 			auto value = reinterpret_cast<ArchiveRefID>(refID);
-			this->Node.append_attribute("refID") = ToString(value).Cstr();
+			this->node.append_attribute("ref_id") = ToString(value).Cstr();
 		}
 
 		void SetValue(bool value) override
 		{
-			this->Node.append_attribute("value") = value;
+			this->node.append_attribute("value") = value;
 		}
 
 		void SetValue(char value) override
 		{
-			this->Node.append_attribute("value") = static_cast<int>(value);
+			this->node.append_attribute("value") = static_cast<int>(value);
 		}
 
 		void SetValue(byte value) override
 		{
-			this->Node.append_attribute("value") = static_cast<unsigned int>(value);
+			this->node.append_attribute("value") = static_cast<unsigned int>(value);
 		}
 
 		void SetValue(int16 value) override
 		{
-			this->Node.append_attribute("value") = static_cast<int>(value);
+			this->node.append_attribute("value") = static_cast<int>(value);
 		}
 
 		void SetValue(uint16 value) override
 		{
-			this->Node.append_attribute("value") = static_cast<unsigned int>(value);
+			this->node.append_attribute("value") = static_cast<unsigned int>(value);
 		}
 
 		void SetValue(int32 value) override
 		{
-			this->Node.append_attribute("value") = value;
+			this->node.append_attribute("value") = value;
 		}
 
 		void SetValue(uint32 value) override
 		{
-			this->Node.append_attribute("value") = value;
+			this->node.append_attribute("value") = value;
 		}
 
 		void SetValue(int64 value) override
 		{
-			this->Node.append_attribute("value") = ToString(value).Cstr();
+			this->node.append_attribute("value") = ToString(value).Cstr();
 		}
 
 		void SetValue(uint64 value) override
 		{
-			this->Node.append_attribute("value") = ToString(value).Cstr();
+			this->node.append_attribute("value") = ToString(value).Cstr();
 		}
 
 		void SetValue(float value) override
 		{
-			this->Node.append_attribute("value") = value;
+			this->node.append_attribute("value") = value;
 		}
 
 		void SetValue(double value) override
 		{
-			this->Node.append_attribute("value") = value;
+			this->node.append_attribute("value") = value;
 		}
 
 		void SetValue(long double value) override
 		{
-			this->Node.append_attribute("value") = ToString(value).Cstr();
+			this->node.append_attribute("value") = ToString(value).Cstr();
 		}
 
 		void SetValue(const char* value) override
 		{
-			this->Node.append_attribute("value") = value;
+			this->node.append_attribute("value") = value;
 		}
 
 		void SetValue(const void* value) override
 		{
-			this->Node.append_attribute("ref") = ToString(reinterpret_cast<ArchiveRefID>(value)).Cstr();
+			this->node.append_attribute("ref") = ToString(reinterpret_cast<ArchiveRefID>(value)).Cstr();
 		}
 
 		void SetValue(std::nullptr_t) override
 		{
-			this->Node.append_attribute("ref") = "null";
+			this->node.append_attribute("ref") = "null";
 		}
 
 		void AddChild(const String& name, FunctionView<void, ArchiveWriter&> function) override
 		{
-			XMLNode child(*this->Archive, this->Node.append_child(name.Cstr()));
+			XMLNode child(*this->archive, this->node.append_child(name.Cstr()));
 			function(child);
 		}
 	};
@@ -315,16 +316,17 @@ namespace Willow
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Willow::XMLArchive);
+BUILD_REFLECTION(willow::XMLArchive);
 
-namespace Willow
+namespace willow
 {
 	////////////////////////
 	///   Constructors   ///
 
 	XMLArchive::XMLArchive()
+		: _doc{ std::make_unique<XMLDoc>() }
 	{
-		_doc = std::make_unique<XMLDoc>();
+		// All done
 	}
 
 	XMLArchive::~XMLArchive()
@@ -335,26 +337,26 @@ namespace Willow
 	///////////////////
 	///   Methods   ///
 
-	bool XMLArchive::Load(const Path& path)
+	bool XMLArchive::load(const Path& path)
 	{
-		auto result = _doc->Doc.load_file(path.ToString().Cstr());
+		auto result = this->_doc->Doc.load_file(path.c_str());
 		return result == pugi::xml_parse_status::status_ok;
 	}
 
-	bool XMLArchive::Save(const Path& path) const
+	bool XMLArchive::save(const Path& path) const
 	{
-		return _doc->Doc.save_file(path.ToString().Cstr());
+		return this->_doc->Doc.save_file(path.c_str());
 	}
 
-	void XMLArchive::AddRoot(FunctionView<void, ArchiveWriter&> handler)
+	void XMLArchive::add_root(FunctionView<void, ArchiveWriter&> handler)
 	{
-		XMLNode root(*this, _doc->Doc.append_child("root"));
+		XMLNode root(*this, this->_doc->Doc.append_child("root"));
 		handler(root);
 	}
 
-	void XMLArchive::GetRoot(FunctionView<void, const ArchiveReader&> handler) const
+	void XMLArchive::get_root(FunctionView<void, const ArchiveReader&> handler) const
 	{
-		XMLNode root(*this, _doc->Doc.first_child());
+		XMLNode root(*this, this->_doc->Doc.first_child());
 		handler(root);
 	}
 }

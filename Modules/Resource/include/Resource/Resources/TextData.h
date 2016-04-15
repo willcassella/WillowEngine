@@ -1,36 +1,36 @@
-// TextFile.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
+// TextData.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "../Resource.h"
+#include "../Path.h"
 
-namespace Willow
+namespace willow
 {
-	class RESOURCE_API TextFile final : public Resource
+	struct RESOURCE_API TextData final
 	{
 		///////////////////////
 		///   Information   ///
 	public:
 
-		REFLECTABLE_CLASS
-		EXTENDS(Resource)
+		REFLECTABLE_STRUCT
 
 		////////////////////////
 		///   Constructors   ///
 	public:
 
-		TextFile(const Path& path);
+		/** Loads from a file. */
+		TextData(const Path& path);
 
 		///////////////////
 		///   Methods   ///
 	public:
 
 		/** Dumps all lines of the text file into a String (including line endings) */
-		String DumpLines() const;
+		String dump_lines() const;
 
 		/** Returns an Array of all the lines in the text file */
-		FORCEINLINE const Array<String>& GetLines() const
+		FORCEINLINE const Array<String>& get_lines() const
 		{
-			return _lines;
+			return this->_lines;
 		}
 
 		////////////////

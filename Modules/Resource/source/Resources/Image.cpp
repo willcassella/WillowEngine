@@ -7,23 +7,27 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Willow::Image);
+BUILD_REFLECTION(willow::Image);
 
-namespace Willow
+namespace willow
 {
 	////////////////////////
 	///   Constructors   ///
 
+	Image::Image()
+		: _bitmap{ nullptr }
+	{
+		// All done
+	}
+
 	Image::Image(const Path& path)
-		: Base(path), _bitmap(nullptr), _width(0), _height(0), _image(nullptr)
 	{
 		// Open the file
-		FREE_IMAGE_FORMAT format = FreeImage_GetFileType(path.ToString().Cstr());
-		FIBITMAP* image = FreeImage_Load(format, path.ToString().Cstr(), 0);
+		FREE_IMAGE_FORMAT format = FreeImage_GetFileType(path.c_str());
+		FIBITMAP* image = FreeImage_Load(format, path.c_str(), 0);
 
 		if (!image)
 		{
-			Console::Warning("'@' could not be opened", path);
 			return;
 		}
 
@@ -34,34 +38,67 @@ namespace Willow
 			FreeImage_Unload(temp);
 		}
 
-		_bitmap = FreeImage_GetBits(image);
-		_width = FreeImage_GetWidth(image);
-		_height = FreeImage_GetHeight(image);
-		_image = image;
+		this->_bitmap = image;
+	}
 
-		Console::WriteLine("'@' loaded successfully", path);
+	Image::Image(const Image& copy)
+		: _bitmap{ FreeImage_Clone(copy._bitmap) }
+	{
+		// All done
+	}
+
+	Image::Image(Image&& move)
+		: _bitmap{ move._bitmap }
+	{
+		move._bitmap = nullptr;
 	}
 
 	Image::~Image()
 	{
-		FreeImage_Unload(static_cast<FIBITMAP*>(_image));
+		FreeImage_Unload(this->_bitmap);
 	}
 
 	///////////////////
 	///   Methods   ///
 
-	uint32 Image::GetWidth() const
+	uint32 Image::get_width() const
 	{
-		return _width;
+		return FreeImage_GetWidth(this->_bitmap);
 	}
 
-	uint32 Image::GetHeight() const
+	uint32 Image::get_height() const
 	{
-		return _height;
+		return FreeImage_GetHeight(this->_bitmap);
 	}
 
-	const byte* Image::GetBitmap() const
+	const byte* Image::get_bitmap() const
 	{
-		return _bitmap;
+		return FreeImage_GetBits(this->_bitmap);
+	}
+
+	/////////////////////
+	///   Operators   ///
+
+	Image& Image::operator=(const Image& copy)
+	{
+		if (this != &copy)
+		{
+			FreeImage_Unload(this->_bitmap);
+			this->_bitmap = FreeImage_Clone(copy._bitmap);
+		}
+
+		return *this;
+	}
+
+	Image& Image::operator=(Image&& move)
+	{
+		if (this != &move)
+		{
+			FreeImage_Unload(this->_bitmap);
+			this->_bitmap = move._bitmap;
+			move._bitmap = nullptr;
+		}
+
+		return *this;
 	}
 }

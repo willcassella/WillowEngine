@@ -1,41 +1,53 @@
 // Image.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include "../Resource.h"
+#include <Core/Umbrellas/Reflection.h>
+#include "../Path.h"
 
-namespace Willow
+namespace willow
 {
-	class RESOURCE_API Image final : public Resource
+	struct RESOURCE_API Image final	
 	{
 		///////////////////////
 		///   Information   ///
 	public:
 
-		REFLECTABLE_CLASS
-		EXTENDS(Resource)
+		REFLECTABLE_STRUCT
 
 		////////////////////////
 		///   Constructors   ///
 	public:
-
+		
+		Image();
 		Image(const Path& path);
-		~Image() override;
+		Image(const Image& copy);
+		Image(Image&& move);
+		~Image();
 
 		///////////////////
 		///   Methods   ///
 	public:
 
-		uint32 GetWidth() const;
-		uint32 GetHeight() const;
-		const byte* GetBitmap() const;
+		/** Returns the width of this Image. */
+		uint32 get_width() const;
+		
+		/** Returns the height of this Image. */
+		uint32 get_height() const;
+		
+		/** Returns a pointer to the bitmap data for this Image. */
+		const byte* get_bitmap() const;
+
+		/////////////////////
+		///   Operators   ///
+	public:
+
+		Image& operator=(const Image& copy);
+		Image& operator=(Image&& move);
 
 		////////////////
 		///   Data   ///
 	private:
 
-		const byte* _bitmap;
-		uint32 _width;
-		uint32 _height;
-		void* _image;
+		struct FIBITMAP* _bitmap;
 	};
 }
