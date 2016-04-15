@@ -12,7 +12,7 @@ namespace willow
 	////////////////////////
 	///   Constructors   ///
 
-	Material::Material(const Path& path)
+	Material::Material(const Path& /*path*/)
 	{
 		this->vertex_shader = "Content/Shaders/default.vert"_p;
 		this->fragment_shader = "Content/Shaders/default.frag"_p;
