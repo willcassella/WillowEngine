@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
+#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include "Common.h"
 
 namespace willow
