@@ -1,6 +1,5 @@
 // BulletPhysicsSystem.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
-#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include <Engine/World.h>
 #include "../include/BulletPhysics/BulletPhysicsSystem.h"
 #include "../private/DebugDrawer.h"

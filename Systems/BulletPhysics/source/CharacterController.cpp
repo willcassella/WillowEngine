@@ -1,4 +1,4 @@
-// CharacterController.cpp
+// CharacterController.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
 #include "../private/CharacterController.h"
 #include "../private/EntityPhysicsData.h"
