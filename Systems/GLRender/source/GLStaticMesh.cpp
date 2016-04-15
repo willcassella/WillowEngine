@@ -20,7 +20,7 @@ namespace willow
 
 		glGenBuffers(1, &this->_vbo);
 		glBindBuffer(GL_ARRAY_BUFFER, this->_vbo);
-		glBufferData(GL_ARRAY_BUFFER, mesh.vertices.Size() * sizeof(StaticMesh::Vertex), &mesh.vertices[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, mesh.vertices.Size() * sizeof(StaticMesh::Vertex), mesh.vertices.CArray(), GL_STATIC_DRAW);
 
 		// Setup vertex specification
 		glEnableVertexAttribArray(0);
