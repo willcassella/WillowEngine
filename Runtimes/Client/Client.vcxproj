@@ -201,6 +201,7 @@
     <Image Include="resources\logo.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Client\ToggleKey.h" />
     <ClInclude Include="include\Client\Window.h" />
     <ClInclude Include="resources\resource.h" />
   </ItemGroup>

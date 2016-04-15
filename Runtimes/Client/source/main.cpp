@@ -6,6 +6,7 @@
 #include <BulletPhysics/BulletPhysicsSystem.h>
 #include <GLRender/GLRenderSystem.h>
 #include "../include/Client/Window.h"
+#include "../include/Client/ToggleKey.h"
 
 /** Main program loop. */
 void event_loop(Window& window, willow::World& world, willow::RenderSystem& renderer, willow::PhysicsSystem& physics)
@@ -17,6 +18,7 @@ void event_loop(Window& window, willow::World& world, willow::RenderSystem& rend
 	uint32 numUpdates = 0;
 	bool shouldExit = false;
 	bool drawPhysics = false;
+	ToggleKey drawPhysicsKey{ GLFW_KEY_F1 };
 
 	// Begin the event loop
 	while (!window.should_close() && !shouldExit)
@@ -85,8 +87,7 @@ void event_loop(Window& window, willow::World& world, willow::RenderSystem& rend
 			numUpdates++;
 		}
 
-		// Press f1 to debug draw physics
-		if (window.get_key(GLFW_KEY_F1))
+		if (drawPhysicsKey.update(window))
 		{
 			drawPhysics = !drawPhysics;
 		}

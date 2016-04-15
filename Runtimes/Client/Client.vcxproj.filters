@@ -31,6 +31,9 @@
     <ClInclude Include="include\Client\Window.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\Client\ToggleKey.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\Client.rc">
