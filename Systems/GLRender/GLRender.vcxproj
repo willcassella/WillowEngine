@@ -21,7 +21,7 @@
   <ItemGroup>
     <ClInclude Include="include\GLRender\config.h" />
     <ClInclude Include="include\GLRender\GLMaterial.h" />
-    <ClInclude Include="include\GLRender\GLPrimitive.h" />
+    <ClInclude Include="include\GLRender\Forwards.h" />
     <ClInclude Include="include\GLRender\GLRenderSystem.h" />
     <ClInclude Include="include\GLRender\GLShader.h" />
     <ClInclude Include="include\GLRender\GLStaticMesh.h" />

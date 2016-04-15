@@ -3,7 +3,7 @@
 
 #include "ColliderComponent.h"
 
-namespace Willow
+namespace willow
 {
 	/** Type mechanism for distinguishing primitive collider shapes (Capsules, Cubes, Spheres, etc) 
 	* from complex ones (Static Meshes, height fields). */

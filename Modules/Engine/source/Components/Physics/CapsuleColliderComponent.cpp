@@ -7,12 +7,12 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Willow::CapsuleColliderComponent)
-.Property("Radius", &CapsuleColliderComponent::GetRadius, &CapsuleColliderComponent::SetRadius, "", "Capsule")
-.Property("Height", &CapsuleColliderComponent::GetHeight, &CapsuleColliderComponent::SetHeight, "", "Capsule")
-.Property("Axis", &CapsuleColliderComponent::GetAxis, &CapsuleColliderComponent::SetAxis, "", "Capsule");
+BUILD_REFLECTION(willow::CapsuleColliderComponent)
+.Property("radius", &CapsuleColliderComponent::get_radius, &CapsuleColliderComponent::set_radius, "", "Capsule")
+.Property("height", &CapsuleColliderComponent::get_height, &CapsuleColliderComponent::set_height, "", "Capsule")
+.Property("axis", &CapsuleColliderComponent::get_axis, &CapsuleColliderComponent::set_axis, "", "Capsule");
 
-namespace Willow
+namespace willow
 {
 	////////////////////////
 	///   Constructors   ///
@@ -33,65 +33,65 @@ namespace Willow
 	void CapsuleColliderComponent::ToArchive(ArchiveWriter& writer) const
 	{
 		this->Base::ToArchive(writer);
-		writer.PushValue("Radius", this->GetRadius());
-		writer.PushValue("Height", this->GetHeight());
-		//writer.PushValue("Axis", this->GetAxis());
+		writer.PushValue("radius", this->get_radius());
+		writer.PushValue("height", this->get_height());
+		//writer.PushValue("axis", this->get_axis());
 	}
 
 	void CapsuleColliderComponent::FromArchive(const ArchiveReader& reader)
 	{
 		this->Base::FromArchive(reader);
-		reader.PullValue("Radius", _shape.Radius);
-		reader.PullValue("Height", _shape.Height);
-		//reader.PullValue("Axis", _shape.Axis);
-		this->UpdateShape();
+		reader.PullValue("radius", _shape.radius);
+		reader.PullValue("height", _shape.height);
+		//reader.PullValue("axis", _shape.axis);
+		this->update_shape();
 	}
 
-	void CapsuleColliderComponent::SetRadius(float radius)
+	void CapsuleColliderComponent::set_radius(float radius)
 	{
-		_shape.Radius = radius;
-		this->UpdateShape();
+		this->_shape.radius = radius;
+		this->update_shape();
 	}
 
-	void CapsuleColliderComponent::SetHeight(float height)
+	void CapsuleColliderComponent::set_height(float height)
 	{
-		_shape.Height = height;
-		this->UpdateShape();
+		this->_shape.height = height;
+		this->update_shape();
 	}
 
-	void CapsuleColliderComponent::SetAxis(ShapeAxis axis)
+	void CapsuleColliderComponent::set_axis(ShapeAxis axis)
 	{
-		_shape.Axis = axis;
-		this->UpdateShape();
+		this->_shape.axis = axis;
+		this->update_shape();
 	}
 
-	void CapsuleColliderComponent::SetShape(Shape shape)
+	void CapsuleColliderComponent::set_shape(Shape shape)
 	{
-		_shape = shape;
-		this->UpdateShape();
+		this->_shape = shape;
+		this->update_shape();
 	}
 
-	void CapsuleColliderComponent::OnUpdateColliderTransform()
+	void CapsuleColliderComponent::on_update_collider_transform()
 	{
-		this->GetWorld().GetSystem<PhysicsSystem>()->SetColliderTransform(*this, this->GetColliderTransform());
+		this->get_world().get_system<PhysicsSystem>()->set_collider_transform(*this, this->get_collider_transform());
 	}
 
-	bool CapsuleColliderComponent::OnActivate()
+	bool CapsuleColliderComponent::on_activate()
 	{
-		this->GetWorld().GetSystem<PhysicsSystem>()->CreateCollider(*this, this->GetEntity(), this->GetColliderTransform(), _shape);
+		this->get_world().get_system<PhysicsSystem>()->create_collider(*this, this->get_entity(), this->get_collider_transform(), this->_shape);
 		return true;
 	}
 
-	void CapsuleColliderComponent::OnDeactivate()
+	void CapsuleColliderComponent::on_deactivate()
 	{
-		this->GetWorld().GetSystem<PhysicsSystem>()->DestroyCollider(*this);
+		this->get_world().get_system<PhysicsSystem>()->destroy_collider(*this);
 	}
 
-	void CapsuleColliderComponent::UpdateShape()
+	void CapsuleColliderComponent::update_shape()
 	{
-		if (this->HasSpawned() && this->IsActive())
+		if (this->has_spawned() && this->is_activate())
 		{
-			this->GetWorld().GetSystem<PhysicsSystem>()->SetColliderShape(*this, _shape);
+			this->get_world().get_system<PhysicsSystem>()->set_collider_shape(*this, this->_shape);
 		}
 	}
 }

@@ -2,19 +2,19 @@
 
 #include <fstream>
 #include <Core/IO/Console.h>
-#include <Resource/Resources/TextFile.h>
+#include <Resource/Resources/TextData.h>
 #include "../include/AssetConverter/AssetConversion.h"
 
-namespace Willow
+namespace willow
 {
-	namespace AssetConversion
+	namespace asset_conversion
 	{
 		/////////////////////
 		///   Functions   ///
 
-		bool Convert(const Path& path, const Array<String>& /*options*/)
+		bool convert(const Path& path, const Array<String>& /*options*/)
 		{
-			InputType input = ParsePath(path);
+			InputType input = parse_path(path);
 
 			// If parsing failed
 			if (input == InputType::None)
@@ -27,11 +27,11 @@ namespace Willow
 			{
 				Array<StaticMesh::Vertex> vertices;
 
-				if (!ParseOBJFile(path, vertices))
+				if (!parse_obj_file(path, vertices))
 				{
 					return false;
 				}
-				if (!WriteStaticMesh(path.GetFileName(), vertices))
+				if (!write_static_mesh(path.get_file_name(), vertices))
 				{
 					return false;
 				}
@@ -43,9 +43,9 @@ namespace Willow
 			return true;
 		}
 
-		InputType ParsePath(const Path& path)
+		InputType parse_path(const Path& path)
 		{
-			String extension = path.GetFileExtension();
+			String extension = path.get_file_extension();
 
 			// Make sure the filename is valid
 			if (extension.IsEmpty())
@@ -71,15 +71,15 @@ namespace Willow
 			}
 		}
 
-		bool ParseOBJFile(const Path& path, Array<StaticMesh::Vertex>& outVertices)
+		bool parse_obj_file(const Path& path, Array<StaticMesh::Vertex>& outVertices)
 		{
 			Array<Vec3> positions;
 			Array<Vec2> coordinates;
 			Array<Vec3> normals;
 
-			TextFile file(path);
+			TextData file(path);
 
-			for (const String& line : file.GetLines())
+			for (const String& line : file.get_lines())
 			{
 				// Parse vertices
 				if (line.StartsWith("v "))
@@ -121,13 +121,13 @@ namespace Willow
 						// Construct a vertex
 						StaticMesh::Vertex vertex;
 						Vec3 position = positions[vertexIndex[i] - 1];
-						vertex.Position = position;
+						vertex.position = position;
 
 						Vec2 textureCoords = coordinates[uvIndex[i] - 1];
-						vertex.UV = textureCoords;
+						vertex.uv = textureCoords;
 
 						Vec3 normal = normals[normalIndex[i] - 1];
-						vertex.Normal = normal;
+						vertex.normal = normal;
 
 						outVertices.Add(vertex);
 					}
@@ -137,7 +137,7 @@ namespace Willow
 			return true;
 		}
 
-		bool WriteStaticMesh(const Path& name, const Array<StaticMesh::Vertex>& vertices)
+		bool write_static_mesh(const Path& name, const Array<StaticMesh::Vertex>& vertices)
 		{
 			// Get the size of each array
 			uint32 numVerts = static_cast<uint32>(vertices.Size());

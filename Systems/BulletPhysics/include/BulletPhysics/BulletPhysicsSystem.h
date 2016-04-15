@@ -6,45 +6,10 @@
 #include <Engine/Systems/PhysicsSystem.h>
 #include <Engine/Containers/GTable.h>
 #include "config.h"
+#include "Forwards.h"
 
-////////////////////
-///   Forwards   ///
-
-/** Defined in a Bullet header. */
-class btSphereShape;
-
-/** Defined in a Bullet header. */
-class btCapsuleShape;
-
-/** Defined in a Bullet header. */
-class btBvhTriangleMeshShape;
-
-namespace Willow
+namespace willow
 {
-	/** Defined in 'private/PhysicsWorld.h' */
-	class PhysicsWorld;
-
-	/** Defined in 'private/EntityPhysicsData.h' */
-	class EntityPhysicsData;
-
-	/** Defined in 'private/EntityCollider.h' */
-	class EntityCollider;
-
-	/** Defined in 'private/RigidBody.h' */
-	class RigidBody;
-
-	/** Defined in 'private/GhostBody.h' */
-	class GhostBody;
-
-	/** Defined in 'private/CharacterController.h' */
-	class CharacterController;
-
-	/** Defined in 'private/BulletTriangleMesh.h' */
-	class BulletTriangleMesh;
-
-	/////////////////
-	///   Types   ///
-
 	class BULLETPHYSICS_API BulletPhysicsSystem final : public PhysicsSystem
 	{
 		///////////////////////
@@ -65,105 +30,105 @@ namespace Willow
 		///   Methods   ///
 	public:
 
-		void Update(const World& world) override;
+		void update(const World& world) override;
 
-		void DebugDraw(RenderSystem& render) override;
+		void debug_draw(RenderSystem& render) override;
 
-		void CreateEntity(EntityHandle entity, EntityHandle parent, Transform& transform, Entity::PhysicsMode mode, Entity::PhysicsState state) override;
+		void create_entity(Handle<Entity> entity, Handle<Entity> parent, Transform& transform, Entity::PhysicsMode mode, Entity::PhysicsState state) override;
 
-		void DestroyEntity(EntityHandle entity) override;
+		void destroy_entity(Handle<Entity> entity) override;
 
-		void SetEntityParent(EntityHandle entity, EntityHandle parent) override;
+		void set_entity_parent(Handle<Entity> entity, Handle<Entity> parent) override;
 
-		void UpdateEntityTransform(EntityHandle entity) override;
+		void update_entity_transform(Handle<Entity> entity) override;
 
-		void SetEntityPhysicsMode(EntityHandle entity, Entity::PhysicsMode mode) override;
+		void set_entity_physics_mode(Handle<Entity> entity, Entity::PhysicsMode mode) override;
 
-		void SetEntityPhysicsState(EntityHandle entity, Entity::PhysicsState state) override;
+		void set_entity_physics_state(Handle<Entity> entity, Entity::PhysicsState state) override;
 
-		void GetEntityLinearVelocity(Vec3& outLinearVelocity, EntityHandle entity) override;
+		void get_entity_linear_velocity(Vec3& outLinearVelocity, Handle<Entity> entity) override;
 
-		void SetEntityLinearVelocity(EntityHandle entity, const Vec3& linearVelocity) override;
+		void set_entity_linear_velocity(Handle<Entity> entity, const Vec3& linearVelocity) override;
 
-		void GetEntityAngularVelocity(Vec3& outAngularVelocity, EntityHandle entity) override;
+		void get_entity_angular_velocity(Vec3& outAngularVelocity, Handle<Entity> entity) override;
 
-		void SetEntityAngularVelocity(EntityHandle entity, const Vec3& angularVelocity) override;
+		void set_entity_angular_velocity(Handle<Entity> entity, const Vec3& angularVelocity) override;
 
-		void ApplyForce(EntityHandle entity, const Vec3& force, const Vec3& offset) override;
+		void apply_force(Handle<Entity> entity, const Vec3& force, const Vec3& offset) override;
 
-		void ApplyImpulse(EntityHandle entity, const Vec3& impulse, const Vec3& offset) override;
+		void apply_impulse(Handle<Entity> entity, const Vec3& impulse, const Vec3& offset) override;
 
-		void ApplyTorque(EntityHandle entity, const Vec3& torque) override;
+		void apply_torque(Handle<Entity> entity, const Vec3& torque) override;
 
-		void ApplyTorqueImpulse(EntityHandle entity, const Vec3& torque) override;
+		void apply_torque_impulse(Handle<Entity> entity, const Vec3& torque) override;
 
-		void CreateCollider(Handle<SphereColliderComponent> component, EntityHandle entity, const Transform& transform, SphereColliderComponent::Shape shape) override;
+		void create_collider(Handle<SphereColliderComponent> component, Handle<Entity> entity, const Transform& transform, SphereColliderComponent::Shape shape) override;
 
-		void CreateCollider(Handle<CapsuleColliderComponent> component, EntityHandle entity, const Transform& transform, CapsuleColliderComponent::Shape shape) override;
+		void create_collider(Handle<CapsuleColliderComponent> component, Handle<Entity> entity, const Transform& transform, CapsuleColliderComponent::Shape shape) override;
 
-		void CreateCollider(Handle<StaticMeshColliderComponent> component, EntityHandle entity, const Transform& transform, StaticMeshColliderComponent::Shape shape) override;
+		void create_collider(Handle<StaticMeshColliderComponent> component, Handle<Entity> entity, const Transform& transform, StaticMeshColliderComponent::Shape shape) override;
 
-		void DestroyCollider(Handle<SphereColliderComponent> component) override;
+		void destroy_collider(Handle<SphereColliderComponent> component) override;
 
-		void DestroyCollider(Handle<CapsuleColliderComponent> component) override;
+		void destroy_collider(Handle<CapsuleColliderComponent> component) override;
 
-		void DestroyCollider(Handle<StaticMeshColliderComponent> component) override;
+		void destroy_collider(Handle<StaticMeshColliderComponent> component) override;
 
-		void SetColliderTransform(Handle<SphereColliderComponent> component, const Transform& transform) override;
+		void set_collider_transform(Handle<SphereColliderComponent> component, const Transform& transform) override;
 
-		void SetColliderTransform(Handle<CapsuleColliderComponent> component, const Transform& transform) override;
+		void set_collider_transform(Handle<CapsuleColliderComponent> component, const Transform& transform) override;
 
-		void SetColliderTransform(Handle<StaticMeshColliderComponent> component, const Transform& transform) override;
+		void set_collider_transform(Handle<StaticMeshColliderComponent> component, const Transform& transform) override;
 
-		void SetColliderShape(Handle<SphereColliderComponent> component, SphereColliderComponent::Shape shape) override;
+		void set_collider_shape(Handle<SphereColliderComponent> component, SphereColliderComponent::Shape shape) override;
 
-		void SetColliderShape(Handle<CapsuleColliderComponent> component, CapsuleColliderComponent::Shape shape) override;
+		void set_collider_shape(Handle<CapsuleColliderComponent> component, CapsuleColliderComponent::Shape shape) override;
 
-		void SetColliderShape(Handle<StaticMeshColliderComponent> component, StaticMeshColliderComponent::Shape shape) override;
+		void set_collider_shape(Handle<StaticMeshColliderComponent> component, StaticMeshColliderComponent::Shape shape) override;
 
-		void CreateCharacterController(
+		void create_character_controller(
 			Handle<CharacterControllerComponent> component,
-			EntityHandle entity,
+			Handle<Entity> entity,
 			Handle<PrimitiveColliderComponent> collider,
 			CharacterControllerComponent::Settings settings) override;
 
-		void CharacterControllerJump(Handle<CharacterControllerComponent> component) override;
+		void character_controller_jump(Handle<CharacterControllerComponent> component) override;
 
-		void CharacterControllerOnGround(Handle<CharacterControllerComponent> component, bool& out) override;
+		void character_controller_on_ground(Handle<CharacterControllerComponent> component, bool& out) override;
 
-		void CharacterControllerWalk(Handle<CharacterControllerComponent> component, const Vec2& direction) override;
+		void character_controller_walk(Handle<CharacterControllerComponent> component, const Vec2& direction) override;
 
 		////////////////
 		///   Data   ///
 	private:
 		
 		// Physics world and configuration
-		std::unique_ptr<PhysicsWorld> _physicsWorld;
+		std::unique_ptr<PhysicsWorld> _physics_world;
 		
 		// Entity physics objects
-		TLinkedBuffer<EntityCollider> _entityColliders;
-		TLinkedBuffer<RigidBody> _rigidBodies;
-		TLinkedBuffer<GhostBody> _ghostBodies;
+		TLinkedBuffer<EntityCollider> _entity_colliders;
+		TLinkedBuffer<RigidBody> _rigid_bodies;
+		TLinkedBuffer<GhostBody> _ghost_bodies;
 
 		// Entity data
-		TLinkedBuffer<EntityPhysicsData> _entityPhysicsData;
-		GTable<Entity, EntityPhysicsData*> _entityDataTable;
+		TLinkedBuffer<EntityPhysicsData> _entity_physics_data;
+		GTable<Entity, EntityPhysicsData*> _entity_data_table;
 
 		// Character controllers
-		TLinkedBuffer<CharacterController> _characterControllers;
-		GTable<CharacterControllerComponent, CharacterController*> _characterControllerTable;
+		TLinkedBuffer<CharacterController> _character_controllers;
+		GTable<CharacterControllerComponent, CharacterController*> _character_controller_table;
 
 		// Sphere colliders
-		TLinkedBuffer<btSphereShape> _sphereColliders;
-		GTable<SphereColliderComponent, btSphereShape*> _sphereColliderTable;
+		TLinkedBuffer<btSphereShape> _sphere_colliders;
+		GTable<SphereColliderComponent, btSphereShape*> _sphere_collider_table;
 
 		// Capsule colliders
-		TLinkedBuffer<btCapsuleShape> _capsuleColliders;
-		GTable<CapsuleColliderComponent, btCapsuleShape*> _capsuleColliderTable;
+		TLinkedBuffer<btCapsuleShape> _capsule_colliders;
+		GTable<CapsuleColliderComponent, btCapsuleShape*> _capsule_collider_table;
 
 		// Static mesh colliders
-		Table<AssetPtr<StaticMesh>, std::unique_ptr<BulletTriangleMesh>> _triangleMeshes;
-		TLinkedBuffer<btBvhTriangleMeshShape> _staticMeshColliders;
-		GTable<StaticMeshColliderComponent, btBvhTriangleMeshShape*> _staticMeshColliderTable;
+		Table<ResourceHandle<StaticMesh>, std::unique_ptr<TriangleMesh>> _triangle_meshes;
+		TLinkedBuffer<btBvhTriangleMeshShape> _static_mesh_colliders;
+		GTable<StaticMeshColliderComponent, btBvhTriangleMeshShape*> _static_mesh_collider_table;
 	};
 }

@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
 	// If files were passed in via the command line
 	if (argc > 1)
 	{
-		Willow::AssetConversion::Convert(argv[1], Array<String>());
+		willow::asset_conversion::convert(argv[1], Array<String>());
 		return 0;
 	}
 
@@ -21,16 +21,16 @@ int main(int argc, char* argv[])
 
 	while (true)
 	{
-		String path = Console::Prompt();
+		willow::Path path = Console::Prompt();
 		Console::NewLine();
 		 
-		if (path.IsEmpty())
+		if (path.is_empty())
 		{
 			break;
 		}
 
 		// @TODO: Parse options (setting compression level, renaming output)
-		Willow::AssetConversion::Convert(path, Array<String>());
+		willow::asset_conversion::convert(path, Array<String>{});
 	}
 
 	Application::Terminate();

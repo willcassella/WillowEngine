@@ -1,13 +1,13 @@
 // GLMaterial.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <Engine/Assets/Material.h>
-#include "GLShader.h"
-#include "GLTexture.h"
+#include <Engine/Resources/Material.h>
+#include "Forwards.h"
+#include "config.h"
 
-namespace Willow
+namespace willow
 {
-	struct GLRENDER_API GLMaterial final : GLPrimitive
+	struct GLRENDER_API GLMaterial final
 	{
 		////////////////////////
 		///   Constructors   ///
@@ -24,33 +24,33 @@ namespace Willow
 	public:
 
 		/** Returns the ID of this Material. */
-		FORCEINLINE BufferID GetID() const
+		FORCEINLINE BufferID get_id() const
 		{
-			return _id;
+			return this->_id;
 		}
 
 		/** Sets this material as the current active material, with the given instance parameters. */
-		void Bind(const Table<String, Material::Param>& instanceParams);
+		void bind(GLRenderSystem& renderer, const Table<String, Material::Param>& instanceParams);
 
 	private:
 
 		/** Uploads the given parameters to this material. */
-		void UploadParams(const Table<String, Material::Param>& params, uint32& texIndex);
+		void upload_params(GLRenderSystem& renderer, const Table<String, Material::Param>& params, uint32& texIndex);
 
 		/** Uploads a scalar parameter to the given location. */
-		void UploadParam(int32 location, float value) const;
+		void upload_param(int32 location, float value) const;
 
 		/** Uploads a Vec2 parameter to the given location. */
-		void UploadParam(int32 location, Vec2 value) const;
+		void upload_param(int32 location, Vec2 value) const;
 
 		/** Uploads a Vec3 parameter to the given location. */
-		void UploadParam(int32 location, Vec3 value) const;
+		void upload_param(int32 location, Vec3 value) const;
 
 		/** Uploads a Vec4 location to the given location. */
-		void UploadParam(int32 location, Vec4 value) const;
+		void upload_param(int32 location, Vec4 value) const;
 
 		/** Uploads a texture parameter to the given location. */
-		void UploadParam(int32 location, const AssetPtr<Texture>& value);
+		void upload_param(int32 location, ResourceHandle<Texture> value);
 
 		////////////////
 		///   Data   ///

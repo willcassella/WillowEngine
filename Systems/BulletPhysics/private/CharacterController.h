@@ -3,9 +3,9 @@
 
 #include <BulletDynamics/Character/btKinematicCharacterController.h>
 #include <Engine/Components/Gameplay/CharacterControllerComponent.h>
-#include "GhostBody.h"
+#include "../include/BulletPhysics/Forwards.h"
 
-namespace Willow
+namespace willow
 {
 	class CharacterController final : public btKinematicCharacterController
 	{
@@ -13,33 +13,17 @@ namespace Willow
 		///   Constructors   ///
 	public:
 
-		CharacterController(EntityPhysicsData& entityData, btConvexShape& collider, const CharacterControllerComponent::Settings& settings)
-			: btKinematicCharacterController{ entityData.GhostBody, &collider, 1 }
-		{
-			_entityData = &entityData;
-		}
+		CharacterController(EntityPhysicsData& entityData, btConvexShape& collider, const CharacterControllerComponent::Settings& settings);
 
 		///////////////////
 		///   Methods   ///
 	public:
 
 		/** Updates this CharacterController. */
-		void updateAction(btCollisionWorld* world, btScalar deltaTimeStep) override
-		{
-			// Call base implementation
-			this->btKinematicCharacterController::updateAction(world, deltaTimeStep);
-			
-			// Update entity transform
-			auto& transform = this->getGhostObject()->getWorldTransform();
-			_entityData->Transform->Location = ConvertFromBullet(transform.getOrigin());
-			_entityData->Transform->Rotation = ConvertFromBullet(transform.getRotation());
-		}
+		void updateAction(btCollisionWorld* world, btScalar deltaTimeStep) override;
 
-		/** Reimplementation of 'canJump', allows for double-jumping (engine API only exposes 'OnGround()'). */
-		bool canJump() const override
-		{
-			return true;
-		}
+		/** Reimplementation of 'canJump', allows for double-jumping (engine API only exposes 'on_ground()'). */
+		bool canJump() const override;
 
 		////////////////
 		///   Data   ///

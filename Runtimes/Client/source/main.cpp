@@ -8,9 +8,9 @@
 #include "../include/Client/Window.h"
 
 /** Main program loop. */
-void EventLoop(Window& window, Willow::World& world, Willow::RenderSystem& renderer, Willow::PhysicsSystem& physics)
+void event_loop(Window& window, willow::World& world, willow::RenderSystem& renderer, willow::PhysicsSystem& physics)
 {
-	double previous = Window::GetCurrentTime();
+	double previous = Window::get_current_time();
 	double lastTime = previous;
 	double lag = 0.0;
 	uint32 numFrames = 0;
@@ -19,9 +19,9 @@ void EventLoop(Window& window, Willow::World& world, Willow::RenderSystem& rende
 	bool drawPhysics = false;
 
 	// Begin the event loop
-	while (!window.ShouldClose() && !shouldExit)
+	while (!window.should_close() && !shouldExit)
 	{
-		double currentTime = Window::GetCurrentTime();
+		double currentTime = Window::get_current_time();
 		lag += currentTime - previous;
 		previous = currentTime;
 		numFrames++;
@@ -30,63 +30,63 @@ void EventLoop(Window& window, Willow::World& world, Willow::RenderSystem& rende
 		{
 			Console::WriteLine("@ ms/frame = @ fps", 1000.0 / numFrames, numFrames);
 			Console::WriteLine("@ updates/second", numUpdates);
-			Console::WriteLine("Drawing @ static meshes", world.Enumerate<Willow::StaticMeshComponent>().Size());
+			Console::WriteLine("Drawing @ static meshes", world.enumerate<willow::StaticMeshComponent>().Size());
 			numFrames = 0;
 			numUpdates = 0;
 			lastTime = currentTime;
 		}
 
 		// Poll input events
-		Window::PollEvents();
+		Window::poll_events();
 
-		while (lag >= world.TimeStep)
+		while (lag >= world.time_step)
 		{
 			Vec2 moveAccum;
 
 			// Check for events
-			if (window.GetKey(GLFW_KEY_W))
+			if (window.get_key(GLFW_KEY_W))
 			{
 				moveAccum.Y += 1;
 			}
-			if (window.GetKey(GLFW_KEY_S))
+			if (window.get_key(GLFW_KEY_S))
 			{
 				moveAccum.Y -= 1;
 			}
-			if (window.GetKey(GLFW_KEY_D))
+			if (window.get_key(GLFW_KEY_D))
 			{
 				moveAccum.X += 1;
 			}
-			if (window.GetKey(GLFW_KEY_A))
+			if (window.get_key(GLFW_KEY_A))
 			{
 				moveAccum.X -= 1;
 			}
-			if (window.GetKey(GLFW_KEY_ESCAPE))
+			if (window.get_key(GLFW_KEY_ESCAPE))
 			{
 				shouldExit = true;
 			}
-			if (window.GetKey(GLFW_KEY_SPACE))
+			if (window.get_key(GLFW_KEY_SPACE))
 			{
-				world.Events.DispatchEvent("Jump");
+				world.events.DispatchEvent("jump");
 			}
-			if (window.GetKey(GLFW_KEY_F))
+			if (window.get_key(GLFW_KEY_F))
 			{
-				world.Events.DispatchEvent("Fire");
+				world.events.DispatchEvent("fire");
 			}
 
 			// Dispatch events
-			world.Events.DispatchEvent("Move", moveAccum.Normalize());
-			world.Events.DispatchEvent("Look", window.GetCursorPosition() / 100);
-			window.CenterCursor();
+			world.events.DispatchEvent("move", moveAccum.Normalize());
+			world.events.DispatchEvent("look", window.get_cursor_position() / 100);
+			window.center_cursor();
 
 			// Update the world
-			world.Update();
+			world.update();
 
-			lag -= world.TimeStep;
+			lag -= world.time_step;
 			numUpdates++;
 		}
 
 		// Press f1 to debug draw physics
-		if (window.GetKey(GLFW_KEY_F1))
+		if (window.get_key(GLFW_KEY_F1))
 		{
 			drawPhysics = !drawPhysics;
 		}
@@ -94,11 +94,11 @@ void EventLoop(Window& window, Willow::World& world, Willow::RenderSystem& rende
 		// Render the frame
 		if (drawPhysics)
 		{
-			physics.DebugDraw(renderer);
+			physics.debug_draw(renderer);
 		}
 
-		renderer.RenderWorld(world);
-		window.SwapBuffers();
+		renderer.render_world(world);
+		window.swap_buffers();
 	}
 }
 
@@ -123,20 +123,20 @@ int main(int argc, char* argv[])
 
 		// Create world
 		Console::WriteLine("Loading world: '@'...", argv[2]);
-		Willow::World world;
+		willow::World world;
 		
 		// Create physcs system
-		Willow::BulletPhysicsSystem physics;
-		world.AddSystem(physics);
+		willow::BulletPhysicsSystem physics;
+		world.add_system(physics);
 
 		// Deserialize it
 		{
-			Willow::XMLArchive archive;
-			archive.Load(argv[2]);
+			willow::XMLArchive archive;
+			archive.load(argv[2]);
 
 			try
 			{
-				archive.Deserialize(world);
+				archive.deserialize(world);
 			}
 			catch (Exception& e)
 			{
@@ -148,12 +148,12 @@ int main(int argc, char* argv[])
 		// Load up subsystems
 		Console::WriteLine("Initializing subsystems...");
 		Window window("Willow Engine", 1280, 720);
-		Willow::GLRenderSystem renderer(window.GetWidth(), window.GetHeight());
-		world.AddSystem(renderer);
+		willow::GLRenderSystem renderer(window.get_width(), window.get_height());
+		world.add_system(renderer);
 
 		// Enter main event loop
 		Console::WriteLine("Entering event loop...");
-		EventLoop(window, world, renderer, physics);
+		event_loop(window, world, renderer, physics);
 	}
 	
 	Application::Terminate();

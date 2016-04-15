@@ -3,7 +3,7 @@
 
 #include "GameObject.h"
 
-namespace Willow
+namespace willow
 {
 	/** Handle that can reference an object in a World, independent of frame. */
 	template <class T>
@@ -18,10 +18,8 @@ namespace Willow
 		template <typename F>
 		friend struct Handle;
 
-		REFLECTABLE_STRUCT
-
-			////////////////////////
-			///   Constructors   ///
+		////////////////////////
+		///   Constructors   ///
 	public:
 
 		Handle()
@@ -30,14 +28,14 @@ namespace Willow
 			// All done
 		}
 		Handle(const T* value)
-			: _id{ value ? value->GameObject::GetID() : 0 }
+			: _id{ value ? value->GameObject::get_id() : 0 }
 		{
-			assert(!value || _id != 0 /** You may not add create a handle to a GameObject that has not been initialized. */);
+			assert(!value || this->_id != 0 /** You may not add create a handle to a GameObject that has not been initialized. */);
 		}
 		Handle(const T& value)
-			: _id{ value.GameObject::GetID() }
+			: _id{ value.GameObject::get_id() }
 		{
-			assert(_id != 0 /** You may not add create a handle to a GameObject that has not been initialized. */);
+			assert(this->_id != 0 /** You may not add create a handle to a GameObject that has not been initialized. */);
 		}
 		Handle(std::nullptr_t)
 			: Handle{}
@@ -47,7 +45,7 @@ namespace Willow
 
 		template <class F>
 		explicit Handle(Handle<F> copy)
-			: _id{ copy.GetID() }
+			: _id{ copy.get_id() }
 		{
 			static_assert(std::is_base_of<T, F>::value, "Incompatible handle type.");
 		}
@@ -67,23 +65,23 @@ namespace Willow
 		}
 
 		/** Returns the ID of the object this handle currently refers to. */
-		FORCEINLINE GameObject::ID GetID() const
+		FORCEINLINE GameObject::ID get_id() const
 		{
-			return _id;
+			return this->_id;
 		}
 
 		/** Returns whether this handle does not refer to an object. */
-		FORCEINLINE bool IsNull() const
+		FORCEINLINE bool is_null() const
 		{
-			return _id == 0;
+			return this->_id == 0;
 		}
 
 		/** Explicitly casts this handle to a handle of the given type. */
 		template <class F>
-		Handle<F> CastTo() const
+		Handle<F> cast_to() const
 		{
 			Handle<F> result;
-			result._id = _id;
+			result._id = this->_id;
 			return result;
 		}
 
@@ -94,19 +92,19 @@ namespace Willow
 		/** Comparison operators. */
 		friend bool operator==(Handle lhs, Handle rhs)
 		{
-			return lhs.GetID() == rhs.GetID();
+			return lhs.get_id() == rhs.get_id();
 		}
 		friend bool operator!=(Handle lhs, Handle rhs)
 		{
-			return lhs.GetID() != rhs.GetID();
+			return lhs.get_id() != rhs.get_id();
 		}
 		friend bool operator==(Handle lhs, std::nullptr_t)
 		{
-			return lhs.GetID() == 0;
+			return lhs.get_id() == 0;
 		}
 		friend bool operator!=(Handle lhs, std::nullptr_t)
 		{
-			return lhs.GetID() != 0;
+			return lhs.get_id() != 0;
 		}
 
 		////////////////
@@ -115,13 +113,32 @@ namespace Willow
 
 		GameObject::ID _id;
 	};
+}
 
-	/** Convenient alias for Entity handles. */
-	using EntityHandle = Handle<Entity>;
+/////////////////////
+///   Operators   ///
 
-	/** Convenient alias for Component handles. */
-	using ComponentHandle = Handle<Component>;
-
+namespace Implementation
+{
+	/** Implement 'TypeOf' operation for Handle<T> */
 	template <class T>
-	BUILD_TEMPLATE_REFLECTION(Handle, T);
+	struct TypeOf< willow::Handle<T> > final
+	{
+		/** Defined below. */
+		static const StructInfo StaticTypeInfo;
+
+		static const StructInfo& Function()
+		{
+			return StaticTypeInfo;
+		}
+
+		static const StructInfo& Function(willow::Handle<T> /*value*/)
+		{
+			return StaticTypeInfo;
+		}
+	};
+	
+	/** Register type information for Handle<T> */
+	template <class T>
+	const StructInfo TypeOf<willow::Handle<T>>::StaticTypeInfo = TypeInfoBuilder<willow::Handle<T>>("willow::Handle");
 }

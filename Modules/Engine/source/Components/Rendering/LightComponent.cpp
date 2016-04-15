@@ -5,6 +5,6 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Willow::LightComponent)
-.Field("Color", &LightComponent::Color, "The color of this light.")
-.Field("Intensity", &LightComponent::Intensity, "The intensity of this light.");
+BUILD_REFLECTION(willow::LightComponent)
+.Field("color", &LightComponent::color, "The color of this light.")
+.Field("intensity", &LightComponent::intensity, "The intensity of this light.");

@@ -65,6 +65,8 @@ namespace willow
 		///   Operators   ///
 	public:
 
+		ResourceHandle& operator=(Path path);
+
 		friend bool operator==(const ResourceHandle& lhs, const ResourceHandle& rhs)
 		{
 			return lhs._id == rhs._id;

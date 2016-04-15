@@ -4,7 +4,7 @@
 #include <Core/Math/Mat4.h>
 #include "../../Component.h"
 
-namespace Willow
+namespace willow
 {
 	class ENGINE_API CameraComponent : public Component
 	{
@@ -20,25 +20,22 @@ namespace Willow
 	public:
 
 		/** The horizontal field of view of this Camera. */
-		Angle Fov = Degrees(90.f);
-
-		/** The screen ratio of this Camera. */
-		float ScreenRatio = 16.f / 9;
+		Angle fov = Degrees(90.f);
 		
 		/** The distance to the near clipping plane. */
-		float ZMin = 0.1f;
+		float z_min = 0.1f;
 
 		/** The distance to the far clipping plane. */
-		float ZMax = 100.f;
+		float z_max = 100.f;
 
 		///////////////////
 		///   Methods   ///
 	public:
 
 		/** Generate a perspective projection matrix for this CameraComponent */
-		FORCEINLINE Mat4 GetPerspective() const
+		FORCEINLINE Mat4 get_perspective_matrix(float screenRatio) const
 		{
-			return Mat4::PerspectiveHFOV(Fov, ScreenRatio, ZMin, ZMax);
+			return Mat4::PerspectiveHFOV(this->fov, screenRatio, this->z_min, this->z_max);
 		}
 	};
 }

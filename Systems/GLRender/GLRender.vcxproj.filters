@@ -28,10 +28,10 @@
     <ClInclude Include="source\glew.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="include\GLRender\GLPrimitive.h">
+    <ClInclude Include="include\GLRender\GLRenderSystem.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\GLRender\GLRenderSystem.h">
+    <ClInclude Include="include\GLRender\Forwards.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

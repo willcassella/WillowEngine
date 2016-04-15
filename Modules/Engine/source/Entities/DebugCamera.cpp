@@ -7,34 +7,34 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Willow::DebugCamera);
+BUILD_REFLECTION(willow::DebugCamera);
 
 ///////////////////
 ///   Methods   ///
 
-namespace Willow
+namespace willow
 {
-	void DebugCamera::OnInitialize()
+	void DebugCamera::on_initialize()
 	{
-		this->Base::OnInitialize();
-		this->GetWorld().Events.Bind("Move", *this, &DebugCamera::Move);
-		this->GetWorld().Events.Bind("Look", *this, &DebugCamera::Look);
+		this->Base::on_initialize();
+		this->get_world().events.Bind("move", *this, &DebugCamera::on_move);
+		this->get_world().events.Bind("look", *this, &DebugCamera::on_look);
 	}
 
-	void DebugCamera::OnSpawn()
+	void DebugCamera::on_spawn()
 	{
-		this->Base::OnSpawn();
-		this->GetWorld().Spawn<CameraComponent>(*this);
+		this->Base::on_spawn();
+		this->get_world().spawn<CameraComponent>(*this);
 	}
 
-	void DebugCamera::Move(Vec2 dir)
+	void DebugCamera::on_move(Vec2 dir)
 	{
-		this->Translate(Vec3{ dir.X, 0, -dir.Y } / 10);
+		this->translate(Vec3{ dir.X, 0, -dir.Y } / 10);
 	}
 
-	void DebugCamera::Look(Vec2 dir)
+	void DebugCamera::on_look(Vec2 dir)
 	{
-		this->RotateGlobal(Vec3::Up, dir.X);
-		this->Rotate(Vec3::Right, dir.Y);
+		this->rotate_global(Vec3::Up, dir.X);
+		this->rotate(Vec3::Right, dir.Y);
 	}
 }

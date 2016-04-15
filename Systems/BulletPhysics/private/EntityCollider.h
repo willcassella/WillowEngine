@@ -3,7 +3,7 @@
 
 #include "Common.h"
 
-namespace Willow
+namespace willow
 {
 	/** Class used to represent colliders on entire Entities. */
 	class EntityCollider final : public btCompoundShape
@@ -12,42 +12,19 @@ namespace Willow
 		///   Constructors   ///
 	public:
 
-		EntityCollider()
-			: btCompoundShape{ /*enableDynamicAabbTree*/ false }
-		{
-			// All done
-		}
+		EntityCollider();
 
 		///////////////////
 		///   Methods   ///
 	public:
 
-		void AddChild(btCollisionShape& child, const Vec3& location, const Quat& rotation)
-		{
-			const btTransform transform{ ConvertToBullet(rotation), ConvertToBullet(location) };
-			child.setLocalScaling(this->getLocalScaling());
-			this->addChildShape(transform, &child);
-		}
+		/** Adds the given collision shape as a child of this EntityCollider. */
+		void add_child(btCollisionShape& child, const Vec3& location, const Quat& rotation);
 
-		void RemoveChild(btCollisionShape& child)
-		{
-			this->removeChildShape(&child);
-		}
+		/** Removes the given collision shape as a child of this EntityCollider. */
+		void remove_child(btCollisionShape& child);
 
-		void UpdateChildLocationRotation(btCollisionShape& child, const Vec3& location, const Quat& rotation)
-		{
-			const auto childList = this->getChildList();
-			const auto numChildren = this->getNumChildShapes();
-
-			for (int i = 0; i < numChildren; ++i)
-			{
-				if (childList[i].m_childShape == &child)
-				{
-					const btTransform transform{ ConvertToBullet(rotation), ConvertToBullet(location) };
-					this->updateChildTransform(i, transform, /*shouldRecalculateLocalAabb*/ true);
-					return;
-				}
-			}
-		}
+		/** Updates the location and rotation of the given child of this EntityCollider. */
+		void update_child_location_rotation(btCollisionShape& child, const Vec3& location, const Quat& rotation);
 	};
 }

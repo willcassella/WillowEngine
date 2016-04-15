@@ -1,19 +1,18 @@
 // GLRenderSystem.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <Core/Math/Vec3.h>
 #include <Engine/World.h>
 #include <Engine/Systems/RenderSystem.h>
-#include <Engine/Assets/Shader.h>
-#include <Engine/Assets/Texture.h>
-#include <Engine/Assets/Material.h>
-#include <Engine/Assets/StaticMesh.h>
+#include <Engine/Resources/Shader.h>
+#include <Engine/Resources/Texture.h>
+#include <Engine/Resources/Material.h>
+#include <Engine/Resources/StaticMesh.h>
 #include "GLShader.h"
 #include "GLTexture.h"
-#include "GLMaterial.h"
 #include "GLStaticMesh.h"
+#include "GLMaterial.h"
 
-namespace Willow
+namespace willow
 {
 	class GLRENDER_API GLRenderSystem final : public RenderSystem
 	{
@@ -28,30 +27,30 @@ namespace Willow
 		///   Methods   ///
 	public:
 
-		void RenderWorld(const World& world) override;
+		void render_world(const World& world) override;
 
-		void DrawDebugLine(const DebugLine& line) override;
+		void draw_debug_line(const DebugLine& line) override;
 
-		/** Finds or loads a GLShader from the given Shader asset. */
-		GLShader& FindShader(const Shader& asset);
+		/** Finds or loads a GLShader from the given Shader handle. */
+		GLShader& find_shader(ResourceHandle<Shader> handle);
 
 		/** Finds or loads a GLTexture based on the given Texture asset. */
-		GLTexture& FindTexture(const Texture& asset);
+		GLTexture& find_texture(ResourceHandle<Texture> handle);
 
 		/** Finds or loads a GLMaterial based on the given Texture asset. */
-		GLMaterial& FindMaterial(const Material& asset);
+		GLMaterial& find_material(ResourceHandle<Material> handle);
 
 		/** Finds or loads a GLMaterial based on the given Static Mesh asset. */
-		GLStaticMesh& FindStaticMesh(const StaticMesh& asset);
+		GLStaticMesh& find_static_mesh(ResourceHandle<StaticMesh> handle);
 
 		////////////////
 		///   Data   ///
 	private:
 
-		Table<Asset::ID, GLShader> _shaders;
-		Table<Asset::ID, GLTexture> _textures;
-		Table<Asset::ID, GLMaterial> _materials;
-		Table<Asset::ID, GLStaticMesh> _staticMeshes;
+		Table<ResourceID, GLShader> _shaders;
+		Table<ResourceID, GLTexture> _textures;
+		Table<ResourceID, GLMaterial> _materials;
+		Table<ResourceID, GLStaticMesh> _staticMeshes;
 
 		// The default framebuffer
 		GLInteger _defaultFrameBuffer;

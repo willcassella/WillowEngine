@@ -6,8 +6,8 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Willow::StaticMeshComponent)
-.Field("Visible", &StaticMeshComponent::Visible)
-.Field("Mesh", &StaticMeshComponent::Mesh)
-.Field("Material", &StaticMeshComponent::Material)
-.Field("InstanceParams", &StaticMeshComponent::InstanceParams);
+BUILD_REFLECTION(willow::StaticMeshComponent)
+.Field("visible", &StaticMeshComponent::visible)
+.Field("mesh", &StaticMeshComponent::mesh)
+.Field("material", &StaticMeshComponent::material)
+.Field("instance_params", &StaticMeshComponent::instance_params);

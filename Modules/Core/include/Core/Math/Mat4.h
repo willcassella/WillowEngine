@@ -83,7 +83,7 @@ public:
 	FORCEINLINE static Mat4 PerspectiveHFOV(Angle hFOV, Scalar ratio, Scalar zMin, Scalar zMax)
 	{
 		// Calculate vertical field of view
-		const Angle vFOV = 2 * std::atan(std::tan(hFOV * 0.5f) * 1 / ratio);
+		const Angle vFOV = 2 * std::atan(std::tan(hFOV * 0.5f) * (1.f / ratio));
 		return Perspective(hFOV, vFOV, zMin, zMax);
 	}
 
@@ -91,7 +91,7 @@ public:
 	FORCEINLINE static Mat4 PerspectiveVFOV(Angle vFOV, Scalar ratio, Scalar zMin, Scalar zMax)
 	{
 		// Calculate horizontal field of view
-		const Angle hFOV = 2 * std::atan(std::tan(vFOV* 0.5f) * ratio);
+		const Angle hFOV = 2 * std::atan(std::tan(vFOV * 0.5f) * ratio);
 		return Perspective(hFOV, vFOV, zMin, zMax);
 	}
 

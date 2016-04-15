@@ -3,7 +3,7 @@
 
 #include "GameObject.h"
 
-namespace Willow
+namespace willow
 {
 	template <class T>
 	struct Instance final

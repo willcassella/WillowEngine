@@ -6,19 +6,19 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Willow::System);
+BUILD_REFLECTION(willow::System);
 
-namespace Willow
+namespace willow
 {
 	///////////////////
 	///   Methods   ///
 
-	void System::Update(const World& /*world*/)
+	void System::update(const World& /*world*/)
 	{
 		// Do nothing
 	}
 
-	void System::PostUpdate(World& /*world*/)
+	void System::post_update(World& /*world*/)
 	{
 		// Do nothing
 	}

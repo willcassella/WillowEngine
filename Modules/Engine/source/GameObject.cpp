@@ -7,24 +7,24 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Willow::GameObject)
-.Data("ID", &GameObject::_id)
-.Data("World", &GameObject::_world, DF_Transient)
-.Property("ID", &GameObject::GetID, nullptr)
-.Property("State", &GameObject::GetState, nullptr)
-.Property("Location", &GameObject::GetLocation, &GameObject::SetLocation, "Location in local space", "Transform")
-.Property("World Location", &GameObject::GetWorldLocation, &GameObject::SetWorldLocation, "Location in world space", "Transform")
-.Property("Rotation", &GameObject::GetRotation, &GameObject::SetRotation, "Rotation in local space", "Transform")
-.Property("World Rotation", &GameObject::GetWorldRotation, &GameObject::SetWorldRotation, "Rotation in world space", "Transform")
-.Property("Scale", &GameObject::GetScale, &GameObject::SetScale, "Scale", "Transform");
+BUILD_REFLECTION(willow::GameObject)
+.Data("id", &GameObject::_id)
+.Data("world", &GameObject::_world, DF_Transient)
+.Property("id", &GameObject::get_id, nullptr)
+.Property("state", &GameObject::get_state, nullptr)
+.Property("location", &GameObject::get_location, &GameObject::set_location, "Location in local space", "Transform")
+.Property("world_location", &GameObject::get_world_location, &GameObject::set_world_location, "Location in world space", "Transform")
+.Property("rotation", &GameObject::get_rotation, &GameObject::set_rotation, "Rotation in local space", "Transform")
+.Property("world_rotation", &GameObject::get_world_rotation, &GameObject::set_world_rotation, "Rotation in world space", "Transform")
+.Property("scale", &GameObject::get_scale, &GameObject::set_scale, "Scale", "Transform");
 
-BUILD_ENUM_REFLECTION(Willow::GameObject::State)
-.Value("Uninitialized", Willow::GameObject::State::Uninitialized)
-.Value("Spawning", Willow::GameObject::State::Spawning)
-.Value("Spawned", Willow::GameObject::State::Spawned)
-.Value("Destroyed", Willow::GameObject::State::Destroyed);
+BUILD_ENUM_REFLECTION(willow::GameObject::State)
+.Value("Uninitialized", willow::GameObject::State::Uninitialized)
+.Value("Spawning", willow::GameObject::State::Spawning)
+.Value("Spawned", willow::GameObject::State::Spawned)
+.Value("Destroyed", willow::GameObject::State::Destroyed);
 
-namespace Willow
+namespace willow
 {
 	////////////////////////
 	///   Constructors   ///
@@ -50,27 +50,27 @@ namespace Willow
 		Operations::Default::FromArchive(*this, reader);
 	}
 
-	void GameObject::Destroy()
+	void GameObject::destroy()
 	{
-		this->GetWorld().DestroyGameObject(*this);
+		this->get_world().destroy_object(*this);
 	}
 
-	void GameObject::OnInitialize()
-	{
-		// Do nothing
-	}
-
-	void GameObject::OnSpawn()
+	void GameObject::on_initialize()
 	{
 		// Do nothing
 	}
 
-	void GameObject::OnClone(const GameObject& /*old*/)
+	void GameObject::on_spawn()
 	{
 		// Do nothing
 	}
 
-	void GameObject::OnDestroy()
+	void GameObject::on_clone(const GameObject& /*old*/)
+	{
+		// Do nothing
+	}
+
+	void GameObject::on_destroy()
 	{
 		// Do nothing
 	}

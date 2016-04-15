@@ -4,15 +4,18 @@
 #include "../private/RigidBody.h"
 #include "../private/GhostBody.h"
 
-namespace Willow
+namespace willow
 {
 	////////////////////////
 	///   Constructors   ///
 
-	EntityPhysicsData::EntityPhysicsData(const Entity::PhysicsState& state, Entity::PhysicsMode mode, EntityHandle parent, Willow::Transform& transform)
-		: State{ state }, Mode{ mode }, Parent{ parent }, Transform{ &transform }
+	EntityPhysicsData::EntityPhysicsData(const Entity::PhysicsState& state, Entity::PhysicsMode mode, Handle<Entity> parent, willow::Transform& transform)
+		: state{ state }, 
+		mode{ mode }, 
+		parent{ parent }, 
+		transform{ &transform }
 	{
-		this->Collider.setLocalScaling(ConvertToBullet(transform.Scale));
+		this->collider.setLocalScaling(convert_to_bullet(transform.scale));
 	}
 
 	///////////////////
@@ -20,18 +23,33 @@ namespace Willow
 
 	void EntityPhysicsData::getWorldTransform(btTransform& worldTrans) const
 	{
-		worldTrans.setOrigin(ConvertToBullet(Transform->Location));
-		worldTrans.setRotation(ConvertToBullet(Transform->Rotation));
+		worldTrans.setOrigin(convert_to_bullet(this->transform->location));
+		worldTrans.setRotation(convert_to_bullet(this->transform->rotation));
 	}
 
 	void EntityPhysicsData::setWorldTransform(const btTransform& worldTrans)
 	{
 		// Use temporaries, makes debugging easier
-		const auto newLocation = ConvertFromBullet(worldTrans.getOrigin());
-		const auto newRotation = ConvertFromBullet(worldTrans.getRotation());
+		const auto newLocation = convert_from_bullet(worldTrans.getOrigin());
+		const auto newRotation = convert_from_bullet(worldTrans.getRotation());
 
-		Transform->Location = newLocation;
-		Transform->Rotation = newRotation;
-		GhostBody->setWorldTransform(worldTrans);
+		this->transform->location = newLocation;
+		this->transform->rotation = newRotation;
+		this->ghost_body->setWorldTransform(worldTrans);
+	}
+
+	void EntityPhysicsData::update_inertia()
+	{
+		if (this->rigid_body && this->mode == Entity::PhysicsMode::Dynamic)
+		{
+			const auto mass = this->state.mass;
+			btVector3 inertia;
+
+			// Calculate inertia
+			this->collider.calculateLocalInertia(mass, inertia);
+
+			// Apply it
+			this->rigid_body->setMassProps(mass, inertia);
+		}
 	}
 }

@@ -3,20 +3,20 @@
 
 #include <Core/Containers/Union.h>
 #include <Core/Math/Vec4.h>
-#include <Resource/AssetPtr.h>
+#include <Resource/ResourceManager.h>
 #include "Texture.h"
 #include "Shader.h"
 
-namespace Willow
+namespace willow
 {
-	class ENGINE_API Material final : public Asset
+	struct ENGINE_API Material final
 	{
 		///////////////////////
 		///   Inner Types   ///
 	public:
 
-		/** A material parameter may either be a Scalars, Vec2, Vec3, Vec4, or texture. */
-		using Param = Union<Scalar, Vec2, Vec3, Vec4, AssetPtr<Texture>>;
+		/** A material parameter may either be floats, Vec2, Vec3, Vec4, or texture. */
+		using Param = Union<float, Vec2, Vec3, Vec4, ResourceHandle<Texture>>;
 		
 		/** A table mapping parameter names to parameter values. */
 		using ParamTable = Table<String, Param>;
@@ -25,8 +25,7 @@ namespace Willow
 		///   Information   ///
 	public:
 
-		REFLECTABLE_CLASS
-		EXTENDS(Asset)
+		REFLECTABLE_STRUCT
 
 		////////////////////////
 		///   Constructors   ///
@@ -39,12 +38,12 @@ namespace Willow
 	public:
 
 		/** The vertex shader for this Material. */
-		AssetPtr<Shader> VertexShader;
+		ResourceHandle<Shader> vertex_shader;
 
 		/** The fragment shader for this Material. */
-		AssetPtr<Shader> FragmentShader;
+		ResourceHandle<Shader> fragment_shader;
 
 		/** The default parameters for this material. */
-		ParamTable DefaultParams;
+		ParamTable default_params;
 	};
 }

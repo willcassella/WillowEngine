@@ -19,10 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\Assets\Material.cpp" />
-    <ClCompile Include="source\Assets\StaticMesh.cpp" />
-    <ClCompile Include="source\Assets\Shader.cpp" />
-    <ClCompile Include="source\Assets\Texture.cpp" />
     <ClCompile Include="source\Component.cpp" />
     <ClCompile Include="source\Components\Gameplay\CharacterControllerComponent.cpp" />
     <ClCompile Include="source\Components\Physics\CapsuleColliderComponent.cpp" />
@@ -36,6 +32,10 @@
     <ClCompile Include="source\Entities\DebugCamera.cpp" />
     <ClCompile Include="source\Entity.cpp" />
     <ClCompile Include="source\GameObject.cpp" />
+    <ClCompile Include="source\Resources\Material.cpp" />
+    <ClCompile Include="source\Resources\Shader.cpp" />
+    <ClCompile Include="source\Resources\StaticMesh.cpp" />
+    <ClCompile Include="source\Resources\Texture.cpp" />
     <ClCompile Include="source\System.cpp" />
     <ClCompile Include="source\Systems\PhysicsSystem.cpp" />
     <ClCompile Include="source\Systems\RenderSystem.cpp" />
@@ -43,10 +43,6 @@
     <ClCompile Include="source\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Engine\Assets\Material.h" />
-    <ClInclude Include="include\Engine\Assets\StaticMesh.h" />
-    <ClInclude Include="include\Engine\Assets\Shader.h" />
-    <ClInclude Include="include\Engine\Assets\Texture.h" />
     <ClInclude Include="include\Engine\Component.h" />
     <ClInclude Include="include\Engine\Components\Gameplay\CharacterControllerComponent.h" />
     <ClInclude Include="include\Engine\Components\Physics\CapsuleColliderComponent.h" />
@@ -67,6 +63,10 @@
     <ClInclude Include="include\Engine\GameObject.h" />
     <ClInclude Include="include\Engine\Handle.h" />
     <ClInclude Include="include\Engine\Instance.h" />
+    <ClInclude Include="include\Engine\Resources\Material.h" />
+    <ClInclude Include="include\Engine\Resources\Shader.h" />
+    <ClInclude Include="include\Engine\Resources\StaticMesh.h" />
+    <ClInclude Include="include\Engine\Resources\Texture.h" />
     <ClInclude Include="include\Engine\System.h" />
     <ClInclude Include="include\Engine\Systems\PhysicsSystem.h" />
     <ClInclude Include="include\Engine\Systems\RenderSystem.h" />

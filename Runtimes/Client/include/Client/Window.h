@@ -22,34 +22,34 @@ public:
 public:
 
 	/** Polls for GLFW events. */
-	static void PollEvents();
+	static void poll_events();
 
 	/** Returns the current system time. */
-	static double GetCurrentTime();
+	static double get_current_time();
 	
 	/** Returns whether this Window has mouse and keyboard focus. */
-	bool HasFocus() const;
+	bool has_focus() const;
 
 	/** Returns the width of this window. */
-	uint32 GetWidth() const;
+	uint32 get_width() const;
 
 	/** Returns the height of this Window. */
-	uint32 GetHeight() const;
+	uint32 get_height() const;
 
 	/** Returns the position of the cursor. */
-	Vec2 GetCursorPosition() const;
+	Vec2 get_cursor_position() const;
 
 	/** Centers the cursor on the screen. */
-	void CenterCursor();
+	void center_cursor();
 
 	/** Returns the state of the given key. */
-	int GetKey(int key) const;
+	int get_key(int key) const;
 	
 	/** Returns whether the user is requesting for this Window to close. */
-	bool ShouldClose() const;
+	bool should_close() const;
 
 	/** Swaps the front and back buffers. */
-	void SwapBuffers();
+	void swap_buffers();
 
 	////////////////
 	///   Data   ///

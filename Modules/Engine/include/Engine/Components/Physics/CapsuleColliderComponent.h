@@ -3,7 +3,7 @@
 
 #include "PrimitiveColliderComponent.h"
 
-namespace Willow
+namespace willow
 {
 	class ENGINE_API CapsuleColliderComponent final : public PrimitiveColliderComponent
 	{
@@ -22,13 +22,13 @@ namespace Willow
 		struct Shape final
 		{
 			/** The radius of the Capsule. */
-			float Radius = 1.f;
+			float radius = 1.f;
 
 			/** The height of the Capsule. */
-			float Height = 3.f;
+			float height = 3.f;
 
 			/** The axis of the Capsule. */
-			ShapeAxis Axis = ShapeAxis::Y;
+			ShapeAxis axis = ShapeAxis::Y;
 		};
 
 		////////////////////////
@@ -47,54 +47,54 @@ namespace Willow
 		void FromArchive(const ArchiveReader& reader) override;
 
 		/** Returns the radius of this CapsuleComponent. */
-		FORCEINLINE float GetRadius() const
+		FORCEINLINE float get_radius() const
 		{
-			return _shape.Radius;
+			return _shape.radius;
 		}
 
 		/** Sets the radius of this CapsuleComponent.
-		* NOTE: If you're going to set the radius, height, and axis, prefer to use 'SetShape'. */
-		void SetRadius(float radius);
+		* NOTE: If you're going to set the radius, height, and axis, prefer to use 'set_shape'. */
+		void set_radius(float radius);
 
 		/** Returns the height of this capsule. */
-		FORCEINLINE float GetHeight() const
+		FORCEINLINE float get_height() const
 		{
-			return _shape.Height;
+			return this->_shape.height;
 		}
 
 		/** Sets the height of this CapsuleComponent.
-		* NOTE: If you're going to set the radius, height, and axis, prefer to use 'SetShape'. */
-		void SetHeight(float height);
+		* NOTE: If you're going to set the radius, height, and axis, prefer to use 'set_shape'. */
+		void set_height(float height);
 
 		/** Returns the axis that this CapsuleComponent is aligned along. */
-		FORCEINLINE ShapeAxis GetAxis() const
+		FORCEINLINE ShapeAxis get_axis() const
 		{
-			return _shape.Axis;
+			return this->_shape.axis;
 		}
 
 		/** Sets the axis that this CapsuleComponent is aligned along. */
-		void SetAxis(ShapeAxis axis);
+		void set_axis(ShapeAxis axis);
 
 		/** Returns the whole shape of this Collider. */
-		FORCEINLINE Shape GetShape() const
+		FORCEINLINE Shape get_shape() const
 		{
-			return _shape;
+			return this->_shape;
 		}
 
 		/** Sets the whole shape of this Collider. */
-		void SetShape(Shape shape);
+		void set_shape(Shape shape);
 
 	protected:
 
-		void OnUpdateColliderTransform() override;
+		void on_update_collider_transform() override;
 
-		bool OnActivate() override;
+		bool on_activate() override;
 
-		void OnDeactivate() override;
+		void on_deactivate() override;
 
 	private:
 
-		void UpdateShape();
+		void update_shape();
 
 		////////////////
 		///   Data   ///

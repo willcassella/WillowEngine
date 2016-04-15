@@ -2,33 +2,32 @@
 #pragma once
 
 #include <Core/Math/Vec3.h>
-#include <Resource/Asset.h>
+#include <Resource/Path.h>
 #include "../config.h"
 
-namespace Willow
+namespace willow
 {
-	class ENGINE_API StaticMesh final : public Asset
+	class ENGINE_API StaticMesh final
 	{
 		///////////////////////
 		///   Information   ///
 	public:
 
-		REFLECTABLE_CLASS
-		EXTENDS(Asset)
+		REFLECTABLE_STRUCT
 
 		/////////////////
 		///   Types   ///
 	public:
 
-		struct ENGINE_API Vertex final
+		struct Vertex final
 		{
 			//////////////////
 			///   Fields   ///
 		public:
 
-			Vec3 Position;	// Position coordinates
-			Vec2 UV;		// UV coordinates
-			Vec3 Normal;	// Normal direction
+			Vec3 position;	// Position coordinates
+			Vec2 uv;		// UV coordinates
+			Vec3 normal;	// Normal direction
 
 			/////////////////////
 			///   Operators   ///
@@ -36,7 +35,7 @@ namespace Willow
 
 			friend FORCEINLINE bool operator==(const Vertex& lhs, const Vertex& rhs)
 			{
-				return lhs.Position == rhs.Position && lhs.UV == rhs.UV && lhs.Normal == rhs.Normal;
+				return lhs.position == rhs.position && lhs.uv == rhs.uv && lhs.normal == rhs.normal;
 			}
 			friend FORCEINLINE bool operator!=(const Vertex& lhs, const Vertex& rhs)
 			{
@@ -54,13 +53,13 @@ namespace Willow
 		///   Fields   ///
 	public:
 
-		Array<Vertex> Vertices;
+		Array<Vertex> vertices;
 
 		///////////////////
 		///   Methods   ///
 	public:
 
 		/** Returns the lengths of a bounding box containing this StaticMesh. */
-		Vec3 GetBoundingBox() const;
+		Vec3 get_bounding_box() const;
 	};
 }

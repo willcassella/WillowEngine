@@ -4,7 +4,7 @@
 #include <Core/Containers/Table.h>
 #include "../Handle.h"
 
-namespace Willow
+namespace willow
 {
 	/** A GTable is a table mapping instance IDs for GameObject types to values. */
 	template <class KeyT, class ValueT>

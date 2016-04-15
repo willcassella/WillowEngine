@@ -59,7 +59,7 @@ Window::Window(CString name, uint32 width, uint32 height)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
 	// Create the window
-	_window = glfwCreateWindow(width, height, name, nullptr, nullptr);
+	this->_window = glfwCreateWindow(width, height, name, nullptr, nullptr);
 	if (!_window)
 	{
 		Console::WriteLine("GLFW failed to create window.");
@@ -67,106 +67,106 @@ Window::Window(CString name, uint32 width, uint32 height)
 	}
 
 	// Register this window with the window table
-	WindowTable[_window] = this;
+	WindowTable[this->_window] = this;
 
 	// Set the window gain/lose focus function
-	glfwSetWindowFocusCallback(_window, [](GLFWwindow* window, int hasFocus)
+	glfwSetWindowFocusCallback(this->_window, [](GLFWwindow* window, int hasFocus)
 	{
 		// Reset the cursor position if the window has gained focus
 		if (hasFocus)
 		{
-			WindowTable[window]->CenterCursor();
+			WindowTable[window]->center_cursor();
 		}
 	});
 
 	// Center the window in the screen
-	int32 centerX = (videoMode->width - this->GetWidth()) / 2;
-	int32 centerY = (videoMode->height - this->GetHeight()) / 2;
-	glfwSetWindowPos(_window, centerX, centerY);
+	int32 centerX = (videoMode->width - this->get_width()) / 2;
+	int32 centerY = (videoMode->height - this->get_height()) / 2;
+	glfwSetWindowPos(this->_window, centerX, centerY);
 
 	// Make the window visible
-	glfwShowWindow(_window);
+	glfwShowWindow(this->_window);
 
 	// Make the cursor invisible and move it to the center of the window
-	glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-	glfwSetCursorPos(_window, this->GetWidth() / 2, this->GetHeight() / 2);
+	glfwSetInputMode(this->_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	glfwSetCursorPos(this->_window, this->get_width() / 2, this->get_height() / 2);
 
 	// Make an OpenGL context in window
-	glfwMakeContextCurrent(_window);
+	glfwMakeContextCurrent(this->_window);
 }
 
 Window::~Window()
 {
-	glfwDestroyWindow(_window);
-	WindowTable.Remove(_window);
+	glfwDestroyWindow(this->_window);
+	WindowTable.Remove(this->_window);
 }
 
 ///////////////////
 ///   Methods   ///
 
-void Window::PollEvents()
+void Window::poll_events()
 {
 	glfwPollEvents();
 }
 
-double Window::GetCurrentTime()
+double Window::get_current_time()
 {
 	return glfwGetTime();
 }
 
-bool Window::HasFocus() const
+bool Window::has_focus() const
 {
-	return glfwGetWindowAttrib(_window, GLFW_FOCUSED) == 1;
+	return glfwGetWindowAttrib(this->_window, GLFW_FOCUSED) == 1;
 }
 
-uint32 Window::GetWidth() const
+uint32 Window::get_width() const
 {
 	int32 width;
-	glfwGetWindowSize(_window, &width, nullptr);
+	glfwGetWindowSize(this->_window, &width, nullptr);
 	return static_cast<uint32>(width);
 }
 
-uint32 Window::GetHeight() const
+uint32 Window::get_height() const
 {
 	int32 height;
-	glfwGetWindowSize(_window, nullptr, &height);
+	glfwGetWindowSize(this->_window, nullptr, &height);
 	return static_cast<uint32>(height);
 }
 
-Vec2 Window::GetCursorPosition() const
+Vec2 Window::get_cursor_position() const
 {
 	// Make sure the window has focus
-	if (!this->HasFocus())
+	if (!this->has_focus())
 	{
 		return Vec2::Zero;
 	}
 
 	double x;
 	double y;
-	glfwGetCursorPos(_window, &x, &y);
+	glfwGetCursorPos(this->_window, &x, &y);
 
 	Vec2 result;
-	result.X = static_cast<float>(x) - this->GetWidth() / 2;
-	result.Y = static_cast<float>(y) - this->GetHeight() / 2;
+	result.X = static_cast<float>(x) - this->get_width() / 2;
+	result.Y = static_cast<float>(y) - this->get_height() / 2;
 	return result;
 }
 
-void Window::CenterCursor()
+void Window::center_cursor()
 {
-	glfwSetCursorPos(_window, this->GetWidth() / 2, this->GetHeight() / 2);
+	glfwSetCursorPos(this->_window, this->get_width() / 2, this->get_height() / 2);
 }
 
-int Window::GetKey(int key) const
+int Window::get_key(int key) const
 {
-	return glfwGetKey(_window, key);
+	return glfwGetKey(this->_window, key);
 }
 
-bool Window::ShouldClose() const
+bool Window::should_close() const
 {
-	return glfwWindowShouldClose(_window) != 0;
+	return glfwWindowShouldClose(this->_window) != 0;
 }
 
-void Window::SwapBuffers()
+void Window::swap_buffers()
 {
-	glfwSwapBuffers(_window);
+	glfwSwapBuffers(this->_window);
 }

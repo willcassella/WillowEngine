@@ -5,7 +5,7 @@
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include "Common.h"
 
-namespace Willow
+namespace willow
 {
 	/** Manages World Bullet physics state. */
 	class PhysicsWorld final

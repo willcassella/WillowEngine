@@ -1,19 +1,20 @@
 // GLTexture.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <Engine/Assets/Texture.h>
-#include "GLPrimitive.h"
+#include <Engine/Resources/Texture.h>
+#include "Forwards.h"
+#include "config.h"
 
-namespace Willow
+namespace willow
 {
-	struct GLRENDER_API GLTexture final : GLPrimitive
+	struct GLRENDER_API GLTexture final
 	{
 		////////////////////////
 		///   Constructors   ///
 	public:
 
 		/** Creates an OpenGL texture from the corresponding Texture asset. */
-		GLTexture(GLRenderSystem& renderer, const Texture& texture);
+		GLTexture(const Texture& texture);
 
 		GLTexture(GLTexture&& move);
 		~GLTexture();
@@ -22,9 +23,9 @@ namespace Willow
 		///   Methods   ///
 	public:
 
-		FORCEINLINE BufferID GetID() const
+		FORCEINLINE BufferID get_id() const
 		{
-			return _id;
+			return this->_id;
 		}
 
 		////////////////

@@ -10,7 +10,7 @@
 /////////////////
 ///   Types   ///
 
-namespace Willow
+namespace willow
 {
 	/** World class contains all game objects and world information */
 	class ENGINE_API World : public Object
@@ -33,9 +33,9 @@ namespace Willow
 		///   Fields   ///
 	public:
 
-		EventManager Events;
-		float TimeDilation = 1.f;
-		float TimeStep = 1.f / 60;
+		EventManager events;
+		float time_dilation = 1.f;
+		float time_step = 1.f / 60;
 
 		///////////////////
 		///   Methods   ///
@@ -48,34 +48,34 @@ namespace Willow
 		void FromArchive(const ArchiveReader& reader);
 
 		/** Updates the state of this World by one time step. */
-		void Update();
+		void update();
 
 		/** Spawns a new instance of the given type into the World. */
 		template <class T>
-		auto Spawn() -> std::enable_if_t<std::is_base_of<Entity, T>::value, T&>
+		auto spawn() -> std::enable_if_t<std::is_base_of<Entity, T>::value, T&>
 		{
 			// Create a new entity
 			auto owner = New<T>();
 			auto& entity = *owner;
 			
 			// Initialize it
-			this->InitializeGameobject(std::move(owner), _nextGameObjectID++);
+			this->intialize_object(std::move(owner), this->_next_object_id++);
 
 			// Spawn it
-			this->SpawnGameObject(entity);
+			this->spawn_object(entity);
 			return entity;
 		}
 		
 		/** Spawns a new instance of the given type of Component into the World. */
 		template <class T>
-		auto Spawn() -> std::enable_if_t<std::is_base_of<Component, T>::value, T&>
+		auto spawn() -> std::enable_if_t<std::is_base_of<Component, T>::value, T&>
 		{
-			auto& entity = this->Spawn<Entity>();
-			return this->Spawn<T>(entity);
+			auto& entity = this->spawn<Entity>();
+			return this->spawn<T>(entity);
 		}
 
 		template <class T>
-		auto Spawn(Entity& entity) -> std::enable_if_t<std::is_base_of<Component, T>::value, T&>
+		auto spawn(Entity& entity) -> std::enable_if_t<std::is_base_of<Component, T>::value, T&>
 		{
 			// Create a new Component
 			auto owner = New<T>();
@@ -84,16 +84,16 @@ namespace Willow
 			// Initialize it
 			component._entity = &entity;
 			entity._components.Add(&component);
-			this->InitializeGameobject(std::move(owner), _nextGameObjectID++);
+			this->intialize_object(std::move(owner), this->_next_object_id++);
 
 			// Spawn it
-			this->SpawnGameObject(component);
+			this->spawn_object(component);
 			return component;
 		}
 
 		/** Spawns a new instance of the given type with the given name into the World. */
 		template <class T>
-		auto Spawn(String name) -> std::enable_if_t<std::is_base_of<Entity, T>::value, T&>
+		auto spawn(String name) -> std::enable_if_t<std::is_base_of<Entity, T>::value, T&>
 		{
 			// Create a new entity
 			auto owner = New<T>();
@@ -101,24 +101,24 @@ namespace Willow
 
 			// Initialize it
 			entity._name = std::move(name);
-			this->InitializeGameobject(std::move(owner), _nextGameObjectID++);
+			this->intialize_object(std::move(owner), this->_next_object_id++);
 
 			// Spawn it
-			this->SpawnGameObject(entity);
+			this->spawn_object(entity);
 			return entity;
 		}
 
 		/** Spawns a new instance of the given type with the given name into the World. */
 		template <class T>
-		auto Spawn(String name) -> std::enable_if_t<std::is_base_of<Component, T>::value, T&>
+		auto spawn(String name) -> std::enable_if_t<std::is_base_of<Component, T>::value, T&>
 		{
-			auto& entity = this->Spawn<Entity>(std::move(name));
-			return this->Spawn<T>(entity);
+			auto& entity = this->spawn<Entity>(std::move(name));
+			return this->spawn<T>(entity);
 		}
 
 		/** Returns an enumeration of the given types of objects in this World. */
 		template <typename T>
-		auto Enumerate() const
+		auto enumerate() const
 		{
 			static_assert(std::is_base_of<GameObject, T>::value, "The given type does not exist in this World.");
 
@@ -126,7 +126,7 @@ namespace Willow
 
 			if (std::is_base_of<Entity, T>::value)
 			{
-				for (auto entity : _entities)
+				for (auto entity : this->_entities)
 				{
 					if (auto e = Cast<const T>(*entity.Second))
 					{
@@ -136,7 +136,7 @@ namespace Willow
 			}
 			else if (std::is_base_of<Component, T>::value)
 			{
-				for (auto component : _components)
+				for (auto component : this->_components)
 				{
 					if (auto c = Cast<const T>(*component.Second))
 					{
@@ -146,7 +146,7 @@ namespace Willow
 			}
 			else
 			{
-				for (const auto& gameObject : _gameObjects)
+				for (const auto& gameObject : this->_objects)
 				{
 					if (auto g = Cast<const T>(*gameObject.Second))
 					{
@@ -159,26 +159,26 @@ namespace Willow
 		}
 
 		/** Destroys the given GameObject at the end of the frame. */
-		void DestroyGameObject(GameObject& object);
+		void destroy_object(GameObject& object);
 
 		template <class T>
-		void Require() const
+		void require_system() const
 		{
-			assert(this->GetSystem<T>() != nullptr);
+			assert(this->get_system<T>() != nullptr);
 		}
 
 		/** Adds the given system to this World. */
-		void AddSystem(System& system)
+		void add_system(System& system)
 		{
-			_systems.Add(&system);
+			this->_systems.Add(&system);
 		}
 
 		/** Retreives the specified type of System from this world.
 		* NOTE: Returns 'null' if the given type of System has not been added to this World. */
 		template <class T>
-		T* GetSystem() const
+		T* get_system() const
 		{
-			for (auto system : _systems)
+			for (auto system : this->_systems)
 			{
 				if (auto pSystem = Cast<T>(*system))
 				{
@@ -190,29 +190,29 @@ namespace Willow
 		}
 
 		/** Returns the current gravity in this World. */
-		Vec3 GetGravity() const
+		Vec3 get_gravity() const
 		{
-			return _gravity;
+			return this->_gravity;
 		}
 
 		/** Sets the gravity in this World. */
-		void SetGravity(const Vec3& gravity);
+		void set_gravity(const Vec3& gravity);
 
 		/** Returns a pointer to the object referred to by the given handle. 
 		* NOTE: Returns 'null' if the object in question no longer exists. */
 		template <class T>
-		T* Get(Handle<T> handle)
+		T* get(Handle<T> handle)
 		{
-			return const_cast<T*>(stde::as_const(*this).Get(handle));
+			return const_cast<T*>(stde::as_const(*this).get(handle));
 		}
 
 		/** Returns a pointer to the object referred to by the given handle. 
 		* NOTE: Returns 'null' if the object in question no longer exists. */
 		template <class T>
-		const T* Get(Handle<T> handle) const
+		const T* get(Handle<T> handle) const
 		{
 			const T* result = nullptr;
-			_gameObjects.Find(handle.GetID(), [&result](const auto& object)
+			this->_objects.Find(handle.get_id(), [&result](const auto& object)
 			{
 				result = static_cast<const T*>(object.GetManagedPointer());
 			});
@@ -220,24 +220,27 @@ namespace Willow
 			return result;
 		}
 
+		/** Resets the state of this World. */
+		void reset();
+
 	private:
 
 		/** Initializes the given GameObject in this World. 
 		* Note: The caller is responsible for initialize all state of this GameObject other than the ID. */
-		void InitializeGameobject(Owned<GameObject> object, GameObject::ID id);
+		void intialize_object(Owned<GameObject> object, GameObject::ID id);
 
 		/** Spawns the given GameObject into this World.
 		* NOTE: The caller is responsible for having previously initialized the given GameObject in this World. */
-		void SpawnGameObject(GameObject& object);
+		void spawn_object(GameObject& object);
 
 		////////////////
 		///   Data   ///
 	private:
 
 		/** World Data */
-		GameObject::ID _nextGameObjectID;
-		Table<GameObject::ID, Owned<GameObject>> _gameObjects;
-		Queue<GameObject*> _destroyedObjects;
+		GameObject::ID _next_object_id;
+		Table<GameObject::ID, Owned<GameObject>> _objects;
+		Queue<GameObject*> _destroyed_objects;
 
 		Table<GameObject::ID, Entity*> _entities;
 		Table<Component::ID, Component*> _components;
@@ -251,24 +254,24 @@ namespace Willow
 	///   Methods   ///
 
 	template <class T>
-	T& Entity::Attach()
+	T& Entity::attach()
 	{
-		auto& object = this->GetWorld().Spawn<T>();
-		object.SetParent(this, SP_MoveToOrigin);
+		auto& object = this->get_world().spawn<T>();
+		object.set_parent(this, SP_Move_To_Origin);
 		return object;
 	}
 
 	template <class T>
-	T& Entity::Attach(String name)
+	T& Entity::attach(String name)
 	{
-		auto& object = this->GetWorld().Spawn<T>(std::move(name));
-		object.SetParent(this, SP_MoveToOrigin);
+		auto& object = this->get_world().spawn<T>(std::move(name));
+		object.set_parent(this, SP_Move_To_Origin);
 		return object;
 	}
 
 	template <class T>
-	T& Entity::Connect()
+	T& Entity::connect()
 	{
-		return this->GetWorld().Spawn<T>(*this);
+		return this->get_world().spawn<T>(*this);
 	}
 }

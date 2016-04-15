@@ -2,39 +2,40 @@
 
 #include "../private/RigidBody.h"
 #include "../private/GhostBody.h"
+#include "../private/EntityPhysicsData.h"
 
-namespace Willow
+namespace willow
 {
 	////////////////////////
 	///   Constructors   ///
 
 	RigidBody::RigidBody(EntityPhysicsData& entityData)
-		: btRigidBody{ entityData.State.Mass, &entityData, &entityData.Collider }
+		: btRigidBody{ entityData.state.mass, &entityData, &entityData.collider }
 	{
 		// Set the mass and inertia
 		btVector3 inertia;
-		entityData.Collider.calculateLocalInertia(entityData.State.Mass, inertia);
-		this->setMassProps(entityData.State.Mass, inertia);
+		entityData.collider.calculateLocalInertia(entityData.state.mass, inertia);
+		this->setMassProps(entityData.state.mass, inertia);
 
 		// Set other properties
-		this->setLinearFactor(ConvertToBullet(entityData.State.LinearMotionFactor));
-		this->setAngularFactor(ConvertToBullet(entityData.State.AngularMotionFactor));
-		this->setFriction(entityData.State.Friction);
-		this->setRollingFriction(entityData.State.RollingFriction);
+		this->setLinearFactor(convert_to_bullet(entityData.state.linear_motion_factor));
+		this->setAngularFactor(convert_to_bullet(entityData.state.angular_motion_factor));
+		this->setFriction(entityData.state.friction);
+		this->setRollingFriction(entityData.state.rolling_friction);
 
-		if (entityData.GhostBody)
+		if (entityData.ghost_body)
 		{
-			this->setIgnoreCollisionCheck(entityData.GhostBody, true);
-			entityData.GhostBody->setIgnoreCollisionCheck(this, true);
+			this->setIgnoreCollisionCheck(entityData.ghost_body, true);
+			entityData.ghost_body->setIgnoreCollisionCheck(this, true);
 		}
 	}
 
-	void RigidBody::Disable(EntityPhysicsData& entityData)
+	void RigidBody::disable(EntityPhysicsData& entityData)
 	{
-		if (entityData.GhostBody)
+		if (entityData.ghost_body)
 		{
-			this->setIgnoreCollisionCheck(entityData.GhostBody, false);
-			entityData.GhostBody->setIgnoreCollisionCheck(this, false);
+			this->setIgnoreCollisionCheck(entityData.ghost_body, false);
+			entityData.ghost_body->setIgnoreCollisionCheck(this, false);
 		}
 	}
 }

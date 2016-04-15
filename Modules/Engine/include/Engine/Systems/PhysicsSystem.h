@@ -10,7 +10,7 @@
 #include "../Components/Physics/StaticMeshColliderComponent.h"
 #include "../Components/Gameplay/CharacterControllerComponent.h"
 
-namespace Willow
+namespace willow
 {
 	/** Defines the interface for a PhysicsSystem. */
 	class ENGINE_API PhysicsSystem : public System
@@ -27,113 +27,113 @@ namespace Willow
 	public:
 
 		/** Debug draws the current state of the physics world. */
-		virtual void DebugDraw(RenderSystem& render) = 0;
+		virtual void debug_draw(RenderSystem& render) = 0;
 
 		/** Creates a new Entity in this PhysicsSystem. */
-		virtual void CreateEntity(
-			EntityHandle entity, 
-			EntityHandle parent, 
+		virtual void create_entity(
+			Handle<Entity> entity, 
+			Handle<Entity> parent, 
 			Transform& transform, 
 			Entity::PhysicsMode mode, 
 			Entity::PhysicsState state) = 0;
 
 		/** Destroys an Entity in this PhysicsSystem. */
-		virtual void DestroyEntity(EntityHandle entity) = 0;
+		virtual void destroy_entity(Handle<Entity> entity) = 0;
 
 		/** Sets the Entity that the given Entity is parented to. */
-		virtual void SetEntityParent(EntityHandle entity, EntityHandle parent) = 0;
+		virtual void set_entity_parent(Handle<Entity> entity, Handle<Entity> parent) = 0;
 
 		/** Sets the Transform of the given Entity. */
-		virtual void UpdateEntityTransform(EntityHandle entity) = 0;
+		virtual void update_entity_transform(Handle<Entity> entity) = 0;
 
 		/** Sets the PhysicsMode for the given Entity. */
-		virtual void SetEntityPhysicsMode(EntityHandle entity, Entity::PhysicsMode mode) = 0;
+		virtual void set_entity_physics_mode(Handle<Entity> entity, Entity::PhysicsMode mode) = 0;
 		
 		/** Sets the PhysicsState of the given Entity. */
-		virtual void SetEntityPhysicsState(EntityHandle entity, Entity::PhysicsState state) = 0;
+		virtual void set_entity_physics_state(Handle<Entity> entity, Entity::PhysicsState state) = 0;
 
 		/** Retreives the linear velocity of the given entity. */
-		virtual void GetEntityLinearVelocity(Vec3& outLinearVelocity, EntityHandle entity) = 0;
+		virtual void get_entity_linear_velocity(Vec3& outLinearVelocity, Handle<Entity> entity) = 0;
 
 		/** Sets the linear velocity of the given Entity. */
-		virtual void SetEntityLinearVelocity(EntityHandle entity, const Vec3& linearVelocity) = 0;
+		virtual void set_entity_linear_velocity(Handle<Entity> entity, const Vec3& linearVelocity) = 0;
 
 		/** Retreives the angular velocity of the given entity. */
-		virtual void GetEntityAngularVelocity(Vec3& outAngularVelocity, EntityHandle entity) = 0;
+		virtual void get_entity_angular_velocity(Vec3& outAngularVelocity, Handle<Entity> entity) = 0;
 
 		/** Sets the angular velocity of the given entity. */
-		virtual void SetEntityAngularVelocity(EntityHandle entity, const Vec3& angularVelocity) = 0;
+		virtual void set_entity_angular_velocity(Handle<Entity> entity, const Vec3& angularVelocity) = 0;
 
 		/** Applys the given force to this Entity. */
-		virtual void ApplyForce(EntityHandle entity, const Vec3& force, const Vec3& offset) = 0;
+		virtual void apply_force(Handle<Entity> entity, const Vec3& force, const Vec3& offset) = 0;
 
 		/** Applys the given impulse to this Entity. */
-		virtual void ApplyImpulse(EntityHandle entity, const Vec3& impulse, const Vec3& offset) = 0;
+		virtual void apply_impulse(Handle<Entity> entity, const Vec3& impulse, const Vec3& offset) = 0;
 
 		/** Applys the given torque to this Entity. */
-		virtual void ApplyTorque(EntityHandle entity, const Vec3& torque) = 0;
+		virtual void apply_torque(Handle<Entity> entity, const Vec3& torque) = 0;
 
 		/** Applys the given torque impulse to this Entity. */
-		virtual void ApplyTorqueImpulse(EntityHandle entity, const Vec3& torque) = 0;
+		virtual void apply_torque_impulse(Handle<Entity> entity, const Vec3& torque) = 0;
 
 		/** Creates a SphereCollider for the given component. */
-		virtual void CreateCollider(
+		virtual void create_collider(
 			Handle<SphereColliderComponent> component, 
-			EntityHandle entity, 
+			Handle<Entity> entity,
 			const Transform& transform, 
 			SphereColliderComponent::Shape shape) = 0;
 
 		/** Creates a CapsuleCollider for the given component. */
-		virtual void CreateCollider(
+		virtual void create_collider(
 			Handle<CapsuleColliderComponent> component, 
-			EntityHandle entity, 
+			Handle<Entity> entity,
 			const Transform& transform, 
 			CapsuleColliderComponent::Shape shape) = 0;
 
 		/** Creates a StaticMeshCollider for the given component. */
-		virtual void CreateCollider(
+		virtual void create_collider(
 			Handle<StaticMeshColliderComponent> component, 
-			EntityHandle entity, 
+			Handle<Entity> entity,
 			const Transform& transform, 
 			StaticMeshColliderComponent::Shape shape) = 0;
 
 		/** Destroys the SphereCollider for the given component. */
-		virtual void DestroyCollider(Handle<SphereColliderComponent> component) = 0;
+		virtual void destroy_collider(Handle<SphereColliderComponent> component) = 0;
 
 		/** Destroys the CapsuleCollider for the given component. */
-		virtual void DestroyCollider(Handle<CapsuleColliderComponent> component) = 0;
+		virtual void destroy_collider(Handle<CapsuleColliderComponent> component) = 0;
 
 		/** Destroys the StaticMeshCollider for the given component. */
-		virtual void DestroyCollider(Handle<StaticMeshColliderComponent> component) = 0;
+		virtual void destroy_collider(Handle<StaticMeshColliderComponent> component) = 0;
 
 		/** Sets the transform for the given component. */
-		virtual void SetColliderTransform(Handle<SphereColliderComponent> component, const Transform& transform) = 0;
+		virtual void set_collider_transform(Handle<SphereColliderComponent> component, const Transform& transform) = 0;
 
 		/** Sets the transform for the given component. */
-		virtual void SetColliderTransform(Handle<CapsuleColliderComponent> component, const Transform& transform) = 0;
+		virtual void set_collider_transform(Handle<CapsuleColliderComponent> component, const Transform& transform) = 0;
 
 		/** Sets the transform for the given component. */
-		virtual void SetColliderTransform(Handle<StaticMeshColliderComponent> component, const Transform& transform) = 0;
+		virtual void set_collider_transform(Handle<StaticMeshColliderComponent> component, const Transform& transform) = 0;
 
 		/** Sets the shape for the given component. */
-		virtual void SetColliderShape(Handle<SphereColliderComponent> component, SphereColliderComponent::Shape shape) = 0;
+		virtual void set_collider_shape(Handle<SphereColliderComponent> component, SphereColliderComponent::Shape shape) = 0;
 
 		/** Sets the shape for the given component. */
-		virtual void SetColliderShape(Handle<CapsuleColliderComponent> component, CapsuleColliderComponent::Shape shape) = 0;
+		virtual void set_collider_shape(Handle<CapsuleColliderComponent> component, CapsuleColliderComponent::Shape shape) = 0;
 
 		/** Sets the shape for the given component. */
-		virtual void SetColliderShape(Handle<StaticMeshColliderComponent> component, StaticMeshColliderComponent::Shape shape) = 0;
+		virtual void set_collider_shape(Handle<StaticMeshColliderComponent> component, StaticMeshColliderComponent::Shape shape) = 0;
 
-		virtual void CreateCharacterController(
+		virtual void create_character_controller(
 			Handle<CharacterControllerComponent> component, 
-			EntityHandle entity, 
+			Handle<Entity> entity,
 			Handle<PrimitiveColliderComponent> collider, 
 			CharacterControllerComponent::Settings settings) = 0;
 
-		virtual void CharacterControllerJump(Handle<CharacterControllerComponent> component) = 0;
+		virtual void character_controller_jump(Handle<CharacterControllerComponent> component) = 0;
 
-		virtual void CharacterControllerOnGround(Handle<CharacterControllerComponent> component, bool& out) = 0;
+		virtual void character_controller_on_ground(Handle<CharacterControllerComponent> component, bool& out) = 0;
 
-		virtual void CharacterControllerWalk(Handle<CharacterControllerComponent> component, const Vec2& direction) = 0;
+		virtual void character_controller_walk(Handle<CharacterControllerComponent> component, const Vec2& direction) = 0;
 	};
 }

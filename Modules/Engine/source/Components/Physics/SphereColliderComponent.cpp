@@ -7,10 +7,10 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Willow::SphereColliderComponent)
-.Property("Radius", &SphereColliderComponent::GetRadius, &SphereColliderComponent::SetRadius, "", "Sphere");
+BUILD_REFLECTION(willow::SphereColliderComponent)
+.Property("radius", &SphereColliderComponent::get_radius, &SphereColliderComponent::set_radius, "", "Sphere");
 
-namespace Willow
+namespace willow
 {
 	////////////////////////
 	///   Constructors   ///
@@ -31,43 +31,43 @@ namespace Willow
 	void SphereColliderComponent::ToArchive(ArchiveWriter& writer) const
 	{
 		this->Base::ToArchive(writer);
-		writer.PushValue("Radius", this->GetRadius());
+		writer.PushValue("radius", this->get_radius());
 	}
 
 	void SphereColliderComponent::FromArchive(const ArchiveReader& reader)
 	{
 		this->Base::FromArchive(reader);
-		reader.PullValue("Radius", _shape.Radius);
-		this->UpdateShape();
+		reader.PullValue("radius", this->_shape.radius);
+		this->update_shape();
 	}
 
-	void SphereColliderComponent::SetRadius(float radius)
+	void SphereColliderComponent::set_radius(float radius)
 	{
-		_shape.Radius = radius;
-		this->UpdateShape();
+		this->_shape.radius = radius;
+		this->update_shape();
 	}
 
-	void SphereColliderComponent::OnUpdateColliderTransform()
+	void SphereColliderComponent::on_update_collider_transform()
 	{
-		this->GetWorld().GetSystem<PhysicsSystem>()->SetColliderTransform(*this, this->GetColliderTransform());
+		this->get_world().get_system<PhysicsSystem>()->set_collider_transform(*this, this->get_collider_transform());
 	}
 
-	bool SphereColliderComponent::OnActivate()
+	bool SphereColliderComponent::on_activate()
 	{
-		this->GetWorld().GetSystem<PhysicsSystem>()->CreateCollider(*this, this->GetEntity(), this->GetColliderTransform(), _shape);
+		this->get_world().get_system<PhysicsSystem>()->create_collider(*this, this->get_entity(), this->get_collider_transform(), this->_shape);
 		return true;
 	}
 
-	void SphereColliderComponent::OnDeactivate()
+	void SphereColliderComponent::on_deactivate()
 	{
-		this->GetWorld().GetSystem<PhysicsSystem>()->DestroyCollider(*this);
+		this->get_world().get_system<PhysicsSystem>()->destroy_collider(*this);
 	}
 
-	void SphereColliderComponent::UpdateShape()
+	void SphereColliderComponent::update_shape()
 	{
-		if (this->HasSpawned() && this->IsActive())
+		if (this->has_spawned() && this->is_activate())
 		{
-			this->GetWorld().GetSystem<PhysicsSystem>()->SetColliderShape(*this, _shape);
+			this->get_world().get_system<PhysicsSystem>()->set_collider_shape(*this, this->_shape);
 		}
 	}
 }

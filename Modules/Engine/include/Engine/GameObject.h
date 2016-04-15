@@ -6,23 +6,9 @@
 #include "config.h"
 #include "Forwards/Engine.h"
 
-namespace Willow
+namespace willow
 {
-	/** Behavior for handling the transform of a GameObject upon setting the parent.
-	* Used by the 'SetParent' member functions. */
-	enum SetParentOffsetMode
-	{
-		/** When this GameObjects's parent is set, its location of moved to the Origin of the new parent (world center for 'null'). */
-		SP_MoveToOrigin,
-
-		/** The transform is set relative to the new parent as it was to the old parent. */
-		SP_KeepLocalOffset,
-
-		/** The transform is set in such a way that the object does not move at all (in world space) when the parent is set. */
-		SP_KeepWorldOffset
-	};
-
-	/** Base for all "Objects" in the game (Entities, Components, Actors, etc). */
+	/** Base for all "Objects" in the game (Entities, Components, etc). */
 	class ENGINE_API GameObject : public Object
 	{
 		///////////////////////
@@ -51,7 +37,7 @@ namespace Willow
 			* However, it may not have had its starting properties set yet. */
 			Initialized,
 
-			/** This GameObject is currently executing its 'OnSpawn' handler. */
+			/** This GameObject is currently executing its 'on_spawn' handler. */
 			Spawning,
 
 			/** This GameObject has been successfully spawned, you may now consider it a fully-active GameObject. */
@@ -76,140 +62,140 @@ namespace Willow
 		virtual void FromArchive(const ArchiveReader& reader);
 
 		/** Returns the ID of this GameObject. */
-		FORCEINLINE ID GetID() const
+		FORCEINLINE ID get_id() const
 		{
-			return _id;
+			return this->_id;
 		}
 
 		/** Returns the current state of this GameObject. */
-		FORCEINLINE State GetState() const
+		FORCEINLINE State get_state() const
 		{
-			return _state;
+			return this->_state;
 		}
 
 		/** Returns a reference to the World that this GameObject belongs to. */
-		FORCEINLINE World& GetWorld()
+		FORCEINLINE World& get_world()
 		{
-			return *_world;
+			return *this->_world;
 		}
 
 		/** Returns a reference to the World that this GameObject belongs to. */
-		FORCEINLINE const World& GetWorld() const
+		FORCEINLINE const World& get_world() const
 		{
-			return *_world;
+			return *this->_world;
 		}
 
 		/** Returns whether this GameObject has been initialized. */
-		FORCEINLINE bool IsInitialized() const
+		FORCEINLINE bool is_initialized() const
 		{
-			return this->GetState() >= State::Initialized;
+			return this->get_state() >= State::Initialized;
 		}
 
 		/** Return whether this GameObject is currently spawning. */
-		FORCEINLINE bool IsSpawning() const
+		FORCEINLINE bool is_spawning() const
 		{
-			return this->GetState() == State::Spawning;
+			return this->get_state() == State::Spawning;
 		}
 
 		/** Returns whether this GameObject has completed its spawning procedure. */
-		FORCEINLINE bool HasSpawned() const
+		FORCEINLINE bool has_spawned() const
 		{
-			return this->GetState() >= State::Spawned;
+			return this->get_state() >= State::Spawned;
 		}
 
 		/** Returns whether this GameObject has been destroyed. */
-		FORCEINLINE bool IsDestroyed() const
+		FORCEINLINE bool is_destroyed() const
 		{
-			return this->GetState() == State::Destroyed;
+			return this->get_state() == State::Destroyed;
 		}
 
 		/** Returns whether this GameObject has a parent. */
-		FORCEINLINE bool HasParent() const
+		FORCEINLINE bool has_parent() const
 		{
-			return this->GetParent() != nullptr;
+			return this->get_parent() != nullptr;
 		}
 
 		/** Returns the parent of this GameObject.
 		* NOTE: Returns 'null' if this GameObject has no parent. */
-		virtual GameObject* GetParent() = 0;
+		virtual GameObject* get_parent() = 0;
 
 		/** Returns the parent of this GameObject.
 		* NOTE: Returns 'null' if this GameObject has no parent. */
-		virtual const GameObject* GetParent() const = 0;
+		virtual const GameObject* get_parent() const = 0;
 		 
 		/** Returns whether this GameObject is the root of a parent-child hierarchy. */
-		FORCEINLINE bool IsRoot() const
+		FORCEINLINE bool is_root() const
 		{
-			return this->GetParent() == nullptr;
+			return this->get_parent() == nullptr;
 		}
 
 		/** Returns the location of this GameObject in local space. */
-		virtual Vec3 GetLocation() const = 0;
+		virtual Vec3 get_location() const = 0;
 
 		/** Returns the location of this GameOject in world space. */
-		virtual Vec3 GetWorldLocation() const = 0;
+		virtual Vec3 get_world_location() const = 0;
 
 		/** Sets the location of this GameObject in local space. */
-		virtual void SetLocation(const Vec3& location) = 0;
+		virtual void set_location(const Vec3& location) = 0;
 
 		/** Sets the location of this GameObject in world space. */
-		virtual void SetWorldLocation(const Vec3& location) = 0;
+		virtual void set_world_location(const Vec3& location) = 0;
 
 		/** Translates this GameObject along the given vector in local space. */
-		virtual void Translate(const Vec3& vec) = 0;
+		virtual void translate(const Vec3& vec) = 0;
 
 		/** Translates this GameObject along the given vector in world space. */
-		virtual void TranslateGlobal(const Vec3& vec) = 0;
+		virtual void translate_global(const Vec3& vec) = 0;
 
 		/** Returns the rotation of this GameObject in local space. */
-		virtual Quat GetRotation() const = 0;
+		virtual Quat get_rotation() const = 0;
 
 		/** Returns the location of this GameObject in world space. */
-		virtual Quat GetWorldRotation() const = 0;
+		virtual Quat get_world_rotation() const = 0;
 
 		/** Sets the rotation of this GameObject in local space. */
-		virtual void SetRotation(const Quat& rotation) = 0;
+		virtual void set_rotation(const Quat& rotation) = 0;
 
 		/** Sets the rotation of this GameObject in world space. */
-		virtual void SetWorldRotation(const Quat& rotation) = 0;
+		virtual void set_world_rotation(const Quat& rotation) = 0;
 
 		/** Rotates this GameObject along the given axis by the given angle, in local space. */
-		virtual void Rotate(const Vec3& axis, Angle angle) = 0;
+		virtual void rotate(const Vec3& axis, Angle angle) = 0;
 
 		/** Rotates this GameObject along the given axis by the given angle, in world space. */
-		virtual void RotateGlobal(const Vec3& axis, Angle angle) = 0;
+		virtual void rotate_global(const Vec3& axis, Angle angle) = 0;
 
 		/** Returns the scale of this GameObject. */
-		virtual Vec3 GetScale() const = 0;
+		virtual Vec3 get_scale() const = 0;
 
 		/** Sets the scale of this GameObject. */
-		virtual void SetScale(const Vec3& scale) = 0;
+		virtual void set_scale(const Vec3& scale) = 0;
 
 		/** Scales this GameObject by the given vector. */
-		virtual void Scale(const Vec3& vec) = 0;
+		virtual void scale(const Vec3& vec) = 0;
 
 		/** Returns a matrix of the world transformation for this GameObject. */
-		virtual Mat4 GetTransformationMatrix() const = 0;
+		virtual Mat4 get_transformation_matrix() const = 0;
 
 		/** Clones this GameObject, returning a new instance in the 'Initialized' state.
 		* 'world' - The world to clone this GameObject into. */
-		Owned<GameObject> Clone(World& world) const;
+		Owned<GameObject> clone(World& world) const;
 
 		/** Destroys this GameObject. TODO: Add delay */
-		void Destroy();
+		void destroy();
 
 	protected:
 
 		/** Handles initialization procedure. */
-		virtual void OnInitialize();
+		virtual void on_initialize();
 
 		/** Handles spawning procedure. */
-		virtual void OnSpawn();
+		virtual void on_spawn();
 
 		/** Handles destruction procedure. */
-		virtual void OnDestroy();
+		virtual void on_destroy();
 
-		virtual void OnClone(const GameObject& old);
+		virtual void on_clone(const GameObject& old);
 
 		/////////////////////
 		///   Operators   ///
@@ -227,4 +213,4 @@ namespace Willow
 	};
 }
 
-REFLECTABLE_ENUM(ENGINE_API, Willow::GameObject::State)
+REFLECTABLE_ENUM(ENGINE_API, willow::GameObject::State)

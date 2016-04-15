@@ -3,7 +3,7 @@
 
 #include "../Entity.h"
 
-namespace Willow
+namespace willow
 {
 	class ENGINE_API DebugCamera final : public Entity
 	{
@@ -18,14 +18,14 @@ namespace Willow
 		///   Methods   ///
 	protected:
 
-		void OnInitialize() override;
+		void on_initialize() override;
 
-		void OnSpawn() override;
+		void on_spawn() override;
 
 	private:
 
-		void Move(Vec2 dir);
+		void on_move(Vec2 dir);
 
-		void Look(Vec2 dir);
+		void on_look(Vec2 dir);
 	};
 }

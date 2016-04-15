@@ -8,12 +8,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="include\Assets">
-      <UniqueIdentifier>{a35cdc63-80fe-46d0-a12e-924cdcf072ba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\Assets">
-      <UniqueIdentifier>{8463d39f-09d5-4366-a577-8607d0e744e8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\Components">
       <UniqueIdentifier>{a4bd4704-aba2-4ac1-9568-d20b29aa81fd}</UniqueIdentifier>
     </Filter>
@@ -56,6 +50,12 @@
     <Filter Include="source\Components\Gameplay">
       <UniqueIdentifier>{22a0785f-e3af-410b-bdb3-cadb03307fee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\Resources">
+      <UniqueIdentifier>{a35cdc63-80fe-46d0-a12e-924cdcf072ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Resources">
+      <UniqueIdentifier>{8463d39f-09d5-4366-a577-8607d0e744e8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Transform.cpp">
@@ -63,18 +63,6 @@
     </ClCompile>
     <ClCompile Include="source\Component.cpp">
       <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Assets\Texture.cpp">
-      <Filter>source\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Assets\Shader.cpp">
-      <Filter>source\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Assets\Material.cpp">
-      <Filter>source\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Assets\StaticMesh.cpp">
-      <Filter>source\Assets</Filter>
     </ClCompile>
     <ClCompile Include="source\World.cpp">
       <Filter>source</Filter>
@@ -124,25 +112,22 @@
     <ClCompile Include="source\Components\Physics\PrimitiveColliderComponent.cpp">
       <Filter>source\Components\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="source\Resources\Material.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Resources\Shader.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Resources\StaticMesh.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Resources\Texture.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Engine\Assets\Material.h">
-      <Filter>include\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engine\Assets\Texture.h">
-      <Filter>include\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engine\Assets\Shader.h">
-      <Filter>include\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engine\Assets\StaticMesh.h">
-      <Filter>include\Assets</Filter>
-    </ClInclude>
     <ClInclude Include="include\Engine\Forwards\Engine.h">
       <Filter>include\Forwards</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engine\Component.h">
-      <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Engine\config.h">
       <Filter>include</Filter>
@@ -211,6 +196,21 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Engine\Instance.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Resources\Material.h">
+      <Filter>include\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Resources\Shader.h">
+      <Filter>include\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Resources\StaticMesh.h">
+      <Filter>include\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Resources\Texture.h">
+      <Filter>include\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Component.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

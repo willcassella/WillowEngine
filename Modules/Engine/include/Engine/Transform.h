@@ -5,7 +5,7 @@
 #include <Core/Math/Mat4.h>
 #include "config.h"
 
-namespace Willow
+namespace willow
 {
 	struct ENGINE_API Transform final : SerializeableStruct<Transform>
 	{
@@ -19,15 +19,15 @@ namespace Willow
 		///   Fields   ///
 	public:
 
-		Vec3 Location;
-		Quat Rotation;
-		Vec3 Scale = { 1, 1, 1 };
+		Vec3 location;
+		Quat rotation;
+		Vec3 scale = { 1, 1, 1 };
 
 		///////////////////
 		///   Methods   ///
 	public:
 
 		/** Returns the transformation matrix for this Transform. */
-		Mat4 GetMatrix() const;
+		Mat4 get_matrix() const;
 	};
 }

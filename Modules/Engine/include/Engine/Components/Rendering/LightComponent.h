@@ -4,7 +4,7 @@
 #include <Core/Math/Vec3.h>
 #include "../../Component.h"
 
-namespace Willow
+namespace willow
 {
 	class ENGINE_API LightComponent : public Component
 	{
@@ -20,9 +20,9 @@ namespace Willow
 	public:
 
 		/** The color of the light. */
-		Vec3 Color = Vec3(1.f, 1.f, 1.f);
+		Vec3 color = Vec3{ 1.f, 1.f, 1.f };
 
 		/** The intensity of this light. */
-		float Intensity = 1.f;
+		float intensity = 1.f;
 	};
 }

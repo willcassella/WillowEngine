@@ -3,7 +3,7 @@
 
 #include "Entity.h"
 
-namespace Willow
+namespace willow
 {
 	class ENGINE_API Component : public GameObject
 	{
@@ -28,131 +28,131 @@ namespace Willow
 
 		void FromArchive(const ArchiveReader& reader) override;
 
-		FORCEINLINE Vec3 GetLocation() const final override
+		FORCEINLINE Vec3 get_location() const final override
 		{
-			return this->GetEntity().GetLocation();
+			return this->get_entity().get_location();
 		}
 
-		FORCEINLINE Vec3 GetWorldLocation() const final override
+		FORCEINLINE Vec3 get_world_location() const final override
 		{
-			return this->GetEntity().GetWorldLocation();
+			return this->get_entity().get_world_location();
 		}
 
-		FORCEINLINE void SetLocation(const Vec3& location) final override
+		FORCEINLINE void set_location(const Vec3& location) final override
 		{
-			this->GetEntity().SetLocation(location);
+			this->get_entity().set_location(location);
 		}
 
-		FORCEINLINE void SetWorldLocation(const Vec3& location) final override
+		FORCEINLINE void set_world_location(const Vec3& location) final override
 		{
-			this->GetEntity().SetWorldLocation(location);
+			this->get_entity().set_world_location(location);
 		}
 
-		FORCEINLINE void Translate(const Vec3& vec) final override
+		FORCEINLINE void translate(const Vec3& vec) final override
 		{
-			this->GetEntity().Translate(vec);
+			this->get_entity().translate(vec);
 		}
 
-		FORCEINLINE void TranslateGlobal(const Vec3& vec) final override
+		FORCEINLINE void translate_global(const Vec3& vec) final override
 		{
-			this->GetEntity().TranslateGlobal(vec);
+			this->get_entity().translate_global(vec);
 		}
 
-		FORCEINLINE Quat GetRotation() const final override
+		FORCEINLINE Quat get_rotation() const final override
 		{
-			return this->GetEntity().GetRotation();
+			return this->get_entity().get_rotation();
 		}
 
-		FORCEINLINE Quat GetWorldRotation() const final override
+		FORCEINLINE Quat get_world_rotation() const final override
 		{
-			return this->GetEntity().GetWorldRotation();
+			return this->get_entity().get_world_rotation();
 		}
 
-		FORCEINLINE void SetRotation(const Quat& rot) final override
+		FORCEINLINE void set_rotation(const Quat& rot) final override
 		{
-			this->GetEntity().SetRotation(rot);
+			this->get_entity().set_rotation(rot);
 		}
 
-		FORCEINLINE void SetWorldRotation(const Quat& rot) final override
+		FORCEINLINE void set_world_rotation(const Quat& rot) final override
 		{
-			this->GetEntity().SetWorldRotation(rot);
+			this->get_entity().set_world_rotation(rot);
 		}
 
-		FORCEINLINE void Rotate(const Vec3& axis, Angle angle) final override
+		FORCEINLINE void rotate(const Vec3& axis, Angle angle) final override
 		{
-			this->GetEntity().Rotate(axis, angle);
+			this->get_entity().rotate(axis, angle);
 		}
 
-		FORCEINLINE void RotateGlobal(const Vec3& axis, Angle angle) final override
+		FORCEINLINE void rotate_global(const Vec3& axis, Angle angle) final override
 		{
-			this->GetEntity().RotateGlobal(axis, angle);
+			this->get_entity().rotate_global(axis, angle);
 		}
 
-		FORCEINLINE Vec3 GetScale() const final override
+		FORCEINLINE Vec3 get_scale() const final override
 		{
-			return this->GetEntity().GetScale();
+			return this->get_entity().get_scale();
 		}
 
-		FORCEINLINE void SetScale(const Vec3& scale) final override
+		FORCEINLINE void set_scale(const Vec3& scale) final override
 		{
-			this->GetEntity().SetScale(scale);
+			this->get_entity().set_scale(scale);
 		}
 
-		FORCEINLINE void Scale(const Vec3& vec) final override
+		FORCEINLINE void scale(const Vec3& vec) final override
 		{
-			this->GetEntity().Scale(vec);
+			this->get_entity().scale(vec);
 		}
 
-		FORCEINLINE Mat4 GetTransformationMatrix() const final override
+		FORCEINLINE Mat4 get_transformation_matrix() const final override
 		{
-			return this->GetEntity().GetTransformationMatrix();
+			return this->get_entity().get_transformation_matrix();
 		}
 
-		FORCEINLINE Entity* GetParent() final override
+		FORCEINLINE Entity* get_parent() final override
 		{
-			return this->GetEntity().GetParent();
+			return this->get_entity().get_parent();
 		}
 
-		FORCEINLINE const Entity* GetParent() const final override
+		FORCEINLINE const Entity* get_parent() const final override
 		{
-			return this->GetEntity().GetParent();
-		}
-
-		/** Returns the Entity that this Component is a part of. */
-		FORCEINLINE Entity& GetEntity()
-		{
-			return *_entity;
+			return this->get_entity().get_parent();
 		}
 
 		/** Returns the Entity that this Component is a part of. */
-		FORCEINLINE const Entity& GetEntity() const
+		FORCEINLINE Entity& get_entity()
 		{
-			return *_entity;
+			return *this->_entity;
+		}
+
+		/** Returns the Entity that this Component is a part of. */
+		FORCEINLINE const Entity& get_entity() const
+		{
+			return *this->_entity;
 		}
 
 		/** Returns a pointer to the Actor that this Component is attached to. */
 		FORCEINLINE Entity* GetActor()
 		{
-			return this->GetEntity().GetActor();
+			return this->get_entity().get_actor();
 		}
 
 		/** Returns a pointer to the Actor that this Component is attached to. */
 		FORCEINLINE const Entity* GetActor() const
 		{
-			return this->GetEntity().GetActor();
+			return this->get_entity().get_actor();
 		}
 
 		/** Returns whether this entity is parented (directly or indirectly) to the given entity. */
 		FORCEINLINE bool IsParentedTo(const Entity& entity) const
 		{
-			return this->GetEntity().IsParentedTo(entity);
+			return this->get_entity().is_parented_to(entity);
 		}
 
 		/** Sets the parent of this Entity as the given Entity.
 		* parent: The Entity being parented to. Use 'nullptr' for no parent. */
-		FORCEINLINE void SetParent(Entity* parent, SetParentOffsetMode mode = SP_KeepWorldOffset)
+		FORCEINLINE void SetParent(Entity* parent, SetParentOffsetMode mode = SP_Keep_World_Offset)
 		{
-			this->GetEntity().SetParent(parent, mode);
+			this->get_entity().set_parent(parent, mode);
 		}
 
 		////////////////

@@ -5,4 +5,4 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Willow::PhysicsSystem);
+BUILD_REFLECTION(willow::PhysicsSystem);

@@ -1,19 +1,19 @@
 // Texture.cpp - Copyright 2013-2016 Will Cassella, All Rights Reserved
 
-#include "../../include/Engine/Assets/Texture.h"
+#include "../../include/Engine/Resources/Texture.h"
 
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Willow::Texture);
+BUILD_REFLECTION(willow::Texture);
 
-namespace Willow
+namespace willow
 {
 	////////////////////////
 	///   Constructors   ///
 
 	Texture::Texture(const Path& path)
-		: Base(path), _image(path)
+		: _image{ path }
 	{
 		// All done
 	}

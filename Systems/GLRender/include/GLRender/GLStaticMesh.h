@@ -1,19 +1,20 @@
 // GLStaticMesh.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <Engine/Assets/StaticMesh.h>
-#include "GLPrimitive.h"
+#include <Engine/Resources/StaticMesh.h>
+#include "Forwards.h"
+#include "config.h"
 
-namespace Willow
+namespace willow
 {
-	struct GLRENDER_API GLStaticMesh final : GLPrimitive
+	struct GLRENDER_API GLStaticMesh final
 	{
 		////////////////////////
 		///   Constructors   ///
 	public:
 
 		/** Uploads the given Mesh asset to the GPU. */
-		GLStaticMesh(GLRenderSystem& renderer, const StaticMesh& mesh);
+		GLStaticMesh(const StaticMesh& mesh);
 
 		GLStaticMesh(GLStaticMesh&& move);
 		~GLStaticMesh();
@@ -22,24 +23,24 @@ namespace Willow
 		///   Methods   ///
 	public:
 
-		void Bind() const;
+		void bind() const;
 
 		/** Returns the ID of the Vertex Array Object for this StaticMesh. */
-		FORCEINLINE BufferID GetVao() const
+		FORCEINLINE BufferID get_vao() const
 		{
-			return _vao;
+			return this->_vao;
 		}
 
 		/** Returns the Vertex Buffer Object for this StaticMesh. */
-		FORCEINLINE BufferID GetVBO() const
+		FORCEINLINE BufferID get_vbo() const
 		{
-			return _vbo;
+			return this->_vbo;
 		}
 
 		/** Returns the number of vertices in this Mesh. */
-		FORCEINLINE GLInteger GetNumVertices() const
+		FORCEINLINE GLInteger get_num_vertices() const
 		{
-			return _numVertices;
+			return this->_numVertices;
 		}
 
 		////////////////

@@ -5,7 +5,7 @@
 #include "../Physics/PrimitiveColliderComponent.h"
 #include "../../Handle.h"
 
-namespace Willow
+namespace willow
 {
 	/** Character movement controller.
 	* NOTE: If the Entity this Component is attached to is in the 'Transient' or 'Dynamic' physics modes, this will not work. */
@@ -24,40 +24,40 @@ namespace Willow
 
 		struct Settings final
 		{
-			float StepHeight = 1.f;
-			Angle MaxSlope;
-			float MaxJumpHeight;
-			float JumpSpeed;
-			float FallSpeed;
+			float step_height = 1.f;
+			Angle max_slope;
+			float max_jump_height;
+			float jump_speed;
+			float fall_speed;
 		};
 
 		///////////////////
 		///   Methods   ///
 	public:
 
-		bool OnGround() const;
+		bool on_ground() const;
 		
-		void Jump();
+		void jump();
 
-		void Walk(const Vec2& direction);
+		void walk(const Vec2& direction);
 
 		/** Returns the collider this CharacterController is using. */
-		FORCEINLINE Handle<PrimitiveColliderComponent> GetCollider() const
+		FORCEINLINE Handle<PrimitiveColliderComponent> get_collider() const
 		{
-			return _collider;
+			return this->_collider;
 		}
 
 		/** Sets the collider for this CharacterController.
 		* NOTE: The given collider must be connected to the same Entity as this. */
-		void SetCollider(PrimitiveColliderComponent* collider);
+		void set_collider(PrimitiveColliderComponent* collider);
 
 	protected:
 
-		void OnInitialize() override;
+		void on_initialize() override;
 
 	private:
 
-		void Create();
+		void create();
 
 		////////////////
 		///   Data   ///

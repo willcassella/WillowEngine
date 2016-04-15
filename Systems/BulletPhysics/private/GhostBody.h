@@ -2,9 +2,9 @@
 #pragma once
 
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
-#include "EntityPhysicsData.h"
+#include "../include/BulletPhysics/Forwards.h"
 
-namespace Willow
+namespace willow
 {
 	class GhostBody final : public btPairCachingGhostObject
 	{
@@ -19,6 +19,6 @@ namespace Willow
 		///   Methods   ///
 	public:
 
-		void Disable(EntityPhysicsData& entityData);
+		void disable(EntityPhysicsData& entityData);
 	};
 }

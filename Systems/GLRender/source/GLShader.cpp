@@ -3,64 +3,63 @@
 #include "glew.h"
 #include "../include/GLRender/GLShader.h"
 
-namespace Willow
+namespace willow
 {
 	////////////////////////
 	///   Constructors   ///
 
-	GLShader::GLShader(GLRenderSystem& renderer, const Shader& shader)
-		: GLPrimitive(renderer)
+	GLShader::GLShader(const Shader& shader)
 	{
 		// Identify the shader type and construct the shader
-		String type = shader.GetPath().GetFileExtension();
-		if (type == "vert")
+		switch (shader.get_shader_type())
 		{
-			_id = glCreateShader(GL_VERTEX_SHADER);
-		}
-		else if (type == "frag")
-		{
-			_id = glCreateShader(GL_FRAGMENT_SHADER);
-		}
-		else if (type == "geom")
-		{
-			_id = glCreateShader(GL_GEOMETRY_SHADER);
+		case Shader::Type::Vertex_Shader:
+			this->_id = glCreateShader(GL_VERTEX_SHADER);
+			break;
+
+		case Shader::Type::Fragment_Shader:
+			this->_id = glCreateShader(GL_FRAGMENT_SHADER);
+			break;
+
+		case Shader::Type::Geometry_Shader:
+			this->_id = glCreateShader(GL_GEOMETRY_SHADER);
+			break;
 		}
 
 		// Compile the shader
-		CString tempSource = shader.GetSource().Cstr();
-		glShaderSource(_id, 1, &tempSource, nullptr);
-		glCompileShader(_id);
+		CString tempSource = shader.get_source().Cstr();
+		glShaderSource(this->_id, 1, &tempSource, nullptr);
+		glCompileShader(this->_id);
 
 		// Make sure the shader compiled successfully
 		GLint compiled;
-		glGetShaderiv(_id, GL_COMPILE_STATUS, &compiled);
+		glGetShaderiv(this->_id, GL_COMPILE_STATUS, &compiled);
 		if (!compiled)
 		{
 			GLsizei length;
-			glGetShaderiv(_id, GL_INFO_LOG_LENGTH, &length);
+			glGetShaderiv(this->_id, GL_INFO_LOG_LENGTH, &length);
 
 			GLchar* log = new GLchar[length + 1];
-			glGetShaderInfoLog(_id, length, &length, log);
+			glGetShaderInfoLog(this->_id, length, &length, log);
 			Console::Error("Shader compilation failed: \"@\"", log);
 			delete[] log;
 		}
 	}
 
-	GLShader::GLShader(GLRenderSystem& renderer, const Path& path)
-		: GLShader(renderer, Shader(path))
+	GLShader::GLShader(const Path& path)
+		: GLShader(Shader{ path })
 	{
 		// All done
 	}
 
 	GLShader::GLShader(GLShader&& move)
-		: GLPrimitive(move.GetRenderer())
 	{
-		_id = move._id;
+		this->_id = move._id;
 		move._id = 0;
 	}
 
 	GLShader::~GLShader()
 	{
-		glDeleteShader(_id);
+		glDeleteShader(this->_id);
 	}
 }

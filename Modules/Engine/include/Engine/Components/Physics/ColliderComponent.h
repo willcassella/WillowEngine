@@ -3,7 +3,7 @@
 
 #include "../../Component.h"
 
-namespace Willow
+namespace willow
 {
 	class ENGINE_API ColliderComponent : public Component
 	{
@@ -42,84 +42,84 @@ namespace Willow
 	public:
 
 		/** Returns whether this ColliderComponent is currently active. */
-		FORCEINLINE bool IsActive() const
+		FORCEINLINE bool is_activate() const
 		{
-			return _isActive;
+			return this->_is_active;
 		}
 
 		/** Activates this ColliderComponent. */
-		void ActivateCollider();
+		void activate_collider();
 
 		/** Deactivates this ColliderComponent. */
-		void DeactivateCollider();
+		void deactivate_collider();
 
 		/** Returns the local transform of this Collider. */
-		FORCEINLINE const Transform& GetColliderTransform() const
+		FORCEINLINE const Transform& get_collider_transform() const
 		{
-			return _colliderTransform;
+			return this->_collider_transform;
 		}
 
 		/** Set the local transform of this Collider. */
-		void SetColliderTransform(const Transform& transform);
+		void set_collider_transform(const Transform& transform);
 
 		/** Returns the local location of this Collider. */
-		FORCEINLINE const Vec3& GetColliderLocation() const
+		FORCEINLINE const Vec3& get_collider_location() const
 		{
-			return _colliderTransform.Location;
+			return this->_collider_transform.location;
 		}
 
 		/** Sets the local location of this Collider. 
 		* NOTE: If you're going to set more than one component of the local transform,
-		* consider using 'SetColliderTransform'. */
-		void SetColliderLocation(const Vec3& location);
+		* consider using 'set_collider_transform'. */
+		void set_collider_location(const Vec3& location);
 
 		/** Returns the local rotation of this Collider. */
-		FORCEINLINE const Quat& GetColliderRotation() const
+		FORCEINLINE const Quat& get_collider_rotation() const
 		{
-			return _colliderTransform.Rotation;
+			return this->_collider_transform.rotation;
 		}
 
 		/** Sets the local rotation of this Collider. 
 		* NOTE: If you're going to set more than one component of the local transform,
-		* consider using 'SetColliderTransform'. */
-		void SetColliderRotation(const Quat& rotation);
+		* consider using 'set_collider_transform'. */
+		void set_collider_rotation(const Quat& rotation);
 
 		/** Returns the local scale of this Collider. */
-		FORCEINLINE const Vec3& GetColliderScale() const
+		FORCEINLINE const Vec3& get_collider_scale() const
 		{
-			return _colliderTransform.Scale;
+			return this->_collider_transform.scale;
 		}
 
 		/** Sets the local scale of this Collider. 
 		* NOTE: If you're going to set more than one component of the local transform,
-		* consider using 'SetColliderTransform'. */
-		void SetColliderScale(const Vec3& scale);
+		* consider using 'set_collider_transform'. */
+		void set_collider_scale(const Vec3& scale);
 
 	protected:
 
-		void OnInitialize() final override;
+		void on_initialize() final override;
 
-		void OnDestroy() final override;
+		void on_destroy() final override;
 
-		virtual void OnUpdateColliderTransform() = 0;
+		virtual void on_update_collider_transform() = 0;
 
-		virtual bool OnActivate() = 0;
+		virtual bool on_activate() = 0;
 
-		virtual void OnDeactivate() = 0;
+		virtual void on_deactivate() = 0;
 
 	private:
 
-		void UpdateColliderTransform();
+		void update_collider_transform();
 
-		void EDITOR_SetActive(bool enabled);
+		void EDITOR_set_active(bool active);
 
 		////////////////
 		///   Data   ///
 	public:
 
-		bool _isActive;
-		Transform _colliderTransform;
+		bool _is_active;
+		Transform _collider_transform;
 	};
 }
 
-REFLECTABLE_ENUM(ENGINE_API, Willow::ColliderComponent::ShapeAxis)
+REFLECTABLE_ENUM(ENGINE_API, willow::ColliderComponent::ShapeAxis)

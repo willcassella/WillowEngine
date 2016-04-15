@@ -1,22 +1,23 @@
 // GLShader.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <Engine/Assets/Shader.h>
-#include "GLPrimitive.h"
+#include <Engine/Resources/Shader.h>
+#include "Forwards.h"
+#include "config.h"
 
-namespace Willow
+namespace willow
 {
-	struct GLRENDER_API GLShader final : GLPrimitive
+	struct GLRENDER_API GLShader final
 	{
 		////////////////////////
 		///   Constructors   ///
 	public:
 
 		/** Constructs a GLShader corresponding to a Shader asset. */
-		GLShader(GLRenderSystem& renderer, const Shader& shader);
+		GLShader(const Shader& shader);
 
 		/** Constructs a GLShader using a file */
-		GLShader(GLRenderSystem& renderer, const Path& path);
+		GLShader(const Path& path);
 
 		GLShader(GLShader&& move);
 		~GLShader();
@@ -25,9 +26,9 @@ namespace Willow
 		///   Methods   ///
 	public:
 
-		FORCEINLINE BufferID GetID() const
+		FORCEINLINE BufferID get_id() const
 		{
-			return _id;
+			return this->_id;
 		}
 
 		////////////////

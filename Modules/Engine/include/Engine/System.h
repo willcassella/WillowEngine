@@ -5,7 +5,7 @@
 #include "Forwards/Engine.h"
 #include "config.h"
 
-namespace Willow
+namespace willow
 {
 	class ENGINE_API System : public Object
 	{
@@ -23,13 +23,13 @@ namespace Willow
 		/** Runs the asynchronous update procedure on this System.
 		* 'world' - the World that this System is attached to.
 		* NOTE: This procedure is run asynchronously among the Systems objects attached to the World.
-		* NOTE: This procedure is run prior to the synchronous 'PostUpdate' procedure. */
-		virtual void Update(const World& world);
+		* NOTE: This procedure is run prior to the synchronous 'post_update' procedure. */
+		virtual void update(const World& world);
 
 		/** Runs the synchronous post-update procedure on this System. 
 		* 'world' - the World that is being updated. 
 		* NOTE: This procedure is run synchronously among the System objects attatched to the World.
-		* NOTE: This procedure is run after the asynchronous 'Update' procedure. */
-		virtual void PostUpdate(World& world);
+		* NOTE: This procedure is run after the asynchronous 'update' procedure. */
+		virtual void post_update(World& world);
 	};
 }

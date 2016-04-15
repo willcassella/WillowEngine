@@ -4,23 +4,29 @@
 #include "GameObject.h"
 #include "Transform.h"
 
-namespace Willow
+namespace willow
 {
 	/////////////////
 	///   Types   ///
 
-	enum SetPhysicsModeMode
+	/** Behavior for handling the transform of a GameObject upon setting the parent.
+	* Used by the 'set_parent' member function. */
+	enum SetParentOffsetMode
 	{
-		/** This Entity's physics state will be destroyed  */
-		SPM_DestroyPhysicsState,
-		SPM_ResetPhysicsState,
-		SPM_KeepPhysicsState,
+		/** When this GameObjects's parent is set, its location of moved to the Origin of the new parent (world center for 'null'). */
+		SP_Move_To_Origin,
+
+		/** The transform is set relative to the new parent as it was to the old parent. */
+		SP_Keep_Local_Offset,
+
+		/** The transform is set in such a way that the object does not move at all (in world space) when the parent is set. */
+		SP_Keep_World_Offset
 	};
 
 	/** An 'Entity' is a collection of Components that should be together thought of as a single object.
 	* Components can be added and removed ("connected" and "disconnected") from an Entity, but they cannot be moved between Entities.
 	* Components are always connected to a single Entity.
-	* Entities can be parented to one-another via 'Attach', or 'SetParent'.
+	* Entities can be parented to one-another via 'attach', or 'set_parent'.
 	* The Entity class may be extended, creating an 'Actor'. */
 	class ENGINE_API Entity : public GameObject
 	{
@@ -55,15 +61,15 @@ namespace Willow
 
 		struct PhysicsState final
 		{
-			float Mass = 1.f;
+			float mass = 1.f;
 
-			Vec3 LinearMotionFactor = { 1.f, 1.f, 1.f };
+			Vec3 linear_motion_factor = { 1.f, 1.f, 1.f };
 
-			Vec3 AngularMotionFactor = { 1.f, 1.f, 1.f, };
+			Vec3 angular_motion_factor = { 1.f, 1.f, 1.f, };
 
-			float Friction = 0.5f;
+			float friction = 0.5f;
 
-			float RollingFriction = 0.f;
+			float rolling_friction = 0.f;
 		};
 
 		////////////////////////
@@ -81,102 +87,102 @@ namespace Willow
 
 		void FromArchive(const ArchiveReader& reader) override;
 
-		Vec3 GetLocation() const final override;
+		Vec3 get_location() const final override;
 
-		Vec3 GetWorldLocation() const final override;
+		Vec3 get_world_location() const final override;
 
-		void SetLocation(const Vec3& location) final override;
+		void set_location(const Vec3& location) final override;
 
-		void SetWorldLocation(const Vec3& location) final override;
+		void set_world_location(const Vec3& location) final override;
 
-		void Translate(const Vec3& vec) final override;
+		void translate(const Vec3& vec) final override;
 
-		void TranslateGlobal(const Vec3& vec) final override;
+		void translate_global(const Vec3& vec) final override;
 
-		Quat GetRotation() const final override;
+		Quat get_rotation() const final override;
 
-		Quat GetWorldRotation() const final override;
+		Quat get_world_rotation() const final override;
 
-		void SetRotation(const Quat& rot) final override;
+		void set_rotation(const Quat& rot) final override;
 
-		void SetWorldRotation(const Quat& rot) final override;
+		void set_world_rotation(const Quat& rot) final override;
 
-		void Rotate(const Vec3& axis, Angle angle) final override;
+		void rotate(const Vec3& axis, Angle angle) final override;
 
-		void RotateGlobal(const Vec3& axis, Angle angle) final override;
+		void rotate_global(const Vec3& axis, Angle angle) final override;
 
-		Vec3 GetScale() const final override;
+		Vec3 get_scale() const final override;
 
-		void SetScale(const Vec3& scale) final override;
+		void set_scale(const Vec3& scale) final override;
 
-		void Scale(const Vec3& vec) final override;
+		void scale(const Vec3& vec) final override;
 
-		Mat4 GetTransformationMatrix() const final override;
+		Mat4 get_transformation_matrix() const final override;
 
-		const Transform& GetTransform() const
+		const Transform& get_transform() const
 		{
-			return _transform;
+			return this->_transform;
 		}
 
-		FORCEINLINE Entity* GetParent() final override
+		FORCEINLINE Entity* get_parent() final override
 		{
-			return _parent;
+			return this->_parent;
 		}
 
-		FORCEINLINE const Entity* GetParent() const final override
+		FORCEINLINE const Entity* get_parent() const final override
 		{
-			return _parent;
+			return this->_parent;
 		}
 
 		/** Returns the name of this Entity. */
 		FORCEINLINE const String& GetName() const /*&*/
 		{
-			return _name;
+			return this->_name;
 		}
 
 		/** Returns whether this Entity is an Actor.
 		* An 'Actor' is any class that extends 'Entity'. */
-		bool IsActor() const;
+		bool is_actor() const;
 
 		/** Returns the Actor that this Entity is directly (or indirectly) parented to.
 		* NOTE: If this Entity is itself an Actor, returns a pointer to itself.
 		* NOTE: If this Entity is not attached to an Actor, returns 'null'. */
-		Entity* GetActor();
+		Entity* get_actor();
 
 		/** Returns the Actor that this Entity is directly (or indirectly) attached to.
 		* NOTE: If this Entity is itself an Actor, returns a pointer to itself.
 		* NOTE: If this Entity is not attached to an Actor, returns 'null'. */
-		const Entity* GetActor() const;
+		const Entity* get_actor() const;
 
 		/** Returns whether this Entity is parented to the given Entity (directly or indirectly). */
-		bool IsParentedTo(const Entity& entity) const;
+		bool is_parented_to(const Entity& entity) const;
 
 		/** Sets the parent of this Entity as the given Entity.
 		* parent: The Entity being parented to. Use 'nullptr' for no parent. */
-		void SetParent(Entity* parent, SetParentOffsetMode mode = SP_KeepWorldOffset);
+		void set_parent(Entity* parent, SetParentOffsetMode mode = SP_Keep_World_Offset);
 
 		/** Connects a new instance of the given Component type to this Entity. */
 		template <class T>
-		T& Connect();
+		T& connect();
 
 		/** Parents a new instance of the given type to this Entity.
 		* Returns a reference to the new object. */
 		template <class T>
-		T& Attach();
+		T& attach();
 
 		/** Parents a new instance of the given type to this Entity.
 		* Returns a reference to the new object.
 		* Sets the name of the spawned Entity to the given name. */
 		template <class T>
-		T& Attach(String name);
+		T& attach(String name);
 
 		/** Enumerates all components of the given type connected to this Entity. */
 		template <class T = Component>
-		auto EnumerateConnected()
+		auto enumerate_connected()
 		{
 			Array<T*> result;
 
-			for (auto& component : _components)
+			for (auto& component : this->_components)
 			{
 				if (auto c = Cast<T>(*component))
 				{
@@ -189,11 +195,11 @@ namespace Willow
 
 		/** Enumerates all components of the given type connected to this Entity. */
 		template <class T = Component>
-		auto EnumerateConnected() const
+		auto enumerate_connected() const
 		{
 			Array<const T*> result;
 
-			for (const auto& component : _components)
+			for (const auto& component : this->_components)
 			{
 				if (auto c = Cast<T>(*component))
 				{
@@ -206,11 +212,11 @@ namespace Willow
 
 		/** Enumerates all Entities attached to this Entity (children). */
 		template <class T = Entity>
-		auto EnumerateChildren()
+		auto enumerate_children()
 		{
 			Array<T*> result;
 
-			for (auto& child : _children)
+			for (auto& child : this->_children)
 			{
 				if (auto c = Cast<T>(*child))
 				{
@@ -223,11 +229,11 @@ namespace Willow
 
 		/** Enumerates all Entities attached to this Entity (children). */
 		template <class T = Entity>
-		auto EnumerateChildren() const
+		auto enumerate_children() const
 		{
 			Array<const T*> result;
 
-			for (const auto& child : _children)
+			for (const auto& child : this->_children)
 			{
 				if (auto c = Cast<T>(*child))
 				{
@@ -239,116 +245,116 @@ namespace Willow
 		}
 
 		/** Returns the current PhysicsMode of this Entity. */
-		FORCEINLINE PhysicsMode GetPhysicsMode() const
+		FORCEINLINE PhysicsMode get_physics_mode() const
 		{
-			return _physicsMode;
+			return this->_physics_mode;
 		}
 
 		/** Sets the current PhysicsMode of this Entity. */
-		void SetPhysicsMode(PhysicsMode mode);
+		void set_physics_mode(PhysicsMode mode);
 
 		/** Returns whether this Entity is physically dynamic. */
-		FORCEINLINE bool IsDynamic() const
+		FORCEINLINE bool is_dynamic() const
 		{
-			return this->GetPhysicsMode() == PhysicsMode::Dynamic;
+			return this->get_physics_mode() == PhysicsMode::Dynamic;
 		}
 
 		/** Returns the mass of this Entity. */
-		FORCEINLINE float GetMass() const
+		FORCEINLINE float get_mass() const
 		{
-			return _physicsState.Mass;
+			return this->_physics_state.mass;
 		}
 
 		/** Sets the mass of this Entity. */
-		void SetMass(float mass);
+		void set_mass(float mass);
 
 		/** Gets the linear motion factor for this Entity.
 		* NOTE: This property is only relevant for Dynamic entities. */
-		FORCEINLINE Vec3 GetLinearMotionFactor() const
+		FORCEINLINE Vec3 get_linear_motion_factor() const
 		{
-			return _physicsState.LinearMotionFactor;
+			return this->_physics_state.linear_motion_factor;
 		}
 
 		/** Sets the linear motion factor for this Entity.
 		* NOTE: This property is only relevant for Dynamic entities. */
-		void SetLinearMotionFactor(const Vec3& factor);
+		void set_linear_motion_factor(const Vec3& factor);
 
 		/** Gets the angular motion factor for this Entity.
 		* NOTE: This property is only relevant for Dynamic entities. */
-		FORCEINLINE Vec3 GetAngularMotionFactor() const
+		FORCEINLINE Vec3 get_angular_motion_factor() const
 		{
-			return _physicsState.AngularMotionFactor;
+			return this->_physics_state.angular_motion_factor;
 		}
 
 		/** Sets the angular motion factor for this Entity.
 		* NOTE: This property is only relevant for Dynamic entities. */
-		void SetAngularMotionFactor(const Vec3& factor);
+		void set_angular_motion_factor(const Vec3& factor);
 
 		/** Gets the friction for this Entity. */
-		FORCEINLINE float GetFriction() const
+		FORCEINLINE float get_friction() const
 		{
-			return _physicsState.Friction;
+			return this->_physics_state.friction;
 		}
 
 		/** Sets the friction for this Entity. */
-		void SetFriction(float friction);
+		void set_friction(float friction);
 
 		/** Gets the rolling friction for this Entity. */
-		FORCEINLINE float GetRollingFriction() const
+		FORCEINLINE float get_rolling_friction() const
 		{
-			return _physicsState.RollingFriction;
+			return this->_physics_state.rolling_friction;
 		}
 
 		/** Sets the rolling friction for this Entity. */
-		void SetRollingFriction(float rollingFriction);
+		void set_rolling_friction(float rollingFriction);
 
 		/** Gets the linear velocity of this Entity.
 		* NOTE: For non-dynamic Entities, this will be zero. */
-		Vec3 GetLinearVelocity() const;
+		Vec3 get_linear_velocity() const;
 
 		/** Sets the linear velocity of this Entity.
 		* NOTE: For non-dynamic Entities, this will have no effect. */
-		void SetLinearVelocity(const Vec3& linearVelocity);
+		void set_linear_velocity(const Vec3& linearVelocity);
 
 		/** Gets the angular velocity of this Entity.
 		* NOTE: For non-dynamic Entities, this will be zero. */
-		Vec3 GetAngularVelocity() const;
+		Vec3 get_angular_velocity() const;
 
 		/** Sets the angular velocity of this Entity.
 		* NOTE: For non-dynamic Entities, this will have no effect. */
-		void SetAngularVelocity(const Vec3& angularVelocity);
+		void set_angular_velocity(const Vec3& angularVelocity);
 
 		/** Applys the given force to this Entity. 
 		* NOTE: If this Entity's physics mode is not 'PhysicsMode::Dynamic', this does nothing. */
-		void ApplyForce(const Vec3& force, const Vec3& offset = Vec3::Zero);
+		void apply_force(const Vec3& force, const Vec3& offset = Vec3::Zero);
 
 		/** Applys the given impulse to this Entity.
 		* NOTE: If this Entity's physics mode is not 'PhysicsMode::Dynamic', this does nothing. */
-		void ApplyImpulse(const Vec3& impulse, const Vec3& offset = Vec3::Zero);
+		void apply_impulse(const Vec3& impulse, const Vec3& offset = Vec3::Zero);
 
 		/** Applys the given torque to this Entity.
 		* NOTE: If this Entity's physics mode is not 'PhysicsMode::Dynamic', this does nothing. */
-		void ApplyTorque(const Vec3& torque);
+		void apply_torque(const Vec3& torque);
 
 		/** Applys the given torque impulse to this Entity.
 		* NOTE: If this Entity's physics mode is not 'PhysicsMode::Dynamic', this does nothing. */
-		void ApplyTorqueImpulse(const Vec3& torque);
+		void apply_torque_impulse(const Vec3& torque);
 
 	protected:
 
-		void OnInitialize() override;
+		void on_initialize() override;
 
-		void OnDestroy() override;
+		void on_destroy() override;
 
 	private:
 
-		void EDITOR_SetName(String name);
+		void EDITOR_set_name(String name);
 
-		void UpdatePhysicsMode();
+		void update_physics_mode();
 
-		void UpdatePhysicsState();
+		void update_physics_state();
 
-		void UpdatePhysicsTransform();
+		void update_physics_transform();
 
 		////////////////
 		///   Data   ///
@@ -364,9 +370,9 @@ namespace Willow
 		Array<Entity*> _children;
 
 		/** Physics data */
-		PhysicsState _physicsState;
-		PhysicsMode _physicsMode;
+		PhysicsState _physics_state;
+		PhysicsMode _physics_mode;
 	};
 }
 
-REFLECTABLE_ENUM(ENGINE_API, Willow::Entity::PhysicsMode)
+REFLECTABLE_ENUM(ENGINE_API, willow::Entity::PhysicsMode)

@@ -5,17 +5,18 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Willow::Component)
-.Data("Entity", &Component::_entity);
+BUILD_REFLECTION(willow::Component)
+.Data("entity", &Component::_entity);
 
-namespace Willow
+namespace willow
 {
 	////////////////////////
 	///   Constructors   ///
 
 	Component::Component()
+		: _entity{ nullptr }
 	{
-		_entity = nullptr;
+		// All done
 	}
 
 	///////////////////
@@ -23,7 +24,7 @@ namespace Willow
 
 	void Component::FromArchive(const ArchiveReader& reader)
 	{
-		Base::FromArchive(reader);
-		_entity->_components.Add(this);
+		this->Base::FromArchive(reader);
+		this->_entity->_components.Add(this);
 	}
 }

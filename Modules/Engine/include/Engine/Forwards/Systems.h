@@ -4,7 +4,7 @@
 /////////////////
 ///   Types   ///
 
-namespace Willow
+namespace willow
 {
 	/** Defined in 'Systems/RenderSystem.h' */
 	class RenderSystem;

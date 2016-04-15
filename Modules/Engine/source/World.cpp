@@ -5,24 +5,25 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Willow::World)
-.Data("GameObjects", &World::_gameObjects, DF_Transient)
-.Data("Entities", &World::_entities, DF_Transient)
-.Data("Components", &World::_components, DF_Transient)
-.Data("Destroyed", &World::_destroyedObjects, DF_Transient)
-.Data("NextGameObjectID", &World::_nextGameObjectID)
-.Field("Events", &World::Events)
-.Field("TimeDilation", &World::TimeDilation, "The time dilation of the world. Default is 1.")
-.Field("TimeStep", &World::TimeStep, "The amount of time (ms) that each update of the world represents.");
+BUILD_REFLECTION(willow::World)
+.Data("objects", &World::_objects, DF_Transient)
+.Data("entities", &World::_entities, DF_Transient)
+.Data("components", &World::_components, DF_Transient)
+.Data("destroyed_objects", &World::_destroyed_objects, DF_Transient)
+.Data("next_object_id", &World::_next_object_id)
+.Field("events", &World::events)
+.Field("time_dilation", &World::time_dilation, "The time dilation of the world. Default is 1.")
+.Field("time_step", &World::time_step, "The amount of time (ms) that each update of the world represents.");
 
-namespace Willow
+namespace willow
 {
 	////////////////////////
 	///   Constructors   ///
 
 	World::World()
+		: _next_object_id{ 1 }
 	{
-		_nextGameObjectID = 1;
+		// All done
 	}
 
 	World::~World()
@@ -35,14 +36,14 @@ namespace Willow
 	
 	void World::ToArchive(ArchiveWriter& writer) const
 	{
-		writer.PushValue("TimeDilation", this->TimeDilation);
-		writer.PushValue("TimeStep", this->TimeStep);
-		writer.PushValue("NextID", _nextGameObjectID);
+		writer.PushValue("time_dilation", this->time_dilation);
+		writer.PushValue("time_step", this->time_step);
+		writer.PushValue("next_object_id", this->_next_object_id);
 		
 		// Save all entites/components
-		writer.AddChild("GameObjects", [this](auto& child)
+		writer.AddChild("objects", [this](auto& child)
 		{
-			for (const auto& kv : this->_gameObjects)
+			for (const auto& kv : this->_objects)
 			{
 				// Push the given value into this archive, wrapping it in a Node containing its type name and address
 				child.PushReferencedValue(kv.Second->GetType().GetName(), *kv.Second);
@@ -53,23 +54,19 @@ namespace Willow
 	void World::FromArchive(const ArchiveReader& reader)
 	{
 		// Reset state
-		_gameObjects.Clear();
-		_destroyedObjects.Clear();
-		_entities.Clear();
-		_components.Clear();
-		_nextGameObjectID = 1;
+		this->reset();
 
 		// Begin deserialization
-		reader.PullValue("TimeDilation", this->TimeDilation);
-		reader.PullValue("TimeStep", this->TimeStep);
-		reader.PullValue("NextID", _nextGameObjectID);
+		reader.PullValue("time_dilation", this->time_dilation);
+		reader.PullValue("time_step", this->time_step);
+		reader.PullValue("next_object_id", this->_next_object_id);
 		
 		// Queue of GameObjects that still need to be spawned
-		Queue<Owned<GameObject>> uninitialized_entities;
-		Queue<Owned<GameObject>> unititialized_component;
+		Queue<Owned<GameObject>> uninitializedEntities;
+		Queue<Owned<GameObject>> unititializedComponents;
 		
 		// Load all entities/components
-		reader.GetChild("GameObjects", [&](auto& child)
+		reader.GetChild("objects", [&](auto& child)
 		{
 			// Queue of gameobjects that still need to be deserialized
 			Queue<Owned<GameObject>> unloadedObjects;
@@ -107,110 +104,119 @@ namespace Willow
 
 					if (object->GetType().IsCastableTo(TypeOf<Entity>()))
 					{
-						uninitialized_entities.Push(std::move(object));
+						uninitializedEntities.Push(std::move(object));
 					}
 					else
 					{
-						unititialized_component.Push(std::move(object));
+						unititializedComponents.Push(std::move(object));
 					}
 				}
 			});
 		});
 
 		// Spawn all Entities
-		for (auto& owner : uninitialized_entities)
+		for (auto& owner : uninitializedEntities)
 		{
 			auto& entity = *owner;
-			this->InitializeGameobject(std::move(owner), entity._id);
+			this->intialize_object(std::move(owner), entity._id);
 			
-			// Serialized entities do not get their 'OnSpawn' handler called
+			// Serialized entities do not get their 'on_spawn' handler called
 			entity._state = GameObject::State::Spawned;
 		}
 
 		// Spawn all Components
-		for (auto& owner : unititialized_component)
+		for (auto& owner : unititializedComponents)
 		{
 			auto& component = *owner;
-			this->InitializeGameobject(std::move(owner), component._id);
+			this->intialize_object(std::move(owner), component._id);
 			
-			// Serialized entities do not get their 'OnSpawn' handler called
+			// Serialized entities do not get their 'on_spawn' handler called
 			component._state = GameObject::State::Spawned;
 		}
 	}
 
-	void World::Update()
+	void World::update()
 	{
-		Events.DispatchEvent("Update", this->TimeDilation);
-		Events.Flush();
+		this->events.DispatchEvent("update", this->time_dilation);
+		this->events.Flush();
 
 		// Remove stale objects
-		while (!_destroyedObjects.IsEmpty())
+		while (!this->_destroyed_objects.IsEmpty())
 		{
-			auto object = _destroyedObjects.Pop();
-			_entities.Remove(object->GetID());
-			_components.Remove(object->GetID());
-			_gameObjects.Remove(object->GetID());
+			auto object = _destroyed_objects.Pop();
+			this->_entities.Remove(object->get_id());
+			this->_components.Remove(object->get_id());
+			this->_objects.Remove(object->get_id());
 		}
 
-		for (auto& system : _systems)
+		for (auto& system : this->_systems)
 		{
-			system->Update(*this);
+			system->update(*this);
 		}
 
-		for (auto& system : _systems)
+		for (auto& system : this->_systems)
 		{
 			// TODO: Make this asynchronous
-			system->PostUpdate(*this);
+			system->post_update(*this);
 		}
 	}
 
-	void World::DestroyGameObject(GameObject& object)
+	void World::destroy_object(GameObject& object)
 	{
 		assert(object._state >= GameObject::State::Spawned);
 
 		if (object._state != GameObject::State::Destroyed)
 		{
 			object._state = GameObject::State::Destroyed;
-			_destroyedObjects.Push(&object);
-			object.OnDestroy();
+			this->_destroyed_objects.Push(&object);
+			object.on_destroy();
 		}
 	}
 
-	void World::SetGravity(const Vec3& gravity)
+	void World::set_gravity(const Vec3& gravity)
 	{
-		_gravity = gravity;
+		this->_gravity = gravity;
 		// TODO: Update this with PhysicsSystem
 	}
 
-	void World::InitializeGameobject(Owned<GameObject> owner, GameObject::ID id)
+	void World::reset()
+	{
+		this->_objects.Clear();
+		this->_destroyed_objects.Clear();
+		this->_entities.Clear();
+		this->_components.Clear();
+		this->_next_object_id = 1;
+	}
+
+	void World::intialize_object(Owned<GameObject> owner, GameObject::ID id)
 	{	
 		auto& object = *owner;
 		assert(object._state == GameObject::State::Uninitialized);
 
 		// Add it to the world
-		_gameObjects[id] = std::move(owner);
+		this->_objects[id] = std::move(owner);
 		if (auto entity = Cast<Entity>(object))
 		{
-			_entities[id] = entity;
+			this->_entities[id] = entity;
 		}
 		else if (auto component = Cast<Component>(object))
 		{
-			_components[id] = component;
+			this->_components[id] = component;
 		}
 
 		// Initialize the object
 		object._id = id;
 		object._world = this;
 		object._state = GameObject::State::Initialized;
-		object.OnInitialize();
+		object.on_initialize();
 	}
 
-	void World::SpawnGameObject(GameObject& object)
+	void World::spawn_object(GameObject& object)
 	{
 		// Spawn the object
 		assert(object._state == GameObject::State::Initialized);
 		object._state = GameObject::State::Spawning;
-		object.OnSpawn();
+		object.on_spawn();
 		object._state = GameObject::State::Spawned;
 	}
 }

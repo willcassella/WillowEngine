@@ -1,11 +1,11 @@
 // StaticMeshColliderComponent.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <Resource/AssetPtr.h>
-#include "../../Assets/StaticMesh.h"
+#include <Resource/ResourceManager.h>
+#include "../../Resources/StaticMesh.h"
 #include "ColliderComponent.h"
 
-namespace Willow
+namespace willow
 {
 	class ENGINE_API StaticMeshColliderComponent final : public ColliderComponent
 	{
@@ -22,7 +22,7 @@ namespace Willow
 
 		struct Shape final
 		{
-			AssetPtr<StaticMesh> Mesh;
+			ResourceHandle<StaticMesh> mesh;
 		};
 
 		////////////////////////
@@ -41,34 +41,34 @@ namespace Willow
 		void FromArchive(const ArchiveReader& reader) override;
 
 		/** Returns the mesh currently used a collider. */
-		FORCEINLINE AssetPtr<StaticMesh> GetMesh() const
+		FORCEINLINE ResourceHandle<StaticMesh> get_mesh() const
 		{
-			return _shape.Mesh;
+			return this->_shape.mesh;
 		}
 
 		/** Sets the mesh currently being used as a collider. */
-		void SetMesh(AssetPtr<StaticMesh> mesh);
+		void set_mesh(ResourceHandle<StaticMesh> mesh);
 
 		/** Returns the shape of this collider. */
-		FORCEINLINE Shape GetShape() const
+		FORCEINLINE Shape get_shape() const
 		{
-			return _shape;
+			return this->_shape;
 		}
 
 		/** Sets the shape of this collider. */
-		void SetShape(Shape shape);
+		void set_shape(Shape shape);
 
 	protected:
 
-		void OnUpdateColliderTransform() override;
+		void on_update_collider_transform() override;
 
-		bool OnActivate() override;
+		bool on_activate() override;
 
-		void OnDeactivate() override;
+		void on_deactivate() override;
 
 	private:
 
-		void UpdateShape();
+		void update_shape();
 
 		////////////////
 		///   Data   ///

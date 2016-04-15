@@ -5,4 +5,4 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Willow::PrimitiveColliderComponent);
+BUILD_REFLECTION(willow::PrimitiveColliderComponent);

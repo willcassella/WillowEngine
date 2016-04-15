@@ -7,26 +7,26 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Willow::ColliderComponent)
-.Data("IsActive", &ColliderComponent::_isActive)
-.Data("ColliderTransform", &ColliderComponent::_colliderTransform)
-.Property("IsActive", &ColliderComponent::IsActive, &ColliderComponent::EDITOR_SetActive, "", "Collider", PF_EditorOnly)
-.Property("Location", &ColliderComponent::GetColliderLocation, &ColliderComponent::SetColliderLocation, "", "Collider")
-.Property("Rotation", &ColliderComponent::GetColliderRotation, &ColliderComponent::SetColliderRotation, "", "Collider")
-.Property("Scale", &ColliderComponent::GetColliderScale, &ColliderComponent::SetColliderScale, "", "Collider");
+BUILD_REFLECTION(willow::ColliderComponent)
+.Data("is_activate", &ColliderComponent::_is_active)
+.Data("collider_transform", &ColliderComponent::_collider_transform)
+.Property("is_activate", &ColliderComponent::is_activate, &ColliderComponent::EDITOR_set_active, "", "Collider", PF_EditorOnly)
+.Property("location", &ColliderComponent::get_collider_location, &ColliderComponent::set_collider_location, "", "Collider")
+.Property("rotation", &ColliderComponent::get_collider_rotation, &ColliderComponent::set_collider_rotation, "", "Collider")
+.Property("scale", &ColliderComponent::get_collider_scale, &ColliderComponent::set_collider_scale, "", "Collider");
 
-BUILD_ENUM_REFLECTION(Willow::ColliderComponent::ShapeAxis)
-.Value("X", Willow::ColliderComponent::ShapeAxis::X)
-.Value("Y", Willow::ColliderComponent::ShapeAxis::Y)
-.Value("Z", Willow::ColliderComponent::ShapeAxis::Z);
+BUILD_ENUM_REFLECTION(willow::ColliderComponent::ShapeAxis)
+.Value("X", willow::ColliderComponent::ShapeAxis::X)
+.Value("Y", willow::ColliderComponent::ShapeAxis::Y)
+.Value("Z", willow::ColliderComponent::ShapeAxis::Z);
 
-namespace Willow
+namespace willow
 {
 	////////////////////////
 	///   Constructors   ///
 
 	ColliderComponent::ColliderComponent()
-		: _isActive{ true }
+		: _is_active{ true }
 	{
 		// All done
 	}
@@ -34,104 +34,104 @@ namespace Willow
 	///////////////////
 	///   Methods   ///
 
-	void ColliderComponent::ActivateCollider()
+	void ColliderComponent::activate_collider()
 	{
-		if (this->IsActive())
+		if (this->is_activate())
 		{
 			// We're already activated
 			return;
 		}
 
-		if (!this->HasSpawned() || this->IsDestroyed())
+		if (!this->has_spawned() || this->is_destroyed())
 		{
 			// We'll activate once we spawn
-			_isActive = true;
+			this->_is_active = true;
 			return;
 		}
 
 		// Attempt to activate
-		_isActive = this->OnActivate();
+		this->_is_active = this->on_activate();
 	}
 
-	void ColliderComponent::DeactivateCollider()
+	void ColliderComponent::deactivate_collider()
 	{
-		if (!this->IsActive())
+		if (!this->is_activate())
 		{
 			// We're already deactivated
 			return;
 		}
 
-		if (!this->HasSpawned() || this->IsDestroyed())
+		if (!this->has_spawned() || this->is_destroyed())
 		{
 			// We haven't spawned yet, so nothing to undo
-			_isActive = false;
+			this->_is_active = false;
 			return;
 		}
 
-		this->OnDeactivate();
+		this->on_deactivate();
 	}
 
-	void ColliderComponent::SetColliderTransform(const Transform& transform)
+	void ColliderComponent::set_collider_transform(const Transform& transform)
 	{
-		_colliderTransform = transform;
-		this->UpdateColliderTransform();
+		this->_collider_transform = transform;
+		this->update_collider_transform();
 	}
 
-	void ColliderComponent::SetColliderLocation(const Vec3& location)
+	void ColliderComponent::set_collider_location(const Vec3& location)
 	{
-		_colliderTransform.Location = location;
-		this->UpdateColliderTransform();
+		this->_collider_transform.location = location;
+		this->update_collider_transform();
 	}
 
-	void ColliderComponent::SetColliderRotation(const Quat& rotation)
+	void ColliderComponent::set_collider_rotation(const Quat& rotation)
 	{
-		_colliderTransform.Rotation = rotation;
-		this->UpdateColliderTransform();
+		this->_collider_transform.rotation = rotation;
+		this->update_collider_transform();
 	}
 
-	void ColliderComponent::SetColliderScale(const Vec3& scale)
+	void ColliderComponent::set_collider_scale(const Vec3& scale)
 	{
-		_colliderTransform.Scale = scale;
-		this->UpdateColliderTransform();
+		this->_collider_transform.scale = scale;
+		this->update_collider_transform();
 	}
 
-	void ColliderComponent::OnInitialize()
+	void ColliderComponent::on_initialize()
 	{
-		this->Base::OnSpawn();
+		this->Base::on_spawn();
 
-		if (this->IsActive())
+		if (this->is_activate())
 		{
-			_isActive = this->OnActivate();
+			this->_is_active = this->on_activate();
 		}
 	}
 
-	void ColliderComponent::OnDestroy()
+	void ColliderComponent::on_destroy()
 	{
-		this->Base::OnDestroy();
+		this->Base::on_destroy();
 
-		if (this->IsActive())
+		if (this->is_activate())
 		{
-			this->OnDeactivate();
+			this->on_deactivate();
 		}
 	}
 
-	void ColliderComponent::UpdateColliderTransform()
+	void ColliderComponent::update_collider_transform()
 	{
-		if (this->IsActive() && this->HasSpawned())
+		if (this->is_activate() && this->has_spawned())
 		{
-			this->OnUpdateColliderTransform();
+			this->on_update_collider_transform();
 		}
 	}
 
-	void ColliderComponent::EDITOR_SetActive(bool enabled)
+	void ColliderComponent::EDITOR_set_active(bool active)
 	{
-		if (enabled)
+		if (active)
 		{
-			this->ActivateCollider();
+			this->activate_collider();
 		}
 		else
 		{
-			this->DeactivateCollider();
+			this->deactivate_collider();
 		}
 	}
 }

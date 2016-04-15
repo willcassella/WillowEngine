@@ -5,140 +5,142 @@
 #include "../include/BulletPhysics/BulletPhysicsSystem.h"
 #include "../private/DebugDrawer.h"
 #include "../private/PhysicsWorld.h"
+#include "../private/GhostBody.h"
 #include "../private/RigidBody.h"
+#include "../private/EntityPhysicsData.h"
 #include "../private/CharacterController.h"
-#include "../private/BulletTriangleMesh.h"
+#include "../private/TriangleMesh.h"
 
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Willow::BulletPhysicsSystem);
+BUILD_REFLECTION(willow::BulletPhysicsSystem);
 
-namespace Willow
+namespace willow
 {
 	////////////////////////
 	///   Constructors   ///
 
 	BulletPhysicsSystem::BulletPhysicsSystem()
 	{
-		_physicsWorld = std::make_unique<PhysicsWorld>();
+		_physics_world = std::make_unique<PhysicsWorld>();
 	}
 
 	BulletPhysicsSystem::~BulletPhysicsSystem()
 	{
-		// _physicsWorld must be destroyed first
-		_physicsWorld.release();
+		// _physics_world must be destroyed first
+		_physics_world.release();
 	}
 
 	///////////////////
 	///   Methods   ///
 
-	void BulletPhysicsSystem::Update(const World& world)
+	void BulletPhysicsSystem::update(const World& world)
 	{
-		_physicsWorld->GetDynamicsWorld().stepSimulation(world.TimeStep, 1);
+		this->_physics_world->GetDynamicsWorld().stepSimulation(world.time_step, 1);
 	}
 
-	void BulletPhysicsSystem::DebugDraw(RenderSystem& render)
+	void BulletPhysicsSystem::debug_draw(RenderSystem& render)
 	{
 		DebugDrawer drawer{ render };
-		_physicsWorld->GetDynamicsWorld().setDebugDrawer(&drawer);
-		_physicsWorld->GetDynamicsWorld().debugDrawWorld();
-		_physicsWorld->GetDynamicsWorld().setDebugDrawer(nullptr);
+		_physics_world->GetDynamicsWorld().setDebugDrawer(&drawer);
+		_physics_world->GetDynamicsWorld().debugDrawWorld();
+		_physics_world->GetDynamicsWorld().setDebugDrawer(nullptr);
 	}
 
-	void BulletPhysicsSystem::CreateEntity(
-		EntityHandle entity, 
-		EntityHandle parent, 
+	void BulletPhysicsSystem::create_entity(
+		Handle<Entity> entity, 
+		Handle<Entity> parent,
 		Transform& transform, 
 		Entity::PhysicsMode mode, 
 		Entity::PhysicsState state)
 	{
 		// Create the physics data for this Entity
-		auto* data = _entityPhysicsData.New(state, mode, parent, transform);
-		_entityDataTable[entity] = data;
+		auto* data = _entity_physics_data.New(state, mode, parent, transform);
+		_entity_data_table[entity] = data;
 
 		// If the entity is at least a ghost
 		if (mode >= Entity::PhysicsMode::Ghost)
 		{
-			data->GhostBody = _ghostBodies.New(*data);
-			_physicsWorld->GetDynamicsWorld().addCollisionObject(data->GhostBody);
+			data->ghost_body = _ghost_bodies.New(*data);
+			_physics_world->GetDynamicsWorld().addCollisionObject(data->ghost_body);
 		}
 
 		// If the entity is at least kinematic
 		if (mode >= Entity::PhysicsMode::Kinematic)
 		{
-			data->RigidBody = _rigidBodies.New(*data);
-			_physicsWorld->GetDynamicsWorld().addRigidBody(data->RigidBody);
+			data->rigid_body = _rigid_bodies.New(*data);
+			_physics_world->GetDynamicsWorld().addRigidBody(data->rigid_body);
 
 			// If the entity IS kinematic
 			if (mode == Entity::PhysicsMode::Kinematic)
 			{
-				data->RigidBody->setMassProps(0, { 0, 0, 0 });
-				data->RigidBody->setActivationState(DISABLE_DEACTIVATION);
-				data->RigidBody->setCollisionFlags(data->RigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+				data->rigid_body->setMassProps(0, { 0, 0, 0 });
+				data->rigid_body->setActivationState(DISABLE_DEACTIVATION);
+				data->rigid_body->setCollisionFlags(data->rigid_body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
 			}
 		}
 	}
 
-	void BulletPhysicsSystem::DestroyEntity(EntityHandle /*entity*/)
+	void BulletPhysicsSystem::destroy_entity(Handle<Entity> /*entity*/)
 	{
 		// TODO
 	}
 
-	void BulletPhysicsSystem::SetEntityParent(EntityHandle /*entity*/, EntityHandle /*parent*/)
+	void BulletPhysicsSystem::set_entity_parent(Handle<Entity> /*entity*/, Handle<Entity> /*parent*/)
 	{
 		// TODO
 	}
 
-	void BulletPhysicsSystem::UpdateEntityTransform(EntityHandle entity)
+	void BulletPhysicsSystem::update_entity_transform(Handle<Entity> entity)
 	{
-		_entityDataTable.Find(entity, [&](EntityPhysicsData* data)
+		_entity_data_table.Find(entity, [&](EntityPhysicsData* data)
 		{
-			data->Collider.setLocalScaling(ConvertToBullet(data->Transform->Scale));
-			btTransform transform{ ConvertToBullet(data->Transform->Rotation), ConvertToBullet(data->Transform->Location) };
+			data->collider.setLocalScaling(convert_to_bullet(data->transform->scale));
+			btTransform transform{ convert_to_bullet(data->transform->rotation), convert_to_bullet(data->transform->location) };
 
 			// If we have a GhostBody
-			if (data->GhostBody)
+			if (data->ghost_body)
 			{
-				data->GhostBody->setWorldTransform(transform);
+				data->ghost_body->setWorldTransform(transform);
 			}
 
 			// If we have a RigidBody
-			if (data->RigidBody)
+			if (data->rigid_body)
 			{
-				data->RigidBody->setWorldTransform(transform);
+				data->rigid_body->setWorldTransform(transform);
 			}
 		});
 	}
 
-	void BulletPhysicsSystem::SetEntityPhysicsMode(EntityHandle entity, Entity::PhysicsMode mode)
+	void BulletPhysicsSystem::set_entity_physics_mode(Handle<Entity> entity, Entity::PhysicsMode mode)
 	{
-		_entityDataTable.Find(entity, [=](EntityPhysicsData* data)
+		_entity_data_table.Find(entity, [=](EntityPhysicsData* data)
 		{
 			// Set the new mode
-			data->Mode = mode;
+			data->mode = mode;
 
 			// If we have a RigidBody
-			if (data->RigidBody)
+			if (data->rigid_body)
 			{
 				// If we don't want to have one
 				if (mode < Entity::PhysicsMode::Kinematic)
 				{
 					// If we don't have any constraints
-					if (data->RigidBody->getNumConstraintRefs() == 0)
+					if (data->rigid_body->getNumConstraintRefs() == 0)
 					{
 						// Destroy it
-						_physicsWorld->GetDynamicsWorld().removeRigidBody(data->RigidBody);
-						data->RigidBody->Disable(*data);
-						_rigidBodies.Destroy(data->RigidBody);
-						data->RigidBody = nullptr;
+						_physics_world->GetDynamicsWorld().removeRigidBody(data->rigid_body);
+						data->rigid_body->disable(*data);
+						_rigid_bodies.Destroy(data->rigid_body);
+						data->rigid_body = nullptr;
 					}
 					else
 					{
 						// Set it up purely for constraints
-						data->RigidBody->setCollisionShape(nullptr);
-						data->RigidBody->setCollisionFlags(
-							data->RigidBody->getCollisionFlags() |
+						data->rigid_body->setCollisionShape(nullptr);
+						data->rigid_body->setCollisionFlags(
+							data->rigid_body->getCollisionFlags() |
 							btCollisionObject::CF_KINEMATIC_OBJECT |
 							btCollisionObject::CF_NO_CONTACT_RESPONSE);
 					}
@@ -150,28 +152,28 @@ namespace Willow
 				if (mode >= Entity::PhysicsMode::Kinematic)
 				{
 					// Create one
-					data->RigidBody = _rigidBodies.New(*data);
-					_physicsWorld->GetDynamicsWorld().addRigidBody(data->RigidBody);
+					data->rigid_body = _rigid_bodies.New(*data);
+					_physics_world->GetDynamicsWorld().addRigidBody(data->rigid_body);
 					
 					if (mode == Entity::PhysicsMode::Kinematic)
 					{
-						data->RigidBody->setMassProps(0, { 0, 0, 0 });
-						data->RigidBody->setActivationState(DISABLE_DEACTIVATION);
-						data->RigidBody->setCollisionFlags(data->RigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+						data->rigid_body->setMassProps(0, { 0, 0, 0 });
+						data->rigid_body->setActivationState(DISABLE_DEACTIVATION);
+						data->rigid_body->setCollisionFlags(data->rigid_body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
 					}
 				}
 			}
 
 			// If we have a Ghost body
-			if (data->GhostBody)
+			if (data->ghost_body)
 			{
 				// If we don't want to have a ghost body
 				if (mode == Entity::PhysicsMode::Transient)
 				{
 					// Destroy it
-					_physicsWorld->GetDynamicsWorld().removeCollisionObject(data->GhostBody);
-					_ghostBodies.Destroy(data->GhostBody);
-					data->GhostBody = nullptr;
+					_physics_world->GetDynamicsWorld().removeCollisionObject(data->ghost_body);
+					_ghost_bodies.Destroy(data->ghost_body);
+					data->ghost_body = nullptr;
 				}
 			}
 			else
@@ -179,298 +181,298 @@ namespace Willow
 				// If we want to have a GhostBody
 				if (mode >= Entity::PhysicsMode::Ghost)
 				{
-					auto* ghost = _ghostBodies.New(*data);
-					_physicsWorld->GetDynamicsWorld().addCollisionObject(ghost);
+					auto* ghost = _ghost_bodies.New(*data);
+					_physics_world->GetDynamicsWorld().addCollisionObject(ghost);
 				}
 			}
 		});
 	}
 
-	void BulletPhysicsSystem::SetEntityPhysicsState(EntityHandle entity, Entity::PhysicsState state)
+	void BulletPhysicsSystem::set_entity_physics_state(Handle<Entity> entity, Entity::PhysicsState state)
 	{
 		// If the PhysicsObject exists
-		_entityDataTable.Find(entity, [&](EntityPhysicsData* data)
+		_entity_data_table.Find(entity, [&](EntityPhysicsData* data)
 		{
-			data->State = state;
+			data->state = state;
 
 			// If it's a Kinematic or Rigid body
-			if (data->Mode >= Entity::PhysicsMode::Kinematic)
+			if (data->mode >= Entity::PhysicsMode::Kinematic)
 			{
-				data->RigidBody->setAngularFactor(ConvertToBullet(state.AngularMotionFactor));
-				data->RigidBody->setLinearFactor(ConvertToBullet(state.LinearMotionFactor));
-				data->RigidBody->setFriction(state.Friction);
-				data->RigidBody->setRollingFriction(state.RollingFriction);
+				data->rigid_body->setAngularFactor(convert_to_bullet(state.angular_motion_factor));
+				data->rigid_body->setLinearFactor(convert_to_bullet(state.linear_motion_factor));
+				data->rigid_body->setFriction(state.friction);
+				data->rigid_body->setRollingFriction(state.rolling_friction);
 
 				// If it's a rigid body
-				if (data->Mode == Entity::PhysicsMode::Dynamic)
+				if (data->mode == Entity::PhysicsMode::Dynamic)
 				{
 					btVector3 inertia;
-					data->Collider.calculateLocalInertia(state.Mass, inertia);
-					data->RigidBody->setMassProps(state.Mass, inertia);
+					data->collider.calculateLocalInertia(state.mass, inertia);
+					data->rigid_body->setMassProps(state.mass, inertia);
 				}
 			}
 		});
 	}
 
-	void BulletPhysicsSystem::GetEntityLinearVelocity(Vec3& outLinearVelocity, EntityHandle entity)
+	void BulletPhysicsSystem::get_entity_linear_velocity(Vec3& outLinearVelocity, Handle<Entity> entity)
 	{
-		auto* entityData = _entityDataTable[entity];
+		auto* entityData = _entity_data_table[entity];
 
-		if (entityData->RigidBody)
+		if (entityData->rigid_body)
 		{
-			outLinearVelocity = ConvertFromBullet(entityData->RigidBody->getLinearVelocity());
+			outLinearVelocity = convert_from_bullet(entityData->rigid_body->getLinearVelocity());
 		}
 	}
 
-	void BulletPhysicsSystem::SetEntityLinearVelocity(EntityHandle entity, const Vec3& linearVelocity)
+	void BulletPhysicsSystem::set_entity_linear_velocity(Handle<Entity> entity, const Vec3& linearVelocity)
 	{
-		auto* entityData = _entityDataTable[entity];
+		auto* entityData = _entity_data_table[entity];
 
-		if (entityData->RigidBody)
+		if (entityData->rigid_body)
 		{
-			entityData->RigidBody->setLinearVelocity(ConvertToBullet(linearVelocity));
+			entityData->rigid_body->setLinearVelocity(convert_to_bullet(linearVelocity));
 		}
 	}
 
-	void BulletPhysicsSystem::GetEntityAngularVelocity(Vec3& outAngularVelocity, EntityHandle entity)
+	void BulletPhysicsSystem::get_entity_angular_velocity(Vec3& outAngularVelocity, Handle<Entity> entity)
 	{
-		auto* entityData = _entityDataTable[entity];
+		auto* entityData = _entity_data_table[entity];
 
-		if (entityData->RigidBody)
+		if (entityData->rigid_body)
 		{
-			outAngularVelocity = ConvertFromBullet(entityData->RigidBody->getAngularVelocity());
+			outAngularVelocity = convert_from_bullet(entityData->rigid_body->getAngularVelocity());
 		}
 	}
 
-	void BulletPhysicsSystem::SetEntityAngularVelocity(EntityHandle entity, const Vec3& angularVelocity)
+	void BulletPhysicsSystem::set_entity_angular_velocity(Handle<Entity> entity, const Vec3& angularVelocity)
 	{
-		auto* entityData = _entityDataTable[entity];
+		auto* entityData = _entity_data_table[entity];
 
-		if (entityData->RigidBody)
+		if (entityData->rigid_body)
 		{
-			entityData->RigidBody->setAngularVelocity(ConvertToBullet(angularVelocity));
+			entityData->rigid_body->setAngularVelocity(convert_to_bullet(angularVelocity));
 		}
 	}
 
-	void BulletPhysicsSystem::ApplyForce(EntityHandle entity, const Vec3& force, const Vec3& offset)
+	void BulletPhysicsSystem::apply_force(Handle<Entity> entity, const Vec3& force, const Vec3& offset)
 	{
-		_entityDataTable.Find(entity, [&](EntityPhysicsData* data)
+		_entity_data_table.Find(entity, [&](EntityPhysicsData* data)
 		{
-			if (data->RigidBody)
+			if (data->rigid_body)
 			{
-				data->RigidBody->applyForce(ConvertToBullet(force), ConvertToBullet(offset));
+				data->rigid_body->applyForce(convert_to_bullet(force), convert_to_bullet(offset));
 			}
 		});
 	}
 
-	void BulletPhysicsSystem::ApplyImpulse(EntityHandle entity, const Vec3& force, const Vec3& offset)
+	void BulletPhysicsSystem::apply_impulse(Handle<Entity> entity, const Vec3& force, const Vec3& offset)
 	{
-		_entityDataTable.Find(entity, [&](EntityPhysicsData* data)
+		_entity_data_table.Find(entity, [&](EntityPhysicsData* data)
 		{
-			if (data->RigidBody)
+			if (data->rigid_body)
 			{
-				data->RigidBody->applyImpulse(ConvertToBullet(force), ConvertToBullet(offset));
+				data->rigid_body->applyImpulse(convert_to_bullet(force), convert_to_bullet(offset));
 			}
 		});
 	}
 
-	void BulletPhysicsSystem::ApplyTorque(EntityHandle entity, const Vec3& torque)
+	void BulletPhysicsSystem::apply_torque(Handle<Entity> entity, const Vec3& torque)
 	{
-		_entityDataTable.Find(entity, [&](EntityPhysicsData* data)
+		_entity_data_table.Find(entity, [&](EntityPhysicsData* data)
 		{
-			if (data->RigidBody)
+			if (data->rigid_body)
 			{
-				data->RigidBody->applyTorque(ConvertToBullet(torque));
+				data->rigid_body->applyTorque(convert_to_bullet(torque));
 			}
 		});
 	}
 
-	void BulletPhysicsSystem::ApplyTorqueImpulse(EntityHandle entity, const Vec3& torque)
+	void BulletPhysicsSystem::apply_torque_impulse(Handle<Entity> entity, const Vec3& torque)
 	{
-		_entityDataTable.Find(entity, [&](EntityPhysicsData* data)
+		_entity_data_table.Find(entity, [&](EntityPhysicsData* data)
 		{
-			if (data->RigidBody)
+			if (data->rigid_body)
 			{
-				data->RigidBody->applyTorqueImpulse(ConvertToBullet(torque));
+				data->rigid_body->applyTorqueImpulse(convert_to_bullet(torque));
 			}
 		});
 	}
 
-	void BulletPhysicsSystem::CreateCollider(Handle<SphereColliderComponent> component, EntityHandle entity, const Transform& transform, SphereColliderComponent::Shape shape)
+	void BulletPhysicsSystem::create_collider(Handle<SphereColliderComponent> component, Handle<Entity> entity, const Transform& transform, SphereColliderComponent::Shape shape)
 	{
-		auto* entityData = _entityDataTable[entity];
+		auto* entityData = _entity_data_table[entity];
 
 		// Create the sphere collider
-		auto* collider = _sphereColliders.New(shape.Radius);
-		collider->setLocalScaling(ConvertToBullet(transform.Scale));
+		auto* collider = _sphere_colliders.New(shape.radius);
+		collider->setLocalScaling(convert_to_bullet(transform.scale));
 		collider->setUserPointer(entityData);
 		
 		// Add it to the EntityCollider
-		entityData->Collider.AddChild(*collider, transform.Location, transform.Rotation);
-		UpdateInertia(*entityData);
+		entityData->collider.add_child(*collider, transform.location, transform.rotation);
+		entityData->update_inertia();
 
 		// Add it to the table
-		_sphereColliderTable[component] = collider;
+		_sphere_collider_table[component] = collider;
 	}
 
-	void BulletPhysicsSystem::CreateCollider(Handle<CapsuleColliderComponent> component, EntityHandle entity, const Transform& transform, CapsuleColliderComponent::Shape shape)
+	void BulletPhysicsSystem::create_collider(Handle<CapsuleColliderComponent> component, Handle<Entity> entity, const Transform& transform, CapsuleColliderComponent::Shape shape)
 	{
-		auto* entityData = _entityDataTable[entity];
+		auto* entityData = _entity_data_table[entity];
 
 		// Create the capsule collider
 		btCapsuleShape* collider = nullptr;
-		switch (shape.Axis)
+		switch (shape.axis)
 		{
 		case ColliderComponent::ShapeAxis::X:
-			collider = _capsuleColliders.New<btCapsuleShapeX>(shape.Radius, shape.Height);
+			collider = _capsule_colliders.New<btCapsuleShapeX>(shape.radius, shape.height);
 			break;
 		case ColliderComponent::ShapeAxis::Y:
-			collider = _capsuleColliders.New<btCapsuleShape>(shape.Radius, shape.Height);
+			collider = _capsule_colliders.New<btCapsuleShape>(shape.radius, shape.height);
 			break;
 		case ColliderComponent::ShapeAxis::Z:
-			collider = _capsuleColliders.New<btCapsuleShapeZ>(shape.Radius, shape.Height);
+			collider = _capsule_colliders.New<btCapsuleShapeZ>(shape.radius, shape.height);
 			break;
 		}
-		collider->setLocalScaling(ConvertToBullet(transform.Scale));
+		collider->setLocalScaling(convert_to_bullet(transform.scale));
 		collider->setUserPointer(entityData);
 
 		// Add it to the entity collider
-		entityData->Collider.AddChild(*collider, transform.Location, transform.Rotation);
-		UpdateInertia(*entityData);
+		entityData->collider.add_child(*collider, transform.location, transform.rotation);
+		entityData->update_inertia();
 
 		// Add it to the table
-		_capsuleColliderTable[component] = collider;
+		_capsule_collider_table[component] = collider;
 	}
 
-	void BulletPhysicsSystem::CreateCollider(Handle<StaticMeshColliderComponent> component, EntityHandle entity, const Transform& transform, StaticMeshColliderComponent::Shape shape)
+	void BulletPhysicsSystem::create_collider(Handle<StaticMeshColliderComponent> component, Handle<Entity> entity, const Transform& transform, StaticMeshColliderComponent::Shape shape)
 	{
-		auto* entityData = _entityDataTable[entity];
+		auto* entityData = _entity_data_table[entity];
 
 		// Find or create a mesh for this collider
-		auto& mesh = _triangleMeshes[shape.Mesh];
+		auto& mesh = _triangle_meshes[shape.mesh];
 		if (!mesh)
 		{
-			mesh = std::make_unique<BulletTriangleMesh>(shape.Mesh);
+			mesh = std::make_unique<TriangleMesh>(shape.mesh);
 		}
 
 		// Create the collider
-		auto* collider = _staticMeshColliders.New(mesh.get(), true);
-		collider->setLocalScaling(ConvertToBullet(transform.Scale));
+		auto* collider = _static_mesh_colliders.New(mesh.get(), true);
+		collider->setLocalScaling(convert_to_bullet(transform.scale));
 		collider->setUserPointer(entityData);
 
 		// Add it to the entity collider
-		entityData->Collider.AddChild(*collider, transform.Location, transform.Rotation);
-		UpdateInertia(*entityData);
+		entityData->collider.add_child(*collider, transform.location, transform.rotation);
+		entityData->update_inertia();
 
 		// Add it to the table
-		_staticMeshColliderTable[component] = collider;
+		_static_mesh_collider_table[component] = collider;
 	}
 
-	void BulletPhysicsSystem::DestroyCollider(Handle<SphereColliderComponent> component)
+	void BulletPhysicsSystem::destroy_collider(Handle<SphereColliderComponent> component)
 	{
 		// Get the collider and its compound
-		auto* collider = _sphereColliderTable[component];
+		auto* collider = _sphere_collider_table[component];
 		auto* entityData = static_cast<EntityPhysicsData*>(collider->getUserPointer());
 		
 		// Destroy it
-		entityData->Collider.RemoveChild(*collider);
-		_sphereColliders.Destroy(collider);
-		_sphereColliderTable.Remove(component);
+		entityData->collider.remove_child(*collider);
+		_sphere_colliders.Destroy(collider);
+		_sphere_collider_table.Remove(component);
 	}
 
-	void BulletPhysicsSystem::DestroyCollider(Handle<CapsuleColliderComponent> component)
+	void BulletPhysicsSystem::destroy_collider(Handle<CapsuleColliderComponent> component)
 	{
 		// Get the collider and its compound
-		auto* collider = _capsuleColliderTable[component];
+		auto* collider = _capsule_collider_table[component];
 		auto* entityData = static_cast<EntityPhysicsData*>(collider->getUserPointer());
 
 		// Destroy it
-		entityData->Collider.RemoveChild(*collider);
-		_capsuleColliderTable.Remove(component);
-		_capsuleColliders.Destroy(collider);
+		entityData->collider.remove_child(*collider);
+		_capsule_collider_table.Remove(component);
+		_capsule_colliders.Destroy(collider);
 	}
 
-	void BulletPhysicsSystem::DestroyCollider(Handle<StaticMeshColliderComponent> /*component*/)
+	void BulletPhysicsSystem::destroy_collider(Handle<StaticMeshColliderComponent> /*component*/)
 	{
 		// TODO
 	}
 
-	void BulletPhysicsSystem::SetColliderTransform(Handle<SphereColliderComponent> component, const Transform& transform)
+	void BulletPhysicsSystem::set_collider_transform(Handle<SphereColliderComponent> component, const Transform& transform)
 	{
-		_sphereColliderTable.Find(component, [&](auto* collider)
+		_sphere_collider_table.Find(component, [&](auto* collider)
 		{
-			collider->setLocalScaling(ConvertToBullet(transform.Scale));
+			collider->setLocalScaling(convert_to_bullet(transform.scale));
 			auto* entityData = static_cast<EntityPhysicsData*>(collider->getUserPointer());
-			entityData->Collider.UpdateChildLocationRotation(*collider, transform.Location, transform.Rotation);
+			entityData->collider.update_child_location_rotation(*collider, transform.location, transform.rotation);
 		});
 	}
 
-	void BulletPhysicsSystem::SetColliderTransform(Handle<CapsuleColliderComponent> component, const Transform& transform)
+	void BulletPhysicsSystem::set_collider_transform(Handle<CapsuleColliderComponent> component, const Transform& transform)
 	{
-		_capsuleColliderTable.Find(component, [&](auto* collider)
+		_capsule_collider_table.Find(component, [&](auto* collider)
 		{
-			collider->setLocalScaling(ConvertToBullet(transform.Scale));
+			collider->setLocalScaling(convert_to_bullet(transform.scale));
 			auto* entityData = static_cast<EntityPhysicsData*>(collider->getUserPointer());
-			entityData->Collider.UpdateChildLocationRotation(*collider, transform.Location, transform.Rotation);
+			entityData->collider.update_child_location_rotation(*collider, transform.location, transform.rotation);
 		});
 	}
 
-	void BulletPhysicsSystem::SetColliderTransform(Handle<StaticMeshColliderComponent> /*component*/, const Transform& /*transform*/)
+	void BulletPhysicsSystem::set_collider_transform(Handle<StaticMeshColliderComponent> /*component*/, const Transform& /*transform*/)
 	{
 		// TODO
 	}
 
-	void BulletPhysicsSystem::SetColliderShape(Handle<SphereColliderComponent> /*component*/, SphereColliderComponent::Shape /*shape*/)
+	void BulletPhysicsSystem::set_collider_shape(Handle<SphereColliderComponent> /*component*/, SphereColliderComponent::Shape /*shape*/)
 	{
 		// TODO
 	}
 
-	void BulletPhysicsSystem::SetColliderShape(Handle<CapsuleColliderComponent> /*component*/, CapsuleColliderComponent::Shape /*shape*/)
+	void BulletPhysicsSystem::set_collider_shape(Handle<CapsuleColliderComponent> /*component*/, CapsuleColliderComponent::Shape /*shape*/)
 	{
 		// TODO
 	}
 
-	void BulletPhysicsSystem::SetColliderShape(Handle<StaticMeshColliderComponent> /*component*/, StaticMeshColliderComponent::Shape /*shape*/)
+	void BulletPhysicsSystem::set_collider_shape(Handle<StaticMeshColliderComponent> /*component*/, StaticMeshColliderComponent::Shape /*shape*/)
 	{
 		// TODO
 	}
 
-	void BulletPhysicsSystem::CreateCharacterController(
+	void BulletPhysicsSystem::create_character_controller(
 		Handle<CharacterControllerComponent> component, 
-		EntityHandle entity, 
+		Handle<Entity> entity,
 		Handle<PrimitiveColliderComponent> collider, 
 		CharacterControllerComponent::Settings settings)
 	{
-		auto* entityData = _entityDataTable[entity];
+		auto* entityData = _entity_data_table[entity];
 
 		// Find collider
 		btConvexShape* bCollider = nullptr;
-		_capsuleColliderTable.Find(collider.CastTo<CapsuleColliderComponent>(), bCollider);
-		_sphereColliderTable.Find(collider.CastTo<SphereColliderComponent>(), bCollider);
+		_capsule_collider_table.Find(collider.cast_to<CapsuleColliderComponent>(), bCollider);
+		_sphere_collider_table.Find(collider.cast_to<SphereColliderComponent>(), bCollider);
 
 		// Create the controller
-		auto* controller = _characterControllers.New(*entityData, *bCollider, settings);
-		_characterControllerTable[component] = controller;
+		auto* controller = _character_controllers.New(*entityData, *bCollider, settings);
+		_character_controller_table[component] = controller;
 
 		// Add it to the world
-		_physicsWorld->GetDynamicsWorld().addAction(controller);
+		_physics_world->GetDynamicsWorld().addAction(controller);
 	}
 
-	void BulletPhysicsSystem::CharacterControllerJump(Handle<CharacterControllerComponent> component)
+	void BulletPhysicsSystem::character_controller_jump(Handle<CharacterControllerComponent> component)
 	{
-		auto* controller = _characterControllerTable[component];
+		auto* controller = _character_controller_table[component];
 		controller->jump();
 	}
 
-	void BulletPhysicsSystem::CharacterControllerOnGround(Handle<CharacterControllerComponent> component, bool& out)
+	void BulletPhysicsSystem::character_controller_on_ground(Handle<CharacterControllerComponent> component, bool& out)
 	{
-		auto* controller = _characterControllerTable[component];
+		auto* controller = _character_controller_table[component];
 		out = controller->onGround();
 	}
 
-	void BulletPhysicsSystem::CharacterControllerWalk(Handle<CharacterControllerComponent> component, const Vec2& direction)
+	void BulletPhysicsSystem::character_controller_walk(Handle<CharacterControllerComponent> component, const Vec2& direction)
 	{
-		auto* controller = _characterControllerTable[component];
+		auto* controller = _character_controller_table[component];
 		controller->setWalkDirection(btVector3{ direction.X, 0, direction.Y });
 	}
 }

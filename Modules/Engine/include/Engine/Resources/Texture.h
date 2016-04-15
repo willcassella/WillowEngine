@@ -1,20 +1,18 @@
 // Texture.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <Resource/Asset.h>
 #include <Resource/Resources/Image.h>
 #include "../config.h"
 
-namespace Willow
+namespace willow
 {
-	class ENGINE_API Texture final : public Asset
+	struct ENGINE_API Texture final
 	{
 		///////////////////////
 		///   Information   ///
 	public:
 
-		REFLECTABLE_CLASS
-		EXTENDS(Asset)
+		REFLECTABLE_STRUCT
 
 		////////////////////////
 		///   Constructors   ///
@@ -26,25 +24,26 @@ namespace Willow
 		///   Methods   ///
 	public:
 
-		FORCEINLINE uint32 GetWidth() const
+		FORCEINLINE uint32 get_width() const
 		{
-			return _image.GetWidth();
+			return this->_image.get_width();
 		}
 
-		FORCEINLINE uint32 GetHeight() const
+		FORCEINLINE uint32 get_height() const
 		{
-			return _image.GetHeight();
+			return this->_image.get_height();
 		}
 
-		FORCEINLINE const byte* GetBitmap() const
+		FORCEINLINE const byte* get_bitmap() const
 		{
-			return _image.GetBitmap();
+			return this->_image.get_bitmap();
 		}
 
 		////////////////
 		///   Data   ///
 	private:
 
+		// TODO: Pull this out as a seperate ResourceHandle or something
 		Image _image;
 	};
 }

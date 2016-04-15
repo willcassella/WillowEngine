@@ -1,12 +1,11 @@
 // StaticMeshComponent.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <Resource/AssetPtr.h>
 #include "../../Component.h"
-#include "../../Assets/StaticMesh.h"
-#include "../../Assets/Material.h"
+#include "../../Resources/StaticMesh.h"
+#include "../../Resources/Material.h"
 
-namespace Willow
+namespace willow
 {
 	class ENGINE_API StaticMeshComponent final : public Component
 	{
@@ -14,23 +13,23 @@ namespace Willow
 		///   Information   ///
 	public:
 
-	REFLECTABLE_CLASS
-	EXTENDS(Component)
+		REFLECTABLE_CLASS
+		EXTENDS(Component)
 
 		//////////////////
 		///   Fields   ///
 	public:
 
 		/** Whether this mesh is visible. */
-		bool Visible = true;
+		bool visible = true;
 
 		/** The Static Mesh used. */
-		AssetPtr<StaticMesh> Mesh;
+		ResourceHandle<StaticMesh> mesh;
 
 		/** The material applied to the StaticMesh. */
-		AssetPtr<class Material> Material;
+		ResourceHandle<Material> material;
 
 		/** The material parameters specific to this instance. */
-		Material::ParamTable InstanceParams;
+		Material::ParamTable instance_params;
 	};
 }

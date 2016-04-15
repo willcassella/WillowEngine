@@ -6,4 +6,4 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Willow::RenderSystem);
+BUILD_REFLECTION(willow::RenderSystem);

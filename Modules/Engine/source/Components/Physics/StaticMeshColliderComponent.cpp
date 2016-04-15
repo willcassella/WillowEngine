@@ -7,10 +7,10 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Willow::StaticMeshColliderComponent)
-.Property("Mesh", &StaticMeshColliderComponent::GetMesh, &StaticMeshColliderComponent::SetMesh);
+BUILD_REFLECTION(willow::StaticMeshColliderComponent)
+.Property("mesh", &StaticMeshColliderComponent::get_mesh, &StaticMeshColliderComponent::set_mesh);
 
-namespace Willow
+namespace willow
 {
 	////////////////////////
 	///   Constructors   ///
@@ -31,38 +31,38 @@ namespace Willow
 	void StaticMeshColliderComponent::ToArchive(ArchiveWriter& writer) const
 	{
 		this->Base::ToArchive(writer);
-		writer.PushValue("Mesh", _shape.Mesh);
+		writer.PushValue("mesh", this->_shape.mesh);
 	}
 
 	void StaticMeshColliderComponent::FromArchive(const ArchiveReader& reader)
 	{
 		this->Base::FromArchive(reader);
-		reader.PullValue("Mesh", _shape.Mesh);
-		this->UpdateShape();
+		reader.PullValue("mesh", this->_shape.mesh);
+		this->update_shape();
 	}
 
-	void StaticMeshColliderComponent::SetMesh(AssetPtr<StaticMesh> mesh)
+	void StaticMeshColliderComponent::set_mesh(ResourceHandle<StaticMesh> mesh)
 	{
-		_shape.Mesh = mesh;
-		this->UpdateShape();
+		this->_shape.mesh = mesh;
+		this->update_shape();
 	}
 
-	void StaticMeshColliderComponent::SetShape(Shape shape)
+	void StaticMeshColliderComponent::set_shape(Shape shape)
 	{
-		_shape = shape;
-		this->UpdateShape();
+		this->_shape = shape;
+		this->update_shape();
 	}
 
-	void StaticMeshColliderComponent::OnUpdateColliderTransform()
+	void StaticMeshColliderComponent::on_update_collider_transform()
 	{
-		this->GetWorld().GetSystem<PhysicsSystem>()->SetColliderTransform(*this, this->GetColliderTransform());
+		this->get_world().get_system<PhysicsSystem>()->set_collider_transform(*this, this->get_collider_transform());
 	}
 
-	bool StaticMeshColliderComponent::OnActivate()
+	bool StaticMeshColliderComponent::on_activate()
 	{
-		if (_shape.Mesh)
+		if (this->_shape.mesh)
 		{
-			this->GetWorld().GetSystem<PhysicsSystem>()->CreateCollider(*this, this->GetEntity(), this->GetColliderTransform(), _shape);
+			this->get_world().get_system<PhysicsSystem>()->create_collider(*this, this->get_entity(), this->get_collider_transform(), this->_shape);
 			return true;
 		}
 		else
@@ -71,16 +71,16 @@ namespace Willow
 		}
 	}
 
-	void StaticMeshColliderComponent::OnDeactivate()
+	void StaticMeshColliderComponent::on_deactivate()
 	{
-		this->GetWorld().GetSystem<PhysicsSystem>()->DestroyCollider(*this);
+		this->get_world().get_system<PhysicsSystem>()->destroy_collider(*this);
 	}
 
-	void StaticMeshColliderComponent::UpdateShape()
+	void StaticMeshColliderComponent::update_shape()
 	{
-		if (this->IsInitialized())
+		if (this->is_initialized())
 		{
-			this->GetWorld().GetSystem<PhysicsSystem>()->SetColliderShape(*this, _shape);
+			this->get_world().get_system<PhysicsSystem>()->set_collider_shape(*this, this->_shape);
 		}
 	}
 }

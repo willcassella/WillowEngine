@@ -8,30 +8,30 @@
 
 namespace ExampleGame
 {
-	class EXAMPLEGAME_API FPSCharacter : public Willow::Entity
+	class EXAMPLEGAME_API FPSCharacter : public willow::Entity
 	{
 		///////////////////////
 		///   Information   ///
 	public:
 
 		REFLECTABLE_CLASS
-		EXTENDS(Willow::Entity)
+		EXTENDS(willow::Entity)
 
 		//////////////////////
 		///   Components   ///
 	public:
 
-		Willow::Handle<Willow::CameraComponent> View;
-		Willow::Handle<Willow::CapsuleColliderComponent> Capsule;
-		Willow::Handle<Willow::CharacterControllerComponent> CharacterMovement;
+		willow::Handle<willow::CameraComponent> View;
+		willow::Handle<willow::CapsuleColliderComponent> Capsule;
+		willow::Handle<willow::CharacterControllerComponent> CharacterMovement;
 
 		///////////////////
 		///   Methods   ///
 	protected:
 
-		void OnInitialize() override;
+		void on_initialize() override;
 
-		void OnSpawn() override;
+		void on_spawn() override;
 
 		///////////////////
 		///   Actions   ///

@@ -7,55 +7,55 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(Willow::CharacterControllerComponent)
-.Data("Collider", &CharacterControllerComponent::_collider);
+BUILD_REFLECTION(willow::CharacterControllerComponent)
+.Data("collider", &CharacterControllerComponent::_collider);
 
-namespace Willow
+namespace willow
 {
-	bool CharacterControllerComponent::OnGround() const
+	bool CharacterControllerComponent::on_ground() const
 	{
 		bool out = false;
-		this->GetWorld().GetSystem<PhysicsSystem>()->CharacterControllerOnGround(*this, out);
+		this->get_world().get_system<PhysicsSystem>()->character_controller_on_ground(*this, out);
 		return out;
 	}
 
-	void CharacterControllerComponent::Jump()
+	void CharacterControllerComponent::jump()
 	{
-		this->GetWorld().GetSystem<PhysicsSystem>()->CharacterControllerJump(*this);
+		this->get_world().get_system<PhysicsSystem>()->character_controller_jump(*this);
 	}
 
-	void CharacterControllerComponent::Walk(const Vec2& direction)
+	void CharacterControllerComponent::walk(const Vec2& direction)
 	{
-		this->GetWorld().GetSystem<PhysicsSystem>()->CharacterControllerWalk(*this, direction);
+		this->get_world().get_system<PhysicsSystem>()->character_controller_walk(*this, direction);
 	}
 
 	///////////////////
 	///   Methods   ///
 
-	void CharacterControllerComponent::SetCollider(PrimitiveColliderComponent* collider)
+	void CharacterControllerComponent::set_collider(PrimitiveColliderComponent* collider)
 	{
 		// If the collider exists and its not connected to the same Entity
-		if (collider && &collider->GetEntity() == &this->GetEntity())
+		if (collider && &collider->get_entity() == &this->get_entity())
 		{
 			// Invalid configuration
 			return;
 		}
 
-		_collider = collider;
+		this->_collider = collider;
 		// TODO: Notify physics system
 	}
 	
-	void CharacterControllerComponent::OnInitialize()
+	void CharacterControllerComponent::on_initialize()
 	{
-		this->Base::OnInitialize();
-		this->Create();
+		this->Base::on_initialize();
+		this->create();
 	}
 
-	void CharacterControllerComponent::Create()
+	void CharacterControllerComponent::create()
 	{
-		if (!_collider.IsNull())
+		if (!this->_collider.is_null())
 		{
-			this->GetWorld().GetSystem<PhysicsSystem>()->CreateCharacterController(*this, this->GetEntity(), _collider, _settings);
+			this->get_world().get_system<PhysicsSystem>()->create_character_controller(*this, this->get_entity(), this->_collider, this->_settings);
 		}
 	}
 }

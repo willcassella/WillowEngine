@@ -4,7 +4,7 @@
 /////////////////
 ///   Types   ///
 
-namespace Willow
+namespace willow
 {
 	/** Defined in 'Components/Physics/ColliderComponent.h' */
 	class ColliderComponent;

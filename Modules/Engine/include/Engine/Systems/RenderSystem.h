@@ -4,7 +4,7 @@
 #include <Core/Math/Vec3.h>
 #include "../System.h"
 
-namespace Willow
+namespace willow
 {
 	class ENGINE_API RenderSystem : public System
 	{
@@ -22,21 +22,21 @@ namespace Willow
 		struct DebugLine final
 		{
 			/** The world location this Line originates from. */
-			Vec3 Start;
+			Vec3 start;
 
 			/** The world location this Line ends at. */
-			Vec3 End;
+			Vec3 end;
 
 			/** The color of this Line. */
-			Vec3 Color;
+			Vec3 color;
 		};
 
 		///////////////////
 		///   Methods   ///
 	public:
 
-		virtual void RenderWorld(const World& world) = 0;
+		virtual void render_world(const World& world) = 0;
 
-		virtual void DrawDebugLine(const DebugLine& line) = 0;
+		virtual void draw_debug_line(const DebugLine& line) = 0;
 	};
 }

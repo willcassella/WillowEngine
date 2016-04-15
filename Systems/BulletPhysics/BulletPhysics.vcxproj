@@ -171,7 +171,8 @@
   <ItemGroup>
     <ClInclude Include="include\BulletPhysics\BulletPhysicsSystem.h" />
     <ClInclude Include="include\BulletPhysics\config.h" />
-    <ClInclude Include="private\BulletTriangleMesh.h" />
+    <ClInclude Include="include\BulletPhysics\Forwards.h" />
+    <ClInclude Include="private\TriangleMesh.h" />
     <ClInclude Include="private\CharacterController.h" />
     <ClInclude Include="private\Common.h" />
     <ClInclude Include="private\DebugDrawer.h" />
@@ -184,9 +185,12 @@
   <ItemGroup>
     <ClCompile Include="source\BulletPhysicsSystem.cpp" />
     <ClCompile Include="source\CharacterController.cpp" />
+    <ClCompile Include="source\DebugDrawer.cpp" />
+    <ClCompile Include="source\EntityCollider.cpp" />
     <ClCompile Include="source\EntityPhysicsData.cpp" />
     <ClCompile Include="source\GhostBody.cpp" />
     <ClCompile Include="source\RigidBody.cpp" />
+    <ClCompile Include="source\TriangleMesh.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

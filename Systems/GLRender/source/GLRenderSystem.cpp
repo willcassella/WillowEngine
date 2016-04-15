@@ -5,8 +5,12 @@
 #include <Engine/Components/Rendering/CameraComponent.h>
 #include "glew.h"
 #include "../include/GLRender/GLRenderSystem.h"
+#include "../include/GLRender/GLTexture.h"
+#include "../include/GLRender/GLShader.h"
+#include "../include/GLRender/GLMaterial.h"
+#include "../include/GLRender/GLStaticMesh.h"
 
-namespace Willow
+namespace willow
 {
 	static_assert(!std::is_same<Scalar, long double>::value, "The renderer does not yet support 'long double' as a Scalar type.");
 	static_assert(std::is_same<BufferID, GLuint>::value, "BufferID does not match GLuint.");
@@ -143,14 +147,14 @@ namespace Willow
 		// Create and upload a shader program for the screen quad
 		Shader vShader("Content/Shaders/viewport.vert");
 		Shader fShader("Content/Shaders/viewport.frag");
-		GLShader glVShader(*this, vShader);
-		GLShader glFShader(*this, fShader);
+		GLShader glVShader{ vShader };
+		GLShader glFShader{ fShader };
 		_screenQuadProgram = glCreateProgram();
-		glAttachShader(_screenQuadProgram, glVShader.GetID());
-		glAttachShader(_screenQuadProgram, glFShader.GetID());
+		glAttachShader(_screenQuadProgram, glVShader.get_id());
+		glAttachShader(_screenQuadProgram, glFShader.get_id());
 		glLinkProgram(_screenQuadProgram);
-		glDetachShader(_screenQuadProgram, glVShader.GetID());
-		glDetachShader(_screenQuadProgram, glFShader.GetID());
+		glDetachShader(_screenQuadProgram, glVShader.get_id());
+		glDetachShader(_screenQuadProgram, glFShader.get_id());
 
 		// Specify shader data
 		GLint positionAttrib = glGetAttribLocation(_screenQuadProgram, "vPosition");
@@ -180,14 +184,14 @@ namespace Willow
 		glGenBuffers(1, &lineBuffer);
 		Shader lineVShader{ "Content/Shaders/line.vert" };
 		Shader lineFShader{ "Content/Shaders/line.frag" };
-		GLShader glLineVShader{ *this, lineVShader };
-		GLShader glLineFShader{ *this, lineFShader };
+		GLShader glLineVShader{ lineVShader };
+		GLShader glLineFShader{ lineFShader };
 		lineProgram = glCreateProgram();
-		glAttachShader(lineProgram, glLineVShader.GetID());
-		glAttachShader(lineProgram, glLineFShader.GetID());
+		glAttachShader(lineProgram, glLineVShader.get_id());
+		glAttachShader(lineProgram, glLineFShader.get_id());
 		glLinkProgram(lineProgram);
-		glDetachShader(lineProgram, glLineVShader.GetID());
-		glDetachShader(lineProgram, glLineFShader.GetID());
+		glDetachShader(lineProgram, glLineVShader.get_id());
+		glDetachShader(lineProgram, glLineFShader.get_id());
 	}
 
 	GLRenderSystem::~GLRenderSystem()
@@ -198,11 +202,11 @@ namespace Willow
 	///////////////////
 	///   Methods   ///
 
-	void GLRenderSystem::RenderWorld(const World& world)
+	void GLRenderSystem::render_world(const willow::World& world)
 	{
 		// Bind the GBuffer and its sub-buffers for drawing
 		glBindFramebuffer(GL_FRAMEBUFFER, _gBuffer);
-		GLuint drawBuffers[] = { GL_COLOR_ATTACHMENT0 /*position*/, GL_COLOR_ATTACHMENT1 /*diffuse*/, GL_COLOR_ATTACHMENT2 /*normal*/, GL_COLOR_ATTACHMENT3 /*specular*/ };
+		const GLuint drawBuffers[] = { GL_COLOR_ATTACHMENT0 /*position*/, GL_COLOR_ATTACHMENT1 /*diffuse*/, GL_COLOR_ATTACHMENT2 /*normal*/, GL_COLOR_ATTACHMENT3 /*specular*/ };
 		glDrawBuffers(4, drawBuffers);
 
 		// Clear the GBuffer
@@ -211,7 +215,7 @@ namespace Willow
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Get first camera in the World
-		auto cameras = world.Enumerate<CameraComponent>();
+		auto cameras = world.enumerate<CameraComponent>();
 
 		// We can't render the World without a camera
 		if (cameras.IsEmpty())
@@ -219,28 +223,33 @@ namespace Willow
 			return;
 		}
 
-		const uint32 frameHeight = _height / cameras.Size();
+		const auto height = static_cast<GLsizei>(_height / cameras.Size());
 
 		// Render each camera
-		for (std::size_t i = 0; i < cameras.Size(); ++i)
+		for (uint32 i = 0; i < cameras.Size(); ++i)
 		{
-			glViewport(0, frameHeight * i, _width, frameHeight * i + frameHeight);
+			const GLint frameX = 0;
+			const GLint frameY = height * i;
+			const GLsizei frameWidth = this->_width;
+			const GLsizei frameHeight = height * i + height;
 
-			Mat4 view = cameras[i]->GetTransformationMatrix().Inverse();
-			Mat4 proj = cameras[i]->GetPerspective();
+			glViewport(frameX, frameY, frameWidth, frameHeight);
+
+			Mat4 view = cameras[i]->get_transformation_matrix().Inverse();
+			Mat4 proj = cameras[i]->get_perspective_matrix(static_cast<float>(this->_width) / height);
 
 			// Render each StaticMeshComponent in the World
-			for (auto staticMesh : world.Enumerate<StaticMeshComponent>())
+			for (auto staticMesh : world.enumerate<StaticMeshComponent>())
 			{
-				if (!staticMesh->Visible)
+				if (!staticMesh->visible)
 					continue;
 
-				Mat4 model = staticMesh->GetTransformationMatrix();
+				Mat4 model = staticMesh->get_transformation_matrix();
 
 				// Bind the mesh and material
-				auto& mesh = FindStaticMesh(*staticMesh->Mesh);
-				mesh.Bind();
-				FindMaterial(*staticMesh->Material).Bind(staticMesh->InstanceParams);
+				auto& mesh = find_static_mesh(staticMesh->mesh);
+				mesh.bind();
+				find_material(staticMesh->material).bind(*this, staticMesh->instance_params);
 
 				// Upload transformation matrices
 				glUniformMatrix4fv(0, 1, false, (const float*)&model);
@@ -250,7 +259,7 @@ namespace Willow
 				// Note: Because I kind of messed up my StaticMesh structure (ie, vertices are tied to specific UV coordinates)
 				// I'm gonna be using GLDrawArrays for now, instead of GLDrawElements.
 				// Luckily, I wasn't actually taking advantage of GLDrawElements before, so all the old mesh files still work
-				glDrawArrays(GL_TRIANGLES, 0, mesh.GetNumVertices());
+				glDrawArrays(GL_TRIANGLES, 0, mesh.get_num_vertices());
 			}
 
 			// Render debug lines
@@ -263,10 +272,10 @@ namespace Willow
 
 				for (const auto& line : _debugLines)
 				{
-					points.Add(line.Start);
-					points.Add(line.Color);
-					points.Add(line.End);
-					points.Add(line.Color);
+					points.Add(line.start);
+					points.Add(line.color);
+					points.Add(line.end);
+					points.Add(line.color);
 				}
 
 				_debugLines.Clear();
@@ -318,56 +327,56 @@ namespace Willow
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 	}
 
-	void GLRenderSystem::DrawDebugLine(const DebugLine& line)
+	void GLRenderSystem::draw_debug_line(const DebugLine& line)
 	{
 		_debugLines.Add(line);
 	}
 
-	GLShader& GLRenderSystem::FindShader(const Shader& asset)
+	GLShader& GLRenderSystem::find_shader(ResourceHandle<Shader> handle)
 	{
-		if (auto pShader = _shaders.Find(asset.GetID()))
+		if (auto pShader = _shaders.Find(handle.get_id()))
 		{
 			return *pShader;
 		}
 		else
 		{
-			return _shaders.Insert(asset.GetID(), GLShader(*this, asset));
+			return _shaders.Insert(handle.get_id(), GLShader(*ResourceManager::get_resource(handle)));
 		}
 	}
 
-	GLTexture& GLRenderSystem::FindTexture(const Texture& asset)
+	GLTexture& GLRenderSystem::find_texture(ResourceHandle<Texture> handle)
 	{
-		if (auto pTexture = _textures.Find(asset.GetID()))
+		if (auto pTexture = _textures.Find(handle.get_id()))
 		{
 			return *pTexture;
 		}
 		else
 		{
-			return _textures.Insert(asset.GetID(), GLTexture(*this, asset));
+			return _textures.Insert(handle.get_id(), GLTexture(*ResourceManager::get_resource(handle)));
 		}
 	}
 
-	GLMaterial& GLRenderSystem::FindMaterial(const Material& asset)
+	GLMaterial& GLRenderSystem::find_material(ResourceHandle<Material> handle)
 	{
-		if (auto pMaterial = _materials.Find(asset.GetID()))
+		if (auto pMaterial = _materials.Find(handle.get_id()))
 		{
 			return *pMaterial;
 		}
 		else
 		{
-			return _materials.Insert(asset.GetID(), GLMaterial(*this, asset));
+			return _materials.Insert(handle.get_id(), GLMaterial(*this, *ResourceManager::get_resource(handle)));
 		}
 	}
 
-	GLStaticMesh& GLRenderSystem::FindStaticMesh(const StaticMesh& asset)
+	GLStaticMesh& GLRenderSystem::find_static_mesh(ResourceHandle<StaticMesh> handle)
 	{
-		if (auto pMesh = _staticMeshes.Find(asset.GetID()))
+		if (auto pMesh = _staticMeshes.Find(handle.get_id()))
 		{
 			return *pMesh;
 		}
 		else
 		{
-			return _staticMeshes.Insert(asset.GetID(), GLStaticMesh(*this, asset));
+			return _staticMeshes.Insert(handle.get_id(), GLStaticMesh(*ResourceManager::get_resource(handle)));
 		}
 	}
 }

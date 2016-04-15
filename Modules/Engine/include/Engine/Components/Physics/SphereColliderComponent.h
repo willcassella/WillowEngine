@@ -3,7 +3,7 @@
 
 #include "PrimitiveColliderComponent.h"
 
-namespace Willow
+namespace willow
 {
 	class ENGINE_API SphereColliderComponent final : public PrimitiveColliderComponent
 	{
@@ -22,7 +22,7 @@ namespace Willow
 		struct Shape final
 		{
 			/** The radius of this Sphere. */
-			float Radius = 1.f;
+			float radius = 1.f;
 		};
 
 		////////////////////////
@@ -40,31 +40,31 @@ namespace Willow
 
 		void FromArchive(const ArchiveReader& reader) override;
 
-		FORCEINLINE float GetRadius() const
+		FORCEINLINE float get_radius() const
 		{
-			return _shape.Radius;
+			return this->_shape.radius;
 		}
 
-		void SetRadius(float radius);
+		void set_radius(float radius);
 
-		FORCEINLINE Shape GetShape() const
+		FORCEINLINE Shape get_shape() const
 		{
-			return _shape;
+			return this->_shape;
 		}
 
-		void SetShape(Shape shape);
+		void set_shape(Shape shape);
 
 	protected:
 
-		void OnUpdateColliderTransform() override;
+		void on_update_collider_transform() override;
 
-		bool OnActivate() override;
+		bool on_activate() override;
 
-		void OnDeactivate() override;
+		void on_deactivate() override;
 
 	private:
 
-		void UpdateShape();
+		void update_shape();
 
 		////////////////
 		///   Data   ///

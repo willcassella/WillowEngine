@@ -4,7 +4,7 @@
 /////////////////
 ///   Types   ///
 
-namespace Willow
+namespace willow
 {
 	/** Defined in "Transform.h" */
 	struct Transform;

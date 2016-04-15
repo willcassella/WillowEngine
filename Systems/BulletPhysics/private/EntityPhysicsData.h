@@ -1,12 +1,12 @@
 // EntityPhysicsData.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include <Engine/Handle.h>
 #include <Engine/Entity.h>
+#include "../include/BulletPhysics/Forwards.h"
 #include "EntityCollider.h"
 
-namespace Willow
+namespace willow
 {
 	class EntityPhysicsData final : public btMotionState
 	{
@@ -14,7 +14,7 @@ namespace Willow
 		///   Constructors   ///
 	public:
 
-		EntityPhysicsData(const Entity::PhysicsState& state, Entity::PhysicsMode mode, EntityHandle parent, Transform& transform);
+		EntityPhysicsData(const Entity::PhysicsState& state, Entity::PhysicsMode mode, Handle<Entity> parent, Transform& transform);
 		EntityPhysicsData(const EntityPhysicsData& copy) = delete;
 
 		//////////////////
@@ -22,30 +22,30 @@ namespace Willow
 	public:
 
 		/** The collider for this Entity. */
-		EntityCollider Collider;
+		EntityCollider collider;
 
 		/** GhostBody for this Entity.
 		* NOTE: This will exist if:
 		* - The Entity is in the 'Ghost', 'Kinematic', or 'Dynamic' modes. */
-		class GhostBody* GhostBody = nullptr;
+		GhostBody* ghost_body = nullptr;
 
 		/** RigidBody for this Entity.
 		* NOTE: This will exist if:
 		* - The Entity is in the 'Kinematic' or 'Dynamic' modes.
 		* - The Entity has any constraints attached to it. */
-		class RigidBody* RigidBody = nullptr;
+		RigidBody* rigid_body = nullptr;
 
 		/** The PhysicsState of this Entity. */
-		Entity::PhysicsState State;
+		Entity::PhysicsState state;
 
 		/** The mode this Entity is currently in. */
-		Entity::PhysicsMode Mode = Entity::PhysicsMode::Transient;
+		Entity::PhysicsMode mode = Entity::PhysicsMode::Transient;
 
 		/** The parent of this Entity. */
-		EntityHandle Parent;
+		Handle<Entity> parent;
 
 		/** The Transform for this Entity. */
-		Willow::Transform* Transform;
+		Transform* transform;
 
 		///////////////////
 		///   Methods   ///
@@ -54,5 +54,7 @@ namespace Willow
 		void getWorldTransform(btTransform& worldTrans) const override;
 
 		void setWorldTransform(const btTransform& worldTrans) override;
+
+		void update_inertia();
 	};
 }
