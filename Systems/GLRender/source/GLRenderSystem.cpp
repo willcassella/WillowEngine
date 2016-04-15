@@ -223,20 +223,21 @@ namespace willow
 			return;
 		}
 
-		const auto height = static_cast<GLsizei>(_height / cameras.Size());
-
 		// Render each camera
 		for (uint32 i = 0; i < cameras.Size(); ++i)
 		{
+			// Calculate frame proportions
 			const GLint frameX = 0;
-			const GLint frameY = height * i;
+			const GLint frameY = this->_height / static_cast<GLint>(cameras.Size()) * i;
 			const GLsizei frameWidth = this->_width;
-			const GLsizei frameHeight = height * i + height;
+			const GLsizei frameHeight = this->_height / static_cast<GLsizei>(cameras.Size());
 
+			// Create viewport
 			glViewport(frameX, frameY, frameWidth, frameHeight);
-
-			Mat4 view = cameras[i]->get_transformation_matrix().Inverse();
-			Mat4 proj = cameras[i]->get_perspective_matrix(static_cast<float>(this->_width) / height);
+			
+			// Create matrices
+			const Mat4 view = cameras[i]->get_transformation_matrix().Inverse();
+			const Mat4 proj = cameras[i]->get_perspective_matrix(static_cast<float>(frameWidth) / frameHeight);
 
 			// Render each StaticMeshComponent in the World
 			for (auto staticMesh : world.enumerate<StaticMeshComponent>())
