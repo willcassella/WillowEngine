@@ -6,24 +6,26 @@
 #include <Engine/Components/Gameplay/CharacterControllerComponent.h>
 #include "config.h"
 
-namespace ExampleGame
+namespace example_game
 {
-	class EXAMPLEGAME_API FPSCharacter : public willow::Entity
+	using namespace willow;
+
+	class EXAMPLEGAME_API FPSCharacter : public Entity
 	{
 		///////////////////////
 		///   Information   ///
 	public:
 
 		REFLECTABLE_CLASS
-		EXTENDS(willow::Entity)
+		EXTENDS(Entity)
 
 		//////////////////////
 		///   Components   ///
 	public:
 
-		willow::Handle<willow::CameraComponent> View;
-		willow::Handle<willow::CapsuleColliderComponent> Capsule;
-		willow::Handle<willow::CharacterControllerComponent> CharacterMovement;
+		Handle<CameraComponent> view;
+		Handle<CapsuleColliderComponent> capsule;
+		Handle<CharacterControllerComponent> character_movement;
 
 		///////////////////
 		///   Methods   ///
@@ -37,9 +39,9 @@ namespace ExampleGame
 		///   Actions   ///
 	public:
 
-		void Move(Vec2 direction);
-		void Look(Vec2 direction);
-		void Fire();
-		void Jump();
+		void on_move(Vec2 direction);
+		void on_look(Vec2 direction);
+		void on_fire();
+		void on_jump();
 	};
 }

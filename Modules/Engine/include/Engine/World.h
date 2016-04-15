@@ -201,15 +201,15 @@ namespace willow
 		/** Returns a pointer to the object referred to by the given handle. 
 		* NOTE: Returns 'null' if the object in question no longer exists. */
 		template <class T>
-		T* get(Handle<T> handle)
+		T* get_object(Handle<T> handle)
 		{
-			return const_cast<T*>(stde::as_const(*this).get(handle));
+			return const_cast<T*>(stde::as_const(*this).get_object(handle));
 		}
 
 		/** Returns a pointer to the object referred to by the given handle. 
 		* NOTE: Returns 'null' if the object in question no longer exists. */
 		template <class T>
-		const T* get(Handle<T> handle) const
+		const T* get_object(Handle<T> handle) const
 		{
 			const T* result = nullptr;
 			this->_objects.Find(handle.get_id(), [&result](const auto& object)

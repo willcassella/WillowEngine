@@ -8,12 +8,12 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(ExampleGame::FPSCharacter)
-.Field("View", &FPSCharacter::View)
-.Field("Capsule", &FPSCharacter::Capsule)
-.Field("CharacterMovement", &FPSCharacter::CharacterMovement);
+BUILD_REFLECTION(example_game::FPSCharacter)
+.Field("view", &FPSCharacter::view)
+.Field("capsule", &FPSCharacter::capsule)
+.Field("character_movement", &FPSCharacter::character_movement);
 
-namespace ExampleGame
+namespace example_game
 {
 	///////////////////
 	///   Methods   ///
@@ -22,10 +22,10 @@ namespace ExampleGame
 	{
 		this->Base::on_initialize();
 
-		this->get_world().events.Bind("move", *this, &FPSCharacter::Move);
-		this->get_world().events.Bind("look", *this, &FPSCharacter::Look);
-		this->get_world().events.Bind("fire", *this, &FPSCharacter::Fire);
-		this->get_world().events.Bind("jump", *this, &FPSCharacter::Jump);
+		this->get_world().events.Bind("move", *this, &FPSCharacter::on_move);
+		this->get_world().events.Bind("look", *this, &FPSCharacter::on_look);
+		this->get_world().events.Bind("fire", *this, &FPSCharacter::on_fire);
+		this->get_world().events.Bind("jump", *this, &FPSCharacter::on_jump);
 	}
 
 	void FPSCharacter::on_spawn()
@@ -36,38 +36,38 @@ namespace ExampleGame
 	///////////////////
 	///   Actions   ///
 
-	void FPSCharacter::Move(Vec2 direction)
+	void FPSCharacter::on_move(Vec2 direction)
 	{
-		Vec3 dir = Mat4::Rotate(get_world().get(View)->get_world_rotation()) * Vec3 { direction.X, 0, -direction.Y };
-		get_world().get(CharacterMovement)->walk(Vec2{ dir.X, dir.Z } / 5);
+		Vec3 dir = Mat4::Rotate(this->get_world().get_object(this->view)->get_world_rotation()) * Vec3 { direction.X, 0, -direction.Y };
+		this->get_world().get_object(this->character_movement)->walk(Vec2{ dir.X, dir.Z } / 5);
 	}
 
-	void FPSCharacter::Look(Vec2 direction)
+	void FPSCharacter::on_look(Vec2 direction)
 	{
-		auto view = get_world().get(View);
+		auto view = get_world().get_object(this->view);
 		view->rotate_global(Vec3::Up, direction.X);
 		view->rotate(Vec3::Right, direction.Y);
 	}
 
-	void FPSCharacter::Fire()
+	void FPSCharacter::on_fire()
 	{
-		auto& projectile = this->get_world().spawn<willow::StaticMeshComponent>("projectile");
+		auto& projectile = this->get_world().spawn<StaticMeshComponent>("projectile");
 		projectile.mesh = "Content/Models/monkey.wmesh"_p;
 		projectile.material = "Content/Materials/Sponza.mat";
-		projectile.instance_params["diffuse"] = willow::ResourceHandle<willow::Texture>("Content/Textures/monkey.png");
+		projectile.instance_params["diffuse"] = ResourceHandle<Texture>("Content/Textures/monkey.png");
 
-		auto view = get_world().get(View);
+		auto view = this->get_world().get_object(this->view);
 		projectile.set_world_location(view->get_world_location() + Vec3{ 3, 0, 0 });
 		projectile.set_world_rotation(view->get_world_rotation());
 		projectile.translate({ 0, 0, -1 });
 		
-		auto& sphere = projectile.get_entity().connect<willow::SphereColliderComponent>();
+		auto& sphere = projectile.get_entity().connect<SphereColliderComponent>();
 		projectile.get_entity().set_physics_mode(PhysicsMode::Dynamic);
 		sphere.set_radius(0.7f);
 	}
 
-	void FPSCharacter::Jump()
+	void FPSCharacter::on_jump()
 	{
-		this->get_world().get(CharacterMovement)->jump();
+		this->get_world().get_object(this->character_movement)->jump();
 	}
 }
