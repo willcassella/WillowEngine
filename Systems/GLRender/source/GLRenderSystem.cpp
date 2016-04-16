@@ -214,7 +214,7 @@ namespace willow
 		glDisable(GL_BLEND);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// Get first camera in the World
+		// Get all cameras in the world
 		auto cameras = world.enumerate<CameraComponent>();
 
 		// We can't render the World without a camera
