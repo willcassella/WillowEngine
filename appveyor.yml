@@ -7,8 +7,6 @@ configuration:
 platform: 
   - x64
   - Win32
-install:
-  cmd: C:\Python35-x64\python.exe packages.py
 build:
   project: WillowEngine.sln
   parallel: true
