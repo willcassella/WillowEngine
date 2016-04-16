@@ -126,6 +126,38 @@ public:
 		}
 	}
 
+	/** Enumerates over all the values in this Buffer. */
+	template <typename F>
+	void enumerate(F& func)
+	{
+		for (const auto node : _nodes)
+		{
+			for (std::size_t i = 0; i < NodeSize; ++i)
+			{
+				if (node.Mask.test(i))
+				{
+					func(node.Values[i]);
+				}
+			}
+		}
+	}
+
+	/** Enumerates over all the values in this Buffer. */
+	template <typename F>
+	void enumerate(F& func) const
+	{
+		for (const auto node : _nodes)
+		{
+			for (std::size_t i = 0; i < NodeSize; ++i)
+			{
+				if (node.Mask.test(i))
+				{
+					func(node.Values[i]);
+				}
+			}
+		}
+	}
+
 	/////////////////////
 	///   Operators   ///
 public:
