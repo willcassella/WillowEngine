@@ -96,12 +96,11 @@ Describing interfaces is detailed below.
 
 ### Enums
 
-Use the following macro in same header as the enum (or wherever I guess, it just has to be in the global namespace):
+Use the following macro in same header as the enum, at global scope:
 ```
-REFLECTABLE_ENUM(e)
+REFLECTABLE_ENUM(api, e)
 ```
-
-Then in the source file for the enum (or any source file in the same module), use the following macro:
+Where 'api' is the API macro for the module the enum is part of, and 'e' is the enum to be reflected. If the enum is part of a template (and therefore has no canonical 'module'), you may use the NO_API macro. In the source file for the enum (or any source file in the same module, or the header file in the case of template enums), use the following macro:
 ```
 BUILD_ENUM_REFLECTION(e)
 // Describe the enum here
@@ -119,6 +118,6 @@ Classes, Interfaces, and Structs are all considered "Compounds" (in the sense th
 
 In the case of structs you may also use `.IsStable()` to indicate that layout of this struct will never change. This is used to optimize some part of serialization, but should be used *very cautiously*, as changes to the layout will make this struct incompatible with old archives.
 
-The reflection system will pick up on the default constructor for a type - if one exists - and will use it for serialization. If your type is not default-constructible but you still wish for it to be serializable, you may implement a constructor that accepts a `DynamicInitializer` object.
+The reflection system will pick up on the default constructor for a type - if one exists - and allow for it to be invoked dynamically at runtime. If your type is not default-constructible but you still wish for it to be dynamically constructible, you may implement a constructor that accepts a `DynamicInitializer` object.
 
 That's pretty much it. There's a few more intricacies to how all this works, but for the most part you don't really need to deal with those, and you'd be better off looking at the source anyway.
