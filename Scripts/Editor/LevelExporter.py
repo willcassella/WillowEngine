@@ -101,7 +101,7 @@ for obj in bpy.data.objects:
     
     # Special case for Character physics objects: CharacterController
     elif obj.game.physics_type == 'CHARACTER':
-        XML.SubElement(entity, "physics_mode").set("value"), "Ghost")
+        XML.SubElement(entity, "physics_mode").set("value", "Ghost")
         
         # Create a node for the CharacterControllerComponent
         characterControllerID = nextID
@@ -110,13 +110,13 @@ for obj in bpy.data.objects:
         characterController.set("ref_id", str(characterControllerID))
         
         # Serialize its ID and entity reference
-        XML.SubElement(characterController, "id").set("value", str(characterControllerID)
+        XML.SubElement(characterController, "id").set("value", str(characterControllerID))
     
     # If the object is a mesh
     if obj.type == 'MESH':
         
         # Create a path for the mesh
-        meshPath = "Meshes/" + obj.data.name + ".wmesh"
+        meshPath = "ExportedContent/Meshes/" + obj.data.name + ".wmesh"
         
         # If we haven't exported its mesh yet
         if meshPath not in exportedMeshes:
@@ -147,7 +147,9 @@ for obj in bpy.data.objects:
         valueNode = XML.SubElement(itemNode, "value")
         
         if obj.active_material is not None and obj.active_material.active_texture is not None:
-            XML.SubElement(valueNode, "willow::ResourceHandle").set("value", obj.active_material.active_texture.image.filepath[2:])   
+            texPath = obj.active_material.active_texture.image.filepath
+            texPath = "Content\\Textures\\" + texPath.split("Textures\\")[1]
+            XML.SubElement(valueNode, "willow::ResourceHandle").set("value", texPath)   
         
     # If the object is a Camera
     if obj.type == 'CAMERA':
@@ -162,7 +164,7 @@ for obj in bpy.data.objects:
         XML.SubElement(camera, "id").set("value", str(cameraID))
         XML.SubElement(camera, "entity").set("ref", str(entityID))
         
-    if obj.        # Create a node for the StaticMeshColliderComponent
+        # Create a node for the StaticMeshColliderComponent
         staticMeshColliderID = nextID
         nextID += 1
         staticMeshCollider = XML.SubElement(gameObjects, "willow::StaticMeshColliderComponent")
@@ -180,4 +182,4 @@ XML.SubElement(root, "next_object_id").set("value", str(nextID))
 
 # Output result
 tree = XML.ElementTree(root)
-tree.write(bpy.context.scene.world.name + ".xml")
+tree.write("ExportedContent/" + bpy.context.scene.world.name + ".xml")
