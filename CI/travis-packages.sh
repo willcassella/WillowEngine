@@ -32,4 +32,4 @@ cd glfw-3.1.2 && cmake -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_B
 # Download and compile Bullet, since the version they have is outdated
 wget https://github.com/bulletphysics/bullet3/archive/2.83.7.tar.gz
 tar -xzvf 2.83.7.tar.gz
-cd bullet-2.83.7 && cmake ./ -DBUILD_BULLET3=OFF -DBUILD_BULLET2_DEMOS=OFF -DBUILD_CPU_DEMOS=OFF -DBUILD_UNIT_TESTS=OFF && make && sudo make install && cd ..
+cd bullet3-2.83.7 && cmake ./ -DBUILD_BULLET3=OFF -DBUILD_BULLET2_DEMOS=OFF -DBUILD_CPU_DEMOS=OFF -DBUILD_UNIT_TESTS=OFF && make && sudo make install && cd ..
