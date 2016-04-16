@@ -128,7 +128,7 @@ public:
 
 	/** Enumerates over all the values in this Buffer. */
 	template <typename F>
-	void enumerate(F& func)
+	void enumerate(F&& func)
 	{
 		for (const auto node : _nodes)
 		{
@@ -144,7 +144,7 @@ public:
 
 	/** Enumerates over all the values in this Buffer. */
 	template <typename F>
-	void enumerate(F& func) const
+	void enumerate(F&& func) const
 	{
 		for (const auto node : _nodes)
 		{
