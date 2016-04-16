@@ -1,6 +1,7 @@
 bin/
 build/
 packages/
+EngineContent/
 .idea/workspace.xml
 .idea/tasks.xml
 *.iml

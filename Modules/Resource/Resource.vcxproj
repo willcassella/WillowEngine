@@ -94,29 +94,29 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\Core\include;$(SolutionDir)packages\FreeImage\include;$(SolutionDir)packages\pugixml\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)packages\FreeImage\lib\$(Platform);$(SolutionDir)packages\pugixml\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>..\Core\include;packages\FreeImage\include;packages\pugixml\include;$(IncludePath)</IncludePath>
+    <LibraryPath>packages\FreeImage\lib\$(Platform);packages\pugixml\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\Core\include;$(SolutionDir)packages\FreeImage\include;$(SolutionDir)packages\pugixml\include;$(ProjectDir)thirdParty\FreeImage\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)packages\FreeImage\lib\$(Platform);$(SolutionDir)packages\pugixml\lib\$(Platform)\$(Configuration);$(ProjectDir)thirdParty\FreeImage\$(Platform);$(LibraryPath)</LibraryPath>
+    <IncludePath>..\Core\include;packages\FreeImage\include;packages\pugixml\include;$(ProjectDir)thirdParty\FreeImage\include;$(IncludePath)</IncludePath>
+    <LibraryPath>packages\FreeImage\lib\$(Platform);packages\pugixml\lib\$(Platform)\$(Configuration);$(ProjectDir)thirdParty\FreeImage\$(Platform);$(LibraryPath)</LibraryPath>
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\Core\include;$(SolutionDir)packages\FreeImage\include;$(SolutionDir)packages\pugixml\include;$(ProjectDir)thirdParty\FreeImage\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)packages\FreeImage\lib\$(Platform);$(SolutionDir)packages\pugixml\lib\$(Platform)\$(Configuration);$(ProjectDir)thirdParty\FreeImage\$(Platform);$(LibraryPath)</LibraryPath>
+    <IncludePath>..\Core\include;packages\FreeImage\include;packages\pugixml\include;$(ProjectDir)thirdParty\FreeImage\include;$(IncludePath)</IncludePath>
+    <LibraryPath>packages\FreeImage\lib\$(Platform);packages\pugixml\lib\$(Platform)\$(Configuration);$(ProjectDir)thirdParty\FreeImage\$(Platform);$(LibraryPath)</LibraryPath>
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\Core\include;$(SolutionDir)packages\FreeImage\include;$(SolutionDir)packages\pugixml\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)packages\FreeImage\lib\$(Platform);$(SolutionDir)packages\pugixml\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>..\Core\include;packages\FreeImage\include;packages\pugixml\include;$(IncludePath)</IncludePath>
+    <LibraryPath>packages\FreeImage\lib\$(Platform);packages\pugixml\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <TargetExt>.dll</TargetExt>
@@ -138,8 +138,11 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y
-xcopy "$(SolutionDir)packages\FreeImage\lib\$(Platform)\*.dll" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
+xcopy "packages\FreeImage\lib\$(Platform)\*.dll" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>python ../../Scripts/Packages.py http://www.willcassella.net/WillowEngine/packages/Resource.zip</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -158,8 +161,11 @@ xcopy "$(SolutionDir)packages\FreeImage\lib\$(Platform)\*.dll" "$(SolutionDir)bi
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y
-xcopy "$(SolutionDir)packages\FreeImage\lib\$(Platform)\*.dll" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
+xcopy "packages\FreeImage\lib\$(Platform)\*.dll" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>python ../../Scripts/Packages.py http://www.willcassella.net/WillowEngine/packages/Resource.zip</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -184,8 +190,11 @@ xcopy "$(SolutionDir)packages\FreeImage\lib\$(Platform)\*.dll" "$(SolutionDir)bi
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y
-xcopy "$(SolutionDir)packages\FreeImage\lib\$(Platform)\*.dll" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
+xcopy "packages\FreeImage\lib\$(Platform)\*.dll" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>python ../../Scripts/Packages.py http://www.willcassella.net/WillowEngine/packages/Resource.zip</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -210,8 +219,11 @@ xcopy "$(SolutionDir)packages\FreeImage\lib\$(Platform)\*.dll" "$(SolutionDir)bi
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y
-xcopy "$(SolutionDir)packages\FreeImage\lib\$(Platform)\*.dll" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
+xcopy "packages\FreeImage\lib\$(Platform)\*.dll" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>python ../../Scripts/Packages.py http://www.willcassella.net/WillowEngine/packages/Resource.zip</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

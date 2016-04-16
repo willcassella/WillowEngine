@@ -47,8 +47,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="content\shaders\default.frag" />
-    <None Include="content\shaders\default.vert" />
     <None Include="content\shaders\line.frag" />
     <None Include="content\shaders\line.vert" />
     <None Include="content\shaders\viewport.frag" />
@@ -107,29 +105,29 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <LibraryPath>$(SolutionDir)packages\glew-1.13.0\lib\$(Platform);C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;$(SolutionDir)packages\glew-1.13.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>packages\glew-1.13.0\lib\$(Platform);C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;packages\glew-1.13.0\include;$(IncludePath)</IncludePath>
     <Linkage-glew>static</Linkage-glew>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <LibraryPath>$(SolutionDir)packages\glew-1.13.0\lib\$(Platform);C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;$(SolutionDir)packages\glew-1.13.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>packages\glew-1.13.0\lib\$(Platform);C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;packages\glew-1.13.0\include;$(IncludePath)</IncludePath>
     <Linkage-glew>static</Linkage-glew>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <LibraryPath>$(SolutionDir)packages\glew-1.13.0\lib\$(Platform);$(LibraryPath)</LibraryPath>
-    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;$(SolutionDir)packages\glew-1.13.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>packages\glew-1.13.0\lib\$(Platform);$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;packages\glew-1.13.0\include;$(IncludePath)</IncludePath>
     <Linkage-glew>static</Linkage-glew>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <LibraryPath>$(SolutionDir)packages\glew-1.13.0\lib\$(Platform);$(LibraryPath)</LibraryPath>
-    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;$(SolutionDir)packages\glew-1.13.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>packages\glew-1.13.0\lib\$(Platform);$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;packages\glew-1.13.0\include;$(IncludePath)</IncludePath>
     <Linkage-glew>static</Linkage-glew>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -138,7 +136,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLRENDER_BUILD;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521;4522;4814</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4521;4522;4814;4099</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
@@ -152,8 +150,12 @@
       <AdditionalDependencies>glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y
+xcopy "$(ProjectDir)content" "$(SolutionDir)EngineContent"  /s /h /i /d /y</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>python ../../Scripts/Packages.py http://www.willcassella.net/WillowEngine/packages/GLRender.zip</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -161,7 +163,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLRENDER_BUILD;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521;4522;4814</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4521;4522;4814;4099</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
@@ -175,8 +177,12 @@
       <AdditionalDependencies>glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y
+xcopy "$(ProjectDir)content" "$(SolutionDir)EngineContent"  /s /h /i /d /y</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>python ../../Scripts/Packages.py http://www.willcassella.net/WillowEngine/packages/GLRender.zip</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -186,7 +192,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLRENDER_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521;4522;4814</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4521;4522;4814;4099</DisableSpecificWarnings>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
@@ -204,8 +210,12 @@
       <AdditionalDependencies>glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y
+xcopy "$(ProjectDir)content" "$(SolutionDir)EngineContent"  /s /h /i /d /y</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>python ../../Scripts/Packages.py http://www.willcassella.net/WillowEngine/packages/GLRender.zip</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -215,7 +225,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLRENDER_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521;4522;4814</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4521;4522;4814;4099</DisableSpecificWarnings>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
@@ -233,8 +243,12 @@
       <AdditionalDependencies>glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y
+xcopy "$(ProjectDir)content" "$(SolutionDir)EngineContent"  /s /h /i /d /y</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>python ../../Scripts/Packages.py http://www.willcassella.net/WillowEngine/packages/GLRender.zip</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

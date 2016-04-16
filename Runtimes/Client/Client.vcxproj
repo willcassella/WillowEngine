@@ -66,32 +66,32 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;..\..\Systems\GLRender\include;..\..\Systems\BulletPhysics\include;$(SolutionDir)packages\glfw-3.2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)packages\glfw-3.2\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;..\..\Systems\GLRender\include;..\..\Systems\BulletPhysics\include;packages\glfw-3.2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>packages\glfw-3.2\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <Linkage-glfw>
     </Linkage-glfw>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;..\..\Systems\GLRender\include;..\..\Systems\BulletPhysics\include;$(SolutionDir)packages\glfw-3.2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)packages\glfw-3.2\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;..\..\Systems\GLRender\include;..\..\Systems\BulletPhysics\include;packages\glfw-3.2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>packages\glfw-3.2\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <Linkage-glfw>
     </Linkage-glfw>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;..\..\Systems\GLRender\include;..\..\Systems\BulletPhysics\include;$(SolutionDir)packages\glfw-3.2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)packages\glfw-3.2\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;..\..\Systems\GLRender\include;..\..\Systems\BulletPhysics\include;packages\glfw-3.2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>packages\glfw-3.2\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <Linkage-glfw>
     </Linkage-glfw>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;..\..\Systems\GLRender\include;..\..\Systems\BulletPhysics\include;$(SolutionDir)packages\glfw-3.2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)packages\glfw-3.2\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;..\..\Systems\GLRender\include;..\..\Systems\BulletPhysics\include;packages\glfw-3.2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>packages\glfw-3.2\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <Linkage-glfw>
@@ -115,6 +115,9 @@
       <Message>
       </Message>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>python ../../Scripts/Packages.py http://www.willcassella.net/WillowEngine/packages/Client.zip</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -136,6 +139,9 @@
       <Message>
       </Message>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>python ../../Scripts/Packages.py http://www.willcassella.net/WillowEngine/packages/Client.zip</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -164,6 +170,9 @@
       <Message>
       </Message>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>python ../../Scripts/Packages.py http://www.willcassella.net/WillowEngine/packages/Client.zip</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -192,6 +201,9 @@
       <Message>
       </Message>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>python ../../Scripts/Packages.py http://www.willcassella.net/WillowEngine/packages/Client.zip</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source\main.cpp" />

@@ -145,8 +145,8 @@ namespace willow
 		glBufferData(GL_ARRAY_BUFFER, sizeof(screenQuadData), screenQuadData, GL_STATIC_DRAW);
 
 		// Create and upload a shader program for the screen quad
-		Shader vShader("content/shaders/viewport.vert");
-		Shader fShader("content/shaders/viewport.frag");
+		Shader vShader("EngineContent/shaders/viewport.vert");
+		Shader fShader("EngineContent/shaders/viewport.frag");
 		GLShader glVShader{ vShader };
 		GLShader glFShader{ fShader };
 		_screenQuadProgram = glCreateProgram();
@@ -182,8 +182,8 @@ namespace willow
 		glBindVertexArray(lineVAO);
 		
 		glGenBuffers(1, &lineBuffer);
-		Shader lineVShader{ "content/shaders/line.vert" };
-		Shader lineFShader{ "content/shaders/line.frag" };
+		Shader lineVShader{ "EngineContent/shaders/line.vert" };
+		Shader lineFShader{ "EngineContent/shaders/line.frag" };
 		GLShader glLineVShader{ lineVShader };
 		GLShader glLineFShader{ lineFShader };
 		lineProgram = glCreateProgram();

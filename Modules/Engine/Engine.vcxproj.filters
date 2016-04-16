@@ -56,6 +56,12 @@
     <Filter Include="source\Resources">
       <UniqueIdentifier>{8463d39f-09d5-4366-a577-8607d0e744e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="content">
+      <UniqueIdentifier>{339d2570-c5db-4d28-9370-cd14bc079168}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="content\shaders">
+      <UniqueIdentifier>{27d09737-908d-4b96-bdf2-e618f2f64ea6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Transform.cpp">
@@ -195,9 +201,6 @@
     <ClInclude Include="include\Engine\Handle.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Engine\Instance.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="include\Engine\Resources\Material.h">
       <Filter>include\Resources</Filter>
     </ClInclude>
@@ -213,5 +216,13 @@
     <ClInclude Include="include\Engine\Component.h">
       <Filter>include</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="content\shaders\default.frag">
+      <Filter>content\shaders</Filter>
+    </None>
+    <None Include="content\shaders\default.vert">
+      <Filter>content\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

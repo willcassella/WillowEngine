@@ -62,7 +62,6 @@
     <ClInclude Include="include\Engine\Forwards\Systems.h" />
     <ClInclude Include="include\Engine\GameObject.h" />
     <ClInclude Include="include\Engine\Handle.h" />
-    <ClInclude Include="include\Engine\Instance.h" />
     <ClInclude Include="include\Engine\Resources\Material.h" />
     <ClInclude Include="include\Engine\Resources\Shader.h" />
     <ClInclude Include="include\Engine\Resources\StaticMesh.h" />
@@ -80,6 +79,10 @@
     <ProjectReference Include="..\Resource\Resource.vcxproj">
       <Project>{bfd70eb7-b841-46d3-872f-e71bfba95a58}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="content\shaders\default.frag" />
+    <None Include="content\shaders\default.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C257E175-629A-42F3-A52A-CEC2D0DBBCF2}</ProjectGuid>
@@ -174,7 +177,8 @@
       <AdditionalDependencies>Render_d.lib</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y
+xcopy "$(ProjectDir)content" "$(SolutionDir)EngineContent" /s /h /i /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -197,7 +201,8 @@
       <AdditionalDependencies>Render64_d.lib</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y
+xcopy "$(ProjectDir)content" "$(SolutionDir)EngineContent" /s /h /i /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -226,7 +231,8 @@
       <AdditionalDependencies>Render.lib</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y
+xcopy "$(ProjectDir)content" "$(SolutionDir)EngineContent" /s /h /i /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -255,7 +261,8 @@
       <AdditionalDependencies>Render64.lib</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y
+xcopy "$(ProjectDir)content" "$(SolutionDir)EngineContent" /s /h /i /d /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -72,29 +72,29 @@
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <TargetExt>.dll</TargetExt>
-    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;$(SolutionDir)\packages\Bullet\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\packages\Bullet\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;packages\Bullet\include;$(IncludePath)</IncludePath>
+    <LibraryPath>packages\Bullet\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <TargetExt>.dll</TargetExt>
-    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;$(SolutionDir)\packages\Bullet\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\packages\Bullet\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;packages\Bullet\include;$(IncludePath)</IncludePath>
+    <LibraryPath>packages\Bullet\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <TargetExt>.dll</TargetExt>
-    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;$(SolutionDir)\packages\Bullet\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\packages\Bullet\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;packages\Bullet\include;$(IncludePath)</IncludePath>
+    <LibraryPath>packages\Bullet\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <TargetExt>.dll</TargetExt>
-    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;$(SolutionDir)\packages\Bullet\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\packages\Bullet\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;packages\Bullet\include;$(IncludePath)</IncludePath>
+    <LibraryPath>packages\Bullet\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -111,6 +111,9 @@
     <PostBuildEvent>
       <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>python ../../Scripts/Packages.py http://www.willcassella.net/WillowEngine/packages/BulletPhysics.zip</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -127,6 +130,9 @@
     <PostBuildEvent>
       <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>python ../../Scripts/Packages.py http://www.willcassella.net/WillowEngine/packages/BulletPhysics.zip</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -147,6 +153,9 @@
     <PostBuildEvent>
       <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>python ../../Scripts/Packages.py http://www.willcassella.net/WillowEngine/packages/BulletPhysics.zip</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -167,6 +176,9 @@
     <PostBuildEvent>
       <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>python ../../Scripts/Packages.py http://www.willcassella.net/WillowEngine/packages/BulletPhysics.zip</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\BulletPhysics\BulletPhysicsSystem.h" />
