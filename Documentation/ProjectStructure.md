@@ -1,10 +1,10 @@
 # Project Structure
 
-The engine is currently divided into several major bits: "Modules", "Services", "Runtimes", "Games", "Tools", and "Tests".
+The engine is currently divided into several major bits: "Modules", "Systems", "Runtimes", "Games", "Tools", and "Tests".
 
-## Modules and Services
+## Modules and Systems
 
-The distinction between Modules and Services is mostly semantic. Modules are key parts of the engine that other systems are highly dependant on, while Services are external ... services that provide features that are considered extraneous to the core behavior of the engine. Essentially, any discreet engine feature that isn't actually needed to successfully simulate the game world is broken off as a Service.
+The distinction between Modules and Systems is mostly semantic. Modules are key parts of the engine that it simply couldn't function without, while Systems are external services that provide features that are considered extraneous to the core behavior of the engine (a container of Enties and Components). While the engine may be severely gimped without some systems, it still can exist without them.
 
 ### Core module
 
@@ -18,9 +18,13 @@ This module defines the interface for loading and accessing generic resources an
 
 This module defines the classes and functions that make up the meat of the game engine itself. While this module acknowledges the existance of services such as rendering, it does not implement any actual rendering behavior or interact with the renderer directly.
 
-### GLRender service
+### GLRender system
 
-This service observes the current state of the game world and draws it to the screen, implemented in OpenGL. The engine has no knowledge of whether it is being rendered and does not interact with the renderer, other than supplying it all necessary rendering data.
+This system observes the current state of the game world and draws it to the screen, implemented in OpenGL. The engine for the most part does not interact with the renderer, other than supplying it all necessary rendering data.
+
+### BulletPhysics system
+
+This system is responsible for simulating physics in the game world via the Bullet 2 library. At the moment this system is less seperated from the engine then I would like, but deadlines are deadlines.
 
 ## Runtimes
 
