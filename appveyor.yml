@@ -7,6 +7,8 @@ configuration:
 platform: 
   - x64
   - Win32
+install:
+  cmd: setx PATH "C:\Python35-x64\;%PATH%"
 build:
   project: WillowEngine.sln
   parallel: true
