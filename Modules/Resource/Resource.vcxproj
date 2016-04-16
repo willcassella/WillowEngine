@@ -39,6 +39,11 @@
     <ClCompile Include="source\Resources\Image.cpp" />
     <ClCompile Include="source\Resources\TextData.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.vcxproj">
+      <Project>{b17b9116-afa2-4d56-b791-c95f2f75214b}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BFD70EB7-B841-46D3-872F-E71BFBA95A58}</ProjectGuid>
     <RootNamespace>Resource</RootNamespace>
@@ -89,29 +94,29 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)packages\FreeImage\include;$(SolutionDir)packages\pugixml\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)packages\FreeImage\lib\$(Platform);$(SolutionDir)packages\pugixml\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>..\Core\include;$(SolutionDir)packages\FreeImage\include;$(SolutionDir)packages\pugixml\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)packages\FreeImage\lib\$(Platform);$(SolutionDir)packages\pugixml\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)packages\FreeImage\include;$(SolutionDir)packages\pugixml\include;$(ProjectDir)thirdParty\FreeImage\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)packages\FreeImage\lib\$(Platform);$(SolutionDir)packages\pugixml\lib\$(Platform)\$(Configuration);$(ProjectDir)thirdParty\FreeImage\$(Platform);$(LibraryPath)</LibraryPath>
+    <IncludePath>..\Core\include;$(SolutionDir)packages\FreeImage\include;$(SolutionDir)packages\pugixml\include;$(ProjectDir)thirdParty\FreeImage\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)packages\FreeImage\lib\$(Platform);$(SolutionDir)packages\pugixml\lib\$(Platform)\$(Configuration);$(ProjectDir)thirdParty\FreeImage\$(Platform);$(LibraryPath)</LibraryPath>
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)packages\FreeImage\include;$(SolutionDir)packages\pugixml\include;$(ProjectDir)thirdParty\FreeImage\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)packages\FreeImage\lib\$(Platform);$(SolutionDir)packages\pugixml\lib\$(Platform)\$(Configuration);$(ProjectDir)thirdParty\FreeImage\$(Platform);$(LibraryPath)</LibraryPath>
+    <IncludePath>..\Core\include;$(SolutionDir)packages\FreeImage\include;$(SolutionDir)packages\pugixml\include;$(ProjectDir)thirdParty\FreeImage\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)packages\FreeImage\lib\$(Platform);$(SolutionDir)packages\pugixml\lib\$(Platform)\$(Configuration);$(ProjectDir)thirdParty\FreeImage\$(Platform);$(LibraryPath)</LibraryPath>
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)packages\FreeImage\include;$(SolutionDir)packages\pugixml\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)packages\FreeImage\lib\$(Platform);$(SolutionDir)packages\pugixml\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>..\Core\include;$(SolutionDir)packages\FreeImage\include;$(SolutionDir)packages\pugixml\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)packages\FreeImage\lib\$(Platform);$(SolutionDir)packages\pugixml\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <TargetExt>.dll</TargetExt>
@@ -129,7 +134,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Core.lib;FreeImage.lib;pugixml.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>FreeImage.lib;pugixml.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y
@@ -149,7 +154,7 @@ xcopy "$(SolutionDir)packages\FreeImage\lib\$(Platform)\*.dll" "$(SolutionDir)bi
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Core.lib;FreeImage.lib;pugixml.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>FreeImage.lib;pugixml.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y
@@ -175,7 +180,7 @@ xcopy "$(SolutionDir)packages\FreeImage\lib\$(Platform)\*.dll" "$(SolutionDir)bi
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Core.lib;FreeImage.lib;pugixml.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>FreeImage.lib;pugixml.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y
@@ -201,7 +206,7 @@ xcopy "$(SolutionDir)packages\FreeImage\lib\$(Platform)\*.dll" "$(SolutionDir)bi
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Core.lib;FreeImage.lib;pugixml.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>FreeImage.lib;pugixml.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(TargetPath)" "$(SolutionDir)bin\$(Platform)\$(Configuration)\" /d /y

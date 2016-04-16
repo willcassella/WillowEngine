@@ -8,6 +8,12 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="content">
+      <UniqueIdentifier>{9e5ff519-e525-4daa-a3d6-197766920289}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="content\shaders">
+      <UniqueIdentifier>{abfd5df7-e763-493d-9d82-1155171db441}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\GLRender\config.h">
@@ -51,5 +57,25 @@
     <ClCompile Include="source\GLRenderSystem.cpp">
       <Filter>source</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="content\shaders\default.frag">
+      <Filter>content\shaders</Filter>
+    </None>
+    <None Include="content\shaders\default.vert">
+      <Filter>content\shaders</Filter>
+    </None>
+    <None Include="content\shaders\viewport.frag">
+      <Filter>content\shaders</Filter>
+    </None>
+    <None Include="content\shaders\viewport.vert">
+      <Filter>content\shaders</Filter>
+    </None>
+    <None Include="content\shaders\line.frag">
+      <Filter>content\shaders</Filter>
+    </None>
+    <None Include="content\shaders\line.vert">
+      <Filter>content\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

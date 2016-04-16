@@ -99,6 +99,19 @@ for obj in bpy.data.objects:
     elif obj.game.physics_type == 'RIGID_BODY':
         XML.SubElement(entity, "physics_mode").set("value", "Dynamic")
     
+    # Special case for Character physics objects: CharacterController
+    elif obj.game.physics_type == 'CHARACTER':
+        XML.SubElement(entity, "physics_mode").set("value"), "Ghost")
+        
+        # Create a node for the CharacterControllerComponent
+        characterControllerID = nextID
+        nextID += 1
+        characterController = XML.SubElement(gameObjects, "willow::CharacterControllerComponent")
+        characterController.set("ref_id", str(characterControllerID))
+        
+        # Serialize its ID and entity reference
+        XML.SubElement(characterController, "id").set("value", str(characterControllerID)
+    
     # If the object is a mesh
     if obj.type == 'MESH':
         
@@ -136,19 +149,6 @@ for obj in bpy.data.objects:
         if obj.active_material is not None and obj.active_material.active_texture is not None:
             XML.SubElement(valueNode, "willow::ResourceHandle").set("value", obj.active_material.active_texture.image.filepath[2:])   
         
-        # Create a node for the StaticMeshColliderComponent
-        staticMeshColliderID = nextID
-        nextID += 1
-        staticMeshCollider = XML.SubElement(gameObjects, "willow::StaticMeshColliderComponent")
-        staticMeshCollider.set("ref_id", str(staticMeshColliderID))
-        
-        # Serialize its ID, and entity reference
-        XML.SubElement(staticMeshCollider, "id").set("value", str(staticMeshColliderID))
-        XML.SubElement(staticMeshCollider, "entity").set("ref", str(entityID))
-        
-        # Serialize its mesh
-        XML.SubElement(staticMeshCollider, "mesh").set("value", meshPath)
-        
     # If the object is a Camera
     if obj.type == 'CAMERA':
         
@@ -161,6 +161,19 @@ for obj in bpy.data.objects:
         # Serialize ID and entity reference
         XML.SubElement(camera, "id").set("value", str(cameraID))
         XML.SubElement(camera, "entity").set("ref", str(entityID))
+        
+    if obj.        # Create a node for the StaticMeshColliderComponent
+        staticMeshColliderID = nextID
+        nextID += 1
+        staticMeshCollider = XML.SubElement(gameObjects, "willow::StaticMeshColliderComponent")
+        staticMeshCollider.set("ref_id", str(staticMeshColliderID))
+        
+        # Serialize its ID, and entity reference
+        XML.SubElement(staticMeshCollider, "id").set("value", str(staticMeshColliderID))
+        XML.SubElement(staticMeshCollider, "entity").set("ref", str(entityID))
+        
+        # Serialize its mesh
+        XML.SubElement(staticMeshCollider, "mesh").set("value", meshPath)
 
 # Write next world id
 XML.SubElement(root, "next_object_id").set("value", str(nextID))

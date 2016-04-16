@@ -35,6 +35,25 @@
     <ClCompile Include="source\GLStaticMesh.cpp" />
     <ClCompile Include="source\GLTexture.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Modules\Core\Core.vcxproj">
+      <Project>{b17b9116-afa2-4d56-b791-c95f2f75214b}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\Engine\Engine.vcxproj">
+      <Project>{c257e175-629a-42f3-a52a-cec2d0dbbcf2}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\Resource\Resource.vcxproj">
+      <Project>{bfd70eb7-b841-46d3-872f-e71bfba95a58}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="content\shaders\default.frag" />
+    <None Include="content\shaders\default.vert" />
+    <None Include="content\shaders\line.frag" />
+    <None Include="content\shaders\line.vert" />
+    <None Include="content\shaders\viewport.frag" />
+    <None Include="content\shaders\viewport.vert" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D3DE9FCC-C429-4E36-A88E-DAC1004F1944}</ProjectGuid>
     <RootNamespace>RenderModule</RootNamespace>
@@ -88,29 +107,29 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Engine\bin\$(Platform)\$(Configuration);$(SolutionDir)packages\glew-1.13.0\lib\$(Platform);C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)packages\glew-1.13.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)packages\glew-1.13.0\lib\$(Platform);C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;$(SolutionDir)packages\glew-1.13.0\include;$(IncludePath)</IncludePath>
     <Linkage-glew>static</Linkage-glew>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Engine\bin\$(Platform)\$(Configuration);$(SolutionDir)packages\glew-1.13.0\lib\$(Platform);C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)packages\glew-1.13.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)packages\glew-1.13.0\lib\$(Platform);C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;$(SolutionDir)packages\glew-1.13.0\include;$(IncludePath)</IncludePath>
     <Linkage-glew>static</Linkage-glew>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Engine\bin\$(Platform)\$(Configuration);$(SolutionDir)packages\glew-1.13.0\lib\$(Platform);$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)packages\glew-1.13.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)packages\glew-1.13.0\lib\$(Platform);$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;$(SolutionDir)packages\glew-1.13.0\include;$(IncludePath)</IncludePath>
     <Linkage-glew>static</Linkage-glew>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Engine\bin\$(Platform)\$(Configuration);$(SolutionDir)packages\glew-1.13.0\lib\$(Platform);$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)packages\glew-1.13.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)packages\glew-1.13.0\lib\$(Platform);$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;$(SolutionDir)packages\glew-1.13.0\include;$(IncludePath)</IncludePath>
     <Linkage-glew>static</Linkage-glew>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -125,7 +144,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Core.lib;Resource.lib;Engine.lib;glew32s.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32s.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
     </Link>
     <Lib />
@@ -148,7 +167,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Core.lib;Resource.lib;Engine.lib;glew32s.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>glew32s.lib;opengl32.lib</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
     </Link>
     <Lib />
@@ -177,7 +196,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Core.lib;Resource.lib;Engine.lib;glew32s.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32s.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
     </Link>
     <Lib />
@@ -206,7 +225,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Core.lib;Resource.lib;Engine.lib;glew32s.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>glew32s.lib;opengl32.lib</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
     </Link>
     <Lib />

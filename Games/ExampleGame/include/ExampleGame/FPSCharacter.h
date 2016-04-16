@@ -24,7 +24,6 @@ namespace example_game
 	public:
 
 		Handle<CameraComponent> view;
-		Handle<CapsuleColliderComponent> capsule;
 		Handle<CharacterControllerComponent> character_movement;
 
 		///////////////////

@@ -32,7 +32,7 @@ namespace willow
 		// Initialize GLEW
 		glewExperimental = GL_TRUE;
 		glewInit();
-		glGetError(); // Sometimes GLEW initialization generates an error, get rid of it.
+		glGetError(); // Sometimes GLEW initialization generates an error, pop it off the stack.
 
 		// Initialize OpenGL
 		glClearColor(0, 0, 0, 1);
@@ -145,8 +145,8 @@ namespace willow
 		glBufferData(GL_ARRAY_BUFFER, sizeof(screenQuadData), screenQuadData, GL_STATIC_DRAW);
 
 		// Create and upload a shader program for the screen quad
-		Shader vShader("Content/Shaders/viewport.vert");
-		Shader fShader("Content/Shaders/viewport.frag");
+		Shader vShader("content/shaders/viewport.vert");
+		Shader fShader("content/shaders/viewport.frag");
 		GLShader glVShader{ vShader };
 		GLShader glFShader{ fShader };
 		_screenQuadProgram = glCreateProgram();
@@ -182,8 +182,8 @@ namespace willow
 		glBindVertexArray(lineVAO);
 		
 		glGenBuffers(1, &lineBuffer);
-		Shader lineVShader{ "Content/Shaders/line.vert" };
-		Shader lineFShader{ "Content/Shaders/line.frag" };
+		Shader lineVShader{ "content/shaders/line.vert" };
+		Shader lineFShader{ "content/shaders/line.frag" };
 		GLShader glLineVShader{ lineVShader };
 		GLShader glLineFShader{ lineFShader };
 		lineProgram = glCreateProgram();

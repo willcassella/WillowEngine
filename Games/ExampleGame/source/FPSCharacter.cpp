@@ -10,7 +10,6 @@
 
 BUILD_REFLECTION(example_game::FPSCharacter)
 .Field("view", &FPSCharacter::view)
-.Field("capsule", &FPSCharacter::capsule)
 .Field("character_movement", &FPSCharacter::character_movement);
 
 namespace example_game

@@ -66,32 +66,32 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)Systems\GLRender\include;$(SolutionDir)Systems\BulletPhysics\include;$(SolutionDir)packages\glfw-3.2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Engine\bin\$(Platform)\$(Configuration);$(SolutionDir)Systems\GLRender\bin\$(Platform)\$(Configuration);$(SolutionDir)Systems\BulletPhysics\bin\$(Platform)\$(Configuration);$(SolutionDir)packages\glfw-3.2\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;..\..\Systems\GLRender\include;..\..\Systems\BulletPhysics\include;$(SolutionDir)packages\glfw-3.2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)packages\glfw-3.2\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <Linkage-glfw>
     </Linkage-glfw>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)Systems\GLRender\include;$(SolutionDir)Systems\BulletPhysics\include;$(SolutionDir)packages\glfw-3.2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Engine\bin\$(Platform)\$(Configuration);$(SolutionDir)Systems\GLRender\bin\$(Platform)\$(Configuration);$(SolutionDir)Systems\BulletPhysics\bin\$(Platform)\$(Configuration);$(SolutionDir)packages\glfw-3.2\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;..\..\Systems\GLRender\include;..\..\Systems\BulletPhysics\include;$(SolutionDir)packages\glfw-3.2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)packages\glfw-3.2\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <Linkage-glfw>
     </Linkage-glfw>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)Systems\GLRender\include;$(SolutionDir)Systems\BulletPhysics\include;$(SolutionDir)packages\glfw-3.2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Engine\bin\$(Platform)\$(Configuration);$(SolutionDir)Systems\GLRender\bin\$(Platform)\$(Configuration);$(SolutionDir)Systems\BulletPhysics\bin\$(Platform)\$(Configuration);$(SolutionDir)packages\glfw-3.2\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;..\..\Systems\GLRender\include;..\..\Systems\BulletPhysics\include;$(SolutionDir)packages\glfw-3.2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)packages\glfw-3.2\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <Linkage-glfw>
     </Linkage-glfw>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)Modules\Core\include;$(SolutionDir)Modules\Resource\include;$(SolutionDir)Modules\Engine\include;$(SolutionDir)Systems\GLRender\include;$(SolutionDir)Systems\BulletPhysics\include;$(SolutionDir)packages\glfw-3.2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Modules\Core\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Resource\bin\$(Platform)\$(Configuration);$(SolutionDir)Modules\Engine\bin\$(Platform)\$(Configuration);$(SolutionDir)Systems\GLRender\bin\$(Platform)\$(Configuration);$(SolutionDir)Systems\BulletPhysics\bin\$(Platform)\$(Configuration);$(SolutionDir)packages\glfw-3.2\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\Modules\Core\include;..\..\Modules\Resource\include;..\..\Modules\Engine\include;..\..\Systems\GLRender\include;..\..\Systems\BulletPhysics\include;$(SolutionDir)packages\glfw-3.2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)packages\glfw-3.2\lib\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
     <Linkage-glfw>
@@ -106,7 +106,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Core.lib;Resource.lib;Engine.lib;GLRender.lib;BulletPhysics.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
@@ -125,7 +125,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Core.lib;Resource.lib;Engine.lib;GLRender.lib;BulletPhysics.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
@@ -152,7 +152,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Core.lib;Resource.lib;Engine.lib;GLRender.lib;BulletPhysics.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <EntryPointSymbol>
       </EntryPointSymbol>
@@ -180,7 +180,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Core.lib;Resource.lib;Engine.lib;GLRender.lib;BulletPhysics.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
@@ -207,6 +207,23 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\Client.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Modules\Core\Core.vcxproj">
+      <Project>{b17b9116-afa2-4d56-b791-c95f2f75214b}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\Engine\Engine.vcxproj">
+      <Project>{c257e175-629a-42f3-a52a-cec2d0dbbcf2}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\Resource\Resource.vcxproj">
+      <Project>{bfd70eb7-b841-46d3-872f-e71bfba95a58}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Systems\BulletPhysics\BulletPhysics.vcxproj">
+      <Project>{9df93f16-3856-42f0-bf63-cb9162e1f467}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Systems\GLRender\GLRender.vcxproj">
+      <Project>{d3de9fcc-c429-4e36-a88e-dac1004f1944}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>
