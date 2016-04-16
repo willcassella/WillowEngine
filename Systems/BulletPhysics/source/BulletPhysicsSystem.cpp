@@ -27,6 +27,12 @@ namespace willow
 
 	BulletPhysicsSystem::~BulletPhysicsSystem()
 	{
+		// Take all ghost objects out of world (keeps Bullet happy)
+		_ghost_bodies.enumerate([this](GhostBody& body)
+		{
+			this->_physics_world->GetDynamicsWorld().removeCollisionObject(&body);
+		});
+
 		// _physics_world must be destroyed first
 		_physics_world.release();
 	}
