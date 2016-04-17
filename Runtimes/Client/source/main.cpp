@@ -98,7 +98,7 @@ void event_loop(Window& window, willow::World& world, willow::RenderSystem& rend
 			physics.debug_draw(renderer);
 		}
 
-		renderer.render_world(world);
+		renderer.render_world(world, 1);
 		window.swap_buffers();
 	}
 }

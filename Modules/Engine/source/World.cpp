@@ -137,7 +137,7 @@ namespace willow
 
 	void World::update()
 	{
-		this->events.DispatchEvent("update", this->time_dilation);
+		this->events.DispatchEvent("update", this->time_step * this->time_dilation);
 		this->events.Flush();
 
 		// Remove stale objects
@@ -159,6 +159,37 @@ namespace willow
 			// TODO: Make this asynchronous
 			system->post_update(*this);
 		}
+	}
+
+	Entity& World::spawn(SubClassOf<Entity> type)
+	{
+		assert(!type.is_null());
+
+		// Instantiate the object
+		auto owner = StaticPointerCast<Entity>(DynamicNew(*type.get_class()));
+		auto& entity = *owner;
+
+		// Spawn it
+		this->intialize_object(std::move(owner), this->_next_object_id++);
+		this->spawn_object(entity);
+
+		return entity;
+	}
+
+	Entity& World::spawn(SubClassOf<Entity> type, String name)
+	{
+		assert(!type.is_null());
+
+		// Instantiate the object
+		auto owner = StaticPointerCast<Entity>(DynamicNew(*type.get_class()));
+		auto& entity = *owner;
+		
+		// Spawn it
+		entity._name = std::move(name);
+		this->intialize_object(std::move(owner), this->_next_object_id++);
+		this->spawn_object(entity);
+
+		return entity;
 	}
 
 	void World::destroy_object(GameObject& object)

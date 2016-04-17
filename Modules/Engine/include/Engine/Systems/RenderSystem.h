@@ -35,7 +35,7 @@ namespace willow
 		///   Methods   ///
 	public:
 
-		virtual void render_world(const World& world) = 0;
+		virtual void render_world(const World& world, uint32 views) = 0;
 
 		virtual void draw_debug_line(const DebugLine& line) = 0;
 	};

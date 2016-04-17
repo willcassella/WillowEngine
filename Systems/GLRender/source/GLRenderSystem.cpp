@@ -17,10 +17,6 @@ namespace willow
 	static_assert(std::is_same<GLValue, GLuint>::value, "GLValue does not match GLuint.");
 	static_assert(std::is_same<GLInteger, GLint>::value, "GLInteger does not match GLint.");
 
-	BufferID lineBuffer;
-	BufferID lineVAO;
-	BufferID lineProgram;
-
 	////////////////////////
 	///   Constructors   ///
 
@@ -178,20 +174,20 @@ namespace willow
 		}
 
 		/// DEBUG DRAW CODE
-		glGenVertexArrays(1, &lineVAO);
-		glBindVertexArray(lineVAO);
+		glGenVertexArrays(1, &_lineVAO);
+		glBindVertexArray(_lineVAO);
 		
-		glGenBuffers(1, &lineBuffer);
+		glGenBuffers(1, &_lineBuffer);
 		Shader lineVShader{ "EngineContent/shaders/line.vert" };
 		Shader lineFShader{ "EngineContent/shaders/line.frag" };
 		GLShader glLineVShader{ lineVShader };
 		GLShader glLineFShader{ lineFShader };
-		lineProgram = glCreateProgram();
-		glAttachShader(lineProgram, glLineVShader.get_id());
-		glAttachShader(lineProgram, glLineFShader.get_id());
-		glLinkProgram(lineProgram);
-		glDetachShader(lineProgram, glLineVShader.get_id());
-		glDetachShader(lineProgram, glLineFShader.get_id());
+		_lineProgram = glCreateProgram();
+		glAttachShader(_lineProgram, glLineVShader.get_id());
+		glAttachShader(_lineProgram, glLineFShader.get_id());
+		glLinkProgram(_lineProgram);
+		glDetachShader(_lineProgram, glLineVShader.get_id());
+		glDetachShader(_lineProgram, glLineFShader.get_id());
 	}
 
 	GLRenderSystem::~GLRenderSystem()
@@ -202,7 +198,7 @@ namespace willow
 	///////////////////
 	///   Methods   ///
 
-	void GLRenderSystem::render_world(const willow::World& world)
+	void GLRenderSystem::render_world(const willow::World& world, uint32 views)
 	{
 		// Bind the GBuffer and its sub-buffers for drawing
 		glBindFramebuffer(GL_FRAMEBUFFER, _gBuffer);
@@ -224,13 +220,13 @@ namespace willow
 		}
 
 		// Render each camera
-		for (uint32 i = 0; i < cameras.Size(); ++i)
+		for (uint32 i = 0; i < cameras.Size() && i < views; ++i)
 		{
 			// Calculate frame proportions
 			const GLint frameX = 0;
-			const GLint frameY = this->_height / static_cast<GLint>(cameras.Size()) * i;
+			const GLint frameY = this->_height / views * i;
 			const GLsizei frameWidth = this->_width;
-			const GLsizei frameHeight = this->_height / static_cast<GLsizei>(cameras.Size());
+			const GLsizei frameHeight = this->_height / views;
 
 			// Create viewport
 			glViewport(frameX, frameY, frameWidth, frameHeight);
@@ -264,9 +260,9 @@ namespace willow
 			}
 
 			// Render debug lines
-			glBindVertexArray(lineVAO);
-			glUseProgram(lineProgram);
-			glBindBuffer(GL_ARRAY_BUFFER, lineBuffer);
+			glBindVertexArray(_lineVAO);
+			glUseProgram(_lineProgram);
+			glBindBuffer(GL_ARRAY_BUFFER, _lineBuffer);
 
 			{
 				Array<Vec3> points(_debugLines.Size() * 2);
@@ -283,11 +279,11 @@ namespace willow
 
 				if (!points.IsEmpty())
 				{
-					auto linePos = glGetAttribLocation(lineProgram, "vPosition");
+					auto linePos = glGetAttribLocation(_lineProgram, "vPosition");
 					glEnableVertexAttribArray(linePos);
 					glVertexAttribPointer(linePos, 3, GL_FLOAT, GL_FALSE, sizeof(Vec3) * 2, nullptr);
 
-					auto lineColor = glGetAttribLocation(lineProgram, "vColor");
+					auto lineColor = glGetAttribLocation(_lineProgram, "vColor");
 					glEnableVertexAttribArray(lineColor);
 					glVertexAttribPointer(lineColor, 3, GL_FLOAT, GL_FALSE, sizeof(Vec3) * 2, (void*)sizeof(Vec3));
 

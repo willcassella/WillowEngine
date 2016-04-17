@@ -27,7 +27,7 @@ namespace willow
 		///   Methods   ///
 	public:
 
-		void render_world(const World& world) override;
+		void render_world(const World& world, uint32 views) override;
 
 		void draw_debug_line(const DebugLine& line) override;
 
@@ -73,6 +73,11 @@ namespace willow
 		BufferID _screenQuadVAO;
 		BufferID _screenQuadVBO;
 		BufferID _screenQuadProgram;
+
+		// Line buffers
+		BufferID _lineBuffer;
+		BufferID _lineVAO;
+		BufferID _lineProgram;
 
 		// Debug draw
 		Array<DebugLine> _debugLines;
