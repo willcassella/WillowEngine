@@ -38,12 +38,6 @@ public:
 	/** Performs shutdown procedure for the Application. This should be the last function called in 'main'. */
 	static void Terminate(int code = EXIT_SUCCESS);
 
-	/** Returns the default memory manager for this Application. */
-	FORCEINLINE static MemoryManager& GetMemoryManager()
-	{
-		return Instance()._memoryManager;
-	}
-
 	/** Returns a collection of all currently loaded types. */
 	FORCEINLINE static const Array<const TypeInfo*>& GetAllTypes()
 	{
@@ -70,7 +64,6 @@ private:
 	///   Data   ///
 private:
 
-	MemoryManager _memoryManager;
 	Array<const TypeInfo*> _types;
 	Array<const TypeInfo*> _uninitializedTypes;
 };

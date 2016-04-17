@@ -4,9 +4,6 @@
 /////////////////
 ///   Types   ///
 
-/** Defined in 'Memory/MemoryManager.h' */
-struct MemoryManager;
-
 /** Defined in 'Memory/ReferenceCounter.h' */
 struct ReferenceCounter;
 
