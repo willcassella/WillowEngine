@@ -324,6 +324,9 @@
     <ClInclude Include="include\Core\Misc\ArithmeticAlias.h">
       <Filter>include\Misc</Filter>
     </ClInclude>
+    <ClInclude Include="include\Core\Reflection\SubClassOf.h">
+      <Filter>include\Reflection</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Object.cpp">
