@@ -50,6 +50,14 @@ namespace willow
 		/** Updates the state of this World by one time step. */
 		void update();
 
+		/** Spawns a new instance of the given type. 
+		* WARNING: 'type' must not be null. */
+		Entity& spawn(SubClassOf<Entity> type);
+
+		/** Spawns a new instance of the given type, with the given name.
+		* WARNING: 'type' must not be null. */
+		Entity& spawn(SubClassOf<Entity> type, String name);
+
 		/** Spawns a new instance of the given type into the World. */
 		template <class T>
 		auto spawn() -> std::enable_if_t<std::is_base_of<Entity, T>::value, T&>
@@ -254,7 +262,15 @@ namespace willow
 	///   Methods   ///
 
 	template <class T>
-	T& Entity::attach()
+	auto Entity::attach() -> std::enable_if_t<std::is_base_of<Component, T>::value, T&>
+	{
+		auto& object = this->get_world().spawn<T>();
+		object.get_entity().set_parent(this, SP_Move_To_Origin);
+		return object;
+	}
+
+	template <class T>
+	auto Entity::attach() -> std::enable_if_t<std::is_base_of<Entity, T>::value, T&>
 	{
 		auto& object = this->get_world().spawn<T>();
 		object.set_parent(this, SP_Move_To_Origin);
@@ -262,7 +278,15 @@ namespace willow
 	}
 
 	template <class T>
-	T& Entity::attach(String name)
+	auto Entity::attach(String name) -> std::enable_if_t<std::is_base_of<Component, T>::value, T&>
+	{
+		auto& object = this->get_world().spawn<T>(std::move(name));
+		object.get_entity().set_parent(this, SP_Move_To_Origin);
+		return object;
+	}
+
+	template <class T>
+	auto Entity::attach(String name) -> std::enable_if_t<std::is_base_of<Entity, T>::value, T&>
 	{
 		auto& object = this->get_world().spawn<T>(std::move(name));
 		object.set_parent(this, SP_Move_To_Origin);

@@ -168,13 +168,24 @@ namespace willow
 		/** Parents a new instance of the given type to this Entity.
 		* Returns a reference to the new object. */
 		template <class T>
-		T& attach();
+		auto attach() -> std::enable_if_t<std::is_base_of<Component, T>::value, T&>;
+
+		/** Parents a new instance of the given type to this Entity.
+		* Returns a reference to the new object. */
+		template <class T>
+		auto attach() -> std::enable_if_t<std::is_base_of<Entity, T>::value, T&>;
 
 		/** Parents a new instance of the given type to this Entity.
 		* Returns a reference to the new object.
 		* Sets the name of the spawned Entity to the given name. */
 		template <class T>
-		T& attach(String name);
+		auto attach(String name) -> std::enable_if_t<std::is_base_of<Component, T>::value, T&>;
+		
+		/** Parents a new instance of the given type to this Entity.
+		* Returns a reference to the new object.
+		* Sets the name of the spawned Entity to the given name. */
+		template <class T>
+		auto attach(String name) -> std::enable_if_t<std::is_base_of<Entity, T>::value, T&>;
 
 		/** Enumerates all components of the given type connected to this Entity. */
 		template <class T = Component>
