@@ -432,9 +432,36 @@ namespace willow
 		// TODO
 	}
 
-	void BulletPhysicsSystem::set_collider_shape(Handle<CapsuleColliderComponent> /*component*/, CapsuleColliderComponent::Shape /*shape*/)
+	void BulletPhysicsSystem::set_collider_shape(Handle<CapsuleColliderComponent> component, CapsuleColliderComponent::Shape shape)
 	{
-		// TODO
+		// Get the collider
+		auto* collider = _capsule_collider_table[component];
+		auto localScaling = collider->getLocalScaling();
+
+		// Get the entity
+		auto* entityData = static_cast<EntityPhysicsData*>(collider->getUserPointer());
+
+		// Destroy the old collider
+		collider->~btCapsuleShape();
+
+		// Rebuild it
+		switch (shape.axis)
+		{
+		case ColliderComponent::ShapeAxis::X:
+			new (collider) btCapsuleShapeX{ shape.radius, shape.height };
+			break;
+		case ColliderComponent::ShapeAxis::Y:
+			new (collider) btCapsuleShape{ shape.radius, shape.height };
+			break;
+		case ColliderComponent::ShapeAxis::Z:
+			new (collider) btCapsuleShapeZ{ shape.radius, shape.height };
+			break;
+		}
+		collider->setLocalScaling(localScaling);
+		collider->setUserPointer(entityData);
+
+		// Update entity
+		entityData->update_inertia();
 	}
 
 	void BulletPhysicsSystem::set_collider_shape(Handle<StaticMeshColliderComponent> /*component*/, StaticMeshColliderComponent::Shape /*shape*/)
@@ -461,6 +488,15 @@ namespace willow
 
 		// Add it to the world
 		_physics_world->GetDynamicsWorld().addAction(controller);
+	}
+
+	void BulletPhysicsSystem::set_character_controller_collider(Handle<CharacterControllerComponent> component, Handle<PrimitiveColliderComponent> collider)
+	{
+		auto* controller = _character_controller_table[component];
+		btConvexShape* bCollider = nullptr;
+		_capsule_collider_table.Find(collider.cast_to<CapsuleColliderComponent>(), bCollider);
+		_sphere_collider_table.Find(collider.cast_to<SphereColliderComponent>(), bCollider);
+		controller->set_collider(*bCollider);
 	}
 
 	void BulletPhysicsSystem::character_controller_jump(Handle<CharacterControllerComponent> component)

@@ -35,14 +35,22 @@ namespace willow
 	void CharacterControllerComponent::set_collider(PrimitiveColliderComponent* collider)
 	{
 		// If the collider exists and its not connected to the same Entity
-		if (collider && &collider->get_entity() == &this->get_entity())
+		if (collider && &collider->get_entity() != &this->get_entity())
 		{
 			// Invalid configuration
 			return;
 		}
 
 		this->_collider = collider;
-		// TODO: Notify physics system
+
+		if (this->_is_active)
+		{
+			this->get_world().get_system<PhysicsSystem>()->set_character_controller_collider(*this, this->_collider);
+		}
+		else
+		{
+			this->create();
+		}
 	}
 	
 	void CharacterControllerComponent::on_initialize()
@@ -56,6 +64,7 @@ namespace willow
 		if (!this->_collider.is_null())
 		{
 			this->get_world().get_system<PhysicsSystem>()->create_character_controller(*this, this->get_entity(), this->_collider, this->_settings);
+			this->_is_active = true;
 		}
 	}
 }

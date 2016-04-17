@@ -34,4 +34,10 @@ namespace willow
 	{
 		return true;
 	}
+
+	void CharacterController::set_collider(btConvexShape& collider)
+	{
+		this->m_convexShape = &collider;
+		// TODO: Is there more I need to do here?
+	}
 }

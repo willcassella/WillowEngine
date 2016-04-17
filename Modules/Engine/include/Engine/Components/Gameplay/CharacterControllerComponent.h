@@ -65,5 +65,6 @@ namespace willow
 
 		Handle<PrimitiveColliderComponent> _collider;
 		Settings _settings;
+		bool _is_active = false;
 	};
 }

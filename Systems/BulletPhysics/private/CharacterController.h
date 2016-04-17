@@ -25,6 +25,8 @@ namespace willow
 		/** Reimplementation of 'canJump', allows for double-jumping (engine API only exposes 'on_ground()'). */
 		bool canJump() const override;
 
+		void set_collider(btConvexShape& collider);
+
 		////////////////
 		///   Data   ///
 	private:
