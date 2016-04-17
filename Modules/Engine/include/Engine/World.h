@@ -3,6 +3,7 @@
 
 #include <Core/Containers/Queue.h>
 #include <Core/Event/EventManager.h>
+#include <Core/Reflection/SubClassOf.h>
 #include "Component.h"
 #include "System.h"
 #include "Handle.h"
