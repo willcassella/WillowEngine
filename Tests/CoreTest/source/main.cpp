@@ -10,8 +10,8 @@
 
 void FormatTest(WTest::Context& context)
 {
-	String test = Format("TestPtr<@>{ <@, @, @> }", TypeOf<Vec3>().GetName(), 1.f, 2.5f, 3.5f);
-	String fTest = fFormat("TestPtr<@>{ <@, @, @> }", TypeOf<Vec3>().GetName(), 1.f, 2.5f, 3.5f);
+	String test = Format("TestPtr<@>{ <@, @, @> }", TypeOf<Vec3>().get_name(), 1.f, 2.5f, 3.5f);
+	String fTest = fFormat("TestPtr<@>{ <@, @, @> }", TypeOf<Vec3>().get_name(), 1.f, 2.5f, 3.5f);
 
 	context.AssertEquals(test, fTest);
 }
