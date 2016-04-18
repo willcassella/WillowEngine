@@ -37,7 +37,7 @@ public:
 	{
 		if (this->_class)
 		{
-			writer.SetValue(_class->GetName());
+			writer.SetValue(_class->get_name());
 		}
 		else
 		{

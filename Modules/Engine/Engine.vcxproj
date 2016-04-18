@@ -45,6 +45,7 @@
   <ItemGroup>
     <ClInclude Include="include\Engine\Component.h" />
     <ClInclude Include="include\Engine\Components\Gameplay\CharacterControllerComponent.h" />
+    <ClInclude Include="include\Engine\Components\Gameplay\InputComponent.h" />
     <ClInclude Include="include\Engine\Components\Physics\CapsuleColliderComponent.h" />
     <ClInclude Include="include\Engine\Components\Physics\ColliderComponent.h" />
     <ClInclude Include="include\Engine\Components\Physics\PrimitiveColliderComponent.h" />
@@ -56,6 +57,7 @@
     <ClInclude Include="include\Engine\config.h" />
     <ClInclude Include="include\Engine\Containers\GTable.h" />
     <ClInclude Include="include\Engine\Entities\DebugCamera.h" />
+    <ClInclude Include="include\Engine\Entities\Player.h" />
     <ClInclude Include="include\Engine\Entity.h" />
     <ClInclude Include="include\Engine\Forwards\Components.h" />
     <ClInclude Include="include\Engine\Forwards\Engine.h" />

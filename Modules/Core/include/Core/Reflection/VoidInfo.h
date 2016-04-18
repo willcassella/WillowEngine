@@ -28,10 +28,10 @@ public:
 public:
 
 	// TODO: Documentation
-	bool IsCastableTo(const TypeInfo& type) const override;
+	bool is_castable_to(const TypeInfo& type) const override;
 
 	// TODO: Documentation
-	bool IsStable() const override;
+	bool is_stable() const override;
 };
 
 // TODO: Documentation

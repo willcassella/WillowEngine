@@ -12,10 +12,10 @@ struct TAngle final
 public:
 
 	/** Multiplication factor for converting degrees to radians. */
-	static constexpr T DegreesToRadians = T{ 0.0174533f };
+	static constexpr T Degrees_To_Radians = T{ 0.0174533f };
 
 	/** Multiplication factor for converting radians to degrees. */
-	static constexpr T RadiansToDegrees = T{ 57.2958f };
+	static constexpr T Radians_To_Degrees = T{ 57.2958f };
 
 	////////////////////////
 	///   Constructors   ///
@@ -37,27 +37,27 @@ public:
 public:
 
 	/** Returns the current value in radians. */
-	constexpr T GetRadians() const
+	constexpr T get_radians() const
 	{
-		return _radians;
+		return this->_radians;
 	}
 
 	/** Sets the current value in radians. */
-	constexpr void SetRadians(T value)
+	constexpr void set_radians(T value)
 	{
-		_radians = value;
+		this->_radians = value;
 	}
 
 	/** Returns the current value in degrees. */
-	constexpr T GetDegrees() const
+	constexpr T get_degrees() const
 	{
-		return _radians * RadiansToDegrees;
+		return this->_radians * Radians_To_Degrees;
 	}
 
 	/** Sets the current value in degrees. */
-	constexpr void SetDegrees(T value)
+	constexpr void set_degrees(T value)
 	{
-		_radians = value * DegreesToRadians;
+		this->_radians = value * Degrees_To_Radians;
 	}
 
 	/////////////////////
@@ -67,7 +67,7 @@ public:
 	/** Converts this object to the underlying type. */
 	constexpr operator T() const
 	{
-		return _radians;
+		return this->_radians;
 	}
 
 	/** Coversion operator for casting between precisions. */
@@ -92,16 +92,16 @@ using Angle = TAngle<Scalar>;
 
 /** Constructs an angle in radians. */
 template <typename T>
-constexpr TAngle<T> Radians(T value)
+constexpr TAngle<T> radians(T value)
 {
 	return{ value };
 }
 
 /** Constructs an angle in degrees. */
 template <typename T>
-constexpr TAngle<T> Degrees(T value)
+constexpr TAngle<T> degrees(T value)
 {
-	return{ value * TAngle<T>::DegreesToRadians };
+	return{ value * TAngle<T>::Degrees_To_Radians };
 }
 
 //////////////////////

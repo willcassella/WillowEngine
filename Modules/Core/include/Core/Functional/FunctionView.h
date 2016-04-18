@@ -2,11 +2,10 @@
 #pragma once
 
 #include <utility>
-#include "../Utility/View.h"
 
 /** Allows lambdas to be passed down the stack without using templates or dynamic allocation. */
 template <typename R, typename ... Args>
-struct FunctionView final : View
+struct FunctionView final
 {
 	////////////////////////
 	///   Constructors   ///
@@ -24,12 +23,12 @@ public:
 	}
 
 	FunctionView(FunctionView& copy)
-		: View(copy), _func(copy._func), _invoker(copy._invoker)
+		: _func(copy._func), _invoker(copy._invoker)
 	{
 		// All done TODO: Default this once MSVC doesn't suck
 	}
 	FunctionView(const FunctionView& copy)
-		: View(copy), _func(copy._func), _invoker(copy._invoker)
+		: _func(copy._func), _invoker(copy._invoker)
 	{
 		// All done TODO: Default this once MSVC doesn't suck
 	}

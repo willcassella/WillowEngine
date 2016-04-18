@@ -19,25 +19,26 @@ VoidInfo::VoidInfo(const TypeInfoBuilder<void, VoidInfo>& builder)
 
 TypeInfoBuilder<void, TypeInfo>::TypeInfoBuilder()
 {
-	_data.rawName = "void";
+	_data.type_info = &typeid(void);
+	_data.raw_name = "void";
 
 	_data.size = 0;
 	_data.alignment = 0;
-	_data.isCompound = false;
-	_data.isAbstract = false;
-	_data.isPolymorphic = false;
-	_data.isTrivial = false;
+	_data.is_compound = false;
+	_data.is_abstract = false;
+	_data.is_polymorphic = false;
+	_data.is_trivial = false;
 }
 
 ///////////////////
 ///   Methods   ///
 
-bool VoidInfo::IsCastableTo(const TypeInfo& type) const
+bool VoidInfo::is_castable_to(const TypeInfo& type) const
 {
 	return type == *this;
 }
 
-bool VoidInfo::IsStable() const
+bool VoidInfo::is_stable() const
 {
 	return true;
 }

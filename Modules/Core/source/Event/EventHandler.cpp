@@ -17,7 +17,7 @@ BUILD_REFLECTION(EventHandler)
 
 void EventHandler::TryHandle(const Event& event) const
 {
-	if (event.GetArgType().IsCastableTo(_argType))
+	if (event.GetArgType().is_castable_to(_argType))
 	{
 		_handler(event);
 	}

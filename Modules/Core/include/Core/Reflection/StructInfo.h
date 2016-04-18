@@ -43,10 +43,10 @@ public:
 public:
 
 	/** Returns whether this type is castable (via 'reinterpret_cast') to the given type */
-	bool IsCastableTo(const TypeInfo& type) const override;
+	bool is_castable_to(const TypeInfo& type) const override;
 
 	/** Returns whether this struct is stable (its memory layout is unlikely to ever change). */
-	bool IsStable() const final override;
+	bool is_stable() const final override;
 
 	////////////////
 	///   Data   ///

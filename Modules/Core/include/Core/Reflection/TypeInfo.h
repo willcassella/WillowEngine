@@ -1,6 +1,7 @@
 // TypeInfo.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
+#include <typeinfo>
 #include "../Object.h"
 #include "../Containers/String.h"
 #include "../Operations/FailableOperation.h"
@@ -78,7 +79,7 @@ public:
 	TypeInfo(const TypeInfoBuilder<T, TypeInfo>& builder)
 		: Base(NoReferenceCount), _data(std::move(builder._data))
 	{
-		this->RegisterWithApplication();
+		this->register_with_application();
 	}
 
 	/** Stupid move-constructor that will never get called. See notes in source. */
@@ -94,221 +95,221 @@ public:
 	/** Returns this TypeInfo object as a String */
 	FORCEINLINE String ToString() const final override
 	{
-		return GetName();
+		return get_name();
 	}
 
 	/** Gets the name for this type. */
-	FORCEINLINE const String& GetName() const
+	FORCEINLINE const String& get_name() const
 	{
-		if (_name.IsEmpty())
+		if (this->_name.IsEmpty())
 		{
-			_name = this->GenerateName();
+			this->_name = this->generate_name();
 		}
 
-		return _name;
+		return this->_name;
 	}
 
 	/** Returns the size of this type. */
-	FORCEINLINE std::size_t GetSize() const
+	FORCEINLINE std::size_t get_size() const
 	{
-		return _data.size;
+		return this->_data.size;
 	}
 
 	/** Returns the alignment of this type. */
-	FORCEINLINE std::size_t GetAlignment() const
+	FORCEINLINE std::size_t get_alignment() const
 	{
-		return _data.alignment;
+		return this->_data.alignment;
 	}
 
 	/** Returns whether this type is a compound type.
 	* i.e - It is composed of smaller types (like a class, struct, or interface). */
-	FORCEINLINE bool IsCompound() const
+	FORCEINLINE bool is_compound() const
 	{
-		return _data.isCompound;
+		return this->_data.is_compound;
 	}
 
 	/** Returns whether this type is abstract
 	* i.e - It has at least one pure virtual function */
-	FORCEINLINE bool IsAbstract() const
+	FORCEINLINE bool is_abstract() const
 	{
-		return _data.isAbstract;
+		return this->_data.is_abstract;
 	}
 
 	/** Returns whether this type is polymorphic
 	* i.e - It has at least one virtual function */
-	FORCEINLINE bool IsPolymorphic() const
+	FORCEINLINE bool is_polymorphic() const
 	{
-		return _data.isPolymorphic;
+		return this->_data.is_polymorphic;
 	}
 
 	/** Returns whether this type is trivial (it can be safely memcopy'd). */
-	FORCEINLINE bool IsTrivial() const
+	FORCEINLINE bool is_trivial() const
 	{
-		return _data.isTrivial;
+		return this->_data.is_trivial;
 	}
 
 	/** Returns whether this type is default-constructible */
-	FORCEINLINE bool IsDefaultConstructible() const
+	FORCEINLINE bool is_default_constructible() const
 	{
-		return this->GetDefaultConstructor() != nullptr;
+		return this->get_default_constructor() != nullptr;
 	}
 
 	/** Returns whether this type has a dynamic constructor. */
-	FORCEINLINE bool HasDynamicConstructor() const
+	FORCEINLINE bool is_dynamically_constructible() const
 	{
-		return this->GetDynamicConstructor() != nullptr;
+		return this->get_dynamic_constructor() != nullptr;
 	}
 
 	/** Returns whether this type is copy-constructible. */
-	FORCEINLINE bool IsCopyConstructible() const
+	FORCEINLINE bool is_copy_constructible() const
 	{
-		return this->GetCopyConstructor() != nullptr;
+		return this->get_copy_constructor() != nullptr;
 	}
 
 	/** Returns whether this type is move-constructible. */
-	FORCEINLINE bool IsMoveConstructible() const
+	FORCEINLINE bool is_move_constructible() const
 	{
-		return this->GetMoveConstructor() != nullptr;
+		return this->get_move_constructor() != nullptr;
 	}
 
 	/** Returns whether this type is destructible. */
-	FORCEINLINE bool IsDestructible() const
+	FORCEINLINE bool is_destructible() const
 	{
-		return this->GetDestructor() != nullptr;
+		return this->get_destructor() != nullptr;
 	}
 
 	/** Returns whether this type is copy-assignable. */
-	FORCEINLINE bool IsCopyAssignable() const
+	FORCEINLINE bool is_copy_assignable() const
 	{
-		return this->GetCopyAssignmentOperator() != nullptr;
+		return this->get_copy_assignment_operator() != nullptr;
 	}
 
 	/** Returns whether this type is move-assignable. */
-	FORCEINLINE bool IsMoveAssignable() const
+	FORCEINLINE bool is_move_assignable() const
 	{
-		return this->GetMoveAssignmentOperator() != nullptr;
+		return this->get_move_assignment_operator() != nullptr;
 	}
 
 	/** Returns whether this type supports the 'ToString' operation. */
-	FORCEINLINE bool HasToStringImplementation() const
+	FORCEINLINE bool implements_to_string() const
 	{
-		return this->GetToStringImplementation() != nullptr;
+		return this->get_to_string_implementation() != nullptr;
 	}
 
 	/** Returns whether this type supports the 'FromString' operation. */
-	FORCEINLINE bool HasFromStringImplementation() const
+	FORCEINLINE bool implements_from_string() const
 	{
-		return this->GetFromStringImplementation() != nullptr;
+		return this->get_from_string_implementation() != nullptr;
 	}
 
 	/** Returns whether this type supports the 'ToArchive' operation. */
-	FORCEINLINE bool HasToArchiveImplementation() const
+	FORCEINLINE bool implements_to_archive() const
 	{
-		return this->GetToArchiveImplementation() != nullptr;
+		return this->get_to_archive_implementation() != nullptr;
 	}
 
 	/** Returns whether this type supports the 'FromArchive' operation. */
-	FORCEINLINE bool HasFromArchiveImplementation() const
+	FORCEINLINE bool implements_from_archive() const
 	{
-		return this->GetFromArchiveImplementation() != nullptr;
+		return this->get_from_archive_implementation() != nullptr;
 	}
 
 	/** Returns the constructor for this type.
 	* NOTE: Returns 'null' if this type is not constructible. */
-	FORCEINLINE Constructor GetDefaultConstructor() const
+	FORCEINLINE Constructor get_default_constructor() const
 	{
-		return _data.defaultConstructor;
+		return this->_data.default_constructor;
 	}
 
 	/** Returns the dynamic constructor for this type.
 	* The dynamic constructor is similar to the default constructor, except it is explicitly intended for serialization.
 	* If the type does not have a dynamic constructor, just use the default-constructor. If this type does not have either, then it is not serializable.
 	* NOTE: Returns 'null' if this type does not have a dynamic constructor. */
-	FORCEINLINE Constructor GetDynamicConstructor() const
+	FORCEINLINE Constructor get_dynamic_constructor() const
 	{
-		return _data.dynamicConstructor;
+		return this->_data.dynamic_constructor;
 	}
 
 	/** Returns the copy-constructor for this type. 
 	* NOTE: Returns 'null' if this type is not copy-constructible. */
-	FORCEINLINE CopyConstructor GetCopyConstructor() const
+	FORCEINLINE CopyConstructor get_copy_constructor() const
 	{
-		return _data.copyConstructor;
+		return this->_data.copy_constructor;
 	}
 
 	/** Returns the move-constructor for this type.
 	* NOTE: Returns 'null' if this type is not move-constructible. */
-	FORCEINLINE MoveConstructor GetMoveConstructor() const
+	FORCEINLINE MoveConstructor get_move_constructor() const
 	{
-		return _data.moveConstructor;
+		return this->_data.move_constructor;
 	}
 
 	/** Returns the destructor for this type.
 	* NOTE: Returns 'null' if this type is not destructible. */
-	FORCEINLINE Destructor GetDestructor() const
+	FORCEINLINE Destructor get_destructor() const
 	{
-		return _data.destructor;
+		return this->_data.destructor;
 	}
 
 	/** Returns the copy-assignment operator for this type.
 	* NOTE: Returns 'null' if this type is not copy-assignable. */
-	FORCEINLINE CopyAssignmentOperator GetCopyAssignmentOperator() const
+	FORCEINLINE CopyAssignmentOperator get_copy_assignment_operator() const
 	{
-		return _data.copyAssignmentOperator;
+		return this->_data.copy_assignment_operator;
 	}
 
 	/** Returns the move-assignment operator for this type.
 	* NOTE: Returns 'null' if this type is not move-assignable. */
-	FORCEINLINE MoveAssignmentOperator GetMoveAssignmentOperator() const
+	FORCEINLINE MoveAssignmentOperator get_move_assignment_operator() const
 	{
-		return _data.moveAssignmentOperator;
+		return this->_data.move_assignment_operator;
 	}
 
 	/** Returns the implementation of 'ToString' for this type. 
 	* NOTE: Returns 'null' if this type does not support the 'ToString' operation. */
-	FORCEINLINE ToStringImplementation GetToStringImplementation() const
+	FORCEINLINE ToStringImplementation get_to_string_implementation() const
 	{
-		return _data.toStringImplementation;
+		return this->_data.to_string_implementation;
 	}
 
 	/** Returns the implementation of 'FromString' for this type. 
 	* NOTE: Returns 'null' if this type does not support the 'FromString' operation. */
-	FORCEINLINE FromStringImplementation GetFromStringImplementation() const
+	FORCEINLINE FromStringImplementation get_from_string_implementation() const
 	{
-		return _data.fromStringImplementation;
+		return this->_data.from_string_implementation;
 	}
 
 	/** Returns the implementation of 'ToArchive' for this type. 
 	* NOTE: Returns 'null' if this type does not support the 'ToArchive' operation. */
-	FORCEINLINE ToArchiveImplementation GetToArchiveImplementation() const
+	FORCEINLINE ToArchiveImplementation get_to_archive_implementation() const
 	{
-		return _data.toArchiveImplementation;
+		return this->_data.to_archive_implementation;
 	}
 
 	/** Returns the implementation of 'FromArchive' for this type. 
 	* NOTE: Returns 'null' if this type does not support the 'FromArchive' operation. */
-	FORCEINLINE FromArchiveImplementation GetFromArchiveImplementation() const
+	FORCEINLINE FromArchiveImplementation get_from_archive_implementation() const
 	{
-		return _data.fromArchiveImplementation;
+		return this->_data.from_archive_implementation;
 	}
 
 	/** Returns whether this type is bitwise castable to the given type */
-	virtual bool IsCastableTo(const TypeInfo& type) const = 0;
+	virtual bool is_castable_to(const TypeInfo& type) const = 0;
 
 	/** Returns whether this type is stable (its memory layout is unlikely to ever change). */
-	virtual bool IsStable() const = 0;
+	virtual bool is_stable() const = 0;
 
 protected:
 
 	/** Generates the name of the type. Since some types need special name-formatting behavior that is unsafe
 	* to do while the application is starting up, this needs to be done when the application is initialized.
 	* Called when the Application is initialized. */
-	virtual String GenerateName() const;
+	virtual String generate_name() const;
 
 private:
 
 	/** Registers this TypeInfo instance with the Application singleton. */
-	void RegisterWithApplication();
+	void register_with_application();
 
 	/////////////////////
 	///   Operators   ///
@@ -316,7 +317,7 @@ public:
 
 	friend FORCEINLINE bool operator==(const TypeInfo& lhs, const TypeInfo& rhs)
 	{
-		return &lhs == &rhs || lhs.GetName() == rhs.GetName();
+		return lhs._data.type_info->hash_code() == rhs._data.type_info->hash_code();
 	}
 	friend FORCEINLINE bool operator!=(const TypeInfo& lhs, const TypeInfo& rhs)
 	{
@@ -328,30 +329,31 @@ public:
 private:
 
 	/** Some types need special behavior when generating their name.
-	* While '_data.rawName' holds the ungenerated part of the name, '_name' holds the final name.
+	* While '_data.raw_name' holds the ungenerated part of the name, '_name' holds the final name.
 	* After the application is initialized, '_rawName' should be ignored. */
 	mutable String _name;
 	
 	struct Data final
 	{
-		CString rawName = nullptr;
-		Constructor defaultConstructor = nullptr;
-		Constructor dynamicConstructor = nullptr;
-		CopyConstructor copyConstructor = nullptr;
-		MoveConstructor moveConstructor = nullptr;
+		const std::type_info* type_info = nullptr;
+		CString raw_name = nullptr;
+		Constructor default_constructor = nullptr;
+		Constructor dynamic_constructor = nullptr;
+		CopyConstructor copy_constructor = nullptr;
+		MoveConstructor move_constructor = nullptr;
 		Destructor destructor = nullptr;
-		CopyAssignmentOperator copyAssignmentOperator = nullptr;
-		MoveAssignmentOperator moveAssignmentOperator = nullptr;
-		ToStringImplementation toStringImplementation = nullptr;
-		FromStringImplementation fromStringImplementation = nullptr;
-		ToArchiveImplementation toArchiveImplementation = nullptr;
-		FromArchiveImplementation fromArchiveImplementation = nullptr;
+		CopyAssignmentOperator copy_assignment_operator = nullptr;
+		MoveAssignmentOperator move_assignment_operator = nullptr;
+		ToStringImplementation to_string_implementation = nullptr;
+		FromStringImplementation from_string_implementation = nullptr;
+		ToArchiveImplementation to_archive_implementation = nullptr;
+		FromArchiveImplementation from_archive_implementation = nullptr;
 		std::size_t size = 0;
 		std::size_t alignment = 0;
-		bool isCompound = false;
-		bool isAbstract = false;
-		bool isPolymorphic = false;
-		bool isTrivial = false;
+		bool is_compound = false;
+		bool is_abstract = false;
+		bool is_polymorphic = false;
+		bool is_trivial = false;
 	} _data;
 };
 
@@ -371,13 +373,14 @@ public:
 
 	TypeInfoBuilder(CString name)
 	{
-		_data.rawName = name;
+		_data.type_info = &typeid(T);
+		_data.raw_name = name;
 
 		// If the type is default-constructible
 		using DefaultConstructT = Operations::DefaultConstruct<T>;
 		if (DefaultConstructT::Supported)
 		{
-			_data.defaultConstructor = [](byte* location)
+			_data.default_constructor = [](byte* location)
 			{
 				FailableOperation<DefaultConstructT>(location);
 			};
@@ -387,7 +390,7 @@ public:
 		using DynamicInitializeT = Operations::DynamicInitialize<T>;
 		if (DynamicInitializeT::Supported)
 		{
-			_data.dynamicConstructor = [](byte* location) -> void
+			_data.dynamic_constructor = [](byte* location) -> void
 			{
 				FailableOperation<DynamicInitializeT>(location, DynamicInitializer());
 			};
@@ -397,7 +400,7 @@ public:
 		using CopyConstructT = Operations::CopyConstruct<T>;
 		if (CopyConstructT::Supported)
 		{
-			_data.copyConstructor = [](byte* location, const void* copy) -> void
+			_data.copy_constructor = [](byte* location, const void* copy) -> void
 			{
 				FailableOperation<CopyConstructT>(location, *static_cast<const T*>(copy));
 			};
@@ -407,7 +410,7 @@ public:
 		using MoveConstructT = Operations::MoveConstruct<T>;
 		if (MoveConstructT::Supported)
 		{
-			_data.moveConstructor = [](byte* location, void* move) -> void
+			_data.move_constructor = [](byte* location, void* move) -> void
 			{
 				FailableOperation<MoveConstructT>(location, std::move(*static_cast<T*>(move)));
 			};
@@ -427,7 +430,7 @@ public:
 		using CopyAssignT = Operations::CopyAssign<T>;
 		if (CopyAssignT::Supported)
 		{
-			_data.copyAssignmentOperator = [](void* lhs, const void* rhs) -> void
+			_data.copy_assignment_operator = [](void* lhs, const void* rhs) -> void
 			{
 				FailableOperation<CopyAssignT>(*static_cast<T*>(lhs), *static_cast<const T*>(rhs));
 			};
@@ -437,7 +440,7 @@ public:
 		using MoveAssignT = Operations::MoveAssign<T>;
 		if (MoveAssignT::Supported)
 		{
-			_data.moveAssignmentOperator = [](void* lhs, void* rhs) -> void
+			_data.move_assignment_operator = [](void* lhs, void* rhs) -> void
 			{
 				FailableOperation<MoveAssignT>(*static_cast<T*>(lhs), std::move(*static_cast<T*>(rhs)));
 			};
@@ -447,7 +450,7 @@ public:
 		using ToStringT = Operations::ToString<T>;
 		if (ToStringT::Supported)
 		{
-			_data.toStringImplementation = [](const void* value) -> String
+			_data.to_string_implementation = [](const void* value) -> String
 			{
 				String out;
 				FailableOperation<ToStringT>(out, *static_cast<const T*>(value));
@@ -459,7 +462,7 @@ public:
 		using FromStringT = Operations::FromString<T>;
 		if (FromStringT::Supported)
 		{
-			_data.fromStringImplementation = [](void* value, const String& string) -> String
+			_data.from_string_implementation = [](void* value, const String& string) -> String
 			{
 				String out;
 				FailableOperation<FromStringT>(out, *static_cast<T*>(value), string);
@@ -471,7 +474,7 @@ public:
 		using ToArchiveT = Operations::ToArchive<T>;
 		if (ToArchiveT::Supported)
 		{
-			_data.toArchiveImplementation = [](const void* value, ArchiveWriter& writer) -> void
+			_data.to_archive_implementation = [](const void* value, ArchiveWriter& writer) -> void
 			{
 				FailableOperation<ToArchiveT>(*static_cast<const T*>(value), writer);
 			};
@@ -481,7 +484,7 @@ public:
 		using FromArchiveT = Operations::FromArchive<T>;
 		if (FromArchiveT::Supported)
 		{
-			_data.fromArchiveImplementation = [](void* value, const ArchiveReader& reader) -> void
+			_data.from_archive_implementation = [](void* value, const ArchiveReader& reader) -> void
 			{
 				FailableOperation<FromArchiveT>(*static_cast<T*>(value), reader);
 			};
@@ -489,10 +492,10 @@ public:
 
 		_data.size = sizeof(T);
 		_data.alignment = alignof(T&); // Have to use reference here, since MSVC errors out when using plain 'T'
-		_data.isCompound = std::is_class<T>::value;
-		_data.isAbstract = std::is_abstract<T>::value;
-		_data.isPolymorphic = std::is_polymorphic<T>::value;
-		_data.isTrivial = std::is_trivial<T>::value;
+		_data.is_compound = std::is_class<T>::value;
+		_data.is_abstract = std::is_abstract<T>::value;
+		_data.is_polymorphic = std::is_polymorphic<T>::value;
+		_data.is_trivial = std::is_trivial<T>::value;
 	}
 
 	///////////////////
@@ -534,7 +537,7 @@ namespace Operations
 template <typename TargetT, typename T>
 bool IsCastableTo(T& value)
 {
-	return std::is_base_of<TargetT, T>::value || TypeOf(value).IsCastableTo(TypeOf<TargetT>());
+	return std::is_base_of<TargetT, T>::value || TypeOf(value).is_castable_to(TypeOf<TargetT>());
 }
 
 /** Safely casts from a reference of one type to the target type.

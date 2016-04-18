@@ -651,7 +651,7 @@ namespace Operations
 			type.EnumerateData([&](const auto& dataInfo)
 			{
 				// If this data is not marked as transient
-				if (dataInfo.GetDataType().HasToArchiveImplementation() && !(dataInfo.GetFlags() & DF_Transient))
+				if (dataInfo.GetDataType().implements_to_archive() && !(dataInfo.GetFlags() & DF_Transient))
 				{
 					// Add a node for the data member, naming it after the data member
 					writer.PushValue(dataInfo.GetName(), dataInfo.GetFromOwner(value));
@@ -674,7 +674,7 @@ namespace Operations
 				// Try to find the data that this child archive references
 				if (auto data = type.FindData(child.GetName()))
 				{
-					if (data->GetDataType().HasFromArchiveImplementation())
+					if (data->GetDataType().implements_from_archive())
 					{
 						// Deserialize the data
 						data->GetFromOwner(value).FromArchive(child);

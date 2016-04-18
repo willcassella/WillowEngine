@@ -59,7 +59,6 @@
     <ClInclude Include="include\Core\Memory\Buffers\StaticBuffer.h" />
     <ClInclude Include="include\Core\Memory\Pointers\Borrowed.h" />
     <ClInclude Include="include\Core\Memory\ReferenceCounter.h" />
-    <ClInclude Include="include\Core\Memory\MemoryManager.h" />
     <ClInclude Include="include\Core\Memory\New.h" />
     <ClInclude Include="include\Core\Memory\Pointers\Weak.h" />
     <ClInclude Include="include\Core\Memory\Pointers\Owned.h" />
@@ -96,7 +95,8 @@
     <ClInclude Include="include\Core\Test\Test.h" />
     <ClInclude Include="include\Core\Umbrellas\Containers.h" />
     <ClInclude Include="include\Core\Umbrellas\Reflection.h" />
-    <ClInclude Include="include\Core\Utility\View.h" />
+    <ClInclude Include="include\Core\Utility\UnCopyable.h" />
+    <ClInclude Include="include\Core\Utility\UnMoveable.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Application.cpp" />

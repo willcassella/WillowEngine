@@ -55,7 +55,7 @@ public:
 	/** Returns whether 'ToString' is supported by the referenced value. */
 	FORCEINLINE bool HasToStringImplementation() const
 	{
-		return _type->HasToStringImplementation();
+		return _type->implements_to_string();
 	}
 
 	/** Formats the state of this Variant as a String. 
@@ -63,13 +63,13 @@ public:
 	FORCEINLINE String ToString() const
 	{
 		assert(this->HasToStringImplementation());
-		return _type->GetToStringImplementation()(_value);
+		return _type->get_to_string_implementation()(_value);
 	}
 
 	/** Returns whether 'FromString' is supported by the referenced value. */
 	FORCEINLINE bool HasFromStringImplementation() const
 	{
-		return _type->HasFromArchiveImplementation();
+		return _type->implements_from_archive();
 	}
 
 	/** Sets the state of this Variant from a String, returning the remainder. 
@@ -77,13 +77,13 @@ public:
 	FORCEINLINE String FromString(const String& string)
 	{
 		assert(this->HasFromStringImplementation());
-		return _type->GetFromStringImplementation()(_value, string);
+		return _type->get_from_string_implementation()(_value, string);
 	}
 
 	/** Returns whether 'ToArchive' is supported by the referenced value. */
 	FORCEINLINE bool HasToArchiveImplementation() const
 	{
-		return _type->HasToArchiveImplementation();
+		return _type->implements_to_archive();
 	}
 
 	/** Serializes the state of this Variant to the given archive. 
@@ -91,13 +91,13 @@ public:
 	FORCEINLINE void ToArchive(ArchiveWriter& writer) const
 	{
 		assert(this->HasToArchiveImplementation());
-		_type->GetToArchiveImplementation()(_value, writer);
+		_type->get_to_archive_implementation()(_value, writer);
 	}
 
 	/** Returns whether 'FromArchive' is supported by the referenced value. */
 	FORCEINLINE bool HasFromArchiveImplementatino() const
 	{
-		return _type->HasFromArchiveImplementation();
+		return _type->implements_from_archive();
 	}
 
 	/** Deserializes the state of this Variant from the given archive.
@@ -105,7 +105,7 @@ public:
 	FORCEINLINE void FromArchive(const ArchiveReader& reader)
 	{
 		assert(this->HasFromStringImplementation());
-		_type->GetFromArchiveImplementation()(_value, reader);
+		_type->get_from_archive_implementation()(_value, reader);
 	}
 
 	////////////////
@@ -166,7 +166,7 @@ public:
 	/** Returns whether 'ToString' is supported by the referenced value. */
 	FORCEINLINE bool HasToStringImplementation() const
 	{
-		return _type->HasToStringImplementation();
+		return _type->implements_to_string();
 	}
 
 	/** Formats the state of this ImmutableVariant as a String. 
@@ -174,13 +174,13 @@ public:
 	FORCEINLINE String ToString() const
 	{
 		assert(this->HasToStringImplementation());
-		return _type->GetToStringImplementation()(_value);
+		return _type->get_to_string_implementation()(_value);
 	}
 
 	/** Returns whether 'ToArchive' is supported by the referenced value. */
 	FORCEINLINE bool HasToArchiveImplementation() const
 	{
-		return _type->HasToArchiveImplementation();
+		return _type->implements_to_archive();
 	}
 
 	/** Serializes the state of this ImmutableVariant to the given archive. 
@@ -188,7 +188,7 @@ public:
 	FORCEINLINE void ToArchive(ArchiveWriter& writer) const
 	{
 		assert(this->HasToArchiveImplementation());
-		_type->GetToArchiveImplementation()(_value, writer);
+		_type->get_to_archive_implementation()(_value, writer);
 	}
 
 	////////////////
@@ -206,7 +206,7 @@ private:
 template <typename TargetT>
 FORCEINLINE TargetT* Cast(Variant value)
 {
-	if (value.GetType().IsCastableTo(TypeOf<TargetT>()))
+	if (value.GetType().is_castable_to(TypeOf<TargetT>()))
 	{
 		return static_cast<TargetT*>(value.GetValue());
 	}
@@ -220,7 +220,7 @@ FORCEINLINE TargetT* Cast(Variant value)
 template <typename TargetT>
 FORCEINLINE const TargetT* Cast(ImmutableVariant value)
 {
-	if (value.GetType().IsCastableTo(TypeOf<TargetT>()))
+	if (value.GetType().is_castable_to(TypeOf<TargetT>()))
 	{
 		return static_cast<const TargetT*>(value.GetValue());
 	}

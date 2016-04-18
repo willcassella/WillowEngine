@@ -89,7 +89,7 @@ const TypeInfo* Application::FindType(const String& name)
 {
 	for (auto type : Application::Instance()._types)
 	{
-		if (type->GetName() == name)
+		if (type->get_name() == name)
 		{
 			return type;
 		}
@@ -125,7 +125,7 @@ void Application::InitializeTypes()
 	for (auto type : instance._uninitializedTypes)
 	{
 		// Force the type to generate its name
-		type->GetName();
+		type->get_name();
 		instance._types.Add(type);
 	}
 

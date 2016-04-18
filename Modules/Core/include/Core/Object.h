@@ -3,10 +3,11 @@
 
 #include "Reflection/Reflection.h"
 #include "Memory/ReferenceCounter.h"
+#include "Utility/UnMoveable.h"
 
 /** Base of any polymorphic type that has to act within a larger system.
 * May be referenced with 'Weak<T>' and 'Borrowed<T>' smart pointers. */
-class CORE_API Object
+class CORE_API Object : public willow::UnMoveable
 {
 	///////////////////////
 	///   Inner Types   ///
@@ -35,9 +36,6 @@ public:
 	
 	/** Constructs an Object without a reference counter. */
 	explicit Object(ObjectConstructionFlags flags);
-
-	Object(const Object& copy) = delete;
-	Object(Object&& move) = delete;
 	
 	/** Marks Object as being destroyed (if it's refcounted). */
 	virtual ~Object();
@@ -64,13 +62,6 @@ public:
 
 	/** Formats the state of this Object as a String. */
 	virtual String ToString() const;
-
-	/////////////////////
-	///   Operators   ///
-public:
-
-	Object& operator=(const Object& copy) = delete;
-	Object& operator=(Object&& move) = delete;
 
 	////////////////
 	///   Data   ///

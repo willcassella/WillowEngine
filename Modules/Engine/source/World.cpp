@@ -46,7 +46,7 @@ namespace willow
 			for (const auto& kv : this->_objects)
 			{
 				// Push the given value into this archive, wrapping it in a Node containing its type name and address
-				child.PushReferencedValue(kv.Second->GetType().GetName(), *kv.Second);
+				child.PushReferencedValue(kv.Second->GetType().get_name(), *kv.Second);
 			}
 		});
 	}
@@ -77,7 +77,7 @@ namespace willow
 				// Find the type of GameObject that this node is referring to
 				auto type = Application::FindType(gameobject.GetName());
 				
-				if (!type || !type->IsCastableTo(TypeOf<GameObject>()))
+				if (!type || !type->is_castable_to(TypeOf<GameObject>()))
 				{
 					// Type isn't a GameObject type, go to next object
 					gameobject.MapRefID(nullptr);
@@ -102,7 +102,7 @@ namespace willow
 				{
 					object->FromArchive(gameobject);
 
-					if (object->GetType().IsCastableTo(TypeOf<Entity>()))
+					if (object->GetType().is_castable_to(TypeOf<Entity>()))
 					{
 						uninitializedEntities.Push(std::move(object));
 					}

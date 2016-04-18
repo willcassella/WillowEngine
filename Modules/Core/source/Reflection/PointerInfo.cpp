@@ -24,7 +24,7 @@ TypeInfoBuilder<std::nullptr_t, PointerInfo>::TypeInfoBuilder()
 ///////////////////
 ///   Methods   ///
 
-bool PointerInfo::IsCastableTo(const TypeInfo& type) const
+bool PointerInfo::is_castable_to(const TypeInfo& type) const
 {
 	// Make sure the given type is a pointer type
 	if (type.GetType().Extends<PointerInfo>())
@@ -38,7 +38,7 @@ bool PointerInfo::IsCastableTo(const TypeInfo& type) const
 		}
 
 		// If the pointed types are compatible, then we're good to go
-		return GetPointedType().IsCastableTo(pointerType.GetPointedType());
+		return GetPointedType().is_castable_to(pointerType.GetPointedType());
 	}
 	else
 	{
@@ -46,22 +46,22 @@ bool PointerInfo::IsCastableTo(const TypeInfo& type) const
 	}
 }
 
-String PointerInfo::GenerateName() const
+String PointerInfo::generate_name() const
 {
 	if (_data.IsConst)
 	{
 		// If we have a pointer to a pointer
 		if (_data.PointedType->GetType() == TypeOf<PointerInfo>())
 		{
-			return Format("@ const*", _data.PointedType->GetName());
+			return Format("@ const*", _data.PointedType->get_name());
 		}
 		else
 		{
-			return Format("const @*", _data.PointedType->GetName());
+			return Format("const @*", _data.PointedType->get_name());
 		}
 	}
 	else
 	{
-		return Format("@*", _data.PointedType->GetName());
+		return Format("@*", _data.PointedType->get_name());
 	}
 }

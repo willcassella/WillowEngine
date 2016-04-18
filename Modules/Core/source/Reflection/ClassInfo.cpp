@@ -20,7 +20,7 @@ TypeInfoBuilder<Object, ClassInfo>::TypeInfoBuilder()
 ///////////////////
 ///   Methods   ///
 
-bool ClassInfo::IsCastableTo(const TypeInfo& type) const
+bool ClassInfo::is_castable_to(const TypeInfo& type) const
 {
 	// If the given type is this type
 	if (type == *this)
@@ -46,7 +46,7 @@ bool ClassInfo::IsCastableTo(const TypeInfo& type) const
 	}
 }
 
-bool ClassInfo::IsStable() const
+bool ClassInfo::is_stable() const
 {
 	return false;
 }

@@ -44,7 +44,7 @@ public:
 	///   Methods   ///
 public:
 
-	bool IsCastableTo(const TypeInfo& type) const override;
+	bool is_castable_to(const TypeInfo& type) const override;
 
 	/** Returns whether this enum represents a bit flag. */
 	FORCEINLINE bool IsBitFlag() const

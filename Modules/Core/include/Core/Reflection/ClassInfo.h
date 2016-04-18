@@ -34,9 +34,9 @@ public:
 	///   Methods   ///
 public:
 
-	bool IsCastableTo(const TypeInfo& type) const override;
+	bool is_castable_to(const TypeInfo& type) const override;
 
-	bool IsStable() const final override;
+	bool is_stable() const final override;
 
 	/** Returns all properties on this type (including base type properties). */
 	Array<PropertyInfo> GetProperties() const final override;

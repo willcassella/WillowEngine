@@ -296,7 +296,7 @@ namespace Operations
 			{
 				value.Invoke([&](const auto& v)
 				{
-					writer.PushValue(::TypeOf(v).GetName(), v);
+					writer.PushValue(::TypeOf(v).get_name(), v);
 				});
 			}
 			else

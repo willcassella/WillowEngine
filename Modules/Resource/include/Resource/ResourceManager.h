@@ -1,6 +1,7 @@
 // AssetManager.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
+#include <typeindex>
 #include <memory>
 #include <Core/Containers/Table.h>
 #include "ResourceHandle.h"
@@ -165,7 +166,7 @@ namespace willow
 				: _path(std::move(path))
 			{
 				this->load(this->_path);
-				Console::WriteLine("@ at '@' loaded successfully", TypeOf<T>().GetName(), this->_path);
+				Console::WriteLine("@ at '@' loaded successfully", TypeOf<T>().get_name(), this->_path);
 			}
 
 			///////////////////
@@ -220,11 +221,11 @@ namespace willow
 			// Make sure the file exists
 			if (!path.points_to_file())
 			{
-				Console::Warning("@ at '@' could not be found.", TypeOf<T>().GetName(), path);
+				Console::Warning("@ at '@' could not be found.", TypeOf<T>().get_name(), path);
 				return ResourceHandle<T>{};
 			}
 
-			auto pathKey = MakePair(std::move(path), TypePtr<>{ TypeOf<T>() });
+			auto pathKey = MakePair(std::move(path), std::type_index{ typeid(T) });
 			auto id = get_instance()._resource_paths[pathKey];
 			
 			// If this resource doesn't exist
@@ -286,7 +287,7 @@ namespace willow
 
 		ResourceID _next_resource_id;
 		Table<ResourceID, std::unique_ptr<ResourceInfoBase>> _resources;
-		Table<Pair<Path, TypePtr<>>, ResourceID> _resource_paths;
+		Table<Pair<Path, std::type_index>, ResourceID> _resource_paths;
 	};
 
 	////////////////////////

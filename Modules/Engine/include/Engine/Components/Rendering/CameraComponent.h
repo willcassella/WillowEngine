@@ -20,7 +20,7 @@ namespace willow
 	public:
 
 		/** The horizontal field of view of this Camera. */
-		Angle fov = Degrees(90.f);
+		Angle fov = degrees(90.f);
 		
 		/** The distance to the near clipping plane. */
 		float z_min = 0.1f;

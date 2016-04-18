@@ -36,7 +36,7 @@ public:
 public:
 
 	/** Returns whether this type is castable (via reinterpret_cast) to the given type */
-	bool IsCastableTo(const TypeInfo& type) const override;
+	bool is_castable_to(const TypeInfo& type) const override;
 
 	/** Returns whether this pointer points to an immutable value (e.g 'const int*' vs 'int*') */
 	FORCEINLINE bool IsConst() const
@@ -52,7 +52,7 @@ public:
 
 protected:
 
-	String GenerateName() const override;
+	String generate_name() const override;
 
 	////////////////
 	///   Data   ///

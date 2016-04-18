@@ -8,18 +8,18 @@
 ///   Reflection   ///
 
 BUILD_REFLECTION(StructInfo)
-.Property("Stable", &StructInfo::IsStable, nullptr, "Whether the layout of this struct is stable.");
+.Property("Stable", &StructInfo::is_stable, nullptr, "Whether the layout of this struct is stable.");
 
 ///////////////////
 ///   Methods   ///
 
-bool StructInfo::IsCastableTo(const TypeInfo& type) const
+bool StructInfo::is_castable_to(const TypeInfo& type) const
 {
 	// Structs are never castable to anything other than themselves
 	return type == *this;
 }
 
-bool StructInfo::IsStable() const
+bool StructInfo::is_stable() const
 {
 	return _data.isStable;
 }

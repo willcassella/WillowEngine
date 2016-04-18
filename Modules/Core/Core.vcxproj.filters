@@ -231,9 +231,6 @@
     <ClInclude Include="include\Core\Reflection\DataInfo.h">
       <Filter>include\Reflection</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Memory\MemoryManager.h">
-      <Filter>include\Memory</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Memory\New.h">
       <Filter>include\Memory</Filter>
     </ClInclude>
@@ -266,9 +263,6 @@
     </ClInclude>
     <ClInclude Include="include\Core\STDE\Utility.h">
       <Filter>include\STDE</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Core\Utility\View.h">
-      <Filter>include\Utility</Filter>
     </ClInclude>
     <ClInclude Include="include\Core\Functional\FunctionView.h">
       <Filter>include\Functional</Filter>
@@ -326,6 +320,12 @@
     </ClInclude>
     <ClInclude Include="include\Core\Reflection\SubClassOf.h">
       <Filter>include\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Utility\UnCopyable.h">
+      <Filter>include\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Utility\UnMoveable.h">
+      <Filter>include\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

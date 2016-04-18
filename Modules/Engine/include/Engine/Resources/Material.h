@@ -15,7 +15,7 @@ namespace willow
 		///   Inner Types   ///
 	public:
 
-		/** A material parameter may either be floats, Vec2, Vec3, Vec4, or texture. */
+		/** A material parameter may either be a float, Vec2, Vec3, Vec4, or texture. */
 		using Param = Union<float, Vec2, Vec3, Vec4, ResourceHandle<Texture>>;
 		
 		/** A table mapping parameter names to parameter values. */

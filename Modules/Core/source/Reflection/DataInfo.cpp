@@ -25,12 +25,12 @@ DataInfo::DataInfo(CString name, DataFlags flags)
 
 Variant DataInfo::GetFromOwner(Variant owner) const
 {
-	assert(owner.GetType().IsCastableTo(*_ownerType));
+	assert(owner.GetType().is_castable_to(*_ownerType));
 	return Variant(static_cast<byte*>(owner.GetValue()) + _offset, *_dataType);
 }
 
 ImmutableVariant DataInfo::GetFromOwner(ImmutableVariant owner) const
 {
-	assert(owner.GetType().IsCastableTo(*_ownerType));
+	assert(owner.GetType().is_castable_to(*_ownerType));
 	return ImmutableVariant(static_cast<const byte*>(owner.GetValue()) + _offset, *_dataType);
 }

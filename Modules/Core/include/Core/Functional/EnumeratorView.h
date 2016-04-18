@@ -3,7 +3,7 @@
 
 #include <utility>
 #include <type_traits>
-#include "../Utility/View.h"
+#include "../Utility/UnMoveable.h"
 
 enum class EnumeratorResult : byte
 {
@@ -15,7 +15,7 @@ enum class EnumeratorResult : byte
 };
 
 template <typename T>
-struct EnumeratorView final : View
+struct EnumeratorView final
 {
 	////////////////////////
 	///   Constructors   ///

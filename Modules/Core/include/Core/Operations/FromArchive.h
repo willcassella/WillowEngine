@@ -303,7 +303,7 @@ namespace Operations
 		template <typename C, typename ... R>
 		static void Recurse(stde::type_sequence<C, R...>, const String& type, UnionT& value, const ArchiveReader& reader)
 		{
-			if (::TypeOf<C>().GetName() == type)
+			if (::TypeOf<C>().get_name() == type)
 			{
 				// Set the value to an instance of this type
 				value.SetValue(C{});
