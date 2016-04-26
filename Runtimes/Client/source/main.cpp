@@ -19,6 +19,7 @@ void event_loop(Window& window, willow::World& world, willow::RenderSystem& rend
 	bool shouldExit = false;
 	bool drawPhysics = false;
 	ToggleKey drawPhysicsKey{ GLFW_KEY_F1 };
+	ToggleKey jumpKey{ GLFW_KEY_SPACE };
 
 	// Begin the event loop
 	while (!window.should_close() && !shouldExit)
@@ -66,7 +67,7 @@ void event_loop(Window& window, willow::World& world, willow::RenderSystem& rend
 			{
 				shouldExit = true;
 			}
-			if (window.get_key(GLFW_KEY_SPACE))
+			if (jumpKey.update(window))
 			{
 				world.push_event("jump");
 			}
