@@ -170,6 +170,19 @@ namespace willow
 			}
 		});
 
+		// Update systems
+		for (auto& system : this->_systems)
+		{
+			system->update(*this);
+		}
+
+		// Dispatch collision events
+		for (auto collisionPair : _collision_events)
+		{
+			collisionPair.first->on_collision(*collisionPair.second);
+		}
+		_collision_events.Clear();
+
 		// Remove destroyed objects
 		while (!this->_destroyed_objects.IsEmpty())
 		{
@@ -177,11 +190,6 @@ namespace willow
 			this->_entities.Remove(object->get_id());
 			this->_components.Remove(object->get_id());
 			this->_objects.Remove(object->get_id());
-		}
-
-		for (auto& system : this->_systems)
-		{
-			system->update(*this);
 		}
 	}
 
@@ -241,6 +249,11 @@ namespace willow
 		this->_entities.Clear();
 		this->_components.Clear();
 		this->_next_object_id = 1;
+	}
+
+	void World::STUPID_add_collision_event(Entity& collider, Entity& collidee)
+	{
+		_collision_events.Add(std::make_pair(&collider, &collidee));
 	}
 
 	void World::intialize_object(Owned<GameObject> owner, GameObject::ID id)

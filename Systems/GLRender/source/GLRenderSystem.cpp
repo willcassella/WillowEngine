@@ -213,12 +213,6 @@ namespace willow
 		// Get all cameras in the world
 		auto cameras = world.enumerate<CameraComponent>();
 
-		// We can't render the World without a camera
-		if (cameras.IsEmpty())
-		{
-			return;
-		}
-
 		// Render each camera
 		for (uint32 i = 0; i < cameras.Size() && i < views; ++i)
 		{

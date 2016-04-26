@@ -55,6 +55,8 @@ namespace willow
 
 		void on_initialize() override;
 
+		void on_destroy() override;
+
 	private:
 
 		void create();

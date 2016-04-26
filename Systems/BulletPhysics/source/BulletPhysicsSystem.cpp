@@ -58,8 +58,10 @@ namespace willow
 					auto* overlappingObject = ghost->getOverlappingObject(i);
 					auto* overlappingObjectData = static_cast<EntityPhysicsData*>(overlappingObject->getUserPointer());
 
-					// Invoke it
-					world.get_object(entityData.Second->entity)->on_collision(*world.get_object(overlappingObjectData->entity));
+					// Add the collision event TODO: STUPID
+					auto* entityA = world.get_object(entityData.Second->entity);
+					auto* entityB = world.get_object(overlappingObjectData->entity);
+					world.STUPID_add_collision_event(*entityA, *entityB);
 				}
 			}
 		}
@@ -549,6 +551,19 @@ namespace willow
 
 		// Add it to the world
 		_physics_world->GetDynamicsWorld().addAction(controller);
+	}
+
+	void BulletPhysicsSystem::destroy_character_controller(Handle<CharacterControllerComponent> component)
+	{
+		// Get the controller
+		auto* controller = _character_controller_table[component];
+
+		// Remove it from the world
+		_physics_world->GetDynamicsWorld().removeAction(controller);
+
+		// Destroy it
+		_character_controller_table.Remove(component);
+		_character_controllers.Destroy(controller);
 	}
 
 	void BulletPhysicsSystem::set_character_controller_collider(Handle<CharacterControllerComponent> component, Handle<PrimitiveColliderComponent> collider)

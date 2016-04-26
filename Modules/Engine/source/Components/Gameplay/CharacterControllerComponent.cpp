@@ -59,6 +59,14 @@ namespace willow
 		this->create();
 	}
 
+	void CharacterControllerComponent::on_destroy()
+	{
+		if (this->_is_active)
+		{
+			this->get_world().get_system<PhysicsSystem>()->destroy_character_controller(*this);
+		}
+	}
+
 	void CharacterControllerComponent::create()
 	{
 		if (!this->_collider.is_null())

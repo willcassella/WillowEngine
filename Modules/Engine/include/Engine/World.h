@@ -253,6 +253,10 @@ namespace willow
 			this->_events.push_event(std::move(name), std::move(value));
 		}
 
+		/** Adds a collision event.
+		* TODO: THIS IS STUPID */
+		void STUPID_add_collision_event(Entity& collider, Entity& collidee);
+
 	private:
 
 		/** Initializes the given GameObject in this World. 
@@ -278,6 +282,7 @@ namespace willow
 
 		/** Physics data */
 		Vec3 _gravity;
+		Array<std::pair<Entity*, Entity*>> _collision_events;
 
 		/* Frame data */
 		Table<String, Array<std::pair<Handle<GameObject>, EventHandler>>> _event_bindings;

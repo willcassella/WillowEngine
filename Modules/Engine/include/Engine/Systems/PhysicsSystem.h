@@ -130,6 +130,8 @@ namespace willow
 			Handle<PrimitiveColliderComponent> collider, 
 			CharacterControllerComponent::Settings settings) = 0;
 
+		virtual void destroy_character_controller(Handle<CharacterControllerComponent> component) = 0;
+
 		virtual void set_character_controller_collider(Handle<CharacterControllerComponent> component, Handle<PrimitiveColliderComponent> collider) = 0;
 
 		virtual void character_controller_jump(Handle<CharacterControllerComponent> component) = 0;
