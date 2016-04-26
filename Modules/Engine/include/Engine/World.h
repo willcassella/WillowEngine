@@ -1,12 +1,14 @@
 // World.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
+#include <Core/Memory/New.h>
 #include <Core/Containers/Queue.h>
-#include <Core/Event/EventManager.h>
 #include <Core/Reflection/SubClassOf.h>
 #include "Component.h"
 #include "System.h"
 #include "Handle.h"
+#include <Core/Event/EventHandler.h>
+#include <Core/Event/EventQueue.h>
 
 /////////////////
 ///   Types   ///
@@ -28,13 +30,13 @@ namespace willow
 	public:
 
 		World();
+		World(World&& world) = delete;
 		~World() override;
 
 		//////////////////
 		///   Fields   ///
 	public:
 
-		EventManager events;
 		float time_dilation = 1.f;
 		float time_step = 1.f / 60;
 
@@ -232,6 +234,25 @@ namespace willow
 		/** Resets the state of this World. */
 		void reset();
 
+		template <class T, typename HandlerT>
+		void bind_event(const String& name, T& object, HandlerT handler)
+		{
+			this->_event_bindings[name].Add(std::make_pair(Handle<GameObject>{ object }, EventHandler{ handler }));
+		}
+
+		/** Pushes the given event onto the event queue. */
+		void push_event(String name)
+		{
+			this->_events.push_event(std::move(name));
+		}
+
+		/** Pushes the given event with the given argument onto the event queue. */
+		template <typename T>
+		void push_event(String name, T value)
+		{
+			this->_events.push_event(std::move(name), std::move(value));
+		}
+
 	private:
 
 		/** Initializes the given GameObject in this World. 
@@ -257,6 +278,10 @@ namespace willow
 
 		/** Physics data */
 		Vec3 _gravity;
+
+		/* Frame data */
+		Table<String, Array<std::pair<Handle<GameObject>, EventHandler>>> _event_bindings;
+		EventQueue _events;
 	};
 
 	///////////////////

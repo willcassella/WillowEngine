@@ -246,7 +246,7 @@ public:
 	/** Returns the number of elements that can be put into this Array before requring reallocation. */
 	FORCEINLINE std::size_t Capacity() const
 	{
-		return _buffer.GetSize() / sizeof(T);
+		return _buffer.get_size() / sizeof(T);
 	}
 
 	/** Returns whether this Array is empty. */
@@ -258,13 +258,13 @@ public:
 	/** Returns a pointer to the start of this Array. */
 	FORCEINLINE T* CArray()
 	{
-		return _buffer.GetPointer<T>();
+		return _buffer.get_pointer<T>();
 	}
 
 	/** Returns a pointer to the start of this Array. */
 	FORCEINLINE const T* CArray() const
 	{
-		return _buffer.GetPointer<T>();
+		return _buffer.get_pointer<T>();
 	}
 
 	/** Returns whether a copy of the given value exists in this Array. */
@@ -542,7 +542,7 @@ public:
 		{
 			// Move all elements below 'size' into new array
 			T& value = this->FastGet(i);
-			new (newBuff.GetPointer<T>() + i) T(std::move(value));
+			new (newBuff.get_pointer<T>() + i) T(std::move(value));
 			value.~T();
 		}
 
@@ -570,7 +570,7 @@ public:
 	void Reset(std::size_t size)
 	{
 		this->Clear();
-		_buffer.Reset(size);
+		_buffer.reset(size);
 	}
 
 	/* Iteration methods */

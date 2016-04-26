@@ -68,16 +68,16 @@ void event_loop(Window& window, willow::World& world, willow::RenderSystem& rend
 			}
 			if (window.get_key(GLFW_KEY_SPACE))
 			{
-				world.events.DispatchEvent("jump");
+				world.push_event("jump");
 			}
 			if (window.get_key(GLFW_KEY_F))
 			{
-				world.events.DispatchEvent("fire");
+				world.push_event("fire");
 			}
 
 			// Dispatch events
-			world.events.DispatchEvent("move", moveAccum.Normalize());
-			world.events.DispatchEvent("look", window.get_cursor_position() / 100);
+			world.push_event("move", moveAccum.Normalize());
+			world.push_event("look", window.get_cursor_position() / 100);
 			window.center_cursor();
 
 			// Update the world
@@ -98,7 +98,7 @@ void event_loop(Window& window, willow::World& world, willow::RenderSystem& rend
 			physics.debug_draw(renderer);
 		}
 
-		renderer.render_world(world, 1);
+		renderer.render_world(world, 2);
 		window.swap_buffers();
 	}
 }

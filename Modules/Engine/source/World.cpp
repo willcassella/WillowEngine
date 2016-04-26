@@ -11,7 +11,6 @@ BUILD_REFLECTION(willow::World)
 .Data("components", &World::_components, DF_Transient)
 .Data("destroyed_objects", &World::_destroyed_objects, DF_Transient)
 .Data("next_object_id", &World::_next_object_id)
-.Field("events", &World::events)
 .Field("time_dilation", &World::time_dilation, "The time dilation of the world. Default is 1.")
 .Field("time_step", &World::time_step, "The amount of time (ms) that each update of the world represents.");
 
@@ -137,10 +136,41 @@ namespace willow
 
 	void World::update()
 	{
-		this->events.DispatchEvent("update", this->time_step * this->time_dilation);
-		this->events.Flush();
+		// Copy event bindings and instances onto stack (prevents issues with binding/dispatching events during event dispatch)
+		auto eventBindings = this->_event_bindings;
+		auto events = std::move(this->_events); // NOTE: It's safe to move 'EventQueue' multiple times
 
-		// Remove stale objects
+		// Push 'Update' event
+		events.push_event("update", this->time_step * this->time_dilation);
+
+		// Flush events
+		events.enumerate([&](const String& event, const TypeInfo* argType, const void* argValue)
+		{
+			auto* bindings = eventBindings.Find(event);
+
+			// If there's anything bound to this event
+			if (bindings)
+			{
+				// For each binding for the event
+				for (const auto& binding : *bindings)
+				{
+					// If the handler argument is compatible with the event argument
+					if (!binding.second.accepts_argument() || argType && argType->is_castable_to(binding.second.get_arg_type()))
+					{
+						// Get the object to handle the event
+						auto* object = this->get_object(binding.first);
+						
+						// If the object still exists
+						if (object)
+						{
+							binding.second.invoke(object, argValue);
+						}
+					}
+				}
+			}
+		});
+
+		// Remove destroyed objects
 		while (!this->_destroyed_objects.IsEmpty())
 		{
 			auto object = _destroyed_objects.Pop();

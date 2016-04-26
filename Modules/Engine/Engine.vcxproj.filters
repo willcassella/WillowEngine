@@ -216,12 +216,6 @@
     <ClInclude Include="include\Engine\Component.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Engine\Entities\Player.h">
-      <Filter>include\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engine\Components\Gameplay\InputComponent.h">
-      <Filter>include\Components\Gameplay</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="content\shaders\default.frag">

@@ -3,9 +3,8 @@
 
 #include <functional>
 #include "../Reflection/VoidInfo.h"
-#include "Event.h"
 
-struct EventHandler final
+struct CORE_API EventHandler final
 {
 	///////////////////////
 	///   Information   ///
@@ -19,67 +18,70 @@ public:
 
 	/** Creates an event handler with one argument, to a mutable object */
 	template <class OwnerT, typename ReturnT, typename ArgT>
-	EventHandler(OwnerT& object, ReturnT (OwnerT::*handler)(ArgT))
-		: _argType(TypeOf<ArgT>()), _ownerType(TypeOf<OwnerT>())
+	EventHandler(ReturnT (OwnerT::*handler)(ArgT))
+		: _arg_type{ &TypeOf<ArgT>() }, _owner_type{ &TypeOf<OwnerT>() }
 	{
-		EventHandler::ConstructorAsserts<OwnerT, ArgT>();
-		_handler = [&object, handler](const Event& event)-> void
+		EventHandler::constructor_asserts<ArgT>();
+
+		this->_handler = [handler](void* object, const void* value)-> void
 		{
-			auto pValue = static_cast<const ArgT*>(event.GetValue().GetValue());
-			(object.*handler)(*pValue);
+			auto* pObject = static_cast<OwnerT*>(object);
+			auto* pValue = static_cast<const ArgT*>(value);
+			(pObject->*handler)(*pValue);
 		};
 	}
 
 	/** Creates a const event handler with one argument, to an immutable object */
 	template <class OwnerT, typename ReturnT, typename ArgT>
-	EventHandler(const OwnerT& object, ReturnT(OwnerT::*handler)(ArgT) const)
-		: _argType(TypeOf<ArgT>()), _ownerType(TypeOf<OwnerT>())
+	EventHandler(ReturnT(OwnerT::*handler)(ArgT) const)
+		: _arg_type{ &TypeOf<ArgT>() }, _owner_type{ &TypeOf<OwnerT>() }
 	{
-		EventHandler::ConstructorAsserts<OwnerT, ArgT>();
-		_handler = [&object, handler](const Event& event)-> void
+		EventHandler::constructor_asserts<ArgT>();
+
+		this->_handler = [handler](void* object, const void* value)-> void
 		{
-			auto pValue = static_cast<const ArgT*>(event.GetValue().GetValue());
-			(object.*handler)(*pValue);
+			auto* pObject = static_cast<const OwnerT*>(object);
+			auto* pValue = static_cast<const ArgT*>(value);
+			(pObject->*handler)(*pValue);
 		};
 	}
 
 	/** Creates an event handler with no arguments, to a mutable object */
 	template <class OwnerT, typename ReturnT>
-	EventHandler(OwnerT& object, ReturnT(OwnerT::*handler)())
-		: _argType(TypeOf<void>()), _ownerType(TypeOf<OwnerT>())
+	EventHandler(ReturnT(OwnerT::*handler)())
+		: _arg_type{ nullptr }, _owner_type{ &TypeOf<OwnerT>() }
 	{
-		EventHandler::ConstructorAsserts<OwnerT, void>();
-		_handler = [&object, handler](const Event& /*event*/)-> void
+		this->_handler = [handler](void* object, const void* /*value*/)-> void
 		{
-			(object.*handler)();
+			auto* pObject = static_cast<OwnerT*>(object);
+			(pObject->*handler)();
 		};
 	}
 
 	/** Creates a const event handler with no arguments, to an immutable object */
 	template <class OwnerT, typename ReturnT>
-	EventHandler(const OwnerT& object, ReturnT(OwnerT::*handler)() const)
-		: _argType(TypeOf<void>()), _ownerType(TypeOf<OwnerT>())
+	EventHandler(ReturnT(OwnerT::*handler)() const)
+		: _arg_type{ nullptr }, _owner_type{ &TypeOf<OwnerT>() }
 	{
-		EventHandler::ConstructorAsserts<OwnerT, void>();
-		_handler = [&object, handler](const Event& /*event*/)-> void
+		this->_handler = [handler](void* object, const void* /*value*/)-> void
 		{
-			(object.*handler)();
+			auto* pObject = static_cast<const OwnerT*>(object);
+			(pObject->*handler)();
 		};
 	}
 
 	/** Creates an event handler to a field */
 	template <class OwnerT, typename FieldT, WHERE(!std::is_function<FieldT>::value)>
-	EventHandler(OwnerT& object, FieldT OwnerT::*field)
-		: _argType(TypeOf<FieldT>()), _ownerType(TypeOf<OwnerT>())
+	EventHandler(FieldT OwnerT::*field)
+		: _arg_type{ TypeOf<FieldT>() }, _owner_type{ TypeOf<OwnerT>() }
 	{
-		static_assert(std::is_copy_assignable<FieldT>::value, 
-			"You cannot create a field handler to a non copy-assignable field");
+		EventHandler::constructor_asserts<FieldT>();
 
-		EventHandler::ConstructorAsserts<OwnerT, void>();
-		_handler = [&object, field](const Event& event)-> void
+		this->_handler = [field](void* object, const void* value)-> void
 		{
-			auto pValue = static_cast<const FieldT*>(event.GetValue().GetValue());
-			(object.*field) = *pValue;
+			auto* pObject = static_cast<OwnerT*>(object);
+			auto* pValue = static_cast<const FieldT*>(value);
+			(pObject->*field) = *pValue;
 		};
 	}
 
@@ -87,46 +89,56 @@ public:
 	///   Methods   ///
 public:
 
-	/** Returns the type information for the type of argument this handler accepts. */
-	FORCEINLINE const TypeInfo& GetArgType() const
+	/** Returns whether this EventHandler accepts an argument.  */
+	FORCEINLINE bool accepts_argument() const
 	{
-		return _argType;
+		return this->_arg_type != nullptr;
 	}
 
-	/** Returns the type information for the compound that owns this handler. */
-	FORCEINLINE const ClassInfo& GetOwnerType() const
+	/** Returns the type information for the type of argument this handler accepts.
+	* NOTE: If this EventHandler does not take an argument, this returns 'TypeOf<void>()'. */
+	FORCEINLINE const TypeInfo& get_arg_type() const
 	{
-		return _ownerType;
+		if (this->_arg_type)
+		{
+			return *this->_arg_type;
+		}
+		else
+		{
+			return TypeOf<void>();
+		}
 	}
 
-	/** Attempts to handle the given event.
-	* If the given event is not compatible with this handler, does nothing. */
-	void TryHandle(const Event& event) const;
+	/** Returns the type information for the class that owns this handler. */
+	FORCEINLINE const CompoundInfo& get_owner_type() const
+	{
+		return *this->_owner_type;
+	}
+
+	/** Invokes this EventHandler.
+	* NOTE: It is the caller's responsibility to ensure that 'object' and 'value' are of the proper type. */
+	void invoke(void* object, const void* value) const;
 
 private:
 
-	/** Handles the given event without verifying whether it is compatible first.
-	* WARNING: Make sure you KNOW this handler is compatible with the given event before calling this. */
-	FORCEINLINE void Handle(const Event& event) const
+	template <typename ArgT>
+	static constexpr void constructor_asserts()
 	{
-		_handler(event);
-	}
-
-	template <typename OwnerT, typename ArgT>
-	static constexpr void ConstructorAsserts()
-	{
-		static_assert(std::is_base_of<Object, OwnerT>::value, 
-			"Only 'Object' types may have event handlers.");
-		
-		static_assert(std::is_void<ArgT>::value || !stde::is_reference_to_mutable<ArgT>::value, 
+		static_assert(!stde::is_reference_to_mutable<ArgT>::value, 
 			"You cannot create an event handler which accepts a non-const reference");
+
+		static_assert(Operations::CopyConstruct<ArgT>::Supported,
+			"Uncopyable types may not be used as event arguments.");
+
+		static_assert(Operations::MoveConstruct<ArgT>::Supported,
+			"Unmoveable types may not be used as event arguments.");
 	}
 
 	////////////////
 	///   Data   ///
 private:
 
-	TypePtr<> _argType;
-	TypePtr<ClassInfo> _ownerType;
-	std::function<void(const Event&)> _handler;
+	const TypeInfo* _arg_type;
+	const CompoundInfo* _owner_type;
+	std::function<void(void*, const void*)> _handler;
 };

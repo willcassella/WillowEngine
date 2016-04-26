@@ -8,27 +8,27 @@
 ///   Constructors   ///
 
 DynamicBuffer::DynamicBuffer()
-	: _buffer(nullptr), _size(0)
+	: _buffer{ nullptr }, _size{ 0 }
 {
 	// All done
 }
 
 DynamicBuffer::DynamicBuffer(std::size_t size)
 {
-	_buffer = static_cast<byte*>(std::malloc(size));
-	_size = size;
+	this->_buffer = static_cast<byte*>(std::malloc(size));
+	this->_size = size;
 }
 
 DynamicBuffer::DynamicBuffer(const DynamicBuffer& copy)
 	: DynamicBuffer(copy._size)
 {
-	std::memcpy(_buffer, copy._buffer, copy._size);
+	std::memcpy(this->_buffer, copy._buffer, copy._size);
 }
 
 DynamicBuffer::DynamicBuffer(DynamicBuffer&& move)
 {
-	_buffer = move._buffer;
-	_size = move._size;
+	this->_buffer = move._buffer;
+	this->_size = move._size;
 
 	move._buffer = nullptr;
 	move._size = 0;
@@ -36,31 +36,31 @@ DynamicBuffer::DynamicBuffer(DynamicBuffer&& move)
 
 DynamicBuffer::~DynamicBuffer()
 {
-	std::free(_buffer);
+	std::free(this->_buffer);
 }
 
 ///////////////////
 ///   Methods   ///
 
-void DynamicBuffer::Resize(std::size_t newSize)
+void DynamicBuffer::resize(std::size_t newSize)
 {
-	_buffer = static_cast<byte*>(std::realloc(_buffer, newSize));
-	_size = newSize;
+	this->_buffer = static_cast<byte*>(std::realloc(this->_buffer, newSize));
+	this->_size = newSize;
 }
 
-void DynamicBuffer::Reset(std::size_t newSize)
+void DynamicBuffer::reset(std::size_t newSize)
 {
-	std::free(_buffer);
+	std::free(this->_buffer);
 
-	_buffer = static_cast<byte*>(std::malloc(newSize));
-	_size = newSize;
+	this->_buffer = static_cast<byte*>(std::malloc(newSize));
+	this->_size = newSize;
 }
 
-void DynamicBuffer::Reserve(std::size_t size)
+void DynamicBuffer::reserve(std::size_t size)
 {
-	if (this->GetSize() < size)
+	if (this->get_size() < size)
 	{
-		this->Resize(this ->GetSize() + size);
+		this->resize(this->get_size() + size);
 	}
 }
 
@@ -71,8 +71,8 @@ DynamicBuffer& DynamicBuffer::operator=(const DynamicBuffer& copy)
 {
 	if (this != &copy)
 	{
-		this->Reset(copy._size);
-		std::memcpy(_buffer, copy._buffer, copy._size);
+		this->reset(copy._size);
+		std::memcpy(this->_buffer, copy._buffer, copy._size);
 	}
 
 	return *this;
@@ -82,10 +82,10 @@ DynamicBuffer& DynamicBuffer::operator=(DynamicBuffer&& move)
 {
 	if (this != &move)
 	{
-		std::free(_buffer);
+		std::free(this->_buffer);
 
-		_buffer = move._buffer;
-		_size = move._size;
+		this->_buffer = move._buffer;
+		this->_size = move._size;
 
 		move._buffer = nullptr;
 		move._size = 0;

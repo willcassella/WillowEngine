@@ -8,17 +8,12 @@
 //////////////////////
 ///   Reflection   ///
 
-BUILD_REFLECTION(EventHandler)
-.Property("Owner", &EventHandler::_ownerType, nullptr, "The type that owns this handler.")
-.Property("Argument Type", &EventHandler::_argType, nullptr, "The type of argument that this handler accepts.");
+BUILD_REFLECTION(EventHandler);
 
 ///////////////////
 ///   Methods   ///
 
-void EventHandler::TryHandle(const Event& event) const
+void EventHandler::invoke(void* object, const void* value) const
 {
-	if (event.GetArgType().is_castable_to(_argType))
-	{
-		_handler(event);
-	}
+	this->_handler(object, value);
 }

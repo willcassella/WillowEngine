@@ -32,10 +32,10 @@ namespace willow
 		}
 
 		// Resize the buffer to hold the file
-		this->_data.Reset(size);
+		this->_data.reset(size);
 
 		// Read the contents of the file into the buffer
-		file.read(this->_data.GetPointer<char>(), size);
+		file.read(this->_data.get_pointer<char>(), size);
 
 		// Make sure the contents were read correctly
 		if (file.gcount() != size)
@@ -49,16 +49,16 @@ namespace willow
 
 	byte* BinaryData::get_data()
 	{
-		return this->_data.GetPointer();
+		return this->_data.get_pointer();
 	}
 
 	const byte* BinaryData::get_data() const
 	{
-		return this->_data.GetPointer();
+		return this->_data.get_pointer();
 	}
 
 	std::size_t BinaryData::get_size() const
 	{
-		return this->_data.GetSize();
+		return this->_data.get_size();
 	}
 }

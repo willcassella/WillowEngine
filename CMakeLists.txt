@@ -34,6 +34,3 @@ add_subdirectory(Systems/BulletPhysics)
 
 # Add Client project
 add_subdirectory(Runtimes/Client)
-
-# Add ExampleGame project
-add_subdirectory(Games/ExampleGame)

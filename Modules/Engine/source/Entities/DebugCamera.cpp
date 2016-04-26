@@ -17,8 +17,8 @@ namespace willow
 	void DebugCamera::on_initialize()
 	{
 		this->Base::on_initialize();
-		this->get_world().events.Bind("move", *this, &DebugCamera::on_move);
-		this->get_world().events.Bind("look", *this, &DebugCamera::on_look);
+		this->get_world().bind_event("move", *this, &DebugCamera::on_move);
+		this->get_world().bind_event("look", *this, &DebugCamera::on_look);
 	}
 
 	void DebugCamera::on_spawn()

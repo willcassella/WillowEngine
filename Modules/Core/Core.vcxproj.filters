@@ -165,13 +165,7 @@
     <ClInclude Include="include\Core\Operations\FromString.h">
       <Filter>include\Operations</Filter>
     </ClInclude>
-    <ClInclude Include="include\Core\Event\Event.h">
-      <Filter>include\Event</Filter>
-    </ClInclude>
     <ClInclude Include="include\Core\Event\EventHandler.h">
-      <Filter>include\Event</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Core\Event\EventManager.h">
       <Filter>include\Event</Filter>
     </ClInclude>
     <ClInclude Include="include\Core\Reflection\EnumInfo.h">
@@ -327,6 +321,12 @@
     <ClInclude Include="include\Core\Utility\UnMoveable.h">
       <Filter>include\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="include\Core\Event\EventQueue.h">
+      <Filter>include\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Memory\Functions.h">
+      <Filter>include\Memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Object.cpp">
@@ -368,9 +368,6 @@
     <ClCompile Include="source\Operations\FromString.cpp">
       <Filter>source\Operations</Filter>
     </ClCompile>
-    <ClCompile Include="source\Event\Event.cpp">
-      <Filter>source\Event</Filter>
-    </ClCompile>
     <ClCompile Include="source\Reflection\Reflection.cpp">
       <Filter>source\Reflection</Filter>
     </ClCompile>
@@ -381,9 +378,6 @@
       <Filter>source\Reflection</Filter>
     </ClCompile>
     <ClCompile Include="source\Event\EventHandler.cpp">
-      <Filter>source\Event</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Event\EventManager.cpp">
       <Filter>source\Event</Filter>
     </ClCompile>
     <ClCompile Include="source\Math\Mat4.cpp">
@@ -436,6 +430,9 @@
     </ClCompile>
     <ClCompile Include="source\Exception.cpp">
       <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Event\EventQueue.cpp">
+      <Filter>source\Event</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
