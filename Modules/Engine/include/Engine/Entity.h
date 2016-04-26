@@ -135,7 +135,7 @@ namespace willow
 		}
 
 		/** Returns the name of this Entity. */
-		FORCEINLINE const String& GetName() const /*&*/
+		FORCEINLINE const String& get_name() const /*&*/
 		{
 			return this->_name;
 		}
@@ -350,6 +350,10 @@ namespace willow
 		/** Applys the given torque impulse to this Entity.
 		* NOTE: If this Entity's physics mode is not 'PhysicsMode::Dynamic', this does nothing. */
 		void apply_torque_impulse(const Vec3& torque);
+
+		/** Called when this Entity (which is set as a 'Ghost' object) collides with another object. 
+		* TODO: Make this protected */
+		virtual void on_collision(Entity& collidee);
 
 	protected:
 

@@ -183,12 +183,6 @@ namespace willow
 		{
 			system->update(*this);
 		}
-
-		for (auto& system : this->_systems)
-		{
-			// TODO: Make this asynchronous
-			system->post_update(*this);
-		}
 	}
 
 	Entity& World::spawn(SubClassOf<Entity> type)

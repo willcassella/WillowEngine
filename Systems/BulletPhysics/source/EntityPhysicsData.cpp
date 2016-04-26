@@ -9,9 +9,10 @@ namespace willow
 	////////////////////////
 	///   Constructors   ///
 
-	EntityPhysicsData::EntityPhysicsData(const Entity::PhysicsState& state, Entity::PhysicsMode mode, Handle<Entity> parent, willow::Transform& transform)
+	EntityPhysicsData::EntityPhysicsData(const Entity::PhysicsState& state, Entity::PhysicsMode mode, Handle<Entity> entity, Handle<Entity> parent, willow::Transform& transform)
 		: state{ state }, 
 		mode{ mode }, 
+		entity{ entity },
 		parent{ parent }, 
 		transform{ &transform }
 	{

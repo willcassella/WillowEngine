@@ -20,6 +20,7 @@ void event_loop(Window& window, willow::World& world, willow::RenderSystem& rend
 	bool drawPhysics = false;
 	ToggleKey drawPhysicsKey{ GLFW_KEY_F1 };
 	ToggleKey jumpKey{ GLFW_KEY_SPACE };
+	ToggleKey fireKey{ GLFW_KEY_F };
 
 	// Begin the event loop
 	while (!window.should_close() && !shouldExit)
@@ -71,7 +72,7 @@ void event_loop(Window& window, willow::World& world, willow::RenderSystem& rend
 			{
 				world.push_event("jump");
 			}
-			if (window.get_key(GLFW_KEY_F))
+			if (fireKey.update(window))
 			{
 				world.push_event("fire");
 			}

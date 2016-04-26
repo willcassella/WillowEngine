@@ -23,6 +23,8 @@ namespace willow
 		this->setFriction(entityData.state.friction);
 		this->setRollingFriction(entityData.state.rolling_friction);
 
+		this->setUserPointer(&entityData);
+
 		if (entityData.ghost_body)
 		{
 			this->setIgnoreCollisionCheck(entityData.ghost_body, true);
@@ -32,6 +34,8 @@ namespace willow
 
 	void RigidBody::disable(EntityPhysicsData& entityData)
 	{
+		this->setUserPointer(nullptr);
+
 		if (entityData.ghost_body)
 		{
 			this->setIgnoreCollisionCheck(entityData.ghost_body, false);

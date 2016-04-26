@@ -14,7 +14,7 @@ namespace willow
 		///   Constructors   ///
 	public:
 
-		EntityPhysicsData(const Entity::PhysicsState& state, Entity::PhysicsMode mode, Handle<Entity> parent, Transform& transform);
+		EntityPhysicsData(const Entity::PhysicsState& state, Entity::PhysicsMode mode, Handle<Entity> entity, Handle<Entity> parent, Transform& transform);
 		EntityPhysicsData(const EntityPhysicsData& copy) = delete;
 
 		//////////////////
@@ -40,6 +40,9 @@ namespace willow
 
 		/** The mode this Entity is currently in. */
 		Entity::PhysicsMode mode = Entity::PhysicsMode::Transient;
+
+		/** The entity this belongs to. */
+		Handle<Entity> entity;
 
 		/** The parent of this Entity. */
 		Handle<Entity> parent;

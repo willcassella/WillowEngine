@@ -19,6 +19,8 @@ namespace willow
 		const btTransform transform{ convert_to_bullet(entityData.transform->rotation), convert_to_bullet(entityData.transform->location) };
 		this->setWorldTransform(transform);
 
+		this->setUserPointer(&entityData);
+
 		if (entityData.rigid_body)
 		{
 			this->setIgnoreCollisionCheck(entityData.rigid_body, true);
@@ -28,6 +30,8 @@ namespace willow
 
 	void GhostBody::disable(EntityPhysicsData& entityData)
 	{
+		this->setUserPointer(&entityData);
+
 		if (entityData.rigid_body)
 		{
 			this->setIgnoreCollisionCheck(entityData.rigid_body, false);

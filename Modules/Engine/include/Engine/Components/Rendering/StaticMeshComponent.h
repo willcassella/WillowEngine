@@ -16,6 +16,12 @@ namespace willow
 		REFLECTABLE_CLASS
 		EXTENDS(Component)
 
+		////////////////////////
+		///   Constructors   ///
+	public:
+
+		StaticMeshComponent();
+
 		//////////////////
 		///   Fields   ///
 	public:
@@ -26,7 +32,8 @@ namespace willow
 		/** The Static Mesh used. */
 		ResourceHandle<StaticMesh> mesh;
 
-		/** The material applied to the StaticMesh. */
+		/** The material applied to the StaticMesh. 
+		* TODO: This is unbeleivably broken right now, need to fix. */
 		ResourceHandle<Material> material;
 
 		/** The material parameters specific to this instance. */

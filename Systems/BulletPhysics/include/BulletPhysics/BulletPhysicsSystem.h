@@ -30,7 +30,7 @@ namespace willow
 		///   Methods   ///
 	public:
 
-		void update(const World& world) override;
+		void update(World& world) override;
 
 		void debug_draw(RenderSystem& render) override;
 

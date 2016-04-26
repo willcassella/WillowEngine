@@ -40,9 +40,29 @@ namespace willow
 	///////////////////
 	///   Methods   ///
 
-	void BulletPhysicsSystem::update(const World& world)
+	void BulletPhysicsSystem::update(World& world)
 	{
+		// Update the physics world
 		this->_physics_world->GetDynamicsWorld().stepSimulation(world.time_step, 1);
+
+		// Dispatch all collision events
+		for (auto entityData : _entity_data_table)
+		{
+			// If the entity has a GhostObject
+			if (auto* ghost = entityData.Second->ghost_body)
+			{
+				// Dispatch 'on_collision' for each object it's colliding with
+				for (auto i = 0; i < ghost->getNumOverlappingObjects(); ++i)
+				{
+					// Get the object it's overlapping with
+					auto* overlappingObject = ghost->getOverlappingObject(i);
+					auto* overlappingObjectData = static_cast<EntityPhysicsData*>(overlappingObject->getUserPointer());
+
+					// Invoke it
+					world.get_object(entityData.Second->entity)->on_collision(*world.get_object(overlappingObjectData->entity));
+				}
+			}
+		}
 	}
 
 	void BulletPhysicsSystem::debug_draw(RenderSystem& render)
@@ -61,7 +81,7 @@ namespace willow
 		Entity::PhysicsState state)
 	{
 		// Create the physics data for this Entity
-		auto* data = _entity_physics_data.New(state, mode, parent, transform);
+		auto* data = _entity_physics_data.New(state, mode, entity, parent, transform);
 		_entity_data_table[entity] = data;
 
 		// If the entity is at least a ghost
@@ -87,9 +107,27 @@ namespace willow
 		}
 	}
 
-	void BulletPhysicsSystem::destroy_entity(Handle<Entity> /*entity*/)
+	void BulletPhysicsSystem::destroy_entity(Handle<Entity> entity)
 	{
-		// TODO
+		// NOTE: Assuming entity colliders have been destroyed
+		auto* entityData = _entity_data_table[entity];
+		
+		// If the entity has a rigid body
+		if (entityData->rigid_body)
+		{
+			_physics_world->GetDynamicsWorld().removeRigidBody(entityData->rigid_body);
+		}
+
+		// If the entity has a ghost body
+		if (entityData->ghost_body)
+		{
+			_physics_world->GetDynamicsWorld().removeCollisionObject(entityData->ghost_body);
+		}
+
+		// TODO: Handle character controllers
+
+		_entity_data_table.Remove(entity);
+		_entity_physics_data.Destroy(entityData);
 	}
 
 	void BulletPhysicsSystem::set_entity_parent(Handle<Entity> /*entity*/, Handle<Entity> /*parent*/)
@@ -397,9 +435,16 @@ namespace willow
 		_capsule_colliders.Destroy(collider);
 	}
 
-	void BulletPhysicsSystem::destroy_collider(Handle<StaticMeshColliderComponent> /*component*/)
+	void BulletPhysicsSystem::destroy_collider(Handle<StaticMeshColliderComponent> component)
 	{
-		// TODO
+		// Get the collider and its compound
+		auto* collider = _static_mesh_collider_table[component];
+		auto* entityData = static_cast<EntityPhysicsData*>(collider->getUserPointer());
+
+		// Destroy it
+		entityData->collider.remove_child(*collider);
+		_static_mesh_collider_table.Remove(component);
+		_static_mesh_colliders.Destroy(collider);
 	}
 
 	void BulletPhysicsSystem::set_collider_transform(Handle<SphereColliderComponent> component, const Transform& transform)
@@ -427,9 +472,25 @@ namespace willow
 		// TODO
 	}
 
-	void BulletPhysicsSystem::set_collider_shape(Handle<SphereColliderComponent> /*component*/, SphereColliderComponent::Shape /*shape*/)
+	void BulletPhysicsSystem::set_collider_shape(Handle<SphereColliderComponent> component, SphereColliderComponent::Shape shape)
 	{
-		// TODO
+		// Get the collider
+		auto* collider = _sphere_collider_table[component];
+		auto localScaling = collider->getLocalScaling();
+
+		// Get the entity
+		auto* entityData = static_cast<EntityPhysicsData*>(collider->getUserPointer());
+
+		// Destroy the old sphere
+		collider->~btSphereShape();
+
+		// Rebuild it
+		new (collider) btSphereShape(shape.radius);
+		collider->setLocalScaling(localScaling);
+		collider->setUserPointer(entityData);
+
+		// Update entity
+		entityData->update_inertia();
 	}
 
 	void BulletPhysicsSystem::set_collider_shape(Handle<CapsuleColliderComponent> component, CapsuleColliderComponent::Shape shape)

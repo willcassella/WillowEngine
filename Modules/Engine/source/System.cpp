@@ -13,12 +13,7 @@ namespace willow
 	///////////////////
 	///   Methods   ///
 
-	void System::update(const World& /*world*/)
-	{
-		// Do nothing
-	}
-
-	void System::post_update(World& /*world*/)
+	void System::update(World& /*world*/)
 	{
 		// Do nothing
 	}

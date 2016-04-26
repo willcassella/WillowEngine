@@ -14,7 +14,7 @@ BUILD_REFLECTION(willow::Entity)
 .Data("transform", &Entity::_transform)
 .Data("parent", &Entity::_parent)
 .Data("children", &Entity::_children, DF_Transient)
-.Property("name", &Entity::GetName, &Entity::EDITOR_set_name, "The name of this Entity", PF_EditorOnly);
+.Property("name", &Entity::get_name, &Entity::EDITOR_set_name, "The name of this Entity", PF_EditorOnly);
 
 BUILD_ENUM_REFLECTION(willow::Entity::PhysicsMode)
 .Value("Transient", willow::Entity::PhysicsMode::Transient)
@@ -172,7 +172,7 @@ namespace willow
 		if (parent && parent->is_parented_to(*this))
 		{
 			// This would create a parent cycle, abort
-			Console::Warning("Attempt to parent entity '@' to '@' would create a parent cycle.", this->GetName(), parent->GetName());
+			Console::Warning("Attempt to parent entity '@' to '@' would create a parent cycle.", this->get_name(), parent->get_name());
 			return;
 		}
 
@@ -430,6 +430,11 @@ namespace willow
 		{
 			phys->destroy_entity(*this);
 		}
+	}
+
+	void Entity::on_collision(Entity& collidee)
+	{
+		// Do nothing
 	}
 
 	void Entity::EDITOR_set_name(String name)

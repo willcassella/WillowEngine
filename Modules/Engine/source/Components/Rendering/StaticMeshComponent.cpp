@@ -11,3 +11,15 @@ BUILD_REFLECTION(willow::StaticMeshComponent)
 .Field("mesh", &StaticMeshComponent::mesh)
 .Field("material", &StaticMeshComponent::material)
 .Field("instance_params", &StaticMeshComponent::instance_params);
+
+namespace willow
+{
+	////////////////////////
+	///   Constructors   ///
+
+	StaticMeshComponent::StaticMeshComponent()
+	{
+		// NOTE: This is stupid
+		this->material = "Content/Materials/Sponza.mat";
+	}
+}
