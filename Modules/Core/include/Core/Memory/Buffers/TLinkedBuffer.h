@@ -1,22 +1,13 @@
 // TLinkedBuffer.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
+#include <cstdlib>
 #include <bitset>
 #include "../../Containers/Array.h"
 
 template <typename T, std::size_t NodeSize = 64>
 struct TLinkedBuffer final
 {
-	/////////////////////
-	///   Constants   ///
-private:
-
-	/** Function used to allocate memory for each node. */
-	static constexpr auto AllocFunc = std::malloc;
-
-	/** Function used to deallocated memory for each node. */
-	static constexpr auto FreeFunc = std::free;
-
 	/////////////////
 	///   Types   ///
 private:
@@ -49,7 +40,7 @@ public:
 			}
 
 			// Free the node's buffer
-			FreeFunc(node.Values);
+			std::free(node.Values);
 		}
 	}
 
@@ -62,7 +53,7 @@ public:
 	* If you want to destroy a value before the buffer is destroyed, use the 'Destroy' member function. 
 	* NOTE: You may use this to construct derived classes of 'T', but they must have the same size and alignment. */
 	template <typename F = T, typename ... Args>
-	F* New(Args&& ... args)
+	F* emplace_new(Args&& ... args)
 	{
 		static_assert(std::is_base_of<T, F>::value, "The given type to construct does not extend the buffer 'T' type.");
 		static_assert(sizeof(F) == sizeof(T) && alignof(F&) == alignof(T&), "The given type to construct does not fit in this TLinkedBuffer.");
@@ -70,10 +61,8 @@ public:
 		// Check all existing nodes
 		for (auto& node : _nodes)
 		{
-			const auto mask = node.Mask;
-
 			// See if there are any free slots in this node
-			if (mask.all())
+			if (node.Mask.all())
 			{
 				// No free slots, continue
 				continue;
@@ -82,7 +71,7 @@ public:
 			// Find the first free slot in the node
 			for (std::size_t i = 0; i < NodeSize; ++i)
 			{
-				if (!mask.test(i))
+				if (!node.Mask.test(i))
 				{
 					// Emplace the object
 					node.Mask.set(i, true);
@@ -93,7 +82,7 @@ public:
 
 		// No free slots in existing nodes, create a new one
 		Node node;
-		node.Values = static_cast<T*>(AllocFunc(sizeof(T) * NodeSize));
+		node.Values = static_cast<T*>(std::calloc(NodeSize, sizeof(T)));
 
 		// Emplace the object
 		node.Mask.set(0, true);
@@ -107,7 +96,7 @@ public:
 
 	/** Destroys the given value.
 	* NOTE: If the value does not exist in this buffer, this does nothing. */
-	void Destroy(T* value)
+	void destroy(T* value)
 	{
 		// Find the node that this value belongs to
 		for (auto& node : _nodes)
@@ -115,12 +104,12 @@ public:
 			// If the given pointer is within the range of owned values
 			if (value >= node.Values && value < node.Values + NodeSize)
 			{
-				// Calculate the index of the pointer within the node, and set the mask bit
-				const auto index = (value - node.Values) / sizeof(T);
-				node.Mask.set(index, false);
+				// Calculate the index of the pointer within the node
+				const auto index = value - node.Values;
 
 				// Destroy the value
 				value->~T();
+				node.Mask.set(index, false);
 				return;
 			}
 		}

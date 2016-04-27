@@ -45,23 +45,29 @@ namespace willow
 		// Update the physics world
 		this->_physics_world->GetDynamicsWorld().stepSimulation(world.time_step, 1);
 
-		// Dispatch all collision events
-		for (auto entityData : _entity_data_table)
+		int numManifolds = _physics_world->GetDynamicsWorld().getDispatcher()->getNumManifolds();
+		
+		for (int i = 0; i < numManifolds; i++)
 		{
-			// If the entity has a GhostObject
-			if (auto* ghost = entityData.Second->ghost_body)
-			{
-				// Dispatch 'on_collision' for each object it's colliding with
-				for (auto i = 0; i < ghost->getNumOverlappingObjects(); ++i)
-				{
-					// Get the object it's overlapping with
-					auto* overlappingObject = ghost->getOverlappingObject(i);
-					auto* overlappingObjectData = static_cast<EntityPhysicsData*>(overlappingObject->getUserPointer());
+			auto* contactManifold = _physics_world->GetDynamicsWorld().getDispatcher()->getManifoldByIndexInternal(i);
+			auto* obA = contactManifold->getBody0();
+			auto* obB = contactManifold->getBody1();
 
-					// Add the collision event TODO: STUPID
-					auto* entityA = world.get_object(entityData.Second->entity);
-					auto* entityB = world.get_object(overlappingObjectData->entity);
+			int numContacts = contactManifold->getNumContacts();
+
+			for (int j = 0; j < numContacts; j++)
+			{
+				btManifoldPoint& pt = contactManifold->getContactPoint(j);
+				if (pt.getDistance() < 0.f)
+				{
+					const btVector3& ptA = pt.getPositionWorldOnA();
+					const btVector3& ptB = pt.getPositionWorldOnB();
+					const btVector3& normalOnB = pt.m_normalWorldOnB;
+
+					auto* entityA = world.get_object(static_cast<EntityPhysicsData*>(obA->getUserPointer())->entity);
+					auto* entityB = world.get_object(static_cast<EntityPhysicsData*>(obB->getUserPointer())->entity);
 					world.STUPID_add_collision_event(*entityA, *entityB);
+					world.STUPID_add_collision_event(*entityB, *entityA);
 				}
 			}
 		}
@@ -83,20 +89,20 @@ namespace willow
 		Entity::PhysicsState state)
 	{
 		// Create the physics data for this Entity
-		auto* data = _entity_physics_data.New(state, mode, entity, parent, transform);
+		auto* data = _entity_physics_data.emplace_new(state, mode, entity, parent, transform);
 		_entity_data_table[entity] = data;
 
 		// If the entity is at least a ghost
 		if (mode >= Entity::PhysicsMode::Ghost)
 		{
-			data->ghost_body = _ghost_bodies.New(*data);
+			data->ghost_body = _ghost_bodies.emplace_new(*data);
 			_physics_world->GetDynamicsWorld().addCollisionObject(data->ghost_body);
 		}
 
 		// If the entity is at least kinematic
 		if (mode >= Entity::PhysicsMode::Kinematic)
 		{
-			data->rigid_body = _rigid_bodies.New(*data);
+			data->rigid_body = _rigid_bodies.emplace_new(*data);
 			_physics_world->GetDynamicsWorld().addRigidBody(data->rigid_body);
 
 			// If the entity IS kinematic
@@ -126,10 +132,8 @@ namespace willow
 			_physics_world->GetDynamicsWorld().removeCollisionObject(entityData->ghost_body);
 		}
 
-		// TODO: Handle character controllers
-
 		_entity_data_table.Remove(entity);
-		_entity_physics_data.Destroy(entityData);
+		_entity_physics_data.destroy(entityData);
 	}
 
 	void BulletPhysicsSystem::set_entity_parent(Handle<Entity> /*entity*/, Handle<Entity> /*parent*/)
@@ -177,7 +181,7 @@ namespace willow
 						// Destroy it
 						_physics_world->GetDynamicsWorld().removeRigidBody(data->rigid_body);
 						data->rigid_body->disable(*data);
-						_rigid_bodies.Destroy(data->rigid_body);
+						_rigid_bodies.destroy(data->rigid_body);
 						data->rigid_body = nullptr;
 					}
 					else
@@ -197,7 +201,7 @@ namespace willow
 				if (mode >= Entity::PhysicsMode::Kinematic)
 				{
 					// Create one
-					data->rigid_body = _rigid_bodies.New(*data);
+					data->rigid_body = _rigid_bodies.emplace_new(*data);
 					_physics_world->GetDynamicsWorld().addRigidBody(data->rigid_body);
 					
 					if (mode == Entity::PhysicsMode::Kinematic)
@@ -217,7 +221,7 @@ namespace willow
 				{
 					// Destroy it
 					_physics_world->GetDynamicsWorld().removeCollisionObject(data->ghost_body);
-					_ghost_bodies.Destroy(data->ghost_body);
+					_ghost_bodies.destroy(data->ghost_body);
 					data->ghost_body = nullptr;
 				}
 			}
@@ -226,8 +230,8 @@ namespace willow
 				// If we want to have a GhostBody
 				if (mode >= Entity::PhysicsMode::Ghost)
 				{
-					auto* ghost = _ghost_bodies.New(*data);
-					_physics_world->GetDynamicsWorld().addCollisionObject(ghost);
+					auto* ghost = _ghost_bodies.emplace_new(*data);
+					_physics_world->GetDynamicsWorld().addCollisionObject(data->ghost_body);
 				}
 			}
 		});
@@ -348,7 +352,7 @@ namespace willow
 		auto* entityData = _entity_data_table[entity];
 
 		// Create the sphere collider
-		auto* collider = _sphere_colliders.New(shape.radius);
+		auto* collider = _sphere_colliders.emplace_new(shape.radius);
 		collider->setLocalScaling(convert_to_bullet(transform.scale));
 		collider->setUserPointer(entityData);
 		
@@ -369,13 +373,13 @@ namespace willow
 		switch (shape.axis)
 		{
 		case ColliderComponent::ShapeAxis::X:
-			collider = _capsule_colliders.New<btCapsuleShapeX>(shape.radius, shape.height);
+			collider = _capsule_colliders.emplace_new<btCapsuleShapeX>(shape.radius, shape.height);
 			break;
 		case ColliderComponent::ShapeAxis::Y:
-			collider = _capsule_colliders.New<btCapsuleShape>(shape.radius, shape.height);
+			collider = _capsule_colliders.emplace_new<btCapsuleShape>(shape.radius, shape.height);
 			break;
 		case ColliderComponent::ShapeAxis::Z:
-			collider = _capsule_colliders.New<btCapsuleShapeZ>(shape.radius, shape.height);
+			collider = _capsule_colliders.emplace_new<btCapsuleShapeZ>(shape.radius, shape.height);
 			break;
 		}
 		collider->setLocalScaling(convert_to_bullet(transform.scale));
@@ -401,7 +405,7 @@ namespace willow
 		}
 
 		// Create the collider
-		auto* collider = _static_mesh_colliders.New(mesh.get(), true);
+		auto* collider = _static_mesh_colliders.emplace_new(mesh.get(), true);
 		collider->setLocalScaling(convert_to_bullet(transform.scale));
 		collider->setUserPointer(entityData);
 
@@ -421,7 +425,7 @@ namespace willow
 		
 		// Destroy it
 		entityData->collider.remove_child(*collider);
-		_sphere_colliders.Destroy(collider);
+		_sphere_colliders.destroy(collider);
 		_sphere_collider_table.Remove(component);
 	}
 
@@ -434,7 +438,7 @@ namespace willow
 		// Destroy it
 		entityData->collider.remove_child(*collider);
 		_capsule_collider_table.Remove(component);
-		_capsule_colliders.Destroy(collider);
+		_capsule_colliders.destroy(collider);
 	}
 
 	void BulletPhysicsSystem::destroy_collider(Handle<StaticMeshColliderComponent> component)
@@ -446,7 +450,7 @@ namespace willow
 		// Destroy it
 		entityData->collider.remove_child(*collider);
 		_static_mesh_collider_table.Remove(component);
-		_static_mesh_colliders.Destroy(collider);
+		_static_mesh_colliders.destroy(collider);
 	}
 
 	void BulletPhysicsSystem::set_collider_transform(Handle<SphereColliderComponent> component, const Transform& transform)
@@ -546,7 +550,7 @@ namespace willow
 		_sphere_collider_table.Find(collider.cast_to<SphereColliderComponent>(), bCollider);
 
 		// Create the controller
-		auto* controller = _character_controllers.New(*entityData, *bCollider, settings);
+		auto* controller = _character_controllers.emplace_new(*entityData, *bCollider, settings);
 		_character_controller_table[component] = controller;
 
 		// Add it to the world
@@ -563,7 +567,7 @@ namespace willow
 
 		// Destroy it
 		_character_controller_table.Remove(component);
-		_character_controllers.Destroy(controller);
+		_character_controllers.destroy(controller);
 	}
 
 	void BulletPhysicsSystem::set_character_controller_collider(Handle<CharacterControllerComponent> component, Handle<PrimitiveColliderComponent> collider)
