@@ -12,6 +12,12 @@ namespace willow
 	struct ENGINE_API Material final
 	{
 		///////////////////////
+		///   Information   ///
+	public:
+
+		REFLECTABLE_STRUCT
+
+		///////////////////////
 		///   Inner Types   ///
 	public:
 
@@ -20,12 +26,6 @@ namespace willow
 		
 		/** A table mapping parameter names to parameter values. */
 		using ParamTable = Table<String, Param>;
-
-		///////////////////////
-		///   Information   ///
-	public:
-
-		REFLECTABLE_STRUCT
 
 		////////////////////////
 		///   Constructors   ///

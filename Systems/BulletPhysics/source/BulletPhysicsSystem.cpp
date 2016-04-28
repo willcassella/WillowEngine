@@ -45,8 +45,9 @@ namespace willow
 		// Update the physics world
 		this->_physics_world->GetDynamicsWorld().stepSimulation(world.time_step, 1);
 
+		Array<std::pair<Entity*, Entity*>> collisions;
+
 		int numManifolds = _physics_world->GetDynamicsWorld().getDispatcher()->getNumManifolds();
-		
 		for (int i = 0; i < numManifolds; i++)
 		{
 			auto* contactManifold = _physics_world->GetDynamicsWorld().getDispatcher()->getManifoldByIndexInternal(i);
@@ -66,10 +67,18 @@ namespace willow
 
 					auto* entityA = world.get_object(static_cast<EntityPhysicsData*>(obA->getUserPointer())->entity);
 					auto* entityB = world.get_object(static_cast<EntityPhysicsData*>(obB->getUserPointer())->entity);
-					world.STUPID_add_collision_event(*entityA, *entityB);
-					world.STUPID_add_collision_event(*entityB, *entityA);
+					
+					// Add the collision
+					collisions.Add(std::make_pair(entityA, entityB));
 				}
 			}
+		}
+
+		// Dispatch collisions
+		for (auto collision : collisions)
+		{
+			collision.first->on_collision(*collision.second);
+			collision.second->on_collision(*collision.first);
 		}
 	}
 

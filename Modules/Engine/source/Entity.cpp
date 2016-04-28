@@ -117,43 +117,6 @@ namespace willow
 		});
 	}
 
-	bool Entity::is_actor() const
-	{
-		return this->GetType() != TypeOf<Entity>();
-	}
-
-	Entity* Entity::get_actor()
-	{
-		if (this->is_actor())
-		{
-			return this;
-		}
-		else if (this->_parent)
-		{
-			return this->_parent->get_actor();
-		}
-		else
-		{
-			return nullptr;
-		}
-	}
-
-	const Entity* Entity::get_actor() const
-	{
-		if (this->is_actor())
-		{
-			return this;
-		}
-		else if (this->_parent)
-		{
-			return this->_parent->get_actor();
-		}
-		else
-		{
-			return nullptr;
-		}
-	}
-
 	bool Entity::is_parented_to(const Entity& entity) const
 	{
 		for (auto ent = this; ent != nullptr; ent = ent->_parent)

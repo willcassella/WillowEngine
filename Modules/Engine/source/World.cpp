@@ -6,10 +6,6 @@
 ///   Reflection   ///
 
 BUILD_REFLECTION(willow::World)
-.Data("objects", &World::_objects, DF_Transient)
-.Data("entities", &World::_entities, DF_Transient)
-.Data("components", &World::_components, DF_Transient)
-.Data("destroyed_objects", &World::_destroyed_objects, DF_Transient)
 .Data("next_object_id", &World::_next_object_id)
 .Field("time_dilation", &World::time_dilation, "The time dilation of the world. Default is 1.")
 .Field("time_step", &World::time_step, "The amount of time (ms) that each update of the world represents.");
@@ -27,7 +23,7 @@ namespace willow
 
 	World::~World()
 	{
-		// All done
+		this->reset();
 	}
 
 	///////////////////
@@ -42,7 +38,7 @@ namespace willow
 		// Save all entites/components
 		writer.AddChild("objects", [this](auto& child)
 		{
-			for (const auto& kv : this->_objects)
+			for (const auto& kv : this->_object_table)
 			{
 				// Push the given value into this archive, wrapping it in a Node containing its type name and address
 				child.PushReferencedValue(kv.Second->GetType().get_name(), *kv.Second);
@@ -61,14 +57,14 @@ namespace willow
 		reader.PullValue("next_object_id", this->_next_object_id);
 		
 		// Queue of GameObjects that still need to be spawned
-		Queue<Owned<GameObject>> uninitializedEntities;
-		Queue<Owned<GameObject>> unititializedComponents;
+		Queue<GameObject*> uninitializedEntities;
+		Queue<GameObject*> unititializedComponents;
 		
 		// Load all entities/components
 		reader.GetChild("objects", [&](auto& child)
 		{
 			// Queue of gameobjects that still need to be deserialized
-			Queue<Owned<GameObject>> unloadedObjects;
+			Queue<GameObject*> unloadedObjects;
 
 			// Do a first pass, instantiate everything
 			child.EnumerateChildren([&](auto& gameobject)
@@ -85,11 +81,11 @@ namespace willow
 				else
 				{
 					// Instantiate it
-					auto object = StaticPointerCast<GameObject>(DynamicNew(*type));
+					auto& object = this->create_object(*static_cast<const ClassInfo*>(type));
 
 					// Map the address of the new instantiation to the address in the archive
-					gameobject.MapRefID(object.GetManagedPointer());
-					unloadedObjects.Push(std::move(object));
+					gameobject.MapRefID(&object);
+					unloadedObjects.Push(&object);
 				}
 			});
 
@@ -103,34 +99,32 @@ namespace willow
 
 					if (object->GetType().is_castable_to(TypeOf<Entity>()))
 					{
-						uninitializedEntities.Push(std::move(object));
+						uninitializedEntities.Push(object);
 					}
 					else
 					{
-						unititializedComponents.Push(std::move(object));
+						unititializedComponents.Push(object);
 					}
 				}
 			});
 		});
 
 		// Spawn all Entities
-		for (auto& owner : uninitializedEntities)
+		for (auto entity : uninitializedEntities)
 		{
-			auto& entity = *owner;
-			this->intialize_object(std::move(owner), entity._id);
+			this->initialize_object(*entity, entity->_id);
 			
 			// Serialized entities do not get their 'on_spawn' handler called
-			entity._state = GameObject::State::Spawned;
+			entity->_state = GameObject::State::Spawned;
 		}
 
 		// Spawn all Components
-		for (auto& owner : unititializedComponents)
+		for (auto component : unititializedComponents)
 		{
-			auto& component = *owner;
-			this->intialize_object(std::move(owner), component._id);
+			this->initialize_object(*component, component->_id);
 			
 			// Serialized entities do not get their 'on_spawn' handler called
-			component._state = GameObject::State::Spawned;
+			component->_state = GameObject::State::Spawned;
 		}
 	}
 
@@ -138,7 +132,7 @@ namespace willow
 	{
 		// Copy event bindings and instances onto stack (prevents issues with binding/dispatching events during event dispatch)
 		auto eventBindings = this->_event_bindings;
-		auto events = std::move(this->_events); // NOTE: It's safe to move 'EventQueue' multiple times
+		auto events = std::move(this->_current_frame.events); // NOTE: It's safe to move 'EventQueue' multiple times
 
 		// Push 'Update' event
 		events.push_event("update", this->time_step * this->time_dilation);
@@ -176,20 +170,20 @@ namespace willow
 			system->update(*this);
 		}
 
-		// Dispatch collision events
-		for (auto collisionPair : _collision_events)
-		{
-			collisionPair.first->on_collision(*collisionPair.second);
-		}
-		_collision_events.Clear();
-
 		// Remove destroyed objects
-		while (!this->_destroyed_objects.IsEmpty())
+		while (!this->_current_frame.destroyed_objects.IsEmpty())
 		{
-			auto object = _destroyed_objects.Pop();
-			this->_entities.Remove(object->get_id());
-			this->_components.Remove(object->get_id());
-			this->_objects.Remove(object->get_id());
+			auto object = _current_frame.destroyed_objects.Pop();
+			
+			// Get its type
+			auto* type = &object->GetType();
+
+			// Remove it from the table and call destructor
+			_object_table.Remove(object->get_id());
+			object->~GameObject();
+
+			// Mark the slot as empty
+			_object_storage.Find(type)->set_slot_empty(reinterpret_cast<byte*>(object));
 		}
 	}
 
@@ -198,13 +192,13 @@ namespace willow
 		assert(!type.is_null());
 
 		// Instantiate the object
-		auto owner = StaticPointerCast<Entity>(DynamicNew(*type.get_class()));
-		auto& entity = *owner;
+		auto& entity = static_cast<Entity&>(this->create_object(type));
 
+		// Initialize it
+		this->initialize_object(entity, this->_next_object_id++);
+		
 		// Spawn it
-		this->intialize_object(std::move(owner), this->_next_object_id++);
 		this->spawn_object(entity);
-
 		return entity;
 	}
 
@@ -213,14 +207,14 @@ namespace willow
 		assert(!type.is_null());
 
 		// Instantiate the object
-		auto owner = StaticPointerCast<Entity>(DynamicNew(*type.get_class()));
-		auto& entity = *owner;
-		
-		// Spawn it
-		entity._name = std::move(name);
-		this->intialize_object(std::move(owner), this->_next_object_id++);
-		this->spawn_object(entity);
+		auto& entity = static_cast<Entity&>(this->create_object(type));
 
+		// Initialize it
+		entity._name = std::move(name);
+		this->initialize_object(entity, this->_next_object_id++);
+
+		// Spawn it
+		this->spawn_object(entity);
 		return entity;
 	}
 
@@ -231,7 +225,7 @@ namespace willow
 		if (object._state != GameObject::State::Destroyed)
 		{
 			object._state = GameObject::State::Destroyed;
-			this->_destroyed_objects.Push(&object);
+			this->_current_frame.destroyed_objects.Push(&object);
 			object.on_destroy();
 		}
 	}
@@ -244,33 +238,27 @@ namespace willow
 
 	void World::reset()
 	{
-		this->_objects.Clear();
-		this->_destroyed_objects.Clear();
-		this->_entities.Clear();
-		this->_components.Clear();
+		// Destroy all the objects
+		for (auto object : _object_table)
+		{
+			object.Second->~GameObject();
+		}
+
+		_object_table.Clear();
+		_object_storage.Clear();
+		_event_bindings.Clear();
+		_current_frame.destroyed_objects.Clear();
+		_current_frame.events.clear();
+
 		this->_next_object_id = 1;
 	}
 
-	void World::STUPID_add_collision_event(Entity& collider, Entity& collidee)
-	{
-		_collision_events.Add(std::make_pair(&collider, &collidee));
-	}
-
-	void World::intialize_object(Owned<GameObject> owner, GameObject::ID id)
+	void World::initialize_object(GameObject& object, GameObject::ID id)
 	{	
-		auto& object = *owner;
 		assert(object._state == GameObject::State::Uninitialized);
 
 		// Add it to the world
-		this->_objects[id] = std::move(owner);
-		if (auto entity = Cast<Entity>(object))
-		{
-			this->_entities[id] = entity;
-		}
-		else if (auto component = Cast<Component>(object))
-		{
-			this->_components[id] = component;
-		}
+		this->_object_table[id] = &object;
 
 		// Initialize the object
 		object._id = id;
@@ -279,10 +267,31 @@ namespace willow
 		object.on_initialize();
 	}
 
+	GameObject& World::create_object(SubClassOf<GameObject> type)
+	{
+		assert(!type.is_null());
+
+		// Get the buffer for this type
+		LinkedBuffer* buffer = _object_storage.Find(type.get_class());
+		
+		// If we don't have a buffer, create one
+		if (!buffer)
+		{
+			buffer = &_object_storage.Insert(type.get_class(), LinkedBuffer{ type.get_class()->get_size() });
+		}
+
+		// Get a slot for the object and construct it
+		byte* slot = buffer->get_empty_slot();
+		type.get_class()->get_default_constructor()(slot);
+
+		return reinterpret_cast<GameObject&>(*slot);
+	}
+
 	void World::spawn_object(GameObject& object)
 	{
-		// Spawn the object
 		assert(object._state == GameObject::State::Initialized);
+		
+		// Spawn the object
 		object._state = GameObject::State::Spawning;
 		object.on_spawn();
 		object._state = GameObject::State::Spawned;

@@ -34,7 +34,7 @@ void event_loop(Window& window, willow::World& world, willow::RenderSystem& rend
 		{
 			Console::WriteLine("@ ms/frame = @ fps", 1000.0 / numFrames, numFrames);
 			Console::WriteLine("@ updates/second", numUpdates);
-			Console::WriteLine("Drawing @ static meshes", world.enumerate<willow::StaticMeshComponent>().Size());
+			Console::WriteLine("Drawing @ static meshes", world.enumerate_objects<willow::StaticMeshComponent>().Size());
 			numFrames = 0;
 			numUpdates = 0;
 			lastTime = currentTime;
@@ -150,7 +150,7 @@ int main(int argc, char* argv[])
 
 		// Load up subsystems
 		Console::WriteLine("Initializing subsystems...");
-		Window window("Willow Engine", 1920, 1080);
+		Window window("Willow Engine", 1280, 720);
 		willow::GLRenderSystem renderer(window.get_width(), window.get_height());
 		world.add_system(renderer);
 

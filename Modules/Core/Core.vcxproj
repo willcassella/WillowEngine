@@ -54,6 +54,7 @@
     <ClInclude Include="include\Core\Math\Vec3.h" />
     <ClInclude Include="include\Core\Math\Vec4.h" />
     <ClInclude Include="include\Core\Memory\Buffers\DynamicBuffer.h" />
+    <ClInclude Include="include\Core\Memory\Buffers\LinkedBuffer.h" />
     <ClInclude Include="include\Core\Memory\Buffers\TLinkedBuffer.h" />
     <ClInclude Include="include\Core\Memory\Buffers\StaticBuffer.h" />
     <ClInclude Include="include\Core\Memory\Functions.h" />

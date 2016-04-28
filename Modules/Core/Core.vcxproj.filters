@@ -327,6 +327,9 @@
     <ClInclude Include="include\Core\Memory\Functions.h">
       <Filter>include\Memory</Filter>
     </ClInclude>
+    <ClInclude Include="include\Core\Memory\Buffers\LinkedBuffer.h">
+      <Filter>include\Memory\Buffers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Object.cpp">

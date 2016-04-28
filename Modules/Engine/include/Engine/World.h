@@ -1,14 +1,14 @@
 // World.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <Core/Memory/New.h>
+#include <Core/Memory/Buffers/LinkedBuffer.h>
 #include <Core/Containers/Queue.h>
 #include <Core/Reflection/SubClassOf.h>
+#include <Core/Event/EventHandler.h>
+#include <Core/Event/EventQueue.h>
 #include "Component.h"
 #include "System.h"
 #include "Handle.h"
-#include <Core/Event/EventHandler.h>
-#include <Core/Event/EventQueue.h>
 
 /////////////////
 ///   Types   ///
@@ -24,6 +24,16 @@ namespace willow
 
 		REFLECTABLE_CLASS
 		EXTENDS(Object)
+
+		/////////////////
+		///   Types   ///
+	public:
+
+		struct Frame final
+		{
+			Queue<GameObject*> destroyed_objects;
+			EventQueue events;
+		};
 
 		////////////////////////
 		///   Constructors   ///
@@ -65,16 +75,7 @@ namespace willow
 		template <class T>
 		auto spawn() -> std::enable_if_t<std::is_base_of<Entity, T>::value, T&>
 		{
-			// Create a new entity
-			auto owner = New<T>();
-			auto& entity = *owner;
-			
-			// Initialize it
-			this->intialize_object(std::move(owner), this->_next_object_id++);
-
-			// Spawn it
-			this->spawn_object(entity);
-			return entity;
+			return static_cast<T&>(this->spawn(TypeOf<T>()));
 		}
 		
 		/** Spawns a new instance of the given type of Component into the World. */
@@ -89,13 +90,12 @@ namespace willow
 		auto spawn(Entity& entity) -> std::enable_if_t<std::is_base_of<Component, T>::value, T&>
 		{
 			// Create a new Component
-			auto owner = New<T>();
-			auto& component = *owner;
+			auto& component = static_cast<T&>(this->create_object(TypeOf<T>()));
 
 			// Initialize it
 			component._entity = &entity;
 			entity._components.Add(&component);
-			this->intialize_object(std::move(owner), this->_next_object_id++);
+			this->initialize_object(component, this->_next_object_id++);
 
 			// Spawn it
 			this->spawn_object(component);
@@ -106,17 +106,7 @@ namespace willow
 		template <class T>
 		auto spawn(String name) -> std::enable_if_t<std::is_base_of<Entity, T>::value, T&>
 		{
-			// Create a new entity
-			auto owner = New<T>();
-			auto& entity = *owner;
-
-			// Initialize it
-			entity._name = std::move(name);
-			this->intialize_object(std::move(owner), this->_next_object_id++);
-
-			// Spawn it
-			this->spawn_object(entity);
-			return entity;
+			return static_cast<T&>(this->spawn(TypeOf<T>(), std::move(name)));
 		}
 
 		/** Spawns a new instance of the given type with the given name into the World. */
@@ -127,44 +117,37 @@ namespace willow
 			return this->spawn<T>(entity);
 		}
 
-		/** Returns an enumeration of the given types of objects in this World. */
-		template <typename T>
-		auto enumerate() const
+		/** Enumeras all objects of the given type in this World. */
+		template <typename T, typename F>
+		void enumerate_objects(F func) const
 		{
 			static_assert(std::is_base_of<GameObject, T>::value, "The given type does not exist in this World.");
 
+			// For each type in this world
+			for (const auto& type : _object_storage)
+			{
+				// If the type is castable to 'T'
+				if (type.First->is_castable_to(TypeOf<T>()))
+				{
+					// Add all instances of that type
+					type.Second.enumerate_unempty([&func](const byte* ptr)
+					{
+						func(*reinterpret_cast<const T*>(ptr));
+					});
+				}
+			}
+		}
+
+		/** Enumeras all objects of the given type in this World. */
+		template <typename T>
+		auto enumerate_objects() const
+		{
 			Array<const T*> result;
 
-			if (std::is_base_of<Entity, T>::value)
+			this->enumerate_objects<T>([&result](const T& object)
 			{
-				for (auto entity : this->_entities)
-				{
-					if (auto e = Cast<const T>(*entity.Second))
-					{
-						result.Add(e);
-					}
-				}
-			}
-			else if (std::is_base_of<Component, T>::value)
-			{
-				for (auto component : this->_components)
-				{
-					if (auto c = Cast<const T>(*component.Second))
-					{
-						result.Add(c);
-					}
-				}
-			}
-			else
-			{
-				for (const auto& gameObject : this->_objects)
-				{
-					if (auto g = Cast<const T>(*gameObject.Second))
-					{
-						result.Add(g);
-					}
-				}
-			}
+				result.Add(&object);
+			});
 
 			return result;
 		}
@@ -223,9 +206,9 @@ namespace willow
 		const T* get_object(Handle<T> handle) const
 		{
 			const T* result = nullptr;
-			this->_objects.Find(handle.get_id(), [&result](const auto& object)
+			this->_object_table.Find(handle.get_id(), [&result](auto object)
 			{
-				result = static_cast<const T*>(object.GetManagedPointer());
+				result = static_cast<const T*>(object);
 			});
 
 			return result;
@@ -243,28 +226,29 @@ namespace willow
 		/** Pushes the given event onto the event queue. */
 		void push_event(String name)
 		{
-			this->_events.push_event(std::move(name));
+			this->_current_frame.events.push_event(std::move(name));
 		}
 
 		/** Pushes the given event with the given argument onto the event queue. */
 		template <typename T>
 		void push_event(String name, T value)
 		{
-			this->_events.push_event(std::move(name), std::move(value));
+			this->_current_frame.events.push_event(std::move(name), std::move(value));
 		}
-
-		/** Adds a collision event.
-		* TODO: THIS IS STUPID */
-		void STUPID_add_collision_event(Entity& collider, Entity& collidee);
 
 	private:
 
+		/** Allocates and constructs a new instance of the given type of object
+		* NOTE: This does not initialize or spawn the object. */
+		GameObject& create_object(SubClassOf<GameObject> type);
+
 		/** Initializes the given GameObject in this World. 
 		* Note: The caller is responsible for initialize all state of this GameObject other than the ID. */
-		void intialize_object(Owned<GameObject> object, GameObject::ID id);
+		void initialize_object(GameObject& object, GameObject::ID id);
 
 		/** Spawns the given GameObject into this World.
-		* NOTE: The caller is responsible for having previously initialized the given GameObject in this World. */
+		* NOTE: The caller is responsible for having previously initialized the given GameObject in this World
+		* NOTE: This should not be called for objects loaded from an Archive, as they have already been "spawned". */
 		void spawn_object(GameObject& object);
 
 		////////////////
@@ -273,20 +257,18 @@ namespace willow
 
 		/** World Data */
 		GameObject::ID _next_object_id;
-		Table<GameObject::ID, Owned<GameObject>> _objects;
-		Queue<GameObject*> _destroyed_objects;
-
-		Table<GameObject::ID, Entity*> _entities;
-		Table<Component::ID, Component*> _components;
-		Array<System*> _systems; // TODO: Make this weak
+		Table<GameObject::ID, GameObject*> _object_table;
+		Table<const ClassInfo*, LinkedBuffer> _object_storage;
+		Array<System*> _systems; // TODO: Figure out a better way of doing this
 
 		/** Physics data */
 		Vec3 _gravity;
-		Array<std::pair<Entity*, Entity*>> _collision_events;
+
+		/* Event data */
+		Table<String, Array<std::pair<Handle<GameObject>, EventHandler>>> _event_bindings;
 
 		/* Frame data */
-		Table<String, Array<std::pair<Handle<GameObject>, EventHandler>>> _event_bindings;
-		EventQueue _events;
+		Frame _current_frame;
 	};
 
 	///////////////////

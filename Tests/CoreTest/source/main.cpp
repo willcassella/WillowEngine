@@ -6,6 +6,7 @@
 #include <Core/Functional/EnumeratorView.h>
 #include <Core/Containers/Nullable.h>
 #include <Core/Containers/Union.h>
+#include <Core/Memory/Buffers/LinkedBuffer.h>
 #include <Core/Test/Test.h>
 
 void FormatTest(WTest::Context& context)
@@ -66,6 +67,33 @@ void EnumerationViewTest(WTest::Context& context)
 	context.AssertEquals(6, sum);
 }
 
+void LinkedBufferTest(WTest::Context& context)
+{
+	LinkedBuffer buffer{ sizeof(String) };
+	
+	// Create two strings
+	auto* str1 = new (buffer.get_empty_slot()) String("test1");
+	auto* str2 = new (buffer.get_empty_slot()) String("test2");
+
+	// Destroy the first
+	str1->~String();
+	buffer.set_slot_empty(reinterpret_cast<byte*>(str1));
+
+	// Create a new string
+	auto* str3 = new (buffer.get_empty_slot()) String("test3");
+
+	// Destroy the second string
+	str2->~String();
+	buffer.set_slot_empty(reinterpret_cast<byte*>(str2));
+
+	// Create a new string
+	auto* str4 = new (buffer.get_empty_slot()) String("test4");
+
+	// Destroy everything
+	str4->~String();
+	str3->~String();
+}
+
 ////////////////////////
 ///   Static Tests   ///
 
@@ -116,6 +144,7 @@ int main()
 	RUN_TEST(NullableTest);
 	RUN_TEST(UnionTest);
 	RUN_TEST(EnumerationViewTest);
+	RUN_TEST(LinkedBufferTest);
 
 	Console::Prompt();
 

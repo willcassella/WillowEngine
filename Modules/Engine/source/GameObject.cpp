@@ -11,12 +11,7 @@ BUILD_REFLECTION(willow::GameObject)
 .Data("id", &GameObject::_id)
 .Data("world", &GameObject::_world, DF_Transient)
 .Property("id", &GameObject::get_id, nullptr)
-.Property("state", &GameObject::get_state, nullptr)
-.Property("location", &GameObject::get_location, &GameObject::set_location, "Location in local space", "Transform")
-.Property("world_location", &GameObject::get_world_location, &GameObject::set_world_location, "Location in world space", "Transform")
-.Property("rotation", &GameObject::get_rotation, &GameObject::set_rotation, "Rotation in local space", "Transform")
-.Property("world_rotation", &GameObject::get_world_rotation, &GameObject::set_world_rotation, "Rotation in world space", "Transform")
-.Property("scale", &GameObject::get_scale, &GameObject::set_scale, "Scale", "Transform");
+.Property("state", &GameObject::get_state, nullptr);
 
 BUILD_ENUM_REFLECTION(willow::GameObject::State)
 .Value("Uninitialized", willow::GameObject::State::Uninitialized)
@@ -80,7 +75,7 @@ namespace willow
 
 	GameObject& GameObject::operator=(const GameObject& /*copy*/)
 	{
-		// Do nothing (ID and State are not copied)
+		// Do nothing (id, world, and state are not copied)
 		return *this;
 	}
 }

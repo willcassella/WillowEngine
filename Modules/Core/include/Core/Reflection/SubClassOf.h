@@ -26,7 +26,14 @@ public:
 	SubClassOf(const ClassInfo& type)
 		: _class{ &type }
 	{
-		assert(type.Extends(TypeOf<T>()));
+		assert(type.is_castable_to(TypeOf<T>()));
+	}
+
+	template <class F>
+	SubClassOf(SubClassOf<F> type)
+		: _class{ type.get_class() }
+	{
+		static_assert(std::is_base_of<T, F>::value, "");
 	}
 
 	///////////////////

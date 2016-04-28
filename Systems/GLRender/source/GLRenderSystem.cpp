@@ -211,7 +211,8 @@ namespace willow
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Get all cameras in the world
-		auto cameras = world.enumerate<CameraComponent>();
+		auto cameras = world.enumerate_objects<CameraComponent>();
+		auto meshes = world.enumerate_objects<StaticMeshComponent>();
 
 		// Render each camera
 		for (uint32 i = 0; i < cameras.Size() && i < views; ++i)
@@ -226,16 +227,16 @@ namespace willow
 			glViewport(frameX, frameY, frameWidth, frameHeight);
 			
 			// Create matrices
-			const Mat4 view = cameras[i]->get_transformation_matrix().Inverse();
+			const Mat4 view = cameras[i]->get_entity().get_transformation_matrix().Inverse();
 			const Mat4 proj = cameras[i]->get_perspective_matrix(static_cast<float>(frameWidth) / frameHeight);
 
 			// Render each StaticMeshComponent in the World
-			for (auto staticMesh : world.enumerate<StaticMeshComponent>())
+			for (auto staticMesh : meshes)
 			{
 				if (!staticMesh->visible)
 					continue;
 
-				Mat4 model = staticMesh->get_transformation_matrix();
+				Mat4 model = staticMesh->get_entity().get_transformation_matrix();
 
 				// Bind the mesh and material
 				auto& mesh = find_static_mesh(staticMesh->mesh);

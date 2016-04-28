@@ -26,8 +26,7 @@ namespace willow
 	/** An 'Entity' is a collection of Components that should be together thought of as a single object.
 	* Components can be added and removed ("connected" and "disconnected") from an Entity, but they cannot be moved between Entities.
 	* Components are always connected to a single Entity.
-	* Entities can be parented to one-another via 'attach', or 'set_parent'.
-	* The Entity class may be extended, creating an 'Actor'. */
+	* Entities can be parented to one-another via 'attach', or 'set_parent'. */
 	class ENGINE_API Entity : public GameObject
 	{
 		///////////////////////
@@ -87,51 +86,78 @@ namespace willow
 
 		void FromArchive(const ArchiveReader& reader) override;
 
-		Vec3 get_location() const final override;
+		/** Returns the location of this GameObject in local space. */
+		Vec3 get_location() const;
 
-		Vec3 get_world_location() const final override;
+		/** Returns the location of this GameOject in world space. */
+		Vec3 get_world_location() const;
 
-		void set_location(const Vec3& location) final override;
+		/** Sets the location of this GameObject in local space. */
+		void set_location(const Vec3& location);
 
-		void set_world_location(const Vec3& location) final override;
+		/** Sets the location of this GameObject in world space. */
+		void set_world_location(const Vec3& location);
 
-		void translate(const Vec3& vec) final override;
+		/** Translates this GameObject along the given vector in local space. */
+		void translate(const Vec3& vec);
 
-		void translate_global(const Vec3& vec) final override;
+		/** Translates this GameObject along the given vector in world space. */
+		void translate_global(const Vec3& vec);
 
-		Quat get_rotation() const final override;
+		/** Returns the rotation of this GameObject in local space. */
+		Quat get_rotation() const;
 
-		Quat get_world_rotation() const final override;
+		/** Returns the location of this GameObject in world space. */
+		Quat get_world_rotation() const;
 
-		void set_rotation(const Quat& rot) final override;
+		/** Sets the rotation of this GameObject in local space. */
+		void set_rotation(const Quat& rot);
 
-		void set_world_rotation(const Quat& rot) final override;
+		/** Sets the rotation of this GameObject in world space. */
+		void set_world_rotation(const Quat& rot);
 
-		void rotate(const Vec3& axis, Angle angle) final override;
+		/** Rotates this GameObject along the given axis by the given angle, in local space. */
+		void rotate(const Vec3& axis, Angle angle);
 
-		void rotate_global(const Vec3& axis, Angle angle) final override;
+		/** Rotates this GameObject along the given axis by the given angle, in world space. */
+		void rotate_global(const Vec3& axis, Angle angle);
 
-		Vec3 get_scale() const final override;
+		/** Returns the scale of this GameObject. */
+		Vec3 get_scale() const;
 
-		void set_scale(const Vec3& scale) final override;
+		/** Sets the scale of this GameObject. */
+		void set_scale(const Vec3& scale);
 
-		void scale(const Vec3& vec) final override;
+		/** Scales this GameObject by the given vector. */
+		void scale(const Vec3& vec);
 
-		Mat4 get_transformation_matrix() const final override;
+		/** Returns a matrix of the world transformation for this GameObject. */
+		Mat4 get_transformation_matrix() const;
 
+		/** Returns the transform of this GameObject. */
 		const Transform& get_transform() const
 		{
 			return this->_transform;
 		}
 
-		FORCEINLINE Entity* get_parent() final override
+		/** Returns the parent of this GameObject.
+		* NOTE: Returns 'null' if this GameObject has no parent. */
+		FORCEINLINE Entity* get_parent()
 		{
 			return this->_parent;
 		}
 
-		FORCEINLINE const Entity* get_parent() const final override
+		/** Returns the parent of this GameObject.
+		* NOTE: Returns 'null' if this GameObject has no parent. */
+		FORCEINLINE const Entity* get_parent() const
 		{
 			return this->_parent;
+		}
+
+		/** Returns whether this GameObject has a parent. */
+		FORCEINLINE bool has_parent() const
+		{
+			return this->_parent != nullptr;
 		}
 
 		/** Returns the name of this Entity. */
@@ -139,20 +165,6 @@ namespace willow
 		{
 			return this->_name;
 		}
-
-		/** Returns whether this Entity is an Actor.
-		* An 'Actor' is any class that extends 'Entity'. */
-		bool is_actor() const;
-
-		/** Returns the Actor that this Entity is directly (or indirectly) parented to.
-		* NOTE: If this Entity is itself an Actor, returns a pointer to itself.
-		* NOTE: If this Entity is not attached to an Actor, returns 'null'. */
-		Entity* get_actor();
-
-		/** Returns the Actor that this Entity is directly (or indirectly) attached to.
-		* NOTE: If this Entity is itself an Actor, returns a pointer to itself.
-		* NOTE: If this Entity is not attached to an Actor, returns 'null'. */
-		const Entity* get_actor() const;
 
 		/** Returns whether this Entity is parented to the given Entity (directly or indirectly). */
 		bool is_parented_to(const Entity& entity) const;
@@ -186,7 +198,7 @@ namespace willow
 		* Sets the name of the spawned Entity to the given name. */
 		template <class T>
 		auto attach(String name) -> std::enable_if_t<std::is_base_of<Entity, T>::value, T&>;
-
+		
 		/** Enumerates all components of the given type connected to this Entity. */
 		template <class T = Component>
 		auto enumerate_connected()
