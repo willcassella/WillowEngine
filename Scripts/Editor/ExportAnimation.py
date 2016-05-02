@@ -1,22 +1,36 @@
 import bpy
-import xml.etree.ElementTree as XML
+import struct
+import array
 
-cube = bpy.context.scene.objects.active
-anim = cube.animation_data.action
+path = "C:/Users/Will/Downloads/test.wanim"
+object = bpy.context.scene.objects.active
+anim = object.animation_data.action
 frameRange = anim.frame_range
 
-root = XML.Element("root")
-animNode = XML.SubElement(root, str(anim.name))
+xPosFrames = array.array('f')
+yPosFrames = array.array('f')
+zPosFrames = array.array('f')
 
 frame = frameRange[0]
 while (frame < frameRange[1]):
-    frameNode = XML.SubElement(animNode, "Frame")
-    frameNode.set("time", str(frame))
-    frameNode.set("x", str(anim.fcurves[0].evaluate(frame)))
-    frameNode.set("y", str(anim.fcurves[1].evaluate(frame)))
-    frameNode.set("z", str(anim.fcurves[2].evaluate(frame)))
+    xPosFrames.append(anim.fcurves[1].evaluate(frame))
+    yPosFrames.append(anim.fcurves[2].evaluate(frame))
+    zPosFrames.append(anim.fcurves[0].evaluate(frame))
     frame += 1
 
 # Output result
-tree = XML.ElementTree(root)
-tree.write("C:/Users/Will/Downloads/Animation.xml")
+with open(path, 'wb') as file:
+    # Write number of frames
+    file.write(struct.pack('I', len(xPosFrames)))
+    
+    # Write x frames
+    file.write(struct.pack('B', 1))
+    xPosFrames.tofile(file)
+    
+    # Write y frames
+    file.write(struct.pack('B', 1))
+    yPosFrames.tofile(file)
+    
+    # Write z frames
+    file.write(struct.pack('B', 1))
+    zPosFrames.tofile(file)

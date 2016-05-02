@@ -102,7 +102,7 @@
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521;4522;4814</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4521;4522;4814;4800</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -124,7 +124,7 @@
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521;4522;4814</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4521;4522;4814;4800</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -151,7 +151,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521;4522;4814</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4521;4522;4814;4800</DisableSpecificWarnings>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
@@ -182,7 +182,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521;4522;4814</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4521;4522;4814;4800</DisableSpecificWarnings>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
@@ -213,6 +213,7 @@
     <Image Include="resources\logo.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Client\Controller.h" />
     <ClInclude Include="include\Client\ToggleKey.h" />
     <ClInclude Include="include\Client\Window.h" />
     <ClInclude Include="resources\resource.h" />

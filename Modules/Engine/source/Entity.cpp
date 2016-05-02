@@ -395,7 +395,7 @@ namespace willow
 		}
 	}
 
-	void Entity::on_collision(Entity& collidee)
+	void Entity::on_collision(Entity& /*entity*/, const CollisionData& /*data*/)
 	{
 		// Do nothing
 	}

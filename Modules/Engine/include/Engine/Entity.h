@@ -71,6 +71,12 @@ namespace willow
 			float rolling_friction = 0.f;
 		};
 
+		struct CollisionData final
+		{
+			Vec3 normal;
+			Vec3 point;
+		};
+
 		////////////////////////
 		///   Constructors   ///
 	public:
@@ -365,7 +371,7 @@ namespace willow
 
 		/** Called when this Entity (which is set as a 'Ghost' object) collides with another object. 
 		* TODO: Make this protected */
-		virtual void on_collision(Entity& collidee);
+		virtual void on_collision(Entity& entity, const CollisionData& data);
 
 	protected:
 

@@ -75,6 +75,11 @@ public:
 		}
 	}
 
+	FORCEINLINE Vec3 Reflect(const Vec3& vec) const
+	{
+		return 2 * Dot(*this, vec) * *this - vec;
+	}
+
 	/** Returns the dot product of two vectors */
 	FORCEINLINE static Scalar Dot(const Vec3& a, const Vec3& b)
 	{

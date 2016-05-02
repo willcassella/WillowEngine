@@ -3,10 +3,12 @@
 #include <Core/IO/Console.h>
 #include <Resource/Archives/XMLArchive.h>
 #include <Engine/Components/Rendering/StaticMeshComponent.h>
+#include <Engine/Systems/AnimationSystem.h>
 #include <BulletPhysics/BulletPhysicsSystem.h>
 #include <GLRender/GLRenderSystem.h>
 #include "../include/Client/Window.h"
 #include "../include/Client/ToggleKey.h"
+#include "../include/Client/Controller.h"
 
 /** Main program loop. */
 void event_loop(Window& window, willow::World& world, willow::RenderSystem& renderer, willow::PhysicsSystem& physics)
@@ -19,8 +21,7 @@ void event_loop(Window& window, willow::World& world, willow::RenderSystem& rend
 	bool shouldExit = false;
 	bool drawPhysics = false;
 	ToggleKey drawPhysicsKey{ GLFW_KEY_F1 };
-	ToggleKey jumpKey{ GLFW_KEY_SPACE };
-	ToggleKey fireKey{ GLFW_KEY_F };
+	Controller controller{ GLFW_JOYSTICK_1, 0.2f };
 
 	// Begin the event loop
 	while (!window.should_close() && !shouldExit)
@@ -45,41 +46,23 @@ void event_loop(Window& window, willow::World& world, willow::RenderSystem& rend
 
 		while (lag >= world.time_step)
 		{
-			Vec2 moveAccum;
-
-			// Check for events
-			if (window.get_key(GLFW_KEY_W))
-			{
-				moveAccum.Y += 1;
-			}
-			if (window.get_key(GLFW_KEY_S))
-			{
-				moveAccum.Y -= 1;
-			}
-			if (window.get_key(GLFW_KEY_D))
-			{
-				moveAccum.X += 1;
-			}
-			if (window.get_key(GLFW_KEY_A))
-			{
-				moveAccum.X -= 1;
-			}
 			if (window.get_key(GLFW_KEY_ESCAPE))
 			{
 				shouldExit = true;
 			}
-			if (jumpKey.update(window))
+			
+			if (controller.get_jump())
 			{
 				world.push_event("jump");
 			}
-			if (fireKey.update(window))
+			if (controller.get_fire())
 			{
 				world.push_event("fire");
 			}
 
 			// Dispatch events
-			world.push_event("move", moveAccum.Normalize());
-			world.push_event("look", window.get_cursor_position() / 100);
+			world.push_event("move", controller.get_lstick());
+			world.push_event("look", controller.get_rstick() / 15);
 			window.center_cursor();
 
 			// Update the world
@@ -131,6 +114,10 @@ int main(int argc, char* argv[])
 		// Create physcs system
 		willow::BulletPhysicsSystem physics;
 		world.add_system(physics);
+
+		// Create animation system
+		willow::AnimationSystem animation;
+		world.add_system(animation);
 
 		// Deserialize it
 		{

@@ -85,6 +85,10 @@ namespace willow
 			return result;
 		}
 
+		T* get_object(World& world) const;
+
+		const T* get_object(const World& world) const;
+
 		/////////////////////
 		///   Operators   ///
 	public:

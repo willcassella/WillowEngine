@@ -45,7 +45,16 @@ namespace willow
 		// Update the physics world
 		this->_physics_world->GetDynamicsWorld().stepSimulation(world.time_step, 1);
 
-		Array<std::pair<Entity*, Entity*>> collisions;
+		struct Collision final
+		{
+			Entity* entity_a;
+			Entity* entity_b;
+			Vec3 normal;
+			Vec3 point_on_a;
+			Vec3 point_on_b;
+		};
+
+		Array<Collision> collisions;
 
 		int numManifolds = _physics_world->GetDynamicsWorld().getDispatcher()->getNumManifolds();
 		for (int i = 0; i < numManifolds; i++)
@@ -61,15 +70,16 @@ namespace willow
 				btManifoldPoint& pt = contactManifold->getContactPoint(j);
 				if (pt.getDistance() < 0.f)
 				{
-					const btVector3& ptA = pt.getPositionWorldOnA();
-					const btVector3& ptB = pt.getPositionWorldOnB();
-					const btVector3& normalOnB = pt.m_normalWorldOnB;
+					Collision collision;
+					collision.point_on_a = convert_from_bullet(pt.getPositionWorldOnA());
+					collision.point_on_b = convert_from_bullet(pt.getPositionWorldOnB());
+					collision.normal = convert_from_bullet(pt.m_normalWorldOnB);
 
-					auto* entityA = world.get_object(static_cast<EntityPhysicsData*>(obA->getUserPointer())->entity);
-					auto* entityB = world.get_object(static_cast<EntityPhysicsData*>(obB->getUserPointer())->entity);
-					
+					collision.entity_a = world.get_object(static_cast<EntityPhysicsData*>(obA->getUserPointer())->entity);
+					collision.entity_b = world.get_object(static_cast<EntityPhysicsData*>(obB->getUserPointer())->entity);
+
 					// Add the collision
-					collisions.Add(std::make_pair(entityA, entityB));
+					collisions.Add(collision);
 				}
 			}
 		}
@@ -77,8 +87,15 @@ namespace willow
 		// Dispatch collisions
 		for (auto collision : collisions)
 		{
-			collision.first->on_collision(*collision.second);
-			collision.second->on_collision(*collision.first);
+			Entity::CollisionData aCollisionData;
+			aCollisionData.normal = collision.normal;
+			aCollisionData.point = collision.point_on_a;
+			collision.entity_a->on_collision(*collision.entity_b, aCollisionData);
+
+			Entity::CollisionData bCollisionData;
+			bCollisionData.normal = collision.normal * -1;
+			bCollisionData.point = collision.point_on_b;
+			collision.entity_b->on_collision(*collision.entity_a, bCollisionData);
 		}
 	}
 

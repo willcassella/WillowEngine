@@ -152,6 +152,20 @@ namespace willow
 			return result;
 		}
 
+		/** Enumeras all objects of the given type in this World. */
+		template <typename T>
+		auto enumerate_objects()
+		{
+			Array<T*> result;
+
+			this->enumerate_objects<T>([&result](const T& object)
+			{
+				result.Add(const_cast<T*>(&object));
+			});
+
+			return result;
+		}
+
 		/** Destroys the given GameObject at the end of the frame. */
 		void destroy_object(GameObject& object);
 
@@ -310,5 +324,17 @@ namespace willow
 	T& Entity::connect()
 	{
 		return this->get_world().spawn<T>(*this);
+	}
+
+	template <class T>
+	T* Handle<T>::get_object(World& world) const
+	{
+		return world.get_object(*this);
+	}
+
+	template <class T>
+	const T* Handle<T>::get_object(const World& world) const
+	{
+		return world.get_object(*this);
 	}
 }

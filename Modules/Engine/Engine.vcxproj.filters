@@ -130,6 +130,15 @@
     <ClCompile Include="source\Resources\Texture.cpp">
       <Filter>source\Resources</Filter>
     </ClCompile>
+    <ClCompile Include="source\Resources\Animation.cpp">
+      <Filter>source\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Components\Rendering\AnimationComponent.cpp">
+      <Filter>source\Components\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Systems\AnimationSystem.cpp">
+      <Filter>source\Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Engine\Forwards\Engine.h">
@@ -215,6 +224,15 @@
     </ClInclude>
     <ClInclude Include="include\Engine\Component.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Components\Rendering\AnimationComponent.h">
+      <Filter>include\Components\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Resources\Animation.h">
+      <Filter>include\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Systems\AnimationSystem.h">
+      <Filter>include\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

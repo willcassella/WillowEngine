@@ -26,17 +26,20 @@
     <ClCompile Include="source\Components\Physics\PrimitiveColliderComponent.cpp" />
     <ClCompile Include="source\Components\Physics\SphereColliderComponent.cpp" />
     <ClCompile Include="source\Components\Physics\StaticMeshColliderComponent.cpp" />
+    <ClCompile Include="source\Components\Rendering\AnimationComponent.cpp" />
     <ClCompile Include="source\Components\Rendering\CameraComponent.cpp" />
     <ClCompile Include="source\Components\Rendering\LightComponent.cpp" />
     <ClCompile Include="source\Components\Rendering\StaticMeshComponent.cpp" />
     <ClCompile Include="source\Entities\DebugCamera.cpp" />
     <ClCompile Include="source\Entity.cpp" />
     <ClCompile Include="source\GameObject.cpp" />
+    <ClCompile Include="source\Resources\Animation.cpp" />
     <ClCompile Include="source\Resources\Material.cpp" />
     <ClCompile Include="source\Resources\Shader.cpp" />
     <ClCompile Include="source\Resources\StaticMesh.cpp" />
     <ClCompile Include="source\Resources\Texture.cpp" />
     <ClCompile Include="source\System.cpp" />
+    <ClCompile Include="source\Systems\AnimationSystem.cpp" />
     <ClCompile Include="source\Systems\PhysicsSystem.cpp" />
     <ClCompile Include="source\Systems\RenderSystem.cpp" />
     <ClCompile Include="source\World.cpp" />
@@ -50,6 +53,7 @@
     <ClInclude Include="include\Engine\Components\Physics\PrimitiveColliderComponent.h" />
     <ClInclude Include="include\Engine\Components\Physics\SphereColliderComponent.h" />
     <ClInclude Include="include\Engine\Components\Physics\StaticMeshColliderComponent.h" />
+    <ClInclude Include="include\Engine\Components\Rendering\AnimationComponent.h" />
     <ClInclude Include="include\Engine\Components\Rendering\CameraComponent.h" />
     <ClInclude Include="include\Engine\Components\Rendering\LightComponent.h" />
     <ClInclude Include="include\Engine\Components\Rendering\StaticMeshComponent.h" />
@@ -62,11 +66,13 @@
     <ClInclude Include="include\Engine\Forwards\Systems.h" />
     <ClInclude Include="include\Engine\GameObject.h" />
     <ClInclude Include="include\Engine\Handle.h" />
+    <ClInclude Include="include\Engine\Resources\Animation.h" />
     <ClInclude Include="include\Engine\Resources\Material.h" />
     <ClInclude Include="include\Engine\Resources\Shader.h" />
     <ClInclude Include="include\Engine\Resources\StaticMesh.h" />
     <ClInclude Include="include\Engine\Resources\Texture.h" />
     <ClInclude Include="include\Engine\System.h" />
+    <ClInclude Include="include\Engine\Systems\AnimationSystem.h" />
     <ClInclude Include="include\Engine\Systems\PhysicsSystem.h" />
     <ClInclude Include="include\Engine\Systems\RenderSystem.h" />
     <ClInclude Include="include\Engine\Transform.h" />
@@ -163,7 +169,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>ENGINE_BUILD;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521;4522;4814</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4521;4522;4814;4800</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -187,7 +193,7 @@ xcopy "$(ProjectDir)content" "$(SolutionDir)EngineContent" /s /h /i /d /y</Comma
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>ENGINE_BUILD;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521;4522;4814</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4521;4522;4814;4800</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -213,7 +219,7 @@ xcopy "$(ProjectDir)content" "$(SolutionDir)EngineContent" /s /h /i /d /y</Comma
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>ENGINE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521;4522;4814</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4521;4522;4814;4800</DisableSpecificWarnings>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
@@ -243,7 +249,7 @@ xcopy "$(ProjectDir)content" "$(SolutionDir)EngineContent" /s /h /i /d /y</Comma
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>ENGINE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4251;4521;4522;4814</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4521;4522;4814;4800</DisableSpecificWarnings>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
