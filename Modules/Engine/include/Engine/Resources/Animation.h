@@ -76,7 +76,9 @@ namespace willow
 		Array<Quat> rot_frames;
 		
 		// Scale frames
-		Array<Vec3> scale_frames;
+		Array<float> scale_x_frames;
+		Array<float> scale_y_frames;
+		Array<float> scale_z_frames;
 	};
 }
 

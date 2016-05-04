@@ -98,13 +98,21 @@ namespace willow
 		{
 			return lhs.get_id() == rhs.get_id();
 		}
-		friend bool operator!=(Handle lhs, Handle rhs)
+		friend bool operator==(Handle lhs, const T& rhs)
 		{
-			return lhs.get_id() != rhs.get_id();
+			return lhs.get_id() == rhs.GameObject::get_id();
 		}
 		friend bool operator==(Handle lhs, std::nullptr_t)
 		{
 			return lhs.get_id() == 0;
+		}
+		friend bool operator!=(Handle lhs, Handle rhs)
+		{
+			return lhs.get_id() != rhs.get_id();
+		}
+		friend bool operator!=(Handle lhs, const T& rhs)
+		{
+			return lhs.get_id() != rhs.GameObject::get_id();
 		}
 		friend bool operator!=(Handle lhs, std::nullptr_t)
 		{

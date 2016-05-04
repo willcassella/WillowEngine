@@ -40,7 +40,7 @@ namespace willow
 
 		void set_entity_parent(Handle<Entity> entity, Handle<Entity> parent) override;
 
-		void update_entity_transform(Handle<Entity> entity) override;
+		void update_entity_transform(Handle<Entity> entity, const Transform& transform) override;
 
 		void set_entity_physics_mode(Handle<Entity> entity, Entity::PhysicsMode mode) override;
 

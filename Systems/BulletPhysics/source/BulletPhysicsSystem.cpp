@@ -167,12 +167,12 @@ namespace willow
 		// TODO
 	}
 
-	void BulletPhysicsSystem::update_entity_transform(Handle<Entity> entity)
+	void BulletPhysicsSystem::update_entity_transform(Handle<Entity> entity, const Transform& worldTrans)
 	{
 		_entity_data_table.Find(entity, [&](EntityPhysicsData* data)
 		{
-			data->collider.setLocalScaling(convert_to_bullet(data->transform->scale));
-			btTransform transform{ convert_to_bullet(data->transform->rotation), convert_to_bullet(data->transform->location) };
+			data->collider.setLocalScaling(convert_to_bullet(worldTrans.scale));
+			btTransform transform{ convert_to_bullet(worldTrans.rotation), convert_to_bullet(worldTrans.location) };
 
 			// If we have a GhostBody
 			if (data->ghost_body)

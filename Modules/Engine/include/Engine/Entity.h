@@ -379,6 +379,8 @@ namespace willow
 
 		void on_destroy() override;
 
+		void STUPID_update_children_physics_transform();
+
 	private:
 
 		void EDITOR_set_name(String name);

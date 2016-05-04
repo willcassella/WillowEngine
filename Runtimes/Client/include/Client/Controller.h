@@ -20,6 +20,11 @@ public:
 	///   Methods   ///
 public:
 
+	int get_index() const
+	{
+		return _index + 1;
+	}
+
 	Vec2 get_lstick() const
 	{
 		Vec2 result;

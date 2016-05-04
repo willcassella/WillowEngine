@@ -130,8 +130,10 @@ namespace willow
 		return false;
 	}
 
-	void Entity::set_parent(Entity* parent, SetParentOffsetMode /*mode*/) // TODO: Handle mode
+	void Entity::set_parent(Entity* parent, SetParentOffsetMode mode)
 	{
+		auto worldLocation = this->get_world_location();
+
 		if (parent && parent->is_parented_to(*this))
 		{
 			// This would create a parent cycle, abort
@@ -152,6 +154,21 @@ namespace willow
 		if (parent)
 		{
 			parent->_children.Add(this);
+		}
+
+		switch (mode)
+		{
+		case SP_Move_To_Origin:
+			this->set_location(Vec3{ 0, 0, 0 });
+			break;
+
+		case SP_Keep_Local_Offset:
+			// Do nothing
+			break;
+
+		case SP_Keep_World_Offset:
+			this->set_location(worldLocation);
+			break;
 		}
 	}
 
@@ -395,6 +412,14 @@ namespace willow
 		}
 	}
 
+	void Entity::STUPID_update_children_physics_transform()
+	{
+		for (auto child : _children)
+		{
+			child->update_physics_transform();
+		}
+	}
+
 	void Entity::on_collision(Entity& /*entity*/, const CollisionData& /*data*/)
 	{
 		// Do nothing
@@ -425,7 +450,13 @@ namespace willow
 	{
 		if (auto phys = this->get_world().get_system<PhysicsSystem>())
 		{
-			phys->update_entity_transform(*this);
+			Transform worldTrans;
+			worldTrans.location = this->get_world_location();
+			worldTrans.rotation = this->get_world_rotation();
+
+			phys->update_entity_transform(*this, worldTrans);
 		}
+
+		this->STUPID_update_children_physics_transform();
 	}
 }

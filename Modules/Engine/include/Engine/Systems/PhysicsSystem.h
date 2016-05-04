@@ -44,7 +44,7 @@ namespace willow
 		virtual void set_entity_parent(Handle<Entity> entity, Handle<Entity> parent) = 0;
 
 		/** Sets the Transform of the given Entity. */
-		virtual void update_entity_transform(Handle<Entity> entity) = 0;
+		virtual void update_entity_transform(Handle<Entity> entity, const Transform& worldTransform) = 0;
 
 		/** Sets the PhysicsMode for the given Entity. */
 		virtual void set_entity_physics_mode(Handle<Entity> entity, Entity::PhysicsMode mode) = 0;

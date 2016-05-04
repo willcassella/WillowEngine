@@ -53,16 +53,16 @@ void event_loop(Window& window, willow::World& world, willow::RenderSystem& rend
 			
 			if (controller.get_jump())
 			{
-				world.push_event("jump");
+				world.push_event(Format("jump@", controller.get_index()));
 			}
 			if (controller.get_fire())
 			{
-				world.push_event("fire");
+				world.push_event(Format("fire@", controller.get_index()));
 			}
 
 			// Dispatch events
-			world.push_event("move", controller.get_lstick());
-			world.push_event("look", controller.get_rstick() / 15);
+			world.push_event(Format("move@", controller.get_index()), controller.get_lstick());
+			world.push_event(Format("look@", controller.get_index()), controller.get_rstick() / 15);
 			window.center_cursor();
 
 			// Update the world

@@ -72,10 +72,18 @@ namespace willow
 		case ClipMode::Ping_Pong:
 			auto div = std::div(frame, num_frames); // Gives quotient and remainder
 			int32 mult = (int32)std::pow(-1, div.quot); // Alternates between '1' and '-1'
-			return (num_frames + div.rem * mult) % num_frames;
+
+			if (mult == -1)
+			{
+				return num_frames - div.rem - 1;
+			}
+			else
+			{
+				return div.rem;
+			}
 		}
 
-		// Not sure how else to handle case where 'mode' isn't valid (or something)
+		// Not sure how else to handle case where 'mode' isn't valid
 		return 0;
 	}
 
@@ -137,14 +145,23 @@ namespace willow
 	Vec3 Animation::sample_scale(int32 frame, ClipMode clip) const
 	{
 		auto clippedFrame = this->clip_frame(frame, clip);
+		Vec3 result;
 
-		if (!this->scale_frames.IsEmpty())
+		if (!this->scale_x_frames.IsEmpty())
 		{
-			return scale_frames[clippedFrame];
+			result.X = scale_x_frames[clippedFrame];
 		}
-		else
+		
+		if (!this->scale_y_frames.IsEmpty())
 		{
-			return Vec3();
+			result.Y = scale_y_frames[clippedFrame];
 		}
+
+		if (!this->scale_z_frames.IsEmpty())
+		{
+			result.Z = scale_z_frames[clippedFrame];
+		}
+
+		return result;
 	}
 }
