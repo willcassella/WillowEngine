@@ -15,6 +15,16 @@ namespace willow
 		REFLECTABLE_CLASS
 		EXTENDS(Component)
 
+		/////////////////
+		///   Types   ///
+	public:
+
+		enum class SplitScreenOrientation : int32
+		{
+			Top = 0,
+			Bottom = 1
+		};
+
 		//////////////////
 		///   Fields   ///
 	public:
@@ -27,6 +37,8 @@ namespace willow
 
 		/** The distance to the far clipping plane. */
 		float z_max = 100.f;
+
+		SplitScreenOrientation orientation = SplitScreenOrientation::Bottom;
 
 		///////////////////
 		///   Methods   ///
