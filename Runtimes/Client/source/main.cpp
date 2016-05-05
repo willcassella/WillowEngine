@@ -143,7 +143,7 @@ int main(int argc, char* argv[])
 
 		// Load up subsystems
 		Console::WriteLine("Initializing subsystems...");
-		Window window("Willow Engine", 1280, 720);
+		Window window("Willow Engine", 1920, 1080);
 		willow::GLRenderSystem renderer(window.get_width(), window.get_height());
 		world.add_system(renderer);
 

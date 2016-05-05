@@ -230,9 +230,9 @@ namespace willow
 		}
 	}
 
-	void Entity::set_rotation(const Quat&)
+	void Entity::set_rotation(const Quat& rot)
 	{
-		// TODO
+		_transform.rotation = rot;
 	}
 
 	void Entity::set_world_rotation(const Quat& rot)
