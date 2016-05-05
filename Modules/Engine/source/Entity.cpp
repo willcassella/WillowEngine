@@ -222,7 +222,7 @@ namespace willow
 	{
 		if (this->has_parent())
 		{
-			return this->get_parent()->get_world_rotation() * this->_transform.rotation;
+			return this->_transform.rotation * this->get_parent()->get_world_rotation();
 		}
 		else
 		{
