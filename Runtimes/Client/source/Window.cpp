@@ -59,7 +59,7 @@ Window::Window(CString name, uint32 width, uint32 height)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
 	// Create the window
-	this->_window = glfwCreateWindow(width, height, name, glfwGetPrimaryMonitor(), nullptr);
+	this->_window = glfwCreateWindow(width, height, name, nullptr, nullptr);
 	if (!_window)
 	{
 		Console::WriteLine("GLFW failed to create window.");
