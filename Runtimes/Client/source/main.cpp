@@ -21,7 +21,7 @@ void event_loop(Window& window, willow::World& world, willow::RenderSystem& rend
 	bool shouldExit = false;
 	bool drawPhysics = false;
 	ToggleKey drawPhysicsKey{ GLFW_KEY_F1 };
-	Controller controller{ GLFW_JOYSTICK_1, 0.2f };
+	Controller controller{ GLFW_JOYSTICK_1, 0.25f };
 
 	// Begin the event loop
 	while (!window.should_close() && !shouldExit)

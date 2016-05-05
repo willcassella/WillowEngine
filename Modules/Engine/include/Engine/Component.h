@@ -40,6 +40,10 @@ namespace willow
 			return *this->_entity;
 		}
 
+	protected:
+
+		void on_destroy() override;
+
 		////////////////
 		///   Data   ///
 	private:

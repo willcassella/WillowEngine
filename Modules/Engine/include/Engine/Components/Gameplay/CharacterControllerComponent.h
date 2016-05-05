@@ -1,7 +1,6 @@
 // CharacterControllerComponent.h - Copyright 2013-2016 Will Cassella, All Rights Reserved
 #pragma once
 
-#include <Core/Memory/Pointers/Weak.h>
 #include "../Physics/PrimitiveColliderComponent.h"
 #include "../../Handle.h"
 
@@ -26,9 +25,8 @@ namespace willow
 		{
 			float step_height = 1.f;
 			Angle max_slope;
-			float max_jump_height;
-			float jump_speed;
-			float fall_speed;
+			float jump_speed = 10.f;
+			float fall_speed = 9.8f;
 		};
 
 		///////////////////
@@ -51,6 +49,17 @@ namespace willow
 		* NOTE: The given collider must be connected to the same Entity as this. */
 		void set_collider(PrimitiveColliderComponent* collider);
 
+		float get_jump_speed()
+		{
+			return _settings.jump_speed;
+		}
+
+		void set_jump_speed(float speed)
+		{
+			_settings.jump_speed = speed;
+			this->update_settings();
+		}
+
 	protected:
 
 		void on_initialize() override;
@@ -60,6 +69,8 @@ namespace willow
 	private:
 
 		void create();
+
+		void update_settings();
 
 		////////////////
 		///   Data   ///

@@ -94,6 +94,8 @@ namespace willow
 
 		void destroy_character_controller(Handle<CharacterControllerComponent> component) override;
 
+		void set_character_controller_settings(Handle<CharacterControllerComponent> component, CharacterControllerComponent::Settings settings) override;
+		
 		void set_character_controller_collider(Handle<CharacterControllerComponent> component, Handle<PrimitiveColliderComponent> collider) override;
 
 		void character_controller_jump(Handle<CharacterControllerComponent> component) override;

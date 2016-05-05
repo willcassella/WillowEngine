@@ -596,6 +596,13 @@ namespace willow
 		_character_controllers.destroy(controller);
 	}
 
+	void BulletPhysicsSystem::set_character_controller_settings(Handle<CharacterControllerComponent> component, CharacterControllerComponent::Settings settings)
+	{
+		auto* controller = _character_controller_table[component];
+		controller->setJumpSpeed(settings.jump_speed);
+		// TODO: Other settings
+	}
+
 	void BulletPhysicsSystem::set_character_controller_collider(Handle<CharacterControllerComponent> component, Handle<PrimitiveColliderComponent> collider)
 	{
 		auto* controller = _character_controller_table[component];

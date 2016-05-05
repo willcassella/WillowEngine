@@ -10,9 +10,11 @@ namespace willow
 	///   Constructors   ///
 
 	CharacterController::CharacterController(EntityPhysicsData& entityData, btConvexShape& collider, const CharacterControllerComponent::Settings& settings)
-		: btKinematicCharacterController{ entityData.ghost_body, &collider, settings.max_jump_height }
+		: btKinematicCharacterController{ entityData.ghost_body, &collider, 0.f }
 	{
 		_entityData = &entityData;
+
+		this->setJumpSpeed(settings.jump_speed);
 	}
 
 	///////////////////

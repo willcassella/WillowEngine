@@ -75,4 +75,12 @@ namespace willow
 			this->_is_active = true;
 		}
 	}
+
+	void CharacterControllerComponent::update_settings()
+	{
+		if (this->_is_active)
+		{
+			this->get_world().get_system<PhysicsSystem>()->set_character_controller_settings(*this, _settings);
+		}
+	}
 }

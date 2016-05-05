@@ -134,6 +134,8 @@ namespace willow
 
 		virtual void set_character_controller_collider(Handle<CharacterControllerComponent> component, Handle<PrimitiveColliderComponent> collider) = 0;
 
+		virtual void set_character_controller_settings(Handle<CharacterControllerComponent> component, CharacterControllerComponent::Settings settings) = 0;
+
 		virtual void character_controller_jump(Handle<CharacterControllerComponent> component) = 0;
 
 		virtual void character_controller_on_ground(Handle<CharacterControllerComponent> component, bool& out) = 0;

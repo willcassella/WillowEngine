@@ -396,12 +396,14 @@ namespace willow
 	{
 		this->Base::on_destroy();
 
-		for (auto child : _children)
+		auto children = _children;
+		for (auto child : children)
 		{
 			child->destroy();
 		}
 
-		for (auto component : _components)
+		auto components = _components;
+		for (auto component : components)
 		{
 			component->destroy();
 		}
@@ -409,6 +411,12 @@ namespace willow
 		if (auto phys = this->get_world().get_system<PhysicsSystem>())
 		{
 			phys->destroy_entity(*this);
+		}
+
+		if (this->_parent)
+		{
+			_parent->_children.DeleteFirst(this);
+			this->_parent = nullptr;
 		}
 	}
 
