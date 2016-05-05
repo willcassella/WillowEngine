@@ -10,6 +10,22 @@
 #include "../include/Client/ToggleKey.h"
 #include "../include/Client/Controller.h"
 
+void dispatch_controller_events(willow::World& world, Controller& controller)
+{
+	if (controller.get_jump())
+	{
+		world.push_event(Format("jump@", controller.get_index()));
+	}
+	if (controller.get_fire())
+	{
+		world.push_event(Format("fire@", controller.get_index()));
+	}
+
+	// Dispatch events
+	world.push_event(Format("move@", controller.get_index()), controller.get_lstick());
+	world.push_event(Format("look@", controller.get_index()), controller.get_rstick() / 15);
+}
+
 /** Main program loop. */
 void event_loop(Window& window, willow::World& world, willow::RenderSystem& renderer, willow::PhysicsSystem& physics)
 {
@@ -21,7 +37,8 @@ void event_loop(Window& window, willow::World& world, willow::RenderSystem& rend
 	bool shouldExit = false;
 	bool drawPhysics = false;
 	ToggleKey drawPhysicsKey{ GLFW_KEY_F1 };
-	Controller controller{ GLFW_JOYSTICK_1, 0.25f };
+	Controller controller1{ GLFW_JOYSTICK_1, 0.25f };
+	Controller controller2{ GLFW_JOYSTICK_2, 0.25f };
 
 	// Begin the event loop
 	while (!window.should_close() && !shouldExit)
@@ -51,19 +68,8 @@ void event_loop(Window& window, willow::World& world, willow::RenderSystem& rend
 				shouldExit = true;
 			}
 			
-			if (controller.get_jump())
-			{
-				world.push_event(Format("jump@", controller.get_index()));
-			}
-			if (controller.get_fire())
-			{
-				world.push_event(Format("fire@", controller.get_index()));
-			}
-
-			// Dispatch events
-			world.push_event(Format("move@", controller.get_index()), controller.get_lstick());
-			world.push_event(Format("look@", controller.get_index()), controller.get_rstick() / 15);
-			window.center_cursor();
+			dispatch_controller_events(world, controller1);
+			dispatch_controller_events(world, controller2);
 
 			// Update the world
 			world.update();
