@@ -10,7 +10,7 @@ Willow Engine is a game engine in development by Will Cassella.
 
 ### Windows
 
-The engine requires Visual Studio 2015 to compile on Windows, older versions of VS will not work. To build the engine, just open the 'WillowEngine.sln' file and build all.
+The engine requires Visual Studio 2015 to compile on Windows, older versions of VS will not work. To build the engine, just open the 'WillowEngine.sln' file and build all. You must have Python 3 installed and setup in your PATH.
 Note that the CMake files have not been tested on Windows, but I'm not planning on replacing my beautiful hand-crafted Visual Studio project files with ugly CMake generated ones anyway.
 
 Additionally, there are natvis files for various types in the engine in the "extras" directory, so you can use those to assist debugging in Visual Studio.
