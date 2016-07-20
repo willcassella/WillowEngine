@@ -6,20 +6,20 @@ Willow Engine is a game engine in development by Will Cassella.
 
 <img src="http://www.willcassella.net/WillowEngine/demo_screenshot.png" alt="Demo scene">
 
-## Example
+### Example
 
 For an example of a game made with the engine, see [Real Tournament](https://www.github.com/willcassella/RealTournament).
 
-# Compiling the engine
+## Compiling the engine
 
-## Windows
+### Windows
 
 The engine requires Visual Studio 2015 to compile on Windows, older versions of VS will not work. To build the engine, just open the 'WillowEngine.sln' file and build all. You must have Python 3 installed and setup in your PATH.
 Note that the CMake files have not been tested on Windows, but I'm not planning on replacing my beautiful hand-crafted Visual Studio project files with ugly CMake generated ones anyway.
 
 Additionally, there are natvis files for various types in the engine in the "extras" directory, so you can use those to assist debugging in Visual Studio.
 
-## Linux
+### Linux
 
 The engine compiles cleanly on Clang and GCC, however you do need to install the following aptitude packages:
 + libglfw3-dev
@@ -39,12 +39,12 @@ Once you have all packages installed, compiling the engine is as simple as:
 `cmake ../`  
 `make`  
 
-## Mac
+### Mac
 
 Mac is not officially supported, but I don't see any reason why it wouldn't work, assuming you set up the packages (which are all portable) correctly.
 If I eventually get a Mac I'll add support for it in the CMake files.
 
-# Further documentation
+## Further documentation
 
 - [Project Structure](Documentation/ProjectStructure.md)  
 - [Reflection System](Documentation/Reflection.md)
